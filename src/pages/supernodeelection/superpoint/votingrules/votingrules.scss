@@ -1,0 +1,44 @@
+page-votingrules {
+    .arrow_mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 10;
+        display: block;
+        background: #000;
+        opacity: 0.8;
+    }
+    .close {
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        opacity: 1;
+    }
+    .close img {
+        width: 11.03px;
+        height: 11.03px;
+    }
+    .vote_rule {
+        z-index: 1000;
+        color: #fff;
+    }
+    .vote_rule .title {
+        font-size: 14px;
+        color: #1ED189;
+        margin-top: 60px;
+        text-align: center;
+    }
+    .vote_rule .ul_li {
+        margin: 40px 20px 20px 40px;
+    }
+    .vote_rule .ul_li .text {
+        list-style: disc;
+        font-size: 13px;
+        letter-spacing: 2px;
+        font-family: PingFang-SC-Regular;
+        font-weight: 300;
+        margin-bottom: 40px;
+    }
+}

@@ -1,0 +1,13 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title style="text-align:center">{{'text-path-list' | translate}}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+    <ion-list>
+        <button ion-item *ngFor="let item of pathList; let i = index" (click)="onNext(item)">
+            {{ item.name | translate }}
+          </button>
+    </ion-list>
+</ion-content>

@@ -1,0 +1,72 @@
+app-home {
+    .home-top-box {
+        text-align: center;
+        padding: 50px 0px 10px 0px;
+        &>img {
+            width: 60px;
+        }
+    }
+    .home-list-img {
+        display: inline-block;
+        //width: 30px;
+        // height: 60px;
+    }
+    .home-list-title {
+        font-size: 1.2em;
+        line-height: 40px;
+    }
+    .home-eye {
+        width: 24px;
+        height: 24px;
+        float: right;
+        background-size: 100%;
+    }
+    .home-eye-off {
+        background-image: url("../assets/images/icon/icon-eye-off.svg");
+    }
+    .home-eye-on {
+        background-image: url("../assets/images/icon/icon-eye-on.svg");
+    }
+    .home-top {
+        position: relative;
+        .home-top-button-left {
+            width: 30px;
+            margin: 10px;
+        }
+        .home-top-button-right {
+            position: absolute;
+            margin: 10px;
+            right: 0px;
+            width: 40px;
+            height: 40px;
+            top: 0px;
+        }
+    }
+    .row-title {
+        font-size: 14px;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .text-left {
+        text-align: left;
+    }
+    .font-size-1 {
+        font-size: 16px;
+    }
+    .hang {
+        border-top: 1px solid #dddddd;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .bottom-broder {
+        border-bottom: 1px solid #dddddd;
+    }
+    .red {
+        color: #ff0000;
+    }
+    .green {
+        color: #00ff00;
+    }
+}

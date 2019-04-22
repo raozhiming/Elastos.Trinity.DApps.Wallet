@@ -1,0 +1,42 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title style="text-align:center">{{'text-withdraw' | translate}}</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="rightHeader()">
+            <img src="assets/images/icon/ico-scan.svg" style="width: 40px;height:30px">
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-grid class="margin-top:10px">
+        <ion-row>
+            <ion-col col-12 class="font-size-1" col-auto>
+                <ion-item>
+                    <ion-input type="text" placeholder="{{ 'text-withdraw-address' | translate}}" [(ngModel)]="mainchain.accounts"></ion-input>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-4 align-self-center class="font-size-1">
+                <ion-item>
+                    <ion-input type="text" placeholder="{{ 'text-price' | translate}}" [(ngModel)]="transfer.amount" col-auto></ion-input>
+                </ion-item>
+            </ion-col>
+            <ion-col col-8 align-self-center class="text-right font-size-1">
+                {{'text-balance' | translate}}：{{balance/SELA}}({{'text-rate' | translate}}：1:{{this.mainchain.rate}})
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-12 align-self-center class="text-right font-size-1">
+                <ion-item>
+                    <textarea placeholder="{{ 'text-remark' | translate}}" rows="3" [(ngModel)]="transfer.remark" maxlength="20"></textarea>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-footer>
+    <button ion-button style="width: 100%" (click)="onClick(2)">{{ 'text-transfer' | translate }}</button>
+</ion-footer>

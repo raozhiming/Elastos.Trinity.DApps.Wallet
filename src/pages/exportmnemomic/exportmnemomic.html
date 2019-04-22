@@ -1,0 +1,46 @@
+<!--
+  Generated template for the ExportmnemomicPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>{{'text-export-mnemomic' | translate}}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+    <div class="coin-info-top-box">
+        <img src="./assets/images/logo-maincolor.svg">
+        <div style="font-size: 1.6em;">{{walltename}}
+            <span *ngIf="account['Type']==='Standard'" style="font-size: 1.3px">{{'text-standard-wallte' | translate}}</span>
+            <span *ngIf="account['Type']==='Multi-Sign'" style="font-size: 1.3px">{{'text-multi-wallte' | translate}}</span>
+        </div>
+    </div>
+    <ion-item *ngIf="isShow">
+        <ion-label stacked>{{'unlock-paypassword-title' | translate }}</ion-label>
+        <ion-input type="password" placeholder="{{ 'unlock-paypassword-placeholder' | translate }}" [(ngModel)]="payPassword"></ion-input>
+    </ion-item>
+    <div class="mnemonic" *ngIf="!isShow">
+        <div class="slide-container">
+            <div class="slide-title">{{ 'text-mnemonic-prompt' | translate}}</div>
+            <div class="slide-body">
+                <div class="phrase-container">
+                    <div class="phrase">
+                        <span *ngFor="let item of mnemonicList;let i=index">
+                      <span>{{item.text}}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>
+<ion-footer>
+    <button ion-button (click)="onExport()" full *ngIf="isShow">{{ 'text-export-mnemomic' | translate }}</button>
+    <button ion-button (click)="onNext()" full *ngIf="!isShow">{{ 'text-memory' | translate }}</button>
+</ion-footer>

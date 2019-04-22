@@ -1,0 +1,76 @@
+coin {
+    .coin-info-top-box {
+        text-align: center;
+        padding: 30px;
+        &>img {
+            width: 50px;
+        }
+    }
+    .transfer-list {
+        .transfer-list-img {
+            width: 30px;
+            margin-right: 10px;
+            display: block
+        }
+        .transfer-list-date {
+            color: #ccc;
+            font-size: 0.8em;
+        }
+        margin-bottom:55px;
+    }
+    .coin-bottom {
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        display: -webkit-box;
+        height: 50px;
+        line-height: 50px;
+        z-index: 999;
+        &>div {
+            -webkit-box-flex: 1;
+            text-align: center;
+            color: #fff;
+            &:nth-child(1) {
+                background-color: #0070C9;
+            }
+            &:nth-child(2) {
+                background-color: #36B8C8;
+            }
+            &:nth-child(3) {
+                background-color: #0070C9;
+            }
+        }
+    }
+    .address-whole {
+        overflow: auto;
+        height: 100%;
+    }
+    .row-title {
+        font-size: 14px;
+    }
+    .hang {
+        border-top: 1px solid #dddddd;
+    }
+    .bottom-border {
+        border-bottom: 1px solid #dddddd;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .text-left {
+        text-align: left;
+    }
+    .more {
+        text-align: center;
+        font-size: 16px;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 5px
+    }
+    .font-size-1 {
+        font-size: 16px;
+    }
+    .font-size-2 {
+        font-size: 14px;
+    }
+}

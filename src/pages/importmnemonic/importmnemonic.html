@@ -1,0 +1,51 @@
+<!--
+  Generated template for the ImportmnemonicPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>{{ 'text-mnemonic' | translate }}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <div class="kuangTextArea">
+        <textarea class="backupWalletTextArea" placeholder="{{ 'text-mnemonic-format' | translate}}" rows="4" [(ngModel)]="mnemonicObj.mnemonic"></textarea>
+    </div>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>{{ 'addwallet-walletname-title' | translate }}</ion-label>
+            <ion-input type="text" placeholder="{{ 'addwallet-walletname-placeholder' | translate }}" [(ngModel)]="mnemonicObj.name"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>{{ 'unlock-paypassword-title' | translate }}</ion-label>
+            <ion-input type="password" placeholder="{{ 'addwallet-paypassword1-placeholder' | translate }}" [(ngModel)]="mnemonicObj.payPassword"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input type="password" placeholder="{{ 'addwallet-paypassword2-placeholder' | translate }}" [(ngModel)]="mnemonicObj.rePayPassword"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>{{'text-signaddress' | translate }}</ion-label>
+            <ion-checkbox [(ngModel)]="mnemonicObj.singleAddress" disabled="true"></ion-checkbox>
+        </ion-item>
+    </ion-list>
+
+    <ion-item (click)="toggleShowAdvOpts()">
+        <ion-label *ngIf="!showAdvOpts">{{'show-advanced-options' | translate}}</ion-label>
+        <ion-label *ngIf="showAdvOpts"> {{'hide-advanced-options' | translate}}</ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="showAdvOpts">
+        <ion-label stacked>{{ 'importmnes-optionalpassword-title' | translate }}</ion-label>
+        <ion-input type="password" placeholder="{{ 'importmnes-optionalpassword-placeholder' | translate }}" [(ngModel)]="mnemonicObj.phrasePassword"></ion-input>
+    </ion-item>
+</ion-content>
+<ion-footer>
+    <button ion-button full (click)="nextPage()">{{'text-next-step' | translate}}</button>
+</ion-footer>

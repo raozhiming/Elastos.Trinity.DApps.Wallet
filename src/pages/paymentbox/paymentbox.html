@@ -1,0 +1,41 @@
+<div class="juzhong">
+    <div class="arrow_mask" (click)=click_close()></div>
+    <div class="kuang">
+        <p class="pay-box-title">{{'transfer-info' | translate}}
+            <img class="close" src="./assets/images/icon/icon-close.svg" (click)="click_close()">
+        </p>
+
+        <table border="0" style="width: 100%">
+            <tr class="item">
+                <td class="left">{{'transfer-address' | translate}}</td>
+                <td class="right1">{{toAddress}}</td>
+            </tr>
+
+            <tr class="item">
+                <td class="left">{{'text-price' | translate}}</td>
+                <td class="right">{{transfer.amount}}</td>
+            </tr>
+
+            <tr class="item">
+                <td class="left">{{'text-fees' | translate}}</td>
+                <td class="right">{{transfer.fee/SELA}}</td>
+            </tr>
+
+            <tr class="item" *ngIf="transfer.rate">
+                <td class="left">{{'text-rate' | translate}}</td>
+                <td class="right">1 : {{transfer.rate}}</td>
+            </tr>
+
+            <tr class="item" class="font-size-1" *ngIf="walltype">
+                <ion-item>
+                    <ion-input type="password" placeholder="{{ 'text-pay-passworld-input' | translate }}" [(ngModel)]="transfer.payPassword"></ion-input>
+                </ion-item>
+            </tr>
+
+        </table>
+
+        <div style="text-align: center">
+            <button ion-button full (click)="click_button()">{{ 'confirm' | translate }}</button>
+        </div>
+    </div>
+</div>

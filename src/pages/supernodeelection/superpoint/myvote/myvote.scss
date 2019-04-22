@@ -1,0 +1,81 @@
+page-myvote {
+    .wallet {
+        width: 100%;
+        height: 150px;
+        background-color: #0070c9;
+        border-radius: 4px;
+        display: flex;
+    }
+    .wallet .name {
+        flex: 3;
+        color: #ffffff;
+        padding-top: 15px;
+        padding-left: 10px;
+    }
+    .big {
+        font-size: 16px;
+        margin-bottom: 5px;
+        font-family: PingFang-SC-Medium;
+    }
+    .wallet .logo img {
+        margin: 20px auto;
+        display: block;
+        width: 60px;
+        height: 60px;
+    }
+    .name .data img {
+        display: inline-block;
+        width: 11.52px;
+        height: 11.52px;
+        margin-right: 0.06666667rem;
+    }
+    .name .data .power {
+        display: inline-block;
+        font-size: 12px;
+    }
+    .wallet .name .small {
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .text-left {
+        text-align: left;
+    }
+    .list {
+        font-size: 12px;
+        color: #0070c9;
+    }
+    .border-bottom {
+        border-bottom: 1px solid #808080;
+    }
+    .rank {
+        color: #000;
+        font-size: 13px;
+    }
+    .title {
+        font-size: 16px;
+        color: #0070c9;
+        letter-spacing: 0.04rem;
+        font-family: PingFang-SC-Medium;
+        font-weight: 400;
+    }
+    .title-number {
+        color: #1ED189;
+        font-size: 12px;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .border-radius {
+        border-radius: 4px;
+    }
+    .no-data img {
+        width: 80px;
+        height: 80px;
+    }
+    .no-data .empty_history {
+        margin-top: 25px;
+    }
+}

@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title style="text-align:center">{{"text-add-wallet"|translate}}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div id="wrapper">
+        <div id="cell">
+            <div>
+                <button ion-button full (click)="onNext(1)">{{'launcher-create-wallet' | translate }}</button>
+            </div>
+            <div>
+                <button ion-button full (click)="onNext(2)">{{'launcher-backup-import' | translate }}</button>
+            </div>
+            <button ion-button full (click)="onNext(3)">{{'signature-wallet' | translate }}</button>
+        </div>
+    </div>
+</ion-content>

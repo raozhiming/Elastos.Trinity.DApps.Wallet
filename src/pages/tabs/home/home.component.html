@@ -1,0 +1,74 @@
+<ion-content>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles" refreshingText="">
+        </ion-refresher-content>
+        <ion-refresher-content>
+        </ion-refresher-content>
+    </ion-refresher>
+    <div class="home-top">
+        <!-- <img src="./assets/images/icon/ion-list.svg" class="home-top-button-left" (click)="onClick(0)">
+        <img src="" class="home-top-button-left" style="color: #fff;"> -->
+        <img src="./assets/images/icon/icon-manager.svg" class="home-top-button-right" (click)="onClick(1)">
+    </div>
+
+    <div>
+        <div class="home-top-box" (click)="onClick(0)">
+            <img src="./assets/images/icon/icon-wallet.svg">
+            <div style="font-size: 1.6em;">{{wallet.name}}
+                <span *ngIf="account['Type']==='Standard'" style="font-size: 0.6em;">{{'text-standard-wallte' | translate}}</span>
+                <span *ngIf="account['Type']==='Multi-Sign'" style="font-size: 0.6em;">{{'text-multi-wallte' | translate}}</span>
+            </div>
+        </div>
+        <ion-grid>
+            <ion-row>
+                <ion-col col-5 class="row-title">
+                    {{'text-coin-list' | translate}}
+                </ion-col>
+                <ion-col col-7 class="text-right">
+                    <div class="home-eye" (click)="onOpen()" [ngClass]="{'home-eye-on':wallet.showBalance,'home-eye-off':!wallet.showBalance }"></div>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="hang" (click)="onItem(ElaObj)">
+                <ion-col col-2 align-self-center class="text-center">
+                    <img src="./assets/images/logo-maincolor.svg" alt="" style="display: inline;">
+                </ion-col>
+                <ion-col col-3 align-self-center class="text-left font-size-1">
+                    {{ElaObj.name}}
+                </ion-col>
+                <ion-col col-7 class="text-right font-size-1" align-self-center>
+                    <div><span [hidden]="!wallet.showBalance">{{ElaObj.balance}}</span></div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-12 class="text-right">
+                    <!-- <progress-bar proportion="{{elaPer}}"></progress-bar> -->
+                    <span [ngClass]="{'red':elaCurHeight!=elaMaxHeight,'green':elaCurHeight==elaMaxHeight}">{{elaCurHeight}}</span>/<span [ngClass]="{'red':elaCurHeight!=elaMaxHeight,'green':elaCurHeight==elaMaxHeight}">{{elaMaxHeight}}</span>
+                </ion-col>
+            </ion-row>
+
+            <div *ngFor="let item of coinList" (click)="onItem(item)">
+                <ion-row class="hang">
+                    <ion-col col-2 align-self-center class="text-center">
+                        <img src="./assets/images/logo-maincolor.svg" alt="" style="display: inline;">
+                    </ion-col>
+                    <ion-col col-3 align-self-center class="text-left font-size-1">
+                        {{item.name}}
+                    </ion-col>
+                    <ion-col col-7 class="text-right font-size-1" align-self-center>
+                        <div><span [hidden]="!wallet.showBalance">{{item.balance}}</span></div>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col col-12 class="text-right">
+                        <!-- <progress-bar proportion="{{idChainPer}}"></progress-bar> -->
+                        <span [ngClass]="{'red':idChainCurHeight!=idChainMaxHeight,'green':idChainCurHeight==idChainMaxHeight}">{{idChainCurHeight}}</span>/<span [ngClass]="{'red':idChainCurHeight!=idChainMaxHeight,'green':idChainCurHeight==idChainMaxHeight}">{{idChainMaxHeight}}</span>
+                    </ion-col>
+                </ion-row>
+            </div>
+            <div class="bottom-broder">
+
+            </div>
+        </ion-grid>
+    </div>
+</ion-content>

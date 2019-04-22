@@ -1,0 +1,114 @@
+<!--
+  Generated template for the VotemanagePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>{{'vote-manage'|translate}}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <div class="border">
+        <ion-row padding-left padding-right padding-top align-items-center>
+            <ion-col col-2>
+                <div class="general">
+                    <img src="./assets/images/vote/point_name.png" alt="">
+                </div>
+            </ion-col>
+
+            <ion-col col-10>
+                <div class="pargaph">{{info.nickname}}</div>
+            </ion-col>
+        </ion-row>
+
+        <!-- <ion-row padding-left padding-right align-items-center>
+            <ion-col col-2>
+                <div class="general">
+                    <img src="./assets/images/vote/point_position.png" alt="">
+                </div>
+            </ion-col>
+
+            <ion-col col-10>
+                <div class="pargaph">{{info.ownerpublickey}}</div>
+            </ion-col>
+        </ion-row> -->
+
+        <ion-row padding-left padding-right align-items-center>
+            <ion-col col-2>
+                <div class="general">
+                    <img src="./assets/images/vote/point_address.png" alt="">
+                </div>
+            </ion-col>
+
+            <ion-col col-10>
+                <div class="pargaph">{{getCountryByCode(info.location)|translate}}</div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row padding-left padding-right align-items-center>
+            <ion-col col-2>
+                <div class="general">
+                    <img src="./assets/images/vote/point_url.png" alt="">
+                </div>
+            </ion-col>
+
+            <ion-col col-10>
+                <div class="pargaph">{{info.url}}</div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row padding-left padding-right align-items-center>
+            <ion-col col-2>
+                <div class="general">
+                    <img src="./assets/images/vote/percentage.png" alt="">
+                </div>
+            </ion-col>
+
+            <ion-col col-10>
+                <div class="pargaph">{{info.votes}} {{'ticket'|translate}}</div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row padding-left padding-right align-items-center>
+            <ion-col col-2>
+                <div class="general">
+                    <img src="./assets/images/vote/ranking.png" alt="">
+                </div>
+            </ion-col>
+
+            <ion-col col-10>
+                <div class="pargaph">NO.{{(info.index+1)}}</div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row padding-left padding-right padding-bottom align-items-center>
+            <ion-col col-2>
+                <div class="general">
+                    <img src="./assets/images/vote/point_url.png" alt="">
+                </div>
+            </ion-col>
+
+            <ion-col col-10>
+                <div class="pargaph">{{info.netaddress}} </div>
+            </ion-col>
+        </ion-row>
+
+    </div>
+</ion-content>
+<ion-footer>
+    <ion-row>
+        <ion-col col-6 class="text-center">
+            <button ion-button full class="border-radius" (click)="updateInfo()">{{'update-info'|translate}}</button>
+        </ion-col>
+
+        <ion-col col-6 class="text-center">
+            <button ion-button full class="border-radius" color="danger" (click)="logout()">{{'log-out'|translate}}</button>
+        </ion-col>
+    </ion-row>
+</ion-footer>

@@ -1,0 +1,79 @@
+<!--
+  Generated template for the NodeinformationPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>{{'node-information'|translate}}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+    <div class="top">
+        <img src="./assets/images/vote/zhiwen.png" alt="">
+    </div>
+    <ion-row padding-left padding-right>
+        <ion-col col-12 class="row-title">{{'node-name'|translate}}</ion-col>
+        <ion-col col-12 class="row-content">{{info.nickname}}</ion-col>
+    </ion-row>
+
+    <!-- <ion-row padding-left padding-right>
+        <ion-col col-12 class="row-title">{{'node-address'|translate}}</ion-col>
+        <ion-col col-12 class="row-content">{{info.ownerpublickey}}</ion-col>
+    </ion-row> -->
+
+    <!-- <ion-row padding-left padding-right>
+        <ion-col col-12 class="row-title">{{'node-declaration'|translate}}</ion-col>
+        <ion-col col-12 class="row-content">做公平公开公正的全民节点</ion-col>
+    </ion-row> -->
+
+    <ion-row padding-left padding-right>
+        <ion-col col-12 class="row-title">{{'current-votes'|translate}}</ion-col>
+        <ion-col col-12 class="row-content green">{{info.votes}} {{'ticket'|translate}}</ion-col>
+    </ion-row>
+
+    <!-- <ion-row padding-left padding-right>
+        <ion-col col-12 class="row-title">{{'share-voting'|translate}}</ion-col>
+        <ion-col col-12 class="row-content green">3.20%</ion-col>
+    </ion-row> -->
+
+    <ion-row padding-left padding-right>
+        <ion-col col-12 class="row-title">{{'country-region'|translate}}</ion-col>
+        <ion-col col-12 class="row-content">{{getCountryByCode(info.location)|translate}}</ion-col>
+    </ion-row>
+
+    <ion-row padding-left padding-right>
+        <ion-col col-12 class="row-title">URL</ion-col>
+        <ion-col col-12 class="row-content blue" (click)="copy(info.url)">{{info.url}}<span><img src="./assets/images/vote/copy_url.png"></span></ion-col>
+    </ion-row>
+
+    <ion-row padding-left padding-right>
+        <ion-col col-12 class="row-title">{{'node-iPAddress'|translate}}</ion-col>
+        <ion-col col-12 class="row-content">{{info.netaddress}}</ion-col>
+    </ion-row>
+
+</ion-content>
+<!-- <ion-footer>
+    <ion-row padding-left padding-right>
+        <ion-col col-6 *ngIf="!isStatus" (click)="addList('')">
+            <button ion-button>
+                <img src="./assets/images/vote/add_in_list.png" alt="" class="add_in_list">{{'add-in-list'|translate}}
+          </button>
+        </ion-col>
+        <ion-col col-6 *ngIf="isStatus" (click)="delList('')">
+            <button ion-button>
+              <img src="./assets/images/vote/move_out.png"  alt="" class="add_in_list" >{{'del-in-list'|translate}}
+            </button>
+        </ion-col>
+        <ion-col col-6 (click)="lookOver()">
+            <button ion-button>
+                <img src="./assets/images/vote/look_over.png"  alt="" class="add_in_list" >{{'look-over-list'|translate}}
+              </button>
+        </ion-col>
+    </ion-row>
+</ion-footer> -->

@@ -1,0 +1,21 @@
+page-importprivatekey {
+    .des {
+        text-align: center;
+        padding: 15px;
+        margin-top: 5px;
+        border-bottom: 1px solid #ddd;
+    }
+    .importDiv {
+        margin-top: 15px;
+        text-align: center;
+        padding: 15px;
+    }
+    .importTextArea {
+        width: 100%;
+        border: solid 1px #ddd;
+        border-radius: 4px;
+        resize: none;
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+}

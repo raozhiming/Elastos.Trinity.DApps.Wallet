@@ -1,0 +1,59 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title style="text-align:center">{{'text-company-path-deatils' | translate}}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+    <ion-grid>
+        <ion-row *ngFor="let item of companyPathList; let i = index" (click)="onNext(item)" class="hang" [ngClass]="{'bottom-border': i==companyPathList.length-1}">
+            <ion-col col-4 class="font-size-1">
+                {{'text-company-name' | translate }}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                {{item["payObj"]["parms"]["word"]}}
+            </ion-col>
+
+            <ion-col col-4 class="font-size-1">
+                {{'text-company-legal' | translate }}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                {{item["payObj"]["parms"]["legalPerson"]}}
+            </ion-col>
+
+            <ion-col col-4 class="font-size-1">
+                {{'text-company-code' | translate }}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                {{item["payObj"]["parms"]["registrationNum"]}}
+            </ion-col>
+
+            <ion-col col-4 class="font-size-1">
+                {{'path-status' | translate }}
+            </ion-col>
+            <ion-col col-8 class="font-size-1" *ngIf="item['pathStatus']===0">
+                {{'path-status-no-pay' | translate }}
+            </ion-col>
+
+            <ion-col col-8 class="font-size-1" *ngIf="item['pathStatus']===1">
+                {{'path-status-authing' | translate }}
+            </ion-col>
+
+            <ion-col col-8 class="font-size-1" *ngIf="item['pathStatus']===2">
+                {{'path-status-authed' | translate }}
+            </ion-col>
+
+            <ion-col col-8 class="font-size-1" *ngIf="item['pathStatus']===4">
+                {{'text-data-chain1' | translate }}
+            </ion-col>
+
+            <ion-col col-8 class="font-size-1" *ngIf="item['pathStatus']===5">
+                {{'text-data-chain2' | translate }}
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-footer>
+    <button ion-button full class="button-footer" (click)="onCommit()" style="width: 100%"> {{'add-path' | translate}}</button>
+</ion-footer>

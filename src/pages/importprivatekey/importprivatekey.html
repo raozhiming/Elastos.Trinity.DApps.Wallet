@@ -1,0 +1,41 @@
+<!--
+  Generated template for the ImportprivatekeyPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <ion-title style="text-align: center">{{"text-import-privatekey"|translate}}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content no-bounce>
+    <p class="des">{{'text-import-privatekey-des'|translate}}</p>
+    <div class="importDiv">
+        <textarea rows="4" class="importTextArea" [(ngModel)]="importText" placeholder="{{ 'text-import-privatekey-placeholder'|translate}}"></textarea>
+    </div>
+    <div>
+        <ion-list>
+            <ion-item>
+                <ion-label stacked>{{ 'addwallet-walletname-title' | translate }}</ion-label>
+                <ion-input type="text" placeholder="{{ 'addwallet-walletname-placeholder' | translate }}" [(ngModel)]="name"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label stacked>{{ 'addwallet-paypassword1-title' | translate }}</ion-label>
+                <ion-input type="password" placeholder="{{ 'addwallet-paypassword1-placeholder' | translate }}" [(ngModel)]="passWord"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-input type="password" placeholder="{{ 'addwallet-paypassword2-placeholder' | translate }}" [(ngModel)]="rePassWorld"></ion-input>
+            </ion-item>
+
+        </ion-list>
+    </div>
+</ion-content>
+<ion-footer>
+    <button ion-button full (click)="import()">{{ 'text-next-step' | translate }}</button>
+</ion-footer>

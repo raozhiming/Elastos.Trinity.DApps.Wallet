@@ -1,0 +1,108 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title style="text-align:center">{{'text-card-debit' | translate}}</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content no-bounce>
+    <ion-grid>
+
+        <ion-row>
+            <ion-col col-2 align-self-center class="font-size-1 text-left">{{ 'text-name' | translate }} </ion-col>
+            <ion-col col-10 align-self-center>
+                <ion-item>
+                    <ion-input type="text" [(ngModel)]="debitCard.fullName" placeholder="{{'text-input-please' | translate }}"></ion-input>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-2 align-self-center class="font-size-1 text-left">{{'text-identity' | translate }}</ion-col>
+            <ion-col col-10 align-self-center>
+                <ion-item>
+                    <ion-input type="tel" [(ngModel)]="debitCard.identityNumber" placeholder="{{'text-input-please' | translate }}"></ion-input>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-2 align-self-center class="font-size-1 text-left">{{'text-card-debit' | translate }}</ion-col>
+            <ion-col col-10 align-self-center>
+                <ion-item>
+                    <ion-input type="tel" placeholder="{{'text-input-please' | translate }}" [(ngModel)]="debitCard.cardNumber"></ion-input>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-2 align-self-center class="font-size-1 text-left">{{'text-phone' | translate }}</ion-col>
+            <ion-col col-10 align-self-center>
+                <ion-item>
+                    <ion-input type="tel" placeholder="{{'text-input-please' | translate }}" [(ngModel)]="debitCard.cardMobile"></ion-input>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-2 align-self-center class="font-size-1 text-left">{{'text-check-code' | translate }}</ion-col>
+            <ion-col col-4 align-self-center>
+                <ion-item>
+                    <ion-input type="text" placeholder="{{'text-input-please' | translate }}" [(ngModel)]="debitCard.cardCode"></ion-input>
+                </ion-item>
+            </ion-col>
+
+            <ion-col col-6 align-self-center class="text-center">
+                <button ion-button full [(disabled)]="verifyCode.disabled" (click)="getCode(debitCard.cardMobile)">{{verifyCode.verifyCodeTips}}</button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <!-- <div class="person">
+        <div class="certified-phone">
+            <div class="weui-cells__title">{{'text-card-debit' | translate }}</div>
+            <div class="weui-cells">
+
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label for="" class="weui-label">{{'text-name' | translate }}</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" [(ngModel)]="debitCard.fullName" placeholder="{{'text-input-please' | translate }}">
+                    </div>
+                </div>
+
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label for="" class="weui-label">{{'text-identity' | translate }}</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="tel" [(ngModel)]="debitCard.identityNumber" placeholder="{{'text-input-please' | translate }}">
+                    </div>
+                </div>
+
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label for="" class="weui-label">{{'text-card-debit' | translate }}</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="tel" placeholder="{{'text-input-please' | translate }}" [(ngModel)]="debitCard.cardNumber">
+                    </div>
+                </div>
+
+
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label for="" class="weui-label">{{'text-phone' | translate }}</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="tel" placeholder="{{'text-input-please' | translate }}" [(ngModel)]="debitCard.cardMobile">
+                    </div>
+                </div>
+
+                <div class="weui-cell weui-cell_vcode">
+                    <div class="weui-cell__hd"><label class="weui-label">{{'text-check-code' | translate }}</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" placeholder="{{'text-input-please' | translate }}" [(ngModel)]="debitCard.cardCode">
+                    </div>
+                    <div class="weui-cell__ft" (click)="sendCode(debitCard.cardMobile)">
+                        <button class="weui-vcode-btn" [weui-vcode]="onSendCode" weui-seconds="60" weui-tpl="${num}s" weui-error="重新发送">获取验证码</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</ion-content>
+
+<ion-footer>
+    <button ion-button full class="button-footer" (click)="onCommit()" style="width: 100%">{{'text-pay' | translate}}{{payMoney}}{{unit}}</button>
+</ion-footer>
