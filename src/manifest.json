@@ -1,5 +1,5 @@
 {
-    "id": "org.elastos.trinity.wallet",
+    "id": "org.elastos.trinity.dapp.wallet",
     "version": "0.0.1",
     "name": "Wallet",
     "short_name": "wallet",
