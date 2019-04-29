@@ -21,6 +21,9 @@
         "Wallet"
     ],
     "urls": [
+      "https://52.81.8.194:442/*",
+      "https://39.106.96.168:8446/*",
+      "https://123.206.52.29/*",
       "http://www.baidu.com/*",
       "https://www.google.com"
     ],
