@@ -1,0 +1,38 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title style="text-align:center">{{'text-wallet-export' | translate}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="coin-info-top-box">
+        <img src="./assets/images/logo-maincolor.svg">
+        <div style="font-size: 1.6em;">{{exprotObj.name}}
+            <span *ngIf="account['Type']==='Standard'" style="font-size: 1.3px">{{'text-standard-wallte' | translate}}</span>
+            <span *ngIf="account['Type']==='Multi-Sign'" style="font-size: 1.3px">{{'text-multi-wallte' | translate}}</span></div>
+    </div>
+    <div *ngIf="!backupWalletPlainText">
+        <ion-list>
+            <ion-item>
+                <ion-label stacked>{{'exportwallet-keystorepassword1-title' | translate }}</ion-label>
+                <ion-input type="password" placeholder="{{ 'exportwallet-keystorepassword1-placeholder' | translate }}" [(ngModel)]="exprotObj.backupPassWord"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input type="password" placeholder="{{ 'exportwallet-keystorepassword2-placeholder' | translate }}" [(ngModel)]="exprotObj.reBackupPassWord"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="readonly!='Readonly'">
+                <ion-label stacked>{{'unlock-paypassword-title' | translate }}</ion-label>
+                <ion-input type="password" placeholder="{{ 'unlock-paypassword-placeholder' | translate }}" [(ngModel)]="exprotObj.payPassword"></ion-input>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <div *ngIf="backupWalletPlainText" class="kuangTextArea">
+        <p>{{ 'text-keystroe-message' | translate }} </p>
+        <textarea rows="10" class="backupWalletTextArea">{{backupWalletPlainText}}</textarea>
+    </div>
+
+</ion-content>
+<ion-footer>
+    <button *ngIf="!backupWalletPlainText" ion-button (click)="onDown()" full>{{ 'text-down' | translate }}</button>
+    <button *ngIf="backupWalletPlainText" ion-button (click)="onCopay()" full>{{ 'text-copy-to-clipboard' | translate }}</button>
+</ion-footer>

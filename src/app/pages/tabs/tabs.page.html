@@ -1,0 +1,17 @@
+
+ <!-- <router-outlet></router-outlet> -->
+
+<ion-tabs #myTabs (ionChange)="changeTabs()">
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="tab-home">
+        <ion-icon name="apps"></ion-icon>
+        <ion-label>{{ 'tab-home' | translate }}</ion-label>
+      </ion-tab-button>
+  
+      <ion-tab-button tab="tab-setting">
+        <ion-icon name="apps"></ion-icon>
+        <ion-label>{{ 'tab-setting' | translate }}</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  
+  </ion-tabs>

@@ -1,0 +1,70 @@
+<ion-content no-bounce>
+    <div class="setting-title">
+        <p style="font-size: 1.6em;">{{'tab-setting' | translate }}</p>
+    </div>
+    <ion-list>
+
+        <button ion-item (click)="onNext(5)">
+              <ion-label>
+                <span>{{'text-language-message' | translate}}</span>
+              </ion-label>
+              <ion-note *ngIf="currentLanguageName" item-end>
+                {{ currentLanguageName }}
+              </ion-note>
+        </button>
+
+        <button ion-item (click)="onNext(0)">
+          <ion-label>
+            <span>{{'text-wallet-manager' | translate }}</span>
+          </ion-label>
+        </button>
+
+        <button ion-item (click)="onNext(2)">
+          <ion-label>
+            <span>{{'text-contacts' | translate }}</span>
+          </ion-label>
+        </button>
+
+        <!-- <button *ngIf="!readonly" ion-item (click)="onNext(1)">
+          <ion-label>
+            <span>{{'text-check-publickey' | translate }}</span>
+          </ion-label>
+        </button> -->
+
+        <button *ngIf="masterWalletType === 'Multi-Sign' && readonly!='Readonly'" ion-item (click)="onNext(4)">
+          <ion-label>
+            <span>{{'text-sing-tx' | translate }}</span>
+          </ion-label>
+        </button>
+
+        <button *ngIf="masterWalletType === 'Multi-Sign'" ion-item (click)="onNext(3)">
+          <ion-label>
+            <span>{{'text-send-tx' | translate }}</span>
+          </ion-label>
+        </button>
+
+        <!-- <button ion-item (click)="onNext(6)">
+          <ion-label>
+            <span>{{'text-id-my' | translate }}</span>
+          </ion-label>
+        </button>-->
+
+        <button ion-item (click)="onNext(7)">
+          <ion-label>
+            <span>{{'my-vote' | translate }}</span>
+          </ion-label>
+        </button>
+
+        <button ion-item (click)="onNext(8)">
+          <ion-label>
+            <span>{{'about' | translate }}</span>
+          </ion-label>
+        </button>
+
+        <ion-item *ngIf="isShowDeposit" (click)="onNext(9)">
+            <ion-label>
+                <span>{{'take-back-deposit' | translate }}</span>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-title>{{'about'|translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row class="margin-top">
+      <ion-col class="text-right" col-4>
+          <span class="font-size-20">{{'Version'|translate}}</span>：
+      </ion-col>
+      <ion-col col-8 class="text-left">
+          <span class="font-size-18">
+          0.1.3
+        </span>
+      </ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col class="text-right" col-4>
+          <span class="font-size-20">spvsdk</span>：
+      </ion-col>
+      <ion-col col-8 class="text-left">
+          <span class="font-size-18">
+        {{spvVersion}}
+      </span>
+      </ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col class="text-right" col-4>
+          <span class="font-size-20">commit</span>：
+      </ion-col>
+      <ion-col col-8 class="text-left">
+          <span class="font-size-18">
+       <!--html commit ID-->
+    </span>
+      </ion-col>
+  </ion-row>
+  <ion-row class="bottom">
+      <ion-col class="text-center">
+          Website：<a href="https://www.elastos.org/">https://www.elastos.org</a>
+      </ion-col>
+  </ion-row>
+</ion-content>

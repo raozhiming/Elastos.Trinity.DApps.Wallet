@@ -1,0 +1,65 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title style="text-align:center">{{'text-contacts' | translate}}</ion-title>
+        <ion-buttons end>
+            <ion-button icon-only (click)="rightHeader()">
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-list>
+        <ion-item>
+            <ion-label>
+                <span>{{'contacts-name-title' | translate }}</span>
+            </ion-label>
+            <ion-note *ngIf="contactUser['name']" item-end>
+                {{contactUser["name"]}}
+            </ion-note>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>
+                <span>{{'contacts-address-title' | translate }}</span>
+            </ion-label>
+            <ion-note *ngIf="contactUser['address']" item-end style="font-size: 12px">
+                {{contactUser["address"]}}
+            </ion-note>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>
+                <span>{{'contacts-phone-title' | translate}}</span>
+            </ion-label>
+            <ion-note *ngIf="contactUser['phone']" item-end style="font-size: 12px">
+                {{contactUser["phone"]}}
+            </ion-note>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>
+                <span>{{'contacts-email-title' | translate}}</span>
+            </ion-label>
+            <ion-note *ngIf="contactUser['email']" item-end style="font-size: 12px">
+                {{contactUser["email"]}}
+            </ion-note>
+        </ion-item>
+
+
+        <ion-item>
+            <ion-label>
+                <span>{{'text-remark' | translate}}</span>
+            </ion-label>
+            <ion-note *ngIf="contactUser['remark']" item-end style="font-size: 12px">
+                {{contactUser["remark"]}}
+            </ion-note>
+        </ion-item>
+        <div style="text-align: center;width:100%;margin: 10px 0px">
+            <qrcode [qrdata]="qrcode" [size]="200" [level]="'M'" style="display:inline-block;"></qrcode>
+        </div>
+    </ion-list>
+</ion-content>
+<ion-footer *ngIf="isShow">
+    <ion-button expand="full" (click)="pay(contactUser['address'])">{{ 'text-transfer' | translate }}</ion-button>
+</ion-footer>

@@ -1,0 +1,57 @@
+<ion-header>
+    <ion-toolbar hideBackButton="true">
+        <ion-title style="text-align:center">{{'text-payment-confirm' | translate}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-grid>
+        <ion-row>
+
+            <ion-col col-3 class="font-size-1">
+                {{'transaction-price' | translate}}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                - {{transfer.amount/SELA}} {{chianId}}
+            </ion-col>
+
+            <ion-col col-3 class="font-size-1">
+                {{'text-to-address' | translate}}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                - {{transfer.amount/SELA}} {{chianId}}
+            </ion-col>
+
+            <ion-col col-3 class="font-size-1">
+                {{'text-to-address' | translate}}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                {{transfer.toAddress}}
+            </ion-col>
+
+            <ion-col col-3 class="font-size-1">
+                {{'text-memo' | translate}}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                {{transfer.memo}}
+            </ion-col>
+
+            <ion-col col-3 class="font-size-1">
+                {{'text-memo' | translate}}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                {{transfer.memo}}
+            </ion-col>
+
+            <ion-col col-3 class="font-size-1">
+                {{'text-information' | translate}}
+            </ion-col>
+            <ion-col col-8 class="font-size-1">
+                {{information}}
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-footer>
+    <ion-button style="width: 100%" (click)="onClick(2)">{{ 'text-transfer' | translate }}</ion-button>
+</ion-footer>

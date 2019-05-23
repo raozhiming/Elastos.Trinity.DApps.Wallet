@@ -1,0 +1,31 @@
+<!--
+  Generated template for the CreatemultiwalletPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-toolbar>
+        <ion-title style="text-align: center">{{'signature-wallet' | translate}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content no-bounce>
+    <ion-item>
+        <ion-label stacked>{{'text-multi-title1' | translate}}</ion-label>
+        <ion-select [(ngModel)]="totalCopayers" (ionChange)="setTotalCopayers()">
+            <ion-select-option *ngFor="let copayer of copayers" [value]="copayer">{{copayer}}</ion-select-option>
+        </ion-select>
+    </ion-item>
+
+    <ion-item>
+        <ion-label stacked>{{'text-multi-title2' | translate}}</ion-label>
+        <ion-select [(ngModel)]="requiredCopayers">
+            <ion-select-option *ngFor="let signature of signatures" [value]="signature">{{signature}}</ion-select-option>
+        </ion-select>
+    </ion-item>
+
+</ion-content>
+<ion-footer>
+    <ion-button expand="full" (click)="nextPage()">{{'text-next-step' | translate}}</ion-button>
+</ion-footer>

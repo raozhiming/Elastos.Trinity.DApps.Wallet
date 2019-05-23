@@ -277,7 +277,7 @@ export const en = {
   'text-sycn-message':'Sync Status',
   'text-language-message':"Language",
 
-  'text-wallte-list':"Wallet List",
+  'text-wallet-list':"Wallet List",
   'text-add-wallet':"Add Wallet",
   'signature-wallet':"Create Multi-sign wallet",
   'text-next-step':"Next Step",
@@ -287,7 +287,7 @@ export const en = {
   'text-add-private-title':"Add Private Key",
 
   'text-create-privatekey':"Create a new seed",
-  'text-observe-wallte':"Observer wallet (Public Key Only)",
+  'text-observe-wallet':"Observer wallet (Public Key Only)",
 
   'text-import-privatekey':"Import Private Key",
 
@@ -375,8 +375,8 @@ export const en = {
   'suggest-amount':'amount should less than',
   'text-wallet-name-validator1':'Wallet Name with more than 30 characters',
   'text-wallet-name-validator2': 'Wallet Name exist',
-  'text-multi-wallte':'(Multi-Sign Wallet)',
-  'text-standard-wallte':'(Standard Wallet)',
+  'text-multi-wallet':'(Multi-Sign Wallet)',
+  'text-standard-wallet':'(Standard Wallet)',
   'text-export-mnemomic':'Backup Mnemomics',
   'text-export-menmonic-sucess':"Check Mnemonics Success",
 

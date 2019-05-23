@@ -1,0 +1,42 @@
+<ion-header>
+
+    <ion-toolbar>
+        <ion-title style="text-align:center">{{'text-contacts-add' | translate}}</ion-title>
+    </ion-toolbar>
+
+</ion-header>
+<ion-content>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-name-title' | translate }}</ion-label>
+            <ion-input type="text" placeholder="" [(ngModel)]="name">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-address-title' | translate }}</ion-label>
+            <ion-input type="text" placeholder="" [(ngModel)]="address">
+            </ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-phone-title' | translate }}</ion-label>
+            <ion-input type="text" placeholder="" [(ngModel)]="phone">
+            </ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-email-title' | translate }}</ion-label>
+            <ion-input type="text" placeholder="" [(ngModel)]="email">
+            </ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-remark-title' | translate }}</ion-label>
+            <ion-input type="text" placeholder="" [(ngModel)]="remark">
+            </ion-input>
+        </ion-item>
+    </ion-list>
+</ion-content>
+<ion-footer>
+    <ion-button expand="full" (click)="add()">{{'text-add' | translate}}</ion-button>
+</ion-footer>
