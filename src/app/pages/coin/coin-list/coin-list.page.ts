@@ -23,10 +23,6 @@ export class CoinListPage implements OnInit {
   }
 
   ngOnInit() {
-    // TODO::
-    // this.navBar.backButtonClick = (e)=>{
-    //   this.navCtrl.pop();
-    // };
   }
 
   onSelect(item) {

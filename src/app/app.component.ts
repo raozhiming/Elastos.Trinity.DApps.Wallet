@@ -25,7 +25,7 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Router ,NavigationExtras} from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 
 import { TranslateService } from '@ngx-translate/core';
 import { Config } from './services/Config';
@@ -34,131 +34,131 @@ import { Native } from './services/Native';
 
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html'
+    selector: 'app-root',
+    templateUrl: 'app.component.html'
 })
-export class AppComponent {
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    public localStorage: LocalStorage, 
-    private translate: TranslateService, 
-    private native: Native,
-    private router: Router
-  ) {
-    this.initializeApp();
-  }
+export class AppComponent {ß
+    constructor(
+        private platform: Platform,
+        private splashScreen: SplashScreen,
+        private statusBar: StatusBar,
+        public localStorage: LocalStorage,
+        private translate: TranslateService,
+        private native: Native,
+        private router: Router
+    ) {
+        this.initializeApp();
+    }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-      this.initTranslateConfig();
-      this.init();
-    });
-  }
-
-
-  init(){
-    //this.initJsPush();
-    this.getKycIdList();
-
-    this.localStorage.getProgress().then((pdata)=>{
-      if(pdata){
-        Config.perObj = JSON.parse(pdata);
-      }
-
-      this.localStorage.getMappingTable().then((data)=>{
-        this.native.info(data);
-        if(data){
-          Config.setMappingList(JSON.parse(data));
-        }
-        this.router.navigate(['/initialize']);
-      });
-    });
-  }
-
-  // //
-  // onReceiveJG(param) {
-  //   let serialNum = JSON.parse(param)["serialNum"];
-  //   let message1 = this.translate.instant("text-Jpush-kyc-message-1");
-  //   let message2 = this.translate.instant("text-Jpush-kyc-message-2");
-  //   alert(message1 + serialNum + message2);
-  //   //  let serialNum = JSON.parse(param)["serialNum"];
-  //   //  let serids = Config.getSerIds();
-  //   //  let serid = serids[serialNum];
-  //   //  let did = serid["id"];
-  //   //  let appName = serid["appName"];
-  //   //  let appr = serid["appr"];
-  //   //  let idsObj = {};
-  //   //  this.ls.getKycList("kycId").then((val)=>{
-  //   //      if(val == null || val === undefined || val === {} || val === ''){
-  //   //           return;
-  //   //      }
-  //   //   idsObj = JSON.parse(val);
-  //   //   idsObj[did][appName][appr]["order"][serialNum]["status"] = 1;
-  //   //   this.ls.set("kycId",idsObj).then(()=>{
-
-  //   //   });
-  //   //  });
-  // }
-
-  initTranslateConfig() {
-    this.translate.addLangs(["zh", "en"]);
-    this.localStorage.getLanguage("wallet-language").then((val) => {
-      if (val == null) {
-        let lang = navigator.language.substr(0,2);
-        let languageObj = {
-          name: 'English',
-          isoCode: 'en'
-        };
-        if(lang == 'en'){
-          languageObj = {
-            name: 'English',
-            isoCode: 'en'
-          };
-        }else if(lang == 'zh'){
-          languageObj = {
-            name: '中文（简体）',
-            isoCode: 'zh'
-          };
-        }
-        this.localStorage.set("wallet-language", languageObj).then(() => {
-          // 设置默认语言
-          this.translate.setDefaultLang(lang);
-          this.translate.use(lang);
-          if(lang == 'en'){
-             this.native.setMnemonicLang("english")
-          }else if(lang == "zh"){
-            this.native.setMnemonicLang("chinese");
-          }else{
-            this.native.setMnemonicLang("english");
-          }
+    initializeApp() {
+        this.platform.ready().then(() => {
+            this.statusBar.styleDefault();
+            this.splashScreen.hide();
+            this.initTranslateConfig();
+            this.init();
         });
-      } else {
-        let lang = JSON.parse(val)["isoCode"];
-        this.translate.use(lang);
-        if(lang == 'en'){
-          this.native.setMnemonicLang("english")
-        }else if(lang == "zh"){
-         this.native.setMnemonicLang("chinese");
-        }else{
-         this.native.setMnemonicLang("english");
-        }
-      }
-    })
+    }
 
-  }
 
-  getKycIdList(){
-    this.localStorage.getKycList("kycId").then((val) => {
+    init() {
+        //this.initJsPush();
+        this.getKycIdList();
 
-      if (val == null || val === undefined || val === {} || val === '') {
-        return;
-      }
-      let serids = Config.getSertoId(JSON.parse(val));
-      Config.setSerIds(serids);
-    });
-  }
+        this.localStorage.getProgress().then((pdata) => {
+            if (pdata) {
+                Config.perObj = JSON.parse(pdata);
+            }
+
+            this.localStorage.getMappingTable().then((data) => {
+                this.native.info(data);
+                if (data) {
+                    Config.setMappingList(JSON.parse(data));
+                }
+                this.router.navigate(['/initialize']);
+            });
+        });
+    }
+
+    // //
+    // onReceiveJG(param) {
+    //   let serialNum = JSON.parse(param)["serialNum"];
+    //   let message1 = this.translate.instant("text-Jpush-kyc-message-1");
+    //   let message2 = this.translate.instant("text-Jpush-kyc-message-2");
+    //   alert(message1 + serialNum + message2);
+    //   //  let serialNum = JSON.parse(param)["serialNum"];
+    //   //  let serids = Config.getSerIds();
+    //   //  let serid = serids[serialNum];
+    //   //  let did = serid["id"];
+    //   //  let appName = serid["appName"];
+    //   //  let appr = serid["appr"];
+    //   //  let idsObj = {};
+    //   //  this.ls.getKycList("kycId").then((val)=>{
+    //   //      if(val == null || val === undefined || val === {} || val === ''){
+    //   //           return;
+    //   //      }
+    //   //   idsObj = JSON.parse(val);
+    //   //   idsObj[did][appName][appr]["order"][serialNum]["status"] = 1;
+    //   //   this.ls.set("kycId",idsObj).then(()=>{
+
+    //   //   });
+    //   //  });
+    // }
+
+    initTranslateConfig() {
+        this.translate.addLangs(["zh", "en"]);
+        this.localStorage.getLanguage("wallet-language").then((val) => {
+            if (val == null) {
+                let lang = navigator.language.substr(0, 2);
+                let languageObj = {
+                    name: 'English',
+                    isoCode: 'en'
+                };
+                if (lang == 'en') {
+                    languageObj = {
+                        name: 'English',
+                        isoCode: 'en'
+                    };
+                } else if (lang == 'zh') {
+                    languageObj = {
+                        name: '中文（简体）',
+                        isoCode: 'zh'
+                    };
+                }
+                this.localStorage.set("wallet-language", languageObj).then(() => {
+                    // 设置默认语言
+                    this.translate.setDefaultLang(lang);
+                    this.translate.use(lang);
+                    if (lang == 'en') {
+                        this.native.setMnemonicLang("english")
+                    } else if (lang == "zh") {
+                        this.native.setMnemonicLang("chinese");
+                    } else {
+                        this.native.setMnemonicLang("english");
+                    }
+                });
+            } else {
+                let lang = JSON.parse(val)["isoCode"];
+                this.translate.use(lang);
+                if (lang == 'en') {
+                    this.native.setMnemonicLang("english")
+                } else if (lang == "zh") {
+                    this.native.setMnemonicLang("chinese");
+                } else {
+                    this.native.setMnemonicLang("english");
+                }
+            }
+        })
+
+    }
+
+    getKycIdList() {
+        this.localStorage.getKycList("kycId").then((val) => {
+
+            if (val == null || val === undefined || val === {} || val === '') {
+                return;
+            }
+            let serids = Config.getSertoId(JSON.parse(val));
+            Config.setSerIds(serids);
+        });
+    }
 }

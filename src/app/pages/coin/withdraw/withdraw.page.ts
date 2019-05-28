@@ -8,7 +8,7 @@ import { Config } from '../../../services/Config';
 import { IDManager } from "../../../services/IDManager";
 import { ApiUrl } from "../../../services/ApiUrl"
 import { NavController, ModalController,Events } from '@ionic/angular';
-// import {PaymentboxPage} from '../../../pages/paymentbox/paymentbox';
+import { PaymentboxPage } from '../../paymentbox/paymentbox.page';
 
 @Component({
   selector: 'app-withdraw',
@@ -271,9 +271,8 @@ export class WithdrawPage implements OnInit {
     params["timestamp"] = timestamp;
     params["txHash"] = this.txId;
     params["deviceID"] = Config.getdeviceID();
-    //TODO::
-    // let checksum = IDManager.getCheckSum(params,"asc");
-    // params["checksum"] = checksum;
+    let checksum = IDManager.getCheckSum(params,"asc");
+    params["checksum"] = checksum;
 
     console.info("ElastJs sendCompanyHttp params "+ JSON.stringify(params));
     this.native.getHttp().postByAuth(ApiUrl.AUTH,params).toPromise().then(data => {
@@ -307,9 +306,8 @@ sendPersonAuth(parms){
       parms["timestamp"] = timestamp;
       parms["txHash"] = this.txId;
       parms["deviceID"] = Config.getdeviceID();
-      //TODO::
-      // let checksum = IDManager.getCheckSum(parms,"asc");
-      // parms["checksum"] = checksum;
+      let checksum = IDManager.getCheckSum(parms,"asc");
+      parms["checksum"] = checksum;
       this.native.info(parms);
 
   this.native.getHttp().postByAuth(ApiUrl.AUTH,parms).toPromise().then(data=>{
@@ -392,20 +390,22 @@ readWallet(raws){
   // ionViewDidLeave() {
   //    this.events.unsubscribe("error:update");
   // }
-  openPayModal(data){
-    let transfer = this.native.clone(data);
-    //TODO::
-    // const modal = this.modalCtrl.create(PaymentboxPage,transfer);
-    // modal.onDidDismiss(data => {
-    //   if(data){
-    //     this.native.showLoading().then(()=>{
-    //       this.transfer = this.native.clone(data);
-    //       this.sendRawTransaction();
-    //     });
-    //   }
-    // });
-    // modal.present();
-  }
+
+  async openPayModal(transfer) {
+    let props = this.native.clone(transfer);
+    const modal = await this.modalCtrl.create({
+        component: PaymentboxPage,
+        componentProps: props
+    });
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+        this.native.showLoading().then(() => {
+            this.transfer = this.native.clone(data);
+            this.sendRawTransaction();
+        });
+    }
+    return await modal.present();
+}
 
 
   accMul(arg1,arg2)

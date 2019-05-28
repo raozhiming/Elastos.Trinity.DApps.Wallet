@@ -28,11 +28,11 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { HttpModule } from '@angular/http';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
-import {zh} from './../assets/i18n/zh';
-import {en} from './../assets/i18n/en';
+import { zh } from './../assets/i18n/zh';
+import { en } from './../assets/i18n/en';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -55,56 +55,56 @@ import { LoadingService } from './services/Loading';
 
 /** 通过类引用方式解析国家化文件 */
 export class CustomTranslateLoader implements TranslateLoader {
-  public getTranslation(lang: string): Observable<any> {
-    return Observable.create(observer => {
-      switch (lang) {
-        case 'zh':
-        default:
-          observer.next(zh);
-          break;
-        case 'en':
-          observer.next(en);
-      }
+    public getTranslation(lang: string): Observable<any> {
+        return Observable.create(observer => {
+            switch (lang) {
+                case 'zh':
+                default:
+                    observer.next(zh);
+                    break;
+                case 'en':
+                    observer.next(en);
+            }
 
-      observer.complete();
-    });
-  }
+            observer.complete();
+        });
+    }
 }
 
 export function TranslateLoaderFactory() {
-  return new CustomTranslateLoader();
+    return new CustomTranslateLoader();
 }
 
 @NgModule({
-  declarations: [AppComponent
-  ],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule,
-    HttpModule,
-    IonicStorageModule.forRoot({
-      name: '__walletdb',
-      driverOrder: ['localstorage','indexeddb', 'sqlite', 'websql']
-    }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (TranslateLoaderFactory)
-      }
-    }),
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    Clipboard,
-    LocalStorage,
-    Native,
-    Logger,
-    HttpService,
-    PopupProvider,
-    WalletManager,
-    LoadingService,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
-  ],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent
+    ],
+    entryComponents: [],
+    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule,
+        HttpModule,
+        IonicStorageModule.forRoot({
+            name: '__walletdb',
+            driverOrder: ['localstorage', 'indexeddb', 'sqlite', 'websql']
+        }),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: (TranslateLoaderFactory)
+            }
+        }),
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        Clipboard,
+        LocalStorage,
+        Native,
+        Logger,
+        HttpService,
+        PopupProvider,
+        WalletManager,
+        LoadingService,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

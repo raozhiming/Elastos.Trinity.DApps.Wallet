@@ -96,10 +96,6 @@ export class CoinPage implements OnInit {
   }
 
   ngOnInit() {
-    // TODo::
-    // this.navBar.backButtonClick = (e)=>{
-    //   this.navCtrl.pop();
-    // };
   }
 
   initData(){
