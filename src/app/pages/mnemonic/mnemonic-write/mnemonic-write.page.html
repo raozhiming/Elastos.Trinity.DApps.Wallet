@@ -1,7 +1,5 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align:center">{{'text-mnemonic-check' | translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-mnemonic-check"></header-bar>
 </ion-header>
 
 <ion-content>
@@ -12,7 +10,8 @@
                 <div class="slide-title">{{'text-mnemonic-prompt2' | translate}}</div>
                 <div class="phrase-container">
                     <div class="phrase">
-                        <ion-button outline *ngFor="let item of selectList; let i = index" (click)="removeButton(i,item)" style="text-transform: none">{{item.text}}</ion-button>
+                        <ion-button outline *ngFor="let item of selectList; let i = index"
+                            (click)="removeButton(i,item)" style="text-transform: none">{{item.text}}</ion-button>
                     </div>
                 </div>
             </div>
@@ -20,18 +19,24 @@
             <div class="bottom-phrase">
                 <div *ngIf="!selectComplete">
                     <div class="words">
-                        <ion-button outline *ngFor="let item of mnemonicList; let i = index" (click)="addButton(i, item)" [disabled]="item.selected" style="text-transform: none">{{item.text}}
-                    </ion-button>
+                        <ion-button outline *ngFor="let item of mnemonicList; let i = index"
+                            (click)="addButton(i, item)" [disabled]="item.selected" style="text-transform: none">
+                            {{item.text}}
+                        </ion-button>
                     </div>
                 </div>
             </div>
         </div>
 
 
-        <div *ngIf="selectComplete" class="bottom-absolute">
-            <ion-button expand="full" class="button-standard" (click)="onNext()">
+        <!-- <div *ngIf="selectComplete" class="bottom-absolute">
+            <ion-button class="confirm" class="button-standard" (click)="onNext()">
             {{ 'confirm' | translate }}
           </ion-button>
-        </div>
+        </div> -->
     </div>
 </ion-content>
+
+<ion-footer *ngIf="selectComplete">
+    <ion-button class="confirm" (click)="onNext()" full>{{ 'confirm' | translate }}</ion-button>
+</ion-footer>

@@ -1,14 +1,42 @@
+@import "../../../functions.scss";
+
 .kuangTextArea {
     text-align: center;
     padding: 10px
 }
 .backupWalletTextArea {
-    width: 100%;
-    border: solid 1px #ddd;
-    border-radius: 20px;
-    margin-top: 10px;
-    resize: none;
-    padding-left: 10px;
-    padding-top: 10px;
+    margin: auto;
+    border: 1px dashed #d9d9d9;
+    border-radius: 3px;
+    // color: #192c3a;
+    text-align: center;
+    width: px2rem(660);
+    height: px2rem(280);
+    // display: flex;
+    justify-content: center;
+    background-color: #161723;
+    font-size: 20px;
 }
-* {font-size: 1.6em};
+ion-label {
+    font-size: 16px
+};
+
+ion-note {
+    font-size: 12px;
+};
+
+ion-segment-button {
+    // --background: #3880ff;
+    // --background-activated: #3880ff
+    // --background-checked: #3880ff;
+    // --background-hover: green;
+    // --border-color:green;
+    // --color: white;
+    // --color-activated: #3880ff;
+    --color-checked: #FFCB0F;
+    // --color-checked-disabled: white;
+    // --color-disabled: white;
+    // --indicator-color: #3880ff;
+    // --indicator-color-checked: #3880ff;
+    font-size: 16px;
+}

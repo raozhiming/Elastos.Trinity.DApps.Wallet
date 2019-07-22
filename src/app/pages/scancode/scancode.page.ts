@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { NavController, Platform} from '@ionic/angular';
+import { Platform} from '@ionic/angular';
 import { Native } from '../../services/Native';
 import { WalletManager } from '../../services/WalletManager'
 import { Config } from '../../services/Config';
@@ -17,7 +17,7 @@ export class ScancodePage implements OnInit {
   public fee:any;
   public amount:any;
   public iwidth:string=null;
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public native: Native,public walletManager: WalletManager,public zone:NgZone,public plt:Platform) {
+  constructor(public route: ActivatedRoute, public native: Native,public walletManager: WalletManager,public zone:NgZone,public plt:Platform) {
            this.iwidth = (this.plt.width()-10).toString();
            this.route.queryParams.subscribe((data)=>{
             let params = data;
@@ -35,7 +35,7 @@ export class ScancodePage implements OnInit {
               this.qrcode = JSON.stringify(params);
             });
             this.native.info(data);
-          });   
+          });
   }
 
   ngOnInit() {

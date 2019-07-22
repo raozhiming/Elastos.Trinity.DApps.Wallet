@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WalletLanguagePage } from './wallet-language.page';
+import { MyToggleComponent } from './my-toggle.component';
 
-describe('WalletLanguagePage', () => {
-  let component: WalletLanguagePage;
-  let fixture: ComponentFixture<WalletLanguagePage>;
+describe('MyToggleComponent', () => {
+  let component: MyToggleComponent;
+  let fixture: ComponentFixture<MyToggleComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WalletLanguagePage ],
+      declarations: [ MyToggleComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WalletLanguagePage);
+    fixture = TestBed.createComponent(MyToggleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

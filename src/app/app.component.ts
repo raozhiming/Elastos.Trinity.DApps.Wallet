@@ -31,7 +31,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Config } from './services/Config';
 import { LocalStorage } from "./services/Localstorage";
 import { Native } from './services/Native';
-
+import { WalletManager } from './services/WalletManager';
+import { AppService } from './services/AppService';
 
 @Component({
     selector: 'app-root',
@@ -44,8 +45,10 @@ export class AppComponent {ß
         private statusBar: StatusBar,
         public localStorage: LocalStorage,
         private translate: TranslateService,
+        public walletManager: WalletManager,
         private native: Native,
-        private router: Router
+        private router: Router,
+        public appService: AppService
     ) {
         this.initializeApp();
     }
@@ -54,8 +57,11 @@ export class AppComponent {ß
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-            this.initTranslateConfig();
+            this.walletManager.init();
+            this.appService.init();
+            // this.initTranslateConfig();
             this.init();
+            // this.router.navigate(['/tabs']);
         });
     }
 

@@ -1,3 +1,5 @@
+
+@import "../../functions.scss";
 .mnemonic {
     //max-height: 30rem;
     display: flex;
@@ -7,7 +9,7 @@
         text-align: center;
         font-size: 14px;
         padding: 20px;
- 
+
         // color: color($colors, grey);
         color: --ion-color-medium;
     }
@@ -18,34 +20,30 @@
         min-width: 80%;
     }
     .phrase-container {
-        background: white;
+        // background: white;
         margin: auto;
-        border: 2px dashed #d9d9d9;
+        border: 1px dashed #d9d9d9;
         border-radius: 3px;
-        color: #192c3a;
+        // color: #192c3a;
         text-align: center;
-        max-width: 500px;
-        min-height: 9rem;
-        display: flex;
+        width: px2rem(660);
+        height: px2rem(280);
+        // display: flex;
         justify-content: center;
         align-items: center;
         .phrase {
-            padding: 2.5rem;
+            padding: 20px;
             font-weight: bold;
             line-height: 2;
-            font-size: 16px;
-            letter-spacing: 1px;
+            font-size: 18px;
+            // letter-spacing: 1px;
             @media (min-width: 575px) {
                 font-size: 18px;
-                padding: 3rem;
+                padding: 48px;
             }
             @media (max-height: 550px) {
                 font-size: 16px;
-                padding: 1rem;
-            }
-            .button {
-                height: 3rem;
-                font-size: 14px;
+                padding: 16px;
             }
         }
     }
@@ -53,20 +51,20 @@
         max-width: 500px;
         margin: 0 auto;
         .button {
-            height: 3rem;
+            height: 48px;
             font-size: 14px;
         }
     }
     .bottom-button {
         max-width: 500px;
         font-size: 16px;
- 
-        // color: color($colors, grey);
-        color: --ion-color-medium;
 
-        padding: 1rem;
+        // color: color($colors, grey);
+        // color: --ion-color-medium;
+
+        padding: 16px;
         position: absolute;
-        bottom: 2rem;
+        bottom: 32px;
         text-align: center;
         width: 100%;
     }

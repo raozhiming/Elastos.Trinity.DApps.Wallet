@@ -1,18 +1,24 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align:center">{{'text-contacts' | translate}}</ion-title>
-        <ion-buttons end>
-            <ion-button icon-only (click)="rightHeader()">
-              <ion-icon name="add"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
+    <header-bar title="text-contacts"></header-bar>
 </ion-header>
 <ion-content>
-    <nodata keyText='no-add-contact' *ngIf="isnodata"></nodata>
+    <div *ngIf="isnodata" id="nodata">
+        <img src="assets/images/no-contacts.png" />
+        <div>{{'no-add-contact' | translate}}</div>
+    </div>
     <ion-list *ngIf="!isnodata">
-        <button ion-item *ngFor="let item of contactUsers" (click)="onclick(item.id)">
-          {{ item.name }}
-        </button>
+        <ion-item *ngFor="let item of contactUsers" (click)="onClick(item.id)">
+            <img id="contact-circle" src="assets/images/contact-circle.png" />
+            <span id="first-letter">{{item.name[0]}}</span>
+            <ion-label>{{ item.name }}</ion-label>
+            <ion-label><p>{{item.phone}}</p></ion-label>
+            <ion-thumbnail solt="end"  (click)="onEdit(item, $event)">
+                <img src="assets/images/contact-edit.png" />
+            </ion-thumbnail>
+        </ion-item>
     </ion-list>
 </ion-content>
+
+<ion-footer>
+    <ion-button class="confirm" (click)="onAdd()">{{'text-contacts-add' | translate}}</ion-button>
+</ion-footer>

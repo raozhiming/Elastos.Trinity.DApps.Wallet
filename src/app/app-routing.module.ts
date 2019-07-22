@@ -54,11 +54,10 @@ const routes: Routes = [
     { path: 'txdetails', loadChildren: './pages/txdetails/txdetails.module#TxdetailsPageModule' },
     { path: 'scancode', loadChildren: './pages/scancode/scancode.module#ScancodePageModule' },
     { path: 'mnemonic-write', loadChildren: './pages/mnemonic/mnemonic-write/mnemonic-write.module#MnemonicWritePageModule' },
-    { path: 'coin', loadChildren: './pages/coin/coin.module#CoinPageModule' },
+    { path: 'coin/:name/:elaPer/:idChainPer', loadChildren: './pages/coin/coin.module#CoinPageModule' },
     { path: 'coin-list', loadChildren: './pages/coin/coin-list/coin-list.module#CoinListPageModule' },
     { path: 'payment-confirm', loadChildren: './pages/coin/payment-confirm/payment-confirm.module#PaymentConfirmPageModule' },
     { path: 'walletlist', loadChildren: './pages/walletlist/walletlist.module#WalletlistPageModule' },
-    { path: 'wallet-language', loadChildren: './pages/wallet/wallet-language/wallet-language.module#WalletLanguagePageModule' },
     { path: 'wallet-manager', loadChildren: './pages/wallet/wallet-manager/wallet-manager.module#WalletManagerPageModule' },
     { path: 'contacts', loadChildren: './pages/contacts/contacts.module#ContactsPageModule' },
     { path: 'contact-list', loadChildren: './pages/contacts/contact-list/contact-list.module#ContactListPageModule' },
@@ -67,7 +66,7 @@ const routes: Routes = [
     { path: 'paymentbox', loadChildren: './pages/paymentbox/paymentbox.module#PaymentboxPageModule' },
     { path: 'coin-select', loadChildren: './pages/coin/coin-select/coin-select.module#CoinSelectPageModule' },
     { path: 'withdraw', loadChildren: './pages/coin/withdraw/withdraw.module#WithdrawPageModule' },
-    { path: 'receive', loadChildren: './pages/coin/receive/receive.module#ReceivePageModule' },
+    { path: 'receive/:id/:chianId', loadChildren: './pages/coin/receive/receive.module#ReceivePageModule' },
     { path: 'recordinfo', loadChildren: './pages/coin/recordinfo/recordinfo.module#RecordinfoPageModule' },
     { path: 'recharge', loadChildren: './pages/coin/recharge/recharge.module#RechargePageModule' },
     { path: 'transfer', loadChildren: './pages/coin/transfer/transfer.module#TransferPageModule' },
@@ -79,6 +78,7 @@ const routes: Routes = [
     { path: 'modifywalletname', loadChildren: './pages/modifywalletname/modifywalletname.module#ModifywalletnamePageModule' },
     { path: 'exportmnemomic', loadChildren: './pages/exportmnemomic/exportmnemomic.module#ExportmnemomicPageModule' },
     { path: 'checkmnemomic', loadChildren: './pages/checkmnemomic/checkmnemomic.module#CheckmnemomicPageModule' },
+    { path: 'wallet-setting/:id', loadChildren: './pages/wallet/wallet-setting/wallet-setting.module#WalletSettingPageModule' },
 ];
 @NgModule({
     imports: [

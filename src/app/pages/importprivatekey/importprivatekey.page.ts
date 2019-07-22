@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { Util } from '../../services/Util';
 import { Native } from '../../services/Native';
 import { ActivatedRoute } from '@angular/router';
@@ -16,7 +15,7 @@ export class ImportprivatekeyPage implements OnInit {
   public passWord:string="";
   public rePassWorld:string="";
   public name:string ="";
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public native: Native) {
+  constructor(public route: ActivatedRoute, public native: Native) {
     this.route.queryParams.subscribe((data)=>{
       this.msobj = data;
     });

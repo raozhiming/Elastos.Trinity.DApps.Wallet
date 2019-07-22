@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { WalletManager } from '../../services/WalletManager';
 
 @Component({
@@ -9,7 +8,7 @@ import { WalletManager } from '../../services/WalletManager';
 })
 export class AboutPage implements OnInit {
   public spvVersion = "0";
-  constructor(public navCtrl: NavController, public walletManager:WalletManager) {
+  constructor(public walletManager:WalletManager) {
         this.init();
   }
 

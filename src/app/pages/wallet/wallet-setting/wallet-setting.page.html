@@ -1,0 +1,36 @@
+<ion-header>
+    <header-bar title="text-wallet-manager"></header-bar>
+</ion-header>
+<ion-content no-bounce>
+    <ion-list>
+        <ion-item detail [routerLink]="['/modifywalletname']" routerDirection="forward">
+            <ion-label>{{'wallet-name' | translate}}</ion-label>
+            <ion-note *ngIf="walletName" slot="end">
+                {{ walletName }}
+            </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="singleAddress && !readonly" detail [routerLink]="['/publickey']" routerDirection="forward">
+            <ion-label>{{'text-check-publickey' | translate }}</ion-label>
+        </ion-item>
+
+        <ion-item detail [routerLink]="['/exprot-prikey']" routerDirection="forward">
+            <ion-label>{{'wallet-export' | translate }}</ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="readonly!='Readonly'&&readonly!='simple'" detail [routerLink]="['/exportmnemomic']"
+            routerDirection="forward">
+            <ion-label>{{'text-export-mnemomic' | translate }}</ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="readonly!='Readonly'" detail [routerLink]="['/paypassword-reset']"
+            routerDirection="forward">
+            <ion-label>{{'wallet-password-reset' | translate}}</ion-label>
+        </ion-item>
+
+    </ion-list>
+</ion-content>
+
+<ion-footer>
+    <ion-button class="delete" (click)="onDelete()">{{'wallet-delete' | translate}}</ion-button>
+</ion-footer>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ModalController} from '@ionic/angular';
+import { ModalController} from '@ionic/angular';
 import { Config } from '../../services/Config';
 import { Native } from '../../services/Native';
 import { ActivatedRoute } from '@angular/router';
@@ -22,7 +22,7 @@ export class PaymentboxPage implements OnInit {
     remark:'',
     rate:''
   };
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public modalCtrl: ModalController
+  constructor(public route: ActivatedRoute, public modalCtrl: ModalController
     ,public native:Native) {
     let masterId = Config.getCurMasterWalletId();
     let accountObj = Config.getAccountType(masterId);
@@ -39,7 +39,7 @@ export class PaymentboxPage implements OnInit {
       }else{
           this.toAddress = this.transfer["toAddress"];
       }
-    });         
+    });
   }
 
   ngOnInit() {

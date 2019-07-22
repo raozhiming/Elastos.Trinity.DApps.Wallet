@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { NavController, Events} from '@ionic/angular';
+import { Events} from '@ionic/angular';
 import {WalletManager} from '../../../services/WalletManager';
 import {Native} from '../../../services/Native';
 import {LocalStorage} from '../../../services/Localstorage';
@@ -23,7 +23,7 @@ export class WalletImportPage implements OnInit {
   public mnemonicObj:any={mnemonic:"",payPassword: "", rePayPassword: "",phrasePassword:"",name:"",singleAddress:false};
   public walletType:string;
   public accontObj:any ={};
-  constructor(public navCtrl: NavController, public walletManager: WalletManager,public native: Native,public localStorage:LocalStorage,public events:Events,public popupProvider:PopupProvider,public zone:NgZone) {
+  constructor(public walletManager: WalletManager,public native: Native,public localStorage:LocalStorage,public events:Events,public popupProvider:PopupProvider,public zone:NgZone) {
          this.masterWalletId = Config.uuid(6,16);
          this.events.subscribe("error:update",(item)=>{
               if(item["error"]){
@@ -40,9 +40,9 @@ export class WalletImportPage implements OnInit {
 
          });
   }
-  public toggleShowAdvOpts(): void {
+  public toggleShowAdvOpts(isShow): void {
     this.zone.run(()=>{
-      this.showAdvOpts = !this.showAdvOpts;
+      this.showAdvOpts = isShow;
     });
   }
   selectTab(tab: string) {

@@ -1,40 +1,13 @@
-
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align: center">{{'text-scan-code' | translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="scanning"></header-bar>
 </ion-header>
 
-
-<ion-content>
-    <div style="padding-bottom:10px">
-        <qrcode class="receive-qrocde" [qrdata]="qrcode" [size]="iwidth" [level]="'M'"></qrcode>
-    </div>
-    <ul>
-        <li>
-            {{'transaction-id' | translate}}
-        </li>
-        <li class="bottom-border">
-            {{txHash}}
-        </li>
-
-        <li>
-            {{'transfer-address' | translate}}
-        </li>
-        <li class="bottom-border">
-            {{toAddress}}
-        </li>
-        <li>
-            {{'text-price' | translate}}
-        </li>
-        <li class="bottom-border">
-            {{amount}}
-        </li>
-        <li>
-            {{'text-fees' | translate}}
-        </li>
-        <li class="bottom-border">
-            {{fee}}
-        </li>
-    </ul>
+<ion-content no-scroll [ngClass]="{'qrscanner':isShow}">
+    <div [ngClass]="{'qrscanner-area':isShow}"> </div>
+    <div [ngClass]="{'through-line':isShow}"></div>
+    <div class="button-bottom"> <button (click)="toggleLight()" ion-fab class="icon-camera" margin-right>
+            <ion-icon name="flash"></ion-icon>
+        </button> <button (click)="toggleCamera()" ion-fab class="icon-camera">
+            <ion-icon name="reverse-camera"></ion-icon>
+        </button> </div>
 </ion-content>

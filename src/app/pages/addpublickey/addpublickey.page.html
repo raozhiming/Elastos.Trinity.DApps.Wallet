@@ -1,34 +1,23 @@
-
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align: center">{{'text-add-publickey-title'|translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-add-publickey-title"></header-bar>
 </ion-header>
-
-
 <ion-content>
     <!-- <ion-list>
         <ion-item *ngFor="let copayer of publicKeyArr">
             <ion-input type="text" placeholder="{{'text-publickey-placeholder'|translate}}" [(ngModel)]="copayer['publicKey']"></ion-input>
         </ion-item>
     </ion-list> -->
-    <ion-row *ngFor="let copayer of publicKeyArr">
-        <ion-col align-self-center col-10>
-            <ion-item>
-                <ion-input type="text" placeholder="{{'text-publickey-placeholder'|translate}}" [(ngModel)]="copayer['publicKey']"></ion-input>
-            </ion-item>
-        </ion-col>
-        <ion-col align-self-center col-2 (click)="saomiao(copayer['index'])">
-            <img src="assets/images/icon/ico-scan.svg" style="width: 40px;height:30px">
-        </ion-col>
-    </ion-row>
+    <ion-item *ngFor="let copayer of publicKeyArr">
+        <ion-input type="text" placeholder="{{'text-publickey-placeholder'|translate}}"
+            [(ngModel)]="copayer['publicKey']"></ion-input>
+        <ion-thumbnail slot="end" (click)="saomiao(copayer['index'])">
+            <img src="assets/images/icon/ico-scan.svg" />
+        </ion-thumbnail>
+    </ion-item>
 
-    <div style="text-align: center;width:100%;margin-top:20px" (click)="copy()" *ngIf="!isOnly">
-        <qrcode class="receive-qrocde" [qrdata]="qrcode" [size]="200" [level]="'M'" style="display:inline-block;"></qrcode>
-        <p style="text-align:left;margin-top: 10px;font-size:14px;padding:0px 10px">{{'my-publickey'|translate}}：{{qrcode}}</p>
-    </div>
+    <my-qrcode *ngIf="!isOnly" [address]="qrcode" [title]="'my-publickey'|translate"></my-qrcode>
 
 </ion-content>
 <ion-footer>
-    <ion-button expand="full" (click)="nextPage()">{{'text-next-step' | translate}}</ion-button>
+    <ion-button class="confirm" (click)="onNext()">{{'text-next-step' | translate}}</ion-button>
 </ion-footer>

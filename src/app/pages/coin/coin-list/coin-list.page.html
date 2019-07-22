@@ -1,16 +1,12 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button></ion-back-button>
-        </ion-buttons>
-        <ion-title style="text-align:center">{{'text-coin-list' | translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-coin-list"></header-bar>
 </ion-header>
+
 <ion-content>
     <ion-list>
         <ion-item *ngFor="let item of coinList">
             <ion-label>{{item.name}}</ion-label>
-            <ion-toggle *ngIf="item.name!='ELA'" [(ngModel)]="item.open" (ionChange)="onSelect(item)"></ion-toggle>
+            <my-toggle *ngIf="item.name!='ELA'" [checked]="item.open" (onChange)="onSelect(item, $event)"></my-toggle>
         </ion-item>
     </ion-list>
 </ion-content>

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
 import {PopupProvider} from '../../services/popup';
 import {Util} from '../../services/Util';
 import {Native} from '../../services/Native';
@@ -19,8 +18,8 @@ export class TxdetailsPage implements OnInit {
   public raw:string;
   public txHash:string;
   public singPublickey = [];
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public popupProvider:PopupProvider,public native:Native,public walletManager:WalletManager) {
-    
+  constructor(public route: ActivatedRoute, public popupProvider:PopupProvider,public native:Native,public walletManager:WalletManager) {
+
     this.route.queryParams.subscribe((data)=>{
       this.type = data["type"];
       this.txDetails = JSON.parse(data['content'])['tx'];
@@ -37,14 +36,14 @@ export class TxdetailsPage implements OnInit {
                     }
       });
     });
-    
+
   }
 
   ngOnInit() {
     console.log('ngOnInit TxdetailsPage');
   }
 
-  nextPage(){
+  onNext(){
      if(this.type === 4){
         this.getPassWord();
      }else if(this.type === 3){
@@ -74,7 +73,7 @@ export class TxdetailsPage implements OnInit {
                 this.native.info(data);
                 this.walletManager.encodeTransactionToString(data["success"],(raw)=>{
                              if(raw["success"]){
-                              this.native.Go(this.navCtrl, "/scancode", {"tx":{"chianId":this.txDetails["chianId"],"fee":this.txDetails["fee"], "raw": raw["success"]}});
+                              this.native.Go("/scancode", {"tx":{"chianId":this.txDetails["chianId"],"fee":this.txDetails["fee"], "raw": raw["success"]}});
                                }
                 });
               }
@@ -88,7 +87,7 @@ export class TxdetailsPage implements OnInit {
           this.native.info(data);
           this.native.hideLoading();
           this.native.toast_trans('send-raw-transaction');
-          this.navCtrl.pop();
+          this.native.pop();
         }
       })
   }

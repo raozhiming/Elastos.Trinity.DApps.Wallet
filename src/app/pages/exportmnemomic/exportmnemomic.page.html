@@ -1,22 +1,20 @@
-
 <ion-header>
-    <ion-toolbar>
-        <ion-title>{{'text-export-mnemomic' | translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-export-mnemomic"></header-bar>
 </ion-header>
-
-
 <ion-content>
     <div class="coin-info-top-box">
         <img src="./assets/images/logo-maincolor.svg">
-        <div style="font-size: 1.6em;">{{walltename}}
-            <span *ngIf="account['Type']==='Standard'" style="font-size: 1.3px">{{'text-standard-wallte' | translate}}</span>
-            <span *ngIf="account['Type']==='Multi-Sign'" style="font-size: 1.3px">{{'text-multi-wallte' | translate}}</span>
+        <div style="font-size: 1.6em;">{{walletname}}
+            <span *ngIf="account['Type']==='Standard'"
+                style="font-size: 1.3px">{{'text-standard-wallet' | translate}}</span>
+            <span *ngIf="account['Type']==='Multi-Sign'"
+                style="font-size: 1.3px">{{'text-multi-wallet' | translate}}</span>
         </div>
     </div>
     <ion-item *ngIf="isShow">
         <ion-label stacked>{{'unlock-paypassword-title' | translate }}</ion-label>
-        <ion-input type="password" placeholder="{{ 'unlock-paypassword-placeholder' | translate }}" [(ngModel)]="payPassword"></ion-input>
+        <ion-input type="password" placeholder="{{ 'unlock-paypassword-placeholder' | translate }}"
+            [(ngModel)]="payPassword"></ion-input>
     </ion-item>
     <div class="mnemonic" *ngIf="!isShow">
         <div class="slide-container">
@@ -25,7 +23,7 @@
                 <div class="phrase-container">
                     <div class="phrase">
                         <span *ngFor="let item of mnemonicList;let i=index">
-                      <span>{{item.text}}</span>
+                            <span>{{item.text}}</span>
                         </span>
                     </div>
                 </div>
@@ -34,6 +32,6 @@
     </div>
 </ion-content>
 <ion-footer>
-    <ion-button (click)="onExport()" expand="full" *ngIf="isShow">{{ 'text-export-mnemomic' | translate }}</ion-button>
-    <ion-button (click)="onNext()" expand="full" *ngIf="!isShow">{{ 'text-memory' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="onExport()" *ngIf="isShow">{{ 'text-export-mnemomic' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="onNext()" *ngIf="!isShow">{{ 'text-memory' | translate }}</ion-button>
 </ion-footer>

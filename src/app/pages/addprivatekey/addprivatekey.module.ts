@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { QRCodeModule } from 'angularx-qrcode';
+import { ComponentsModule } from '../../components/components.module';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -20,7 +22,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    QRCodeModule,
     TranslateModule,
+    ComponentsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [AddprivatekeyPage]

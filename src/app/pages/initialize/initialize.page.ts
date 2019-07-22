@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
 
-import { NavController, Events, Platform, } from '@ionic/angular';
+import { Events, Platform, } from '@ionic/angular';
 import { WalletManager } from '../../services/WalletManager';
 import { Native } from '../../services/Native';
 import { Util } from '../../services/Util';
@@ -17,9 +17,9 @@ export class InitializePage implements OnInit {
     // @ViewChildren('myTabs') tabs:Tabs;
     backButtonPressed: boolean = false;  //用于判断返回键是否触发
 
-    constructor(/*public appCtrl: App,*/private platform: Platform, public navCtrl: NavController,
+    constructor(/*public appCtrl: App,*/private platform: Platform,
         public walletManager: WalletManager, public native: Native,
-        public localStorage: LocalStorage, public events: Events, private translate: TranslateService/*, 
+        public localStorage: LocalStorage, public events: Events, private translate: TranslateService/*,
     public keyboard: Keyboard, public ionicApp: IonicApp*/) {
 
     }
@@ -188,7 +188,6 @@ export class InitializePage implements OnInit {
                 }
 
                 this.native.hideLoading();
-                alert("type:" + type);
                 switch (type) {
                     case "payment":
                         this.native.setRootRouter("/payment-confirm");

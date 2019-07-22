@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, Events} from '@ionic/angular';
+import { Events} from '@ionic/angular';
 import { WalletManager } from '../../services/WalletManager';
 import { Config } from '../../services/Config';
 import { Native } from '../../services/Native';
@@ -18,9 +18,9 @@ export class ExportmnemomicPage implements OnInit {
   public mnemonicList = [];
   public isShow:boolean = true;
   public mnemonicStr:string="";
-  public walltename:string ="";
+  public walletname:string ="";
   public account:any={};
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public walletManager: WalletManager,public native: Native,public events:Events) {
+  constructor(public route: ActivatedRoute, public walletManager: WalletManager,public native: Native,public events:Events) {
     this.init();
   }
 
@@ -30,7 +30,7 @@ export class ExportmnemomicPage implements OnInit {
 
   ionViewWillEnter(){
     this.masterWalletId = Config.getCurMasterWalletId();
-    this.walltename = Config.getWalletName(this.masterWalletId);
+    this.walletname = Config.getWalletName(this.masterWalletId);
     this.account = Config.getAccountType(this.masterWalletId);
     this.events.subscribe("error:update",()=>{
        this.isShow = true;
@@ -39,7 +39,7 @@ export class ExportmnemomicPage implements OnInit {
 
   init(){
       this.masterWalletId = Config.getCurMasterWalletId();
-      this.walltename = Config.getWalletName(this.masterWalletId);
+      this.walletname = Config.getWalletName(this.masterWalletId);
   }
 
   checkparms(){
@@ -51,7 +51,7 @@ export class ExportmnemomicPage implements OnInit {
   }
 
   onNext(){
-       this.native.Go(this.navCtrl, "/checkmnemomic", {mnemonicStr: this.mnemonicStr, mnemonicList: this.mnemonicList})
+       this.native.Go("/checkmnemomic", {mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList)})
   }
 
   onExport(){

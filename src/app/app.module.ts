@@ -28,6 +28,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { HttpModule } from '@angular/http';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
@@ -38,7 +39,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { IonicStorageModule } from "@ionic/storage";
-
 
 /**provider*/
 import { Clipboard } from '@ionic-native/clipboard/ngx';
@@ -95,6 +95,7 @@ export function TranslateLoaderFactory() {
     providers: [
         StatusBar,
         SplashScreen,
+        QRScanner,
         Clipboard,
         LocalStorage,
         Native,

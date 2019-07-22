@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController ,Events} from '@ionic/angular';
+import { Events} from '@ionic/angular';
 import {WalletManager} from '../../services/WalletManager';
 import {Native} from '../../services/Native';
 import {Config} from '../../services/Config';
@@ -20,13 +20,13 @@ export class AddprivatekeyPage implements OnInit {
   public  name:string = "";
   public curIndex = 0;
   public qrcode: string=null;
-  constructor(public navCtrl: NavController, public route:ActivatedRoute, public walletManager: WalletManager,public native:Native,public localStorage:LocalStorage,public events:Events) {
+  constructor(public route:ActivatedRoute, public walletManager: WalletManager,public native:Native,public localStorage:LocalStorage,public events:Events) {
     this.route.queryParams.subscribe((data)=>{
       this.native.info(data);
       this.msobj = data;
       this.name = this.msobj["name"];
     });
-    
+
     let totalCopayers = this.msobj["totalCopayers"];
     for(let index=0 ;index<totalCopayers-1;index++){
         let item ={index:index,publicKey:this.publicKey};
@@ -52,10 +52,10 @@ export class AddprivatekeyPage implements OnInit {
   saomiao(index){
     this.curIndex = index;
     console.log("saomiao="+index);
-    this.native.Go(this.navCtrl,"/scan", {"pageType":"6"});
+    this.native.Go("/scan", {"pageType":"6"});
   }
 
-  nextPage(){
+  onNext(){
      this.native.showLoading().then(()=>{
       this.createWallet();
      });

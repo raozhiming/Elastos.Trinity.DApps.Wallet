@@ -1,20 +1,17 @@
-
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align: center">{{'text-observe-wallet'|translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-observe-wallet"></header-bar>
 </ion-header>
-
 
 <ion-content no-bounce>
     <ion-list>
         <ion-item>
             <ion-label stacked>{{ 'addwallet-walletname-title' | translate }}</ion-label>
-            <ion-input type="text" placeholder="{{ 'addwallet-walletname-placeholder' | translate }}" [(ngModel)]="name"></ion-input>
+            <ion-input type="text" placeholder="{{ 'addwallet-walletname-placeholder' | translate }}"
+                [(ngModel)]="name"></ion-input>
         </ion-item>
     </ion-list>
 </ion-content>
 
 <ion-footer>
-    <ion-button expand="full" (click)="import()">{{ 'text-next-step' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="import()">{{ 'text-next-step' | translate }}</ion-button>
 </ion-footer>

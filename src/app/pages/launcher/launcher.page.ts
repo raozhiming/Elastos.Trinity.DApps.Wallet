@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { Config } from '../../services/Config';
 
 @Component({
-  selector: 'app-launcher',
-  templateUrl: './launcher.page.html',
-  styleUrls: ['./launcher.page.scss'],
+    selector: 'app-launcher',
+    templateUrl: './launcher.page.html',
+    styleUrls: ['./launcher.page.scss'],
 })
 export class LauncherPage implements OnInit {
 
-  constructor() { }
+    constructor() {
+        Config.multiObj = {};
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+
+    }
 }

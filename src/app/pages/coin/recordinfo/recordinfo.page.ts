@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Config } from '../../../services/Config';
 import { Util } from '../../../services/Util';
-import { NavController, NavParams} from '@ionic/angular';
 import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +20,7 @@ export class RecordinfoPage implements OnInit {
   public jiajian:any="";
   public inputs:any = [];
   public outputs:any = [];
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public walletManager: WalletManager,public native :Native){
+  constructor(public route: ActivatedRoute, public walletManager: WalletManager,public native :Native){
     //this.init();
   }
 
@@ -68,8 +67,8 @@ export class RecordinfoPage implements OnInit {
               status = 'Unconfirmed'
               break;
           }
-  
-  
+
+
           let vtype ="";
             switch(transaction["Type"])
             {
@@ -133,7 +132,7 @@ export class RecordinfoPage implements OnInit {
               this.jiajian = "";
             }
           }
-  
+
           this.transactionRecord = {
             name: chainId,
             status: status,
@@ -152,7 +151,7 @@ export class RecordinfoPage implements OnInit {
       });
     });
 
-    
+
   }
 
   onNext(address){
@@ -164,10 +163,10 @@ export class RecordinfoPage implements OnInit {
    self.location.href=this.blockchain_url + 'tx/' + txId;
   }
 
-  doRefresh(refresher){
+  doRefresh(event){
     this.init();
     setTimeout(() => {
-      refresher.complete();
+      event.target.complete();
     },1000);
   }
 

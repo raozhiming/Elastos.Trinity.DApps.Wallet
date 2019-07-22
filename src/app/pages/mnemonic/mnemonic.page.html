@@ -1,7 +1,5 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align:center">{{'text-mnemonic' | translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-mnemonic"></header-bar>
 </ion-header>
 
 <ion-content>
@@ -12,7 +10,7 @@
                 <div class="phrase-container">
                     <div class="phrase">
                         <span *ngFor="let item of mnemonicList;let i=index">
-                      <span>{{item.text}}</span>
+                            <span>{{item.text}} &ensp;</span>
                         </span>
                     </div>
                 </div>
@@ -20,16 +18,21 @@
             <div class="mnemonic-password">
                 <ion-list>
                     <ion-item>
-                        <ion-label style="font-size:15px">{{'showmnes-optionalpassword1-title' | translate }}</ion-label>
-                        <ion-toggle [(ngModel)]="isSelect"></ion-toggle>
+                        <ion-label style="font-size:15px">{{'showmnes-optionalpassword1-title' | translate }}
+                        </ion-label>
+                        <my-toggle [checked]="isSelect" (onChange)=onChangeSelect($event)></my-toggle>
                     </ion-item>
 
                     <ion-item *ngIf="isSelect">
-                        <ion-input type="password" placeholder="{{ 'showmnes-optionalpassword1-placeholder' | translate }}" [(ngModel)]="mnemonicPassword"></ion-input>
+                        <ion-input type="password"
+                            placeholder="{{ 'showmnes-optionalpassword1-placeholder' | translate }}"
+                            [(ngModel)]="mnemonicPassword"></ion-input>
                     </ion-item>
 
                     <ion-item *ngIf="isSelect">
-                        <ion-input type="password" placeholder="{{ 'showmnes-optionalpassword2-placeholder' | translate }}" [(ngModel)]="mnemonicRepassword"></ion-input>
+                        <ion-input type="password"
+                            placeholder="{{ 'showmnes-optionalpassword2-placeholder' | translate }}"
+                            [(ngModel)]="mnemonicRepassword"></ion-input>
                     </ion-item>
 
                 </ion-list>
@@ -38,5 +41,5 @@
     </div>
 </ion-content>
 <ion-footer>
-    <ion-button (click)="onNext()" full>{{ 'text-memory' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="onNext()" full>{{ 'text-memory' | translate }}</ion-button>
 </ion-footer>

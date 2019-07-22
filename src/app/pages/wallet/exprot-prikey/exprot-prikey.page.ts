@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams} from '@ionic/angular';
 import { WalletManager } from '../../../services/WalletManager';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
@@ -17,7 +16,7 @@ export class ExprotPrikeyPage implements OnInit {
   public readonly:string="";
   public masterWalletType:string = "";
   public singleAddress:boolean = false;
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public walletManager: WalletManager,public native: Native,public localStorage:LocalStorage) {
+  constructor(public route: ActivatedRoute, public walletManager: WalletManager,public native: Native,public localStorage:LocalStorage) {
            this.onWalletDatainit();
   }
 

@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ComponentsModule } from '../../components/components.module';
 
 import { IonicModule } from '@ionic/angular';
-
 import { ContactsPage } from './contacts.page';
 
 const routes: Routes = [
@@ -21,6 +21,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     TranslateModule,
+    ComponentsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ContactsPage]

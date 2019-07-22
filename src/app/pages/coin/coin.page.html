@@ -1,38 +1,53 @@
 <ion-header>
-    <ion-toolbar>
-            <ion-buttons slot="start">
-                <ion-back-button></ion-back-button>
-            </ion-buttons>
-        <ion-title style="text-align:center">{{coinName}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="{{coinName}}"></header-bar>
 </ion-header>
 <ion-content>
-    <nodata keyText='no-tx-record' *ngIf="isNodata"></nodata>
+    <!-- <nodata keyText='no-tx-record' *ngIf="isNodata"></nodata> -->
     <ion-refresher (ionRefresh)="doRefresh($event)" *ngIf="!isNodata">
-        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles" refreshingText="">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles"
+            refreshingText="">
         </ion-refresher-content>
         <ion-refresher-content>
         </ion-refresher-content>
     </ion-refresher>
-    <div class='address-whole' *ngIf="!isNodata">
-        <div class="coin-info-top-box">
-            <img src="./assets/images/logo-maincolor.svg">
-            <div style="font-size: 1.6em;">{{'total-balance' | translate}}: {{coinCount}} {{coinName}}</div>
-            <div style="font-size: 1.6em;" *ngIf="coinName==='ELA'">{{"vote-balance" | translate}}: {{votedCount}} {{coinName}}</div>
-        </div>
 
+    <div class="coin-info-top-box">
+        <h2>{{coinCount}}</h2>
+        <p> {{curHeight}}/{{maxHeight}}</p>
+    </div>
+    <div id="nodata" *ngIf="isNodata">{{'no-tx-record' | translate }}</div>
+
+    <ion-list *ngIf="!isNodata">
+        <div *ngFor="let item of transferList; let i = index" (click)="onItem(item)">
+            <ion-item (click)="onItem(item)">
+                <img src={{item.payStatusIcon}} />
+                <ion-label id="coin-name">
+                    <h2 id="exchange-name">{{item.name}}</h2>
+                    <p *ngIf="item.timestamp!='0'" id="datatime">{{item.datetime}}</p>
+                </ion-label>
+                <ion-label solt="end" id="coin-value">
+                    <h2 id="amount">{{item.fuhao}} {{item.resultAmount}}</h2>
+                    <p *ngIf="item.status!='Confirmed'" id="status">{{item.status | translate}}</p>
+                </ion-label>
+            </ion-item>
+        </div>
+    </ion-list>
+
+    <!-- <div class='address-whole' *ngIf="!isNodata">
         <ion-grid style="margin-bottom: 60px">
             <ion-row>
                 <ion-col col-12 class="row-title">
                     {{ 'coin-recent-transfer' | translate }}
                 </ion-col>
             </ion-row>
-            <ion-row *ngFor="let item of transferList; let i = index" (click)="onItem(item)" class="hang" [ngClass]="{'bottom-border': i==transferList.length-1}">
+            <ion-row *ngFor="let item of transferList; let i = index" (click)="onItem(item)" class="hang"
+                [ngClass]="{'bottom-border': i==transferList.length-1}">
                 <ion-col col-2 align-self-center>
                     <img src={{item.payStatusIcon}} alt="" class="transfer-list-img">
                 </ion-col>
                 <ion-col col-5 align-self-center class="text-left">
-                    <span class="font-size-2">{{item.status | translate}}</span> <span class="transfer-list-date" *ngIf="item.timestamp!='0'" class="font-size-2"> {{item.datetime}} </span>
+                    <span class="font-size-2">{{item.status | translate}}</span> <span class="transfer-list-date"
+                        *ngIf="item.timestamp!='0'" class="font-size-2"> {{item.datetime}} </span>
                 </ion-col>
                 <ion-col col-5 align-self-center class="text-right font-size-1">
                     {{item.fuhao}} {{item.resultAmount}}
@@ -47,18 +62,13 @@
 
         </ion-grid>
 
-    </div>
+    </div> -->
 </ion-content>
 <ion-footer>
     <div class="coin-bottom">
-        <div (click)="onNext(1)" style="font-size: 1.6em;">
-            {{ 'text-receive' | translate }}
-        </div>
-        <div (click)="onNext(3)" style="font-size: 1.6em;">
-            {{ this.textShow | translate }}
-        </div>
-        <div (click)="onNext(2)" style="font-size: 1.6em;">
-            {{ 'text-transfer' | translate }}
-        </div>
+        <ion-button [routerLink]="['/receive', coinId, coinName]" routerDirection="forward">
+            {{ 'text-receive' | translate }}</ion-button>
+        <ion-button (click)="onNext(3)">{{ this.textShow | translate }}</ion-button>
+        <ion-button (click)="onNext(2)">{{ 'text-transfer' | translate }}</ion-button>
     </div>
 </ion-footer>

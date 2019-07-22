@@ -1,8 +1,19 @@
-.setting-title {
-    width: 100%;
-    color: #ffffff;
-    text-align: center;
-    background-color: #0568B2;
-    height: 80px;
-    line-height: 80px;
+@import "../../../functions.scss";
+
+ion-list {
+    ion-item {
+        height: px2rem(104px);
+    }
+    ion-icon {
+        margin: 10px;
+        width: px2rem(32px);
+        height: px2rem(32px);
+    }
+    ion-label {
+        font-size: 18px;
+    }
+    ion-note {
+        font-size: 16px;
+    }
+
 }

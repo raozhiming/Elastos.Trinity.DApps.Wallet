@@ -1,0 +1,8 @@
+{
+  "zh": {
+      "name": "钱包",
+      "short_name": "wallet",
+      "description": "Elastos SPV 钱包",
+      "author_name": "陈冬晓"
+  }
+}

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { Native } from '../../services/Native';
 import { WalletManager } from '../../services/WalletManager';
 import { Config } from '../../services/Config';
@@ -13,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class PublickeyPage implements OnInit {
   public masterWalletId:string ="1";
   public qrcode: string=null;
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public native: Native,public walletManager: WalletManager) {
+  constructor(public route: ActivatedRoute, public native: Native,public walletManager: WalletManager) {
     this.getPublicKey();
   }
 

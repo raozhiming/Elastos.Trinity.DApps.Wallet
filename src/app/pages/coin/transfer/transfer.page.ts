@@ -7,7 +7,7 @@ import { Util } from "../../../services/Util";
 import { Config } from '../../../services/Config';
 import { IDManager } from "../../../services/IDManager";
 import { ApiUrl } from "../../../services/ApiUrl"
-import { NavController, ModalController, Events } from '@ionic/angular';
+import { ModalController, Events } from '@ionic/angular';
 import { PaymentboxPage } from '../../paymentbox/paymentbox.page';
 
 @Component({
@@ -44,7 +44,7 @@ export class TransferPage implements OnInit {
     isInput = false;
     walletInfo = {};
     useVotedUTXO: boolean = false;
-    constructor(public navCtrl: NavController, public route: ActivatedRoute, public walletManager: WalletManager,
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
         public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
         this.init();
     }
@@ -84,7 +84,7 @@ export class TransferPage implements OnInit {
     }
 
     rightHeader() {
-        this.native.Go(this.navCtrl, "/scan", { "pageType": "1" });
+        this.native.Go("/scan", { "pageType": "1" });
     }
 
     initData() {
@@ -101,7 +101,7 @@ export class TransferPage implements OnInit {
     onClick(type) {
         switch (type) {
             case 1:
-                this.native.Go(this.navCtrl, "/contact-list", { "hideButton": true });
+                this.native.Go("/contact-list", { "hideButton": true });
                 break;
             case 2:   // 转账
                 this.checkValue();
@@ -223,7 +223,7 @@ export class TransferPage implements OnInit {
                     this.walletManager.encodeTransactionToString(data["success"], (raw) => {
                         if (raw["success"]) {
                             this.native.hideLoading();
-                            this.native.Go(this.navCtrl, "/scancode", { "tx": { "chianId": this.chianId, "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
+                            this.native.Go("/scancode", { "tx": { "chianId": this.chianId, "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
                         } else {
                             this.native.info(raw);
                         }
@@ -297,7 +297,7 @@ export class TransferPage implements OnInit {
 
         }).catch(error => {
             alert("错误码:" + JSON.stringify(error));
-            this.native.Go(this.navCtrl, "/id-result", { 'status': '1' });
+            this.native.Go("/id-result", { 'status': '1' });
         });
     }
 
@@ -336,7 +336,7 @@ export class TransferPage implements OnInit {
         }).catch(error => {
 
         });
-        this.native.Go(this.navCtrl, "/id-result", { 'status': '0' });
+        this.native.Go("/id-result", { 'status': '0' });
     }
 
     saveKycSerialNum(serialNum) {
@@ -348,7 +348,7 @@ export class TransferPage implements OnInit {
             serialNumObj["txHash"] = this.txId;
             serialNumObj["pathStatus"] = 1;
             this.localStorage.set("kycId", idsObj).then((newVal) => {
-                this.native.Go(this.navCtrl, "/id-result", { 'status': '0', id: this.did, path: this.selectType });
+                this.native.Go("/id-result", { 'status': '0', id: this.did, path: this.selectType });
             });
         })
     }
@@ -380,7 +380,7 @@ export class TransferPage implements OnInit {
         this.walletManager.encodeTransactionToString(raws, (raw) => {
             if (raw["success"]) {
                 this.native.hideLoading();
-                this.native.Go(this.navCtrl, "/scancode", { "tx": { "chianId": this.chianId, "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
+                this.native.Go("/scancode", { "tx": { "chianId": this.chianId, "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
             } else {
                 alert("=====encodeTransactionToString===error===" + JSON.stringify(raw));
             }

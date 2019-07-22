@@ -1,5 +1,4 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { Util } from '../../services/Util';
 import { Native } from '../../services/Native';
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +13,7 @@ export class ImportmnemonicPage implements OnInit {
   public showAdvOpts:boolean;
   public mnemonicObj:any={mnemonic:"",payPassword: "", rePayPassword: "",phrasePassword:"",name:"",singleAddress:true};
   public exatParm:any;
-  constructor(public navCtrl: NavController,  public route: ActivatedRoute, public native:Native,public zone:NgZone) {
+  constructor( public route: ActivatedRoute, public native:Native,public zone:NgZone) {
     this.route.queryParams.subscribe((data)=>{
       this.exatParm = data;
     });
@@ -80,14 +79,14 @@ export class ImportmnemonicPage implements OnInit {
     return wordList.join(isJA ? '\u3000' : ' ');
   };
 
-  nextPage(){
+  onNext(){
      if(this.checkWorld()){
 
          this.exatParm["mnemonicStr"] = this.normalizeMnemonic(this.mnemonicObj.mnemonic);
          this.exatParm["mnemonicPassword"] = this.mnemonicObj.phrasePassword;
          this.exatParm["payPassword"] = this.mnemonicObj.payPassword;
          this.exatParm["name"] = this.mnemonicObj.name;
-         this.native.Go(this.navCtrl, "/mpublickey", this.exatParm);
+         this.native.Go("/mpublickey", this.exatParm);
      }
   }
 

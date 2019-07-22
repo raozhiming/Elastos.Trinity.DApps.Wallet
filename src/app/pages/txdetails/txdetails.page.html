@@ -1,10 +1,6 @@
-
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align: center">{{'text-tx-details'|translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-tx-details"></header-bar>
 </ion-header>
-
 
 <ion-content padding>
     <ul>
@@ -44,5 +40,5 @@
     </ul>
 </ion-content>
 <ion-footer>
-    <ion-button style="width: 100%" (click)="nextPage()">{{'text-next-step' | translate}}</ion-button>
+    <ion-button style="width: 100%" (click)="onNext()">{{'text-next-step' | translate}}</ion-button>
 </ion-footer>

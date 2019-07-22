@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { WalletManager } from '../../../services/WalletManager';
 import { Util } from "../../../services/Util";
 import { Native } from '../../../services/Native';
@@ -16,7 +15,7 @@ export class PaypasswordResetPage implements OnInit {
   oldPayPassword: string;
   payPassword: string;
   rePayPassword: string;
-  constructor(public navCtrl: NavController, public route: ActivatedRoute, public walletManager: WalletManager,public native: Native) {
+  constructor(public route: ActivatedRoute, public walletManager: WalletManager,public native: Native) {
         this.masterWalletId = Config.getCurMasterWalletId();
   }
 
@@ -37,7 +36,7 @@ export class PaypasswordResetPage implements OnInit {
       if(data["success"]){
         this.native.info(data);
         this.native.toast_trans("reset-pwd-success");
-        this.navCtrl.pop();
+        this.native.pop();
       }else{
         this.native.info(data);
       }

@@ -1,30 +1,25 @@
-<!--
-  Generated template for the WalletmodePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align: center">{{'text-select-type'|translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-select-type"></header-bar>
 </ion-header>
 
-
-<ion-content padding style="text-align: center;">
+<ion-content>
     <div id="wrapper">
         <div id="cell">
             <div>
-                <ion-button expand="full" (click)="wayOne()">{{'text-create-privatekey'|translate}}</ion-button>
+                <ion-button expand="full" (click)="onClick('/wallet-create')">
+                    {{'text-create-privatekey'|translate}}</ion-button>
             </div>
             <div>
-                <ion-button expand="full" (click)="wayTwo()">{{'text-import-privatekey'|translate}}</ion-button>
+                <ion-button expand="full" [routerLink]="['/importprivatekey']" routerDirection="forward">
+                    {{'text-import-privatekey'|translate}}</ion-button>
             </div>
             <div>
-                <ion-button expand="full" (click)="wayThree()">{{'text-observe-wallet'|translate}}</ion-button>
+                <ion-button expand="full" [routerLink]="['/createwalletname']" routerDirection="forward">
+                    {{'text-observe-wallet'|translate}}</ion-button>
             </div>
             <div>
-                <ion-button expand="full" (click)="wayFour()">{{ 'create-multi-by-mnes' | translate }}</ion-button>
+                <ion-button expand="full" [routerLink]="['/importmnemonic']" routerDirection="forward">
+                    {{ 'create-multi-by-mnes' | translate }}</ion-button>
             </div>
         </div>
     </div>

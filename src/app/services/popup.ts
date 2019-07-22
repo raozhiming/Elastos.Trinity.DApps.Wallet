@@ -16,11 +16,12 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader : this.translate.instant(subTitle),
         backdropDismiss: false,
+        cssClass: 'my-custom-alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
             handler: () => {
-              console.log('Ok clicked');
+              console.log('ionicAlert Ok clicked');
               resolve();
             }
           }
@@ -36,11 +37,12 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader : this.translate.instant(subTitle)+"("+suggestAmount+amount+")",
         backdropDismiss: false,
+        cssClass: 'my-custom-alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
             handler: () => {
-              console.log('Ok clicked');
+              console.log('ionicAlert_data Ok clicked');
               resolve();
             }
           }
@@ -56,11 +58,12 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader :"txHash:"+"("+hash+")"+":"+transactionDeleted,
         backdropDismiss: false,
+        cssClass: 'my-custom-alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
             handler: () => {
-              console.log('Ok clicked');
+              console.log('ionicAlert_delTx Ok clicked');
               resolve();
             }
           }
@@ -78,11 +81,12 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader :reason+":"+sub+"<br/>"+"("+"txHash:"+hash+")",
         backdropDismiss: false,
+        cssClass: 'my-custom-alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
             handler: () => {
-              console.log('Ok clicked');
+              console.log('ionicAlert_PublishedTx_fail Ok clicked');
               resolve();
             }
           }
@@ -98,11 +102,12 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader :sub+"<br/>"+"("+"txHash:"+hash+")",
         backdropDismiss: false,
+        cssClass: 'my-custom-alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
             handler: () => {
-              console.log('Ok clicked');
+              console.log('ionicAlert_PublishedTx_sucess Ok clicked');
               resolve();
             }
           }
@@ -118,11 +123,12 @@ export class PopupProvider {
       this.alertCtrl.create({
         header: this.translate.instant(title),
         message  : this.translate.instant(message),
+        cssClass: 'my-custom-alert',
         buttons: [
           {
             text: cancelText ? cancelText : this.translate.instant('cancel'),
             handler: () => {
-              console.log('Disagree clicked');
+              console.log('ionicConfirm Disagree clicked');
               resolve(false);
             }
           },

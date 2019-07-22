@@ -1,15 +1,10 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align: center">{{'text-check-publickey' | translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-check-publickey"></header-bar>
 </ion-header>
 
 <ion-content padding>
-    <div style="text-align: center;width:100%;" (click)="copy()">
-        <qrcode class="receive-qrocde" [qrdata]="qrcode" [size]="200" [level]="'M'" style="display:inline-block;"></qrcode>
-        <p style="text-align:left;margin-top: 10px;font-size:1.6em">{{qrcode}}</p>
-    </div>
+    <my-qrcode [address]="qrcode" [title]="'my-qrcode' | translate"></my-qrcode>
 </ion-content>
 <ion-footer>
-    <ion-button expand="full" (click)="nextPage()">{{'text-next-step' | translate}}</ion-button>
+    <ion-button class="confirm" (click)="onNext()">{{'text-next-step' | translate}}</ion-button>
 </ion-footer>

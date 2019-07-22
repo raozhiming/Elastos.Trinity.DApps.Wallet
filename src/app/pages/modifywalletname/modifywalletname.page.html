@@ -1,9 +1,5 @@
 <ion-header>
-
-    <ion-navbar>
-        <ion-title>{{'modify-wallet-name' | translate }}</ion-title>
-    </ion-navbar>
-
+    <header-bar title="modify-wallet-name"></header-bar>
 </ion-header>
 
 <ion-content padding>
@@ -14,5 +10,5 @@
     </ion-list>
 </ion-content>
 <ion-footer>
-    <button ion-button full (click)="modify()">{{ 'confirm' | translate }}</button>
+    <ion-button class="confirm" (click)="modify()" full>{{ 'confirm' | translate }}</ion-button>
 </ion-footer>

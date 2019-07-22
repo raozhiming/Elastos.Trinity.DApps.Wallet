@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Util } from "../../../services/Util";
 import { Config } from '../../../services/Config';
-import { NavController, NavParams, ModalController, Events } from '@ionic/angular';
+import { ModalController, Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
 import { LocalStorage } from '../../../services/Localstorage';
@@ -37,7 +37,7 @@ export class PaymentConfirmPage implements OnInit {
     balance: 0;
 
     information: string;
-    constructor(public navCtrl: NavController, public route: ActivatedRoute, public walletManager: WalletManager,
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
         public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events) {
         this.init();
     }

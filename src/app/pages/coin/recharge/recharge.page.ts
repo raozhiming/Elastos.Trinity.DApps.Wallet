@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Util } from "../../../services/Util";
 import { Config } from '../../../services/Config';
-import { NavController, ModalController, Events } from '@ionic/angular';
+import { ModalController, Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
 import { LocalStorage } from '../../../services/Localstorage';
@@ -43,7 +43,7 @@ export class RechargePage implements OnInit {
 
     SELA = Config.SELA;
     walletInfo = {};
-    constructor(public navCtrl: NavController, public route: ActivatedRoute, public walletManager: WalletManager,
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
         public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events) {
         this.init();
     }
@@ -65,7 +65,7 @@ export class RechargePage implements OnInit {
     }
 
     rightHeader() {
-        this.native.Go(this.navCtrl, "/scan", { "pageType": "1" });
+        this.native.Go("/scan", { "pageType": "1" });
     }
 
     initData() {
@@ -201,7 +201,7 @@ export class RechargePage implements OnInit {
                     this.walletManager.encodeTransactionToString(data["success"], (raw) => {
                         if (raw["success"]) {
                             this.native.hideLoading();
-                            this.native.Go(this.navCtrl, "/scancode", { "tx": { "chianId": 'ELA', "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
+                            this.native.Go("/scancode", { "tx": { "chianId": 'ELA', "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
                         } else {
                             this.native.info(raw);
                         }
@@ -248,7 +248,7 @@ export class RechargePage implements OnInit {
         this.walletManager.encodeTransactionToString(raws, (raw) => {
             if (raw["success"]) {
                 this.native.hideLoading();
-                this.native.Go(this.navCtrl, "/scancode", { "tx": { "chianId": 'ELA', "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
+                this.native.Go("/scancode", { "tx": { "chianId": 'ELA', "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
             } else {
                 alert("=====encodeTransactionToString===error===" + JSON.stringify(raw));
             }

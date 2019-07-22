@@ -1,21 +1,22 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title style="text-align:center">{{"text-add-wallet" | translate}}</ion-title>
-  </ion-toolbar>
+    <header-bar title="text-add-wallet"></header-bar>
 </ion-header>
 
 <ion-content>
-  <div id="wrapper">
-    <div id="cell">
-        <div>
-          <ion-button expand="full" [routerLink]="['/wallet-create']" routerDirection="forward">{{'launcher-create-wallet' | translate}}</ion-button>
-        </div>
-        <div>
-          <ion-button expand="full" [routerLink]="['/wallet-import']" routerDirection="forward">{{'launcher-backup-import' | translate}}</ion-button>
-        </div>
-        <div>
-          <ion-button expand="full" [routerLink]="['/createmultiwallet']" routerDirection="forward">{{'signature-wallet' | translate}}</ion-button>
+    <div id="wrapper">
+        <div id="cell">
+            <div>
+                <ion-button expand="full" [routerLink]="['/wallet-create']" routerDirection="forward">
+                    {{'launcher-create-wallet' | translate}}</ion-button>
+            </div>
+            <div>
+                <ion-button expand="full" [routerLink]="['/wallet-import']" routerDirection="forward">
+                    {{'launcher-backup-import' | translate}}</ion-button>
+            </div>
+            <div>
+                <ion-button expand="full" [routerLink]="['/createmultiwallet']" routerDirection="forward">
+                    {{'signature-wallet' | translate}}</ion-button>
+            </div>
         </div>
     </div>
-</div>
 </ion-content>

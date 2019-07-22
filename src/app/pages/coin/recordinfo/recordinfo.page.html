@@ -1,12 +1,11 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title style="text-align: center">{{'text-record'|translate}}</ion-title>
-    </ion-toolbar>
+    <header-bar title="text-record"></header-bar>
 </ion-header>
 <ion-content>
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles" refreshingText="">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles"
+            refreshingText="">
         </ion-refresher-content>
         <ion-refresher-content>
         </ion-refresher-content>
