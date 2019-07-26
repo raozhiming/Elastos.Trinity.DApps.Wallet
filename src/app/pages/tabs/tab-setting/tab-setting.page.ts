@@ -59,10 +59,6 @@ export class TabSettingPage implements OnInit {
         icon: "contact",
 
     }, {
-        route: "/coin-list",
-        label: "text-coin-list",
-        icon: "star",
-    }, {
         route: "/about",
         label: "about",
         icon: "about",
@@ -131,40 +127,40 @@ export class TabSettingPage implements OnInit {
         });
     }
 
-    onNext(type): void {
-        switch (type) {
-            case 0:
-                this.native.Go("/wallet-manager");
-                break;
-            case 1:
-                this.native.Go("/publickey");
-                break;
-            case 2:
-                this.native.Go("/contact-list");
-                break;
-            case 3:
-                this.sendTX1();
-                break;
-            case 4:
-                this.singTx1();
-                break;
-            case 6:
-                this.getDIDList();
-                break;
-            case 5:
-                this.setLanguage();
-                break;
-            case 7:
-                this.getVoteNode();
-                break;
-            case 8:
-                this.native.Go("/about");
-                break;
-            case 9:
-                this.getPublicKeyForVote();
-                break;
-        }
-    }
+    // onNext(type): void {
+    //     switch (type) {
+    //         case 0:
+    //             this.native.Go("/wallet-manager");
+    //             break;
+    //         case 1:
+    //             this.native.Go("/publickey");
+    //             break;
+    //         case 2:
+    //             this.native.Go("/contact-list");
+    //             break;
+    //         case 3:
+    //             this.sendTX1();
+    //             break;
+    //         case 4:
+    //             this.singTx1();
+    //             break;
+    //         case 6:
+    //             this.getDIDList();
+    //             break;
+    //         case 5:
+    //             this.setLanguage();
+    //             break;
+    //         case 7:
+    //             this.getVoteNode();
+    //             break;
+    //         case 8:
+    //             this.native.Go("/about");
+    //             break;
+    //         case 9:
+    //             this.getPublicKeyForVote();
+    //             break;
+    //     }
+    // }
 
     getDIDList() {
         //TODO::DID
@@ -314,7 +310,7 @@ export class TabSettingPage implements OnInit {
                     this.walletManager.encodeTransactionToString(data["success"], (raw) => {
                         if (raw["success"]) {
                             this.native.hideLoading();
-                            this.native.Go("/scancode", { "tx": { "chianId": "ELA", "fee": this.fee / Config.SELA, "raw": raw["success"] } });
+                            this.native.Go("/scancode", { "tx": { "chainId": "ELA", "fee": this.fee / Config.SELA, "raw": raw["success"] } });
                         } else {
                             this.native.info(raw);
                         }
@@ -342,7 +338,7 @@ export class TabSettingPage implements OnInit {
         this.walletManager.encodeTransactionToString(raws, (raw) => {
             if (raw["success"]) {
                 this.native.hideLoading();
-                this.native.Go("/scancode", { "tx": { "chianId": "ELA", "fee": this.fee / Config.SELA, "raw": raw["success"] } });
+                this.native.Go("/scancode", { "tx": { "chainId": "ELA", "fee": this.fee / Config.SELA, "raw": raw["success"] } });
             }
         });
     }

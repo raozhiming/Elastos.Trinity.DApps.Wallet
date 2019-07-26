@@ -30,7 +30,6 @@ export class ContactCreatePage implements OnInit {
 
         this.route.queryParams.subscribe((data) => {
             if (!Util.isEmptyObject(data)) {
-                console.log(data);
                 this.contactUser = data;
                 this.id = data.id;
                 this.name = data.name;
@@ -42,11 +41,11 @@ export class ContactCreatePage implements OnInit {
             }
             else {
                 this.id = Util.uuid();
-                console.log(this.id);
-                this.name = "abc";
-                this.address = "1223341223341223341223341223312345";
-                this.phone = "18845678901";
-                this.email = "abc@efg.com";
+                // console.log(this.id);
+                this.name = "";
+                this.address = "";
+                this.phone = "";
+                this.email = "";
             }
         });
 

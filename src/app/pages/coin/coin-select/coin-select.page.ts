@@ -22,9 +22,7 @@ export class CoinSelectPage implements OnInit {
     }
 
     init() {
-        this.route.queryParams.subscribe((data) => {
-            this.masterWalletInfo = data["walletInfo"];
-        });
+        this.masterWalletInfo = Config.coinObj.walletInfo;
         let mastId = Config.getCurMasterWalletId();
         let subwallet = Config.getSubWallet(mastId);
         if (subwallet) {
@@ -43,7 +41,8 @@ export class CoinSelectPage implements OnInit {
     }
 
     onItem(item) {
-        this.native.Go("/recharge", { chianId: item.name, "walletInfo": this.masterWalletInfo });
+        Config.coinObj.recharge.chainId = item.name;
+        this.native.Go("/recharge", { chainId: item.name });
     }
 
 }

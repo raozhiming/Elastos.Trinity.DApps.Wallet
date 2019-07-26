@@ -27,7 +27,8 @@ export class CreatemultiwalletPage implements OnInit {
             this.native.toast_trans("text-multi-error");
             return;
         }
-        Config.multiObj = {totalCopayers: this.totalCopayers, requiredCopayers: this.requiredCopayers };
+        Config.walletObj.totalCopayers = this.totalCopayers
+        Config.walletObj.requiredCopayers = this.requiredCopayers;
         this.native.Go("/walletmode");
     }
 

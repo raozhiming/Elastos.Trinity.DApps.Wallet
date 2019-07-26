@@ -38,7 +38,8 @@ export class ExportmnemomicPage implements OnInit {
   }
 
   init(){
-      this.masterWalletId = Config.getCurMasterWalletId();
+      // this.masterWalletId = Config.getCurMasterWalletId();
+      this.masterWalletId = Config.modifyId;
       this.walletname = Config.getWalletName(this.masterWalletId);
   }
 

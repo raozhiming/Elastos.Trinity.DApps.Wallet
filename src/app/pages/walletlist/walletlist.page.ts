@@ -53,7 +53,7 @@ export class WalletlistPage implements OnInit {
             Config.setCurMasterWalletId(id);
             this.masterWalletId = Config.getCurMasterWalletId();
             this.native.pop();
-            this.events.publish("wallet:update",id);
+            this.events.publish("wallet:update",this.masterWalletId);
         });
     }
 

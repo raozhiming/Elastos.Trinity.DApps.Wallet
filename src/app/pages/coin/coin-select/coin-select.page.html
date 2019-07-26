@@ -6,12 +6,15 @@
     <div *ngIf="isNoData" id="nodata">{{'no-open-side-chain' | translate }}</div>
     <ion-list *ngIf="!isNoData">
         <ion-item *ngFor="let item of coinList" (click)="onItem(item)">
-            <ion-icon item-start>
+            <ion-thumbnail>
+                <img src="./assets/images/logo-maincolor.svg"/>
+            </ion-thumbnail>
+            <!-- <ion-icon>
                 <img src="./assets/images/logo-maincolor.svg" width="40">
-            </ion-icon>
-            <ion-note item-end>
+            </ion-icon> -->
+            <ion-label slot="end">
                 {{item.name}}
-            </ion-note>
+            </ion-label>
         </ion-item>
     </ion-list>
 </ion-content>

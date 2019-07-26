@@ -66,7 +66,8 @@ export class CoinListPage implements OnInit {
         this.events.subscribe("error:destroySubWallet", () => {
             this.currentCoin["open"] = true;
         });
-        this.masterWalletId = Config.getCurMasterWalletId();
+        // this.masterWalletId = Config.getCurMasterWalletId();
+        this.masterWalletId = Config.modifyId;
         let subWallet = Config.getSubWallet(this.masterWalletId);
         this.walletManager.getSupportedChains(this.masterWalletId, (data) => {
             if (data['success']) {

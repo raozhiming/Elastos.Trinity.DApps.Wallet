@@ -66,7 +66,7 @@ const routes: Routes = [
     { path: 'paymentbox', loadChildren: './pages/paymentbox/paymentbox.module#PaymentboxPageModule' },
     { path: 'coin-select', loadChildren: './pages/coin/coin-select/coin-select.module#CoinSelectPageModule' },
     { path: 'withdraw', loadChildren: './pages/coin/withdraw/withdraw.module#WithdrawPageModule' },
-    { path: 'receive/:id/:chianId', loadChildren: './pages/coin/receive/receive.module#ReceivePageModule' },
+    { path: 'receive', loadChildren: './pages/coin/receive/receive.module#ReceivePageModule' },
     { path: 'recordinfo', loadChildren: './pages/coin/recordinfo/recordinfo.module#RecordinfoPageModule' },
     { path: 'recharge', loadChildren: './pages/coin/recharge/recharge.module#RechargePageModule' },
     { path: 'transfer', loadChildren: './pages/coin/transfer/transfer.module#TransferPageModule' },

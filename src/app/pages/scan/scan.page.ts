@@ -3,6 +3,7 @@ import { ModalController, Events } from '@ionic/angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { Native } from '../../services/Native';
 import { ActivatedRoute } from '@angular/router';
+import { Config } from '../../services/Config';
 
 @Component({
     selector: 'app-scan',
@@ -25,6 +26,7 @@ export class ScanPage implements OnInit {
         this.route.queryParams.subscribe((data) => {
             this.pageType = data["pageType"];
         });
+        (window.document.querySelector('ion-content') as HTMLElement).classList.add('cameraView');
     }
 
 
@@ -37,17 +39,23 @@ export class ScanPage implements OnInit {
                 this.qrScanner.scan().subscribe((text: string) => {
                     switch (this.pageType) {
                         case "1":
-                            let toaddress = "";
-                            if (text.indexOf('elastos') != -1) {
-                                toaddress = text.split(":")[1];
-                            } else {
-                                toaddress = text.split(":")[0];
-                            }
-                            this.events.publish("address:update", toaddress);
+                            // Config.coinObj.transfer.toaddress = text;
+                            this.events.publish("address:update", text);
                             this.hideCamera();
-                            // stop scanning
                             this.native.pop();
                             break;
+                        // case "1":
+                        //     let toaddress = "";
+                        //     if (text.indexOf('elastos') != -1) {
+                        //         toaddress = text.split(":")[1];
+                        //     } else {
+                        //         toaddress = text.split(":")[0];
+                        //     }
+                        //     this.events.publish("address:update", toaddress);
+                        //     this.hideCamera();
+                        //     // stop scanning
+                        //     this.native.pop();
+                        //     break;
                         case "3":
                             this.hideCamera();
                             this.native.pop();
@@ -114,11 +122,11 @@ export class ScanPage implements OnInit {
     }
 
     showCamera() {
-        (window.document.querySelector('ion-app') as HTMLElement).classList.add('cameraView');
+        // (window.document.querySelector('ion-app') as HTMLElement).classList.add('cameraView');
     }
 
     hideCamera() {
-        (window.document.querySelector('ion-app') as HTMLElement).classList.remove('cameraView');
+        // (window.document.querySelector('ion-app') as HTMLElement).classList.remove('cameraView');
         this.qrScanner.hide();//需要关闭扫描，否则相机一直开着
         this.qrScanner.destroy();//关闭
     }

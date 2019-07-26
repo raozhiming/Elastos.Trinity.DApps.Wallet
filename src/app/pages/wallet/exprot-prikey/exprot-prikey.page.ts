@@ -32,7 +32,8 @@ export class ExprotPrikeyPage implements OnInit {
   };
   public account:any={};
   onWalletDatainit(){
-    this.masterWalletId = Config.getCurMasterWalletId();
+    // this.masterWalletId = Config.getCurMasterWalletId();
+    this.masterWalletId = Config.modifyId;
     this.exprotObj.name = Config.getWalletName(this.masterWalletId);
     this.account = Config.getAccountType(this.masterWalletId);
     this.getMasterWalletBasicInfo();

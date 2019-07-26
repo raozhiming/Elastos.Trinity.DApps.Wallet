@@ -25,7 +25,8 @@ export class PublickeyPage implements OnInit {
   }
 
   getPublicKey(){
-    this.masterWalletId = Config.getCurMasterWalletId();
+    // this.masterWalletId = Config.getCurMasterWalletId();
+    this.masterWalletId = Config.modifyId;
     this.walletManager.getMasterWalletPublicKey(this.masterWalletId,(data)=>{
       if(data["success"]){
         this.qrcode = data["success"];

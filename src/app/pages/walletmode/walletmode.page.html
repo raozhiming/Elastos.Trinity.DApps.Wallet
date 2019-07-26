@@ -6,7 +6,7 @@
     <div id="wrapper">
         <div id="cell">
             <div>
-                <ion-button expand="full" (click)="onClick('/wallet-create')">
+                <ion-button expand="full" [routerLink]="['/wallet-create']" routerDirection="forward">
                     {{'text-create-privatekey'|translate}}</ion-button>
             </div>
             <div>

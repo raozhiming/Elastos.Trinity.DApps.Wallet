@@ -25,7 +25,7 @@ export class InitializePage implements OnInit {
     }
 
     ngOnInit() {
-        this.registerBackButtonAction(/*this.tabs*/);
+        // this.registerBackButtonAction(/*this.tabs*/);
         this.native.showLoading().then(() => {
             this.initializeApp();
         });

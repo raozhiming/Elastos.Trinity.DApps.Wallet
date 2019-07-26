@@ -4,7 +4,7 @@
 
 <ion-content no-bounce>
     <div>
-        <ion-segment [(ngModel)]="selectedTab" color="#FFCB0F" (ionChange)="selectTab(selectedTab)">
+        <ion-segment [(ngModel)]="selectedTab" (ionChange)="selectTab(selectedTab)">
             <ion-segment-button value="words">
                 {{ 'text-mnemonic' | translate }}
             </ion-segment-button>

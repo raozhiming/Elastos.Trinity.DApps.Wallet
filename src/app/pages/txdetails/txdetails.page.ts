@@ -32,7 +32,7 @@ export class TxdetailsPage implements OnInit {
                         this.txHash = JSON.parse(raw["success"])["TxHash"];
                         this.txDetails["address"] =JSON.parse(raw["success"])["Outputs"][0]["Address"];
                         this.txDetails["amount"] = JSON.parse(raw["success"])["Outputs"][0]["Amount"]/Config.SELA;
-                        this.getTransactionSignedSigners(this.masterWalletId,this.txDetails["chianId"],this.raw);
+                        this.getTransactionSignedSigners(this.masterWalletId,this.txDetails["chainId"],this.raw);
                     }
       });
     });
@@ -48,7 +48,7 @@ export class TxdetailsPage implements OnInit {
         this.getPassWord();
      }else if(this.type === 3){
         this.native.showLoading().then(()=>{
-          this.sendTx(this.masterWalletId,this.txDetails["chianId"],this.raw);
+          this.sendTx(this.masterWalletId,this.txDetails["chainId"],this.raw);
         })
      }
   }
@@ -60,7 +60,7 @@ export class TxdetailsPage implements OnInit {
        return;
      }
 
-     this.singTx(this.masterWalletId,this.txDetails["chianId"],this.raw,data.toString());
+     this.singTx(this.masterWalletId,this.txDetails["chainId"],this.raw,data.toString());
 
     }).catch(err=>{
       alert(JSON.stringify(err));
@@ -73,7 +73,7 @@ export class TxdetailsPage implements OnInit {
                 this.native.info(data);
                 this.walletManager.encodeTransactionToString(data["success"],(raw)=>{
                              if(raw["success"]){
-                              this.native.Go("/scancode", {"tx":{"chianId":this.txDetails["chianId"],"fee":this.txDetails["fee"], "raw": raw["success"]}});
+                              this.native.Go("/scancode", {"tx":{"chainId":this.txDetails["chainId"],"fee":this.txDetails["fee"], "raw": raw["success"]}});
                                }
                 });
               }

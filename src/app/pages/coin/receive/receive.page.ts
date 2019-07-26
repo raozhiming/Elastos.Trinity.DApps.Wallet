@@ -16,7 +16,7 @@ export class ReceivePage implements OnInit {
     qrcode: string = null;
     address: Number;
     amount: Number;
-    chinaId: string;
+    chainId: string;
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native) {
 
     }
@@ -27,10 +27,13 @@ export class ReceivePage implements OnInit {
 
     init() {
         this.masterWalletId = Config.getCurMasterWalletId();
-        this.route.paramMap.subscribe((params) => {
-            this.chinaId = params.get("chianId");
-            this.createAddress();
-        });
+        // this.route.paramMap.subscribe((params) => {
+        //     this.chainId = params.get("chainId");
+        //     this.createAddress();
+        // });
+
+        this.chainId = Config.coinObj.chainId;
+        this.createAddress();
     }
 
     onChange() {
@@ -41,11 +44,11 @@ export class ReceivePage implements OnInit {
 
 
     getAddress() {
-        this.native.Go("/address", { chinaId: this.chinaId });
+        this.native.Go("/address", { chainId: this.chainId });
     }
 
     createAddress() {
-        this.walletManager.createAddress(this.masterWalletId, this.chinaId, (data) => {
+        this.walletManager.createAddress(this.masterWalletId, this.chainId, (data) => {
             if (data["success"]) {
                 this.qrcode = data["success"];
                 this.address = data["success"];

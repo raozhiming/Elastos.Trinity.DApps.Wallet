@@ -4,19 +4,7 @@
     text-align: center;
     padding: 10px
 }
-.backupWalletTextArea {
-    margin: auto;
-    border: 1px dashed #d9d9d9;
-    border-radius: 3px;
-    // color: #192c3a;
-    text-align: center;
-    width: px2rem(660);
-    height: px2rem(280);
-    // display: flex;
-    justify-content: center;
-    background-color: #161723;
-    font-size: 20px;
-}
+
 ion-label {
     font-size: 16px
 };
@@ -26,17 +14,8 @@ ion-note {
 };
 
 ion-segment-button {
-    // --background: #3880ff;
-    // --background-activated: #3880ff
-    // --background-checked: #3880ff;
-    // --background-hover: green;
-    // --border-color:green;
-    // --color: white;
-    // --color-activated: #3880ff;
-    --color-checked: #FFCB0F;
-    // --color-checked-disabled: white;
-    // --color-disabled: white;
-    // --indicator-color: #3880ff;
-    // --indicator-color-checked: #3880ff;
+    --color:#666666;
+    --color-checked: white;
+    --indicator-color-checked: #FFCB0F;
     font-size: 16px;
 }

@@ -24,7 +24,7 @@ export class PaymentConfirmPage implements OnInit {
         remark: '',
     };
 
-    chianId: string = 'ELA';
+    chainId: string = 'ELA';
 
     feePerKb = 10000;
 
@@ -116,7 +116,7 @@ export class PaymentConfirmPage implements OnInit {
     }
 
     createTransaction() {
-        this.walletManager.createTransaction(this.masterWalletId, this.chianId, "",
+        this.walletManager.createTransaction(this.masterWalletId, this.chainId, "",
             this.transfer.toAddress,
             this.transfer.amount,
             this.transfer.memo,
@@ -134,7 +134,7 @@ export class PaymentConfirmPage implements OnInit {
     }
 
     getFee() {
-        this.walletManager.calculateTransactionFee(this.masterWalletId, this.chianId, this.rawTransaction, this.feePerKb, (data) => {
+        this.walletManager.calculateTransactionFee(this.masterWalletId, this.chainId, this.rawTransaction, this.feePerKb, (data) => {
             if (data['success']) {
                 this.native.info(data);
                 this.native.hideLoading();
@@ -153,7 +153,7 @@ export class PaymentConfirmPage implements OnInit {
 
 
     updateTxFee() {
-        this.walletManager.updateTransactionFee(this.masterWalletId, this.chianId, this.rawTransaction, this.transfer.fee, "", (data) => {
+        this.walletManager.updateTransactionFee(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.fee, "", (data) => {
             if (data["success"]) {
                 this.native.info(data);
                 this.singTx(data["success"]);
@@ -164,7 +164,7 @@ export class PaymentConfirmPage implements OnInit {
     }
 
     singTx(rawTransaction) {
-        this.walletManager.signTransaction(this.masterWalletId, this.chianId, rawTransaction, this.transfer.payPassword, (data) => {
+        this.walletManager.signTransaction(this.masterWalletId, this.chainId, rawTransaction, this.transfer.payPassword, (data) => {
             if (data["success"]) {
                 this.native.info(data);
                 this.sendTx(data["success"]);
@@ -176,7 +176,7 @@ export class PaymentConfirmPage implements OnInit {
 
     sendTx(rawTransaction) {
         this.native.info(rawTransaction);
-        this.walletManager.publishTransaction(this.masterWalletId, this.chianId, rawTransaction, (data) => {
+        this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (data) => {
             if (data["success"]) {
                 this.native.hideLoading();
                 this.native.info(data);

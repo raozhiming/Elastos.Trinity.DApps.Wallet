@@ -30,6 +30,8 @@ export const zh = {
     'text-mnemonic-ok': '助记词验证成功',
     'text-mnemonic-prompt3': '助记词错误，请重新录入助记词',
     'text-mnemonic-format': '助记词之间使用空格隔开',
+
+    'paypassword-reset': '更改支付密码',
     // TODO remove unused items
     // import wallet page
     'text-from-mnemonic': '来自助记词',
@@ -129,7 +131,7 @@ export const zh = {
     'confirm': '确定',
     'confirmTitle': '提示',
     'confirmTransaction': '交易已确认',
-    'confirmSubTitle': '确定要退出钱包吗？<br/>在退出钱包前，请确认已安全备份助记词及可选加密密码。恢复钱包需要助记词及可选加密密码。任何人无法帮助您恢复钱包',
+    'confirmSubTitle': '确定要删除钱包吗？<br/>在删除钱包前，请确认已安全备份助记词及可选加密密码。恢复钱包需要助记词及可选加密密码。任何人无法帮助您恢复钱包',
     'cancel': '取消',
     'copy-ok': '复制成功',
     'correct-amount': '请输入正确的金额',
@@ -430,7 +432,8 @@ export const zh = {
     'present-quorum-votes': '当前票数',
     'number-of-voting-addresses': '投票地址数量',
     'about': '关于',
-    'Version': '版本号',
+    'version': '版本号',
+    'website': '访问官网',
     'my-publickey': '我的公钥',
     'Inputs': "输入",
     "Outputs": "输出",

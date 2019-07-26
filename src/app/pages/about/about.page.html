@@ -4,39 +4,24 @@
 
 
 <ion-content padding>
-  <ion-row class="margin-top">
-      <ion-col class="text-right" col-4>
-          <span class="font-size-20">{{'Version'|translate}}</span>：
-      </ion-col>
-      <ion-col col-8 class="text-left">
-          <span class="font-size-18">
-          1.0.0
-        </span>
-      </ion-col>
-  </ion-row>
-  <ion-row>
-      <ion-col class="text-right" col-4>
-          <span class="font-size-20">spvsdk</span>：
-      </ion-col>
-      <ion-col col-8 class="text-left">
-          <span class="font-size-18">
-        {{spvVersion}}
-      </span>
-      </ion-col>
-  </ion-row>
-  <ion-row>
-      <ion-col class="text-right" col-4>
-          <span class="font-size-20">commit</span>：
-      </ion-col>
-      <ion-col col-8 class="text-left">
-          <span class="font-size-18">
-       <!--html commit ID-->
-    </span>
-      </ion-col>
-  </ion-row>
-  <ion-row class="bottom">
-      <ion-col class="text-center">
-          Website：<a href="https://www.elastos.org/">https://www.elastos.org</a>
-      </ion-col>
-  </ion-row>
+    <div id="logo">
+        <img src="assets/images/logo.png" />
+        <div>{{('version'|translate) + version}}</div>
+    </div>
+    <ion-list>
+        <ion-item>
+            <ion-label>spvsdk</ion-label>
+            <ion-note slot="end">{{spvVersion}}</ion-note>
+        </ion-item>
+        <ion-item>
+            <ion-label>commit</ion-label>
+            <ion-note slot="end">{{commitVersion}}</ion-note>
+        </ion-item>
+        <ion-item detail (click)="goWebsite()">
+            <ion-label>
+                <h2>{{'website'|translate}}</h2>
+                <p>www.elastos.org</p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
 </ion-content>

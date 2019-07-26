@@ -21,29 +21,31 @@ export class AddpublickeyPage implements OnInit {
     public curIndex = 0;
     public qrcode: string = null;
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events) {
-        this.route.queryParams.subscribe((data) => {
-            this.native.info(data);
-            console.log(data);
-            this.msobj = data;
-            this.name = this.msobj["name"];
+        // this.route.queryParams.subscribe((data) => {
+        //     this.native.info(data);
+        //     console.log(data);
+        //     this.msobj = data;
+        // this.name = this.msobj["name"];
+        this.name = Config.walletObj.name;
+        this.msobj = Config.walletObj
 
-            let totalCopayers = 0;
-            if (this.msobj["payPassword"]) {
-                this.isOnly = false;
-                this.innerType = "Standard";
-                totalCopayers = this.msobj["totalCopayers"] - 1;
-                this.getPublicKey();
-            } else {
-                this.isOnly = true;
-                this.innerType = "Readonly";
-                totalCopayers = this.msobj["totalCopayers"];
-            }
+        let totalCopayers = Config.walletObj.totalCopayers;
+        if (Config.walletObj.payPassword) {
+            this.isOnly = false;
+            this.innerType = "Standard";
+            totalCopayers = totalCopayers - 1;
+            this.getPublicKey();
+        } else {
+            this.isOnly = true;
+            this.innerType = "Readonly";
+            // totalCopayers = this.msobj["totalCopayers"];
+        }
 
-            for (let index = 0; index < totalCopayers; index++) {
-                let item = { index: index, publicKey: "" };
-                this.publicKeyArr.push(item);
-            }
-        });
+        for (let index = 0; index < totalCopayers; index++) {
+            let item = { index: index, publicKey: "" };
+            this.publicKeyArr.push(item);
+        }
+        // });
 
         this.masterWalletId = Config.uuid(6, 16);
 
@@ -58,7 +60,6 @@ export class AddpublickeyPage implements OnInit {
 
     saomiao(index) {
         this.curIndex = index;
-        console.log("saomiao=" + index);
         this.native.Go("/scan", { "pageType": "5" });
     }
 
@@ -83,7 +84,7 @@ export class AddpublickeyPage implements OnInit {
             return;
         }
         this.native.showLoading().then(() => {
-            if (this.msobj["payPassword"]) {
+            if (Config.walletObj.payPassword) {
                 this.createWalletWithMnemonic();
             } else {
                 this.createWallet();
@@ -141,22 +142,22 @@ export class AddpublickeyPage implements OnInit {
                 this.native.hideLoading();
                 Config.setCurMasterWalletId(this.masterWalletId);
                 this.native.setRootRouter("/tabs");
+                this.events.publish("wallet:update", this.masterWalletId);
             });
         });
     }
 
     createWalletWithMnemonic() {
         let copayers = this.getTotalCopayers();
-        console.log(this.msobj);
-        console.log(copayers);
-        this.walletManager.createMultiSignMasterWalletWithMnemonic(this.masterWalletId, this.msobj["mnemonicStr"], this.msobj["mnemonicPassword"], this.msobj["payPassword"], copayers, this.msobj["requiredCopayers"], (data) => {
-            if (data['success']) {
-                this.native.info(data);
-                this.createMnemonicSubWallet("ELA", this.msobj["payPassword"]);
-            } else {
-                this.native.hideLoading();
-            }
-        });
+        this.walletManager.createMultiSignMasterWalletWithMnemonic(this.masterWalletId,
+            this.msobj["mnemonicStr"], this.msobj["mnemonicPassword"], this.msobj["payPassword"], copayers, this.msobj["requiredCopayers"], (data) => {
+                if (data['success']) {
+                    this.native.info(data);
+                    this.createMnemonicSubWallet("ELA", this.msobj["payPassword"]);
+                } else {
+                    this.native.hideLoading();
+                }
+            });
     }
 
     createMnemonicSubWallet(chainId, password) {

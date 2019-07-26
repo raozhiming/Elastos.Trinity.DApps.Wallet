@@ -15,7 +15,7 @@ export class ModifywalletnamePage implements OnInit {
     public walletname: string = "";
     public masterWalletId: string = "1";
     constructor(public route: ActivatedRoute, public native: Native, public localStorage: LocalStorage, public events: Events) {
-        this.masterWalletId = Config.getCurMasterWalletId();
+        this.masterWalletId = Config.modifyId;
         this.walletname = Config.getWalletName(this.masterWalletId);
     }
 

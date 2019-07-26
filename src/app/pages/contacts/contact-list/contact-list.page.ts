@@ -15,6 +15,7 @@ export class ContactListPage implements OnInit {
     isnodata: boolean = false;
     contactUsers = [];
     params: any = {};
+    isHide = true;
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events) {
         this.init();
     }
@@ -24,6 +25,7 @@ export class ContactListPage implements OnInit {
     init() {
         this.route.queryParams.subscribe((data) => {
             this.params = data || {};
+            this.isHide = this.params["hideButton"] || false;
         });
         this.events.subscribe("contanctList:update", () => {
             this.localStorage.get('contactUsers').then((val) => {
@@ -64,8 +66,14 @@ export class ContactListPage implements OnInit {
         return false;
     }
 
-    onClick(id): void {
-        this.native.Go("/contacts", { id: id, exatOption: JSON.stringify(this.params) });
+    onClick(item): void {
+        if (!this.isHide) {
+            this.native.Go("/contacts", { id: item.id, exatOption: JSON.stringify(this.params) });
+        }
+        else {
+            this.events.publish("address:update", item.address);
+            this.native.pop();
+        }
     }
 
     ionViewDidLeave() {

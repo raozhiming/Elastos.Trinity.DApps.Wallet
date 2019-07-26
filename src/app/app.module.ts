@@ -29,6 +29,7 @@ import { HttpModule } from '@angular/http';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
@@ -97,6 +98,7 @@ export function TranslateLoaderFactory() {
         SplashScreen,
         QRScanner,
         Clipboard,
+        InAppBrowser,
         LocalStorage,
         Native,
         Logger,

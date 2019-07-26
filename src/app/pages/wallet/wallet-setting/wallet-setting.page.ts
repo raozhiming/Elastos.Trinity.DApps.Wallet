@@ -26,6 +26,7 @@ export class WalletSettingPage implements OnInit {
 
         this.route.paramMap.subscribe((params) => {
             this.masterWalletId = params.get("id");
+            Config.modifyId = this.masterWalletId;
             this.walletName = Config.getWalletName(this.masterWalletId);
             this.getMasterWalletBasicInfo();
         });
@@ -42,34 +43,34 @@ export class WalletSettingPage implements OnInit {
         //this.walletName = Config.getWalletName(this.masterWalletId);
     }
 
-    onItem(i) {
-        switch (i) {
-            case 0:
-                this.native.Go("/exprot-prikey");
-                break;
-            case 1:
-                this.native.Go("/paypassword-reset");
-                break;
-            case 2:
-                this.popupProvider.ionicConfirm('confirmTitle', 'confirmSubTitle').then((data) => {
-                    if (data) {
-                        this.native.showLoading().then(() => {
-                            this.destroyWallet(this.masterWalletId);
-                        });
-                    }
-                });
-                break;
-            case 3:
-                this.native.Go("/publickey");
-                break;
-            case 4:
-                this.native.Go("/modifywalletname");
-                break;
-            case 5:
-                this.native.Go("/exportmnemomic");
-                break;
-        }
-    }
+    // onItem(i) {
+    //     switch (i) {
+    //         case 0:
+    //             this.native.Go("/exprot-prikey");
+    //             break;
+    //         case 1:
+    //             this.native.Go("/paypassword-reset");
+    //             break;
+    //         case 2:
+    //             this.popupProvider.ionicConfirm('confirmTitle', 'confirmSubTitle').then((data) => {
+    //                 if (data) {
+    //                     this.native.showLoading().then(() => {
+    //                         this.destroyWallet(this.masterWalletId);
+    //                     });
+    //                 }
+    //             });
+    //             break;
+    //         case 3:
+    //             this.native.Go("/publickey");
+    //             break;
+    //         case 4:
+    //             this.native.Go("/modifywalletname");
+    //             break;
+    //         case 5:
+    //             this.native.Go("/exportmnemomic");
+    //             break;
+    //     }
+    // }
 
     onDelete() {
         this.popupProvider.ionicConfirm('confirmTitle', 'confirmSubTitle').then((data) => {
@@ -154,6 +155,7 @@ export class WalletSettingPage implements OnInit {
             this.native.hideLoading();
             Config.setCurMasterWalletId(masterWalletId);
             this.native.setRootRouter("/tabs");
+            this.events.publish("wallet:update", masterWalletId);
         });
     }
 

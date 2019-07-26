@@ -34,7 +34,7 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['./coin.page.scss'],
 })
 export class CoinPage implements OnInit {
-    public masterWalletInfo = {};
+    public masterWalletInfo: string = "";
     masterWalletId: string = "1";
     transferList = [];
 
@@ -76,12 +76,14 @@ export class CoinPage implements OnInit {
         //clearInterval(this.myInterval);
     }
     init() {
+        Config.coinObj = {};
         this.masterWalletId = Config.getCurMasterWalletId();
         this.walletManager.getMasterWalletBasicInfo(this.masterWalletId, (data) => {
             if (data["success"]) {
                 this.native.info(data);
                 let item = JSON.parse(data["success"])["Account"];
-                this.masterWalletInfo = item;
+                this.masterWalletInfo = JSON.stringify(item);
+                Config.coinObj.walletInfo = item;
             } else {
                 alert("=======getMasterWalletBasicInfo====error=====" + JSON.stringify(data));
             }
@@ -89,6 +91,7 @@ export class CoinPage implements OnInit {
 
         this.route.paramMap.subscribe((params) => {
             this.coinName = params.get("name");
+            Config.coinObj.chainId = this.coinName;
             this.elaPer = params.get("elaPer") || 0;
             this.idChainPer = params.get("idChainPer") || 0;
             if (this.coinName == 'ELA') {
@@ -111,6 +114,7 @@ export class CoinPage implements OnInit {
             if (!Util.isNull(data["success"])) {
                 this.native.info(data);
                 this.coinCount = data["success"] / Config.SELA;
+                // Config.coinObj.balance = data["success"];
             } else {
                 this.native.info(data);
             }
@@ -234,24 +238,34 @@ export class CoinPage implements OnInit {
     }
 
     onNext(type) {
+
         switch (type) {
             case 1:
-                this.native.Go("/receive", { id: this.coinId, chianId: this.coinName });
+                this.native.Go("/receive", { id: this.coinId, chainId: this.coinName });
                 break;
             case 2:
-                if (this.coinName == 'ELA') {
-                    // if(this.elaPer != 1){
-                    //   this.messageBox("text-ela-per-message");
-                    //   return;
-                    // }
-                    this.native.Go("/transfer", { id: this.coinId, chianId: this.coinName, "walletInfo": this.masterWalletInfo });
-                } else {
-                    // if(this.idChainPer != 1){
-                    //   this.messageBox("text-ela-per-message");
-                    //   return;
-                    // }
-                    this.native.Go("/transfer", { id: this.coinId, chianId: this.coinName, "walletInfo": this.masterWalletInfo });
-                }
+                Config.coinObj.transfer = {
+                    toAddress: '',
+                    amount: '',
+                    memo: '',
+                    fee: 0,
+                    payPassword: '',//hptest
+                    remark: '',
+                };
+                this.native.Go("/transfer");
+                // if (this.coinName == 'ELA') {
+                //     // if(this.elaPer != 1){
+                //     //   this.messageBox("text-ela-per-message");
+                //     //   return;
+                //     // }
+                //     this.native.Go("/transfer", { id: this.coinId, chainId: this.coinName, "walletInfo": this.masterWalletInfo });
+                // } else {
+                //     // if(this.idChainPer != 1){
+                //     //   this.messageBox("text-ela-per-message");
+                //     //   return;
+                //     // }
+                //     this.native.Go("/transfer", { id: this.coinId, chainId: this.coinName, "walletInfo": this.masterWalletInfo });
+                // }
 
                 break;
             case 3:
@@ -260,13 +274,21 @@ export class CoinPage implements OnInit {
                     //   this.messageBox("text-ela-per-message");
                     //   return;
                     // }
-                    this.native.Go("/coin-select", { chianId: this.coinName, "walletInfo": this.masterWalletInfo });
+                    Config.coinObj.recharge = {
+                        toAddress: '',
+                        amount: '',
+                        memo: '',
+                        fee: 10000,
+                        payPassword: '',
+                        remark: '',
+                    };
+                    this.native.Go("/coin-select", { chainId: this.coinName, "walletInfo": this.masterWalletInfo });
                 } else {
                     // if(this.idChainPer != 1){
                     //   this.messageBox("text-ela-per-message");
                     //   return;
                     // }
-                    this.native.Go("/withdraw", { chianId: this.coinName, "walletInfo": this.masterWalletInfo });
+                    this.native.Go("/withdraw", { chainId: this.coinName, "walletInfo": this.masterWalletInfo });
                 }
                 break;
         }

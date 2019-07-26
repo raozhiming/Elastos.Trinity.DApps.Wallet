@@ -13,7 +13,7 @@ export class ImportprivatekeyPage implements OnInit {
   public msobj:any;
   public importText:string="";
   public passWord:string="";
-  public rePassWorld:string="";
+  public rePassword:string="";
   public name:string ="";
   constructor(public route: ActivatedRoute, public native: Native) {
     this.route.queryParams.subscribe((data)=>{
@@ -57,7 +57,7 @@ export class ImportprivatekeyPage implements OnInit {
       return false;
     }
 
-    if(this.passWord!=this.rePassWorld){
+    if(this.passWord!=this.rePassword){
       this.native.toast_trans('text-passworld-compare');
       return false;
     }

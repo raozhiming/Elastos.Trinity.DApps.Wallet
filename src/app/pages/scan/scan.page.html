@@ -2,12 +2,18 @@
     <header-bar title="scanning"></header-bar>
 </ion-header>
 
-<ion-content no-scroll [ngClass]="{'qrscanner':isShow}">
-    <div [ngClass]="{'qrscanner-area':isShow}"> </div>
-    <div [ngClass]="{'through-line':isShow}"></div>
-    <div class="button-bottom"> <button (click)="toggleLight()" ion-fab class="icon-camera" margin-right>
-            <ion-icon name="flash"></ion-icon>
-        </button> <button (click)="toggleCamera()" ion-fab class="icon-camera">
-            <ion-icon name="reverse-camera"></ion-icon>
-        </button> </div>
+<ion-content no-scroll [ngClass]="{'cameraView':isShow}">
+    <div *ngIf="isShow" style="text-align: center">
+        <div class='qrscanner-area'> </div>
+        <div class='through-line'></div>
+        <div class="button-bottom">
+                <!-- <ion-icon name="flash" (click)="toggleLight()"></ion-icon>
+                <ion-icon name="toggleLight" (click)="toggleCamera()"></ion-icon> -->
+            <button (click)="toggleLight()" ion-fab class="icon-camera" margin-right>
+                <ion-icon name="flash"></ion-icon>
+            </button> <button (click)="toggleCamera()" ion-fab class="icon-camera">
+                <ion-icon name="reverse-camera"></ion-icon>
+            </button>
+        </div>
+    </div>
 </ion-content>

@@ -29,7 +29,7 @@ export class TransferPage implements OnInit {
 
     balance = 0;
 
-    chianId: string;
+    chainId: string;
 
     feePerKb = 10000;
 
@@ -53,28 +53,31 @@ export class TransferPage implements OnInit {
     }
 
     init() {
+        this.transfer = Config.coinObj.transfer;
+        this.chainId = Config.coinObj.chainId;
         this.events.subscribe("address:update", (address) => {
             this.transfer.toAddress = address;
         });
         this.masterWalletId = Config.getCurMasterWalletId();
-        this.route.queryParams.subscribe((data) => {
-            let transferObj = data;
-            this.chianId = transferObj["chianId"];
-            this.transfer.toAddress = transferObj["addr"] || "";
-            this.transfer.amount = transferObj["money"] || "";
-            this.appType = transferObj["appType"] || "";
-            if (this.appType == "") {
-                this.isInput = false;
-            } else {
-                this.isInput = true;
-            }
-            this.selectType = transferObj["selectType"] || "";
-            this.parms = transferObj["parms"] || "";
-            this.did = transferObj["did"] || "";
-            this.walletInfo = transferObj["walletInfo"] || {};
+        // this.route.paramMap.subscribe((params) => {
+        // // this.route.queryParams.subscribe((data) => {
+        //     let transferObj = params;
+        //     this.chainId = transferObj.get("chainId");
+        //     this.transfer.toAddress = transferObj.get("addr") || "";
+        //     this.transfer.amount = transferObj.get("money") || "";
+        //     this.appType = transferObj.get("appType") || "";
+        //     if (this.appType == "") {
+        //         this.isInput = false;
+        //     } else {
+        //         this.isInput = true;
+        //     }
+        //     this.selectType = transferObj.get("selectType") || "";
+        //     this.parms = transferObj.get("parms") || "";
+        //     this.did = transferObj.get("did") || "";
+        //     this.walletInfo = JSON.parse(transferObj.get("walletInfo")) || {};
+            this.walletInfo = Config.coinObj.walletInfo;
             this.initData();
-        });
-
+        // });
     }
 
     updateUseVotedUTXO(useVotedUTXO) {
@@ -84,11 +87,12 @@ export class TransferPage implements OnInit {
     }
 
     rightHeader() {
+        console.log(Config.coinObj.transfer);
         this.native.Go("/scan", { "pageType": "1" });
     }
 
     initData() {
-        this.walletManager.getBalance(this.masterWalletId, this.chianId, Config.total, (data) => {
+        this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.total, (data) => {
             if (!Util.isNull(data["success"])) {
                 this.balance = data["success"];
             } else {
@@ -111,6 +115,9 @@ export class TransferPage implements OnInit {
     }
 
     checkValue() {
+        this.transfer.toAddress = Config.coinObj.transfer.toAddress;
+        this.transfer.amount = Config.coinObj.transfer.amount;
+        this.transfer.remark = Config.coinObj.transfer.remark;
         if (Util.isNull(this.transfer.toAddress)) {
             this.native.toast_trans('correct-address');
             return;
@@ -159,8 +166,9 @@ export class TransferPage implements OnInit {
         let toAmount = 0;
         //toAmount = parseFloat((this.transfer.amount*Config.SELA).toPrecision(16));
         toAmount = this.accMul(this.transfer.amount, Config.SELA);
+        alert(toAmount);
 
-        this.walletManager.createTransaction(this.masterWalletId, this.chianId, "",
+        this.walletManager.createTransaction(this.masterWalletId, this.chainId, "",
             this.transfer.toAddress,
             toAmount,
             this.transfer.memo,
@@ -178,7 +186,7 @@ export class TransferPage implements OnInit {
     }
 
     getFee() {
-        this.walletManager.calculateTransactionFee(this.masterWalletId, this.chianId, this.rawTransaction, this.feePerKb, (data) => {
+        this.walletManager.calculateTransactionFee(this.masterWalletId, this.chainId, this.rawTransaction, this.feePerKb, (data) => {
             if (data['success']) {
                 this.native.hideLoading();
                 this.native.info(data);
@@ -199,7 +207,7 @@ export class TransferPage implements OnInit {
     }
 
     updateTxFee() {
-        this.walletManager.updateTransactionFee(this.masterWalletId, this.chianId, this.rawTransaction, this.transfer.fee, "", (data) => {
+        this.walletManager.updateTransactionFee(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.fee, "", (data) => {
             if (data["success"]) {
                 this.native.info(data);
                 if (this.walletInfo["Type"] === "Multi-Sign" && this.walletInfo["InnerType"] === "Readonly") {
@@ -214,7 +222,7 @@ export class TransferPage implements OnInit {
     }
 
     singTx(rawTransaction) {
-        this.walletManager.signTransaction(this.masterWalletId, this.chianId, rawTransaction, this.transfer.payPassword, (data) => {
+        this.walletManager.signTransaction(this.masterWalletId, this.chainId, rawTransaction, this.transfer.payPassword, (data) => {
             if (data["success"]) {
                 this.native.info(data);
                 if (this.walletInfo["Type"] === "Standard") {
@@ -223,7 +231,7 @@ export class TransferPage implements OnInit {
                     this.walletManager.encodeTransactionToString(data["success"], (raw) => {
                         if (raw["success"]) {
                             this.native.hideLoading();
-                            this.native.Go("/scancode", { "tx": { "chianId": this.chianId, "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
+                            this.native.Go("/scancode", { "tx": { "chainId": this.chainId, "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
                         } else {
                             this.native.info(raw);
                         }
@@ -237,7 +245,7 @@ export class TransferPage implements OnInit {
 
     sendTx(rawTransaction) {
         this.native.info(rawTransaction);
-        this.walletManager.publishTransaction(this.masterWalletId, this.chianId, rawTransaction, (data) => {
+        this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (data) => {
             if (data["success"]) {
                 this.native.hideLoading();
                 this.native.info(data);
@@ -358,7 +366,7 @@ export class TransferPage implements OnInit {
         let toAmount = 0;
         //toAmount = parseFloat((this.transfer.amount*Config.SELA).toPrecision(16));
         toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.createMultiSignTransaction(this.masterWalletId, this.chianId, "",
+        this.walletManager.createMultiSignTransaction(this.masterWalletId, this.chainId, "",
             this.transfer.toAddress,
             toAmount,
             this.transfer.memo,
@@ -380,7 +388,7 @@ export class TransferPage implements OnInit {
         this.walletManager.encodeTransactionToString(raws, (raw) => {
             if (raw["success"]) {
                 this.native.hideLoading();
-                this.native.Go("/scancode", { "tx": { "chianId": this.chianId, "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
+                this.native.Go("/scancode", { "tx": { "chainId": this.chainId, "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
             } else {
                 alert("=====encodeTransactionToString===error===" + JSON.stringify(raw));
             }

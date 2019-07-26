@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 export class AddressPage implements OnInit {
     masterWalletId: string = "1";
     addrList = [];
-    chinaId: string;
+    chainId: string;
     pageNo = 0;
     start = 0;
     infinites;
@@ -28,13 +28,13 @@ export class AddressPage implements OnInit {
     init() {
         this.masterWalletId = Config.getCurMasterWalletId();
         this.route.queryParams.subscribe((data) => {
-            this.chinaId = data["chinaId"];
+            this.chainId = data["chainId"];
             this.getAddressList();
         });
     }
 
     getAddressList() {
-        this.walletManager.getAllAddress(this.masterWalletId, this.chinaId, this.start, (data) => {
+        this.walletManager.getAllAddress(this.masterWalletId, this.chainId, this.start, (data) => {
             if (data["success"]) {
                 this.native.info(data);
                 let address = JSON.parse(data["success"])['Addresses'];

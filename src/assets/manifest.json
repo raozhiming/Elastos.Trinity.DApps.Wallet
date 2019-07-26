@@ -20,7 +20,8 @@
     "plugins": [
       "Wallet",
       "QRScanner",
-      "Clipboard"
+      "Clipboard",
+      "InAppBrowser"
     ],
     "urls": [
       "https://52.81.8.194:442/*",

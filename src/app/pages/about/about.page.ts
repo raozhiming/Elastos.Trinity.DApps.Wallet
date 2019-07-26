@@ -1,27 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { WalletManager } from '../../services/WalletManager';
+import { Native } from '../../services/Native';
 
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.page.html',
-  styleUrls: ['./about.page.scss'],
+    selector: 'app-about',
+    templateUrl: './about.page.html',
+    styleUrls: ['./about.page.scss'],
 })
 export class AboutPage implements OnInit {
-  public spvVersion = "0";
-  constructor(public walletManager:WalletManager) {
+    public version = "1.0.0";
+    public spvVersion = "0";
+    public commitVersion = "v0.12";
+    constructor(public walletManager: WalletManager,
+        public native: Native) {
         this.init();
-  }
+    }
 
-  ngOnInit() {
-    console.log('ngOnInit AboutPage');
-  }
+    ngOnInit() {
+        console.log('ngOnInit AboutPage');
+    }
 
-  init(){
-    this.walletManager.getVersion((data)=>{
-      if(data['success']){
-          this.spvVersion = data['success'];
-      }
-    });
- }
+    init() {
+        this.walletManager.getVersion((data) => {
+            if (data['success']) {
+                this.spvVersion = data['success'];
+            }
+        });
+    }
+
+    goWebsite() {
+        this.native.openUrl("http://www.elastos.org");
+    }
 
 }

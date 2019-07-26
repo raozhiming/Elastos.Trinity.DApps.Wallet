@@ -28,6 +28,8 @@ export const en = {
     'text-mnemonic-ok': 'Mnemonics Verified',
     'text-mnemonic-prompt3': 'Backup phrase or password incorrectly, Please review your backup and try again.',
     'text-mnemonic-format': 'Spaces are required between characters',
+
+    'paypassword-reset': 'Reset pay password',
     // TODO remove unused items
     // import wallet page
     'text-from-mnemonic': 'from Mnemonics',
@@ -77,7 +79,8 @@ export const en = {
     'addwallet-paypassword1-title': 'Pay Password',
     'addwallet-paypassword1-placeholder': 'Set Pay Password',
     'addwallet-paypassword2-placeholder': 'Repeat Pay Password',
-    'text-pwd-validator': 'the length must be 8 or more characters, a mix of letters and numbers are bettter',
+    // 'text-pwd-validator': 'the length must be 8 or more characters, a mix of letters and numbers are bettter',
+    'text-pwd-validator': 'must be 8 or more characters',
     'text-repwd-validator': 'password do not match',
     //
     'showmnes-optionalpassword1-title': 'Mnemonic Optional Passphrase',
@@ -215,8 +218,8 @@ export const en = {
     'text-kyc-success': 'kyc success',
     'text-kyc-failure': 'kyc failed',
     'text-kyc-message': 'kyc message',
-    'show-advanced-options': 'show advanced option',
-    'hide-advanced-options': 'hide advanced option',
+    'show-advanced-options': 'Show advanced option',
+    'hide-advanced-options': 'Hide advanced option',
     'text-pay-passworld-input': 'input paypassword',
     'text-passworld-compare': 'inconformity password',
     'text-keystroe-message': 'please save keystore properly',
@@ -433,7 +436,8 @@ export const en = {
     'present-quorum-votes': 'present quorum votes',
     'number-of-voting-addresses': 'number of voting addresses',
     'about': 'About',
-    'Version': 'Version',
+    'version': 'Version',
+    'website': 'Website',
     'my-publickey': 'my publickey',
     'Inputs': "Inputs",
     "Outputs": "Outputs",

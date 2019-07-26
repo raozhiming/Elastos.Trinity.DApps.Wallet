@@ -10,13 +10,9 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['./createwalletname.page.scss'],
 })
 export class CreatewalletnamePage implements OnInit {
-    public navObj: any;
     public name: string = "";
     constructor(public route: ActivatedRoute, public native: Native) {
-        // this.route.queryParams.subscribe((data) => {
-        //     this.navObj = data;
-        // });
-        this.navObj = this.native.clone(Config.multiObj);
+
     }
 
     ngOnInit() {
@@ -25,8 +21,8 @@ export class CreatewalletnamePage implements OnInit {
 
     import() {
         if (this.checkParms()) {
-            this.navObj["name"] = this.name;
-            this.native.Go("/addpublickey", this.navObj);
+            Config.walletObj.name = this.name;
+            this.native.Go("/addpublickey");
         }
     }
 

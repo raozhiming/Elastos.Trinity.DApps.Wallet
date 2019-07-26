@@ -6,15 +6,15 @@
     <div id="wrapper">
         <div id="cell">
             <div>
-                <ion-button expand="full" [routerLink]="['/wallet-create']" routerDirection="forward">
+                <ion-button expand="full" (click)="onNext(1)">
                     {{'launcher-create-wallet' | translate}}</ion-button>
             </div>
             <div>
-                <ion-button expand="full" [routerLink]="['/wallet-import']" routerDirection="forward">
+                <ion-button expand="full" (click)="onNext(2)">
                     {{'launcher-backup-import' | translate}}</ion-button>
             </div>
             <div>
-                <ion-button expand="full" [routerLink]="['/createmultiwallet']" routerDirection="forward">
+                <ion-button expand="full" (click)="onNext(3)">
                     {{'signature-wallet' | translate}}</ion-button>
             </div>
         </div>

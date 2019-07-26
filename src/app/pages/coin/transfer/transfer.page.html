@@ -1,19 +1,14 @@
 <ion-header>
     <header-bar title="text-transfer"></header-bar>
-    <!-- <ion-toolbar>
-        <ion-title style="text-align:center">{{'text-transfer' | translate}}</ion-title>
-        <ion-buttons end>
-            <ion-button icon-only (click)="rightHeader()">
-            <img src="assets/images/icon/ico-scan.svg" style="width: 40px;height:30px">
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar> -->
 </ion-header>
 <ion-content>
     <ion-list>
         <ion-item>
             <ion-label>{{ 'text-receiver-address' | translate}}</ion-label>
-            <ion-icon slot="end" name="contact" (click)="onClick(1)"></ion-icon>
+            <ion-buttons slot="end">
+                <ion-icon name="scan" (click)="rightHeader()"></ion-icon>
+                <ion-icon name="contact" (click)="onClick(1)"></ion-icon>
+            </ion-buttons>
         </ion-item>
         <ion-item>
             <ion-input type="text" placeholder="{{ 'text-receiver-address' | translate}}"
@@ -24,14 +19,15 @@
             <ion-note slot="end">{{'text-balance' | translate}}：{{balance/SELA}}</ion-note>
         </ion-item>
         <ion-item>
-            <ion-input type="text" placeholder="{{ 'text-price' | translate}}" [(ngModel)]="transfer.amount">
-            </ion-input>
+            <ion-input type="text" placeholder="{{ 'text-price' | translate}}"
+                [(ngModel)]="transfer.amount"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label>{{ 'text-remark' | translate}}</ion-label>
         </ion-item>
         <ion-item>
-            <ion-input type="text" placeholder="{{ 'text-remark' | translate}}" [(ngModel)]="transfer.remark"></ion-input>
+            <ion-input type="text" placeholder="{{ 'text-remark' | translate}}"
+                [(ngModel)]="transfer.remark"></ion-input>
         </ion-item>
     </ion-list>
     <!-- <ion-grid class="margin-top:10px">

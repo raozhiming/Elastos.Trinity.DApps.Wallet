@@ -113,6 +113,7 @@ export class AddprivatekeyPage implements OnInit {
             this.native.hideLoading();
             Config.setCurMasterWalletId(this.masterWalletId);
             this.native.setRootRouter("/tabs");
+            this.events.publish("wallet:update", this.masterWalletId);
       });
 
       });

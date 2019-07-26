@@ -36,7 +36,9 @@ export class Config {
     public static perObj = {};
     public static masterWalletId: string = "1";
     public static masterWalletList = [];
-    public static multiObj = {};
+    public static coinObj:any;
+    public static walletObj:any;
+    public static modifyId = "";
 
     public static mappingList = {};
 

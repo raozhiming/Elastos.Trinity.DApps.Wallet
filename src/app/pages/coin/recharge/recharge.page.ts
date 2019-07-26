@@ -25,17 +25,10 @@ export class RechargePage implements OnInit {
         remark: '',
     };
 
-    sidechain: any = {
-        accounts: '',
-        amounts: 0,
-        index: 0,
-        rate: 1,
-    };
-
 
     balance = 0;
 
-    chianId: string;
+    chainId: string;
 
     feePerKb = 10000;
 
@@ -51,17 +44,21 @@ export class RechargePage implements OnInit {
     ngOnInit() {
     }
     init() {
+        this.transfer = Config.coinObj.recharge;
         this.events.subscribe("address:update", (address) => {
-            this.sidechain.accounts = address;
+            this.transfer.toAddress = address;
         });
         this.masterWalletId = Config.getCurMasterWalletId();
-        this.route.queryParams.subscribe((data) => {
-            let transferObj = data;
-            this.walletInfo = transferObj["walletInfo"] || {};
-            this.chianId = transferObj["chianId"];
-        });
-        this.getGenesisAddress();
-        this.initData();
+        // this.route.queryParams.subscribe((data) => {
+            // let transferObj = data;
+            // this.walletInfo = transferObj["walletInfo"] || {};
+            // this.chainId = data["chainId"];
+            this.walletInfo = Config.coinObj.walletInfo;
+            this.chainId = this.transfer.chainId;
+            this.getGenesisAddress();
+            this.initData();
+        // });
+
     }
 
     rightHeader() {
@@ -92,7 +89,7 @@ export class RechargePage implements OnInit {
     }
 
     checkValue() {
-        if (Util.isNull(this.sidechain.accounts)) {
+        if (Util.isNull(this.transfer.toAddress)) {
             this.native.toast_trans('correct-address');
             return;
         }
@@ -116,7 +113,7 @@ export class RechargePage implements OnInit {
             this.native.toast_trans('correct-amount');
             return;
         }
-        this.walletManager.isAddressValid(this.masterWalletId, this.sidechain.accounts, (data) => {
+        this.walletManager.isAddressValid(this.masterWalletId, this.transfer.toAddress, (data) => {
             if (!data['success']) {
                 this.native.toast_trans("contact-address-digits");
                 return;
@@ -133,7 +130,7 @@ export class RechargePage implements OnInit {
         let toAmount = 0;
         //toAmount = parseFloat((this.transfer.amount*Config.SELA).toPrecision(16));
         toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        let sidechainAddress = this.sidechain.accounts;
+        let sidechainAddress = this.transfer.toAddress;
         this.walletManager.createDepositTransaction(this.masterWalletId, 'ELA', "",
             this.transfer.toAddress, // genesisAddress
             toAmount, // user input amount
@@ -153,7 +150,7 @@ export class RechargePage implements OnInit {
     }
 
     getGenesisAddress() {
-        this.walletManager.getGenesisAddress(this.masterWalletId, this.chianId, (data) => {
+        this.walletManager.getGenesisAddress(this.masterWalletId, this.chainId, (data) => {
             this.transfer.toAddress = data['success'];
         });
     }
@@ -164,7 +161,7 @@ export class RechargePage implements OnInit {
                 this.native.hideLoading();
                 this.native.info(data);
                 this.transfer.fee = data['success'];
-                this.transfer.rate = this.sidechain.rate;
+                // this.transfer.rate = this.sidechain.rate;
                 this.openPayModal(this.transfer);
             } else {
                 this.native.info(data);
@@ -201,7 +198,7 @@ export class RechargePage implements OnInit {
                     this.walletManager.encodeTransactionToString(data["success"], (raw) => {
                         if (raw["success"]) {
                             this.native.hideLoading();
-                            this.native.Go("/scancode", { "tx": { "chianId": 'ELA', "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
+                            this.native.Go("/scancode", { "tx": { "chainId": 'ELA', "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
                         } else {
                             this.native.info(raw);
                         }
@@ -228,7 +225,7 @@ export class RechargePage implements OnInit {
 
     async openPayModal(transfer) {
         let props = this.native.clone(transfer);
-        props["accounts"] = this.sidechain.accounts;
+        props["accounts"] = this.transfer.toAddress;
 
         const modal = await this.modalCtrl.create({
             component: PaymentboxPage,
@@ -248,7 +245,7 @@ export class RechargePage implements OnInit {
         this.walletManager.encodeTransactionToString(raws, (raw) => {
             if (raw["success"]) {
                 this.native.hideLoading();
-                this.native.Go("/scancode", { "tx": { "chianId": 'ELA', "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
+                this.native.Go("/scancode", { "tx": { "chainId": 'ELA', "fee": this.transfer.fee / Config.SELA, "raw": raw["success"] } });
             } else {
                 alert("=====encodeTransactionToString===error===" + JSON.stringify(raw));
             }

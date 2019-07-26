@@ -13,15 +13,10 @@ export class WalletCreatePage implements OnInit {
     MultObj: any;
     isShow: any = false;
     constructor(public route: ActivatedRoute, public native: Native, public zone: NgZone) {
-        this.route.queryParams.subscribe((data) => {
-            this.MultObj = data;
-            console.log(this.MultObj);
-            this.native.info(this.MultObj);
-            if (!Util.isEmptyObject(this.MultObj)) {
-                this.wallet.singleAddress = true;
-                this.isShow = true;
-            }
-        });
+        if (Config.walletObj.isMulti) {
+            this.wallet.singleAddress = true;
+            this.isShow = true;
+        }
 
     }
 
@@ -30,10 +25,10 @@ export class WalletCreatePage implements OnInit {
 
 
     wallet = {
-        name: 'kuit',
+        name: '',
         singleAddress: false,
-        payPassword: 'password',//houpeitest
-        rePayPassword: 'password'//houpeitest
+        payPassword: '',//houpeitest
+        rePayPassword: ''//houpeitest
     };
 
     updateSingleAddress(isShow) {
@@ -77,6 +72,10 @@ export class WalletCreatePage implements OnInit {
             payPassword: this.wallet.payPassword, name: this.wallet.name,
             singleAddress: this.wallet.singleAddress, mult: JSON.stringify(this.MultObj)
         };
+        Config.walletObj.payPassword = this.wallet.payPassword;
+        Config.walletObj.name = this.wallet.name;
+        Config.walletObj.singleAddress = this.wallet.singleAddress;
+        console.log(Config.walletObj);
         this.native.Go("/mnemonic", params);
     }
 }
