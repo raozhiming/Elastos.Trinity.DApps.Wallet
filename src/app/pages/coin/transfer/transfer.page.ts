@@ -403,9 +403,11 @@ export class TransferPage implements OnInit {
             component: PaymentboxPage,
             componentProps: props
         });
-        modal.onDidDismiss().then((data) => {if (data) {
+        modal.onDidDismiss().then((params) => {if (params) {
             this.native.showLoading().then(() => {
-                this.transfer.payPassword = data;
+                this.transfer.payPassword = params.data;
+                // alert(data);
+                console.log(params.data);
                 this.sendRawTransaction();
             });
         }});
