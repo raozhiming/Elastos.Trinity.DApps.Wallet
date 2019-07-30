@@ -53,7 +53,8 @@
     }
 
     .valuation {
-        margin-top: px2rem(98px);
+        // margin-top: px2rem(98px);
+        margin-top: px2rem(120px);
         text-align: center;
         font-size: 40px;
     }
@@ -63,6 +64,9 @@
     }
 }
 
+button {
+    padding-top: px2rem(6px);
+}
 
 
 #home-list-box {

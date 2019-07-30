@@ -32,6 +32,7 @@ export const zh = {
     'text-mnemonic-format': '助记词之间使用空格隔开',
 
     'paypassword-reset': '更改支付密码',
+    'paypassword': '支付密码',
     // TODO remove unused items
     // import wallet page
     'text-from-mnemonic': '来自助记词',
@@ -56,7 +57,7 @@ export const zh = {
     'text-receiver-address': '收款人钱包地址',
     'text-create-address': '我要新地址',
     'text-contacts': '联系人',
-    'text-contacts-add': '+添加联系人',
+    'text-contacts-add': '添加联系人',
     // contacts page
     'contacts-name-title': '姓名',
     'contacts-phone-title': '手机',
@@ -288,7 +289,7 @@ export const zh = {
     'text-sycn-message': '同步状态',
     'text-language-message': "语言",
     'text-wallet-list': "钱包列表",
-    'text-add-wallet': "+添加钱包",
+    'text-add-wallet': "添加钱包",
     'signature-wallet': "创建多签钱包",
     'text-next-step': "下一步",
     'text-select-type': "选择类型",

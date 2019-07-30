@@ -15,14 +15,14 @@
         <div id="home-top-box" [routerLink]="['/walletlist']" routerDirection="forward">
             <div id="wallet-bar">
                 <div id="wallet-name"> {{walletName}}
-                    <span *ngIf="account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
-                    <span *ngIf="account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
+                    <!-- <span *ngIf="account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
+                    <span *ngIf="account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span> -->
                 </div>
                 <button [routerLink]="['/wallet-setting', masterWalletId]" routerDirection="forward" (click)="onClick()">{{'text-wallet-manager' | translate}}</button>
             </div>
             <div class="valuation" [hidden]="!showOn">{{ElaObj.balance}}</div>
             <div class="valuation" [hidden]="showOn">****</div>
-            <div id="valuation-label">预估资产(元)</div>
+            <!-- <div id="valuation-label">预估资产(元)</div> -->
         </div>
 
         <div id="home-list-box">

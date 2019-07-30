@@ -30,6 +30,7 @@ export const en = {
     'text-mnemonic-format': 'Spaces are required between characters',
 
     'paypassword-reset': 'Reset pay password',
+    'paypassword': 'Paypassword',
     // TODO remove unused items
     // import wallet page
     'text-from-mnemonic': 'from Mnemonics',
@@ -54,7 +55,7 @@ export const en = {
     'text-receiver-address': 'Target Address',
     'text-create-address': 'Get new address',
     'text-contacts': 'Contacts',
-    'text-contacts-add': '+Add contact',
+    'text-contacts-add': 'Add contact',
     // contacts page
     'contacts-name-title': 'Name',
     'contacts-phone-title': 'Phone Number',
@@ -287,7 +288,7 @@ export const en = {
     'text-language-message': "Language",
 
     'text-wallet-list': "Wallet List",
-    'text-add-wallet': "+Add Wallet",
+    'text-add-wallet': "Add Wallet",
     'signature-wallet': "Create Multi-sign wallet",
     'text-next-step': "Next Step",
     'text-select-type': "Select Type",

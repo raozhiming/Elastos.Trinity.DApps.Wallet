@@ -25,6 +25,12 @@ export class RechargePage implements OnInit {
         remark: '',
     };
 
+  sidechain: any = {
+    accounts: '',
+    amounts: 0,
+    index: 0,
+    rate: 1,
+  };
 
     balance = 0;
 
@@ -161,7 +167,7 @@ export class RechargePage implements OnInit {
                 this.native.hideLoading();
                 this.native.info(data);
                 this.transfer.fee = data['success'];
-                // this.transfer.rate = this.sidechain.rate;
+                this.transfer.rate = this.sidechain.rate;
                 this.openPayModal(this.transfer);
             } else {
                 this.native.info(data);

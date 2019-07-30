@@ -5,7 +5,30 @@
             <img class="close" src="./assets/images/icon/icon-close.svg" (click)="click_close()">
         </p>
 
-        <table border="0" style="width: 100%">
+        <ion-list>
+            <ion-item>
+                <ion-label class="left">{{'transfer-address' | translate}}</ion-label>
+                <ion-label class="right" slot="end">{{toAddress}}</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label class="left">{{'text-price' | translate}}</ion-label>
+                <ion-label class="right" slot="end">{{transfer.amount}}</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label class="left">{{'text-fees' | translate}}</ion-label>
+                <ion-label class="right" slot="end">{{transfer.fee/SELA}}</ion-label>
+            </ion-item>
+            <ion-item *ngIf="transfer.rate">
+                <ion-label class="left">{{'text-rate' | translate}}</ion-label>
+                <ion-label class="right" slot="end">1 : {{transfer.rate}}</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label class="left">{{'paypassword' | translate}}</ion-label>
+                <ion-input slot="end" type="password" placeholder="{{ 'text-pay-passworld-input' | translate }}"
+                    [(ngModel)]="transfer.payPassword"></ion-input>
+            </ion-item>
+        </ion-list>
+        <!-- <table border="0" style="width: 100%">
             <tr class="item">
                 <td class="left">{{'transfer-address' | translate}}</td>
                 <td class="right1">{{toAddress}}</td>
@@ -23,16 +46,18 @@
 
             <tr class="item" *ngIf="transfer.rate">
                 <td class="left">{{'text-rate' | translate}}</td>
-                <td class="right">1 : {{transfer.rate}}</td>
+                <td class="right">1 : {{transfer.fee}}</td>
             </tr>
 
             <tr class="item" class="font-size-1" *ngIf="walltype">
-                <ion-item>
-                    <ion-input type="password" placeholder="{{ 'text-pay-passworld-input' | translate }}" [(ngModel)]="transfer.payPassword"></ion-input>
-                </ion-item>
+                <td class="left">{{'paypassword' | translate}}</td>
+                <td class="right">
+                    <ion-input type="password" placeholder="{{ 'text-pay-passworld-input' | translate }}"
+                        [(ngModel)]="transfer.payPassword"></ion-input>
+                </td>
             </tr>
 
-        </table>
+        </table> -->
 
         <div style="text-align: center">
             <ion-button class="confirm" (click)="click_button()">{{ 'confirm' | translate }}</ion-button>

@@ -32,6 +32,7 @@ import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 import { zh } from './../assets/i18n/zh';
 import { en } from './../assets/i18n/en';
@@ -51,6 +52,8 @@ import { HttpService } from "./services/HttpService";
 import { PopupProvider } from './services/popup';
 import { WalletManager } from "./services/WalletManager";
 import { LoadingService } from './services/Loading';
+
+import { PaymentboxPage } from './pages/paymentbox/paymentbox.page';
 
 /**pages*/
 
@@ -77,10 +80,12 @@ export function TranslateLoaderFactory() {
 }
 
 @NgModule({
-    declarations: [AppComponent
+    declarations: [AppComponent,
+        PaymentboxPage
     ],
-    entryComponents: [],
+    entryComponents: [PaymentboxPage],
     imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule,
+        FormsModule,
         HttpModule,
         IonicStorageModule.forRoot({
             name: '__walletdb',

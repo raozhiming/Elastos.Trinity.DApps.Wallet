@@ -60,7 +60,10 @@ export class CoinPage implements OnInit {
     maxHeight: any;
     curHeight: any;
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native, public events: Events) {
+    constructor(public route: ActivatedRoute,
+        public walletManager: WalletManager,
+        public native: Native,
+        public events: Events) {
         //this.init();
         this.pageNo = 0;
         this.start = 0;

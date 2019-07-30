@@ -36,7 +36,7 @@ export class TransferPage implements OnInit {
     rawTransaction: '';
 
     SELA = Config.SELA;
-    appType: string = "";
+    appType: string = null;
     selectType: string = "";
     parms: any;
     txId: string;
@@ -53,8 +53,10 @@ export class TransferPage implements OnInit {
     }
 
     init() {
+        console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
         this.chainId = Config.coinObj.chainId;
+        this.walletInfo = Config.coinObj.walletInfo;
         this.events.subscribe("address:update", (address) => {
             this.transfer.toAddress = address;
         });
@@ -75,8 +77,7 @@ export class TransferPage implements OnInit {
         //     this.parms = transferObj.get("parms") || "";
         //     this.did = transferObj.get("did") || "";
         //     this.walletInfo = JSON.parse(transferObj.get("walletInfo")) || {};
-            this.walletInfo = Config.coinObj.walletInfo;
-            this.initData();
+        this.initData();
         // });
     }
 
@@ -115,9 +116,6 @@ export class TransferPage implements OnInit {
     }
 
     checkValue() {
-        this.transfer.toAddress = Config.coinObj.transfer.toAddress;
-        this.transfer.amount = Config.coinObj.transfer.amount;
-        this.transfer.remark = Config.coinObj.transfer.remark;
         if (Util.isNull(this.transfer.toAddress)) {
             this.native.toast_trans('correct-address');
             return;
@@ -166,7 +164,6 @@ export class TransferPage implements OnInit {
         let toAmount = 0;
         //toAmount = parseFloat((this.transfer.amount*Config.SELA).toPrecision(16));
         toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        alert(toAmount);
 
         this.walletManager.createTransaction(this.masterWalletId, this.chainId, "",
             this.transfer.toAddress,
@@ -401,18 +398,25 @@ export class TransferPage implements OnInit {
 
     async openPayModal(transfer) {
         let props = this.native.clone(transfer);
+        console.log(props);
         const modal = await this.modalCtrl.create({
             component: PaymentboxPage,
             componentProps: props
         });
-        const { data } = await modal.onDidDismiss();
-        if (data) {
+        modal.onDidDismiss().then((data) => {if (data) {
             this.native.showLoading().then(() => {
-                this.transfer = this.native.clone(data);
+                this.transfer.payPassword = data;
                 this.sendRawTransaction();
             });
-        }
-        return await modal.present();
+        }});
+        // const { data } = await modal.onDidDismiss();
+        // if (data) {
+        //     this.native.showLoading().then(() => {
+        //         this.transfer = this.native.clone(data);
+        //         this.sendRawTransaction();
+        //     });
+        // }
+        return modal.present();
     }
 
 
