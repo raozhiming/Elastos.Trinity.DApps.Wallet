@@ -6,7 +6,7 @@ import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
 import { LocalStorage } from '../../../services/Localstorage';
 import { ActivatedRoute } from '@angular/router';
-import { PaymentboxPage } from '../../paymentbox/paymentbox.page';
+import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
 
 @Component({
     selector: 'app-recharge',
@@ -234,7 +234,7 @@ export class RechargePage implements OnInit {
         props["accounts"] = this.transfer.toAddress;
 
         const modal = await this.modalCtrl.create({
-            component: PaymentboxPage,
+            component: PaymentboxComponent,
             componentProps: props
         });
         const { data } = await modal.onDidDismiss();

@@ -6,10 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-paymentbox',
-    templateUrl: './paymentbox.page.html',
-    styleUrls: ['./paymentbox.page.scss'],
+    templateUrl: './paymentbox.component.html',
+    styleUrls: ['./paymentbox.component.scss'],
 })
-export class PaymentboxPage implements OnInit {
+export class PaymentboxComponent implements OnInit {
     public SELA = Config.SELA;
     public toAddress = "";
     public walltype: boolean = false;

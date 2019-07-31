@@ -1,14 +1,14 @@
 {
     "id": "org.elastos.trinity.dapp.wallet",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "name": "Wallet",
     "short_name": "wallet",
     "description": "Elastos SPV wallet",
     "start_url": "index.html",
     "icons": [
       {
-          "src": "assets/icon/favicon.ico",
-          "sizes": "80x80",
+          "src": "assets/images/logo.png",
+          "sizes": "120X120",
           "type": "image/png"
       }
     ],
@@ -36,13 +36,6 @@
     "platform": [
       "andriod",
       "ios"
-    ],
-    "background_color": "#4e8ef7",
-    "theme": {
-      "display": "show",
-      "color": "#4e8ef7",
-      "font_name": "default",
-      "font_color": "#4e8ef7"
-    }
+    ]
 }
 

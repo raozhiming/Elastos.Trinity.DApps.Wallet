@@ -53,7 +53,7 @@ import { PopupProvider } from './services/popup';
 import { WalletManager } from "./services/WalletManager";
 import { LoadingService } from './services/Loading';
 
-import { PaymentboxPage } from './pages/paymentbox/paymentbox.page';
+import { PaymentboxComponent } from './components/paymentbox/paymentbox.component';
 
 /**pages*/
 
@@ -81,9 +81,9 @@ export function TranslateLoaderFactory() {
 
 @NgModule({
     declarations: [AppComponent,
-        PaymentboxPage
+        PaymentboxComponent
     ],
-    entryComponents: [PaymentboxPage],
+    entryComponents: [PaymentboxComponent],
     imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule,
         FormsModule,
         HttpModule,

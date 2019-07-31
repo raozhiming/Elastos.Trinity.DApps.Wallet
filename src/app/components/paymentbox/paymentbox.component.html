@@ -28,36 +28,6 @@
                     [(ngModel)]="transfer.payPassword"></ion-input>
             </ion-item>
         </ion-list>
-        <!-- <table border="0" style="width: 100%">
-            <tr class="item">
-                <td class="left">{{'transfer-address' | translate}}</td>
-                <td class="right1">{{toAddress}}</td>
-            </tr>
-
-            <tr class="item">
-                <td class="left">{{'text-price' | translate}}</td>
-                <td class="right">{{transfer.amount}}</td>
-            </tr>
-
-            <tr class="item">
-                <td class="left">{{'text-fees' | translate}}</td>
-                <td class="right">{{transfer.fee/SELA}}</td>
-            </tr>
-
-            <tr class="item" *ngIf="transfer.rate">
-                <td class="left">{{'text-rate' | translate}}</td>
-                <td class="right">1 : {{transfer.fee}}</td>
-            </tr>
-
-            <tr class="item" class="font-size-1" *ngIf="walltype">
-                <td class="left">{{'paypassword' | translate}}</td>
-                <td class="right">
-                    <ion-input type="password" placeholder="{{ 'text-pay-passworld-input' | translate }}"
-                        [(ngModel)]="transfer.payPassword"></ion-input>
-                </td>
-            </tr>
-
-        </table> -->
 
         <div style="text-align: center">
             <ion-button class="confirm" (click)="click_button()">{{ 'confirm' | translate }}</ion-button>

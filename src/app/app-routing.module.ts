@@ -63,7 +63,6 @@ const routes: Routes = [
     { path: 'contact-list', loadChildren: './pages/contacts/contact-list/contact-list.module#ContactListPageModule' },
     { path: 'publickey', loadChildren: './pages/publickey/publickey.module#PublickeyPageModule' },
     { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },
-    { path: 'paymentbox', loadChildren: './pages/paymentbox/paymentbox.module#PaymentboxPageModule' },
     { path: 'coin-select', loadChildren: './pages/coin/coin-select/coin-select.module#CoinSelectPageModule' },
     { path: 'withdraw', loadChildren: './pages/coin/withdraw/withdraw.module#WithdrawPageModule' },
     { path: 'receive', loadChildren: './pages/coin/receive/receive.module#ReceivePageModule' },

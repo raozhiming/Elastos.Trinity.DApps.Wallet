@@ -5,7 +5,7 @@ import { ModalController, Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
 import { LocalStorage } from '../../../services/Localstorage';
-import { PaymentboxPage } from '../../paymentbox/paymentbox.page';
+import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -195,7 +195,7 @@ export class PaymentConfirmPage implements OnInit {
     async openPayModal(transfer) {
         let props = this.native.clone(transfer);
         const modal = await this.modalCtrl.create({
-            component: PaymentboxPage,
+            component: PaymentboxComponent,
             componentProps: props
         });
         const { data }  = await modal.onDidDismiss();

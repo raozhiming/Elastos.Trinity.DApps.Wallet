@@ -8,7 +8,7 @@ import { Config } from '../../../services/Config';
 import { IDManager } from "../../../services/IDManager";
 import { ApiUrl } from "../../../services/ApiUrl"
 import { ModalController, Events } from '@ionic/angular';
-import { PaymentboxPage } from '../../paymentbox/paymentbox.page';
+import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
 
 @Component({
     selector: 'app-transfer',
@@ -400,7 +400,7 @@ export class TransferPage implements OnInit {
         let props = this.native.clone(transfer);
         console.log(props);
         const modal = await this.modalCtrl.create({
-            component: PaymentboxPage,
+            component: PaymentboxComponent,
             componentProps: props
         });
         modal.onDidDismiss().then((params) => {if (params) {
