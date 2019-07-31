@@ -1,0 +1,10 @@
+<ion-header>
+    <header-bar title="text-check-publickey"></header-bar>
+</ion-header>
+
+<ion-content padding>
+    <my-qrcode [address]="qrcode" [title]="'my-qrcode' | translate"></my-qrcode>
+</ion-content>
+<ion-footer>
+    <ion-button class="confirm" (click)="onNext()">{{'text-next-step' | translate}}</ion-button>
+</ion-footer>

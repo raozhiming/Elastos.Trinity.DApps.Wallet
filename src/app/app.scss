@@ -1,50 +1,76 @@
-ion-icon {
-    &[class*="tab-"] {
-        // Instead of using the font-based icons
-        // We're applying SVG masks
-        mask-size: contain;
-        mask-position: 50% 50%;
-        mask-repeat: no-repeat;
-        background: currentColor;
-        width: 2rem !important;
-        height: 2rem !important;
-    }
-    // custom icons
-    &[class*="tab-home"] {
-        mask-image: url(../assets/images/ico-home.svg);
-    }
-    &[class*="tab-settings"] {
-        mask-image: url(../assets/images/ico-settings.svg);
-    }
+// App Styles
+// ----------------------------------------------------------------------------
+// Put style rules here that you want to apply to the entire application. These
+// styles are for the entire app and not just one component. Additionally, this
+// file can hold Sass mixins, functions, and placeholder classes to be imported
+// and used throughout the application.
+
+// http://ionicframework.com/docs/theming/
+
+
+@import "./functions.scss";
+
+
+:root {
+    --ion-text-color: white;
+    --ion-background-color: #161723;
+    --ion-toolbar-color: white;
+    --ion-toolbar-background: #161723;
 }
 
-::-webkit-scrollbar {
-    display: none !important;
-    box-shadow: none !important;
+.my-custom-alert {
+    --ion-text-color: #000000;
+    text-align: center;
 }
 
-
-/* add */
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Microsoft Yahei', 微软雅黑, 华文细黑, STHeiti, MingLiu;
+ion-button {
+    text-transform: none;
 }
 
-body,
-html {
-    height: 100%;
+ion-item {
+    --padding-start: 0;
+    --inner-padding-end:0;
+    margin-left: px2rem(45px);
+    margin-right: px2rem(45px);
 }
 
-.tabs-ios .tab-button-text {
-    margin-top: 0;
-    margin-bottom: 1px;
-    min-height: 11px;
-    font-size: 18px;
+ion-note {
+    font-size: 14px;
 }
 
-.label-ios[stacked] {
-    margin-bottom: 4px;
-    font-size: 1.6rem;
+// ion-icon {
+//     width: px2rem(64px);
+//     height: px2rem(64px);
+// }
+
+ion-footer {
+    text-align: center;
+}
+
+.confirm {
+    width: px2rem(686px);
+    height: px2rem(84px);
+    --background: #783aff;
+    font-size: 16px;
+}
+
+.delete {
+    width: px2rem(686px);
+    height: px2rem(84px);
+    --background: #AB2323;
+    font-size: 16px;
+}
+
+.backupWalletTextArea {
+    margin: auto;
+    border: 1px dashed #d9d9d9;
+    border-radius: 3px;
+    // color: #192c3a;
+    text-align: center;
+    width: px2rem(660px);
+    height: px2rem(280px);
+    // display: flex;
+    justify-content: center;
+    background-color: #161723;
+    font-size: 20px;
 }

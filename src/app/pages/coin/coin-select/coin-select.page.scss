@@ -1,0 +1,15 @@
+@import "../../../functions.scss";
+
+#nodata {
+    text-align: center;
+    margin-top: px2rem(418px);
+}
+
+ion-thumbnail {
+    width: px2rem(40px);
+    height: px2rem(40px);
+}
+
+ion-label {
+    text-align: right;
+}

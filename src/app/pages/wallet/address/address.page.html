@@ -1,0 +1,23 @@
+<ion-header>
+    <header-bar title="text-manager-address"></header-bar>
+</ion-header>
+<ion-content style="width:100%">
+    <!-- <ion-refresher (ionRefresh)='doRefresh($event)'>
+
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="下拉刷新" refreshingSpinner="circles" refreshingText="...">
+
+        </ion-refresher-content>
+
+    </ion-refresher> -->
+
+    <ion-list>
+        <ion-item *ngFor="let item of addrList" (click)="onItem(item)">
+            {{item}}
+        </ion-item>
+    </ion-list>
+
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'load-more'|translate}}">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

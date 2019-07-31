@@ -1,0 +1,49 @@
+<ion-header>
+    <header-bar title="text-contacts-add"></header-bar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-name-title' | translate }}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" autofocus placeholder="请输入联系人姓名" [(ngModel)]="name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-address-title' | translate }}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="请输入钱包地址" [(ngModel)]="address"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-phone-title' | translate }}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="请输入联系人手机" [(ngModel)]="phone"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-email-title' | translate }}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="请输入联系人邮箱地址" [(ngModel)]="email"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>{{ 'contacts-remark-title' | translate }}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="" [(ngModel)]="remark"></ion-input>
+        </ion-item>
+    </ion-list>
+</ion-content>
+
+<ion-footer>
+    <ion-button *ngIf="!isEdit" class="confirm" (click)="add()">{{'text-add' | translate}}</ion-button>
+    <ion-button *ngIf="isEdit" class="confirm" (click)="modify()">{{'text-save-modify' | translate}}</ion-button>
+    <ion-button *ngIf="isEdit" class="delete" id="delete" (click)="delete()">{{'text-delete' | translate}}</ion-button>
+</ion-footer>
+

@@ -1,0 +1,17 @@
+<!-- <ion-header> -->
+    <ion-toolbar>
+        <ion-title>{{_title | translate}}</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button text="" [icon]="back_touched ? 'back-light' : 'back-dark'" (click)="back_touched=true;">
+            </ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="launcher()">
+                <ion-icon slot="icon-only" name="apps"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" (click)="close()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+<!-- </ion-header> -->

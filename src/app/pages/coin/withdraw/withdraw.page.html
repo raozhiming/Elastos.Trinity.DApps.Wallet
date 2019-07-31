@@ -1,0 +1,39 @@
+<ion-header>
+    <header-bar title="text-withdraw"></header-bar>
+    <!-- <ion-navbar>
+        <ion-title style="text-align:center">{{'text-withdraw' | translate}}</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="rightHeader()">
+            <img src="assets/images/icon/ico-scan.svg" style="width: 40px;height:30px">
+            </button>
+        </ion-buttons>
+    </ion-navbar> -->
+</ion-header>
+<ion-content>
+    <ion-list>
+        <ion-item>
+            <ion-label>{{ 'text-withdraw-address' | translate}}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="{{ 'text-withdraw-address' | translate}}"
+                [(ngModel)]="transfer.toAddress"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>{{ 'text-price' | translate}}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="{{ 'text-price' | translate}}"
+                [(ngModel)]="transfer.amount"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>{{ 'text-remark' | translate}}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="{{ 'text-remark' | translate}}"
+                [(ngModel)]="transfer.amount"></ion-input>
+        </ion-item>
+    </ion-list>
+</ion-content>
+<ion-footer>
+    <button ion-button style="width: 100%" (click)="onClick(2)">{{ 'text-transfer' | translate }}</button>
+</ion-footer>

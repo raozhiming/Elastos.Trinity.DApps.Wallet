@@ -1,0 +1,44 @@
+<ion-header>
+    <header-bar title="text-tx-details"></header-bar>
+</ion-header>
+
+<ion-content padding>
+    <ul>
+        <li>
+            {{'transaction-id' | translate}}
+        </li>
+        <li class="bottom-border">
+            {{txHash}}
+        </li>
+
+        <li>
+            {{'transfer-address' | translate}}
+        </li>
+        <li class="bottom-border">
+            {{txDetails['address']}}
+        </li>
+        <li>
+            {{'text-price' | translate}}
+        </li>
+        <li class="bottom-border">
+            {{txDetails['amount']}}
+        </li>
+        <li>
+            {{'text-fees' | translate}}
+        </li>
+        <li class="bottom-border">
+            {{txDetails['fee']}}
+        </li>
+
+        <li *ngIf="singPublickey.length > 0">
+            {{'already-signed-publickey' | translate}}
+        </li>
+        <li *ngFor="let item of singPublickey; let i = index" [ngClass]="{'bottom-border': i==singPublickey.length-1}">
+            {{i+1}}.{{item}}
+        </li>
+
+    </ul>
+</ion-content>
+<ion-footer>
+    <ion-button style="width: 100%" (click)="onNext()">{{'text-next-step' | translate}}</ion-button>
+</ion-footer>

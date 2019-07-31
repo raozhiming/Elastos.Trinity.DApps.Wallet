@@ -1,0 +1,24 @@
+<ion-header>
+    <header-bar title="text-contacts"></header-bar>
+</ion-header>
+<ion-content>
+    <div *ngIf="isnodata" id="nodata">
+        <img src="assets/images/no-contacts.png" />
+        <div>{{'no-add-contact' | translate}}</div>
+    </div>
+    <ion-list *ngIf="!isnodata">
+        <ion-item *ngFor="let item of contactUsers" (click)="onClick(item)">
+            <img id="contact-circle" src="assets/images/contact-circle.png" />
+            <span id="first-letter">{{item.name[0]}}</span>
+            <ion-label>{{ item.name }}</ion-label>
+            <ion-label><p>{{item.phone}}</p></ion-label>
+            <ion-thumbnail *ngIf="!isHide" solt="end"  (click)="onEdit(item, $event)">
+                <img src="assets/images/contact-edit.png" />
+            </ion-thumbnail>
+        </ion-item>
+    </ion-list>
+</ion-content>
+
+<ion-footer *ngIf="!isHide">
+    <ion-button class="confirm" (click)="onAdd()">+{{'text-contacts-add' | translate}}</ion-button>
+</ion-footer>

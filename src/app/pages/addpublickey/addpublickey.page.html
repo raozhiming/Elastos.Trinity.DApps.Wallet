@@ -1,0 +1,23 @@
+<ion-header>
+    <header-bar title="text-add-publickey-title"></header-bar>
+</ion-header>
+<ion-content>
+    <!-- <ion-list>
+        <ion-item *ngFor="let copayer of publicKeyArr">
+            <ion-input type="text" placeholder="{{'text-publickey-placeholder'|translate}}" [(ngModel)]="copayer['publicKey']"></ion-input>
+        </ion-item>
+    </ion-list> -->
+    <ion-item *ngFor="let copayer of publicKeyArr">
+        <ion-input type="text" placeholder="{{'text-publickey-placeholder'|translate}}"
+            [(ngModel)]="copayer['publicKey']"></ion-input>
+        <ion-thumbnail slot="end" (click)="saomiao(copayer['index'])">
+            <img src="assets/images/icon/ico-scan.svg" />
+        </ion-thumbnail>
+    </ion-item>
+
+    <my-qrcode *ngIf="!isOnly" [address]="qrcode" [title]="'my-publickey'|translate"></my-qrcode>
+
+</ion-content>
+<ion-footer>
+    <ion-button class="confirm" (click)="onNext()">{{'text-next-step' | translate}}</ion-button>
+</ion-footer>

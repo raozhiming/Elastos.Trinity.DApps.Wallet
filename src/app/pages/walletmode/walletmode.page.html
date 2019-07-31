@@ -1,0 +1,26 @@
+<ion-header>
+    <header-bar title="text-select-type"></header-bar>
+</ion-header>
+
+<ion-content>
+    <div id="wrapper">
+        <div id="cell">
+            <div>
+                <ion-button expand="full" [routerLink]="['/wallet-create']" routerDirection="forward">
+                    {{'text-create-privatekey'|translate}}</ion-button>
+            </div>
+            <div>
+                <ion-button expand="full" [routerLink]="['/importprivatekey']" routerDirection="forward">
+                    {{'text-import-privatekey'|translate}}</ion-button>
+            </div>
+            <div>
+                <ion-button expand="full" [routerLink]="['/createwalletname']" routerDirection="forward">
+                    {{'text-observe-wallet'|translate}}</ion-button>
+            </div>
+            <div>
+                <ion-button expand="full" [routerLink]="['/importmnemonic']" routerDirection="forward">
+                    {{ 'create-multi-by-mnes' | translate }}</ion-button>
+            </div>
+        </div>
+    </div>
+</ion-content>

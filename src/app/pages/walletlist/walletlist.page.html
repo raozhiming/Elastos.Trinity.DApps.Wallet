@@ -1,0 +1,22 @@
+<ion-header>
+    <header-bar title="text-wallet-list"></header-bar>
+</ion-header>
+
+<ion-content no-bounce>
+    <ion-list>
+        <ion-item *ngFor="let item of items"  (click)="itemSelected(item)">
+            <ion-label>
+                <h2>{{ item.wallname }}</h2>
+                <p *ngIf="item['Account']['Type']==='Standard'">{{'text-standard-wallet' | translate}}</p>
+                <p *ngIf="item['Account']['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</p>
+            </ion-label>
+            <ion-button slot="end" fill="clear" *ngIf="item.id == masterWalletId">
+                <ion-icon slot="icon-only" name="checked"></ion-icon>
+            </ion-button>
+        </ion-item>
+    </ion-list>
+</ion-content>
+
+<ion-footer>
+    <ion-button class="confirm" (click)="onNext()">+{{'text-add-wallet' | translate}}</ion-button>
+</ion-footer>

@@ -1,0 +1,65 @@
+@import "../../functions.scss";
+
+.coin-info-top-box {
+    text-align: center;
+    margin-top: px2rem(52px);
+    h2 {
+        font-size: 32px;
+    }
+    p {
+        font-size: 16px;
+        color: #FFCB0F;
+    }
+}
+
+#nodata {
+    text-align: center;
+    margin-top: px2rem(318px);
+}
+
+ion-item {
+    margin-left: px2rem(45px);
+    margin-right: px2rem(45px);
+}
+
+#coin-name {
+    margin-left: px2rem(20px);
+}
+
+#coin-value {
+    text-align: right;
+}
+
+img {
+    width: px2rem(72px);
+    height: px2rem(72px);
+}
+
+#exchange-name {
+    font-size: 16px;
+}
+
+#datatime {
+    font-size: 14px;
+}
+
+#amount {
+    font-size: 22px;
+}
+
+#status {
+    font-size: 14px;
+    color: #FFCB0F;
+}
+
+.coin-bottom {
+    text-align: center;
+}
+
+ion-button {
+    margin-left: px2rem(6.5px);
+    margin-right: px2rem(6.5px);
+    width: px2rem(220px);
+    height: px2rem(84px);
+    --background: #783aff;
+}

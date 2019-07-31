@@ -1,0 +1,27 @@
+<ion-header>
+    <header-bar title="about"></header-bar>
+</ion-header>
+
+
+<ion-content padding>
+    <div id="logo">
+        <img src="assets/images/logo.png" />
+        <div>{{('version'|translate) + version}}</div>
+    </div>
+    <ion-list>
+        <ion-item>
+            <ion-label>spvsdk</ion-label>
+            <ion-note slot="end">{{spvVersion}}</ion-note>
+        </ion-item>
+        <ion-item>
+            <ion-label>commit</ion-label>
+            <ion-note slot="end">{{commitVersion}}</ion-note>
+        </ion-item>
+        <ion-item detail (click)="goWebsite()">
+            <ion-label>
+                <h2>{{'website'|translate}}</h2>
+                <p>www.elastos.org</p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

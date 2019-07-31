@@ -1,0 +1,41 @@
+{
+    "id": "org.elastos.trinity.dapp.wallet",
+    "version": "1.0.0",
+    "name": "Wallet",
+    "short_name": "wallet",
+    "description": "Elastos SPV wallet",
+    "start_url": "index.html",
+    "icons": [
+      {
+          "src": "assets/images/logo.png",
+          "sizes": "120X120",
+          "type": "image/png"
+      }
+    ],
+    "author": {
+        "name": "ChenDongxiao",
+        "email": "chendongxiao@elastos.org"
+    },
+    "default_locale": "en",
+    "plugins": [
+      "Wallet",
+      "QRScanner",
+      "Clipboard",
+      "InAppBrowser"
+    ],
+    "urls": [
+      "https://52.81.8.194:442/*",
+      "https://39.106.96.168:8446/*",
+      "https://123.206.52.29/*",
+      "http://www.baidu.com/*",
+      "https://www.google.com"
+    ],
+    "framework": [
+      "ionic@4.12.0"
+    ],
+    "platform": [
+      "andriod",
+      "ios"
+    ]
+}
+
