@@ -16,8 +16,8 @@ export class MnemonicPage implements OnInit {
     masterWalletId: string = "1";
     mnemonicList = [];
     mnemonicStr: string;
-    mnemonicPassword: string = "password";
-    mnemonicRepassword: string = "password";
+    mnemonicPassword: string = "";
+    mnemonicRepassword: string = "";
     payPassword: string;
     name: string;
     singleAddress: boolean = false;

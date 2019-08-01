@@ -35,7 +35,7 @@ export class MnemonicWritePage implements OnInit {
         // });
         this.mnemonicStr = Config.walletObj.mnemonicStr;
         this.mnemonicList = Config.walletObj.mnemonicList;
-        // this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
+        this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
     }
 
     ngOnInit() {
