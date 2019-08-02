@@ -25,12 +25,12 @@ export class RechargePage implements OnInit {
         remark: '',
     };
 
-  sidechain: any = {
-    accounts: '',
-    amounts: 0,
-    index: 0,
-    rate: 1,
-  };
+    sidechain: any = {
+        accounts: '',
+        amounts: 0,
+        index: 0,
+        rate: 1,
+    };
 
     balance = 0;
 
@@ -50,20 +50,16 @@ export class RechargePage implements OnInit {
     ngOnInit() {
     }
     init() {
-        this.transfer = Config.coinObj.recharge;
+        this.transfer = Config.coinObj.transfer;
         this.events.subscribe("address:update", (address) => {
             this.transfer.toAddress = address;
         });
         this.masterWalletId = Config.getCurMasterWalletId();
-        // this.route.queryParams.subscribe((data) => {
-            // let transferObj = data;
-            // this.walletInfo = transferObj["walletInfo"] || {};
-            // this.chainId = data["chainId"];
-            this.walletInfo = Config.coinObj.walletInfo;
-            this.chainId = this.transfer.chainId;
-            this.getGenesisAddress();
-            this.initData();
-        // });
+        this.walletInfo = Config.coinObj.walletInfo;
+        this.chainId = this.transfer.chainId;
+        alert(this.chainId);
+        // this.getGenesisAddress();
+        this.initData();
 
     }
 
@@ -83,15 +79,8 @@ export class RechargePage implements OnInit {
     }
 
 
-    onClick(type) {
-        switch (type) {
-            // case 1:
-            //   this.Go(ContactListComponent);
-            //   break;
-            case 2:   // 转账
-                this.checkValue();
-                break;
-        }
+    onClick() {
+        this.checkValue();
     }
 
     checkValue() {
@@ -231,19 +220,22 @@ export class RechargePage implements OnInit {
 
     async openPayModal(transfer) {
         let props = this.native.clone(transfer);
-        props["accounts"] = this.transfer.toAddress;
+        // props["accounts"] = this.transfer.toAddress;
 
         const modal = await this.modalCtrl.create({
             component: PaymentboxComponent,
             componentProps: props
         });
-        const { data } = await modal.onDidDismiss();
-        if (data) {
-            this.native.showLoading().then(() => {
-                this.transfer = this.native.clone(data);
-                this.sendRawTransaction();
-            });
-        }
+
+        modal.onDidDismiss().then((params) => {
+            if (params.data) {
+                this.native.showLoading().then(() => {
+                    this.transfer.payPassword = params.data;
+                    console.log(params.data);
+                    this.sendRawTransaction();
+                });
+            }
+        });
         return await modal.present();
     }
 

@@ -61,24 +61,7 @@ export class TransferPage implements OnInit {
             this.transfer.toAddress = address;
         });
         this.masterWalletId = Config.getCurMasterWalletId();
-        // this.route.paramMap.subscribe((params) => {
-        // // this.route.queryParams.subscribe((data) => {
-        //     let transferObj = params;
-        //     this.chainId = transferObj.get("chainId");
-        //     this.transfer.toAddress = transferObj.get("addr") || "";
-        //     this.transfer.amount = transferObj.get("money") || "";
-        //     this.appType = transferObj.get("appType") || "";
-        //     if (this.appType == "") {
-        //         this.isInput = false;
-        //     } else {
-        //         this.isInput = true;
-        //     }
-        //     this.selectType = transferObj.get("selectType") || "";
-        //     this.parms = transferObj.get("parms") || "";
-        //     this.did = transferObj.get("did") || "";
-        //     this.walletInfo = JSON.parse(transferObj.get("walletInfo")) || {};
         this.initData();
-        // });
     }
 
     updateUseVotedUTXO(useVotedUTXO) {
@@ -403,21 +386,13 @@ export class TransferPage implements OnInit {
             component: PaymentboxComponent,
             componentProps: props
         });
-        modal.onDidDismiss().then((params) => {if (params) {
+        modal.onDidDismiss().then((params) => {if (params.data) {
             this.native.showLoading().then(() => {
                 this.transfer.payPassword = params.data;
-                // alert(data);
                 console.log(params.data);
                 this.sendRawTransaction();
             });
         }});
-        // const { data } = await modal.onDidDismiss();
-        // if (data) {
-        //     this.native.showLoading().then(() => {
-        //         this.transfer = this.native.clone(data);
-        //         this.sendRawTransaction();
-        //     });
-        // }
         return modal.present();
     }
 

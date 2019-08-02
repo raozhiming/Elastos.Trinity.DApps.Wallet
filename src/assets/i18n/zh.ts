@@ -3,10 +3,11 @@ export const zh = {
     'qrcode': "的二维码",
     'copy': '复制',
     'my-qrcode': "我的二维码",
-    'scanning': 'scanning...',
+    'scanning': '扫描中...',
 
     'welcome': '欢迎使用本应用',
     'tab-home': '首页',
+    'wallet': '钱包',
     'tab-setting': '设置',
     'launcher-create-wallet': '创建钱包',
     'launcher-backup-import': '导入钱包',

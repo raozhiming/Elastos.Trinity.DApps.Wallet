@@ -7,7 +7,6 @@
             <ion-label>{{ 'text-recharge-address' | translate}}</ion-label>
             <ion-buttons slot="end">
                 <ion-icon name="scan" (click)="rightHeader()"></ion-icon>
-                <!-- <ion-icon name="contact" (click)="onClick(1)"></ion-icon> -->
             </ion-buttons>
         </ion-item>
         <ion-item>
@@ -34,5 +33,5 @@
     </ion-list>
 </ion-content>
 <ion-footer>
-    <ion-button class="confirm" (click)="onClick(2)">{{ 'text-transfer' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="onClick()">{{ 'text-transfer' | translate }}</ion-button>
 </ion-footer>

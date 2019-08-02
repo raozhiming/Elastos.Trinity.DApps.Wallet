@@ -1,4 +1,4 @@
-<div class="juzhong">
+<div class="view">
     <div class="arrow_mask" (click)=click_close()></div>
     <div class="kuang">
         <p class="pay-box-title">{{'transfer-info' | translate}}
@@ -7,23 +7,23 @@
 
         <ion-list>
             <ion-item>
-                <ion-label class="left">{{'transfer-address' | translate}}</ion-label>
-                <ion-label class="right" slot="end">{{toAddress}}</ion-label>
+                <ion-label class="left">{{'transfer-address' | translate}}:</ion-label>
+                <ion-label class="right" id="address" slot="end">{{toAddress}}</ion-label>
             </ion-item>
             <ion-item>
-                <ion-label class="left">{{'text-price' | translate}}</ion-label>
+                <ion-label class="left">{{'text-price' | translate}}:</ion-label>
                 <ion-label class="right" slot="end">{{transfer.amount}}</ion-label>
             </ion-item>
             <ion-item>
-                <ion-label class="left">{{'text-fees' | translate}}</ion-label>
+                <ion-label class="left">{{'text-fees' | translate}}:</ion-label>
                 <ion-label class="right" slot="end">{{transfer.fee/SELA}}</ion-label>
             </ion-item>
             <ion-item *ngIf="transfer.rate">
-                <ion-label class="left">{{'text-rate' | translate}}</ion-label>
+                <ion-label class="left">{{'text-rate' | translate}}:</ion-label>
                 <ion-label class="right" slot="end">1 : {{transfer.rate}}</ion-label>
             </ion-item>
             <ion-item>
-                <ion-label class="left">{{'paypassword' | translate}}</ion-label>
+                <ion-label class="left">{{'paypassword' | translate}}:</ion-label>
                 <ion-input slot="end" type="password" placeholder="{{ 'text-pay-passworld-input' | translate }}"
                     [(ngModel)]="transfer.payPassword"></ion-input>
             </ion-item>

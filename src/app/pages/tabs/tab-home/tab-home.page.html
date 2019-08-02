@@ -14,9 +14,9 @@
     <div>
         <div id="home-top-box" [routerLink]="['/walletlist']" routerDirection="forward">
             <div id="wallet-bar">
-                <div id="wallet-name"> {{walletName}}
-                    <!-- <span *ngIf="account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
-                    <span *ngIf="account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span> -->
+                <div id="wallet-name" class="line-limit-length"> {{walletName}}
+                    <span *ngIf="account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
+                    <span *ngIf="account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
                 </div>
                 <button [routerLink]="['/wallet-setting', masterWalletId]" routerDirection="forward" (click)="onClick()">{{'text-wallet-manager' | translate}}</button>
             </div>
@@ -37,7 +37,7 @@
                     <img src="assets/images/ela-coin.png" />
                     <ion-label id="coin-name">{{ElaObj.name}}</ion-label>
                     <ion-label solt="end" id="coin-value">
-                        <h2 [hidden]="!showOn">{{ElaObj.balance}}</h2>
+                        <h2 [hidden]="!showOn" class="line-limit-length">{{ElaObj.balance}}</h2>
                         <h2 [hidden]="showOn">****</h2>
                         <p>{{elaCurHeight}}/{{elaMaxHeight}}</p>
                     </ion-label>
@@ -48,7 +48,7 @@
                         <img src="assets/images/id-coin.png" />
                         <ion-label id="coin-name">{{item.name}}</ion-label>
                         <ion-label solt="end" id="coin-value">
-                            <h2 [hidden]="!showOn">{{item.balance}}</h2>
+                            <h2 [hidden]="!showOn" class="line-limit-length">{{item.balance}}</h2>
                             <h2 [hidden]="showOn">****</h2>
                             <p>{{idChainCurHeight}}/{{idChainMaxHeight}}</p>
                         </ion-label>

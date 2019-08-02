@@ -1,88 +1,52 @@
 @import "../../functions.scss";
+
+.view {
+    width: 100%;
+    height: px2rem(670px);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    color: white;
+    background-color: #161723;
+}
+
 .pay-box-title {
-    font-size: 20px;
-    color: #ddd;
-    height: 40px;
-    line-height: 40px;
+    // color: #ddd;
+    margin-top: px2rem(10px);
+    margin-bottom: px2rem(10px);
+    height: px2rem(70px);
+    line-height: px2rem(64px);;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    position: relative;
-    font-size: 15px;
+    // position: relative;
+    font-size: 20px;
 }
 .close {
-    width: 20px;
+    width: px2rem(30px);;
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: px2rem(30px);
+    margin-top: px2rem(15px);
 }
-ion-label {
+ion-list {
+    height: px2rem(470px);;
+}
+ion-item {
     text-align: left;
-    .left {
-        width: px2rem(100px);
+    margin-left: px2rem(35px);
+    margin-right: px2rem(0px);
+    // .left {
+        // width: px2rem(100px);
+    // }
+    #address {
+        font-size: 12px;
+    }
+    .right {
+        flex: 0 0 px2rem(480px) !important;
+        // --ion-background-color: green;
+        // background-color: green;
     }
 }
 
-// .item {
-//     width: 100%;
-//     border-bottom: 1px solid #ddd;
-// }
-// .item .left {
-//     padding-left: 5px;
-//     text-align: left;
-//     width: 30%;
-//     display: inline-block;
-//     height: 50px;
-//     line-height: 50px;
-//     font-size: 15px;
-// }
-// .item .right {
-//     padding-right: 5px;
-//     text-align: left;
-//     width: 70%;
-//     display: inline-block;
-//     vertical-align: middle;
-//     height: 50px;
-//     line-height: 50px;
-//     font-size: 15px;
-// }
-// .item .right1 {
-//     padding-right: 5px;
-//     text-align: left;
-//     width: 70%;
-//     display: inline-block;
-//     vertical-align: middle;
-//     font-size: 15px;
-// }
-.kuang {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 360px;
-    background: #ffffff;
-}
-//   .juzhong {
-//       width: 100%;
-//       height: 300px;
-//       bottom: 0;
-//       left: 0;
-//       position: absolute;
-//   }
-//   .kuang {
-//     position: absolute;
-//     left: 0;
-//     bottom: 0;
-//     width: 100%;
-//     height: 330px;
-//     background: #ffffff;
-// }
-.juzhong {
-    width: 100%;
-    height: 360px;
-    bottom: 0;
-    left: 0;
-    position: absolute;
-}
 .arrow_mask {
     position: fixed;
     top: 0;
@@ -93,7 +57,4 @@ ion-label {
     display: block;
     background: black;
     opacity: 0.7;
-}
-.font-size-1 {
-    font-size: 15px;
 }

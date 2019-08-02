@@ -1,67 +1,16 @@
 import { Injectable } from '@angular/core';
-import { randomBytes, createHash } from 'crypto-browserify';
-import { secp256k1 } from 'secp256k1';
+import { createHash } from 'crypto-js';
 import { Util } from './Util';
-// import {Config} from "./Config";
-import { elliptic } from 'elliptic';
-/***
- * id链相关
- */
+
 @Injectable()
 export class IDManager {
     constructor() {
-
-    }
-
-    public static test(): void {
-        const msg = randomBytes(32);
-        // const msg = this.hash("我是哈哈哈");
-        let privKey;
-        do {
-            privKey = randomBytes(32)
-        } while (!secp256k1.privateKeyVerify(privKey));
-
-        // const pubKey = secp256k1.publicKeyCreate(privKey);
-
-        // const sigObj = this.sign(msg, privKey);
-
-    }
-
-    public static sign(msg, privKey): any {
-        let EC = elliptic.ec;
-        let ec = new EC('p256'); // 获取secp256r1曲线
-        let message = this.hash(msg);
-        let key = ec.keyFromPrivate(privKey, 'hex'); // 导入私钥
-        let sign = key.sign(message).toDER('hex'); // 生成签名
-        return sign;
-    }
-
-    public static sign1(msg, privKey): any {
-        let EC = elliptic.ec;
-        let ec = new EC('p256'); // 获取secp256r1曲线
-        let message = this.hash(msg);
-        //let key = ec.keyFromPrivate(privKey, 'hex'); // 导入私钥
-        let sign = ec.sign(message, privKey, 16).toDER('hex'); // 生成签名
-        return sign;
-    }
-
-    public static verify(msg, signature, pubKey): boolean {
-        return secp256k1.verify(msg, signature, pubKey)
     }
 
     public static hash(msg) {
         return createHash('sha256').update(msg).digest('hex');
     }
 
-    //接口数字签名
-    public static getInfoSign(obj) {
-        let keys = IDManager.getObjKeys(obj, "asc");
-        let msg = "";
-        for (let index in keys) {
-            msg = msg + obj[keys[index]];
-        }
-        return this.sign1(msg, "");
-    }
     //checksum计算规则
     public static getCheckSum(obj, sort) {
         let keys = IDManager.getObjKeys(obj, sort);
@@ -121,17 +70,7 @@ export class IDManager {
             return 0;
         });
     }
-    /**
-     * 获得公钥
-     * @param privKey
-     */
-    public static getPublicKey(privKey) {
-        return "111111";
-    }
 
-    public static getPriKey() {
-        return "sssss"
-    }
 }
 
 

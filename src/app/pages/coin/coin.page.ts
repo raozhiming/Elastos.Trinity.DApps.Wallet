@@ -241,57 +241,29 @@ export class CoinPage implements OnInit {
     }
 
     onNext(type) {
-
+        Config.coinObj.chainId = this.coinName;
+        Config.coinObj.transfer = {
+            toAddress: '',
+            amount: '',
+            memo: '',
+            fee: 0,
+            payPassword: '',
+            remark: '',
+        };
         switch (type) {
             case 1:
-                this.native.Go("/receive", { id: this.coinId, chainId: this.coinName });
+                this.native.Go("/receive");
                 break;
             case 2:
-                Config.coinObj.transfer = {
-                    toAddress: '',
-                    amount: '',
-                    memo: '',
-                    fee: 0,
-                    payPassword: '',//hptest
-                    remark: '',
-                };
-                this.native.Go("/transfer");
-                // if (this.coinName == 'ELA') {
-                //     // if(this.elaPer != 1){
-                //     //   this.messageBox("text-ela-per-message");
-                //     //   return;
-                //     // }
-                //     this.native.Go("/transfer", { id: this.coinId, chainId: this.coinName, "walletInfo": this.masterWalletInfo });
-                // } else {
-                //     // if(this.idChainPer != 1){
-                //     //   this.messageBox("text-ela-per-message");
-                //     //   return;
-                //     // }
-                //     this.native.Go("/transfer", { id: this.coinId, chainId: this.coinName, "walletInfo": this.masterWalletInfo });
-                // }
 
+                this.native.Go("/transfer");
                 break;
             case 3:
                 if (this.coinName == 'ELA') {
-                    // if(this.elaPer != 1){
-                    //   this.messageBox("text-ela-per-message");
-                    //   return;
-                    // }
-                    Config.coinObj.recharge = {
-                        toAddress: '',
-                        amount: '',
-                        memo: '',
-                        fee: 10000,
-                        payPassword: '',
-                        remark: '',
-                    };
-                    this.native.Go("/coin-select", { chainId: this.coinName, "walletInfo": this.masterWalletInfo });
+                    Config.coinObj.transfer.fee = 10000;
+                    this.native.Go("/coin-select");
                 } else {
-                    // if(this.idChainPer != 1){
-                    //   this.messageBox("text-ela-per-message");
-                    //   return;
-                    // }
-                    this.native.Go("/withdraw", { chainId: this.coinName, "walletInfo": this.masterWalletInfo });
+                    this.native.Go("/withdraw");
                 }
                 break;
         }

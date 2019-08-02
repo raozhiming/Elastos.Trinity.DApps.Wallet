@@ -62,7 +62,6 @@ export class TabHomePage implements OnInit {
             this.init();
         });
         this.events.subscribe("register:update", (walletId, coin, result) => {
-
             if (result["MasterWalletID"] === this.masterWalletId && result["ChaiID"] === "ELA") {
                 this.handleEla(result);
             }

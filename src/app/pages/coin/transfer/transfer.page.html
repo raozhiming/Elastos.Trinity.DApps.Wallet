@@ -30,40 +30,6 @@
                 [(ngModel)]="transfer.remark"></ion-input>
         </ion-item>
     </ion-list>
-    <!-- <ion-grid class="margin-top:10px">
-        <ion-row>
-            <ion-col col-10 class="font-size-1" col-auto align-self-center>
-                <ion-item>
-                    <ion-input type="text" placeholder="{{ 'text-receiver-address' | translate}}" [(ngModel)]="transfer.toAddress" [(disabled)]="isInput"></ion-input>
-                </ion-item>
-            </ion-col>
-            <ion-col col-2 align-self-center> <img (click)="onClick(1)" src="./assets/images/icon/icon-account.svg"></ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col col-8 align-self-center class="font-size-1">
-                <ion-item>
-                    <ion-input type="text" placeholder="{{ 'text-price' | translate}}" [(ngModel)]="transfer.amount" col-auto></ion-input>
-                </ion-item>
-            </ion-col>
-            <ion-col col-4 align-self-center class="text-right font-size-1">
-                {{'text-balance' | translate}}：{{balance/SELA}}
-            </ion-col>
-        </ion-row>
-
-        <ion-row>
-            <ion-col col-12 align-self-center class="text-right font-size-1">
-                <ion-item>
-                    <textarea placeholder="{{ 'text-remark' | translate}}" rows="3" [(ngModel)]="transfer.remark" maxlength="20"></textarea>
-                </ion-item>
-            </ion-col>
-        </ion-row>
-
-        <ion-item>
-            <ion-label>{{'use-utxo' | translate }}</ion-label>
-            <ion-checkbox [(ngModel)]="useVotedUTXO" (ionChange)="updateUseVotedUTXO(useVotedUTXO)"></ion-checkbox>
-        </ion-item>
-    </ion-grid> -->
-
 </ion-content>
 <ion-footer>
     <ion-button class="confirm" (click)="onClick(2)">{{ 'text-transfer' | translate }}</ion-button>

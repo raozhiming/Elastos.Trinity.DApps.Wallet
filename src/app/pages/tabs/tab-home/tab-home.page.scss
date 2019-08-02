@@ -32,8 +32,9 @@
         div {
             // margin: auto;
             float: left;
-            padding-top: px2rem(15px);
+            padding-top: px2rem(5px);
             font-size: 18px;
+            width: px2rem(350px);
 
             span {
                 font-size: 14px;
@@ -105,6 +106,7 @@ button {
             }
             #coin-value {
                 text-align: right;
+                flex: 0 0 px2rem(380px) !important;
                 h2 {
                     font-size: 26px;
                 }

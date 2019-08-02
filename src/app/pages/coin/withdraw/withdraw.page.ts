@@ -1,11 +1,9 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
-import { ActivatedRoute } from '@angular/router';
 import { LocalStorage } from '../../../services/Localstorage';
 import { Util } from "../../../services/Util";
 import { Config } from '../../../services/Config';
-import { IDManager } from "../../../services/IDManager";
 import { ApiUrl } from "../../../services/ApiUrl"
 import { ModalController, Events } from '@ionic/angular';
 import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
@@ -16,17 +14,16 @@ import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.c
     styleUrls: ['./withdraw.page.scss'],
 })
 export class WithdrawPage implements OnInit {
-    masterWalletId: string = "1";
-    walletType = "";
-    transfer: any = {
-        toAddress: '',
-        amount: '',
-        memo: '',
-        fee: 0,
-        payPassword: '',//hptest
-        remark: '',
-    };
 
+    masterWalletId: string = "1";
+    transfer: any = {};
+
+  mainchain: any = {
+    accounts: '',
+    amounts: 0,
+    index: 0,
+    rate: 1,
+  };
     balance = 0;
 
     chainId: string;
@@ -36,17 +33,12 @@ export class WithdrawPage implements OnInit {
     rawTransaction: '';
 
     SELA = Config.SELA;
-    appType: string = "";
-    selectType: string = "";
-    parms: any;
-    txId: string;
-    did: string;
-    isInput = false;
+
     walletInfo = {};
-    useVotedUTXO: boolean = false;
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
+
+    constructor(public walletManager: WalletManager,
         public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
-        this.init();
+
     }
 
     ngOnInit() {
@@ -57,30 +49,10 @@ export class WithdrawPage implements OnInit {
             this.transfer.toAddress = address;
         });
         this.masterWalletId = Config.getCurMasterWalletId();
-        this.route.queryParams.subscribe((data) => {
-            let transferObj = data;
-            this.chainId = transferObj["chainId"];
-            this.transfer.toAddress = transferObj["addr"] || "";
-            this.transfer.amount = transferObj["money"] || "";
-            this.appType = transferObj["appType"] || "";
-            if (this.appType == "") {
-                this.isInput = false;
-            } else {
-                this.isInput = true;
-            }
-            this.selectType = transferObj["selectType"] || "";
-            this.parms = transferObj["parms"] || "";
-            this.did = transferObj["did"] || "";
-            this.walletInfo = transferObj["walletInfo"] || {};
+        this.walletInfo = Config.coinObj.walletInfo;
+        this.chainId = Config.coinObj.chainId;
             this.initData();
-        });
 
-    }
-
-    updateUseVotedUTXO(useVotedUTXO) {
-        this.zone.run(() => {
-            this.useVotedUTXO = useVotedUTXO;
-        });
     }
 
     rightHeader() {
@@ -98,16 +70,8 @@ export class WithdrawPage implements OnInit {
     }
 
 
-    onClick(type) {
-        switch (type) {
-            case 1:
-                this.native.Go("/contact-list", { "hideButton": true });
-                break;
-            case 2:   // 转账
-                this.checkValue();
-                break;
-        }
-
+    onClick() {
+        this.checkValue();
     }
 
     checkValue() {
@@ -146,26 +110,22 @@ export class WithdrawPage implements OnInit {
                 return;
             }
             this.native.showLoading().then(() => {
-                if (this.walletInfo["Type"] === "Standard") {
-                    this.createTransaction();
-                } else if (this.walletInfo["Type"] === "Multi-Sign") {
-                    this.createMultTx();
-                }
+                this.createWithdrawTransaction();
             });
         });
     }
 
-    createTransaction() {
+    createWithdrawTransaction() {
         let toAmount = 0;
         //toAmount = parseFloat((this.transfer.amount*Config.SELA).toPrecision(16));
         toAmount = this.accMul(this.transfer.amount, Config.SELA);
 
-        this.walletManager.createTransaction(this.masterWalletId, this.chainId, "",
-            this.transfer.toAddress,
+        this.walletManager.createWithdrawTransaction(this.masterWalletId, this.chainId, "",
             toAmount,
+            this.transfer.toAddress,
+
             this.transfer.memo,
             this.transfer.remark,
-            this.useVotedUTXO,
             (data) => {
                 if (data['success']) {
                     this.native.info(data);
@@ -183,6 +143,7 @@ export class WithdrawPage implements OnInit {
                 this.native.hideLoading();
                 this.native.info(data);
                 this.transfer.fee = data['success'];
+                this.transfer.rate = this.mainchain.rate;
                 this.openPayModal(this.transfer);
             } else {
                 this.native.info(data);
@@ -191,10 +152,6 @@ export class WithdrawPage implements OnInit {
     }
 
     sendRawTransaction() {
-        if (this.walletInfo["Type"] === "Multi-Sign" && this.walletInfo["InnerType"] === "Readonly") {
-            this.updateTxFee();
-            return;
-        }
         this.updateTxFee();
     }
 
@@ -236,144 +193,30 @@ export class WithdrawPage implements OnInit {
     }
 
     sendTx(rawTransaction) {
-        this.native.info(rawTransaction);
         this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (data) => {
             if (data["success"]) {
                 this.native.hideLoading();
                 this.native.info(data);
-                this.txId = JSON.parse(data['success'])["TxHash"];
-                if (Util.isNull(this.appType)) {
-                    this.native.toast_trans('send-raw-transaction');
-                    this.native.setRootRouter("/tabs");
-                } else if (this.appType === "kyc") {
-                    if (this.selectType === "enterprise") {
-                        this.company();
-                    } else {
-                        this.person();
-                    }
-                }
+                this.native.setRootRouter("/tabs");
             } else {
                 this.native.info(data);
             }
         })
     }
 
-    company() {
-        this.sendCompanyHttp(this.parms);
-    }
-
-    person() {
-        this.sendPersonAuth(this.parms);
-    }
-
-    sendCompanyHttp(params) {
-        let timestamp = this.native.getTimestamp();
-        params["timestamp"] = timestamp;
-        params["txHash"] = this.txId;
-        params["deviceID"] = Config.getdeviceID();
-        let checksum = IDManager.getCheckSum(params, "asc");
-        params["checksum"] = checksum;
-
-        console.info("ElastJs sendCompanyHttp params " + JSON.stringify(params));
-        this.native.getHttp().postByAuth(ApiUrl.AUTH, params).toPromise().then(data => {
-            if (data["status"] === 200) {
-                let authData = JSON.parse(data["_body"]);
-                console.info("Elastjs sendCompanyHttp authData" + JSON.stringify(authData));
-                if (authData["errorCode"] === "0") {
-                    let serialNum = authData["serialNum"];
-                    let serIds = Config.getSerIds();
-                    serIds[serialNum] = {
-                        "id": this.did,
-                        "path": this.selectType,
-                        "serialNum": serialNum,
-                        "txHash": this.txId
-                    };
-                    Config.setSerIds(serIds);
-                    this.saveKycSerialNum(serialNum);
-                } else {
-                    alert("sendCompanyHttp 错误码:" + authData["errorCode"]);
-                }
-            }
-
-        }).catch(error => {
-            alert("错误码:" + JSON.stringify(error));
-            this.native.Go("/id-result", { 'status': '1' });
+    async openPayModal(transfer) {
+        let props = this.native.clone(transfer);
+        const modal = await this.modalCtrl.create({
+            component: PaymentboxComponent,
+            componentProps: props
         });
-    }
-
-    sendPersonAuth(parms) {
-        let timestamp = this.native.getTimestamp();
-        parms["timestamp"] = timestamp;
-        parms["txHash"] = this.txId;
-        parms["deviceID"] = Config.getdeviceID();
-        let checksum = IDManager.getCheckSum(parms, "asc");
-        parms["checksum"] = checksum;
-        this.native.info(parms);
-
-        this.native.getHttp().postByAuth(ApiUrl.AUTH, parms).toPromise().then(data => {
-            if (data["status"] === 200) {
-                let authData = JSON.parse(data["_body"])
-                console.log('ElastJs sendPersonAuth return data ---authData---' + JSON.stringify(authData));
-                if (authData["errorCode"] === "0") {
-
-                    console.log('ElastJs sendPersonAuth errorCode == 0');
-
-                    let serialNum = authData["serialNum"];
-                    let serIds = Config.getSerIds();
-                    serIds[serialNum] = {
-                        "id": this.did,
-                        "path": this.selectType,
-                        "serialNum": serialNum,
-                        "txHash": this.txId
-                    }
-                    console.log('ElastJs sendPersonAuth selectType ' + this.selectType + " serialNum " + serialNum);
-                    Config.setSerIds(serIds);
-                    this.saveKycSerialNum(serialNum);
-                } else {
-                    alert("错误码:" + authData["errorCode"]);
-                }
-            }
-        }).catch(error => {
-
-        });
-        this.native.Go("/id-result", { 'status': '0' });
-    }
-
-    saveKycSerialNum(serialNum) {
-        console.log('ElastJs saveKycSerialNum serialNum begin' + serialNum);
-
-        this.localStorage.get("kycId").then((val) => {
-            let idsObj = JSON.parse(val);
-            let serialNumObj = idsObj[this.did][this.selectType][serialNum];
-            serialNumObj["txHash"] = this.txId;
-            serialNumObj["pathStatus"] = 1;
-            this.localStorage.set("kycId", idsObj).then((newVal) => {
-                this.native.Go("/id-result", { 'status': '0', id: this.did, path: this.selectType });
+        modal.onDidDismiss().then((params) => {if (params.data) {
+            this.native.showLoading().then(() => {
+                this.transfer.payPassword = params.data;
+                this.sendRawTransaction();
             });
-        })
-    }
-
-    createMultTx() {
-
-        let toAmount = 0;
-        //toAmount = parseFloat((this.transfer.amount*Config.SELA).toPrecision(16));
-        toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.createMultiSignTransaction(this.masterWalletId, this.chainId, "",
-            this.transfer.toAddress,
-            toAmount,
-            this.transfer.memo,
-            this.transfer.remark,
-            this.useVotedUTXO,
-            (data) => {
-                if (data["success"]) {
-                    this.native.info(data);
-                    this.rawTransaction = data['success'];
-                    this.getFee();
-                } else {
-                    this.native.info(data);
-                }
-            }
-        )
+        }});
+        return await modal.present();
     }
 
     readWallet(raws) {
@@ -387,25 +230,7 @@ export class WithdrawPage implements OnInit {
         });
     }
 
-    // ionViewDidLeave() {
-    //    this.events.unsubscribe("error:update");
-    // }
 
-    async openPayModal(transfer) {
-        let props = this.native.clone(transfer);
-        const modal = await this.modalCtrl.create({
-            component: PaymentboxComponent,
-            componentProps: props
-        });
-        const { data } = await modal.onDidDismiss();
-        if (data) {
-            this.native.showLoading().then(() => {
-                this.transfer = this.native.clone(data);
-                this.sendRawTransaction();
-            });
-        }
-        return await modal.present();
-    }
 
 
     accMul(arg1, arg2) {
