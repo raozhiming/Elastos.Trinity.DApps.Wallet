@@ -3,7 +3,7 @@ export const zh = {
     'qrcode': "的二维码",
     'copy': '复制',
     'my-qrcode': "我的二维码",
-    'scanning': '扫描中...',
+    'scanning': '扫描二维码',
 
     'welcome': '欢迎使用本应用',
     'tab-home': '首页',
