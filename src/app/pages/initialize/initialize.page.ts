@@ -25,122 +25,54 @@ export class InitializePage implements OnInit {
     }
 
     ngOnInit() {
-        // this.registerBackButtonAction(/*this.tabs*/);
         this.native.showLoading().then(() => {
             this.initializeApp();
         });
     }
 
-    registerBackButtonAction(/*tabRef:Tabs*/) {
-        this.platform.backButton.subscribeWithPriority(0, () => {
-            //  //按下返回键时，先关闭键盘
-            //  if (this.keyboard.isOpen()) { //按下返回键时，先关闭键盘
-            //   this.keyboard.close();
-            //   return;
-            //  };
-
-            // let activePortal = this.ionicApp._modalPortal.getActive() ||this.ionicApp._overlayPortal.getActive();
-            // if (activePortal) { //其他的关闭
-            //   activePortal.dismiss().catch(() => { });
-            //   activePortal.onDidDismiss(() => { });
-            //   return;
-            // }
-
-            // let loadingPortal = this.ionicApp._loadingPortal.getActive();
-            // if (loadingPortal) {
-            //   //loading的话，返回键无效
-            //   return;
-            // }
-
-            // let activeNav: NavController = this.appCtrl.getActiveNav();
-            // if(activeNav.canGoBack()){
-            //   activeNav.pop();
-            // }else{
-            //   if (tabRef == null || tabRef._selectHistory[tabRef._selectHistory.length - 1] === tabRef.getByIndex(0).id) {
-            //     this.showExit();
-            //   }else{
-            //      //选择首页第一个的标签
-            //      tabRef.select(0);
-            //   }
-            // }
-        });
-    }
-
-
-    //   },1);
-    // }
-
-    //双击退出提示框
-    showExit() {
-        if (this.backButtonPressed) { //当触发标志为true时，即2秒内双击返回按键则退出APP
-            navigator['app'].exitApp();
-        } else {
-            let exitmesage = this.translate.instant("text-exit-message");
-            this.native.toast(exitmesage);
-            this.backButtonPressed = true;
-            setTimeout(() => this.backButtonPressed = false, 2000);//2秒内没有再次点击返回则将触发标志标记为false
-        }
-    }
-
-
     initializeApp() {
         this.load().then((data) => {
-            this.successHandle(data["success"]);
+            Config.initialized = true;
+            this.successHandle(data);
         }).catch((data) => {
+            Config.initialized = true;
             this.errorHandle(data);
         });
     }
 
     public load(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.walletManager.getAllMasterWallets((data) => {
-                if (data["success"]) {
-                    resolve(data);
-                } else {
-                    reject(data);
-                }
-            });
+            this.walletManager.getAllMasterWallets((ret) => resolve(ret), (err) => reject(err));
         });
     }
 
     successHandle(data) {
-        let idList = JSON.parse(data);
+        let idList = data;
         let type = Util.GetQueryString("type");
         if (idList.length === 0) {
             Config.setMappingList({});
             this.handleNull(type);
         } else {
             this.native.info(idList);
-            this.localStorage.getCurMasterId().then((data) => {
-                let item = JSON.parse(data);
-                this.native.info(item["masterId"]);
-                if (this.isInArray(idList, item["masterId"])) {
-                    Config.setCurMasterWalletId(item["masterId"]);
-                    Config.setMasterWalletIdList(idList);
-                    this.handleMappingdata(idList);
-                    this.getAllsubWallet(item["masterId"], type);
-                } else {
-                    let id = idList[0];
-                    Config.setCurMasterWalletId(id);
-                    Config.setMasterWalletIdList(idList);
-                    this.handleMappingdata(idList);
-                    this.getAllsubWallet(id, type);
+            this.localStorage.getCurMasterId((data) => {
+                var id = idList[0];
+                if (this.isInArray(idList, data["masterId"])) {
+                    id = data["masterId"];
                 }
+                Config.setCurMasterWalletId(id);
+                Config.setMasterWalletIdList(idList);
+                this.handleMappingdata(idList);
+                this.getAllsubWallet(id, type);
 
             });
 
         }
     }
 
-    public errorHandle(data) {
-        let error = data["error"];
-        this.native.info(error["code"]);
+    public errorHandle(error) {
         if (error["code"] === 10002) {
-            this.native.info(error["code"]);
             let type = Util.GetQueryString("type");
             this.handleNull(type);
-        } else {
-            this.native.hideLoading();
         }
     }
 
@@ -178,28 +110,22 @@ export class InitializePage implements OnInit {
     }
 
     getAllsubWallet(masterId, type) {
-        this.walletManager.getAllSubWallets(masterId, (data) => {
-            if (data["success"]) {
+        this.walletManager.getAllSubWallets(masterId, (ret) => {
+            let chinas = ret;
+            for (let index in chinas) {
+                let chain = chinas[index];
+                alert(index + ":" + chain);
+                this.registerWalletListener(masterId, chain);
+            }
 
-                let chinas = JSON.parse(data["success"]);
-                for (let index in chinas) {
-                    let chain = chinas[index];
-                    this.registerWalletListener(masterId, chain);
-                }
-
-                this.native.hideLoading();
-                switch (type) {
-                    case "payment":
-                        this.native.setRootRouter("/payment-confirm");
-                        break;
-                    case "did_login":
-                        //TODO::DID
-                        // this.native.setRootRouter(DidLoginComponent);
-                        break;
-                    default:
-                        this.native.setRootRouter("/tabs");
-                        break;
-                }
+            this.native.hideLoading();
+            switch (type) {
+                case "payment":
+                    this.native.setRootRouter("/payment-confirm");
+                    break;
+                default:
+                    this.native.setRootRouter("/tabs");
+                    break;
             }
         });
     }

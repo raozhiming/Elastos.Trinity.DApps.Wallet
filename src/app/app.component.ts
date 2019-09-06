@@ -68,17 +68,16 @@ export class AppComponent {ß
 
     init() {
         //this.initJsPush();
-        this.getKycIdList();
 
-        this.localStorage.getProgress().then((pdata) => {
+        this.localStorage.getProgress((pdata) => {
             if (pdata) {
-                Config.perObj = JSON.parse(pdata);
+                Config.perObj = pdata;
             }
 
-            this.localStorage.getMappingTable().then((data) => {
+            this.localStorage.getMappingTable((data) => {
                 this.native.info(data);
                 if (data) {
-                    Config.setMappingList(JSON.parse(data));
+                    Config.setMappingList(data);
                 }
                 this.router.navigate(['/initialize']);
             });
@@ -112,7 +111,7 @@ export class AppComponent {ß
 
     initTranslateConfig() {
         this.translate.addLangs(["zh", "en"]);
-        this.localStorage.getLanguage("wallet-language").then((val) => {
+        this.localStorage.getWalletLanguage((val) => {
             if (val == null) {
                 let lang = navigator.language.substr(0, 2);
                 let languageObj = {
@@ -157,14 +156,4 @@ export class AppComponent {ß
 
     }
 
-    getKycIdList() {
-        this.localStorage.getKycList("kycId").then((val) => {
-
-            if (val == null || val === undefined || val === {} || val === '') {
-                return;
-            }
-            let serids = Config.getSertoId(JSON.parse(val));
-            Config.setSerIds(serids);
-        });
-    }
 }

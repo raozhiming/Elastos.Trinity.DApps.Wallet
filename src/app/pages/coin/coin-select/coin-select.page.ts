@@ -23,26 +23,16 @@ export class CoinSelectPage implements OnInit {
 
     init() {
         this.masterWalletInfo = Config.coinObj.walletInfo;
-        let mastId = Config.getCurMasterWalletId();
-        let subwallet = Config.getSubWallet(mastId);
-        if (subwallet) {
-            if (!Util.isEmptyObject(subwallet)) {
-                for (let coin in subwallet) {
-                    if (coin != 'ELA') {
-                        this.coinList.push({ name: coin });
-                    }
-                }
-                console.log(this.coinList.length);
-                if (this.coinList.length > 0) {
-                    this.isNoData = false;
-                }
-            }
+        this.coinList = Config.getSubWalletList();
+        console.log(this.coinList.length);
+        if (this.coinList.length > 0) {
+            this.isNoData = false;
         }
     }
 
     onItem(item) {
-        Config.coinObj.transfer.chainId = item.name;
-        this.native.Go("/recharge");
+        Config.coinObj.chainId = item.name;
+        this.native.go("/recharge");
     }
 
 }

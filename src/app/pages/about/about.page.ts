@@ -22,9 +22,7 @@ export class AboutPage implements OnInit {
 
     init() {
         this.walletManager.getVersion((data) => {
-            if (data['success']) {
-                this.spvVersion = data['success'];
-            }
+            this.spvVersion = data;
         });
     }
 

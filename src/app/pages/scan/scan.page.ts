@@ -60,13 +60,13 @@ export class ScanPage implements OnInit {
                             this.hideCamera();
                             this.native.pop();
                             let senddata = { "content": text, type: 4 };
-                            this.native.Go("/txdetails", senddata);
+                            this.native.go("/txdetails", senddata);
                             break;
                         case "4":
                             this.hideCamera();
                             this.native.pop();
                             let senddata1 = { "content": text, type: 3 };
-                            this.native.Go("/txdetails", senddata1);
+                            this.native.go("/txdetails", senddata1);
                             break;
                         case "5":
                             this.events.publish("publickey:update", text);

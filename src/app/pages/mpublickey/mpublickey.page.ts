@@ -32,28 +32,19 @@ export class MpublickeyPage implements OnInit {
 
     getPublicKey() {
         this.walletManager.getMultiSignPubKeyWithMnemonic(Config.walletObj.mnemonicStr,
-            Config.walletObj.mnemonicPassword, (data) => {
-            if (data["success"]) {
-                this.qrcode = data["success"];
-            } else {
-            }
-        });
+            Config.walletObj.mnemonicPassword, (ret) => this.qrcode = ret);
     }
 
     getMultiSignPubKeyWithPrivKey() {
-        this.walletManager.getMultiSignPubKeyWithPrivKey(this.exatParm["importText"], (data) => {
-            if (data["success"]) {
-                this.qrcode = data["success"];
-            } else {
-            }
-        });
+        this.walletManager.getMultiSignPubKeyWithPrivKey(this.exatParm["importText"],
+            (ret) => this.qrcode = ret);
     }
 
     onNext() {
         if (Config.walletObj.isMulti) {
-            this.native.Go("/addpublickey", this.exatParm);
+            this.native.go("/addpublickey", this.exatParm);
         } else if (this.exatParm["importText"]) {
-            this.native.Go("/addprivatekey", this.exatParm);
+            this.native.go("/addprivatekey", this.exatParm);
         }
 
     }

@@ -12,6 +12,13 @@ import { ActivatedRoute } from '@angular/router';
 export class WalletCreatePage implements OnInit {
     MultObj: any;
     isShow: any = false;
+    wallet = {
+        name: '',
+        singleAddress: false,
+        payPassword: '',
+        rePayPassword: ''
+    };
+
     constructor(public route: ActivatedRoute, public native: Native, public zone: NgZone) {
         if (Config.walletObj.isMulti) {
             this.wallet.singleAddress = true;
@@ -22,14 +29,6 @@ export class WalletCreatePage implements OnInit {
 
     ngOnInit() {
     }
-
-
-    wallet = {
-        name: '',
-        singleAddress: false,
-        payPassword: '',//houpeitest
-        rePayPassword: ''//houpeitest
-    };
 
     updateSingleAddress(isShow) {
         this.zone.run(() => {
@@ -76,6 +75,6 @@ export class WalletCreatePage implements OnInit {
         Config.walletObj.name = this.wallet.name;
         Config.walletObj.singleAddress = this.wallet.singleAddress;
         console.log(Config.walletObj);
-        this.native.Go("/mnemonic", params);
+        this.native.go("/mnemonic", params);
     }
 }

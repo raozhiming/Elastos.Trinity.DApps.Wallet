@@ -46,10 +46,10 @@ export class WalletSettingPage implements OnInit {
     // onItem(i) {
     //     switch (i) {
     //         case 0:
-    //             this.native.Go("/exprot-prikey");
+    //             this.native.go("/exprot-prikey");
     //             break;
     //         case 1:
-    //             this.native.Go("/paypassword-reset");
+    //             this.native.go("/paypassword-reset");
     //             break;
     //         case 2:
     //             this.popupProvider.ionicConfirm('confirmTitle', 'confirmSubTitle').then((data) => {
@@ -61,13 +61,13 @@ export class WalletSettingPage implements OnInit {
     //             });
     //             break;
     //         case 3:
-    //             this.native.Go("/publickey");
+    //             this.native.go("/publickey");
     //             break;
     //         case 4:
-    //             this.native.Go("/modifywalletname");
+    //             this.native.go("/modifywalletname");
     //             break;
     //         case 5:
-    //             this.native.Go("/exportmnemomic");
+    //             this.native.go("/exportmnemomic");
     //             break;
     //     }
     // }
@@ -85,17 +85,12 @@ export class WalletSettingPage implements OnInit {
 
     getAllCreatedSubWallets() {
 
-        this.walletManager.getAllSubWallets(this.masterWalletId, (data) => {
-            if (data["success"]) {
-                let chinas = JSON.parse(data["success"]);
-                let maxLen = chinas.length;
-                for (let index in chinas) {
-                    let chain = chinas[index];
-                    this.destroyWalletListener(index, maxLen, this.masterWalletId, chain);
-                }
-            } else {
-                this.native.hideLoading();
-                alert("==getAllSubWallets==error" + JSON.stringify(data));
+        this.walletManager.getAllSubWallets(this.masterWalletId, (ret) => {
+            let chinas = ret;
+            let maxLen = chinas.length;
+            for (let index in chinas) {
+                let chain = chinas[index];
+                this.destroyWalletListener(index, maxLen, this.masterWalletId, chain);
             }
 
         });
@@ -103,26 +98,17 @@ export class WalletSettingPage implements OnInit {
     }
 
     destroyWalletListener(index, maxLen, masterWalletId, chainId) {
-        this.walletManager.removeWalletListener(masterWalletId, chainId, (data) => {
-            if (data["success"]) {
-                if (parseInt(index) === (maxLen - 1)) {
-                    this.destroyWallet(masterWalletId);
-                }
-            } else {
-                alert("==getAllSubWallets==error" + JSON.stringify(data));
+        this.walletManager.removeWalletListener(masterWalletId, chainId, (ret) => {
+            if (parseInt(index) === (maxLen - 1)) {
+                this.destroyWallet(masterWalletId);
             }
         });
     }
 
     destroyWallet(masterWalletId: string) {
         //this.localStorage.remove('coinListCache').then(()=>{
-        this.walletManager.destroyWallet(masterWalletId, (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-                this.delWalletListOne(masterWalletId);
-            } else {
-                this.native.info(data);
-            }
+        this.walletManager.destroyWallet(masterWalletId, () => {
+            this.delWalletListOne(masterWalletId);
         });
         //});
     }
@@ -166,16 +152,10 @@ export class WalletSettingPage implements OnInit {
     }
 
     getMasterWalletBasicInfo() {
-        this.walletManager.getMasterWalletBasicInfo(this.masterWalletId, (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-                let item = JSON.parse(data["success"])["Account"];
-                this.masterWalletType = item["Type"];
-                this.singleAddress = item["SingleAddress"];
-                this.readonly = item["InnerType"] || "";
-            } else {
-                this.native.info(data);
-            }
+        this.walletManager.getMasterWalletBasicInfo(this.masterWalletId, (ret) => {
+            this.masterWalletType = ret["Type"];
+            this.singleAddress = ret["SingleAddress"];
+            this.readonly = ret["InnerType"] || "";
         });
     }
 }

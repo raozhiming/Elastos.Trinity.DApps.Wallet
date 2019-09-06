@@ -33,15 +33,9 @@ export class PaypasswordResetPage implements OnInit {
             return;
         }
         // reset pay password
-        this.walletManager.changePassword(this.masterWalletId, this.oldPayPassword, this.payPassword, (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-                this.native.toast_trans("reset-pwd-success");
-                this.native.pop();
-            } else {
-                this.native.info(data);
-            }
-
+        this.walletManager.changePassword(this.masterWalletId, this.oldPayPassword, this.payPassword, () => {
+            this.native.toast_trans("reset-pwd-success");
+            this.native.pop();
         });
     }
 

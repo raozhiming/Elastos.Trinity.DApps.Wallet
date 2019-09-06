@@ -56,7 +56,7 @@ export class ContactsPage implements OnInit {
     // }
 
     pay(address): void {
-        this.native.Go("/transfer", { addr: this.contactUser['address'] });
+        this.native.go("/transfer", { addr: this.contactUser['address'] });
         this.events.publish("address:update", address);
         // this.navCtrl.popTo(this.navCtrl.getByIndex(this.navCtrl.length()-3));
     }

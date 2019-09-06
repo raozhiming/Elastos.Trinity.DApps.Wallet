@@ -60,7 +60,7 @@ export class AddpublickeyPage implements OnInit {
 
     saomiao(index) {
         this.curIndex = index;
-        this.native.Go("/scan", { "pageType": "5" });
+        this.native.go("/scan", { "pageType": "5" });
     }
 
     isRepeat(arr) {
@@ -95,12 +95,7 @@ export class AddpublickeyPage implements OnInit {
     createWallet() {
         let copayers = this.getTotalCopayers();
         this.walletManager.createMultiSignMasterWallet(this.masterWalletId, copayers, this.msobj["requiredCopayers"], (data) => {
-            if (data['success']) {
-                this.createSubWallet("ELA");
-            } else {
-                this.native.hideLoading();
-                alert("=====createMultiSignMasterWallet===error==" + JSON.stringify(data));
-            }
+            this.createSubWallet("ELA");
         });
     }
 
@@ -116,14 +111,9 @@ export class AddpublickeyPage implements OnInit {
 
     createSubWallet(chainId) {
         // Sub Wallet
-        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-                this.registerWalletListener(this.masterWalletId, chainId);
-                this.saveWalletList();
-            } else {
-                this.native.hideLoading();
-            }
+        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, () => {
+            this.registerWalletListener(this.masterWalletId, chainId);
+            this.saveWalletList();
         });
     }
 
@@ -151,27 +141,15 @@ export class AddpublickeyPage implements OnInit {
         let copayers = this.getTotalCopayers();
         this.walletManager.createMultiSignMasterWalletWithMnemonic(this.masterWalletId,
             this.msobj["mnemonicStr"], this.msobj["mnemonicPassword"], this.msobj["payPassword"], copayers, this.msobj["requiredCopayers"], (data) => {
-                if (data['success']) {
-                    this.native.info(data);
-                    this.createMnemonicSubWallet("ELA", this.msobj["payPassword"]);
-                } else {
-                    this.native.hideLoading();
-                }
+                this.createMnemonicSubWallet("ELA", this.msobj["payPassword"]);
             });
     }
 
     createMnemonicSubWallet(chainId, password) {
         // Sub Wallet
-        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, (data) => {
-            if (data["success"]) {
-                this.native.hideLoading();
-                this.native.info(data);
-                this.registerWalletListener(this.masterWalletId, chainId);
-                this.saveWalletList();
-            } else {
-                this.native.hideLoading();
-                alert("createSubWallet=error:" + JSON.stringify(data));
-            }
+        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, () => {
+            this.registerWalletListener(this.masterWalletId, chainId);
+            this.saveWalletList();
         });
     }
 
@@ -186,13 +164,8 @@ export class AddpublickeyPage implements OnInit {
 
     getPublicKey() {
 
-        this.walletManager.getMultiSignPubKeyWithMnemonic(this.msobj["mnemonicStr"], this.msobj["mnemonicPassword"], (data) => {
-
-            if (data["success"]) {
-                this.qrcode = data["success"];
-            } else {
-            }
-        });
+        this.walletManager.getMultiSignPubKeyWithMnemonic(this.msobj["mnemonicStr"], this.msobj["mnemonicPassword"],
+            (ret) => { this.qrcode = ret; });
     }
 
 }

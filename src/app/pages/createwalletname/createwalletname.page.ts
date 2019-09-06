@@ -22,7 +22,7 @@ export class CreatewalletnamePage implements OnInit {
     import() {
         if (this.checkParms()) {
             Config.walletObj.name = this.name;
-            this.native.Go("/addpublickey");
+            this.native.go("/addpublickey");
         }
     }
 

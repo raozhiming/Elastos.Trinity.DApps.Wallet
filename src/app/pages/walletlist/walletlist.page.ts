@@ -58,7 +58,7 @@ export class WalletlistPage implements OnInit {
     }
 
     onNext() {
-        this.native.Go("/launcher");
+        this.native.go("/launcher");
     }
 
     registerWalletListener(masterId, coin) {

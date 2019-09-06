@@ -58,19 +58,21 @@ export class TabHomePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.events.subscribe("wallet:update", (id) => {
-            this.init();
-        });
-        this.events.subscribe("register:update", (walletId, coin, result) => {
-            if (result["MasterWalletID"] === this.masterWalletId && result["ChaiID"] === "ELA") {
-                this.handleEla(result);
-            }
+        if (Config.initialized) {
+            this.events.subscribe("wallet:update", (id) => {
+                this.init();
+            });
+            this.events.subscribe("register:update", (walletId, coin, result) => {
+                if (result["MasterWalletID"] === this.masterWalletId && result["ChaiID"] === "ELA") {
+                    this.handleEla(result);
+                }
 
-            if (result["MasterWalletID"] === this.masterWalletId && result["ChaiID"] === "IdChain") {
-                this.handleIdchain(coin, result);
-            }
-        });
-        this.init();
+                if (result["MasterWalletID"] === this.masterWalletId && result["ChaiID"] === "IDChain") {
+                    this.handleIdchain(coin, result);
+                }
+            });
+            this.init();
+        }
     }
 
     ionViewDidLeave() {
@@ -88,9 +90,9 @@ export class TabHomePage implements OnInit {
             //this.elaPer = Config.getMasterPer(this.masterWalletId,"ELA");;
             this.elaMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "ELA");
             this.elaCurHeight = Config.getCurrentHeight(this.masterWalletId, "ELA");
-            this.idChainMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "IdChain");
-            this.idChainCurHeight = Config.getCurrentHeight(this.masterWalletId, "IdChain");
-            //this.idChainPer = Config.getMasterPer(this.masterWalletId,"IdChain");
+            this.idChainMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "IDChain");
+            this.idChainCurHeight = Config.getCurrentHeight(this.masterWalletId, "IDChain");
+            //this.idChainPer = Config.getMasterPer(this.masterWalletId,"IDChain");
         });
         this.getAllSubWallets();
     }
@@ -103,7 +105,7 @@ export class TabHomePage implements OnInit {
         this.localStorage.get('payment').then((val) => {
             if (val) {
                 this.localStorage.remove('payment');
-                this.native.Go("/payment-confirm", JSON.parse(val));
+                this.native.go("/payment-confirm", JSON.parse(val));
             }
         });
     }
@@ -114,17 +116,15 @@ export class TabHomePage implements OnInit {
     }
 
     onItem(item) {
-        this.native.Go("/coin", { name: item.name, "elaPer": this.elaPer, "idChainPer": this.idChainPer });
+        this.native.go("/coin", { name: item.name, "elaPer": this.elaPer, "idChainPer": this.idChainPer });
     }
 
     getElaBalance(item) {
-        this.walletManager.getBalance(this.masterWalletId, item.name, Config.total, (data) => {
-            if (!Util.isNull(data["success"])) {
+        this.walletManager.getBalance(this.masterWalletId, item.name, Config.total, (ret) => {
+            if (!Util.isNull(ret)) {
                 this.zone.run(() => {
-                    this.ElaObj.balance = Util.scientificToNumber(data["success"] / Config.SELA);
+                    this.ElaObj.balance = Util.scientificToNumber(ret / Config.SELA);
                 });
-            } else {
-                alert("getElaBalance=error:" + JSON.stringify(data));
             }
         });
     }
@@ -135,24 +135,24 @@ export class TabHomePage implements OnInit {
     }
 
     getSubBalance(coin) {
-        this.walletManager.getBalance(this.masterWalletId, coin, Config.total, (data) => {
-            this.native.info(data);
-            if (!Util.isNull(data["success"])) {
+        this.walletManager.getBalance(this.masterWalletId, coin, Config.total, (ret) => {
+            if (!Util.isNull(ret)) {
+                var balance = parseInt(ret);
                 if (this.coinList.length === 0) {
-                    this.coinList.push({ name: coin, balance: data["success"] / Config.SELA });
-                } else {
+                    this.coinList.push({ name: coin, balance: balance / Config.SELA });
+                }
+                else {
                     let index = this.getCoinIndex(coin);
                     if (index != -1) {
                         let item = this.coinList[index];
-                        item["balance"] = data["success"] / Config.SELA;
+                        item["balance"] = balance / Config.SELA;
                         this.coinList.splice(index, 1, item);
 
-                    } else {
-                        this.coinList.push({ name: coin, balance: data["success"] / Config.SELA });
+                    }
+                    else {
+                        this.coinList.push({ name: coin, balance: balance / Config.SELA });
                     }
                 }
-            } else {
-                alert("getSubBalance=error" + JSON.stringify(data));
             }
         });
     }
@@ -209,131 +209,119 @@ export class TabHomePage implements OnInit {
     }
 
     handleEla(result) {
-        if (result["Action"] === "OnTxDeleted") {
-            let txHash = result["hash"];
-            this.popupProvider.ionicAlert_delTx('confirmTitle', 'transaction-deleted', txHash);
-        }
-        if (result["Action"] === "OnTxPublished") {
-            this.OnTxPublished(result);
-        }
-        if (result["Action"] === "OnTransactionStatusChanged") {
-            this.native.info(result['confirms']);
-            if (result['confirms'] == 1) {
-                this.getElaBalance(this.ElaObj);
-                this.popupProvider.ionicAlert('confirmTitle', 'confirmTransaction').then((data) => {
-                });
-            }
-        }
-
-        if (result["Action"] === "OnBalanceChanged") {
-            if (!Util.isNull(result["Balance"])) {
+        switch (result["Action"]) {
+            case "OnTransactionStatusChanged":
+                this.native.info(result['confirms']);
+                if (result['confirms'] == 1) {
+                    this.getElaBalance(this.ElaObj);
+                    this.popupProvider.ionicAlert('confirmTitle', 'confirmTransaction').then((data) => {
+                    });
+                }
+                break;
+            case "OnBlockSyncStarted":
                 this.zone.run(() => {
-                    this.ElaObj.balance = Util.scientificToNumber(result["Balance"] / Config.SELA);
+                    //this.elaPer = Config.getMasterPer(this.masterWalletId,"ELA");
+                    this.elaMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "ELA");
+                    this.elaCurHeight = Config.getCurrentHeight(this.masterWalletId, "ELA");
                 });
-            }
+                break;
+            case "OnBlockSyncProgress":
+                this.zone.run(() => {
+                    this.elaMaxHeight = result["estimatedHeight"];
+                    this.elaCurHeight = result["currentBlockHeight"];
+                    //Config.setMasterPer(this.masterWalletId,"ELA",this.elaPer);
+                    Config.setCureentHeight(this.masterWalletId, "ELA", this.elaCurHeight);
+                    Config.setEstimatedHeight(this.masterWalletId, "ELA", this.elaMaxHeight);
+                    this.localStorage.setProgress(Config.perObj);
+                });
+                break;
+            case "OnBlockSyncStopped":
+                this.zone.run(() => {
+                    //this.elaPer = Config.getMasterPer(this.masterWalletId,"ELA");
+                    this.elaMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "ELA");
+                    this.elaCurHeight = Config.getCurrentHeight(this.masterWalletId, "ELA");
+                });
+                break;
+            case "OnBalanceChanged":
+                if (!Util.isNull(result["Balance"])) {
+                    this.zone.run(() => {
+                        this.ElaObj.balance = Util.scientificToNumber(result["Balance"] / Config.SELA);
+                    });
+                }
+                break;
+            case "OnTxPublished":
+                this.OnTxPublished(result);
+                break;
+            case "OnAssetRegistered":
+                break;
+            case "OnConnectStatusChanged":
+                break;
         }
-        if (result["Action"] === "OnBlockSyncStopped") {
-            this.zone.run(() => {
-                //this.elaPer = Config.getMasterPer(this.masterWalletId,"ELA");
-                this.elaMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "ELA");
-                this.elaCurHeight = Config.getCurrentHeight(this.masterWalletId, "ELA");
-            });
-        } else if (result["Action"] === "OnBlockSyncStarted") {
-            this.zone.run(() => {
-                //this.elaPer = Config.getMasterPer(this.masterWalletId,"ELA");
-                this.elaMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "ELA");
-                this.elaCurHeight = Config.getCurrentHeight(this.masterWalletId, "ELA");
-            });
-        } else if (result["Action"] === "OnBlockHeightIncreased") {
-            //this.elaPer= result["progress"];
-            this.zone.run(() => {
-                this.elaMaxHeight = result["estimatedHeight"];
-                this.elaCurHeight = result["currentBlockHeight"];
-                //Config.setMasterPer(this.masterWalletId,"ELA",this.elaPer);
-                Config.setCureentHeight(this.masterWalletId, "ELA", this.elaCurHeight);
-                Config.setEstimatedHeight(this.masterWalletId, "ELA", this.elaMaxHeight);
-                this.localStorage.setProgress(Config.perObj);
-            });
-        }
-
-        //  if(this.elaPer === 1){
-        //     this.zone.run(() => {
-        //     this.elaPer = Config.getMasterPer(this.masterWalletId,"ELA");
-        //   });
-        //  }
     }
 
 
     handleIdchain(coin, result) {
 
-        if (result["Action"] === "OnTxDeleted") {
-            let txHash = result["hash"];
-            this.popupProvider.ionicAlert_delTx('confirmTitle', 'transaction-deleted', txHash);
-        }
-
-        if (result["Action"] === "OnTxPublished") {
-            this.OnTxPublished(result);
-        }
-
-        if (result["Action"] === "OnBalanceChanged") {
-            if (!Util.isNull(result["Balance"])) {
-                if (this.coinList.length === 0) {
-                    this.coinList.push({ name: coin, balance: Util.scientificToNumber(result["Balance"] / Config.SELA) });
-                } else {
-                    let index = this.getCoinIndex(coin);
-                    if (index != -1) {
-                        let item = this.coinList[index];
-                        item["balance"] = Util.scientificToNumber(result["Balance"] / Config.SELA);
-                        this.coinList.splice(index, 1, item);
-
-                    } else {
+        switch (result["Action"]) {
+            case "OnTransactionStatusChanged":
+                if (result['confirms'] == 1) {
+                    this.handleSubwallet();
+                    this.popupProvider.ionicAlert('confirmTitle', 'confirmTransaction').then((data) => {
+                    });
+                }
+                break;
+            case "OnBlockSyncStarted":
+                this.zone.run(() => {
+                    //this.idChainPer = Config.getMasterPer(this.masterWalletId,coin);
+                    this.idChainMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "IDChain");
+                    this.idChainCurHeight = Config.getCurrentHeight(this.masterWalletId, "IDChain");
+                });
+                break;
+            case "OnBlockSyncProgress":
+                this.zone.run(() => {
+                    //this.idChainPer  = result["progress"];
+                    this.idChainMaxHeight = result["estimatedHeight"];
+                    this.idChainCurHeight = result["currentBlockHeight"];
+                    //Config.setMasterPer(this.masterWalletId,coin,this.idChainPer);
+                    Config.setCureentHeight(this.masterWalletId, coin, this.idChainCurHeight);
+                    Config.setEstimatedHeight(this.masterWalletId, coin, this.idChainMaxHeight);
+                    this.localStorage.setProgress(Config.perObj);
+                });
+                break;
+            case "OnBlockSyncStopped":
+                this.zone.run(() => {
+                    //this.idChainPer = Config.getMasterPer(this.masterWalletId,coin);
+                    this.idChainMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "IDChain");
+                    this.idChainCurHeight = Config.getCurrentHeight(this.masterWalletId, "IDChain");
+                });
+                break;
+            case "OnBalanceChanged":
+                if (!Util.isNull(result["Balance"])) {
+                    if (this.coinList.length === 0) {
                         this.coinList.push({ name: coin, balance: Util.scientificToNumber(result["Balance"] / Config.SELA) });
                     }
+                    else {
+                        let index = this.getCoinIndex(coin);
+                        if (index != -1) {
+                            let item = this.coinList[index];
+                            item["balance"] = Util.scientificToNumber(result["Balance"] / Config.SELA);
+                            this.coinList.splice(index, 1, item);
+
+                        }
+                        else {
+                            this.coinList.push({ name: coin, balance: Util.scientificToNumber(result["Balance"] / Config.SELA) });
+                        }
+                    }
                 }
-            }
+                break;
+            case "OnTxPublished":
+                this.OnTxPublished(result);
+                break;
+            case "OnAssetRegistered":
+                break;
+            case "OnConnectStatusChanged":
+                break;
         }
-
-        if (result["Action"] === "OnTransactionStatusChanged") {
-            if (result['confirms'] == 1) {
-                this.handleSubwallet();
-                this.popupProvider.ionicAlert('confirmTitle', 'confirmTransaction').then((data) => {
-                });
-            }
-        }
-
-        if (result["Action"] === "OnBlockSyncStopped") {
-
-            this.zone.run(() => {
-                //this.idChainPer = Config.getMasterPer(this.masterWalletId,coin);
-                this.idChainMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "IdChain");
-                this.idChainCurHeight = Config.getCurrentHeight(this.masterWalletId, "IdChain");
-            });
-
-        } else if (result["Action"] === "OnBlockSyncStarted") {
-            this.zone.run(() => {
-                //this.idChainPer = Config.getMasterPer(this.masterWalletId,coin);
-                this.idChainMaxHeight = Config.getEstimatedHeight(this.masterWalletId, "IdChain");
-                this.idChainCurHeight = Config.getCurrentHeight(this.masterWalletId, "IdChain");
-            });
-        } else if (result["Action"] === "OnBlockHeightIncreased") {
-            this.zone.run(() => {
-                //this.idChainPer  = result["progress"];
-                this.idChainMaxHeight = result["estimatedHeight"];
-                this.idChainCurHeight = result["currentBlockHeight"];
-                //Config.setMasterPer(this.masterWalletId,coin,this.idChainPer);
-                Config.setCureentHeight(this.masterWalletId, coin, this.idChainCurHeight);
-                Config.setEstimatedHeight(this.masterWalletId, coin, this.idChainMaxHeight);
-                this.localStorage.setProgress(Config.perObj);
-            });
-
-
-        }
-
-        // if(this.idChainPer === 1){
-        //         this.zone.run(() => {
-        //           this.idChainPer = Config.getMasterPer(this.masterWalletId,coin);
-        //         });
-        // }
     }
 
     doRefresh(event) {

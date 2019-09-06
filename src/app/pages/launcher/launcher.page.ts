@@ -22,14 +22,14 @@ export class LauncherPage implements OnInit {
         Config.walletObj = {isMulti: false};
         switch (type) {
             case 1:
-                this.native.Go("/wallet-create");
+                this.native.go("/wallet-create");
                 break;
             case 2:
-                this.native.Go("/wallet-import");
+                this.native.go("/wallet-import");
                 break;
             case 3:
                 Config.walletObj.isMulti = true;
-                this.native.Go("/createmultiwallet");
+                this.native.go("/createmultiwallet");
                 break;
         }
     }

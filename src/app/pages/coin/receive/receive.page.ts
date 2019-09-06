@@ -14,11 +14,8 @@ export class ReceivePage implements OnInit {
 
     masterWalletId: string = "1";
     qrcode: string = null;
-    address: Number;
-    amount: Number;
     chainId: string;
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native) {
-
     }
 
     ngOnInit() {
@@ -26,35 +23,18 @@ export class ReceivePage implements OnInit {
     }
 
     init() {
-        this.masterWalletId = Config.getCurMasterWalletId();
-        // this.route.paramMap.subscribe((params) => {
-        //     this.chainId = params.get("chainId");
-        //     this.createAddress();
-        // });
-
+        this.masterWalletId = Config.getCurMasterWalletId()
         this.chainId = Config.coinObj.chainId;
         this.createAddress();
     }
 
-    onChange() {
-        if (!Util.number(this.amount)) {
-            this.native.toast_trans('correct-amount');
-        }
-    }
-
-
     getAddress() {
-        this.native.Go("/address", { chainId: this.chainId });
+        this.native.go("/address", { chainId: this.chainId });
     }
 
     createAddress() {
-        this.walletManager.createAddress(this.masterWalletId, this.chainId, (data) => {
-            if (data["success"]) {
-                this.qrcode = data["success"];
-                this.address = data["success"];
-            } else {
-                alert("===createAddress===error" + JSON.stringify(data));
-            }
+        this.walletManager.createAddress(this.masterWalletId, this.chainId, (ret) => {
+            this.qrcode = ret;
         });
     }
 

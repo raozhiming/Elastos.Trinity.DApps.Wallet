@@ -21,18 +21,7 @@ export class MnemonicWritePage implements OnInit {
         public native: Native,
         public events: Events,
         public zone: NgZone) {
-        // this.route.queryParams.subscribe((data) => {
-        //     if (typeof(data["mult"]) == "string") {
-        //         this.multType = JSON.parse(data["mult"]);
-        //         console.log(this.multType);
-        //     }
-        //     console.log(data);
-        //     this.exatParm = this.native.clone(data);
-        //     this.mnemonicStr = this.native.clone(data["mnemonicStr"]);
-        //     this.mnemonicList = JSON.parse(data["mnemonicList"]);
 
-        //     // this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
-        // });
         this.mnemonicStr = Config.walletObj.mnemonicStr;
         this.mnemonicList = Config.walletObj.mnemonicList;
         this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
@@ -49,7 +38,7 @@ export class MnemonicWritePage implements OnInit {
 
         if (!Util.isNull(mn) && mn == this.mnemonicStr.replace(/\s+/g, "")) {
             if (Config.walletObj.isMulti) {
-                this.native.Go("/mpublickey", this.exatParm);
+                this.native.go("/mpublickey", this.exatParm);
             } else {
                 this.native.toast_trans('text-mnemonic-ok');
                 this.native.setRootRouter("/tabs");

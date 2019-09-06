@@ -29,7 +29,7 @@ export class CreatemultiwalletPage implements OnInit {
         }
         Config.walletObj.totalCopayers = this.totalCopayers
         Config.walletObj.requiredCopayers = this.requiredCopayers;
-        this.native.Go("/walletmode");
+        this.native.go("/walletmode");
     }
 
 }

@@ -81,15 +81,9 @@ export class CoinPage implements OnInit {
     init() {
         Config.coinObj = {};
         this.masterWalletId = Config.getCurMasterWalletId();
-        this.walletManager.getMasterWalletBasicInfo(this.masterWalletId, (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-                let item = JSON.parse(data["success"])["Account"];
-                this.masterWalletInfo = JSON.stringify(item);
-                Config.coinObj.walletInfo = item;
-            } else {
-                alert("=======getMasterWalletBasicInfo====error=====" + JSON.stringify(data));
-            }
+        this.walletManager.getMasterWalletBasicInfo(this.masterWalletId, (ret) => {
+            console.log(ret);
+            Config.coinObj.walletInfo = ret;
         });
 
         this.route.paramMap.subscribe((params) => {
@@ -113,131 +107,101 @@ export class CoinPage implements OnInit {
     }
 
     initData() {
-        this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.total, (data) => {
-            if (!Util.isNull(data["success"])) {
-                this.native.info(data);
-                this.coinCount = data["success"] / Config.SELA;
-                // Config.coinObj.balance = data["success"];
-            } else {
-                this.native.info(data);
-            }
+        this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.total, (ret) => {
+            this.coinCount = ret / Config.SELA;
+            // Config.coinObj.balance = ret;
         });
 
         if (this.coinName === "ELA") {
-            this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.voted, (data) => {
-                if (!Util.isNull(data["success"])) {
-                    this.native.info(data);
-                    this.votedCount = data["success"] / Config.SELA;
-                } else {
-                    this.native.info(data);
-                }
+            this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.voted, (ret) => {
+                this.votedCount = ret / Config.SELA;
             });
         }
         this.getAllTx();
-
-        // this.myInterval = setInterval(()=>{
-
-        //   this.walletManager.getBalance(this.masterWalletId,this.coinName,0, (data)=>{
-        //     if(!Util.isNull(data["success"])){
-        //       this.native.info(data);
-        //       this.coinCount = data["success"]/Config.SELA;
-        //     }else{
-        //       this.native.info(data);
-        //     }
-        //    });
-
-        //       this.pageNo = 0;
-        //       this.transferList =[];
-        //       this.getAllTx();
-        // },1000);
     }
 
     getAllTx() {
-        this.walletManager.getAllTransaction(this.masterWalletId, this.coinName, this.start, '', (data) => {
-            if (data["success"]) {
-                let allTransaction = JSON.parse(data['success']);
-                let transactions = allTransaction['Transactions'];
-                this.MaxCount = allTransaction['MaxCount'];
-                if (this.MaxCount > 0) {
-                    this.isNodata = false;
-                } else {
-                    this.isNodata = true;
-                }
-
-                if (this.start >= this.MaxCount) {
-                    this.isShowMore = false;
-                    return;
-                } else {
-                    this.isShowMore = true;
-                }
-                if (!transactions) {
-                    this.isShowMore = false;
-                    return;
-                }
-
-                if (this.MaxCount <= 20) {
-                    this.isShowMore = false;
-                }
-
-                console.log(transactions);
-
-                for (let key in transactions) {
-                    let transaction = transactions[key];
-                    let timestamp = transaction['Timestamp'] * 1000;
-                    let datetime = Util.dateFormat(new Date(timestamp));
-                    let txId = transaction['TxHash'];
-                    let payStatusIcon = transaction["Direction"];
-                    let name = "交易名称";//JSON.parse("{" + transaction["memo"] +"}").msg;;
-                    let jiajian = "";
-                    if (payStatusIcon === "Received") {
-                        payStatusIcon = './assets/images/exchange-add.png';
-                        jiajian = "+";
-                    } else if (payStatusIcon === "Sent") {
-                        payStatusIcon = './assets/images/exchange-sub.png';
-                        jiajian = "-";
-                    } else if (payStatusIcon === "Moved") {
-                        payStatusIcon = './assets/images/exchange-sub.png';
-                        jiajian = "";
-                    } else if (payStatusIcon === "Deposit") {
-                        payStatusIcon = './assets/images/exchange-sub.png';
-                        if (transaction["Amount"] > 0) {
-                            jiajian = "-";
-                        } else {
-                            jiajian = "";
-                        }
-                    }
-                    let status = '';
-                    switch (transaction["Status"]) {
-                        case 'Confirmed':
-                            status = 'Confirmed'
-                            break;
-                        case 'Pending':
-                            status = 'Pending'
-                            break;
-                        case 'Unconfirmed':
-                            status = 'Unconfirmed'
-                            break;
-                    }
-                    let transfer = {
-                        "name": name,
-                        "status": status,
-                        "resultAmount": transaction["Amount"] / Config.SELA,
-                        "datetime": datetime,
-                        "timestamp": timestamp,
-                        "txId": txId,
-                        "payStatusIcon": payStatusIcon,
-                        "fuhao": jiajian
-                    }
-                    this.transferList.push(transfer);
-                }
+        this.walletManager.getAllTransaction(this.masterWalletId, this.coinName, this.start, '', (ret) => {
+            let allTransaction = ret;
+            let transactions = allTransaction['Transactions'];
+            this.MaxCount = allTransaction['MaxCount'];
+            if (this.MaxCount > 0) {
+                this.isNodata = false;
             } else {
-                alert("====getAllTransaction====error");
+                this.isNodata = true;
+            }
+
+            if (this.start >= this.MaxCount) {
+                this.isShowMore = false;
+                return;
+            } else {
+                this.isShowMore = true;
+            }
+            if (!transactions) {
+                this.isShowMore = false;
+                return;
+            }
+
+            if (this.MaxCount <= 20) {
+                this.isShowMore = false;
+            }
+
+            console.log(transactions);
+
+            for (let key in transactions) {
+                let transaction = transactions[key];
+                let timestamp = transaction['Timestamp'] * 1000;
+                let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd hh:mm:ss');
+                let txId = transaction['TxHash'];
+                let payStatusIcon = transaction["Direction"];
+                let name = transaction["Direction"];//JSON.parse("{" + transaction["memo"] +"}").msg;;
+                let jiajian = "";
+                if (payStatusIcon === "Received") {
+                    payStatusIcon = './assets/images/exchange-add.png';
+                    jiajian = "+";
+                } else if (payStatusIcon === "Sent") {
+                    payStatusIcon = './assets/images/exchange-sub.png';
+                    jiajian = "-";
+                } else if (payStatusIcon === "Moved") {
+                    payStatusIcon = './assets/images/exchange-sub.png';
+                    jiajian = "";
+                } else if (payStatusIcon === "Deposit") {
+                    payStatusIcon = './assets/images/exchange-sub.png';
+                    if (transaction["Amount"] > 0) {
+                        jiajian = "-";
+                    } else {
+                        jiajian = "";
+                    }
+                }
+                let status = '';
+                switch (transaction["Status"]) {
+                    case 'Confirmed':
+                        status = 'Confirmed'
+                        break;
+                    case 'Pending':
+                        status = 'Pending'
+                        break;
+                    case 'Unconfirmed':
+                        status = 'Unconfirmed'
+                        break;
+                }
+                let transfer = {
+                    "name": name,
+                    "status": status,
+                    "resultAmount": transaction["Amount"] / Config.SELA,
+                    "datetime": datetime,
+                    "timestamp": timestamp,
+                    "txId": txId,
+                    "payStatusIcon": payStatusIcon,
+                    "fuhao": jiajian
+                }
+                this.transferList.push(transfer);
             }
         });
     }
 
     onItem(item) {
-        this.native.Go("/recordinfo", { chainId: this.coinName, txId: item.txId });
+        this.native.go("/recordinfo", { chainId: this.coinName, txId: item.txId });
     }
 
     onNext(type) {
@@ -248,22 +212,30 @@ export class CoinPage implements OnInit {
             memo: '',
             fee: 0,
             payPassword: '',
-            remark: '',
         };
         switch (type) {
             case 1:
-                this.native.Go("/receive");
+                this.native.go("/receive");
                 break;
             case 2:
-
-                this.native.Go("/transfer");
+                Config.coinObj.transfer.type = "transfer";
+                this.native.go("/transfer");
                 break;
             case 3:
                 if (this.coinName == 'ELA') {
-                    Config.coinObj.transfer.fee = 10000;
-                    this.native.Go("/coin-select");
-                } else {
-                    this.native.Go("/withdraw");
+                    Config.coinObj.transfer.type = "recharge";
+                    var coinList = Config.getSubWalletList();
+                    if (coinList.length == 1) {
+                        Config.coinObj.chainId = coinList[0].name;
+                        this.native.go("/transfer");
+                    }
+                    else {
+                        this.native.go("/coin-select");
+                    }
+                }
+                else {
+                    Config.coinObj.transfer.type = "withdraw";
+                    this.native.go("/transfer");
                 }
                 break;
         }
@@ -281,13 +253,8 @@ export class CoinPage implements OnInit {
     }
 
     doRefresh(event) {
-        this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.total, (data) => {
-            if (!Util.isNull(data["success"])) {
-                this.native.info(data);
-                this.coinCount = data["success"] / Config.SELA;
-            } else {
-                this.native.info(data);
-            }
+        this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.total, (ret) => {
+            this.coinCount = ret / Config.SELA;
         });
         this.pageNo = 0;
         this.start = 0;

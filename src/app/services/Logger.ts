@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 
-import { Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import * as _ from 'lodash';
 
-import {Config} from "../services/Config"
+import { Config } from "../services/Config"
 
 /**
  * 日志控制
@@ -32,15 +32,15 @@ import {Config} from "../services/Config"
 @Injectable()
 export class Logger {
 
-  constructor() {
+    constructor() {
 
-  }
-
-
-  public static info(message): void {
-    if(Config.isDebug){
-      let msg = "elastos=="+ (_.isString(message) ? message : JSON.stringify(message));
-      console.log(msg,'color:#e8c406');
     }
-  }
+
+
+    public static log(message: any, type: string): void {
+        if (Config.isDebug) {
+            let msg = type +  ": " + (_.isString(message) ? message : JSON.stringify(message));
+            console.log(msg);
+        }
+    }
 }

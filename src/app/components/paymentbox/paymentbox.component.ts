@@ -19,7 +19,6 @@ export class PaymentboxComponent implements OnInit {
         memo: '',
         fee: 0,
         payPassword: '',//hptest
-        remark: '',
         rate: ''
     };
     constructor(public route: ActivatedRoute, public modalCtrl: ModalController,

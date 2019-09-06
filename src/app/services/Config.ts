@@ -36,9 +36,10 @@ export class Config {
     public static perObj = {};
     public static masterWalletId: string = "1";
     public static masterWalletList = [];
-    public static coinObj:any;
-    public static walletObj:any;
+    public static coinObj: any;
+    public static walletObj: any;
     public static modifyId = "";
+    public static initialized: boolean = false;
 
     public static mappingList = {};
 
@@ -917,7 +918,13 @@ export class Config {
     }
 
     public static getWalletName(id) {
-        return this.mappingList[id]["wallname"] || "";
+        if (this.mappingList[id]) {
+            return this.mappingList[id]["wallname"] || "";
+        }
+        else {
+            return "";
+        }
+
     }
 
     public static setWalletName(id, walletname) {
@@ -925,7 +932,26 @@ export class Config {
     }
 
     public static getSubWallet(id) {
-        return this.mappingList[id]["coinListCache"] || null;
+        if (this.mappingList[id]) {
+            return this.mappingList[id]["coinListCache"] || null;
+        }
+        else {
+            return null;
+        }
+    }
+
+    public static getSubWalletList() {
+        var coinList = [];
+        let mastId = Config.getCurMasterWalletId();
+        let subwallet = Config.getSubWallet(mastId);
+        if (subwallet != null) {
+            for (let coin in subwallet) {
+                if (coin != 'ELA') {
+                    coinList.push({ name: coin });
+                }
+            }
+        }
+        return coinList;
     }
 
     public static isResregister(id, coin) {
@@ -952,7 +978,12 @@ export class Config {
     }
 
     public static getAccountType(masterWalletId) {
-        return this.mappingList[masterWalletId]["Account"] || {};
+        if (this.mappingList[masterWalletId]) {
+            return this.mappingList[masterWalletId]["Account"] || {};
+        }
+        else {
+            return {};
+        }
     }
 
 

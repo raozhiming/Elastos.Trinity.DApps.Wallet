@@ -11,13 +11,12 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['./address.page.scss'],
 })
 export class AddressPage implements OnInit {
+
     masterWalletId: string = "1";
     addrList = [];
     chainId: string;
-    pageNo = 0;
-    start = 0;
-    infinites;
-    MaxCount;
+    curCount = 0;
+
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public events: Events, public native: Native) {
         this.init();
     }
@@ -29,27 +28,34 @@ export class AddressPage implements OnInit {
         this.masterWalletId = Config.getCurMasterWalletId();
         this.route.queryParams.subscribe((data) => {
             this.chainId = data["chainId"];
-            this.getAddressList();
+            this.getAddressList(null);
         });
     }
 
-    getAddressList() {
-        this.walletManager.getAllAddress(this.masterWalletId, this.chainId, this.start, (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-                let address = JSON.parse(data["success"])['Addresses'];
-                this.MaxCount = JSON.parse(data["success"])['MaxCount'];
-                if (!address) {
-                    this.infinites.enable(false);
-                    return;
-                }
-                if (this.pageNo != 0) {
-                    this.addrList = this.addrList.concat(JSON.parse(data["success"])['Addresses']);
+    getAddressList(infiniteScroll: any) {
+        this.walletManager.getAllAddress(this.masterWalletId, this.chainId, this.curCount, (ret) => {
+            let addresses = ret['Addresses'];
+            let maxCount = ret['MaxCount'];
+            var disabled = true;
+            if (addresses) {
+                if (this.curCount != 0) {
+                    this.addrList = this.addrList.concat(addresses);
                 } else {
-                    this.addrList = JSON.parse(data["success"])['Addresses'];
+                    this.addrList = addresses;
                 }
-            } else {
-                alert("==getAllAddress==error" + JSON.stringify(data))
+
+                this.curCount = this.curCount + 20;
+                if (this.curCount < maxCount) {
+                    disabled = false;
+                }
+            }
+
+            if (infiniteScroll != null) {
+                infiniteScroll.complete();
+                infiniteScroll.disabled = disabled;
+            }
+            if (disabled) {
+                this.native.toast_trans("load-finish");
             }
         });
     }
@@ -59,28 +65,9 @@ export class AddressPage implements OnInit {
         this.native.toast_trans('copy-ok');
     }
 
-    // doRefresh(refresher){
-    //    this.pageNo = 0;
-    //    this.start = 0;
-    //    this.getAddressList();
-    //    setTimeout(() => {
-    //     refresher.complete();
-    //     //toast提示
-    //     this.native.toast("加载成功");
-    // },2000);
-    // }
-
-    doInfinite(infiniteScroll) {
-        this.infinites = infiniteScroll;
+    doInfinite(event) {
         setTimeout(() => {
-            this.pageNo++;
-            this.start = this.pageNo * 20;
-            if (this.start >= this.MaxCount) {
-                this.infinites.enable(false);
-                return;
-            }
-            this.getAddressList();
-            infiniteScroll.complete();
+            this.getAddressList(event.target);
         }, 500);
     }
 }

@@ -86,7 +86,7 @@ export class ImportmnemonicPage implements OnInit {
             this.exatParm["mnemonicPassword"] = this.mnemonicObj.phrasePassword;
             this.exatParm["payPassword"] = this.mnemonicObj.payPassword;
             this.exatParm["name"] = this.mnemonicObj.name;
-            this.native.Go("/mpublickey", this.exatParm);
+            this.native.go("/mpublickey", this.exatParm);
         }
     }
 

@@ -49,7 +49,15 @@ export class Native {
     }
 
     public info(message) {
-        Logger.info(message);
+        Logger.log(message, "Info");
+    }
+
+    public error(message) {
+        Logger.log(message, "Error");
+    }
+
+    public warnning(message) {
+        Logger.log(message, "Warnning");
     }
 
     public toast(_message: string = '操作完成', duration: number = 2000): void {
@@ -81,7 +89,7 @@ export class Native {
         return this.clipboard.copy(text);
     }
 
-    public Go(page: any, options: any = {}) {
+    public go(page: any, options: any = {}) {
         console.log(options);
         this.router.navigate([page], { queryParams: options });
         // this.navCtrl.navigateForward(page, options);

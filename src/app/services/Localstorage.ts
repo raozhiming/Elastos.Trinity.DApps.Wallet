@@ -27,8 +27,17 @@ export class LocalStorage {
         return this.storage.set(key, JSON.stringify(value));
     }
 
-    public get(key: string): any {
+    public get(key: string): Promise<any> {
         return this.storage.get(key);
+    }
+
+    public getVal(key, func) {
+        this.storage.get(key).then((val) => {
+            if (typeof(val) == "string") {
+                val = JSON.parse(val);
+            }
+            func(val);
+        });
     }
 
     // get seqnumobj by id authtype(bankcard phone idcard enterprise) sign
@@ -40,7 +49,7 @@ export class LocalStorage {
         console.info("ElastosJs localstorage getSeqNumObj begin sign " + sign + " id " + id + " authType " + authType);
 
         /////////////////
-        this.get("kycId").then((val) => {
+        this.getKycList((val) => {
             let valObj = JSON.parse(val);
 
             console.info("ElastosJs getSeqNumObj total     valObj " + JSON.stringify(valObj));
@@ -106,22 +115,24 @@ export class LocalStorage {
         return this.storage.set(key, JSON.stringify(value));
     }
 
-    public getWallet(): any {
+    public getWallet(func): any {
         // TODO
         let key = "ELA-Wallet";
-        return this.storage.get(key);
+        this.getVal(key, func);
     }
 
     public addKyc(key: string, value: any): any {
         return this.storage.set(key, JSON.stringify(value));
     }
 
-    public getKycList(key: string): any {
-        return this.storage.get(key);
+    public getKycList(func): any {
+        let key = "kycId";
+        this.getVal(key, func);
     }
 
-    public getLanguage(key): any {
-        return this.storage.get(key);
+    public getWalletLanguage(func): any {
+        let key = "wallet-language";
+        this.getVal(key, func);
     }
 
 
@@ -131,9 +142,9 @@ export class LocalStorage {
         return this.storage.set(key, JSON.stringify(value));
     }
 
-    public getCurMasterId() {
+    public getCurMasterId(func) {
         let key = "cur-masterId";
-        return this.storage.get(key);
+        this.getVal(key, func);
     }
 
     public saveMappingTable(obj) {
@@ -141,9 +152,9 @@ export class LocalStorage {
         return this.add(key, obj);
     }
 
-    public getMappingTable() {
+    public getMappingTable(func) {
         let key = "map-table";
-        return this.storage.get(key);
+        this.getVal(key, func);
     }
 
 
@@ -152,9 +163,9 @@ export class LocalStorage {
         this.storage.set(key, JSON.stringify(obj));
     }
 
-    public getProgress() {
+    public getProgress(func) {
         let key = "map-Progress";
-        return this.storage.get(key);
+        this.getVal(key, func);
     }
 
 }

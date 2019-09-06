@@ -40,29 +40,15 @@ export class MnemonicPage implements OnInit {
         this.payPassword = Config.walletObj.payPassword;
 
         this.masterWalletId = Config.uuid(6, 16);
-        this.walletManager.generateMnemonic(this.native.getMnemonicLang(), (data) => {
-            if (data["success"]) {
-                this.native.hideLoading();
-                this.native.info(data);
-                this.mnemonicStr = data["success"].toString();
-                let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);
-                for (var i = 0; i < mnemonicArr.length; i++) {
-                    this.mnemonicList.push({ text: mnemonicArr[i], selected: false });
-                }
-            } else {
-                this.native.info(data);
+        this.walletManager.generateMnemonic(this.native.getMnemonicLang(), (ret) => {
+            this.native.hideLoading();
+            this.mnemonicStr = ret;
+            let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);
+            for (var i = 0; i < mnemonicArr.length; i++) {
+                this.mnemonicList.push({ text: mnemonicArr[i], selected: false });
             }
+
         });
-
-
-        // this.route.queryParams.subscribe((data) => {
-        //     this.payPassword = data["payPassword"];
-        //     this.name = data["name"];
-        //     this.singleAddress = data["singleAddress"];
-        //     this.multType = JSON.parse(data["mult"]);
-        //     console.log("--");
-        //     console.log(this.multType);
-        // });
 
     }
 
@@ -86,53 +72,31 @@ export class MnemonicPage implements OnInit {
             this.goMnemonicWrite();
             return;
         }
-        // if (!Util.isEmptyObject(this.multType)) {
-            // this.native.Go("/mnemonic-write", {
-            //     "mult": JSON.stringify(this.multType),
-            //     mnemonicStr: this.mnemonicStr,
-            //     mnemonicList: JSON.stringify(this.mnemonicList),
-            //     "totalCopayers": this.multType["totalCopayers"],
-            //     "requiredCopayers": this.multType["requiredCopayers"],
-            //     "mnemonicPassword": this.mnemonicPassword,
-            //     "payPassword": this.payPassword,
-            //     name: this.name
-            // });
-        //     return;
-        // }
-        this.native.showLoading().then(() => {
-            this.walletManager.createMasterWallet(this.masterWalletId, this.mnemonicStr, this.mnemonicPassword, this.payPassword, this.singleAddress, (data) => {
-                if (data["success"]) {
-                    this.native.info(data);
-                    this.createSubWallet('ELA');
-                } else {
-                    this.native.info(data);
-                }
-            });
 
+        this.native.showLoading().then(() => {
+            this.walletManager.createMasterWallet(this.masterWalletId, this.mnemonicStr, this.mnemonicPassword, this.payPassword, this.singleAddress, () => {
+                this.createSubWallet('ELA');
+            });
         });
 
     }
 
     createSubWallet(chainId) {
         // Sub Wallet
-        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, (data) => {
-            if (data["success"]) {
-                let walletObj = this.native.clone(Config.masterWallObj);
-                walletObj["id"] = this.masterWalletId;
-                walletObj["wallname"] = this.name;
-                walletObj["Account"] = { "SingleAddress": this.singleAddress, "Type": "Standard" };
-                this.localStorage.saveMappingTable(walletObj).then((data) => {
-                    let mappingList = this.native.clone(Config.getMappingList());
-                    mappingList[this.masterWalletId] = walletObj;
-                    this.native.info(mappingList);
-                    Config.setMappingList(mappingList);
-                    this.saveWalletList();
-                    this.registerWalletListener(this.masterWalletId, chainId);
+        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, () => {
+            let walletObj = this.native.clone(Config.masterWallObj);
+            walletObj["id"] = this.masterWalletId;
+            walletObj["wallname"] = this.name;
+            walletObj["Account"] = { "SingleAddress": this.singleAddress, "Type": "Standard" };
+            this.localStorage.saveMappingTable(walletObj).then(() => {
+                let mappingList = this.native.clone(Config.getMappingList());
+                mappingList[this.masterWalletId] = walletObj;
+                this.native.info(mappingList);
+                Config.setMappingList(mappingList);
+                this.saveWalletList();
+                this.registerWalletListener(this.masterWalletId, chainId);
 
-                });
-            } else {
-                alert("createSubWallet=error:" + JSON.stringify(data));
-            }
+            });
         });
     }
 
@@ -141,7 +105,6 @@ export class MnemonicPage implements OnInit {
         this.localStorage.saveCurMasterId({ masterId: this.masterWalletId }).then((data) => {
             this.native.hideLoading();
             Config.setCurMasterWalletId(this.masterWalletId);
-            // this.native.Go("/mnemonic-write", { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) });
             this.goMnemonicWrite();
         });
     }
@@ -152,7 +115,6 @@ export class MnemonicPage implements OnInit {
                 Config.setResregister(masterId, coin, true);
             }
             this.events.publish("register:update", masterId, coin, data);
-            //this.saveWalletList();
         });
     }
 
@@ -165,7 +127,7 @@ export class MnemonicPage implements OnInit {
         Config.walletObj.mnemonicList = this.mnemonicList;
         Config.walletObj.mnemonicPassword = this.mnemonicPassword;
         console.log(Config.walletObj);
-        this.native.Go("/mnemonic-write");
+        this.native.go("/mnemonic-write");
     }
 }
 

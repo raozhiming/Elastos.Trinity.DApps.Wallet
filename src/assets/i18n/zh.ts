@@ -34,6 +34,11 @@ export const zh = {
 
     'paypassword-reset': '更改支付密码',
     'paypassword': '支付密码',
+
+    'Received': '收到',
+    'Sent': '转账',
+    'Moved': '移动',
+    'Deposit': '押金',
     // TODO remove unused items
     // import wallet page
     'text-from-mnemonic': '来自助记词',
@@ -72,7 +77,6 @@ export const zh = {
     'text-about': '关于我们',
     'text-help': '使用帮助',
     'text-notice': '消息通知',
-    'text-remark': '备注',
     'text-add': '添加',
     'text-save-modify': '保存修改',
 
@@ -373,6 +377,7 @@ export const zh = {
     'error-29999': '(ERR-29999)其它错误',
     'modify-wallet-name': '修改钱包名字',
     'load-more': '加载更多',
+    'load-finish': '加载完成',
     'txinfo-receive-amount': '接收金额',
     'txinfo-send-amount': '发送金额',
     'txinfo-receive-addr': '接收地址',

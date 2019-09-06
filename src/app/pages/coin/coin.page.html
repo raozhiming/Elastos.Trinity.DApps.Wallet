@@ -22,7 +22,7 @@
             <ion-item (click)="onItem(item)">
                 <img src={{item.payStatusIcon}} />
                 <ion-label id="coin-name">
-                    <h2 id="exchange-name">{{item.name}}</h2>
+                    <h2 id="exchange-name">{{item.name | translate }}</h2>
                     <p *ngIf="item.timestamp!='0'" id="datatime">{{item.datetime}}</p>
                 </ion-label>
                 <ion-label solt="end" id="coin-value">

@@ -4,11 +4,6 @@
 <ion-content>
     <div class="receive-box">
         <my-qrcode [address]="qrcode" [title]="'my-qrcode' | translate"></my-qrcode>
-        <!-- <p class="receive-address" (click)="onNext(0)" >{{address}} <img
-                src="./assets/images/icon/icon-copy.svg"></p> -->
-        <!-- <div class="recevie-bottom" (click)="onNext(2)">
-            <p></p>
-        </div> -->
         <ion-item detail (click)="getAddress()">
             <ion-label>{{ 'text-manager-address' | translate }}</ion-label>
         </ion-item>

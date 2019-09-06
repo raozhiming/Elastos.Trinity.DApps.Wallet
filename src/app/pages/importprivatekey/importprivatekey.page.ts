@@ -29,7 +29,7 @@ export class ImportprivatekeyPage implements OnInit {
         this.msobj["importText"] = this.importText.replace(/^\s+|\s+$/g,"");
         this.msobj["passWord"] = this.passWord;
         this.msobj["name"] = this.name;
-        this.native.Go("/mpublickey", this.msobj);
+        this.native.go("/mpublickey", this.msobj);
     }
   }
   checkParms(){

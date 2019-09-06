@@ -57,18 +57,18 @@ export class ContactListPage implements OnInit {
     }
 
     onAdd(): void {
-        this.native.Go("/contact-create");
+        this.native.go("/contact-create");
     }
 
     onEdit(item, event) {
         event.stopPropagation();
-        this.native.Go("/contact-create", item);
+        this.native.go("/contact-create", item);
         return false;
     }
 
     onClick(item): void {
         if (!this.isHide) {
-            this.native.Go("/contacts", { id: item.id, exatOption: JSON.stringify(this.params) });
+            this.native.go("/contacts", { id: item.id, exatOption: JSON.stringify(this.params) });
         }
         else {
             this.events.publish("address:update", item.address);

@@ -36,24 +36,22 @@ export class CoinListPage implements OnInit {
         }
         else {
             this.native.showLoading().then(() => {
-                this.walletManager.destroySubWallet(this.masterWalletId, item.name, (data) => {
-                    if (data['success']) {
-                        this.native.hideLoading();
-                        Config.setResregister(this.masterWalletId, item.name, false);
-                        let subWallet = Config.getSubWallet(this.masterWalletId);
-                        delete (subWallet[item.name]);
-                        let walletObj = this.native.clone(Config.masterWallObj);
-                        walletObj["id"] = this.masterWalletId;
-                        walletObj["wallname"] = Config.getWalletName(this.masterWalletId);
-                        walletObj["Account"] = Config.getAccountType(this.masterWalletId);
-                        walletObj["coinListCache"] = subWallet;
-                        this.localStorage.saveMappingTable(walletObj).then((data) => {
-                            let mappingList = this.native.clone(Config.getMappingList());
-                            mappingList[this.masterWalletId] = walletObj;
-                            this.native.info(mappingList);
-                            Config.setMappingList(mappingList);
-                        });
-                    }
+                this.walletManager.destroySubWallet(this.masterWalletId, item.name, () => {
+                    this.native.hideLoading();
+                    Config.setResregister(this.masterWalletId, item.name, false);
+                    let subWallet = Config.getSubWallet(this.masterWalletId);
+                    delete (subWallet[item.name]);
+                    let walletObj = this.native.clone(Config.masterWallObj);
+                    walletObj["id"] = this.masterWalletId;
+                    walletObj["wallname"] = Config.getWalletName(this.masterWalletId);
+                    walletObj["Account"] = Config.getAccountType(this.masterWalletId);
+                    walletObj["coinListCache"] = subWallet;
+                    this.localStorage.saveMappingTable(walletObj).then(() => {
+                        let mappingList = this.native.clone(Config.getMappingList());
+                        mappingList[this.masterWalletId] = walletObj;
+                        this.native.info(mappingList);
+                        Config.setMappingList(mappingList);
+                    });
                 });
             });
         }
@@ -70,33 +68,27 @@ export class CoinListPage implements OnInit {
         this.masterWalletId = Config.modifyId;
         let subWallet = Config.getSubWallet(this.masterWalletId);
         this.walletManager.getSupportedChains(this.masterWalletId, (data) => {
-            if (data['success']) {
-                this.native.info(data);
-                this.native.hideLoading();
-                let allChains = data['success'];
-                for (let index in allChains) {
-                    let chain = allChains[index];
-                    let isOpen = false;
-                    if (subWallet) {
-                        isOpen = chain in subWallet ? true : false;
-                    }
-                    if (chain == "ELA") {
-                        isOpen = true;
-                    }
-                    this.coinList.push({ name: chain, open: isOpen });
+            this.native.info(data);
+            this.native.hideLoading();
+            let allChains = data;
+            for (let index in allChains) {
+                let chain = allChains[index];
+                let isOpen = false;
+                if (subWallet) {
+                    isOpen = chain in subWallet ? true : false;
                 }
-            } else {
-                this.native.info(data);
+                if (chain == "ELA") {
+                    isOpen = true;
+                }
+                this.coinList.push({ name: chain, open: isOpen });
             }
         });
-        //});
     }
 
     createSubWallet() {
-        // Sub Wallet IdChain
+        // Sub Wallet IDChain
         let chainId = this.currentCoin["name"];
         this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, (data) => {
-            if (data['success']) {
                 if (!Config.isResregister(this.masterWalletId, chainId)) {
                     this.registerWalletListener(this.masterWalletId, chainId);
                 }
@@ -119,11 +111,9 @@ export class CoinListPage implements OnInit {
                     mappingList[this.masterWalletId] = walletObj;
                     Config.setMappingList(mappingList);
                 });
-            } else {
-                this.currentCoin["open"] = false;
-                this.native.info(data);
-            }
-        });
+            },
+            () => this.currentCoin["open"] = false
+        );
     }
 
     ionViewDidLeave() {

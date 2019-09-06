@@ -7,30 +7,34 @@
             <ion-label>{{ 'text-receiver-address' | translate}}</ion-label>
             <ion-buttons slot="end">
                 <ion-icon name="scan" (click)="rightHeader()"></ion-icon>
-                <ion-icon name="contact" (click)="onClick(1)"></ion-icon>
+                <ion-icon *ngIf="transfer.type=='transfer'" name="contact" (click)="goContact()"></ion-icon>
             </ion-buttons>
         </ion-item>
         <ion-item>
             <ion-input type="text" placeholder="{{ 'text-receiver-address' | translate}}"
-                [(ngModel)]="transfer.toAddress" [(disabled)]="isInput"></ion-input>
+                [(ngModel)]="transfer.toAddress"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label>{{ 'text-price' | translate}}</ion-label>
-            <ion-note slot="end">{{'text-balance' | translate}}：{{balance/SELA}}</ion-note>
+            <ion-note slot="end" *ngIf="transfer.type=='transfer'">
+                {{'text-balance' | translate}}：{{balance/SELA}}
+            </ion-note>
+            <ion-note slot="end" *ngIf="transfer.type!='transfer'">
+                {{'text-balance' | translate}}：{{balance/SELA}}({{'text-rate' | translate}}：1:{{transfer.rate}})
+            </ion-note>
         </ion-item>
         <ion-item>
-            <ion-input type="text" placeholder="{{ 'text-price' | translate}}"
-                [(ngModel)]="transfer.amount"></ion-input>
+            <ion-input type="text" placeholder="{{ 'text-price' | translate}}" [(ngModel)]="transfer.amount">
+            </ion-input>
         </ion-item>
         <ion-item>
-            <ion-label>{{ 'text-remark' | translate}}</ion-label>
+            <ion-label>{{ 'text-memo' | translate}}</ion-label>
         </ion-item>
         <ion-item>
-            <ion-input type="text" placeholder="{{ 'text-remark' | translate}}"
-                [(ngModel)]="transfer.remark"></ion-input>
+            <ion-input type="text" placeholder="{{ 'text-memo' | translate}}" [(ngModel)]="transfer.memo"></ion-input>
         </ion-item>
     </ion-list>
 </ion-content>
 <ion-footer>
-    <ion-button class="confirm" (click)="onClick(2)">{{ 'text-transfer' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="goTransaction()">{{ 'text-transfer' | translate }}</ion-button>
 </ion-footer>

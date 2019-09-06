@@ -21,7 +21,6 @@ export class PaymentConfirmPage implements OnInit {
         memo: '',
         fee: 0,
         payPassword: '',
-        remark: '',
     };
 
     chainId: string = 'ELA';
@@ -61,13 +60,7 @@ export class PaymentConfirmPage implements OnInit {
     }
 
     getAllSubWallets() {
-        this.walletManager.getAllSubWallets(this.masterWalletId, (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-            } else {
-                this.native.info(data);
-            }
-        })
+        this.walletManager.getAllSubWallets(this.masterWalletId);
     }
 
     GetQueryString(name) {
@@ -103,16 +96,13 @@ export class PaymentConfirmPage implements OnInit {
             this.native.toast_trans('error-amount');
             return;
         }
-        this.walletManager.isAddressValid(this.masterWalletId, this.transfer.toAddress, (data) => {
-            if (!data['success']) {
-                this.native.toast_trans("contact-address-digits");
-                return;
-            }
+        this.walletManager.isAddressValid(this.masterWalletId, this.transfer.toAddress, () => {
             this.native.showLoading().then(() => {
                 this.createTransaction();
             });
-
-        })
+        },
+            () => { this.native.toast_trans("contact-address-digits"); }
+        );
     }
 
     createTransaction() {
@@ -120,74 +110,28 @@ export class PaymentConfirmPage implements OnInit {
             this.transfer.toAddress,
             this.transfer.amount,
             this.transfer.memo,
-            this.transfer.remark,
             false,
-            (data) => {
-                if (data['success']) {
-                    this.native.info(data);
-                    this.rawTransaction = data['success'];
-                    this.getFee();
-                } else {
-                    this.native.info(data);
-                }
+            (ret) => {
+                this.rawTransaction = ret;
+                this.openPayModal(this.transfer);
             });
     }
 
-    getFee() {
-        this.walletManager.calculateTransactionFee(this.masterWalletId, this.chainId, this.rawTransaction, this.feePerKb, (data) => {
-            if (data['success']) {
-                this.native.info(data);
-                this.native.hideLoading();
-                this.transfer.fee = data['success'];
-                this.openPayModal(this.transfer);
-            } else {
-                this.native.info(data);
-            }
-        });
-    }
-
-    sendRawTransaction() {
-
-        this.updateTxFee();
-    }
-
-
-    updateTxFee() {
-        this.walletManager.updateTransactionFee(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.fee, "", (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-                this.singTx(data["success"]);
-            } else {
-                this.native.info(data);
-            }
-        });
-    }
-
-    singTx(rawTransaction) {
-        this.walletManager.signTransaction(this.masterWalletId, this.chainId, rawTransaction, this.transfer.payPassword, (data) => {
-            if (data["success"]) {
-                this.native.info(data);
-                this.sendTx(data["success"]);
-            } else {
-                this.native.info(data);
-            }
+    singTx() {
+        this.walletManager.signTransaction(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.payPassword, (ret) => {
+            this.sendTx(ret);
         });
     }
 
     sendTx(rawTransaction) {
         this.native.info(rawTransaction);
-        this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (data) => {
-            if (data["success"]) {
-                this.native.hideLoading();
-                this.native.info(data);
-                this.txId = JSON.parse(data['success'])["TxHash"];
-                let result = {
-                    txId: this.txId
-                }
-                return result;
-            } else {
-                this.native.info(data);
+        this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
+            this.native.hideLoading();
+            this.txId = JSON.parse(ret)["TxHash"];
+            let result = {
+                txId: this.txId
             }
+            // return result; //TODO::??
             this.native.setRootRouter("/tabs");
         })
     }
@@ -198,11 +142,11 @@ export class PaymentConfirmPage implements OnInit {
             component: PaymentboxComponent,
             componentProps: props
         });
-        const { data }  = await modal.onDidDismiss();
+        const { data } = await modal.onDidDismiss();
         if (data) {
             this.native.showLoading().then(() => {
                 this.transfer = this.native.clone(data);
-                this.sendRawTransaction();
+                this.singTx();
             });
         }
         return await modal.present();

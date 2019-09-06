@@ -18,6 +18,6 @@ export class WalletmodePage implements OnInit {
     }
 
     onClick(route) {
-        this.native.Go(route);
+        this.native.go(route);
     }
 }
