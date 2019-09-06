@@ -214,8 +214,8 @@ export class TabHomePage implements OnInit {
                 this.native.info(result['confirms']);
                 if (result['confirms'] == 1) {
                     this.getElaBalance(this.ElaObj);
-                    this.popupProvider.ionicAlert('confirmTitle', 'confirmTransaction').then((data) => {
-                    });
+                    // this.popupProvider.ionicAlert('confirmTitle', 'confirmTransaction').then((data) => {
+                    // });
                 }
                 break;
             case "OnBlockSyncStarted":
