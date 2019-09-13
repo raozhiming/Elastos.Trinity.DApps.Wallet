@@ -21,7 +21,6 @@ export class WalletImportPage implements OnInit {
     public keyStoreContent: any;
     public importFileObj: any = { payPassword: "", rePayPassword: "", backupPassWord: "", name: "" };
     public mnemonicObj: any = { mnemonic: "", payPassword: "", rePayPassword: "", phrasePassword: "", name: "", singleAddress: false };
-    // public mnemonicObj: any = { mnemonic: "玉 燥 扶 消 滑 吨 输 粪 森 修 菜 谱", payPassword: "password", rePayPassword: "password", phrasePassword: "", name: "cdx", singleAddress: false };
     public walletType: string;
     public accontObj: any = {};
     constructor(public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events, public popupProvider: PopupProvider, public zone: NgZone) {
