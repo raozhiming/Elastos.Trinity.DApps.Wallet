@@ -4,6 +4,7 @@ import { Util } from "../../../services/Util";
 import { Config } from '../../../services/Config';
 import { ActivatedRoute } from '@angular/router';
 import { Events } from '@ionic/angular';
+import { WalletManager } from '../../../services/WalletManager';
 
 @Component({
     selector: 'app-mnemonic-write',
@@ -17,14 +18,16 @@ export class MnemonicWritePage implements OnInit {
     selectComplete = false;
     multType: any = {};
     exatParm: any;
+    walletObj = {};
     constructor(public route: ActivatedRoute,
         public native: Native,
         public events: Events,
+        public walletManager: WalletManager,
         public zone: NgZone) {
 
         this.mnemonicStr = Config.walletObj.mnemonicStr;
         this.mnemonicList = Config.walletObj.mnemonicList;
-        this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
+        // this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
     }
 
     ngOnInit() {
@@ -39,15 +42,28 @@ export class MnemonicWritePage implements OnInit {
         if (!Util.isNull(mn) && mn == this.mnemonicStr.replace(/\s+/g, "")) {
             if (Config.walletObj.isMulti) {
                 this.native.go("/mpublickey", this.exatParm);
-            } else {
+            }
+            else {
                 this.native.toast_trans('text-mnemonic-ok');
-                this.native.setRootRouter("/tabs");
-                this.events.publish("wallet:update", Config.getCurMasterWalletId());
+                this.native.showLoading().then(() => {
+                    this.walletManager.createMasterWallet(Config.walletObj.masterId, this.mnemonicStr,
+                        Config.walletObj.mnemonicPassword, Config.walletObj.payPassword,
+                        Config.walletObj.singleAddress, () => {
+                        this.createSubWallet('ELA');
+                    });
+                });
             }
 
         } else {
             this.native.toast_trans('text-mnemonic-prompt3');
         }
+    }
+
+    createSubWallet(chainId) {
+        this.walletManager.createSubWallet(Config.walletObj.masterId, chainId, 0, () => {
+            let account = { "singleAddress": Config.walletObj.singleAddress, "Type": "Standard" };
+            Config.masterManager.addMasterWallet(Config.walletObj.masterId, Config.walletObj.name, account);
+        });
     }
 
     public addButton(index: number, item: any): void {

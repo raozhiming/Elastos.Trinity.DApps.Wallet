@@ -20,136 +20,36 @@ export class WalletSettingPage implements OnInit {
     public readonly: string = "";
     public masterWalletType: string = "";
     public singleAddress: boolean = false;
+
+    Config = Config;
+
     constructor(public route: ActivatedRoute, public events: Events,
         public localStorage: LocalStorage, public popupProvider: PopupProvider, public walletManager: WalletManager,
     /*private app: App,*/ public native: Native) {
 
-        this.route.paramMap.subscribe((params) => {
-            this.masterWalletId = params.get("id");
-            Config.modifyId = this.masterWalletId;
-            this.walletName = Config.getWalletName(this.masterWalletId);
-            this.getMasterWalletBasicInfo();
-        });
+        this.masterWalletId = Config.modifyId;
+        this.walletName = Config.masterManager.masterWallet[this.masterWalletId].name;
+        this.getMasterWalletBasicInfo();
     }
 
     ngOnInit() {
     }
 
-    ionViewWillEnter() {
-        this.walletName = Config.getWalletName(this.masterWalletId);
-    }
-
-    ionViewDidLeave() {
-        //this.walletName = Config.getWalletName(this.masterWalletId);
-    }
-
-    // onItem(i) {
-    //     switch (i) {
-    //         case 0:
-    //             this.native.go("/exprot-prikey");
-    //             break;
-    //         case 1:
-    //             this.native.go("/paypassword-reset");
-    //             break;
-    //         case 2:
-    //             this.popupProvider.ionicConfirm('confirmTitle', 'confirmSubTitle').then((data) => {
-    //                 if (data) {
-    //                     this.native.showLoading().then(() => {
-    //                         this.destroyWallet(this.masterWalletId);
-    //                     });
-    //                 }
-    //             });
-    //             break;
-    //         case 3:
-    //             this.native.go("/publickey");
-    //             break;
-    //         case 4:
-    //             this.native.go("/modifywalletname");
-    //             break;
-    //         case 5:
-    //             this.native.go("/exportmnemomic");
-    //             break;
-    //     }
-    // }
-
     onDelete() {
         this.popupProvider.ionicConfirm('confirmTitle', 'confirmSubTitle').then((data) => {
             if (data) {
-                this.native.showLoading().then(() => {
-                    this.destroyWallet(this.masterWalletId);
-                });
+                this.destroyWallet(this.masterWalletId);
             }
         });
     }
 
 
-    getAllCreatedSubWallets() {
-
-        this.walletManager.getAllSubWallets(this.masterWalletId, (ret) => {
-            let chinas = ret;
-            let maxLen = chinas.length;
-            for (let index in chinas) {
-                let chain = chinas[index];
-                this.destroyWalletListener(index, maxLen, this.masterWalletId, chain);
-            }
-
-        });
-
-    }
-
-    destroyWalletListener(index, maxLen, masterWalletId, chainId) {
-        this.walletManager.removeWalletListener(masterWalletId, chainId, (ret) => {
-            if (parseInt(index) === (maxLen - 1)) {
-                this.destroyWallet(masterWalletId);
-            }
-        });
-    }
-
-    destroyWallet(masterWalletId: string) {
+    destroyWallet(id: string) {
         //this.localStorage.remove('coinListCache').then(()=>{
-        this.walletManager.destroyWallet(masterWalletId, () => {
-            this.delWalletListOne(masterWalletId);
-        });
+        Config.masterManager.destroyMasterWallet(id);
         //});
     }
 
-    delWalletListOne(masterWalletId) {
-        this.native.info(masterWalletId);
-        let arr = Config.getMasterWalletIdList();
-        let index = arr.indexOf(masterWalletId);
-        this.native.info(index);
-        if (index > -1) {
-            arr.splice(index, 1);
-        }
-
-        if (arr.length === 0) {
-            this.saveWalletList1();
-            return;
-        }
-        this.native.info(arr);
-        Config.setCurMasterWalletId(arr[0]);
-        //Config.setMasterWalletIdList(arr);
-        let allmastwalle = this.native.clone(Config.getMappingList());
-        delete (allmastwalle[this.masterWalletId]);
-        this.native.info(allmastwalle);
-        Config.setMappingList(allmastwalle);
-        this.saveWalletList(arr[0]);
-    }
-
-    saveWalletList(masterWalletId) {
-        this.localStorage.saveCurMasterId({ masterId: masterWalletId }).then((data) => {
-            this.native.hideLoading();
-            Config.setCurMasterWalletId(masterWalletId);
-            this.native.setRootRouter("/tabs");
-            this.events.publish("wallet:update", masterWalletId);
-        });
-    }
-
-    saveWalletList1() {
-        this.native.hideLoading();
-        Config.setMappingList({});
-        this.native.setRootRouter("/launcher");
-    }
 
     getMasterWalletBasicInfo() {
         this.walletManager.getMasterWalletBasicInfo(this.masterWalletId, (ret) => {

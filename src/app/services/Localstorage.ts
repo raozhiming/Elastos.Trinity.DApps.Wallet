@@ -152,19 +152,24 @@ export class LocalStorage {
         return this.add(key, obj);
     }
 
-    public getMappingTable(func) {
-        let key = "map-table";
+    public setMasterInfos(obj) {
+        let key = "infos";
+        this.storage.set(key, JSON.stringify(obj));
+    }
+
+    public getMasterInfos(func) {
+        let key = "infos";
         this.getVal(key, func);
     }
 
 
     public setProgress(obj) {
-        let key = "map-Progress";
+        let key = "progress";
         this.storage.set(key, JSON.stringify(obj));
     }
 
     public getProgress(func) {
-        let key = "map-Progress";
+        let key = "progress";
         this.getVal(key, func);
     }
 

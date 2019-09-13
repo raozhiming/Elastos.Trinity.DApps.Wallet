@@ -5,7 +5,7 @@
     <ion-list>
         <ion-item detail [routerLink]="['/modifywalletname']" routerDirection="forward">
             <ion-label>{{'wallet-name' | translate}}</ion-label>
-            <ion-note *ngIf="walletName" slot="end">
+            <ion-note slot="end">
                 {{ walletName }}
             </ion-note>
         </ion-item>

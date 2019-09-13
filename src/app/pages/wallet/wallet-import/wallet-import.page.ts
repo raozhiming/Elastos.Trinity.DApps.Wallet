@@ -21,6 +21,7 @@ export class WalletImportPage implements OnInit {
     public keyStoreContent: any;
     public importFileObj: any = { payPassword: "", rePayPassword: "", backupPassWord: "", name: "" };
     public mnemonicObj: any = { mnemonic: "", payPassword: "", rePayPassword: "", phrasePassword: "", name: "", singleAddress: false };
+    // public mnemonicObj: any = { mnemonic: "玉 燥 扶 消 滑 吨 输 粪 森 修 菜 谱", payPassword: "password", rePayPassword: "password", phrasePassword: "", name: "cdx", singleAddress: false };
     public walletType: string;
     public accontObj: any = {};
     constructor(public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events, public popupProvider: PopupProvider, public zone: NgZone) {
@@ -126,11 +127,15 @@ export class WalletImportPage implements OnInit {
         this.walletManager.importWalletWithKeystore(this.masterWalletId,
             this.keyStoreContent, this.importFileObj.backupPassWord,
             this.importFileObj.payPassword, () => {
-                this.walletManager.createSubWallet(this.masterWalletId, "ELA", 0, () => {
-                    this.registerWalletListener(this.masterWalletId, "ELA");
-                    this.getAllCreatedSubWallets();
-                });
+                this.createSubWallet('import-text-keystroe-sucess');
             });
+    }
+
+    createSubWallet(msg) {
+        this.walletManager.createSubWallet(this.masterWalletId, "ELA", 0, () => {
+            this.native.toast_trans(msg);
+            this.saveWalletList();
+        });
     }
 
     checkWorld() {
@@ -194,24 +199,8 @@ export class WalletImportPage implements OnInit {
     importWalletWithMnemonic() {
         let mnemonic = this.normalizeMnemonic(this.mnemonicObj.mnemonic);
         this.walletManager.importWalletWithMnemonic(this.masterWalletId, mnemonic, this.mnemonicObj.phrasePassword, this.mnemonicObj.payPassword, this.mnemonicObj.singleAddress, (data) => {
-            this.walletManager.createSubWallet(this.masterWalletId, "ELA", 0, () => {
-                this.native.toast_trans('import-text-world-sucess');
-                this.registerWalletListener(this.masterWalletId, "ELA");
-                this.saveWalletList(null);
-            });
+            this.createSubWallet('import-text-world-sucess');
         });
-    }
-
-    getAllCreatedSubWallets() {
-
-        this.walletManager.getAllSubWallets(this.masterWalletId, (ret) => {
-            let chinas = this.getCoinListCache(ret);
-            //this.localStorage.set('coinListCache',chinas).then(()=>{
-            this.native.toast_trans('import-text-keystroe-sucess');
-            this.saveWalletList(chinas);
-            //});
-        });
-
     }
 
     getCoinListCache(createdChains) {
@@ -225,52 +214,17 @@ export class WalletImportPage implements OnInit {
         return chinas;
     }
 
-    saveWalletList(subchains) {
-        Config.getMasterWalletIdList().push(this.masterWalletId);
-        this.localStorage.saveCurMasterId({ masterId: this.masterWalletId }).then((data) => {
-            let name = "";
-            if (this.selectedTab === "words") {
-                name = this.mnemonicObj.name;
-                this.accontObj["SingleAddress"] = this.mnemonicObj.SingleAddress;
-            } else if (this.selectedTab === "file") {
-                name = this.importFileObj.name;
-            }
-            let walletObj = this.native.clone(Config.masterWallObj);
-            walletObj["id"] = this.masterWalletId;
-            walletObj["wallname"] = name;
-            walletObj["Account"] = this.accontObj;
-            if (subchains) {
-                walletObj["coinListCache"] = subchains;
-                this.registersubWallet(this.masterWalletId, subchains);
-            }
-            this.localStorage.saveMappingTable(walletObj).then((data) => {
-                let mappingList = this.native.clone(Config.getMappingList());
-                mappingList[this.masterWalletId] = walletObj;
-                this.native.info(mappingList);
-                Config.setMappingList(mappingList);
-                this.native.hideLoading();
-                Config.setCurMasterWalletId(this.masterWalletId);
-                this.native.setRootRouter("/tabs");
-                this.events.publish("wallet:update", this.masterWalletId);
-            });
-
-        });
-    }
-
-    registerWalletListener(masterId, coin) {
-        this.walletManager.registerWalletListener(masterId, coin, (data) => {
-            if (!Config.isResregister(masterId, coin)) {
-                Config.setResregister(masterId, coin, true);
-            }
-            this.events.publish("register:update", masterId, coin, data);
-        });
-    }
-
-    registersubWallet(masterId, chinas) {
-        for (let index in chinas) {
-            let chain = chinas[index];
-            this.registerWalletListener(masterId, chain);
+    saveWalletList() {
+        let name = "";
+        if (this.selectedTab === "words") {
+            name = this.mnemonicObj.name;
+            this.accontObj["singleAddress"] = this.mnemonicObj.singleAddress;
+        } else if (this.selectedTab === "file") {
+            name = this.importFileObj.name;
         }
+
+        Config.masterManager.addMasterWallet(this.masterWalletId, name, this.accontObj);
+
     }
 
     ionViewDidLeave() {
@@ -283,11 +237,7 @@ export class WalletImportPage implements OnInit {
             this.walletManager.importWalletWithOldKeystore(this.masterWalletId,
                 this.keyStoreContent, this.importFileObj.backupPassWord,
                 this.importFileObj.payPassword, webKeyStore, () => {
-                    this.walletManager.createSubWallet(this.masterWalletId, "ELA", 0, () => {
-                        this.native.toast_trans('import-text-world-sucess');
-                        this.registerWalletListener(this.masterWalletId, "ELA");
-                        this.saveWalletList(null);
-                    });
+                    this.createSubWallet('import-text-world-sucess');
                 });
         });
     }

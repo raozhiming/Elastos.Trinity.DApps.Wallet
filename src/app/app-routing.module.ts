@@ -26,7 +26,6 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', loadChildren: './home/home.module#HomePageModule' },
-    { path: 'initialize', loadChildren: './pages/initialize/initialize.module#InitializePageModule' },
     { path: 'launcher', loadChildren: './pages/launcher/launcher.module#LauncherPageModule' },
     { path: 'wallet-create', loadChildren: './pages/wallet/wallet-create/wallet-create.module#WalletCreatePageModule' },
     { path: 'wallet-import', loadChildren: './pages/wallet/wallet-import/wallet-import.module#WalletImportPageModule' },
@@ -54,7 +53,7 @@ const routes: Routes = [
     { path: 'txdetails', loadChildren: './pages/txdetails/txdetails.module#TxdetailsPageModule' },
     { path: 'scancode', loadChildren: './pages/scancode/scancode.module#ScancodePageModule' },
     { path: 'mnemonic-write', loadChildren: './pages/mnemonic/mnemonic-write/mnemonic-write.module#MnemonicWritePageModule' },
-    { path: 'coin/:name/:elaPer/:idChainPer', loadChildren: './pages/coin/coin.module#CoinPageModule' },
+    { path: 'coin/:name', loadChildren: './pages/coin/coin.module#CoinPageModule' },
     { path: 'coin-list', loadChildren: './pages/coin/coin-list/coin-list.module#CoinListPageModule' },
     { path: 'payment-confirm', loadChildren: './pages/coin/payment-confirm/payment-confirm.module#PaymentConfirmPageModule' },
     { path: 'walletlist', loadChildren: './pages/walletlist/walletlist.module#WalletlistPageModule' },
@@ -77,7 +76,7 @@ const routes: Routes = [
     { path: 'modifywalletname', loadChildren: './pages/modifywalletname/modifywalletname.module#ModifywalletnamePageModule' },
     { path: 'exportmnemomic', loadChildren: './pages/exportmnemomic/exportmnemomic.module#ExportmnemomicPageModule' },
     { path: 'checkmnemomic', loadChildren: './pages/checkmnemomic/checkmnemomic.module#CheckmnemomicPageModule' },
-    { path: 'wallet-setting/:id', loadChildren: './pages/wallet/wallet-setting/wallet-setting.module#WalletSettingPageModule' },
+    { path: 'wallet-setting', loadChildren: './pages/wallet/wallet-setting/wallet-setting.module#WalletSettingPageModule' },
 ];
 @NgModule({
     imports: [

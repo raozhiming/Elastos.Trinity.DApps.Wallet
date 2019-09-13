@@ -15,8 +15,8 @@ export class ModifywalletnamePage implements OnInit {
     public walletname: string = "";
     public masterWalletId: string = "1";
     constructor(public route: ActivatedRoute, public native: Native, public localStorage: LocalStorage, public events: Events) {
-        this.masterWalletId = Config.modifyId;
-        this.walletname = Config.getWalletName(this.masterWalletId);
+        this.masterWalletId = Config.modifyId
+        this.walletname = Config.masterManager.masterWallet[this.masterWalletId].name;
     }
 
     ngOnInit() {
@@ -39,30 +39,16 @@ export class ModifywalletnamePage implements OnInit {
             return;
         }
 
-        this.native.showLoading().then(() => {
+        // this.native.showLoading().then(() => {
             this.modifyName();
-        })
+        // })
+
 
     }
 
     modifyName() {
-
-        let walletObj = this.native.clone(Config.masterWallObj);
-        walletObj["id"] = this.masterWalletId;
-        walletObj["Account"] = Config.getAccountType(this.masterWalletId);
-        walletObj["wallname"] = this.walletname;
-        let subWallet = Config.getSubWallet(this.masterWalletId);
-        if (subWallet) {
-            walletObj["coinListCache"] = subWallet;
-        }
-
-        this.localStorage.saveMappingTable(walletObj).then((data) => {
-            let mappingList = this.native.clone(Config.getMappingList());
-            mappingList[this.masterWalletId] = walletObj;
-            Config.setWalletName(this.masterWalletId, this.walletname);
-            Config.setMappingList(mappingList);
-            this.native.hideLoading();
-            this.native.pop();
-        });
+        Config.masterManager.masterWallet[this.masterWalletId].name = this.walletname;
+        Config.masterManager.saveInfos();
+        this.native.pop();
     }
 }

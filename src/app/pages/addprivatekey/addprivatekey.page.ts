@@ -94,15 +94,15 @@ export class AddprivatekeyPage implements OnInit {
             let walletObj = this.native.clone(Config.masterWallObj);
             walletObj["id"] = this.masterWalletId;
             walletObj["wallname"] = this.name;
-            walletObj["Account"] = { "SingleAddress": true, "Type": "Multi-Sign", "InnerType": "Simple" };
+            walletObj["account"] = { "SingleAddress": true, "Type": "Multi-Sign", "InnerType": "Simple" };
             this.localStorage.saveMappingTable(walletObj).then((data) => {
                 let mappingList = this.native.clone(Config.getMappingList());
                 mappingList[this.masterWalletId] = walletObj;
                 this.native.info(mappingList);
                 Config.setMappingList(mappingList);
                 this.native.hideLoading();
-                Config.setCurMasterWalletId(this.masterWalletId);
-                this.native.setRootRouter("/tabs");
+                // Config.setCurMasterWalletId(this.masterWalletId);
+                this.native.setRootRouter("/tabs/tab-home");
                 this.events.publish("wallet:update", this.masterWalletId);
             });
 

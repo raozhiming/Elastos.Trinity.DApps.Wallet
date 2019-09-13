@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -33,6 +33,7 @@ import { LocalStorage } from "./services/Localstorage";
 import { Native } from './services/Native';
 import { WalletManager } from './services/WalletManager';
 import { AppService } from './services/AppService';
+import { MasterManager } from "./services/MasterManager";
 
 @Component({
     selector: 'app-root',
@@ -48,6 +49,7 @@ export class AppComponent {ß
         public walletManager: WalletManager,
         private native: Native,
         private router: Router,
+        public zone: NgZone,
         public appService: AppService
     ) {
         this.initializeApp();
@@ -57,103 +59,9 @@ export class AppComponent {ß
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-            this.walletManager.init();
             this.appService.init();
-            // this.initTranslateConfig();
-            this.init();
-            // this.router.navigate(['/tabs']);
+            this.walletManager.init();
+            Config.masterManager = new MasterManager(this.native, this.localStorage, this.zone, this.walletManager);
         });
     }
-
-
-    init() {
-        //this.initJsPush();
-
-        this.localStorage.getProgress((pdata) => {
-            if (pdata) {
-                Config.perObj = pdata;
-            }
-
-            this.localStorage.getMappingTable((data) => {
-                this.native.info(data);
-                if (data) {
-                    Config.setMappingList(data);
-                }
-                this.router.navigate(['/initialize']);
-            });
-        });
-    }
-
-    // //
-    // onReceiveJG(param) {
-    //   let serialNum = JSON.parse(param)["serialNum"];
-    //   let message1 = this.translate.instant("text-Jpush-kyc-message-1");
-    //   let message2 = this.translate.instant("text-Jpush-kyc-message-2");
-    //   alert(message1 + serialNum + message2);
-    //   //  let serialNum = JSON.parse(param)["serialNum"];
-    //   //  let serids = Config.getSerIds();
-    //   //  let serid = serids[serialNum];
-    //   //  let did = serid["id"];
-    //   //  let appName = serid["appName"];
-    //   //  let appr = serid["appr"];
-    //   //  let idsObj = {};
-    //   //  this.ls.getKycList("kycId").then((val)=>{
-    //   //      if(val == null || val === undefined || val === {} || val === ''){
-    //   //           return;
-    //   //      }
-    //   //   idsObj = JSON.parse(val);
-    //   //   idsObj[did][appName][appr]["order"][serialNum]["status"] = 1;
-    //   //   this.ls.set("kycId",idsObj).then(()=>{
-
-    //   //   });
-    //   //  });
-    // }
-
-    initTranslateConfig() {
-        this.translate.addLangs(["zh", "en"]);
-        this.localStorage.getWalletLanguage((val) => {
-            if (val == null) {
-                let lang = navigator.language.substr(0, 2);
-                let languageObj = {
-                    name: 'English',
-                    isoCode: 'en'
-                };
-                if (lang == 'en') {
-                    languageObj = {
-                        name: 'English',
-                        isoCode: 'en'
-                    };
-                } else if (lang == 'zh') {
-                    languageObj = {
-                        name: '中文（简体）',
-                        isoCode: 'zh'
-                    };
-                }
-                this.localStorage.set("wallet-language", languageObj).then(() => {
-                    // 设置默认语言
-                    this.translate.setDefaultLang(lang);
-                    this.translate.use(lang);
-                    if (lang == 'en') {
-                        this.native.setMnemonicLang("english")
-                    } else if (lang == "zh") {
-                        this.native.setMnemonicLang("chinese");
-                    } else {
-                        this.native.setMnemonicLang("english");
-                    }
-                });
-            } else {
-                let lang = JSON.parse(val)["isoCode"];
-                this.translate.use(lang);
-                if (lang == 'en') {
-                    this.native.setMnemonicLang("english")
-                } else if (lang == "zh") {
-                    this.native.setMnemonicLang("chinese");
-                } else {
-                    this.native.setMnemonicLang("english");
-                }
-            }
-        })
-
-    }
-
 }

@@ -48,8 +48,6 @@ export class CoinPage implements OnInit {
 
     textShow = '';
 
-    elaPer: any;
-    idChainPer: any;
     isShowMore = false;
     MaxCount = 0;
     isNodata: boolean = false;
@@ -89,15 +87,13 @@ export class CoinPage implements OnInit {
         this.route.paramMap.subscribe((params) => {
             this.coinName = params.get("name");
             Config.coinObj.chainId = this.coinName;
-            this.elaPer = params.get("elaPer") || 0;
-            this.idChainPer = params.get("idChainPer") || 0;
             if (this.coinName == 'ELA') {
                 this.textShow = 'text-recharge';
             } else {
                 this.textShow = 'text-withdraw';
             }
-            this.maxHeight = Config.getEstimatedHeight(this.masterWalletId, this.coinName);
-            this.curHeight = Config.getCurrentHeight(this.masterWalletId, this.coinName);
+            // this.maxHeight = Config.getEstimatedHeight(this.masterWalletId, this.coinName);
+            // this.curHeight = Config.getCurrentHeight(this.masterWalletId, this.coinName);
 
             this.initData();
         });

@@ -91,6 +91,8 @@ export class Native {
 
     public go(page: any, options: any = {}) {
         console.log(options);
+        this.hideLoading();
+        this.navCtrl.setDirection('forward');
         this.router.navigate([page], { queryParams: options });
         // this.navCtrl.navigateForward(page, options);
     }
@@ -106,8 +108,11 @@ export class Native {
     }
 
 
-    public setRootRouter(router) {
-        this.navCtrl.navigateRoot(router);
+    public setRootRouter(page: any,  options: any = {}) {
+        this.hideLoading();
+        this.navCtrl.setDirection('root');
+        this.router.navigate([page], { queryParams: options });
+        // this.navCtrl.navigateRoot(router, { queryParams: options });
     }
 
     public getMnemonicLang(): string {

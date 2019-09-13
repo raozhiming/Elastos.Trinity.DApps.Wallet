@@ -3,11 +3,11 @@
 </ion-header>
 <ion-content no-bounce>
     <ion-list>
-        <ion-item *ngFor="let item of items" detail [routerLink]="['/wallet-setting', item.id]" routerDirection="forward">
+        <ion-item *ngFor="let id of masterList" detail (click)="itemSelected(id)">
             <ion-label>
-                <h2>{{ item.wallname }}</h2>
-                <p *ngIf="item['Account']['Type']==='Standard'">{{'text-standard-wallet' | translate}}</p>
-                <p *ngIf="item['Account']['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</p>
+                <h2>{{ masterWallet[id].name }}</h2>
+                <p *ngIf="masterWallet[id]['account']['Type']==='Standard'">{{'text-standard-wallet' | translate}}</p>
+                <p *ngIf="masterWallet[id]['account']['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</p>
             </ion-label>
         </ion-item>
     </ion-list>

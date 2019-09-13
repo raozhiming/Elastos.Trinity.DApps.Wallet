@@ -32,15 +32,14 @@ export class ExprotPrikeyPage implements OnInit {
     };
     public account: any = {};
     onWalletDatainit() {
-        // this.masterWalletId = Config.getCurMasterWalletId();
         this.masterWalletId = Config.modifyId;
-        this.exprotObj.name = Config.getWalletName(this.masterWalletId);
-        this.account = Config.getAccountType(this.masterWalletId);
+        // this.exprotObj.name = Config.getWalletName(this.masterWalletId);
+        this.exprotObj.name = Config.masterManager.masterWallet[this.masterWalletId].name;
+        this.account = Config.masterManager.masterWallet[this.masterWalletId].account;
         this.getMasterWalletBasicInfo();
     }
 
     checkparms() {
-
         if (Util.isNull(this.exprotObj.backupPassWord)) {
             this.native.toast_trans("text-wallet-pwd");
             return false;

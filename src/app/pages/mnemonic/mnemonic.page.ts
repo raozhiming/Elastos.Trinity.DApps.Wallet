@@ -18,9 +18,6 @@ export class MnemonicPage implements OnInit {
     mnemonicStr: string;
     mnemonicPassword: string = "";
     mnemonicRepassword: string = "";
-    payPassword: string;
-    name: string;
-    singleAddress: boolean = false;
     defaultCointype = "Ela";
     isSelect: boolean = false;
 
@@ -35,9 +32,6 @@ export class MnemonicPage implements OnInit {
     }
 
     init() {
-        this.name = Config.walletObj.name;
-        this.singleAddress = Config.walletObj.singleAddress;
-        this.payPassword = Config.walletObj.payPassword;
 
         this.masterWalletId = Config.uuid(6, 16);
         this.walletManager.generateMnemonic(this.native.getMnemonicLang(), (ret) => {
@@ -68,54 +62,7 @@ export class MnemonicPage implements OnInit {
             this.mnemonicRepassword = "";
         }
 
-        if (Config.walletObj.isMulti) {
-            this.goMnemonicWrite();
-            return;
-        }
-
-        this.native.showLoading().then(() => {
-            this.walletManager.createMasterWallet(this.masterWalletId, this.mnemonicStr, this.mnemonicPassword, this.payPassword, this.singleAddress, () => {
-                this.createSubWallet('ELA');
-            });
-        });
-
-    }
-
-    createSubWallet(chainId) {
-        // Sub Wallet
-        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, () => {
-            let walletObj = this.native.clone(Config.masterWallObj);
-            walletObj["id"] = this.masterWalletId;
-            walletObj["wallname"] = this.name;
-            walletObj["Account"] = { "SingleAddress": this.singleAddress, "Type": "Standard" };
-            this.localStorage.saveMappingTable(walletObj).then(() => {
-                let mappingList = this.native.clone(Config.getMappingList());
-                mappingList[this.masterWalletId] = walletObj;
-                this.native.info(mappingList);
-                Config.setMappingList(mappingList);
-                this.saveWalletList();
-                this.registerWalletListener(this.masterWalletId, chainId);
-
-            });
-        });
-    }
-
-    saveWalletList() {
-        Config.getMasterWalletIdList().push(this.masterWalletId);
-        this.localStorage.saveCurMasterId({ masterId: this.masterWalletId }).then((data) => {
-            this.native.hideLoading();
-            Config.setCurMasterWalletId(this.masterWalletId);
-            this.goMnemonicWrite();
-        });
-    }
-
-    registerWalletListener(masterId, coin) {
-        this.walletManager.registerWalletListener(masterId, coin, (data) => {
-            if (!Config.isResregister(masterId, coin)) {
-                Config.setResregister(masterId, coin, true);
-            }
-            this.events.publish("register:update", masterId, coin, data);
-        });
+        this.goMnemonicWrite();
     }
 
     onChangeSelect(select) {
@@ -123,6 +70,7 @@ export class MnemonicPage implements OnInit {
     }
 
     goMnemonicWrite() {
+        Config.walletObj.masterId = this.masterWalletId;
         Config.walletObj.mnemonicStr = this.mnemonicStr;
         Config.walletObj.mnemonicList = this.mnemonicList;
         Config.walletObj.mnemonicPassword = this.mnemonicPassword;
