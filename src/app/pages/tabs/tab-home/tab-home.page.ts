@@ -45,7 +45,6 @@ export class TabHomePage implements OnInit {
     Config = Config;
 
     constructor(public native: Native) {
-
     }
 
     ngOnInit() {
@@ -72,7 +71,7 @@ export class TabHomePage implements OnInit {
     }
 
     goSetting() {
-        Config.modifyId = this.masterWalletId;
+        Config.modifyId = Config.getCurMasterWalletId();
         this.native.go("/wallet-setting");
         event.stopPropagation();
         return false;
@@ -81,7 +80,7 @@ export class TabHomePage implements OnInit {
     doRefresh(event) {
         //this.init();
         // this.walletManager.getWalletBalance(this.masterWalletId, "ELA");
-        Config.masterManager.getWalletBalance(this.masterWalletId, "ELA");
+        Config.masterManager.getWalletBalance(Config.getCurMasterWalletId(), "ELA");
         setTimeout(() => {
             event.target.complete();
         }, 1000);
