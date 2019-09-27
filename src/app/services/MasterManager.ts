@@ -71,7 +71,7 @@ export class MasterManager {
             let id = idList[i];
             if (this.masterInfos[id]) {
                 this.masterWallet[id] = this.masterInfos[id];
-                this.getAllSubWallets(id);
+                this.getMasterWalletBasicInfo(id);
             }
         }
     }
@@ -91,6 +91,13 @@ export class MasterManager {
         this.native.setRootRouter('/launcher');
     }
 
+    getMasterWalletBasicInfo(masterId, isAdd = false) {
+        this.walletManager.getMasterWalletBasicInfo(masterId, (ret) => {
+            this.masterWallet[masterId].account = ret;
+            this.getAllSubWallets(masterId, isAdd)
+        });
+    }
+
     public getAllSubWallets(masterId, isAdd = false) {
         this.walletManager.getAllSubWallets(masterId, (data) => {
             this.masterWallet[masterId].chainList = [];
@@ -104,7 +111,7 @@ export class MasterManager {
 
             if (this.curMasterId == "-1") {
                 this.localStorage.getCurMasterId((data) => {
-                    if (this.masterList.indexOf(data["masterId"]) > -1) {
+                    if (data && data["masterId"] && this.masterList.indexOf(data["masterId"]) > -1) {
                         this.curMasterId = data["masterId"]
                     }
                     else {
@@ -133,10 +140,10 @@ export class MasterManager {
         });
     }
 
-    public addMasterWallet(id, name, account) {
-        this.masterWallet[id] = { name: name, account: account };
+    public addMasterWallet(id, name) {
+        this.masterWallet[id] = { name: name};
         this.masterList.push(id);
-        this.getAllSubWallets(id, true);
+        this.getMasterWalletBasicInfo(id, true);
     }
 
     destroyMasterWallet(id) {
@@ -215,8 +222,6 @@ export class MasterManager {
     }
 
     public handleSubWalletCallback(result) {
-        console.log("----handleSubWalletCallback----");
-        console.log(result);;
         let masterId = result["MasterWalletID"];
         let chainId = result["ChaiID"];
         let chain = this.masterWallet[masterId].subWallet[chainId];
@@ -290,129 +295,6 @@ export class MasterManager {
 
         this.localStorage.setProgress(this.progress);
     }
-
-    // getAllsubWallet(masterId) {
-    //     this.curMasterId = masterId;
-    //     this.walletManager.getAllSubWallets(masterId, (data) => {
-    //         for (let index in data) {
-    //             this.addSubWallet(data[index]);
-    //         }
-    //     });
-    // }
-
-    // public addSubWallet(chainId) {
-    //     this.subWallet[chainId] = { name: chainId, balance: 0, maxHeight: 0, curHeight: 0 };
-    //     this.subWalletNameList.push(chainId);
-    //     this.walletManager.registerWalletListener(this.curMasterId, chainId, (ret) => {
-    //         this.zone.run(() => {
-    //             this.handleSubWalletCallback(ret);
-    //         });
-    //     });
-    //     this.getBalance(chainId);
-    // }
-
-    // registerWalletListener(masterId, coin) {
-    //     this.walletManager.registerWalletListener(masterId, coin, (data) => {
-    //         console.log("---");
-    //         Config.walletObjs.handleSubWalletCallback(data);
-    //         console.log(data);
-    //         // this.events.publish("register:update", masterId, coin, data);
-    //     });
-    // }
-
-    // public removeSubWallet(chainId) {
-    //     this.zone.run(() => {
-    //         this.subWallet[chainId] = null;
-    //         for (var i = 0; i < this.subWalletNameList.length; i++) {
-    //             if (this.subWalletNameList[i] == chainId) {
-    //                 this.subWalletNameList.splice(i, 1);
-    //                 break;
-    //             }
-    //         }
-    //         console.log(this.subWalletNameList);
-    //     });
-    //     // this.walletManager.removeWalletListener(this.curMasterId, chainId, (ret) => {
-    //     // });
-    // }
-
-    // //handle callback
-    // public getBalance(chainId) {
-    //     this.walletManager.getBalance(this.curMasterId, chainId, Config.total, (data) => {
-    //         this.zone.run(() => {
-    //             this.subWallet[chainId].balance = parseInt(data) / Config.SELA;
-    //         });
-    //     });
-    // }
-
-    // public handleSubWalletCallback(result) {
-    //     console.log("----handleSubWalletCallback----");
-    //     console.log(result);;
-    //     if (result["MasterWalletID"] !== this.curMasterId) {
-    //         return;
-    //     }
-    //     let chainId = result["ChaiID"];
-    //     let chain = this.subWallet[result["ChaiID"]];
-    //     switch (result["Action"]) {
-    //         case "OnTransactionStatusChanged":
-    //             if (result['confirms'] == 1) {
-    //                 this.getBalance(chainId);
-    //             }
-    //             break;
-    //         case "OnBlockSyncStarted":
-    //             alert(result["estimatedHeight"]);
-    //             break;
-    //         case "OnBlockSyncProgress":
-    //             this.zone.run(() => {
-    //                 chain.maxHeight = result["estimatedHeight"];
-    //                 chain.curHeight = result["currentBlockHeight"];
-    //             });
-    //             break;
-    //         case "OnBlockSyncStopped":
-    //             // alert(result["estimatedHeight"]);
-    //             break;
-    //         case "OnBalanceChanged":
-    //             if (!Util.isNull(result["Balance"])) {
-    //                 this.zone.run(() => {
-    //                     this.subWallet[chainId].balance = parseInt(result["Balance"]) / Config.SELA;
-    //                 });
-    //             }
-    //             break;
-    //         case "OnTxPublished":
-    //             this.OnTxPublished(result);
-    //             break;
-    //         case "OnAssetRegistered":
-    //             break;
-    //         case "OnConnectStatusChanged":
-    //             break;
-    //     }
-    // }
-
-    // OnTxPublished(data) {
-    //     let hash = data["hash"];
-    //     let result = JSON.parse(data["result"]);
-    //     let code = result["Code"];
-    //     let tx = "txPublished-"
-    //     switch (code) {
-    //         case 0:
-    //         case 18:
-    //             // this.popupProvider.ionicAlert_PublishedTx_sucess('confirmTitle', tx + code, hash);
-    //             break;
-    //         case 1:
-    //         case 16:
-    //         case 17:
-    //         case 22:
-    //         case 64:
-    //         case 65:
-    //         case 66:
-    //         case 67:
-    //             // this.popupProvider.ionicAlert_PublishedTx_fail('confirmTitle', tx + code, hash);
-    //             break;
-    //     }
-    // }
-
-
-
-
 }
 
 

@@ -55,7 +55,6 @@ const routes: Routes = [
     { path: 'mnemonic-write', loadChildren: './pages/mnemonic/mnemonic-write/mnemonic-write.module#MnemonicWritePageModule' },
     { path: 'coin/:name', loadChildren: './pages/coin/coin.module#CoinPageModule' },
     { path: 'coin-list', loadChildren: './pages/coin/coin-list/coin-list.module#CoinListPageModule' },
-    { path: 'payment-confirm', loadChildren: './pages/coin/payment-confirm/payment-confirm.module#PaymentConfirmPageModule' },
     { path: 'walletlist', loadChildren: './pages/walletlist/walletlist.module#WalletlistPageModule' },
     { path: 'wallet-manager', loadChildren: './pages/wallet/wallet-manager/wallet-manager.module#WalletManagerPageModule' },
     { path: 'contacts', loadChildren: './pages/contacts/contacts.module#ContactsPageModule' },

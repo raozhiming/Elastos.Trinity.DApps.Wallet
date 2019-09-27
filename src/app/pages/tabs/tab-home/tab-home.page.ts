@@ -23,6 +23,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
+import { AppService } from '../../../services/AppService';
 
 @Component({
     selector: 'app-tab-home',
@@ -30,27 +31,20 @@ import { Native } from '../../../services/Native';
     styleUrls: ['./tab-home.page.scss'],
 })
 export class TabHomePage implements OnInit {
-    masterWalletId: string = "1";
-    elaPer: any;
-    idChainPer: any;
-    walletName = 'myWallet';
     showOn: boolean = true;
-    ElaObj = { "name": "ELA", "balance": 0 };
-    coinList = [];
-    account: any = {};
-    elaMaxHeight: any;
-    elaCurHeight: any;
-    idChainMaxHeight: any;
-    idChainCurHeight: any;
     Config = Config;
 
-    constructor(public native: Native) {
+    constructor(public native: Native,
+        public appService: AppService) {
     }
 
     ngOnInit() {
     }
 
     ionViewWillEnter() {
+        if (Config.getCurMasterWalletId() != "-1") {
+            this.appService.setIntentListener();
+        }
     }
 
     ionViewDidLeave() {

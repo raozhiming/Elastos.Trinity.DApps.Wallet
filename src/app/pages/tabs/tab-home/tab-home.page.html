@@ -15,8 +15,8 @@
         <div id="home-top-box" [routerLink]="['/walletlist']" routerDirection="forward">
             <div id="wallet-bar">
                 <div id="wallet-name" class="line-limit-length"> {{Config.curMaster.name}}
-                    <span *ngIf="account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
-                    <span *ngIf="account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
+                    <span *ngIf="Config.curMaster.account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
+                    <span *ngIf="Config.curMaster.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
                 </div>
                 <button (click)="goSetting()">{{'text-wallet-manager' | translate}}</button>
             </div>

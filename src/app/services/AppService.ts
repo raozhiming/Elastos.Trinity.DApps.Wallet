@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Native } from './Native';
+import { Config } from './Config';
 
 declare let appService: any;
 let myService = null;
@@ -28,6 +29,7 @@ export class AppService {
     public lastList: any = [];
     public rows: any = [];
     private currentLang: string = null;
+    private isReceiveIntentReady = false;
 
     constructor(private translate: TranslateService,
         public native: Native) {
@@ -45,6 +47,13 @@ export class AppService {
         appService.setListener(this.onReceive);
         this.getLanguage();
         // alert(screen.width + " + " + document.documentElement.clientWidth + " + " + window.innerWidth + " " + window.devicePixelRatio);
+    }
+
+    setIntentListener() {
+        if (!this.isReceiveIntentReady) {
+            this.isReceiveIntentReady = true;
+            appService.setIntentListener(this.onReceiveIntent);
+        }
     }
 
 
@@ -117,4 +126,34 @@ export class AppService {
                 break;
         }
     }
+
+    onReceiveIntent(ret) {
+        console.log("Intent receive message:" + ret.action + ". params: " + ret.params + ". from: " + ret.fromId);
+        console.log(ret);
+        switch (ret.action) {
+            case "pay":
+                    Config.coinObj = {};
+                    Config.coinObj.chainId = "ELA";
+                    Config.coinObj.walletInfo = Config.curMaster.account;
+                    Config.coinObj.transfer = {
+                        toAddress: ret.params.toAddress,
+                        amount: ret.params.amount,
+                        memo: ret.params.memo,
+                        fee: 0,
+                        payPassword: '',
+                        intentId: ret.intentId,
+                        action: ret.action,
+                        from: ret.from,
+                    };
+                    Config.coinObj.transfer.type = "payment-confirm";
+                    myService.native.go("/transfer");
+
+                break;
+        }
+    }
+
+    sendIntentRespone(action, result, intentId) {
+        appService.sendIntentRespone(action, result, intentId);
+    }
+
 }

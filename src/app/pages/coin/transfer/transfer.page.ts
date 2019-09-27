@@ -27,10 +27,9 @@ import { ActivatedRoute } from '@angular/router';
 import { LocalStorage } from '../../../services/Localstorage';
 import { Util } from "../../../services/Util";
 import { Config } from '../../../services/Config';
-import { IDManager } from "../../../services/IDManager";
-import { ApiUrl } from "../../../services/ApiUrl"
 import { ModalController, Events } from '@ionic/angular';
 import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
+import { AppService } from '../../../services/AppService';
 
 @Component({
     selector: 'app-transfer',
@@ -63,8 +62,9 @@ export class TransferPage implements OnInit {
     useVotedUTXO: boolean = false;
 
     transFunction: any;
+    readonly: boolean = false;
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
         public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
         this.init();
     }
@@ -86,6 +86,8 @@ export class TransferPage implements OnInit {
         });
         this.masterWalletId = Config.getCurMasterWalletId();
         switch (this.transfer.type) {
+            case "payment-confirm":
+                this.readonly = true;
             case "transfer":
                 this.transFunction = this.createTransaction;
                 break;
@@ -250,6 +252,9 @@ export class TransferPage implements OnInit {
             this.native.hideLoading();
             this.native.toast_trans('send-raw-transaction');
             this.native.setRootRouter("/tabs");
+            if (this.transfer.type == "payment-confirm") {
+                this.appService.sendIntentRespone(this.transfer.action, {result: "sent"}, this.transfer.intentId);
+            }
         })
     }
 }

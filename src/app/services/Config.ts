@@ -46,7 +46,10 @@ export class Config {
     // public static curMaster: any = {};
     public static walletInfos: any = {};
 
-    public static curMaster: any = { name: "myWallet", subWallet: { "ELA": { balance: 0 } }, chainList: [] };
+    public static curMaster: any = {
+        name: "myWallet", subWallet: { "ELA": { balance: 0 } }, chainList: [],
+        account: { 'Type': 'Standard' }
+    };
     public static masterManager: any = {};
 
     public static SELA = 100000000;
