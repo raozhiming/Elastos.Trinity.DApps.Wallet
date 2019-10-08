@@ -29,7 +29,7 @@
         "ionic@4.12.0"
     ],
     "platform": [
-        "andriod",
+        "android",
         "ios"
     ],
     "intent_filters": [
