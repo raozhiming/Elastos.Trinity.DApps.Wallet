@@ -152,8 +152,8 @@ export class AppService {
         }
     }
 
-    sendIntentRespone(action, result, intentId) {
-        appService.sendIntentRespone(action, result, intentId);
+    sendIntentResponse(action, result, intentId) {
+        appService.sendIntentResponse(action, result, intentId);
     }
 
 }

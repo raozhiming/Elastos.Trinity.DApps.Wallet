@@ -253,7 +253,7 @@ export class TransferPage implements OnInit {
             this.native.toast_trans('send-raw-transaction');
             this.native.setRootRouter("/tabs");
             if (this.transfer.type == "payment-confirm") {
-                this.appService.sendIntentRespone(this.transfer.action, {result: "sent"}, this.transfer.intentId);
+                this.appService.sendIntentResponse(this.transfer.action, {result: "sent"}, this.transfer.intentId);
             }
         })
     }
