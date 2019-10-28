@@ -51,7 +51,6 @@ export class AddprivatekeyPage implements OnInit {
 
     saomiao(index) {
         this.curIndex = index;
-        console.log("saomiao=" + index);
         this.native.go("/scan", { "pageType": "6" });
     }
 

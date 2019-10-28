@@ -33,7 +33,6 @@ export class PaymentboxComponent implements OnInit {
         }
 
         this.transfer = this.navParams.data;
-        console.log(this.transfer);
         if (this.transfer["rate"]) {
             this.toAddress = this.transfer["accounts"];
         } else {

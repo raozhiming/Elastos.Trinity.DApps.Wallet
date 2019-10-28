@@ -19,12 +19,10 @@ export class ContactsPage implements OnInit {
         this.route.queryParams.subscribe((data) => {
             this.params = data || {};
         });
-        console.log(this.params);
         if (typeof this.params["exatOption"] == "string") {
             this.params["exatOption"] = JSON.parse(this.params["exatOption"]);
             this.isShow = this.params["exatOption"]["hideButton"] || false;
         }
-        console.log(this.isShow);
         this.init();
     }
 

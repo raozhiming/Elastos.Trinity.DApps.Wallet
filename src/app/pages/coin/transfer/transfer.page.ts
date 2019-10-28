@@ -77,7 +77,7 @@ export class TransferPage implements OnInit {
     // }
 
     init() {
-        console.log(Config.coinObj);
+        // console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
         this.chainId = Config.coinObj.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
@@ -113,7 +113,7 @@ export class TransferPage implements OnInit {
     }
 
     rightHeader() {
-        console.log(Config.coinObj.transfer);
+        // console.log(Config.coinObj.transfer);
         this.native.go("/scan", { "pageType": "1" });
     }
 
@@ -168,7 +168,6 @@ export class TransferPage implements OnInit {
 
     async openPayModal(transfer) {
         let props = this.native.clone(transfer);
-        console.log(props);
         const modal = await this.modalCtrl.create({
             component: PaymentboxComponent,
             componentProps: props
@@ -177,7 +176,7 @@ export class TransferPage implements OnInit {
             if (params.data) {
                 this.native.showLoading().then(() => {
                     this.transfer.payPassword = params.data;
-                    console.log(params.data);
+                    // console.log(params.data);
                     this.singTx();
                 });
             }

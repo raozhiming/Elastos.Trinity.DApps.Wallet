@@ -69,7 +69,7 @@ export class AppService {
         var me = this;
         appService.getLocale(
             ret => {
-                console.log(ret);
+                // console.log(ret);
                 me.setCurLang(ret.currentLang);
                 me.setDefaultLang(ret.defaultLang);
                 // me.setting.setSystemLang(ret.systemLang);
@@ -108,12 +108,12 @@ export class AppService {
     }
 
     onReceive(ret) {
-        console.log("ElastosJS  HomePage receive message:" + ret.message + ". type: " + ret.type + ". from: " + ret.from);
+        // console.log("ElastosJS  HomePage receive message:" + ret.message + ". type: " + ret.type + ". from: " + ret.from);
         var params: any = ret.message;
         if (typeof (params) == "string") {
             params = JSON.parse(params);
         }
-        console.log(params);
+        // console.log(params);
         switch (ret.type) {
             case MessageType.IN_REFRESH:
                 switch (params.action) {
@@ -128,8 +128,8 @@ export class AppService {
     }
 
     onReceiveIntent(ret) {
-        console.log("Intent receive message:" + ret.action + ". params: " + ret.params + ". from: " + ret.fromId);
-        console.log(ret);
+        // console.log("Intent receive message:" + ret.action + ". params: " + ret.params + ". from: " + ret.fromId);
+        // console.log(ret);
         switch (ret.action) {
             case "pay":
                     Config.coinObj = {};

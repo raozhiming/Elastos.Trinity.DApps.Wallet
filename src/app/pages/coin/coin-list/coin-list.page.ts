@@ -56,11 +56,11 @@ export class CoinListPage implements OnInit {
             for (let index in data) {
                 let chain = data[index];
                 let isOpen = false;
-                if (subWallet) {
-                    isOpen = chain in subWallet ? true : false;
-                }
                 if (chain == "ELA") {
                     isOpen = true;
+                }
+                else if (subWallet) {
+                    isOpen =  subWallet.indexOf(chain) != -1;
                 }
                 this.coinList.push({ name: chain, open: isOpen });
             }

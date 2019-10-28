@@ -47,9 +47,9 @@ export class RecordinfoPage implements OnInit {
                 let transactions = allTransaction['Transactions'];
                 let transaction = transactions[0];
                 this.inputs = this.objtoarr(transaction["Inputs"]);
-                console.log("===this===" + JSON.stringify(this.inputs));
+                // console.log("===this===" + JSON.stringify(this.inputs));
                 this.outputs = this.objtoarr(transaction["Outputs"]);
-                console.log("===this===" + JSON.stringify(this.outputs));
+                // console.log("===this===" + JSON.stringify(this.outputs));
                 let timestamp = transaction['Timestamp'] * 1000;
                 let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
                 let status = '';

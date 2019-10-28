@@ -74,7 +74,7 @@ export class WalletCreatePage implements OnInit {
         Config.walletObj.payPassword = this.wallet.payPassword;
         Config.walletObj.name = this.wallet.name;
         Config.walletObj.singleAddress = this.wallet.singleAddress;
-        console.log(Config.walletObj);
+        // console.log(Config.walletObj);
         this.native.go("/mnemonic", params);
     }
 }

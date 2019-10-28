@@ -90,7 +90,7 @@ export class Native {
     }
 
     public go(page: any, options: any = {}) {
-        console.log(options);
+        // console.log(options);
         this.hideLoading();
         this.navCtrl.setDirection('forward');
         this.router.navigate([page], { queryParams: options });

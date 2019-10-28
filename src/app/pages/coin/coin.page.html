@@ -12,8 +12,9 @@
     </ion-refresher>
 
     <div class="coin-info-top-box">
-        <h2>{{coinCount}}</h2>
-        <p> {{curHeight}}/{{maxHeight}}</p>
+        <h2>{{Config.curMaster.subWallet[chainId].balance}}</h2>
+        <p>{{Config.curMaster.subWallet[chainId].curHeight}}/{{Config.curMaster.subWallet[chainId].maxHeight}}</p>
+
     </div>
     <div id="nodata" *ngIf="isNodata">{{'no-tx-record' | translate }}</div>
 
@@ -32,37 +33,7 @@
             </ion-item>
         </div>
     </ion-list>
-
-    <!-- <div class='address-whole' *ngIf="!isNodata">
-        <ion-grid style="margin-bottom: 60px">
-            <ion-row>
-                <ion-col col-12 class="row-title">
-                    {{ 'coin-recent-transfer' | translate }}
-                </ion-col>
-            </ion-row>
-            <ion-row *ngFor="let item of transferList; let i = index" (click)="onItem(item)" class="hang"
-                [ngClass]="{'bottom-border': i==transferList.length-1}">
-                <ion-col col-2 align-self-center>
-                    <img src={{item.payStatusIcon}} alt="" class="transfer-list-img">
-                </ion-col>
-                <ion-col col-5 align-self-center class="text-left">
-                    <span class="font-size-2">{{item.status | translate}}</span> <span class="transfer-list-date"
-                        *ngIf="item.timestamp!='0'" class="font-size-2"> {{item.datetime}} </span>
-                </ion-col>
-                <ion-col col-5 align-self-center class="text-right font-size-1">
-                    {{item.fuhao}} {{item.resultAmount}}
-                </ion-col>
-            </ion-row>
-
-            <ion-row>
-                <ion-col col-12>
-                    <p class="more" (click)="clickMore()" *ngIf="isShowMore">{{ 'click-to-load-more' | translate }}</p>
-                </ion-col>
-            </ion-row>
-
-        </ion-grid>
-
-    </div> -->
+    <div class="more" (click)="clickMore()" *ngIf="isShowMore">{{ 'click-to-load-more' | translate }}</div>
 </ion-content>
 <ion-footer>
     <div class="coin-bottom">

@@ -24,7 +24,6 @@ export class CoinSelectPage implements OnInit {
     init() {
         this.masterWalletInfo = Config.coinObj.walletInfo;
         this.coinList = Config.getSubWalletList();
-        console.log(this.coinList.length);
         if (this.coinList.length > 0) {
             this.isNoData = false;
         }

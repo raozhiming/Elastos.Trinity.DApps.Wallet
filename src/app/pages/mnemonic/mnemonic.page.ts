@@ -74,7 +74,7 @@ export class MnemonicPage implements OnInit {
         Config.walletObj.mnemonicStr = this.mnemonicStr;
         Config.walletObj.mnemonicList = this.mnemonicList;
         Config.walletObj.mnemonicPassword = this.mnemonicPassword;
-        console.log(Config.walletObj);
+        // console.log(Config.walletObj);
         this.native.go("/mnemonic-write");
     }
 }

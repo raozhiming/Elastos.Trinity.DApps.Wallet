@@ -42,7 +42,7 @@ export class CoinPage implements OnInit {
 
     coinId = 0;
 
-    coinName = "";
+    chainId = "";
     pageNo = 0;
     start = 0;
 
@@ -55,18 +55,12 @@ export class CoinPage implements OnInit {
     public jiajian: any = "";
     public votedCount = 0;
 
-    maxHeight: any;
-    curHeight: any;
+    Config = Config;
 
     constructor(public route: ActivatedRoute,
         public walletManager: WalletManager,
         public native: Native,
         public events: Events) {
-        //this.init();
-        this.pageNo = 0;
-        this.start = 0;
-        this.MaxCount = 0;
-        this.transferList = [];
         this.init();
     }
     ionViewWillEnter() {
@@ -78,22 +72,20 @@ export class CoinPage implements OnInit {
     }
     init() {
         Config.coinObj = {};
+
         this.masterWalletId = Config.getCurMasterWalletId();
         this.walletManager.getMasterWalletBasicInfo(this.masterWalletId, (ret) => {
-            console.log(ret);
             Config.coinObj.walletInfo = ret;
         });
 
         this.route.paramMap.subscribe((params) => {
-            this.coinName = params.get("name");
-            Config.coinObj.chainId = this.coinName;
-            if (this.coinName == 'ELA') {
+            this.chainId = params.get("name");
+            Config.coinObj.chainId = this.chainId;
+            if (this.chainId == 'ELA') {
                 this.textShow = 'text-recharge';
             } else {
                 this.textShow = 'text-withdraw';
             }
-            // this.maxHeight = Config.getEstimatedHeight(this.masterWalletId, this.coinName);
-            // this.curHeight = Config.getCurrentHeight(this.masterWalletId, this.coinName);
 
             this.initData();
         });
@@ -103,21 +95,22 @@ export class CoinPage implements OnInit {
     }
 
     initData() {
-        this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.total, (ret) => {
-            this.coinCount = ret / Config.SELA;
-            // Config.coinObj.balance = ret;
-        });
+        // if (this.chainId === "ELA") {
+        //     this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.voted, (ret) => {
+        //         this.votedCount = ret / Config.SELA;
+        //     });
+        // }
 
-        if (this.coinName === "ELA") {
-            this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.voted, (ret) => {
-                this.votedCount = ret / Config.SELA;
-            });
-        }
+        this.pageNo = 0;
+        this.start = 0;
+        this.MaxCount = 0;
+        this.transferList = [];
+
         this.getAllTx();
     }
 
     getAllTx() {
-        this.walletManager.getAllTransaction(this.masterWalletId, this.coinName, this.start, '', (ret) => {
+        this.walletManager.getAllTransaction(this.masterWalletId, this.chainId, this.start, '', (ret) => {
             let allTransaction = ret;
             let transactions = allTransaction['Transactions'];
             this.MaxCount = allTransaction['MaxCount'];
@@ -141,8 +134,6 @@ export class CoinPage implements OnInit {
             if (this.MaxCount <= 20) {
                 this.isShowMore = false;
             }
-
-            console.log(transactions);
 
             for (let key in transactions) {
                 let transaction = transactions[key];
@@ -197,11 +188,11 @@ export class CoinPage implements OnInit {
     }
 
     onItem(item) {
-        this.native.go("/recordinfo", { chainId: this.coinName, txId: item.txId });
+        this.native.go("/recordinfo", { chainId: this.chainId, txId: item.txId });
     }
 
     onNext(type) {
-        Config.coinObj.chainId = this.coinName;
+        Config.coinObj.chainId = this.chainId;
         Config.coinObj.transfer = {
             toAddress: '',
             amount: '',
@@ -218,7 +209,7 @@ export class CoinPage implements OnInit {
                 this.native.go("/transfer");
                 break;
             case 3:
-                if (this.coinName == 'ELA') {
+                if (this.chainId == 'ELA') {
                     Config.coinObj.transfer.type = "recharge";
                     var coinList = Config.getSubWalletList();
                     if (coinList.length == 1) {
@@ -249,7 +240,7 @@ export class CoinPage implements OnInit {
     }
 
     doRefresh(event) {
-        this.walletManager.getBalance(this.masterWalletId, this.coinName, Config.total, (ret) => {
+        this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.total, (ret) => {
             this.coinCount = ret / Config.SELA;
         });
         this.pageNo = 0;
