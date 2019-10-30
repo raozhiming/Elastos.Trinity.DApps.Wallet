@@ -11,7 +11,7 @@
             </ion-buttons>
         </ion-item>
         <ion-item>
-            <ion-input type="text" placeholder="{{ 'text-receiver-address' | translate}}" readonly="readonly"
+            <ion-input type="text" placeholder="{{ 'text-receiver-address' | translate}}" [readonly]="readonly"
                 [(ngModel)]="transfer.toAddress"></ion-input>
         </ion-item>
         <ion-item>
@@ -25,7 +25,7 @@
         </ion-item>
         <ion-item>
             <ion-input type="text" placeholder="{{ 'text-price' | translate}}" [(ngModel)]="transfer.amount"
-                readonly="readonly">
+                [readonly]="readonly">
             </ion-input>
         </ion-item>
         <ion-item>
@@ -33,7 +33,7 @@
         </ion-item>
         <ion-item>
             <ion-input type="text" placeholder="{{ 'text-memo' | translate}}" [(ngModel)]="transfer.memo"
-                readonly="readonly"></ion-input>
+                [readonly]="readonly"></ion-input>
         </ion-item>
     </ion-list>
 </ion-content>
