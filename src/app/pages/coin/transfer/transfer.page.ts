@@ -86,6 +86,10 @@ export class TransferPage implements OnInit {
         });
         this.masterWalletId = Config.getCurMasterWalletId();
         switch (this.transfer.type) {
+            case "vote-UTXO":
+                this.transFunction = this.createVoteProducerTransaction;
+                this.transfer.amount = this.balance;
+                break;
             case "payment-confirm":
                 this.readonly = true;
             case "transfer":
@@ -233,6 +237,24 @@ export class TransferPage implements OnInit {
             });
     }
 
+    createVoteProducerTransaction() {
+        let toAmount = this.accMul(this.transfer.amount, Config.SELA);
+        if (this.transfer.toAddress == "default") {
+            this.transfer.toAddress = "";
+        }
+
+        this.walletManager.createVoteProducerTransaction(this.masterWalletId, this.chainId,
+            this.transfer.toAddress,
+            toAmount,
+            this.transfer.publicKeys,
+            this.transfer.memo,
+            true,
+            (data) => {
+                this.rawTransaction = data;
+                this.openPayModal(this.transfer);
+            });
+    }
+
     singTx() {
         this.walletManager.signTransaction(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.payPassword, (ret) => {
             if (this.walletInfo["Type"] === "Standard") {
@@ -251,9 +273,10 @@ export class TransferPage implements OnInit {
             this.native.hideLoading();
             this.native.toast_trans('send-raw-transaction');
             this.native.setRootRouter("/tabs");
-            if (this.transfer.type == "payment-confirm") {
-                this.appService.sendIntentResponse(this.transfer.action, {result: "sent"}, this.transfer.intentId);
+            if (this.transfer.type == "payment-confirm" || this.transfer.type == "vote-UTXO") {
+                this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
             }
+            console.log(ret.TxHash);
         })
     }
 }

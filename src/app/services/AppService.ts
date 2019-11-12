@@ -149,6 +149,24 @@ export class AppService {
                     myService.native.go("/transfer");
 
                 break;
+                case "dposvotetransaction":
+                    Config.coinObj = {};
+                    Config.coinObj.chainId = "ELA";
+                    Config.coinObj.walletInfo = Config.curMaster.account;
+                    Config.coinObj.transfer = {
+                        toAddress: "default",
+                        publicKeys: ret.params.publicKeys,
+                        memo: "",
+                        fee: 0,
+                        payPassword: '',
+                        intentId: ret.intentId,
+                        action: ret.action,
+                        from: ret.from,
+                    };
+                    Config.coinObj.transfer.type = "vote-UTXO";
+                    myService.native.go("/transfer");
+
+                break;
         }
     }
 

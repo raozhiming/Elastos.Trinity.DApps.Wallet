@@ -6,7 +6,7 @@
         </p>
 
         <ion-list>
-            <ion-item>
+            <ion-item *ngIf="toAddress!=''">
                 <ion-label class="left">{{'transfer-address' | translate}}:</ion-label>
                 <ion-label class="right" id="address" slot="end">{{toAddress}}</ion-label>
             </ion-item>

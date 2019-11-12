@@ -49,7 +49,10 @@ export class MasterManager {
 
     init() {
         this.localStorage.getMasterInfos((infos) => {
-            this.masterInfos = infos;
+            if (infos != null) {
+                this.masterInfos = infos;
+            }
+
             this.localStorage.getProgress((progress) => {
                 if (progress) {
                     this.progress = progress;
@@ -75,9 +78,6 @@ export class MasterManager {
             }
         }
     }
-
-
-
 
     public errorHandle(error) {
         this.native.hideLoading();
