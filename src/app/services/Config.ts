@@ -137,12 +137,7 @@ export class Config {
     }
 
     public static getSubWallet(id) {
-        if (this.walletInfos[id]) {
-            return this.walletInfos[id]["coinListCache"] || null;
-        }
-        else {
-            return null;
-        }
+        return Config.masterManager.masterWallet[id].chainList || null;
     }
 
     public static getSubWalletList() {
@@ -150,12 +145,14 @@ export class Config {
         let mastId = Config.getCurMasterWalletId();
         let subwallet = Config.getSubWallet(mastId);
         if (subwallet != null) {
-            for (let coin in subwallet) {
+            for (let index in subwallet) {
+                let coin = subwallet[index];
                 if (coin != 'ELA') {
                     coinList.push({ name: coin });
                 }
             }
         }
+
         return coinList;
     }
 
