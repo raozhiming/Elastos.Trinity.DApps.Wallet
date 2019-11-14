@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Native } from './Native';
 import { Config } from './Config';
 
-declare let appService: any;
+declare let appManager: any;
 let myService = null;
 
 enum MessageType {
@@ -44,7 +44,7 @@ export class AppService {
 
     init() {
         console.log("AppmanagerService init");
-        appService.setListener(this.onReceive);
+        appManager.setListener(this.onReceive);
         this.getLanguage();
         // alert(screen.width + " + " + document.documentElement.clientWidth + " + " + window.innerWidth + " " + window.devicePixelRatio);
     }
@@ -52,7 +52,7 @@ export class AppService {
     setIntentListener() {
         if (!this.isReceiveIntentReady) {
             this.isReceiveIntentReady = true;
-            appService.setIntentListener(this.onReceiveIntent);
+            appManager.setIntentListener(this.onReceiveIntent);
         }
     }
 
@@ -62,12 +62,12 @@ export class AppService {
     }
 
     // display_err(err) {
-    //     appService.alertPrompt("Error", err);
+    //     appManager.alertPrompt("Error", err);
     // }
 
     getLanguage() {
         var me = this;
-        appService.getLocale(
+        appManager.getLocale(
             ret => {
                 // console.log(ret);
                 me.setCurLang(ret.currentLang);
@@ -96,15 +96,15 @@ export class AppService {
 
 
     launcher() {
-        appService.launcher();
+        appManager.launcher();
     }
 
     start(id: string) {
-        appService.start(id);
+        appManager.start(id);
     }
 
     close() {
-        appService.close();
+        appManager.close();
     }
 
     onReceive(ret) {
@@ -171,7 +171,7 @@ export class AppService {
     }
 
     sendIntentResponse(action, result, intentId) {
-        appService.sendIntentResponse(action, result, intentId);
+        appManager.sendIntentResponse(action, result, intentId);
     }
 
 }
