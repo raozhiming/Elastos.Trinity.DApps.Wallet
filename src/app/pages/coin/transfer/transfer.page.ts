@@ -63,6 +63,7 @@ export class TransferPage implements OnInit {
 
     transFunction: any;
     readonly: boolean = false;
+    showRate: boolean = false;
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
         public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
@@ -86,6 +87,19 @@ export class TransferPage implements OnInit {
         });
         this.masterWalletId = Config.getCurMasterWalletId();
         switch (this.transfer.type) {
+            case "did-confirm":
+                this.readonly = true;
+                this.transFunction = this.createIDTransaction;
+                if (this.chainId == 'ELA') {
+                    var coinList = Config.getSubWalletList();
+                    if (coinList.length == 1) {
+                        this.chainId = coinList[0].name;
+                    }
+                    else {
+                        //TODO open idchain or select
+                    }
+                }
+                break;
             case "vote-UTXO":
                 this.transFunction = this.createVoteProducerTransaction;
                 this.transfer.amount = this.balance;
@@ -136,6 +150,10 @@ export class TransferPage implements OnInit {
     }
 
     checkValue() {
+        if (this.transfer.type == "did-confirm") {
+            return this.transFunction();
+        }
+
         if (Util.isNull(this.transfer.toAddress)) {
             this.native.toast_trans('correct-address');
             return;
@@ -226,7 +244,6 @@ export class TransferPage implements OnInit {
 
     createWithdrawTransaction() {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
-
         this.walletManager.createWithdrawTransaction(this.masterWalletId, this.chainId, "",
             toAmount,
             this.transfer.toAddress,
@@ -255,6 +272,18 @@ export class TransferPage implements OnInit {
             });
     }
 
+    createIDTransaction() {
+        this.walletManager.createIdTransaction(this.masterWalletId, this.chainId,
+            "",
+            this.transfer.didrequest,
+            "",
+            this.transfer.memo,
+            (data) => {
+                this.rawTransaction = data;
+                this.openPayModal(this.transfer);
+            });
+    }
+
     singTx() {
         this.walletManager.signTransaction(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.payPassword, (ret) => {
             if (this.walletInfo["Type"] === "Standard") {
@@ -273,8 +302,12 @@ export class TransferPage implements OnInit {
             this.native.hideLoading();
             this.native.toast_trans('send-raw-transaction');
             this.native.setRootRouter("/tabs");
-            if (this.transfer.type == "payment-confirm" || this.transfer.type == "vote-UTXO") {
-                this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
+            switch (this.transfer.type) {
+                case "payment-confirm":
+                case "vote-UTXO":
+                case "did-confirm":
+                    this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
+                break;
             }
             console.log(ret.TxHash);
         })

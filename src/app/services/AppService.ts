@@ -167,6 +167,22 @@ export class AppService {
                     myService.native.go("/transfer");
 
                 break;
+                case "didtransaction":
+                    Config.coinObj = {};
+                    Config.coinObj.chainId = "ELA";
+                    Config.coinObj.walletInfo = Config.curMaster.account;
+                    Config.coinObj.transfer = {
+                        // toAddress: "default",
+                        didrequest: ret.params.didrequest,
+                        memo: ret.params.memo,
+                        intentId: ret.intentId,
+                        action: ret.action,
+                        from: ret.from,
+                    };
+                    Config.coinObj.transfer.type = "did-confirm";
+                    myService.native.go("/transfer");
+
+                break;
         }
     }
 

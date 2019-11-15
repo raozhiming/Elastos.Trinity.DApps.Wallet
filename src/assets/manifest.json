@@ -37,6 +37,9 @@
             "action": "pay"
         },
         {
+            "action": "didtransaction"
+        },
+        {
             "action": "dposvotetransaction"
         }
     ]
