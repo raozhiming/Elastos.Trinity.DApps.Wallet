@@ -63,7 +63,6 @@ export class TransferPage implements OnInit {
 
     transFunction: any;
     readonly: boolean = false;
-    showRate: boolean = false;
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
         public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
