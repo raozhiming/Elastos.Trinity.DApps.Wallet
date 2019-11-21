@@ -76,6 +76,7 @@ const routes: Routes = [
     { path: 'exportmnemomic', loadChildren: './pages/exportmnemomic/exportmnemomic.module#ExportmnemomicPageModule' },
     { path: 'checkmnemomic', loadChildren: './pages/checkmnemomic/checkmnemomic.module#CheckmnemomicPageModule' },
     { path: 'wallet-setting', loadChildren: './pages/wallet/wallet-setting/wallet-setting.module#WalletSettingPageModule' },
+    { path: 'access', loadChildren: './pages/wallet/access/access.module#AccessPageModule' },
 ];
 @NgModule({
     imports: [

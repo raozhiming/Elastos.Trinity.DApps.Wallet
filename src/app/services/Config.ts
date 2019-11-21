@@ -38,6 +38,7 @@ export class Config {
     public static masterWalletList = [];
     public static coinObj: any;
     public static walletObj: any;
+    public static requestDapp: any;
     public static modifyId = "";
     public static initialized: boolean = false;
 

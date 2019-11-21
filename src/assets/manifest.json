@@ -41,6 +41,9 @@
         },
         {
             "action": "dposvotetransaction"
+        },
+        {
+            "action": "walletaccess"
         }
     ]
 }

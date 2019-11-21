@@ -114,6 +114,11 @@ export const en = {
     'text-wallet-repwd': 'Repeat SecretKey Password',
     'text-signaddress': 'Single Address Wallet',
     'text-pwd-repeat': 'Repeat Password',
+    //access page
+    'access': 'Authorization',
+    'ela-address': 'Wallet Address',
+    'requester': 'Request from',
+    'text-share-address': 'Share this address',
 
     'text-old-pay-password': 'Input Original Pay Password',
     'reset-pwd-success': 'Password Updated Successfully',
