@@ -27,7 +27,7 @@ import { PopupProvider } from "./popup";
 import { LocalStorage } from './Localstorage';
 import { Events } from '@ionic/angular';
 
-declare let wallet: any;
+declare let walletManager: any;
 
 /***
  * wallet jni 交互
@@ -37,7 +37,7 @@ declare let wallet: any;
 @Injectable()
 export class WalletManager {
 
-    private wallet;
+    private walletManager;
     public static COINTYPE_ELA = 0;
     public static COINTYPE_ID = 1;
     public static LIMITGAP = 500;
@@ -59,7 +59,7 @@ export class WalletManager {
     }
 
     init() {
-        this.wallet = wallet;
+        this.walletManager = walletManager;
     }
 
     getTimestamp(): number {
@@ -77,7 +77,7 @@ export class WalletManager {
      * @param {long} feePerKb
      */
     createSubWallet(masterWalletId: string, chainID: string, feePerKb: number, success, error = null) {
-        this.wallet.createSubWallet([masterWalletId, chainID, feePerKb],
+        this.walletManager.createSubWallet([masterWalletId, chainID, feePerKb],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err, error); });
     }
@@ -90,7 +90,7 @@ export class WalletManager {
      * @param {long} feePerKb
      */
     recoverSubWallet(masterWalletId: string, chainID: string, limitGap: number, feePerKb: number, success) {
-        this.wallet.recoverSubWallet([masterWalletId, chainID, limitGap, feePerKb],
+        this.walletManager.recoverSubWallet([masterWalletId, chainID, limitGap, feePerKb],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -108,7 +108,7 @@ export class WalletManager {
      * @param Fun
      */
     createMasterWallet(masterWalletId: string, mnemonic: string, phrasePassword: string, payPassword: string, singleAddress: boolean, success) {
-        this.wallet.createMasterWallet([masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
+        this.walletManager.createMasterWallet([masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -120,7 +120,7 @@ export class WalletManager {
      * @param Fun
      */
     importWalletWithKeystore(masterWalletId: string, keystoreContent: string, backupPassword: string, payPassword: string, success) {
-        this.wallet.importWalletWithKeystore([masterWalletId, keystoreContent, backupPassword, payPassword],
+        this.walletManager.importWalletWithKeystore([masterWalletId, keystoreContent, backupPassword, payPassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -134,7 +134,7 @@ export class WalletManager {
     * @param Fun
     */
     importWalletWithMnemonic(masterWalletId: string, mnemonic: string, phrasePassword: string, payPassword, singleAddress: boolean, success) {
-        this.wallet.importWalletWithMnemonic([masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
+        this.walletManager.importWalletWithMnemonic([masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -146,7 +146,7 @@ export class WalletManager {
      * @param Fun
      */
     exportWalletWithKeystore(masterWalletId: string, backupPassWord: string, payPassword: string, success) {
-        this.wallet.exportWalletWithKeystore([masterWalletId, backupPassWord, payPassword],
+        this.walletManager.exportWalletWithKeystore([masterWalletId, backupPassWord, payPassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -156,7 +156,7 @@ export class WalletManager {
      * @param Fun
      */
     exportWalletWithMnemonic(masterWalletId: string, payPassWord: string, success) {
-        this.wallet.exportWalletWithMnemonic([masterWalletId, payPassWord],
+        this.walletManager.exportWalletWithMnemonic([masterWalletId, payPassWord],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -167,7 +167,7 @@ export class WalletManager {
     * @param Fun
     */
     getBalance(masterWalletId: string, chainId: string, balanceType: number, success) {
-        this.wallet.getBalance([masterWalletId, chainId, balanceType],
+        this.walletManager.getBalance([masterWalletId, chainId, balanceType],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -177,7 +177,7 @@ export class WalletManager {
     * @param Fun
     */
     createAddress(masterWalletId: string, chainId: string, success) {
-        this.wallet.createAddress([masterWalletId, chainId],
+        this.walletManager.createAddress([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -189,7 +189,7 @@ export class WalletManager {
      * @param Fun
      */
     getAllAddress(masterWalletId: string, chainId: string, start: number, success) {
-        this.wallet.getAllAddress([masterWalletId, chainId, start, 20],
+        this.walletManager.getAllAddress([masterWalletId, chainId, start, 20],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -201,7 +201,7 @@ export class WalletManager {
     * @param Fun
     */
     getBalanceWithAddress(masterWalletId: string, chainId: string, address: string, balanceType, success) {
-        this.wallet.getBalanceWithAddress([masterWalletId, chainId, address, balanceType],
+        this.walletManager.getBalanceWithAddress([masterWalletId, chainId, address, balanceType],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -214,7 +214,7 @@ export class WalletManager {
      * @param Fun
      */
     getAllTransaction(masterWalletId: string, chainId: string, start, addressOrTxId, success) {
-        this.wallet.getAllTransaction([masterWalletId, chainId, start, WalletManager.PAGECOUNT, addressOrTxId],
+        this.walletManager.getAllTransaction([masterWalletId, chainId, start, WalletManager.PAGECOUNT, addressOrTxId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -224,7 +224,7 @@ export class WalletManager {
     * @param Fun
     */
     registerWalletListener(masterWalletId: string, chainId: string, success) {
-        this.wallet.registerWalletListener([masterWalletId, chainId],
+        this.walletManager.registerWalletListener([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -237,7 +237,7 @@ export class WalletManager {
      * @param Fun
      */
     sign(masterWalletId: string, chainId: string, message, payPassword, success) {
-        this.wallet.sign([masterWalletId, chainId, message, payPassword],
+        this.walletManager.sign([masterWalletId, chainId, message, payPassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -250,7 +250,7 @@ export class WalletManager {
     * @param Fun
     */
     checkSign(masterWalletId: string, chainId: string, publicKey, message, signature, success) {
-        this.wallet.checkSign([masterWalletId, chainId, publicKey, message, signature],
+        this.walletManager.checkSign([masterWalletId, chainId, publicKey, message, signature],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -258,19 +258,19 @@ export class WalletManager {
      * @param {string} masterWalletId
      */
     destroyWallet(masterWalletId: string, success) {
-        this.wallet.destroyWallet([masterWalletId],
+        this.walletManager.destroyWallet([masterWalletId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     deriveIdAndKeyForPurpose(purpose: number, index: number, payPassword: string, success) {
-        this.wallet.deriveIdAndKeyForPurpose([purpose, index, payPassword],
+        this.walletManager.deriveIdAndKeyForPurpose([purpose, index, payPassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getAllMasterWallets(success, error) {
-        this.wallet.getAllMasterWallets([],
+        this.walletManager.getAllMasterWallets([],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err, error); });
     }
@@ -278,7 +278,7 @@ export class WalletManager {
     * @param {string} masterWalletId
     */
     getBalanceInfo(masterWalletId: string, chainId: string, success) {
-        this.wallet.getBalanceInfo([masterWalletId, chainId],
+        this.walletManager.getBalanceInfo([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -286,19 +286,19 @@ export class WalletManager {
      * @param {string} masterWalletId
      */
     isAddressValid(masterWalletId: string, address: string, success, error) {
-        this.wallet.isAddressValid([masterWalletId, address],
+        this.walletManager.isAddressValid([masterWalletId, address],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err, error); });
     }
 
     generateMnemonic(language: string, success) {
-        this.wallet.generateMnemonic([language],
+        this.walletManager.generateMnemonic([language],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getAllChainIds(success) {
-        this.wallet.getAllChainIds([],
+        this.walletManager.getAllChainIds([],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -307,7 +307,7 @@ export class WalletManager {
      * @param {string} masterWalletId
      */
     getSupportedChains(masterWalletId: string, success) {
-        this.wallet.getSupportedChains([masterWalletId],
+        this.walletManager.getSupportedChains([masterWalletId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -315,7 +315,7 @@ export class WalletManager {
      * @param {string} masterWalletId
      */
     getAllSubWallets(masterWalletId: string, success = null) {
-        this.wallet.getAllSubWallets([masterWalletId],
+        this.walletManager.getAllSubWallets([masterWalletId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -323,51 +323,51 @@ export class WalletManager {
      * @param {string} masterWalletId
      */
     changePassword(masterWalletId: string, oldPassword: string, newPassword: string, success) {
-        this.wallet.changePassword([masterWalletId, oldPassword, newPassword],
+        this.walletManager.changePassword([masterWalletId, oldPassword, newPassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createTransaction(masterWalletId: string, chainId: string, fromAddress: string, toAddress: string, amount: number, memo: string, useVotedUTXO: boolean, success) {
-        this.wallet.createTransaction([masterWalletId, chainId, fromAddress, toAddress, amount, memo, useVotedUTXO],
+        this.walletManager.createTransaction([masterWalletId, chainId, fromAddress, toAddress, amount, memo, useVotedUTXO],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     calculateTransactionFee(masterWalletId: string, chainId: string, rawTransaction: string, feePerKb: number, success) {
-        this.wallet.calculateTransactionFee([masterWalletId, chainId, rawTransaction, feePerKb],
+        this.walletManager.calculateTransactionFee([masterWalletId, chainId, rawTransaction, feePerKb],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createIdTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, programJson: string, memo: string, success) {
-        this.wallet.createIdTransaction([masterWalletId, chainId, fromAddress, payloadJson, programJson, memo],
+        this.walletManager.createIdTransaction([masterWalletId, chainId, fromAddress, payloadJson, programJson, memo],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createDepositTransaction(masterWalletId: string, chainId: string, fromAddress: string, toAddress: string, amount: number
         , sidechainAccounts: string, memo: string, useVotedUTXO: boolean, success) {
-        this.wallet.createDepositTransaction([masterWalletId, chainId, fromAddress, toAddress, amount, sidechainAccounts, memo, useVotedUTXO],
+        this.walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress, toAddress, amount, sidechainAccounts, memo, useVotedUTXO],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createWithdrawTransaction(masterWalletId: string, chainId: string, fromAddress: string, amount: number
         , mainchainAccounts: string, memo: string, success) {
-        this.wallet.createWithdrawTransaction([masterWalletId, chainId, fromAddress, amount, mainchainAccounts, memo],
+        this.walletManager.createWithdrawTransaction([masterWalletId, chainId, fromAddress, amount, mainchainAccounts, memo],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getGenesisAddress(masterWalletId: string, chainId: string, success) {
-        this.wallet.getGenesisAddress([masterWalletId, chainId],
+        this.walletManager.getGenesisAddress([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     didGenerateProgram(did: string, message: string, password: string, success) {
-        this.wallet.didGenerateProgram([did, message, password],
+        this.walletManager.didGenerateProgram([did, message, password],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -376,86 +376,86 @@ export class WalletManager {
       * @param {string} masterWalletId
       */
     getMasterWalletBasicInfo(masterWalletId: string, success) {
-        this.wallet.getMasterWalletBasicInfo([masterWalletId],
+        this.walletManager.getMasterWalletBasicInfo([masterWalletId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createMultiSignMasterWallet(masterWalletId: string, publicKeys: string, m: number, success) {
-        this.wallet.createMultiSignMasterWallet([masterWalletId, publicKeys, m, this.getTimestamp()],
+        this.walletManager.createMultiSignMasterWallet([masterWalletId, publicKeys, m, this.getTimestamp()],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createMultiSignMasterWalletWithPrivKey(masterWalletId: string, privKey: string, payPassword: string, publicKeys: string, m: number, success) {
-        this.wallet.createMultiSignMasterWalletWithPrivKey([masterWalletId, privKey, payPassword, publicKeys, m, this.getTimestamp()],
+        this.walletManager.createMultiSignMasterWalletWithPrivKey([masterWalletId, privKey, payPassword, publicKeys, m, this.getTimestamp()],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     updateTransactionFee(masterWalletId: string, chainId: string, rawTransaction: string, fee: number, fromAddress: string, success) {
-        this.wallet.updateTransactionFee([masterWalletId, chainId, rawTransaction, fee, fromAddress],
+        this.walletManager.updateTransactionFee([masterWalletId, chainId, rawTransaction, fee, fromAddress],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     signTransaction(masterWalletId: string, chainId: string, rawTransaction: string, payPassword: string, success) {
-        this.wallet.signTransaction([masterWalletId, chainId, rawTransaction, payPassword],
+        this.walletManager.signTransaction([masterWalletId, chainId, rawTransaction, payPassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     publishTransaction(masterWalletId: string, chainId: string, rawTransaction: string, success) {
-        this.wallet.publishTransaction([masterWalletId, chainId, rawTransaction],
+        this.walletManager.publishTransaction([masterWalletId, chainId, rawTransaction],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getMasterWalletPublicKey(masterWalletId: string, success) {
-        this.wallet.getMasterWalletPublicKey([masterWalletId],
+        this.walletManager.getMasterWalletPublicKey([masterWalletId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getSubWalletPublicKey(masterWalletId: string, chainId: string, success) {
-        this.wallet.getSubWalletPublicKey([masterWalletId, chainId],
+        this.walletManager.getSubWalletPublicKey([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createMultiSignMasterWalletWithMnemonic(masterWalletId: string, mnemonic: string, phrasePassword: string, payPassword: string, coSignersJson: string, requiredSignCount: string, success) {
-        this.wallet.createMultiSignMasterWalletWithMnemonic([masterWalletId, mnemonic, phrasePassword, payPassword, coSignersJson, requiredSignCount],
+        this.walletManager.createMultiSignMasterWalletWithMnemonic([masterWalletId, mnemonic, phrasePassword, payPassword, coSignersJson, requiredSignCount],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     removeWalletListener(masterWalletId: string, chainId: string, success) {
-        this.wallet.removeWalletListener([masterWalletId, chainId],
+        this.walletManager.removeWalletListener([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     disposeNative(success) {
-        this.wallet.disposeNative([],
+        this.walletManager.disposeNative([],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
     // args[0]: String mnemonic
     // args[1]: String phrasePassword
     getMultiSignPubKeyWithMnemonic(mnemonic, phrasePassword, success) {
-        this.wallet.getMultiSignPubKeyWithMnemonic([mnemonic, phrasePassword],
+        this.walletManager.getMultiSignPubKeyWithMnemonic([mnemonic, phrasePassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
     // args[0]: String privKey
     getMultiSignPubKeyWithPrivKey(privKey, success) {
-        this.wallet.getMultiSignPubKeyWithPrivKey([privKey],
+        this.walletManager.getMultiSignPubKeyWithPrivKey([privKey],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getTransactionSignedSigners(masterWalletId: string, chainId: string, txJson: string, success) {
-        this.wallet.getTransactionSignedSigners([masterWalletId, chainId, txJson],
+        this.walletManager.getTransactionSignedSigners([masterWalletId, chainId, txJson],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -469,13 +469,13 @@ export class WalletManager {
     * @param Fun
     */
     importWalletWithOldKeystore(masterWalletId: string, keystoreContent: string, backupPassword: string, payPassword: string, phrasePassword: string, success) {
-        this.wallet.importWalletWithOldKeystore([masterWalletId, keystoreContent, backupPassword, payPassword, phrasePassword],
+        this.walletManager.importWalletWithOldKeystore([masterWalletId, keystoreContent, backupPassword, payPassword, phrasePassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getVersion(success) {
-        this.wallet.getVersion([],
+        this.walletManager.getVersion([],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -485,64 +485,64 @@ export class WalletManager {
     * @param Fun
     */
     destroySubWallet(masterWalletId: string, chainId: string, success) {
-        this.wallet.destroySubWallet([masterWalletId, chainId],
+        this.walletManager.destroySubWallet([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createCancelProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, useVotedUTXO: boolean, success) {
-        this.wallet.createCancelProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo, useVotedUTXO],
+        this.walletManager.createCancelProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo, useVotedUTXO],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createVoteProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, stake: number, publicKey: string, memo: string, useVotedUTXO: boolean, success) {
-        this.wallet.createVoteProducerTransaction([masterWalletId, chainId, fromAddress, stake, publicKey, memo, useVotedUTXO],
+        this.walletManager.createVoteProducerTransaction([masterWalletId, chainId, fromAddress, stake, publicKey, memo, useVotedUTXO],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getVotedProducerList(masterWalletId: string, chainId: string, success) {
-        this.wallet.getVotedProducerList([masterWalletId, chainId],
+        this.walletManager.getVotedProducerList([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
 
     getRegisteredProducerInfo(masterWalletId: string, chainId: string, success) {
-        this.wallet.getRegisteredProducerInfo([masterWalletId, chainId],
+        this.walletManager.getRegisteredProducerInfo([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
 
     createRegisterProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, amount: number, memo: string, useVotedUTXO: boolean, success) {
-        this.wallet.createRegisterProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, amount, memo, useVotedUTXO],
+        this.walletManager.createRegisterProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, amount, memo, useVotedUTXO],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     generateProducerPayload(masterWalletId: string, chainId: string, publicKey: string, nodePublicKey: string, nickName: string, url: string, IPAddress: string, location: number, payPasswd: string, success) {
-        this.wallet.generateProducerPayload([masterWalletId, chainId, publicKey, nodePublicKey, nickName, url, IPAddress, location, payPasswd],
+        this.walletManager.generateProducerPayload([masterWalletId, chainId, publicKey, nodePublicKey, nickName, url, IPAddress, location, payPasswd],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     generateCancelProducerPayload(masterWalletId: string, chainId: string, publicKey: string, payPasswd: string, success) {
-        this.wallet.generateCancelProducerPayload([masterWalletId, chainId, publicKey, payPasswd],
+        this.walletManager.generateCancelProducerPayload([masterWalletId, chainId, publicKey, payPasswd],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     getPublicKeyForVote(masterWalletId: string, chainId: string, success) {
-        this.wallet.getPublicKeyForVote([masterWalletId, chainId],
+        this.walletManager.getPublicKeyForVote([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
 
     createRetrieveDepositTransaction(masterWalletId: string, chainId: string, amount, memo: string, success) {
-        this.wallet.createRetrieveDepositTransaction([masterWalletId, chainId, amount, memo],
+        this.walletManager.createRetrieveDepositTransaction([masterWalletId, chainId, amount, memo],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -555,13 +555,13 @@ export class WalletManager {
      * @param Fun
      */
     getAllMyTransaction(masterWalletId: string, chainId: string, start, addressOrTxId, success) {
-        this.wallet.getAllTransaction([masterWalletId, chainId, start, -1, addressOrTxId],
+        this.walletManager.getAllTransaction([masterWalletId, chainId, start, -1, addressOrTxId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
     createUpdateProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, useVotedUTXO: boolean, success) {
-        this.wallet.createUpdateProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo, useVotedUTXO],
+        this.walletManager.createUpdateProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo, useVotedUTXO],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
