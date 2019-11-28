@@ -1,0 +1,33 @@
+<ion-header>
+    <header-bar title="{{'text-dposvote' | translate }}"></header-bar>
+</ion-header>
+<ion-content class="ion-padding">
+        <div class="intro ion-text-center"
+        [innerHtml]="'text-you-are-going-to-vote-intro' | translate:{votecount:transfer.publicKeys.length, maxvotes:36}">
+        </div>
+    
+        <div class="number-of-votes ion-text-center">
+            Number of votes:
+
+            <div class="number-of-votes-value">
+                {{(balance/SELA) | number:'1.0-0'}}
+            </div>
+        </div>
+        
+        <div class="notes">
+            <div class="note">
+                {{ 'text-note' | translate }}
+            </div>
+        
+            <div class="note-entry">
+                {{ 'text-vote-note-1' | translate }}
+            </div>
+            <div class="note-entry">
+                {{ 'text-vote-note-2' | translate }}
+            </div>
+        </div>
+</ion-content>
+<ion-footer>
+    <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="medium" size="large" (click)="cancelOperation()">{{ 'cancel' | translate }}</ion-button>
+    <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="primary" size="large" (click)="goTransaction()">{{ 'text-vote' | translate }}</ion-button>
+</ion-footer>

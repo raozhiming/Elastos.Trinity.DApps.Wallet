@@ -32,6 +32,12 @@ export const zh = {
     'text-mnemonic-prompt3': '助记词错误，请重新录入助记词',
     'text-mnemonic-format': '助记词之间使用空格隔开',
 
+    'text-dposvote': 'Supernode Vote',
+    'text-you-are-going-to-vote-intro': 'You are going to vote for <b>{{ votecount }}</> nodes',
+    'text-vote-note-1': 'No ELA is spent, except to pay a very low transaction fee.',
+    'text-vote-note-2': "Don't forget to re-vote every time you spend ELA, as this cancels your votes.",
+    'text-vote': 'Vote now',
+
     'paypassword-reset': '更改支付密码',
     'paypassword': '支付密码',
 
@@ -79,6 +85,7 @@ export const zh = {
     'text-notice': '消息通知',
     'text-add': '添加',
     'text-save-modify': '保存修改',
+    'text-note': 'Note',
 
     //create wallet page
     'addwallet-walletname-title': '钱包名称',

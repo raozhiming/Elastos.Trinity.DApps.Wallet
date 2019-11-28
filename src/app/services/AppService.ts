@@ -146,12 +146,13 @@ export class AppService {
                 break;
 
             case "dposvotetransaction":
+                console.log("DPOS Transaction intent content:", ret.params);
                 Config.coinObj = {};
                 Config.coinObj.chainId = "ELA";
                 Config.coinObj.walletInfo = Config.curMaster.account;
                 Config.coinObj.transfer = {
                     toAddress: "default",
-                    publicKeys: ret.params.publicKeys,
+                    publicKeys: ret.params.publickeys,
                     memo: "",
                     fee: 0,
                     payPassword: '',
@@ -160,7 +161,7 @@ export class AppService {
                     from: ret.from,
                 };
                 Config.coinObj.transfer.type = "vote-UTXO";
-                myService.native.go("/transfer");
+                myService.native.go("/dposvote");
                 break;
 
             case "didtransaction":

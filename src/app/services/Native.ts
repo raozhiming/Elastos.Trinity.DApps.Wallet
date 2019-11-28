@@ -90,6 +90,7 @@ export class Native {
     }
 
     public go(page: any, options: any = {}) {
+        console.log("Navigating to:", page);
         // console.log(options);
         this.hideLoading();
         this.navCtrl.setDirection('forward');
@@ -107,8 +108,9 @@ export class Native {
         this.inappBrowser.create(url, target, options);
     }
 
-
     public setRootRouter(page: any,  options: any = {}) {
+        console.log("Setting root router path to:", page);
+
         this.hideLoading();
         this.navCtrl.setDirection('root');
         this.router.navigate([page], { queryParams: options });

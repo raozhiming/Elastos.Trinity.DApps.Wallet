@@ -67,6 +67,7 @@ const routes: Routes = [
     { path: 'recordinfo', loadChildren: './pages/coin/recordinfo/recordinfo.module#RecordinfoPageModule' },
     // { path: 'recharge', loadChildren: './pages/coin/recharge/recharge.module#RechargePageModule' },
     { path: 'transfer', loadChildren: './pages/coin/transfer/transfer.module#TransferPageModule' },
+    { path: 'dposvote', loadChildren: './pages/coin/dposvote/dposvote.module#DPoSVotePageModule' },
     { path: 'address', loadChildren: './pages/wallet/address/address.module#AddressPageModule' },
     { path: 'id-result', loadChildren: './pages/id/id-result/id-result.module#IdResultPageModule' },
     { path: 'contact-create', loadChildren: './pages/contacts/contact-create/contact-create.module#ContactCreatePageModule' },

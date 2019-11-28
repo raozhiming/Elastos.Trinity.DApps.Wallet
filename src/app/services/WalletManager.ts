@@ -27,7 +27,7 @@ import { PopupProvider } from "./popup";
 import { LocalStorage } from './Localstorage';
 import { Events } from '@ionic/angular';
 
-declare let walletManager: any;
+declare let walletManager: WalletPlugin.WalletManager;
 
 /***
  * wallet jni 交互
@@ -37,7 +37,7 @@ declare let walletManager: any;
 @Injectable()
 export class WalletManager {
 
-    private walletManager;
+    private walletManager: WalletPlugin.WalletManager;
     public static COINTYPE_ELA = 0;
     public static COINTYPE_ID = 1;
     public static LIMITGAP = 500;
@@ -334,11 +334,11 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    calculateTransactionFee(masterWalletId: string, chainId: string, rawTransaction: string, feePerKb: number, success) {
+    /*calculateTransactionFee(masterWalletId: string, chainId: string, rawTransaction: string, feePerKb: number, success) {
         this.walletManager.calculateTransactionFee([masterWalletId, chainId, rawTransaction, feePerKb],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
-    }
+    }*/
 
     createIdTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, programJson: string, memo: string, success) {
         this.walletManager.createIdTransaction([masterWalletId, chainId, fromAddress, payloadJson, programJson, memo],
@@ -393,11 +393,11 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    updateTransactionFee(masterWalletId: string, chainId: string, rawTransaction: string, fee: number, fromAddress: string, success) {
+    /*updateTransactionFee(masterWalletId: string, chainId: string, rawTransaction: string, fee: number, fromAddress: string, success) {
         this.walletManager.updateTransactionFee([masterWalletId, chainId, rawTransaction, fee, fromAddress],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
-    }
+    }*/
 
     signTransaction(masterWalletId: string, chainId: string, rawTransaction: string, payPassword: string, success) {
         this.walletManager.signTransaction([masterWalletId, chainId, rawTransaction, payPassword],

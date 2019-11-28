@@ -32,20 +32,17 @@ import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.c
 import { AppService } from '../../../services/AppService';
 
 @Component({
-    selector: 'app-transfer',
-    templateUrl: './transfer.page.html',
-    styleUrls: ['./transfer.page.scss'],
+    selector: 'app-dposvote',
+    templateUrl: './dposvote.page.html',
+    styleUrls: ['./dposvote.page.scss'],
 })
-export class TransferPage implements OnInit {
+export class DPoSVotePage implements OnInit {
     masterWalletId: string = "1";
-    walletType = "";
     transfer: any = null;
 
     balance = 0;
 
     chainId: string;
-
-    feePerKb = 10000;
 
     rawTransaction: '';
 
@@ -77,7 +74,7 @@ export class TransferPage implements OnInit {
     // }
 
     init() {
-        // console.log(Config.coinObj);
+        console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
         this.chainId = Config.coinObj.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
@@ -86,43 +83,12 @@ export class TransferPage implements OnInit {
         });
         this.masterWalletId = Config.getCurMasterWalletId();
         switch (this.transfer.type) {
-            case "did-confirm":
-                this.readonly = true;
-                this.transFunction = this.createIDTransaction;
-                if (this.chainId == 'ELA') {
-                    var coinList = Config.getSubWalletList();
-                    if (coinList.length == 1) {
-                        this.chainId = coinList[0].name;
-                    }
-                    else {
-                        //TODO open idchain or select
-                    }
-                }
-                break;
-            case "payment-confirm":
-                this.readonly = true;
-            case "transfer":
-                this.transFunction = this.createTransaction;
-                break;
-            case "recharge":
-                this.transFunction = this.createDepositTransaction;
-                this.transfer.rate = 1;//TODO:: this is sidechain rate
-                this.transfer.fee = 10000;
-                this.chainId = "ELA";
-                this.getGenesisAddress();
-                break;
-            case "withdraw":
-                this.transFunction = this.createWithdrawTransaction;
-                this.transfer.rate = 1;//TODO:: this is mainchain rate
+            case "vote-UTXO":
+                this.transFunction = this.createVoteProducerTransaction;
+                this.transfer.amount = this.balance;
                 break;
         }
         this.initData();
-    }
-
-    getGenesisAddress() {
-        this.walletManager.getGenesisAddress(this.masterWalletId, Config.coinObj.chainId, (data) => {
-            this.genesisAddress = data;
-        });
     }
 
     rightHeader() {
@@ -130,8 +96,12 @@ export class TransferPage implements OnInit {
         this.native.go("/scan", { "pageType": "1" });
     }
 
-    goContact() {
-        this.native.go("/contact-list", { "hideButton": true });
+    /**
+     * Cancel the vote operation. Closes the screen and goes back to the calling application after
+     * sending the intent response.
+     */
+    cancelOperation() {
+        this.appService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
     }
 
     goTransaction() {
@@ -145,10 +115,6 @@ export class TransferPage implements OnInit {
     }
 
     checkValue() {
-        if (this.transfer.type == "did-confirm") {
-            return this.transFunction();
-        }
-
         if (Util.isNull(this.transfer.toAddress)) {
             this.native.toast_trans('correct-address');
             return;
@@ -223,38 +189,18 @@ export class TransferPage implements OnInit {
             });
     }
 
-    createDepositTransaction() {
+    createVoteProducerTransaction() {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.createDepositTransaction(this.masterWalletId, 'ELA', "",
-            this.genesisAddress, // genesisAddress
-            toAmount, // user input amount
-            this.transfer.toAddress, // user input address
-            this.transfer.memo,
-            this.useVotedUTXO,
-            (data) => {
-                this.rawTransaction = data;
-                this.openPayModal(this.transfer);
-            });
-    }
+        if (this.transfer.toAddress == "default") {
+            this.transfer.toAddress = "";
+        }
 
-    createWithdrawTransaction() {
-        let toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.createWithdrawTransaction(this.masterWalletId, this.chainId, "",
-            toAmount,
+        this.walletManager.createVoteProducerTransaction(this.masterWalletId, this.chainId,
             this.transfer.toAddress,
+            toAmount,
+            this.transfer.publicKeys,
             this.transfer.memo,
-            (data) => {
-                this.rawTransaction = data;
-                this.openPayModal(this.transfer);
-            });
-    }
-
-    createIDTransaction() {
-        this.walletManager.createIdTransaction(this.masterWalletId, this.chainId,
-            "",
-            this.transfer.didrequest,
-            "",
-            this.transfer.memo,
+            true,
             (data) => {
                 this.rawTransaction = data;
                 this.openPayModal(this.transfer);

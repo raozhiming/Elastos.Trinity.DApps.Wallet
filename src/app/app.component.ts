@@ -56,7 +56,9 @@ export class AppComponent {ß
     }
 
     initializeApp() {
+        console.log("Initialize app");
         this.platform.ready().then(() => {
+            console.log("Platform is ready");
             this.statusBar.styleDefault();
             this.splashScreen.hide();
             this.appService.init();

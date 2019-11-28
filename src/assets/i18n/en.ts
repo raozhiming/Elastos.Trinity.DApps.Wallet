@@ -31,6 +31,12 @@ export const en = {
     'text-mnemonic-prompt3': 'Backup phrase or password incorrectly, Please review your backup and try again.',
     'text-mnemonic-format': 'Spaces are required between characters',
 
+    'text-dposvote': 'Supernode Vote',
+    'text-you-are-going-to-vote-intro': 'You are going to vote for <b>{{ votecount }}</b> nodes',
+    'text-vote-note-1': 'No ELA is spent, except to pay a very low transaction fee.',
+    'text-vote-note-2': "Don't forget to re-vote every time you spend ELA, as this cancels your votes.",
+    'text-vote': 'Vote now',
+
     'paypassword-reset': 'Reset pay password',
     'paypassword': 'Paypassword',
     // TODO remove unused items
@@ -73,6 +79,7 @@ export const en = {
     'text-notice': 'Notification',
     'text-add': 'Add',
     'text-save-modify': 'Save Modify',
+    'text-note': 'Note',
 
     // create wallet page
     'addwallet-walletname-title': 'Wallet Name',

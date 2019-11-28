@@ -12,7 +12,11 @@
     "importHelpers": true,
     "target": "es5",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "node_modules/@elastosfoundation"
+    ],
+    "types": [
+      "trinity-types"
     ],
     "lib": [
       "es2018",
