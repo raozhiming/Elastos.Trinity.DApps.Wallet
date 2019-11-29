@@ -9,6 +9,9 @@ import { AppService } from '../../services/AppService';
 export class HeaderBarComponent implements OnInit {
     public back_touched = false;
     public _title: string = '';
+    @Input('showBack') showBack: boolean = true;
+    @Input('showMinimize') showMinimize: boolean = true;
+    @Input('showClose') showClose: boolean = true;
 
     @Input()
     set title(title: string) {
