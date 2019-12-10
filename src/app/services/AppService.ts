@@ -66,18 +66,11 @@ export class AppService {
     getLanguage() {
         var me = this;
         appManager.getLocale(
-            ret => {
-                // console.log(ret);
-                me.setCurLang(ret.currentLang);
-                me.setDefaultLang(ret.defaultLang);
-                // me.setting.setSystemLang(ret.systemLang);
+            (currentLang, systemLang) => {
+                me.setCurLang(currentLang);
             },
             err => me.print_err(err)
         );
-    }
-
-    setDefaultLang(lang: string) {
-
     }
 
     setCurLang(lang: string) {
