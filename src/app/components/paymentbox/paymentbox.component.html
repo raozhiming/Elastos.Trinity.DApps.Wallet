@@ -10,11 +10,11 @@
                 <ion-label class="left">{{'transfer-address' | translate}}:</ion-label>
                 <ion-label class="right" id="address" slot="end">{{toAddress}}</ion-label>
             </ion-item>
-            <ion-item>
+            <ion-item *ngIf="transfer.amount">
                 <ion-label class="left">{{'text-price' | translate}}:</ion-label>
                 <ion-label class="right" slot="end">{{transfer.amount}}</ion-label>
             </ion-item>
-            <ion-item>
+            <ion-item *ngIf="transfer.fee">
                 <ion-label class="left">{{'text-fees' | translate}}:</ion-label>
                 <ion-label class="right" slot="end">{{transfer.fee/SELA}}</ion-label>
             </ion-item>

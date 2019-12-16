@@ -270,6 +270,8 @@ export class WalletManager {
     }
 
     getAllMasterWallets(success, error) {
+        console.log("Getting all master wallets");
+
         this.walletManager.getAllMasterWallets([],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err, error); });
@@ -496,7 +498,7 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    createVoteProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, stake: number, publicKey: string, memo: string, useVotedUTXO: boolean, success) {
+    createVoteProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, stake: string, publicKey: string, memo: string, useVotedUTXO: boolean, success) {
         this.walletManager.createVoteProducerTransaction([masterWalletId, chainId, fromAddress, stake, publicKey, memo, useVotedUTXO],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });

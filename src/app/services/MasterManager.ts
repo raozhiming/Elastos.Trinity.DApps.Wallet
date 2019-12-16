@@ -48,12 +48,21 @@ export class MasterManager {
     }
 
     init() {
+        console.log("Master manager is initializing");
+
         this.localStorage.getMasterInfos((infos) => {
+            console.log("Got master infos", infos);
+
             if (infos != null) {
                 this.masterInfos = infos;
             }
+            else {
+                console.warn("Empty Master info returned!");
+            }
 
             this.localStorage.getProgress((progress) => {
+                console.log("Got progress", progress);
+
                 if (progress) {
                     this.progress = progress;
                 }
@@ -65,10 +74,15 @@ export class MasterManager {
     successHandle(idList) {
         this.masterList = idList;
 
+        console.log("Master list:", this.masterList);
+
         if (idList.length === 0) {
             this.handleNull();
             return;
         }
+
+        if (idList.length != Object.keys(this.masterInfos).length) 
+            console.error("Local storage wallet list and SPVSDK list have different sizes!");
 
         for (var i = 0; i < idList.length; i++) {
             let id = idList[i];
@@ -92,6 +106,8 @@ export class MasterManager {
     }
 
     getMasterWalletBasicInfo(masterId, isAdd = false) {
+        console.log("Getting basic wallet info for wallet:", masterId);
+
         this.walletManager.getMasterWalletBasicInfo(masterId, (ret) => {
             this.masterWallet[masterId].account = ret;
             this.getAllSubWallets(masterId, isAdd)
@@ -99,6 +115,8 @@ export class MasterManager {
     }
 
     public getAllSubWallets(masterId, isAdd = false) {
+        console.log("Getting all subwallets for wallet:", masterId);
+
         this.walletManager.getAllSubWallets(masterId, (data) => {
             this.masterWallet[masterId].chainList = [];
             if (!this.masterWallet[masterId]["subWallet"]) {
