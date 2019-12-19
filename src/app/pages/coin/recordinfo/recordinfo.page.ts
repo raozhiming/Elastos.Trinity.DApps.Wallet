@@ -47,24 +47,21 @@ export class RecordinfoPage implements OnInit {
                 let transactions = allTransaction['Transactions'];
                 let transaction = transactions[0];
                 this.inputs = this.objtoarr(transaction["Inputs"]);
-                // console.log("===this===" + JSON.stringify(this.inputs));
                 this.outputs = this.objtoarr(transaction["Outputs"]);
-                // console.log("===this===" + JSON.stringify(this.outputs));
                 let timestamp = transaction['Timestamp'] * 1000;
                 let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
                 let status = '';
                 switch (transaction["Status"]) {
                     case 'Confirmed':
-                        status = 'Confirmed'
+                        status = 'Confirmed';
                         break;
                     case 'Pending':
-                        status = 'Pending'
+                        status = 'Pending';
                         break;
                     case 'Unconfirmed':
-                        status = 'Unconfirmed'
+                        status = 'Unconfirmed';
                         break;
                 }
-
 
                 let vtype = "";
                 switch (transaction["Type"]) {
@@ -127,6 +124,11 @@ export class RecordinfoPage implements OnInit {
                     } else {
                         this.jiajian = "";
                     }
+                }
+
+                //for vote transaction
+                if (!Util.isNull(transaction['OutputPayload']) && (transaction['OutputPayload'].length > 0)) {
+                    vtype = "transaction-type-vote";
                 }
 
                 this.transactionRecord = {

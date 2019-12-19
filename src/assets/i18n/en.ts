@@ -470,6 +470,7 @@ export const en = {
     "transaction-type-11": "UpdateProducer",
     "transaction-type-12": "ReturnDepositCoin",
     "transaction-type-13": "Unknown Type",
+    "transaction-type-vote": "Vote Transaction",
     "transaction-type": "Transaction Type",
     'transaction-deleted': "Deleted",
     'txPublished-0': "Successful Trade",

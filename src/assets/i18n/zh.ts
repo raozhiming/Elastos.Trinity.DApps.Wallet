@@ -470,6 +470,7 @@ export const zh = {
     "transaction-type-11": "更新参选交易",
     "transaction-type-12": "取回参选质押资产",
     "transaction-type-13": "未知交易类型",
+    "transaction-type-vote": "投票交易",
     "transaction-type": "交易类型",
     'transaction-deleted': "已删除",
     'txPublished-0': "交易成功",
