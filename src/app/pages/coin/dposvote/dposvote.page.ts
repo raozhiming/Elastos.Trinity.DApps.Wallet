@@ -163,7 +163,7 @@ export class DPoSVotePage implements OnInit {
      * funds won't be enough to vote.
      */
     votingFees(): number {
-        return 0.0001; // ELA
+        return 0.001; // ELA
     }
 
     createVoteProducerTransaction() {
