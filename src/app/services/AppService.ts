@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Native } from './Native';
 import { Config } from './Config';
 
-declare let appManager: any;
+declare let appManager: AppManagerPlugin.AppManager;
 let myService = null;
 
 enum MessageType {
@@ -27,11 +27,10 @@ export class AppService {
     public runningList: any = [];
     public lastList: any = [];
     public rows: any = [];
-    private currentLang: string = null;
+    // private currentLang: string = null;
     private isReceiveIntentReady = false;
 
-    constructor(private translate: TranslateService,
-        public native: Native) {
+    constructor(private translate: TranslateService, public native: Native) {
         myService = this;
 
         var me = this;
@@ -55,21 +54,13 @@ export class AppService {
         }
     }
 
-    print_err(err) {
-        console.log("ElastosJS  Error: " + err);
-    }
-
-    // display_err(err) {
-    //     appManager.alertPrompt("Error", err);
-    // }
-
     getLanguage() {
         var me = this;
         appManager.getLocale(
-            (currentLang, systemLang) => {
+            (defaultLang, currentLang, systemLang) => {
+                console.log('defaultLang', defaultLang, ' currentLang:', currentLang, ' systemLang:', systemLang);
                 me.setCurLang(currentLang);
-            },
-            err => me.print_err(err)
+            }
         );
     }
 
@@ -89,7 +80,7 @@ export class AppService {
     }
 
     start(id: string) {
-        appManager.start(id);
+        appManager.start(id, () => {});
     }
 
     close() {
@@ -189,7 +180,7 @@ export class AppService {
     }
 
     sendIntentResponse(action, result, intentId) {
-        appManager.sendIntentResponse(action, result, intentId);
+        appManager.sendIntentResponse(action, result, intentId, () => {});
     }
 
 }
