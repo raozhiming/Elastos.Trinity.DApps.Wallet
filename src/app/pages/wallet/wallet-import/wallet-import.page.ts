@@ -3,7 +3,6 @@ import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
 import { LocalStorage } from '../../../services/Localstorage';
-// import {TabsComponent} from '../../../pages/tabs/tabs.component';
 import { Util } from "../../../services/Util";
 import { Config } from '../../../services/Config';
 import { PopupProvider } from '../../../services/popup';
@@ -131,7 +130,7 @@ export class WalletImportPage implements OnInit {
     }
 
     async createSubWallet(msg) {
-        this.walletManager.createSubWallet(this.masterWalletId, "ELA", 0, () => {
+        this.walletManager.createSubWallet(this.masterWalletId, "ELA", () => {
             // open IDChain for did
             this.walletManager.createSubWallet(this.masterWalletId, "IDChain", 0, () => {
                 this.native.toast_trans(msg);
@@ -235,13 +234,13 @@ export class WalletImportPage implements OnInit {
 
     webKeyStore(webKeyStore) {
         console.log("========webKeyStore" + webKeyStore);
-        this.native.showLoading().then(() => {
-            this.walletManager.importWalletWithOldKeystore(this.masterWalletId,
-                this.keyStoreContent, this.importFileObj.backupPassWord,
-                this.importFileObj.payPassword, webKeyStore, () => {
-                    this.createSubWallet('import-text-world-sucess');
-                });
-        });
+        // this.native.showLoading().then(() => {
+        //     this.walletManager.importWalletWithOldKeystore(this.masterWalletId,
+        //         this.keyStoreContent, this.importFileObj.backupPassWord,
+        //         this.importFileObj.payPassword, webKeyStore, () => {
+        //             this.createSubWallet('import-text-world-sucess');
+        //         });
+        // });
     }
 
     ngOnInit() {

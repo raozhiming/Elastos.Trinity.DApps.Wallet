@@ -141,9 +141,7 @@ export class DidtransactionPage implements OnInit {
     createIDTransaction() {
         console.log('createIDTransaction');
         this.walletManager.createIdTransaction(this.masterWalletId, this.chainId,
-            '',
             this.transfer.didrequest,
-            '',
             this.transfer.memo,
             (data) => {
                 this.rawTransaction = data;

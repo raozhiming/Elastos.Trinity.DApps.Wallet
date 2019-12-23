@@ -81,7 +81,7 @@ export class MasterManager {
             return;
         }
 
-        if (idList.length != Object.keys(this.masterInfos).length) 
+        if (idList.length != Object.keys(this.masterInfos).length)
             console.error("Local storage wallet list and SPVSDK list have different sizes!");
 
         for (var i = 0; i < idList.length; i++) {
@@ -151,7 +151,7 @@ export class MasterManager {
     }
 
     public getWalletBalance(masterId, chainId) {
-        this.walletManager.getBalance(masterId, chainId, Config.total, (data) => {
+        this.walletManager.getBalance(masterId, chainId, (data) => {
             this.zone.run(() => {
                 this.masterWallet[masterId].subWallet[chainId].balance = parseInt(data) / Config.SELA;
             });
@@ -253,9 +253,8 @@ export class MasterManager {
                 break;
             case "OnBlockSyncProgress":
                 this.zone.run(() => {
-                    chain.maxHeight = result["estimatedHeight"];
-                    chain.curHeight = result["currentBlockHeight"];
-                    this.setProgress(masterId, chainId, chain.maxHeight, chain.curHeight);
+                    var progressInfo = JSON.parse(result["progressInfo"]);
+                    this.setProgress(masterId, chainId, progressInfo.Progress);
                 });
                 break;
             case "OnBlockSyncStopped":
@@ -298,7 +297,7 @@ export class MasterManager {
         }
     }
 
-    public setProgress(masterId, coin, estimatedHeight, currentHeight) {
+    public setProgress(masterId, coin, progress) {
         if (!this.progress[masterId]) {
             this.progress[masterId] = {};
         }
@@ -308,8 +307,7 @@ export class MasterManager {
 
         }
 
-        this.progress[masterId][coin]["maxHeight"] = estimatedHeight;
-        this.progress[masterId][coin]["curHeight"] = currentHeight;
+        this.progress[masterId][coin]["progress"] = progress;
 
         this.localStorage.setProgress(this.progress);
     }

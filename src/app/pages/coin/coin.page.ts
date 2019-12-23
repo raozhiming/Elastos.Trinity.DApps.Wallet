@@ -259,7 +259,7 @@ export class CoinPage implements OnInit {
     }
 
     doRefresh(event) {
-        this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.total, (ret) => {
+        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret) => {
             this.coinCount = ret / Config.SELA;
         });
         this.pageNo = 0;

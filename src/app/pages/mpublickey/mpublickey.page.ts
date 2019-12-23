@@ -18,7 +18,7 @@ export class MpublickeyPage implements OnInit {
         if (Config.walletObj.isMulti) {
             this.getPublicKey();
         } else if (this.exatParm["importText"]) {
-            this.getMultiSignPubKeyWithPrivKey();
+            // this.getMultiSignPubKeyWithPrivKey();
         }
     }
 
@@ -31,13 +31,13 @@ export class MpublickeyPage implements OnInit {
     }
 
     getPublicKey() {
-        this.walletManager.getMultiSignPubKeyWithMnemonic(Config.walletObj.mnemonicStr,
-            Config.walletObj.mnemonicPassword, (ret) => this.qrcode = ret);
+        // this.walletManager.getMultiSignPubKeyWithMnemonic(Config.walletObj.mnemonicStr,
+        //     Config.walletObj.mnemonicPassword, (ret) => this.qrcode = ret);
     }
 
     getMultiSignPubKeyWithPrivKey() {
-        this.walletManager.getMultiSignPubKeyWithPrivKey(this.exatParm["importText"],
-            (ret) => this.qrcode = ret);
+        // this.walletManager.getMultiSignPubKeyWithPrivKey(this.exatParm["importText"],
+        //     (ret) => this.qrcode = ret);
     }
 
     onNext() {

@@ -111,7 +111,7 @@ export class AddpublickeyPage implements OnInit {
 
     createSubWallet(chainId) {
         // Sub Wallet
-        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, () => {
+        this.walletManager.createSubWallet(this.masterWalletId, chainId, () => {
             this.registerWalletListener(this.masterWalletId, chainId);
             this.saveWalletList();
         });
@@ -146,7 +146,7 @@ export class AddpublickeyPage implements OnInit {
 
     createMnemonicSubWallet(chainId, password) {
         // Sub Wallet
-        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, () => {
+        this.walletManager.createSubWallet(this.masterWalletId, chainId, () => {
             this.registerWalletListener(this.masterWalletId, chainId);
             this.saveWalletList();
         });
@@ -163,8 +163,8 @@ export class AddpublickeyPage implements OnInit {
 
     getPublicKey() {
 
-        this.walletManager.getMultiSignPubKeyWithMnemonic(this.msobj["mnemonicStr"], this.msobj["mnemonicPassword"],
-            (ret) => { this.qrcode = ret; });
+        // this.walletManager.getMultiSignPubKeyWithMnemonic(this.msobj["mnemonicStr"], this.msobj["mnemonicPassword"],
+        //     (ret) => { this.qrcode = ret; });
     }
 
 }

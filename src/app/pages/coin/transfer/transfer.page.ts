@@ -58,7 +58,6 @@ export class TransferPage implements OnInit {
     did: string;
     isInput = false;
     walletInfo = {};
-    useVotedUTXO: boolean = false;
 
     transFunction: any;
     readonly: boolean = false;
@@ -95,7 +94,7 @@ export class TransferPage implements OnInit {
                 this.transfer.rate = 1;//TODO:: this is sidechain rate
                 this.transfer.fee = 10000;
                 this.chainId = "ELA";
-                this.getGenesisAddress();
+                // this.getGenesisAddress();
                 break;
             case "withdraw":
                 this.transFunction = this.createWithdrawTransaction;
@@ -105,11 +104,11 @@ export class TransferPage implements OnInit {
         this.initData();
     }
 
-    getGenesisAddress() {
-        this.walletManager.getGenesisAddress(this.masterWalletId, Config.coinObj.chainId, (data) => {
-            this.genesisAddress = data;
-        });
-    }
+    // getGenesisAddress() {
+    //     this.walletManager.getGenesisAddress(this.masterWalletId, Config.coinObj.chainId, (data) => {
+    //         this.genesisAddress = data;
+    //     });
+    // }
 
     rightHeader() {
         // console.log(Config.coinObj.transfer);
@@ -125,7 +124,7 @@ export class TransferPage implements OnInit {
     }
 
     initData() {
-        this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.total, (ret) => {
+        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret) => {
             this.balance = ret;
         });
     }
@@ -198,7 +197,6 @@ export class TransferPage implements OnInit {
             this.transfer.toAddress,
             toAmount,
             this.transfer.memo,
-            this.useVotedUTXO,
             (data) => {
                 me.rawTransaction = data;
                 me.openPayModal(me.transfer);
@@ -208,11 +206,11 @@ export class TransferPage implements OnInit {
     createDepositTransaction() {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
         this.walletManager.createDepositTransaction(this.masterWalletId, 'ELA', "",
-            this.genesisAddress, // genesisAddress
-            toAmount, // user input amount
+            Config.coinObj.chainId,
             this.transfer.toAddress, // user input address
+            toAmount, // user input amount
+            "",
             this.transfer.memo,
-            this.useVotedUTXO,
             (data) => {
                 this.rawTransaction = data;
                 this.openPayModal(this.transfer);
@@ -235,8 +233,7 @@ export class TransferPage implements OnInit {
         this.walletManager.signTransaction(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.payPassword, (ret) => {
             if (this.walletInfo["Type"] === "Standard") {
                 this.sendTx(ret);
-            }
-            else if (this.walletInfo["Type"] === "Multi-Sign") {
+            } else if (this.walletInfo["Type"] === "Multi-Sign") {
                 this.native.hideLoading();
                 this.native.go("/scancode", { "tx": { "chainId": this.chainId, "fee": this.transfer.fee / Config.SELA, "raw": ret } });
             }

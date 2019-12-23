@@ -61,7 +61,7 @@ export class MnemonicWritePage implements OnInit {
     }
 
     createSubWallet(chainId) {
-        this.walletManager.createSubWallet(Config.walletObj.masterId, chainId, 0, () => {
+        this.walletManager.createSubWallet(Config.walletObj.masterId, chainId,() => {
             let account = { "singleAddress": Config.walletObj.singleAddress, "Type": "Standard" };
             Config.masterManager.addMasterWallet(Config.walletObj.masterId, Config.walletObj.name, account);
         });

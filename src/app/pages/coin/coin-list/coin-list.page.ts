@@ -81,7 +81,7 @@ export class CoinListPage implements OnInit {
 
     createSubWallet(chainId) {
         // Sub Wallet IDChain
-        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, (data) => {
+        this.walletManager.createSubWallet(this.masterWalletId, chainId, (data) => {
             this.native.hideLoading();
             Config.masterManager.addSubWallet(this.masterWalletId, chainId);
             Config.masterManager.saveInfos();

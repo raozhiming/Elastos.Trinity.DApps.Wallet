@@ -82,7 +82,7 @@ export class DPoSVotePage implements OnInit {
     }
 
     fetchBalance() {
-        this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.total, (ret: string) => {
+        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret: string) => {
             this.zone.run(()=>{
                 console.log("Received balance:", ret);
                 this.balance = ret;
@@ -176,7 +176,6 @@ export class DPoSVotePage implements OnInit {
             stakeAmount,
             this.transfer.publicKeys,
             this.transfer.memo,
-            true,
             (data) => {
                 this.rawTransaction = data;
                 this.openPayModal(this.transfer);

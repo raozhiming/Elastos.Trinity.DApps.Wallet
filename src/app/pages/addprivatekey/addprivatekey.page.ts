@@ -34,7 +34,7 @@ export class AddprivatekeyPage implements OnInit {
         }
 
         this.masterWalletId = Config.uuid(6, 16);
-        this.getMultiSignPubKeyWithPrivKey();
+        // this.getMultiSignPubKeyWithPrivKey();
         this.events.subscribe("privatekey:update", (val) => {
             this.publicKeyArr[this.curIndex]['publicKey'] = val;
         });
@@ -80,7 +80,7 @@ export class AddprivatekeyPage implements OnInit {
 
     createSubWallet(chainId) {
         // Sub Wallet
-        this.walletManager.createSubWallet(this.masterWalletId, chainId, 0, () => {
+        this.walletManager.createSubWallet(this.masterWalletId, chainId, () => {
             this.registerWalletListener(this.masterWalletId, chainId);
             this.saveWalletList();
         });
@@ -118,9 +118,9 @@ export class AddprivatekeyPage implements OnInit {
     }
 
     getMultiSignPubKeyWithPrivKey() {
-        this.walletManager.getMultiSignPubKeyWithPrivKey(this.msobj["importText"], (ret) => {
-            this.qrcode = ret;
-        });
+        // this.walletManager.getMultiSignPubKeyWithPrivKey(this.msobj["importText"], (ret) => {
+        //     this.qrcode = ret;
+        // });
     }
 
 }
