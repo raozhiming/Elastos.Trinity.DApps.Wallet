@@ -21,40 +21,33 @@
  */
 
 import { Component, OnInit, NgZone } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ModalController, Events } from '@ionic/angular';
 import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
 import { AppService } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
-import { LocalStorage } from '../../../services/Localstorage';
 import { Native } from '../../../services/Native';
+import { PopupProvider } from '../../../services/popup';
 import { WalletManager } from '../../../services/WalletManager';
 
 @Component({
-    selector: 'app-dposvote',
-    templateUrl: './dposvote.page.html',
-    styleUrls: ['./dposvote.page.scss'],
+    selector: 'app-didtransaction',
+    templateUrl: './didtransaction.page.html',
+    styleUrls: ['./didtransaction.page.scss'],
 })
-export class DPoSVotePage implements OnInit {
-    masterWalletId: string = "1";
+export class DidtransactionPage implements OnInit {
+    masterWalletId = '1';
     transfer: any = null;
 
-    balance: string; // Balance in SELA
+    balance = 0;
 
     chainId: string;
-
     rawTransaction: '';
-
-    appType: string = null;
-    selectType: string = "";
-    parms: any;
     txId: string;
-    did: string;
-    isInput = false;
+    hasOpenIDChain = false;
     walletInfo = {};
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
-        public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
+    constructor(public walletManager: WalletManager, public appService: AppService, public popupProvider: PopupProvider,
+                public native: Native, public modalCtrl: ModalController, public zone: NgZone) {
         this.init();
     }
 
@@ -62,15 +55,11 @@ export class DPoSVotePage implements OnInit {
     }
 
     ionViewDidEnter() {
-        if (this.walletInfo["Type"] === "Multi-Sign") {
-            // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
-            this.appService.close();
-        }
+      if (this.walletInfo["Type"] === "Multi-Sign") {
+          // TODO: reject didtransaction if multi sign (show error popup)
+          this.appService.close();
+      }
     }
-
-    // ionViewDidLeave() {
-    //    this.events.unsubscribe("error:update");
-    // }
 
     init() {
         console.log(Config.coinObj);
@@ -78,16 +67,26 @@ export class DPoSVotePage implements OnInit {
         this.chainId = Config.coinObj.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
         this.masterWalletId = Config.getCurMasterWalletId();
-        this.fetchBalance();
+        if (this.chainId === 'ELA') {
+            let coinList = Config.getSubWalletList();
+            if (coinList.length === 1) {
+                this.chainId = coinList[0].name;
+                this.hasOpenIDChain = true;
+                this.fetchBalance();
+            } else {
+                this.hasOpenIDChain = false;
+                this.confirmOpenIDChain();
+            }
+        }
     }
 
     fetchBalance() {
-        this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.total, (ret: string) => {
-            this.zone.run(()=>{
-                console.log("Received balance:", ret);
-                this.balance = ret;
-            });
-        });
+      this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.total, (ret) => {
+          // this.zone.run(() => {
+              // console.log(this.chainId + ' balance:', ret);
+              this.balance = ret / Config.SELA;
+          // });
+      });
     }
 
     /**
@@ -103,16 +102,22 @@ export class DPoSVotePage implements OnInit {
         this.checkValue();
     }
 
+    confirmOpenIDChain() {
+        if (!this.hasOpenIDChain) {
+            this.popupProvider.ionicAlert('confirmTitle', 'no-open-side-chain');
+        }
+        return this.hasOpenIDChain;
+    }
     checkValue() {
-        if (this.getBalanceInELA() == 0) {
-            this.native.toast_trans('amount-null');
+        if (!this.confirmOpenIDChain()) {
+            return;
+        }
+        if (this.balance === 0) {// sela
+            this.native.toast_trans('error-amount');
             return;
         }
 
-        this.walletManager.isAddressValid(this.masterWalletId, this.transfer.toAddress,
-            () => { this.createVoteProducerTransaction(); },
-            () => { this.native.toast_trans("contact-address-digits"); }
-        );
+        this.createIDTransaction();
     }
 
     async openPayModal(transfer) {
@@ -133,50 +138,13 @@ export class DPoSVotePage implements OnInit {
         return modal.present();
     }
 
-    elaToSELAString(elaAmount: number) {
-        let integerPart = Math.trunc(elaAmount);
-        let fracPart = elaAmount - integerPart;
-
-        let integerPartString = integerPart.toString();
-        let fracPartString = Math.trunc(fracPart*Config.SELA).toString();
-
-        return integerPartString+fracPartString;
-    }
-
-    // 15950000000 SELA will give 159.5 ELA
-    // We need to use this trick because JS is limited to 2^53 bits numbers and this could create
-    // problems with big ELA amounts.
-    getBalanceInELA(): number {
-        if (!this.balance)
-            return 0;
-
-        let strSizeOfSELA = 8;
-        let leftPart = this.balance.substr(0, this.balance.length-strSizeOfSELA);
-        let rightPart = this.balance.substr(this.balance.length-strSizeOfSELA);
-
-        let elaAmount = Number(leftPart) + Number(rightPart)/Config.SELA;
-        return elaAmount;
-    }
-
-    /**
-     * Fees needed to pay for the vote transaction. They have to be deduced from the total amount otherwise
-     * funds won't be enough to vote.
-     */
-    votingFees(): number {
-        return 0.001; // ELA
-    }
-
-    createVoteProducerTransaction() {
-        let stakeAmount = this.elaToSELAString(this.getBalanceInELA() - this.votingFees());
-        console.log("Creating vote transaction with amount", stakeAmount);
-
-        this.transfer.toAddress = "";
-        this.walletManager.createVoteProducerTransaction(this.masterWalletId, this.chainId,
-            this.transfer.toAddress,
-            stakeAmount,
-            this.transfer.publicKeys,
+    createIDTransaction() {
+        console.log('createIDTransaction');
+        this.walletManager.createIdTransaction(this.masterWalletId, this.chainId,
+            '',
+            this.transfer.didrequest,
+            '',
             this.transfer.memo,
-            true,
             (data) => {
                 this.rawTransaction = data;
                 this.openPayModal(this.transfer);
@@ -194,14 +162,11 @@ export class DPoSVotePage implements OnInit {
         this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
             this.native.hideLoading();
             this.native.toast_trans('send-raw-transaction');
-            this.native.setRootRouter("/tabs");
-            switch (this.transfer.type) {
-                case "vote-UTXO":
-                    this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
-                break;
-            }
+            this.native.setRootRouter('/tabs');
+
+            this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
             console.log(ret.TxHash);
-        })
+        });
     }
 }
 

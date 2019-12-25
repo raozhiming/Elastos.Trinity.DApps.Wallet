@@ -155,13 +155,13 @@ export class AppService {
                 Config.coinObj.transfer = {
                     // toAddress: "default",
                     didrequest: ret.params.didrequest,
-                    memo: ret.params.memo,
+                    memo: ret.params.memo || '',
                     intentId: ret.intentId,
                     action: ret.action,
                     from: ret.from,
                 };
                 Config.coinObj.transfer.type = "did-confirm";
-                myService.native.go("/transfer");
+                myService.native.go("/didtransaction");
                 break;
 
             case "walletaccess":

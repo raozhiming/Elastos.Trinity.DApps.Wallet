@@ -21,15 +21,14 @@
  */
 
 import { Component, OnInit, NgZone } from '@angular/core';
-import { WalletManager } from '../../../services/WalletManager';
-import { Native } from '../../../services/Native';
 import { ActivatedRoute } from '@angular/router';
-import { LocalStorage } from '../../../services/Localstorage';
-import { Util } from "../../../services/Util";
-import { Config } from '../../../services/Config';
 import { ModalController, Events } from '@ionic/angular';
 import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
 import { AppService } from '../../../services/AppService';
+import { Config } from '../../../services/Config';
+import { Native } from '../../../services/Native';
+import { Util } from '../../../services/Util';
+import { WalletManager } from '../../../services/WalletManager';
 
 @Component({
     selector: 'app-transfer',
@@ -65,7 +64,7 @@ export class TransferPage implements OnInit {
     readonly: boolean = false;
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
-        public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
+        public native: Native, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
         this.init();
     }
 
@@ -86,19 +85,6 @@ export class TransferPage implements OnInit {
         });
         this.masterWalletId = Config.getCurMasterWalletId();
         switch (this.transfer.type) {
-            case "did-confirm":
-                this.readonly = true;
-                this.transFunction = this.createIDTransaction;
-                if (this.chainId == 'ELA') {
-                    var coinList = Config.getSubWalletList();
-                    if (coinList.length == 1) {
-                        this.chainId = coinList[0].name;
-                    }
-                    else {
-                        //TODO open idchain or select
-                    }
-                }
-                break;
             case "payment-confirm":
                 this.readonly = true;
             case "transfer":
@@ -145,10 +131,6 @@ export class TransferPage implements OnInit {
     }
 
     checkValue() {
-        if (this.transfer.type == "did-confirm") {
-            return this.transFunction();
-        }
-
         if (Util.isNull(this.transfer.toAddress)) {
             this.native.toast_trans('correct-address');
             return;
@@ -249,18 +231,6 @@ export class TransferPage implements OnInit {
             });
     }
 
-    createIDTransaction() {
-        this.walletManager.createIdTransaction(this.masterWalletId, this.chainId,
-            "",
-            this.transfer.didrequest,
-            "",
-            this.transfer.memo,
-            (data) => {
-                this.rawTransaction = data;
-                this.openPayModal(this.transfer);
-            });
-    }
-
     signTx() {
         this.walletManager.signTransaction(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.payPassword, (ret) => {
             if (this.walletInfo["Type"] === "Standard") {
@@ -282,7 +252,6 @@ export class TransferPage implements OnInit {
             switch (this.transfer.type) {
                 case "payment-confirm":
                 case "vote-UTXO":
-                case "did-confirm":
                     this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
                 break;
             }

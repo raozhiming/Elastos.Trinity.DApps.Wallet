@@ -37,6 +37,10 @@ export const en = {
     'text-vote-note-2': "Don't forget to re-vote every time you spend ELA, as this cancels your votes.",
     'text-vote': 'Vote now',
 
+    'text-did': 'Publish Identity',
+    'text-did-note': 'Do you agree to publish your latest identity changes to the public DID chain?',
+    'text-did-action': 'Publish',
+
     'paypassword-reset': 'Reset pay password',
     'paypassword': 'Paypassword',
     // TODO remove unused items

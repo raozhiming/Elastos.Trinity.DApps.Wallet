@@ -78,6 +78,7 @@ const routes: Routes = [
     { path: 'checkmnemomic', loadChildren: './pages/checkmnemomic/checkmnemomic.module#CheckmnemomicPageModule' },
     { path: 'wallet-setting', loadChildren: './pages/wallet/wallet-setting/wallet-setting.module#WalletSettingPageModule' },
     { path: 'access', loadChildren: './pages/wallet/access/access.module#AccessPageModule' },
+    { path: 'didtransaction', loadChildren: './pages/coin/didtransaction/didtransaction.module#DidtransactionPageModule' },
 ];
 @NgModule({
     imports: [

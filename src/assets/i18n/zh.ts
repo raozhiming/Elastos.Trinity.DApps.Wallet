@@ -38,6 +38,10 @@ export const zh = {
     'text-vote-note-2': "Don't forget to re-vote every time you spend ELA, as this cancels your votes.",
     'text-vote': 'Vote now',
 
+    'text-did': '发布',
+    'text-did-note': '您是否同意将最新的身份更改发布到公共的DID链？',
+    'text-did-action': '发布',
+
     'paypassword-reset': '更改支付密码',
     'paypassword': '支付密码',
 
