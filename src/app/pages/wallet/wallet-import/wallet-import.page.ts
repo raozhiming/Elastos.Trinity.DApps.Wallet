@@ -130,10 +130,13 @@ export class WalletImportPage implements OnInit {
             });
     }
 
-    createSubWallet(msg) {
+    async createSubWallet(msg) {
         this.walletManager.createSubWallet(this.masterWalletId, "ELA", 0, () => {
-            this.native.toast_trans(msg);
-            this.saveWalletList();
+            // open IDChain for did
+            this.walletManager.createSubWallet(this.masterWalletId, "IDChain", 0, () => {
+                this.native.toast_trans(msg);
+                this.saveWalletList();
+            });
         });
     }
 

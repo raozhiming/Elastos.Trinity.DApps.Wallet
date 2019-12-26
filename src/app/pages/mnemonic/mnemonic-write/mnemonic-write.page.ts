@@ -50,6 +50,7 @@ export class MnemonicWritePage implements OnInit {
                         Config.walletObj.mnemonicPassword, Config.walletObj.payPassword,
                         Config.walletObj.singleAddress, () => {
                         this.createSubWallet('ELA');
+                        this.createSubWallet('IDChain');// open IDChain for did
                     });
                 });
             }

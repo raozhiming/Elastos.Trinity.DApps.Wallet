@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, Events } from '@ionic/angular';
-import { WalletManager } from '../../../services/WalletManager';
-import { Native } from '../../../services/Native';
-import { LocalStorage } from '../../../services/Localstorage';
 import { Config } from '../../../services/Config';
+import { LocalStorage } from '../../../services/Localstorage';
+import { Native } from '../../../services/Native';
+import { PopupProvider} from '../../../services/popup';
+import { WalletManager } from '../../../services/WalletManager';
 
 @Component({
     selector: 'app-coin-list',
@@ -17,8 +18,8 @@ export class CoinListPage implements OnInit {
     payPassword: string = "";
     singleAddress: boolean = false;
     currentCoin: any;
-    constructor(public walletManager: WalletManager,
-        public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events) {
+    constructor(public walletManager: WalletManager, public popupProvider: PopupProvider,
+                public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events) {
         this.init();
     }
 
@@ -26,6 +27,18 @@ export class CoinListPage implements OnInit {
     }
 
     onSelect(item, open) {
+        if (!open) {
+            this.popupProvider.ionicConfirm('confirmTitle', 'text-coin-close-warning').then((data) => {
+                if (data) {
+                    this.switchCoin(item, open);
+                }
+            });
+        } else {// open
+            this.switchCoin(item, open);
+        }
+    }
+
+    switchCoin(item, open) {
         item.open = open;
         this.native.info(item);
 
@@ -33,8 +46,7 @@ export class CoinListPage implements OnInit {
         this.native.showLoading().then(() => {
             if (item.open) {
                 this.createSubWallet(item.name);
-            }
-            else {
+            } else {
                 this.destroySubWallet(item.name);
             }
         });

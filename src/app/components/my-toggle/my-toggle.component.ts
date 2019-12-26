@@ -9,11 +9,14 @@ export class MyToggleComponent implements OnInit {
 
     constructor() { }
 
+    @Input() auto: boolean = true;
     @Input() checked: boolean = false;
     @Output() onChange = new EventEmitter<boolean>();
 
     onClick(checked) {
-        this.checked = checked;
+        if (this.auto) {
+            this.checked = checked;
+        }
         this.onChange.emit(checked);
     }
 

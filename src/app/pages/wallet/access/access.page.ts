@@ -54,6 +54,6 @@ export class AccessPage implements OnInit {
         this.appService.sendIntentResponse(this.requestDapp.action, {walletinfo: [{elaaddress: this.elaAddress}]}, this.requestDapp.intentId);
         this.native.pop();
       }
-  });
+    });
   }
 }
