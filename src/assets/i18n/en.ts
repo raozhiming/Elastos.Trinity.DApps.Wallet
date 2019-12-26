@@ -39,6 +39,8 @@ export const en = {
 
     'text-did': 'Publish Identity',
     'text-did-note': 'Do you agree to publish your latest identity changes to the public DID chain?',
+    'text-did-note-1': 'No ELA is spent, except to pay a very low transaction fee.',
+    'text-did-balance-idchain': 'Balance of IDChain:',
     'text-did-action': 'Publish',
 
     'paypassword-reset': 'Reset pay password',

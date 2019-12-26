@@ -13,23 +13,42 @@
     font-size: 16px;
 }
 
+ion-note {
+    font-size: 12px;
+}
+
+ion-icon {
+    margin-left: px2rem(20px);
+    width: px2rem(32px);
+    height: px2rem(32px);
+}
+
 .intro {
     font-size: 2em;
     margin:14vw;
 }
 
-.number-of-ela-value {
-    font-size: 1em;
-    margin-left: 5px;
+.number-of-idchain {
+    font-size: 1.7em;
+    margin-top: 20px;
+}
 
-    ion-item {
-        #coin-name {
-            margin-left: px2rem(27px);
-            font-size: 18px;
-        }
-        #coin-value {
-            text-align: right;
-            flex: 0 0 px2rem(380px) !important;
-        }
-    }
+.number-of-idchain-value {
+    font-weight: bold;
+    font-size: 2.2em;
+    margin: 5px;
+}
+
+.notes {
+    margin-top: 5vh;
+}
+
+.note {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size:1.2em;
+}
+
+.note-entry {
+    margin-bottom:10px;
 }

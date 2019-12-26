@@ -32,14 +32,16 @@ export const zh = {
     'text-mnemonic-prompt3': '助记词错误，请重新录入助记词',
     'text-mnemonic-format': '助记词之间使用空格隔开',
 
-    'text-dposvote': 'Supernode Vote',
-    'text-you-are-going-to-vote-intro': 'You are going to vote for <b>{{ votecount }}</> nodes',
-    'text-vote-note-1': 'No ELA is spent, except to pay a very low transaction fee.',
-    'text-vote-note-2': "Don't forget to re-vote every time you spend ELA, as this cancels your votes.",
-    'text-vote': 'Vote now',
+    'text-dposvote': '超级节点投票',
+    'text-you-are-going-to-vote-intro': '您将给 <b>{{ votecount }}</> 个节点投票',
+    'text-vote-note-1': '此操作只花费极少的交易费用。',
+    'text-vote-note-2': "转账会取消投票，因此转账后请重新投票。",
+    'text-vote': '投票',
 
-    'text-did': '发布',
-    'text-did-note': '您是否同意将最新的身份更改发布到公共的DID链？',
+    'text-did': '发布 DID',
+    'text-did-note': '您是否同意将最新的身份发布到公共的DID链？',
+    'text-did-note-1': '此操作只花费极少的交易费用。',
+    'text-did-balance-idchain': 'ID链金额:',
     'text-did-action': '发布',
 
     'paypassword-reset': '更改支付密码',
@@ -89,7 +91,7 @@ export const zh = {
     'text-notice': '消息通知',
     'text-add': '添加',
     'text-save-modify': '保存修改',
-    'text-note': 'Note',
+    'text-note': '备注',
 
     //create wallet page
     'addwallet-walletname-title': '钱包名称',
