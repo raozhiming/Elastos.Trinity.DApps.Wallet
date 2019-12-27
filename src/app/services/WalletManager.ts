@@ -403,9 +403,9 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    createDepositTransaction(masterWalletId: string, chainId: string, fromAddress: string, sideChainID: string, toAddress: string, amount: number
-        , sidechainAccounts: string, memo: string, success) {
-        this.walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress,sideChainID, toAddress, amount, sidechainAccounts, memo],
+    createDepositTransaction(masterWalletId: string, chainId: string, fromAddress: string, sideChainID: string, amount: number
+        , sideChainAddress: string, memo: string, success) {
+        this.walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress,sideChainID, amount, sideChainAddress, memo],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
