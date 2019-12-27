@@ -25,10 +25,11 @@
   },
   "default_locale": "en",
   "plugins": [
-    "Wallet",
-    "QRScanner",
     "Clipboard",
-    "InAppBrowser"
+    "InAppBrowser",
+    "QRScanner",
+    "SplashScreen",
+    "Wallet"
   ],
   "urls": [],
   "framework": [
