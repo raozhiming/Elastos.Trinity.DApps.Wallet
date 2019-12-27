@@ -88,8 +88,11 @@ export class MasterManager {
             let id = idList[i];
             if (this.masterInfos[id]) {
                 this.masterWallet[id] = this.masterInfos[id];
-                this.getMasterWalletBasicInfo(id);
             }
+            else {
+                this.masterWallet[id] = { name: "walletName"};
+            }
+            this.getMasterWalletBasicInfo(id);
         }
     }
 
@@ -99,7 +102,6 @@ export class MasterManager {
             this.handleNull();
         }
     }
-
 
     handleNull() {
         this.native.setRootRouter('/launcher');
@@ -127,25 +129,22 @@ export class MasterManager {
                 this.addSubWallet(masterId, chainId);
             }
 
-            if (this.curMasterId == "-1") {
-                this.localStorage.getCurMasterId((data) => {
-                    if (data && data["masterId"] && this.masterList.indexOf(data["masterId"]) > -1) {
-                        this.curMasterId = data["masterId"]
-                    }
-                    else {
-                        this.curMasterId = this.masterList[0];
-                    }
-                    Config.curMaster = this.masterWallet[this.curMasterId];
-                    Config.setCurMasterWalletId(this.curMasterId);
-
-                    this.native.setRootRouter("/tabs");
-                    return;
-                });
-            }
-
             if (isAdd) {
                 this.saveInfos();
                 this.setCurMasterId(masterId);
+                this.native.setRootRouter("/tabs");
+            }
+            else {
+                if (this.curMasterId == "-1") {
+                    this.localStorage.getCurMasterId((data) => {
+                        var curMasterId = this.masterList[0];
+                        if (data && data["masterId"] && this.masterList.indexOf(data["masterId"]) > -1) {
+                            curMasterId = data["masterId"]
+                        }
+                        this.setCurMasterId(curMasterId);
+                        this.native.setRootRouter("/tabs");
+                    });
+                }
             }
         });
     }
@@ -187,11 +186,35 @@ export class MasterManager {
         this.localStorage.setMasterInfos(this.masterWallet);
     }
 
+    private syncStartSubWallets(masterId) {
+        if (masterId == "-1") {
+            return;
+        }
+
+        for (var i = 0; i < this.masterWallet[masterId].chainList.length; i++) {
+            var chainId = this.masterWallet[masterId].chainList[i];
+            this.walletManager.syncStart(masterId, chainId, () => {});
+        }
+    }
+
+    private syncStopSubWallets(masterId) {
+        if (masterId == "-1") {
+            return;
+        }
+
+        for (var i = 0; i < this.masterWallet[masterId].chainList.length; i++) {
+            var chainId = this.masterWallet[masterId].chainList[i];
+            this.walletManager.syncStop(masterId, chainId, () => {});
+        }
+    }
+
     public setCurMasterId(id) {
         if (id != this.curMasterId) {
+            this.syncStopSubWallets(this.curMasterId);
             this.localStorage.saveCurMasterId({ masterId: id }).then((data) => {
                 this.curMasterId = id;
                 Config.curMaster = this.masterWallet[id];
+                this.syncStartSubWallets(id);
                 this.native.setRootRouter("/tabs");
             });
         }
@@ -204,17 +227,13 @@ export class MasterManager {
     public addSubWallet(masterId, chainId) {
         this.masterWallet[masterId].chainList.push(chainId);
         if (!this.masterWallet[masterId].subWallet[chainId]) {
-            this.masterWallet[masterId].subWallet[chainId] = { balance: 0, maxHeight: 0, curHeight: 0 };
+            this.masterWallet[masterId].subWallet[chainId] = { balance: 0, progress: 0 };
         }
         else {
             if (this.progress && this.progress[masterId] && this.progress[masterId][chainId]) {
-                let maxHeight = this.progress[masterId][chainId]["maxHeight"];
-                if (maxHeight) {
-                    this.masterWallet[masterId].subWallet[chainId].maxHeight = maxHeight;
-                }
-                let curHeight = this.progress[masterId][chainId]["curHeight"];
-                if (curHeight) {
-                    this.masterWallet[masterId].subWallet[chainId].curHeight = curHeight;
+                let progress = this.progress[masterId][chainId]["progress"];
+                if (progress) {
+                    this.masterWallet[masterId].subWallet[chainId].progress = progress;
                 }
             }
         }

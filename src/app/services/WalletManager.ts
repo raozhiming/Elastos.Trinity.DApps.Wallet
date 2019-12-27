@@ -276,6 +276,19 @@ export class WalletManager {
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err, error); });
     }
+
+    syncStart(masterWalletId: string, chainId: string, success) {
+        this.walletManager.syncStart([masterWalletId, chainId],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    syncStop(masterWalletId: string, chainId: string, success) {
+        this.walletManager.syncStop([masterWalletId, chainId],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
     /**
     * @param {string} masterWalletId
     */

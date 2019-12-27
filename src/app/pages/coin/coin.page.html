@@ -13,7 +13,7 @@
 
     <div class="coin-info-top-box">
         <h2>{{Config.curMaster.subWallet[chainId].balance}}</h2>
-        <p>{{Config.curMaster.subWallet[chainId].curHeight}}/{{Config.curMaster.subWallet[chainId].maxHeight}}</p>
+        <p>{{Config.curMaster.subWallet[chainId].progress}}%</p>
 
     </div>
     <div id="nodata" *ngIf="isNodata">{{'no-tx-record' | translate }}</div>
