@@ -408,7 +408,7 @@ export const en = {
     'text-wallet-name-validator2': 'Wallet Name exist',
     'text-multi-wallet': '(Multi-Sign Wallet)',
     'text-standard-wallet': '(Standard Wallet)',
-    'text-export-mnemomic': 'Backup Mnemomics',
+    'text-export-mnemomic': 'Backup Mnemonics',
     'text-export-menmonic-sucess': "Check Mnemonics Success",
 
     'create-multi-by-mnes': 'Use Existing Seed (Import Mnemonics) ',

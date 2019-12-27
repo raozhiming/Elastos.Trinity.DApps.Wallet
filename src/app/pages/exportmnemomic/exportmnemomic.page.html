@@ -22,9 +22,11 @@
             <div class="slide-body">
                 <div class="phrase-container">
                     <div class="phrase">
-                        <span *ngFor="let item of mnemonicList;let i=index">
-                            <span>{{item.text}}</span>
-                        </span>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="4" *ngFor="let item of mnemonicList;let i=index">{{item.text}}</ion-col>
+                            </ion-row>
+                        </ion-grid>
                     </div>
                 </div>
             </div>
