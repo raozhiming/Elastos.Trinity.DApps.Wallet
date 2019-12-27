@@ -207,9 +207,8 @@ export class TransferPage implements OnInit {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
         this.walletManager.createDepositTransaction(this.masterWalletId, 'ELA', "",
             Config.coinObj.chainId,
-            this.transfer.toAddress, // user input address
             toAmount, // user input amount
-            "",
+            this.transfer.toAddress, // user input address
             this.transfer.memo,
             (data) => {
                 this.rawTransaction = data;
