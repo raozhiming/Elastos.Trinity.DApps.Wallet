@@ -27,7 +27,7 @@ import { PopupProvider } from "./popup";
 import { LocalStorage } from './Localstorage';
 import { Events } from '@ionic/angular';
 
-declare let walletManager: any;
+declare let walletManager: WalletPlugin.WalletManager;
 
 /***
  * wallet jni 交互
