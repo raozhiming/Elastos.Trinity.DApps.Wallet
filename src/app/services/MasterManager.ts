@@ -237,6 +237,7 @@ export class MasterManager {
                 }
             }
         }
+
         this.walletManager.registerWalletListener(masterId, chainId, (ret) => {
             this.zone.run(() => {
                 this.handleSubWalletCallback(ret);
@@ -260,7 +261,7 @@ export class MasterManager {
 
     public handleSubWalletCallback(result) {
         let masterId = result["MasterWalletID"];
-        let chainId = result["ChaiID"];
+        let chainId = result["ChainID"];
         let chain = this.masterWallet[masterId].subWallet[chainId];
         switch (result["Action"]) {
             case "OnTransactionStatusChanged":
@@ -272,8 +273,7 @@ export class MasterManager {
                 break;
             case "OnBlockSyncProgress":
                 this.zone.run(() => {
-                    var progressInfo = JSON.parse(result["progressInfo"]);
-                    this.setProgress(masterId, chainId, progressInfo.Progress);
+                    this.setProgress(masterId, chainId, result['Progress']);
                 });
                 break;
             case "OnBlockSyncStopped":
@@ -317,10 +317,10 @@ export class MasterManager {
     }
 
     public setProgress(masterId, coin, progress) {
+        this.masterWallet[masterId].subWallet[coin]["progress"] = progress;
         if (!this.progress[masterId]) {
             this.progress[masterId] = {};
         }
-
         if (!this.progress[masterId][coin]) {
             this.progress[masterId][coin] = {};
 
