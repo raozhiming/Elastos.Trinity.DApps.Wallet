@@ -81,12 +81,9 @@ export class DidtransactionPage implements OnInit {
     }
 
     fetchBalance() {
-      this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.total, (ret) => {
-          // this.zone.run(() => {
-              // console.log(this.chainId + ' balance:', ret);
-              this.balance = ret / Config.SELA;
-          // });
-      });
+        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret) => {
+            this.balance = ret / Config.SELA;
+        });
     }
 
     /**
@@ -139,7 +136,6 @@ export class DidtransactionPage implements OnInit {
     }
 
     createIDTransaction() {
-        console.log('createIDTransaction');
         this.walletManager.createIdTransaction(this.masterWalletId, this.chainId,
             this.transfer.didrequest,
             this.transfer.memo,

@@ -132,7 +132,7 @@ export class WalletImportPage implements OnInit {
     async createSubWallet(msg) {
         this.walletManager.createSubWallet(this.masterWalletId, "ELA", () => {
             // open IDChain for did
-            this.walletManager.createSubWallet(this.masterWalletId, "IDChain", 0, () => {
+            this.walletManager.createSubWallet(this.masterWalletId, "IDChain", () => {
                 this.native.toast_trans(msg);
                 this.saveWalletList();
             });
