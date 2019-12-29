@@ -12,10 +12,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class RecordinfoPage implements OnInit {
     masterWalletId: string = "1";
+    chainId = '';
     transactionRecord: any = {};
     start = 0;
     payStatusIcon: string = "";
     blockchain_url = Config.BLOCKCHAIN_URL;
+    idchain_url = Config.IDCHAIN_URL;
     public myInterval: any;
     public jiajian: any = "";
     public inputs: any = [];
@@ -96,7 +98,11 @@ export class RecordinfoPage implements OnInit {
                         vtype = "transaction-type-9";
                         break;
                     case 10:
-                        vtype = "transaction-type-10";
+                        if (chainId === 'IDChain') {
+                            vtype = "transaction-type-did";
+                        } else {
+                            vtype = "transaction-type-10";
+                        }
                         break;
                     case 11:
                         vtype = "transaction-type-11";
@@ -142,7 +148,7 @@ export class RecordinfoPage implements OnInit {
                     confirmCount: transaction["ConfirmStatus"],
                     memo: transaction["Memo"],
                     payType: vtype
-                }
+                };
 
             });
         });
@@ -155,9 +161,12 @@ export class RecordinfoPage implements OnInit {
         this.native.toast_trans('copy-ok');
     }
 
-    tiaozhuan(txId) {
-        // self.location.href = this.blockchain_url + 'tx/' + txId;
-        this.native.openUrl(this.blockchain_url + 'tx/' + txId)
+    tiaozhuan(chainId, txId) {
+        if (chainId === 'ELA') {
+            this.native.openUrl(this.blockchain_url + 'tx/' + txId);
+        } else {
+            this.native.openUrl(this.idchain_url + 'tx/' + txId);
+        }
     }
 
     doRefresh(event) {

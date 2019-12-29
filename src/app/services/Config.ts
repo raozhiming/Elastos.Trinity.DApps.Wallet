@@ -55,6 +55,7 @@ export class Config {
 
     public static SELA = 100000000;
 
+    public static IDCHAIN_URL: String = 'https://idchain.elastos.org/';
     public static BLOCKCHAIN_URL: String = 'https://blockchain.elastos.org/';
     // public static BLOCKCHAIN_URL: String = 'https://blockchain-beta.elastos.org/';
     //public static BLOCKCHAIN_URL: String = 'https://blockchain-regtest.elastos.org/';

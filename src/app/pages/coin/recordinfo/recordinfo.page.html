@@ -69,7 +69,7 @@
             <ion-col col-4>
                 {{'transaction-id' | translate}}
             </ion-col>
-            <ion-col col-8 (click)="tiaozhuan(transactionRecord.txId)">
+            <ion-col col-8 (click)="tiaozhuan(transactionRecord.name, transactionRecord.txId)">
                 <a href="#">{{transactionRecord.txId}}</a>
             </ion-col>
         </ion-row>
