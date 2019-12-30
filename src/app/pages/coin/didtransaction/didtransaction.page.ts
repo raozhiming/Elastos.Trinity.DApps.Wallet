@@ -136,10 +136,12 @@ export class DidtransactionPage implements OnInit {
     }
 
     createIDTransaction() {
+        console.log("Calling createIdTransaction(): ", this.transfer.didrequest, this.transfer.memo)
         this.walletManager.createIdTransaction(this.masterWalletId, this.chainId,
             this.transfer.didrequest,
             this.transfer.memo,
             (data) => {
+                console.log("Created raw DID transaction:", data);
                 this.rawTransaction = data;
                 this.openPayModal(this.transfer);
             });
