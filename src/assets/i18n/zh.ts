@@ -18,6 +18,7 @@ export const zh = {
     'text-receive': '接收',
     'text-transfer': '转账',
     'text-recharge': '侧链充值',
+    'text-recharge-intro': '您将要将一些ELA转到DID侧链，以管理您的去中心化身份凭证。',
     'text-withdraw': '主链提现',
     'text-recharge-address': '侧链充值地址',
     'text-withdraw-address': '主链提现地址',
@@ -43,6 +44,7 @@ export const zh = {
     'text-did-note-1': '此操作只花费极少的交易费用。',
     'text-did-balance-idchain': 'ID链金额:',
     'text-did-action': '发布',
+    'text-did-balance-not-enough': 'ID链余额不足，请充值!',
 
     'paypassword-reset': '更改支付密码',
     'paypassword': '支付密码',

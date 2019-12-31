@@ -16,7 +16,8 @@ export const en = {
     'coin-recent-transfer': 'Recent Transfers',
     'text-receive': 'Receive',
     'text-transfer': 'Send',
-    'text-recharge': 'Recharge',
+    'text-recharge': 'To DID',
+    'text-recharge-intro': 'You are going to transfer some ELA to the DID sidechain in order to manage your decentralized identity.',
     'text-withdraw': 'Withdraw',
     'text-recharge-address': 'Withdraw to (Address)',
     'text-withdraw-address': 'Recharge From (Address)',
@@ -42,6 +43,7 @@ export const en = {
     'text-did-note-1': 'No ELA is spent, except to pay a very low transaction fee.',
     'text-did-balance-idchain': 'Balance of IDChain:',
     'text-did-action': 'Publish',
+    'text-did-balance-not-enough': 'The balance of IDChain is not enough, please recharge!',
 
     'paypassword-reset': 'Reset pay password',
     'paypassword': 'Paypassword',

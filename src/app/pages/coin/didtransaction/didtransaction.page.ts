@@ -109,8 +109,8 @@ export class DidtransactionPage implements OnInit {
         if (!this.confirmOpenIDChain()) {
             return;
         }
-        if (this.balance === 0) {// sela
-            this.native.toast_trans('error-amount');
+        if (this.balance < 20000) {// sela
+            this.native.toast_trans('text-did-balance-not-enoug');
             return;
         }
 

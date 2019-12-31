@@ -61,6 +61,8 @@ export class TransferPage implements OnInit {
 
     transFunction: any;
     readonly: boolean = false;
+    hideMemo: boolean = false;
+    introText = ''; // to show intro text
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
         public native: Native, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
@@ -94,7 +96,10 @@ export class TransferPage implements OnInit {
                 this.transfer.rate = 1;//TODO:: this is sidechain rate
                 this.transfer.fee = 10000;
                 this.chainId = "ELA";
-                // this.getGenesisAddress();
+                this.transfer.amount = '0.1'; // for DID
+                this.getIDChainAddress();
+                this.hideMemo = true;
+;               this.introText = 'text-recharge-intro';
                 break;
             case "withdraw":
                 this.transFunction = this.createWithdrawTransaction;
@@ -104,11 +109,11 @@ export class TransferPage implements OnInit {
         this.initData();
     }
 
-    // getGenesisAddress() {
-    //     this.walletManager.getGenesisAddress(this.masterWalletId, Config.coinObj.chainId, (data) => {
-    //         this.genesisAddress = data;
-    //     });
-    // }
+    getIDChainAddress() {
+        this.walletManager.createAddress(this.masterWalletId, 'IDChain', (ret) => {
+            this.transfer.toAddress = ret;
+        });
+    }
 
     rightHeader() {
         // console.log(Config.coinObj.transfer);
