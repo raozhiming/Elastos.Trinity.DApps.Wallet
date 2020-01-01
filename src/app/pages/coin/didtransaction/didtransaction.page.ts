@@ -38,7 +38,7 @@ export class DidtransactionPage implements OnInit {
     masterWalletId = '1';
     transfer: any = null;
 
-    balance = 0;
+    balance: string; // ELA
 
     chainId: string;
     rawTransaction: '';
@@ -72,18 +72,12 @@ export class DidtransactionPage implements OnInit {
             if (coinList.length === 1) {
                 this.chainId = coinList[0].name;
                 this.hasOpenIDChain = true;
-                this.fetchBalance();
+                this.balance = Config.masterManager.masterWallet[this.masterWalletId].subWallet[this.chainId].balance;
             } else {
                 this.hasOpenIDChain = false;
                 this.confirmOpenIDChain();
             }
         }
-    }
-
-    fetchBalance() {
-        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret) => {
-            this.balance = ret / Config.SELA;
-        });
     }
 
     /**
@@ -109,8 +103,9 @@ export class DidtransactionPage implements OnInit {
         if (!this.confirmOpenIDChain()) {
             return;
         }
-        if (this.balance < 20000) {// sela
-            this.native.toast_trans('text-did-balance-not-enoug');
+
+        if (parseFloat(this.balance) < 0.0002) {
+            this.popupProvider.ionicAlert('confirmTitle', 'text-did-balance-not-enough');
             return;
         }
 

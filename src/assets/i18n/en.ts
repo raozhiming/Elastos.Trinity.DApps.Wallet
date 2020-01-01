@@ -43,7 +43,7 @@ export const en = {
     'text-did-note-1': 'No ELA is spent, except to pay a very low transaction fee.',
     'text-did-balance-idchain': 'Balance of IDChain:',
     'text-did-action': 'Publish',
-    'text-did-balance-not-enough': 'The balance of IDChain is not enough, please recharge!',
+    'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
 
     'paypassword-reset': 'Reset pay password',
     'paypassword': 'Paypassword',

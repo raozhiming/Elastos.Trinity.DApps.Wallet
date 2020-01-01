@@ -44,7 +44,7 @@ export const zh = {
     'text-did-note-1': '此操作只花费极少的交易费用。',
     'text-did-balance-idchain': 'ID链金额:',
     'text-did-action': '发布',
-    'text-did-balance-not-enough': 'ID链余额不足，请充值!',
+    'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从您的主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
 
     'paypassword-reset': '更改支付密码',
     'paypassword': '支付密码',
