@@ -108,7 +108,7 @@ export class AppService {
     }
 
     onReceiveIntent(ret) {
-        // console.log("Intent receive message:" + ret.action + ". params: " + ret.params + ". from: " + ret.fromId);
+        console.log("Intent received message:", ret.action, ". params: ", ret.params, ". from: ", ret.fromId);
         // console.log(ret);
         switch (ret.action) {
             case "pay":
