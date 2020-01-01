@@ -1,12 +1,13 @@
 {
   "id": "org.elastos.trinity.dapp.wallet",
   "version": "1.0.0",
-  "version_code": 100,
+  "version_code": 1,
   "name": "Wallet",
   "short_name": "wallet",
-  "description": "Elastos SPV wallet",
+  "description": "elastOS SPV ELA wallet",
   "start_url": "index.html",
   "type": "app",
+  "category":"finance",
   "icons": [
     {
       "src": "assets/images/logo.png",
@@ -20,8 +21,9 @@
     }
   ],
   "author": {
-    "name": "ChenDongxiao",
-    "email": "chendongxiao@elastos.org"
+    "name": "Elastos Foundation",
+    "email": "contact@elastos.org",
+    "website": "https://www.elastos.org"
   },
   "default_locale": "en",
   "plugins": [
