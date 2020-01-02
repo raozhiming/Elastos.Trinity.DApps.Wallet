@@ -138,7 +138,7 @@ export class CoinPage implements OnInit {
             for (let key in transactions) {
                 let transaction = transactions[key];
                 let timestamp = transaction['Timestamp'] * 1000;
-                let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd hh:mm:ss');
+                let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
                 let txId = transaction['TxHash'];
                 let payStatusIcon = transaction["Direction"];
                 let name = transaction["Direction"];//JSON.parse("{" + transaction["memo"] +"}").msg;;
