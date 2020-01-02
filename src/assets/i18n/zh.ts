@@ -81,9 +81,13 @@ export const zh = {
     'text-contacts-add': '添加联系人',
     // contacts page
     'contacts-name-title': '姓名',
+    'contacts-name-input': '请输入联系人姓名',
     'contacts-phone-title': '手机',
+    'contacts-phone-input': '请输入联系人手机号码',
     'contacts-email-title': '邮箱',
+    'contacts-email-input': '请输入联系人邮箱地址',
     'contacts-address-title': '钱包地址',
+    'contacts-address-input': '请输入ELA钱包地址',
     'contacts-remark-title': '备注',
 
     'text-contacts-info': '联系人详情',

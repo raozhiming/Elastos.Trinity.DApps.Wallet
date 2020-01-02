@@ -75,9 +75,13 @@ export const en = {
     'text-contacts-add': 'Add contact',
     // contacts page
     'contacts-name-title': 'Name',
+    'contacts-name-input': 'Pls input name',
     'contacts-phone-title': 'Phone Number',
+    'contacts-phone-input': 'Pls input telephone number',
     'contacts-email-title': 'Email Address',
+    'contacts-email-input': 'Pls input email address',
     'contacts-address-title': 'Wallet Address',
+    'contacts-address-input': 'Pls input ELA Wallet address',
     'contacts-remark-title': 'Remark',
 
     'text-contacts-info': 'Contacts Information',

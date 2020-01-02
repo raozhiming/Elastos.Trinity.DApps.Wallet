@@ -36,7 +36,7 @@ export class PaymentboxComponent implements OnInit {
         if (this.transfer["rate"]) {
             this.toAddress = this.transfer["accounts"];
         } else {
-            this.toAddress = this.transfer["toAddress"];
+            this.toAddress = this.transfer["toAddress"] ? this.transfer["toAddress"] : '';
         }
         // this.route.queryParams.subscribe((data) => {
         //     console.log(data);
