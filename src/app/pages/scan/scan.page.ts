@@ -14,6 +14,7 @@ export class ScanPage implements OnInit {
     light: boolean;//判断闪光灯
     frontCamera: boolean;//判断摄像头
     isShow: boolean = false;//控制显示背景，避免切换页面卡顿
+
     pageType: string;
     constructor(public route: ActivatedRoute,
         private qrScanner: QRScanner,
@@ -33,6 +34,9 @@ export class ScanPage implements OnInit {
     ngOnInit() {
         this.qrScanner.prepare().then((status: QRScannerStatus) => {
             if (status.authorized) {
+                // show camera preview
+                this.qrScanner.show();
+                this.isShow = true;
                 // camera permission was granted
                 // start scanning
                 // let scanSub =
@@ -81,10 +85,7 @@ export class ScanPage implements OnInit {
                             this.native.pop();
                             break;
                     }
-
                 });
-                // show camera preview
-                this.qrScanner.show();
                 // wait for user to scan something,then the observable callback will be called
             } else if (status.denied) {
                 // camera permission was permanently denied
@@ -96,11 +97,10 @@ export class ScanPage implements OnInit {
         }).catch((e: any) => console.log('Error is', e));
     }
 
-    ionViewDidEnter() {
-        //页面可见时才执行
-        this.showCamera();
-        this.isShow = true;//显示背景
-    }
+    // ionViewDidEnter() {
+    //     //页面可见时才执行
+    //     this.showCamera();
+    // }
 
     /** * 闪光灯控制，默认关闭 */
     toggleLight() {
@@ -129,9 +129,12 @@ export class ScanPage implements OnInit {
         // (window.document.querySelector('ion-app') as HTMLElement).classList.remove('cameraView');
         this.qrScanner.hide();//需要关闭扫描，否则相机一直开着
         this.qrScanner.destroy();//关闭
+        this.isShow = false;
     }
 
     ionViewWillLeave() {
-        this.hideCamera();
+        if (this.isShow) {
+            this.hideCamera();
+        }
     }
 }
