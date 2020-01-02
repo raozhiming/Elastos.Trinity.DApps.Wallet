@@ -41,6 +41,7 @@ export class Config {
     public static requestDapp: any;
     public static modifyId = "";
     public static initialized: boolean = false;
+    public static needPromptTransfer2IDChain = false; // for now just show once atmost?
 
     public static masterWallet: any = {};
     public static curMasterId: string = "-1";

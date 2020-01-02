@@ -30,7 +30,6 @@ import { LocalStorage } from './Localstorage';
 
 export class MasterManager {
 
-    // public curMasterId: string = "1";
     public subWallet = {};
     public name: string = '';
 
@@ -40,6 +39,8 @@ export class MasterManager {
     public masterInfos: any = {};
     public progress: any = {};
     public masterList: any = {};
+
+    public hasPromptTransfer2IDChain = true;
 
     constructor(public native: Native,
         public localStorage: LocalStorage,
@@ -68,6 +69,10 @@ export class MasterManager {
                 }
                 this.walletManager.getAllMasterWallets((ret) => this.successHandle(ret), (err) => this.errorHandle(err));
             });
+        });
+
+        this.localStorage.get('hasPrompt').then( (val) => {
+            this.hasPromptTransfer2IDChain = val ? val : false;
         });
     }
 
@@ -297,7 +302,7 @@ export class MasterManager {
         let hash = data["hash"];
         let result = JSON.parse(data["result"]);
         let code = result["Code"];
-        let tx = "txPublished-"
+        let tx = "txPublished-";
         switch (code) {
             case 0:
             case 18:
@@ -329,6 +334,39 @@ export class MasterManager {
         this.progress[masterId][coin]["progress"] = progress;
 
         this.localStorage.setProgress(this.progress);
+        console.log('setProgress ',coin, ' progress ',progress)
+        if (!this.hasPromptTransfer2IDChain && (coin === 'IDChain') && (progress === 100)) {
+            this.checkIDChainBalance();
+        }
+    }
+
+    public setHasPromptTransfer2IDChain() {
+        this.hasPromptTransfer2IDChain = true;
+        Config.needPromptTransfer2IDChain = false;
+        this.localStorage.set('hasPrompt', true);
+    }
+
+    public checkIDChainBalance() {
+        if (this.hasPromptTransfer2IDChain) { return; }
+        if (Config.needPromptTransfer2IDChain) { return; }
+
+        // // IDChain not open, do not prompt
+        // if (Util.isNull(this.masterWallet[this.curMasterId].subWallet['IDChain'])) {
+        //     return;
+        // }
+
+        if (parseFloat(this.masterWallet[this.curMasterId].subWallet['ELA'].balance) <= 0.1) {
+            console.log('ELA balance ', this.masterWallet[this.curMasterId].subWallet['ELA'].balance);
+            return;
+        }
+
+        if (parseFloat(this.masterWallet[this.curMasterId].subWallet['IDChain'].balance) > 0.01) {
+            console.log('IDChain balance ', this.masterWallet[this.curMasterId].subWallet['IDChain'].balance);
+            return;
+        }
+
+        console.log('set needPromptTransfer2IDChain true');
+        Config.needPromptTransfer2IDChain = true;
     }
 }
 

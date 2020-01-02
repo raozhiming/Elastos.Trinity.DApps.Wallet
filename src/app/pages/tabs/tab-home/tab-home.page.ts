@@ -21,9 +21,10 @@
  */
 
 import { Component, OnInit, NgZone } from '@angular/core';
+import { AppService } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
-import { AppService } from '../../../services/AppService';
+import { PopupProvider } from '../../../services/popup';
 
 @Component({
     selector: 'app-tab-home',
@@ -34,8 +35,7 @@ export class TabHomePage implements OnInit {
     showOn: boolean = true;
     Config = Config;
 
-    constructor(public native: Native,
-        public appService: AppService) {
+    constructor(public native: Native, public appService: AppService, public popupProvider: PopupProvider) {
     }
 
     ngOnInit() {
@@ -44,12 +44,12 @@ export class TabHomePage implements OnInit {
     ionViewWillEnter() {
         if (Config.getCurMasterWalletId() != "-1") {
             this.appService.setIntentListener();
+            this.promptTransfer2IDChain();
         }
     }
 
     ionViewDidLeave() {
     }
-
 
     onOpen() {
         this.showOn = !this.showOn;
@@ -78,5 +78,12 @@ export class TabHomePage implements OnInit {
         setTimeout(() => {
             event.target.complete();
         }, 1000);
+    }
+
+    promptTransfer2IDChain() {
+        if (Config.needPromptTransfer2IDChain) {
+            this.popupProvider.ionicAlert('text-did-balance-not-enough');
+            Config.masterManager.setHasPromptTransfer2IDChain();
+        }
     }
 }
