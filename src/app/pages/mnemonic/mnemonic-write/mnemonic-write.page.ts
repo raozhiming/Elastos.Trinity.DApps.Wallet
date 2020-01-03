@@ -49,8 +49,7 @@ export class MnemonicWritePage implements OnInit {
                     this.walletManager.createMasterWallet(Config.walletObj.masterId, this.mnemonicStr,
                         Config.walletObj.mnemonicPassword, Config.walletObj.payPassword,
                         Config.walletObj.singleAddress, () => {
-                        this.createSubWallet('ELA');
-                        this.createSubWallet('IDChain');// open IDChain for did
+                        this.createSubWallet();
                     });
                 });
             }
@@ -60,10 +59,12 @@ export class MnemonicWritePage implements OnInit {
         }
     }
 
-    createSubWallet(chainId) {
-        this.walletManager.createSubWallet(Config.walletObj.masterId, chainId,() => {
+    async createSubWallet() {
+        this.walletManager.createSubWallet(Config.walletObj.masterId, "ELA", () => {
             let account = { "singleAddress": Config.walletObj.singleAddress, "Type": "Standard" };
             Config.masterManager.addMasterWallet(Config.walletObj.masterId, Config.walletObj.name, account);
+            // open IDChain for did
+            this.walletManager.createSubWallet(Config.walletObj.masterId, "IDChain", () => {});
         });
     }
 
