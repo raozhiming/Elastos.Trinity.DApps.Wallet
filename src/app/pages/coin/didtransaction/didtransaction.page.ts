@@ -157,6 +157,7 @@ export class DidtransactionPage implements OnInit {
 
             this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
             console.log(ret.TxHash);
+            this.appService.close();
         });
     }
 }
