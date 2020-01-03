@@ -50,7 +50,9 @@ export class AppService {
     setIntentListener() {
         if (!this.isReceiveIntentReady) {
             this.isReceiveIntentReady = true;
-            appManager.setIntentListener(this.onReceiveIntent);
+            appManager.setIntentListener((intent: AppManagerPlugin.ReceivedIntent)=>{
+              this.onReceiveIntent(intent);
+            });
         }
     }
 
@@ -107,8 +109,8 @@ export class AppService {
         }
     }
 
-    onReceiveIntent(ret) {
-        console.log("Intent received message:", ret.action, ". params: ", ret.params, ". from: ", ret.fromId);
+    onReceiveIntent(ret: AppManagerPlugin.ReceivedIntent) {
+        console.log("Intent received message:", ret.action, ". params: ", ret.params, ". from: ", ret.from);
         // console.log(ret);
         switch (ret.action) {
             case "pay":
@@ -180,7 +182,9 @@ export class AppService {
     }
 
     sendIntentResponse(action, result, intentId) {
-        appManager.sendIntentResponse(action, result, intentId, () => {});
+        appManager.sendIntentResponse(action, result, intentId, () => {   
+        }, (err)=>{
+            console.error("sendIntentResponse error!", err);
+        });
     }
-
 }

@@ -155,6 +155,7 @@ export class DidtransactionPage implements OnInit {
             this.native.toast_trans('send-raw-transaction');
             this.native.setRootRouter('/tabs');
 
+            console.log("Sending intent response", this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
             this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
             console.log(ret.TxHash);
             this.appService.close();
