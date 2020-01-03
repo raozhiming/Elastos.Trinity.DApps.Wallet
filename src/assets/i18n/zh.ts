@@ -11,6 +11,8 @@ export const zh = {
     'tab-setting': '设置',
     'launcher-create-wallet': '创建钱包',
     'launcher-backup-import': '导入钱包',
+    'launcher-warning-title': '重要提示',
+    'launcher-warning': '这个钱包是稳定的，但目前仍在测试中。建议您避免使用大额的ELA。',
     'text-wallet-export': '导出钱包',
     'text-down': '导出钱包',
     'text-wallet-manager': '钱包管理',
