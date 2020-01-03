@@ -398,7 +398,7 @@ export const en = {
     'error-20042': '(ERR-20042)Local tx do not belong to wallet',
     'error-20043': '(ERR-20043)Deposit amount is insufficient',
     'error-29999': '(ERR-29999)Other error',
-    'modify-wallet-name': 'Editt Wallet Name',
+    'modify-wallet-name': 'Edit Wallet Name',
     'load-more': 'Load More',
     'load-finish': 'Load Finish',
     'txinfo-receive-amount': 'Receive Amount',
