@@ -21,12 +21,12 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
-import { WalletManager } from '../../services/WalletManager';
-import { Native } from '../../services/Native';
-import { Config } from '../../services/Config';
-import { Util } from '../../services/Util';
 import { ActivatedRoute } from '@angular/router';
+import { Events } from '@ionic/angular';
+import { Config } from '../../services/Config';
+import { Native } from '../../services/Native';
+import { Util } from '../../services/Util';
+import { WalletManager } from '../../services/WalletManager';
 
 @Component({
     selector: 'app-coin',
@@ -51,25 +51,24 @@ export class CoinPage implements OnInit {
     isShowMore = false;
     MaxCount = 0;
     isNodata: boolean = false;
-    public myInterval: any;
-    public jiajian: any = "";
+    public autoFefreshInterval: any;
     public votedCount = 0;
 
     Config = Config;
 
-    constructor(public route: ActivatedRoute,
-        public walletManager: WalletManager,
-        public native: Native,
-        public events: Events) {
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
+                public native: Native, public events: Events) {
         this.init();
     }
-    ionViewWillEnter() {
 
+    ionViewWillEnter() {
+        this.startRefreshTimer();
     }
 
     ionViewDidLeave() {
-        //clearInterval(this.myInterval);
+        this.closeRefreshTimer();
     }
+
     init() {
         Config.coinObj = {};
 
@@ -81,7 +80,7 @@ export class CoinPage implements OnInit {
         this.route.paramMap.subscribe((params) => {
             this.chainId = params.get("name");
             Config.coinObj.chainId = this.chainId;
-            if (this.chainId == 'ELA') {
+            if (this.chainId === 'ELA') {
                 this.textShow = 'text-recharge';
             } else {
                 this.textShow = 'text-withdraw';
@@ -142,16 +141,16 @@ export class CoinPage implements OnInit {
                 let txId = transaction['TxHash'];
                 let payStatusIcon = transaction["Direction"];
                 let name = transaction["Direction"];//JSON.parse("{" + transaction["memo"] +"}").msg;;
-                let jiajian = "";
+                let symbol = "";
                 if (payStatusIcon === "Received") {
                     payStatusIcon = './assets/images/exchange-add.png';
-                    jiajian = "+";
+                    symbol = "+";
                 } else if (payStatusIcon === "Sent") {
                     payStatusIcon = './assets/images/exchange-sub.png';
-                    jiajian = "-";
+                    symbol = "-";
                 } else if (payStatusIcon === "Moved") {
                     payStatusIcon = './assets/images/exchange-sub.png';
-                    jiajian = "";
+                    symbol = "";
 
                     //for vote transaction
                     let isVote = await this.isVoteTransaction(txId);
@@ -161,9 +160,9 @@ export class CoinPage implements OnInit {
                 } else if (payStatusIcon === "Deposit") {
                     payStatusIcon = './assets/images/exchange-sub.png';
                     if (transaction["Amount"] > 0) {
-                        jiajian = "-";
+                        symbol = "-";
                     } else {
-                        jiajian = "";
+                        symbol = "";
                     }
                 }
                 let status = '';
@@ -187,11 +186,25 @@ export class CoinPage implements OnInit {
                     "timestamp": timestamp,
                     "txId": txId,
                     "payStatusIcon": payStatusIcon,
-                    "fuhao": jiajian
+                    "symbol": symbol
                 }
                 this.transferList.push(transfer);
             }
         });
+    }
+
+    startRefreshTimer() {
+        if (this.autoFefreshInterval == null) {
+            this.autoFefreshInterval = setInterval(() => {
+                this.getAllTx();
+            }, 30000); // 30s
+        }
+    }
+    closeRefreshTimer() {
+        if (this.autoFefreshInterval) {
+            clearInterval(this.autoFefreshInterval);
+            this.autoFefreshInterval = null;
+        }
     }
 
     isVoteTransaction(txId: string): Promise<any> {

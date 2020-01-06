@@ -27,7 +27,7 @@
                     <p *ngIf="item.timestamp!='0'" id="datatime">{{item.datetime}}</p>
                 </ion-label>
                 <ion-label solt="end" id="coin-value">
-                    <h2 id="amount">{{item.fuhao}} {{item.resultAmount}}</h2>
+                    <h2 id="amount">{{item.symbol}} {{item.resultAmount}}</h2>
                     <p *ngIf="item.status!='Confirmed'" id="status">{{item.status | translate}}</p>
                 </ion-label>
             </ion-item>
