@@ -39,6 +39,7 @@ export const en = {
     'text-vote-note-1': 'No ELA is spent, except to pay a very low transaction fee.',
     'text-vote-note-2': "Don't forget to re-vote every time you spend ELA, as this cancels your votes.",
     'text-vote': 'Vote now',
+    'test-vote-pending': 'There is already an on going transaction. Please vote again in a few minutes.',
 
     'text-did': 'Publish Identity',
     'text-did-note': 'Do you agree to publish your latest identity changes to the public DID chain?',

@@ -28,6 +28,7 @@ import { AppService } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
 import { LocalStorage } from '../../../services/Localstorage';
 import { Native } from '../../../services/Native';
+import { PopupProvider } from '../../../services/popup';
 import { WalletManager } from '../../../services/WalletManager';
 
 @Component({
@@ -54,7 +55,8 @@ export class DPoSVotePage implements OnInit {
     walletInfo = {};
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
-        public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
+                public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController,
+                public events: Events, public zone: NgZone, public popupProvider: PopupProvider) {
         this.init();
     }
 
@@ -79,6 +81,8 @@ export class DPoSVotePage implements OnInit {
         this.walletInfo = Config.coinObj.walletInfo;
         this.masterWalletId = Config.getCurMasterWalletId();
         this.fetchBalance();
+
+        this.hasPendingVoteTransaction();
     }
 
     fetchBalance() {
@@ -87,6 +91,17 @@ export class DPoSVotePage implements OnInit {
                 console.log("Received balance:", ret);
                 this.balance = ret;
             });
+        });
+    }
+
+    hasPendingVoteTransaction() {
+        this.walletManager.getBalanceInfo(this.masterWalletId, this.chainId, async (info) => {
+            let balanceInfo = JSON.parse(info);
+            // console.log('balanceInfo ',balanceInfo);
+            if (balanceInfo[0]['Summary']['SpendingBalance'] !== '0') {
+                await this.popupProvider.ionicAlert('confirmTitle', 'test-vote-pending');
+                this.cancelOperation();
+            }
         });
     }
 

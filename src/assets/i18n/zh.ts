@@ -40,6 +40,7 @@ export const zh = {
     'text-vote-note-1': '此操作只花费极少的交易费用。',
     'text-vote-note-2': "转账会取消投票，因此转账后请重新投票。",
     'text-vote': '投票',
+    'test-vote-pending': '有交易正在确认中。如有需要，请在几分钟后再次投票。',
 
     'text-did': '发布 DID',
     'text-did-note': '您是否同意将最新的身份发布到公共的DID链？',
