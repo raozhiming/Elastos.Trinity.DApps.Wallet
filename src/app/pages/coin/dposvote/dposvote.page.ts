@@ -206,16 +206,24 @@ export class DPoSVotePage implements OnInit {
     sendTx(rawTransaction) {
         this.native.info(rawTransaction);
         this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
-            this.native.hideLoading();
-            this.native.toast_trans('send-raw-transaction');
-            this.native.setRootRouter("/tabs");
-            switch (this.transfer.type) {
-                case "vote-UTXO":
-                    this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
-                break;
-            }
-            console.log(ret.TxHash);
-        })
+            setTimeout(() => {
+                let txId = ret.TxHash;
+                const status = Config.masterManager.getTxStatus(txId);
+                if (status !== 0) {
+                    txId = null;
+                }
+                this.native.hideLoading();
+                this.native.toast_trans('send-raw-transaction');
+                this.native.setRootRouter("/tabs");
+                switch (this.transfer.type) {
+                    case "vote-UTXO":
+                        console.log("Sending intent response", this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
+                        this.appService.sendIntentResponse(this.transfer.action, {txid: txId}, this.transfer.intentId);
+                    break;
+                }
+
+            }, 5000); // wait for 5s for txPublished
+        });
     }
 }
 

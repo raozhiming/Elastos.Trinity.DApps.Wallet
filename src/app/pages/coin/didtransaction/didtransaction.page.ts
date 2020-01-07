@@ -151,14 +151,21 @@ export class DidtransactionPage implements OnInit {
     sendTx(rawTransaction) {
         this.native.info(rawTransaction);
         this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
-            this.native.hideLoading();
-            this.native.toast_trans('send-raw-transaction');
-            this.native.setRootRouter('/tabs');
+            setTimeout(() => {
+                let txId = ret.TxHash;
+                const status = Config.masterManager.getTxStatus(txId);
+                if (status !== 0) {
+                    txId = null;
+                }
 
-            console.log("Sending intent response", this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
-            this.appService.sendIntentResponse(this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
-            console.log(ret.TxHash);
-            this.appService.close();
+                this.native.hideLoading();
+                this.native.toast_trans('send-raw-transaction');
+                this.native.setRootRouter('/tabs');
+
+                console.log("Sending intent response", this.transfer.action, {txid: txId}, this.transfer.intentId);
+                this.appService.sendIntentResponse(this.transfer.action, {txid: txId}, this.transfer.intentId);
+                // this.appService.close();
+            }, 5000); // wait for 5s for txPublished
         });
     }
 }

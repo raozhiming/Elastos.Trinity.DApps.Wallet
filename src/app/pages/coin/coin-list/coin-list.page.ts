@@ -85,6 +85,8 @@ export class CoinListPage implements OnInit {
             this.native.hideLoading();
             Config.masterManager.addSubWallet(this.masterWalletId, chainId);
             Config.masterManager.saveInfos();
+
+            this.walletManager.syncStart(this.masterWalletId, chainId, () => {});
         },
             () => this.currentCoin["open"] = false
         );

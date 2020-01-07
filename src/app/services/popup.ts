@@ -73,13 +73,13 @@ export class PopupProvider {
   };
 
 
-  public ionicAlert_PublishedTx_fail(title: string, subTitle?: string,hash?:any,okText?: string): Promise<any> {
+  public ionicAlert_PublishedTx_fail(title: string, subTitle?: string, hash?: string, okText?: string): Promise<any> {
     let sub= this.translate.instant(subTitle);
     let reason = this.translate.instant('reasons-failure');
     return new Promise((resolve, reject) => {
       let alert = this.alertCtrl.create({
         header : this.translate.instant(title),
-        subHeader :reason+":"+sub+"<br/>"+"("+"txHash:"+hash+")",
+        subHeader :reason+":"+sub+"  ("+"txHash:"+hash+")",
         backdropDismiss: false,
         cssClass: 'my-custom-alert',
         buttons: [

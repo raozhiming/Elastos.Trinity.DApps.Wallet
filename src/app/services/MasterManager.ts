@@ -21,12 +21,12 @@
  */
 
 import { NgZone } from '@angular/core';
-import { Native } from "./Native";
-import { Config } from "./Config";
-import { Util } from "./Util";
-import { WalletManager } from "./WalletManager";
-import { Events } from '@ionic/angular';
+import { Native } from './Native';
+import { Config } from './Config';
 import { LocalStorage } from './Localstorage';
+import { PopupProvider } from './popup';
+import { WalletManager } from './WalletManager';
+import { Util } from './Util';
 
 export class MasterManager {
 
@@ -39,12 +39,15 @@ export class MasterManager {
     public masterInfos: any = {};
     public progress: any = {};
     public masterList: any = {};
+    public transactionMap: any = {}; // when sync over, need to cleanup transactionMap
 
     public hasPromptTransfer2IDChain = true;
 
     constructor(public native: Native,
-        public localStorage: LocalStorage,
-        public zone: NgZone, public walletManager: WalletManager) {
+                public zone: NgZone,
+                public localStorage: LocalStorage,
+                public popupProvider: PopupProvider,
+                public walletManager: WalletManager) {
         this.init();
     }
 
@@ -172,10 +175,13 @@ export class MasterManager {
         this.walletManager.destroyWallet(id, () => {
             this.masterWallet[id] = null;
             for (var i = 0; i < this.masterList.length; i++) {
-                if (this.masterList[i] == id) {
+                if (this.masterList[i] === id) {
                     this.masterList.splice(i, 1);
                     break;
                 }
+            }
+            if (this.curMasterId === id) {
+                this.curMasterId = '-1';
             }
             this.saveInfos();
             if (this.masterList.length > 0) {
@@ -268,8 +274,10 @@ export class MasterManager {
         let masterId = result["MasterWalletID"];
         let chainId = result["ChainID"];
         let chain = this.masterWallet[masterId].subWallet[chainId];
+
         switch (result["Action"]) {
             case "OnTransactionStatusChanged":
+                // console.log('OnTransactionStatusChanged ', result);
                 if (result['confirms'] == 1) {
                     this.getWalletBalance(masterId, chainId);
                 }
@@ -277,6 +285,7 @@ export class MasterManager {
             case "OnBlockSyncStarted":
                 break;
             case "OnBlockSyncProgress":
+                // console.log('OnBlockSyncProgress ', result);
                 this.zone.run(() => {
                     this.setProgress(masterId, chainId, result['Progress']);
                 });
@@ -284,11 +293,13 @@ export class MasterManager {
             case "OnBlockSyncStopped":
                 break;
             case "OnBalanceChanged":
+                // console.log('OnBalanceChanged ', result);
                 this.zone.run(() => {
                     chain.balance = parseInt(result["Balance"]) / Config.SELA;
                 });
                 break;
             case "OnTxPublished":
+                // console.log('OnTxPublished ', result);
                 this.OnTxPublished(result);
                 break;
             case "OnAssetRegistered":
@@ -302,22 +313,13 @@ export class MasterManager {
         let hash = data["hash"];
         let result = JSON.parse(data["result"]);
         let code = result["Code"];
+        // let reason = result["Reason"];
         let tx = "txPublished-";
-        switch (code) {
-            case 0:
-            case 18:
-                // this.popupProvider.ionicAlert_PublishedTx_sucess('confirmTitle', tx + code, hash);
-                break;
-            case 1:
-            case 16:
-            case 17:
-            case 22:
-            case 64:
-            case 65:
-            case 66:
-            case 67:
-                // this.popupProvider.ionicAlert_PublishedTx_fail('confirmTitle', tx + code, hash);
-                break;
+
+        this.transactionMap[hash] = {code};
+
+        if (code !== 0) {
+            this.popupProvider.ionicAlert_PublishedTx_fail('confirmTitle', tx + code, hash);
         }
     }
 
@@ -334,7 +336,7 @@ export class MasterManager {
         this.progress[masterId][coin]["progress"] = progress;
 
         this.localStorage.setProgress(this.progress);
-        console.log('setProgress ',coin, ' progress ',progress)
+        // console.log('setProgress ',coin, ' progress ',progress)
         if (!this.hasPromptTransfer2IDChain && (coin === 'IDChain') && (progress === 100)) {
             this.checkIDChainBalance();
         }
@@ -367,6 +369,14 @@ export class MasterManager {
 
         console.log('set needPromptTransfer2IDChain true');
         Config.needPromptTransfer2IDChain = true;
+    }
+
+    public getTxStatus(hash) {
+        let status = 0;
+        if (!Util.isNull(this.transactionMap[hash])) {
+            status = this.transactionMap[hash];
+        }
+        return status;
     }
 }
 

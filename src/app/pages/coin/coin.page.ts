@@ -196,6 +196,10 @@ export class CoinPage implements OnInit {
     startRefreshTimer() {
         if (this.autoFefreshInterval == null) {
             this.autoFefreshInterval = setInterval(() => {
+                this.pageNo = 0;
+                this.start = 0;
+                this.transferList = [];
+                this.MaxCount = 0;
                 this.getAllTx();
             }, 30000); // 30s
         }
