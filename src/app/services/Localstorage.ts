@@ -93,6 +93,16 @@ export class LocalStorage {
         this.getVal(key, func);
     }
 
+    public savePublishTxList(obj) {
+        let key = "publishTx";
+        this.storage.set(key, JSON.stringify(obj));
+    }
+
+    public getPublishTxList(func) {
+        let key = "publishTx";
+        this.getVal(key, func);
+    }
+
 }
 
 

@@ -150,10 +150,11 @@ export class DidtransactionPage implements OnInit {
     sendTx(rawTransaction) {
         this.native.info(rawTransaction);
         this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
+            Config.masterManager.lockTx(ret.TxHash);
             setTimeout(() => {
                 let txId = ret.TxHash;
-                const status = Config.masterManager.getTxStatus(txId);
-                if (status !== 0) {
+                const code = Config.masterManager.getTxCode(txId);
+                if (code !== 0) {
                     txId = null;
                 }
 

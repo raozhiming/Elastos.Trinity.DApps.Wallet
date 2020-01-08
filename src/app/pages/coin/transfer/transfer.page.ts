@@ -248,10 +248,11 @@ export class TransferPage implements OnInit {
         this.native.info(rawTransaction);
         this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
             if (this.transfer.type === 'payment-confirm') {
+                Config.masterManager.lockTx(ret.TxHash);
                 setTimeout(() => {
                     let txId = ret.TxHash;
-                    const status = Config.masterManager.getTxStatus(txId);
-                    if (status !== 0) {
+                    const code = Config.masterManager.getTxCode(txId);
+                    if (code !== 0) {
                         txId = null;
                     }
                     this.native.hideLoading();

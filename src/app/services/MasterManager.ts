@@ -81,6 +81,12 @@ export class MasterManager {
         this.localStorage.get('hasPrompt').then( (val) => {
             this.hasPromptTransfer2IDChain = val ? val : false;
         });
+
+        this.localStorage.getPublishTxList((publishTxList) => {
+            if (publishTxList) {
+                this.transactionMap = publishTxList;
+            }
+        });
     }
 
     successHandle(idList) {
@@ -285,6 +291,9 @@ export class MasterManager {
                 if (result['confirms'] == 1) {
                     this.getWalletBalance(masterId, chainId);
                 }
+                if (this.transactionMap[result.txId]) {
+                    this.transactionMap[result.txId].Status = result.status;
+                }
                 break;
             case "OnBlockSyncStarted":
                 break;
@@ -317,13 +326,32 @@ export class MasterManager {
         let hash = data["hash"];
         let result = JSON.parse(data["result"]);
         let code = result["Code"];
-        // let reason = result["Reason"];
+        let reason = result["Reason"];
         let tx = "txPublished-";
+        let MasterWalletID = data["MasterWalletID"];
+        let chainId = data["ChainID"];
 
-        this.transactionMap[hash] = {code};
+        if (this.transactionMap[hash]) {
+            this.transactionMap[hash].Code = code;
+            this.transactionMap[hash].Reason = reason;
+            this.transactionMap[hash].WalletID = MasterWalletID;
+            this.transactionMap[hash].ChainID = chainId;
+        } else {
+            this.transactionMap[hash] = {
+                WalletID : MasterWalletID,
+                ChainID : chainId,
+                Code : code,
+                Reason: reason,
+            };
+            this.localStorage.savePublishTxList(this.transactionMap);
+        }
 
         if (code !== 0) {
             this.popupProvider.ionicAlert_PublishedTx_fail('confirmTitle', tx + code, hash);
+            if (this.transactionMap[hash].lock !== true) {
+                delete this.transactionMap[hash];
+                this.localStorage.savePublishTxList(this.transactionMap);
+            }
         }
     }
 
@@ -334,7 +362,6 @@ export class MasterManager {
         }
         if (!this.progress[masterId][coin]) {
             this.progress[masterId][coin] = {};
-
         }
 
         this.progress[masterId][coin]["progress"] = progress;
@@ -379,12 +406,36 @@ export class MasterManager {
         Config.needPromptTransfer2IDChain = true;
     }
 
-    public getTxStatus(hash) {
-        let status = 0;
-        if (!Util.isNull(this.transactionMap[hash])) {
-            status = this.transactionMap[hash];
+    // for intent
+    lockTx(hash) {
+        if (this.transactionMap[hash]) {
+            this.transactionMap[hash].lock = true;
+        } else {
+            this.transactionMap[hash] = {lock : true};
+            //
+            this.localStorage.savePublishTxList(this.transactionMap);
         }
-        return status;
+    }
+
+    public getTxCode(hash) {
+        let code = 0;
+        if (this.transactionMap[hash].Code) {
+            code = this.transactionMap[hash].Code;
+        }
+
+        if (this.transactionMap[hash].Status === 'Deleted') {// success also need delete
+            delete this.transactionMap[hash];
+            this.localStorage.savePublishTxList(this.transactionMap);
+        } else {
+            this.transactionMap[hash].lock = false;
+        }
+
+        return code;
+    }
+
+    cleanTransactionMap() {
+        this.transactionMap = [];
+        this.localStorage.savePublishTxList(this.transactionMap);
     }
 }
 

@@ -25,6 +25,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Events } from '@ionic/angular';
 import { Config } from '../../services/Config';
 import { Native } from '../../services/Native';
+import { PopupProvider } from '../../services/popup';
 import { Util } from '../../services/Util';
 import { WalletManager } from '../../services/WalletManager';
 
@@ -57,7 +58,7 @@ export class CoinPage implements OnInit {
     Config = Config;
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager,
-                public native: Native, public events: Events) {
+                public native: Native, public events: Events, public popupProvider: PopupProvider) {
         this.init();
     }
 
@@ -67,6 +68,7 @@ export class CoinPage implements OnInit {
 
     ionViewDidLeave() {
         this.closeRefreshTimer();
+        this.events.unsubscribe(this.chainId + ':synccompleted');
     }
 
     init() {
@@ -87,6 +89,14 @@ export class CoinPage implements OnInit {
             }
 
             this.initData();
+
+            if (Config.curMaster.subWallet[this.chainId].progress !== 100) {
+                this.events.subscribe(this.chainId + ':synccompleted', (coin) => {
+                    this.CheckPublishTx();
+                });
+            } else {
+                this.CheckPublishTx();
+            }
         });
     }
 
@@ -287,5 +297,24 @@ export class CoinPage implements OnInit {
         setTimeout(() => {
             event.target.complete();
         }, 1000);
+    }
+
+    CheckPublishTx() {
+        for (const txId in Config.masterManager.transactionMap) {
+            if (this.getIndexByTxId(txId)) {
+                delete Config.masterManager.transactionMap[txId];
+            }
+        }
+
+        console.log('Fail txId:', Config.masterManager.transactionMap);
+        for (const txId in Config.masterManager.transactionMap) {
+            this.popupProvider.ionicAlert_PublishedTx_fail('confirmTitle', txId, txId);
+        }
+
+        Config.masterManager.cleanTransactionMap();
+    }
+
+    getIndexByTxId(txId: string) {
+        return this.transferList.findIndex(e => e.txId === txId);
     }
 }

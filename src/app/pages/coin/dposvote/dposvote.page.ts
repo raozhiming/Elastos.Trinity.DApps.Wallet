@@ -97,7 +97,7 @@ export class DPoSVotePage implements OnInit {
     hasPendingVoteTransaction() {
         this.walletManager.getBalanceInfo(this.masterWalletId, this.chainId, async (info) => {
             let balanceInfo = JSON.parse(info);
-            // console.log('balanceInfo ',balanceInfo);
+            // console.log('balanceInfo ', balanceInfo);
             if (balanceInfo[0]['Summary']['SpendingBalance'] !== '0') {
                 await this.popupProvider.ionicAlert('confirmTitle', 'test-vote-pending');
                 this.cancelOperation();
@@ -206,16 +206,17 @@ export class DPoSVotePage implements OnInit {
     sendTx(rawTransaction) {
         this.native.info(rawTransaction);
         this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
+            Config.masterManager.lockTx(ret.TxHash);
             setTimeout(() => {
                 let txId = ret.TxHash;
-                const status = Config.masterManager.getTxStatus(txId);
-                if (status !== 0) {
+                const code = Config.masterManager.getTxCode(txId);
+                if (code !== 0) {
                     txId = null;
                 }
                 this.native.hideLoading();
                 this.native.toast_trans('send-raw-transaction');
                 this.native.setRootRouter("/tabs");
-                console.log("Sending intent response", this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
+                console.log("Sending intent response", this.transfer.action, {txid: txId}, this.transfer.intentId);
                 this.appService.sendIntentResponse(this.transfer.action, {txid: txId}, this.transfer.intentId);
             }, 5000); // wait for 5s for txPublished
         });

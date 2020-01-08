@@ -177,7 +177,7 @@ export class AppService {
                     intentId: ret.intentId,
                     action: ret.action,
                     reason: ret.params.elaaddress.reason
-                }
+                };
                 myService.native.go("/access");
                 break;
             default:
