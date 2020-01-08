@@ -1,0 +1,41 @@
+<ion-header>
+    <header-bar title="{{'text-wait-sync' | translate }}" [showBack]="false" [showMinimize]="false" [showClose]="false">
+    </header-bar>
+</ion-header>
+
+<ion-content>
+    <div class="note">
+        <div class="note-entry">
+            {{ action | translate }}
+        </div>
+        <div class="note-entry">
+            {{ 'text-wait-info' | translate }}
+        </div>
+        <div class="note-entry">
+            {{ 'text-wait-info-2' | translate }}
+        </div>
+    </div>
+
+    <div id="home-list-box">
+        <ion-list>
+            <ion-list-header>
+            <div>{{'text-coin-list' | translate}}</div>
+            </ion-list-header>
+
+            <ion-item>
+                <img *ngIf="chainId=='ELA'" src="assets/images/ela-coin.png" />
+                <img *ngIf="chainId!='ELA'"  src="assets/images/id-coin.png" />
+                <ion-label id="coin-name">{{chainId}}</ion-label>
+                <ion-label solt="end" id="coin-value">
+                    <h2 [hidden]="!showOn" class="line-limit-length">{{Config.curMaster.subWallet[chainId].balance}}</h2>
+                    <h2 [hidden]="showOn">****</h2>
+                    <p>{{Config.curMaster.subWallet[chainId].progress}}%</p>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+    </div>
+</ion-content>
+
+<ion-footer>
+    <ion-button class="confirm" (click)="cancelOperation()">{{ 'cancel' | translate }}</ion-button>
+</ion-footer>

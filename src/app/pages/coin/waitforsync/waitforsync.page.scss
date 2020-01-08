@@ -1,0 +1,58 @@
+@import "../../../functions.scss";
+
+#home-list-box {
+    position:absolute;
+    left: 0;
+    top: px2rem(225px);
+    width: 100%;
+    height: 100%;
+
+    ion-list {
+        margin-top: px2rem(110px);
+        background: transparent;
+
+        ion-list-header {
+            color: #77777D;
+            padding-left: 0;
+            margin-left: px2rem(45px);
+            margin-right: px2rem(45px);
+            // background-color: white;
+        }
+
+        ion-item {
+            img {
+                width: px2rem(60px);
+                height: px2rem(60px);
+            }
+
+            #coin-name {
+                margin-left: px2rem(27px);
+                font-size: 18px;
+            }
+            #coin-value {
+                text-align: right;
+                flex: 0 0 px2rem(380px) !important;
+                h2 {
+                    font-size: 26px;
+                }
+                p {
+                    font-size: 14px;
+                    color: #FFCB0F;
+                }
+            }
+        }
+    }
+}
+
+.note {
+    margin-top: 5vh;
+    margin-left: 20px;
+    margin-right: 20px;
+    // text-transform: uppercase;
+    // font-weight: bold;
+    font-size:1.2em;
+}
+
+.note-entry {
+    margin-bottom:10px;
+}
