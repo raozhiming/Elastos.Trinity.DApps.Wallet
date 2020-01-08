@@ -118,7 +118,7 @@ export class AppService {
                 Config.coinObj.chainId = "ELA";
                 Config.coinObj.walletInfo = Config.curMaster.account;
                 Config.coinObj.transfer = {
-                    toAddress: ret.params.toAddress,
+                    toAddress: ret.params.receiver,
                     amount: ret.params.amount,
                     memo: ret.params.memo,
                     fee: 0,
