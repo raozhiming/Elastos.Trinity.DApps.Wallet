@@ -55,7 +55,6 @@ import { LoadingService } from './services/Loading';
 
 import { PaymentboxComponent } from './components/paymentbox/paymentbox.component';
 
-/**pages*/
 
 /** 通过类引用方式解析国家化文件 */
 export class CustomTranslateLoader implements TranslateLoader {
@@ -84,7 +83,11 @@ export function TranslateLoaderFactory() {
         PaymentboxComponent
     ],
     entryComponents: [PaymentboxComponent],
-    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule,
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        IonicStorageModule,
         FormsModule,
         HttpModule,
         IonicStorageModule.forRoot({

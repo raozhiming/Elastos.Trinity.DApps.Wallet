@@ -5,6 +5,14 @@ export const zh = {
     'my-qrcode': "我的二维码",
     'scanning': '扫描二维码',
 
+    // splashscreen
+    'text-loading': '正在加载数据，请耐心等待!',
+
+    // wait for sync
+    'text-wait-sync': '等待同步',
+    'text-wait-info': '与链的数据同步完成后才能执行相关操作，请耐心等待！',
+    'text-wait-info-2': '同步完成后将自动进入下一页',
+
     'welcome': '欢迎使用本应用',
     'tab-home': '首页',
     'wallet': '钱包',

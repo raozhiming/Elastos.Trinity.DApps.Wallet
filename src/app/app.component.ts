@@ -21,36 +21,34 @@
  */
 
 import { Component, NgZone } from '@angular/core';
-
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { Events, Platform, ModalController } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Router, NavigationExtras } from '@angular/router';
 
-import { TranslateService } from '@ngx-translate/core';
 import { Config } from './services/Config';
-import { LocalStorage } from "./services/Localstorage";
+import { LocalStorage } from './services/Localstorage';
 import { Native } from './services/Native';
 import { WalletManager } from './services/WalletManager';
 import { AppService } from './services/AppService';
-import { MasterManager } from "./services/MasterManager";
+import { MasterManager } from './services/MasterManager';
+import { PopupProvider } from './services/popup';
+
 
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html'
 })
-export class AppComponent {ß
+export class AppComponent {
     constructor(
         private platform: Platform,
-        private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         public localStorage: LocalStorage,
-        private translate: TranslateService,
         public walletManager: WalletManager,
+        public events: Events,
         private native: Native,
-        private router: Router,
         public zone: NgZone,
-        public appService: AppService
+        public appService: AppService,
+        public popupProvider: PopupProvider,
+        public modalCtrl: ModalController
     ) {
         this.initializeApp();
     }
@@ -60,10 +58,12 @@ export class AppComponent {ß
         this.platform.ready().then(() => {
             console.log("Platform is ready");
             this.statusBar.styleDefault();
-            this.splashScreen.hide();
+            this.native.setRootRouter('/splashscreen');
             this.appService.init();
             this.walletManager.init();
-            Config.masterManager = new MasterManager(this.native, this.localStorage, this.zone, this.walletManager);
+            Config.masterManager = new MasterManager(
+                    this.events, this.native, this.zone, this.localStorage,
+                    this.popupProvider, this.walletManager);
         });
     }
 }

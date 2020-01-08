@@ -21,6 +21,7 @@
  */
 
 import { NgZone } from '@angular/core';
+import { Events } from '@ionic/angular';
 import { Native } from './Native';
 import { Config } from './Config';
 import { LocalStorage } from './Localstorage';
@@ -43,12 +44,15 @@ export class MasterManager {
 
     public hasPromptTransfer2IDChain = true;
 
-    constructor(public native: Native,
+    constructor(public events: Events,
+                public native: Native,
                 public zone: NgZone,
                 public localStorage: LocalStorage,
                 public popupProvider: PopupProvider,
                 public walletManager: WalletManager) {
-        this.init();
+        setTimeout(() => {
+            this.init();
+        }, 2000);
     }
 
     init() {
@@ -339,6 +343,10 @@ export class MasterManager {
         // console.log('setProgress ',coin, ' progress ',progress)
         if (!this.hasPromptTransfer2IDChain && (coin === 'IDChain') && (progress === 100)) {
             this.checkIDChainBalance();
+        }
+
+        if (progress === 100) {
+            this.events.publish(coin + ':synccompleted', {coin});
         }
     }
 

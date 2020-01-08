@@ -5,6 +5,14 @@ export const en = {
     'my-qrcode': "My qrcode",
     'scanning': 'Scan qrcode',
 
+    // splashscreen
+    'text-loading': 'Loading, please be patient!',
+
+    // wait for sync
+    'text-wait-sync': 'Wait for sync',
+    'text-wait-info': 'The operation can only be performed after the data synchronization with the chain is completed, please be patient!',
+    'text-wait-info-2': 'After the synchronization is completed, it will automatically go to the next page',
+
     'tab-home': 'Home',
     'tab-setting': 'Settings',
     'wallet': 'Wallet',

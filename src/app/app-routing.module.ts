@@ -24,7 +24,9 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    // { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: '', redirectTo: 'splashscreen', pathMatch: 'full' },
+    { path: 'splashscreen', loadChildren: './pages/splashscreen/splashscreen.module#SplashscreenPageModule' },
     { path: 'home', loadChildren: './home/home.module#HomePageModule' },
     { path: 'launcher', loadChildren: './pages/launcher/launcher.module#LauncherPageModule' },
     { path: 'wallet-create', loadChildren: './pages/wallet/wallet-create/wallet-create.module#WalletCreatePageModule' },
@@ -62,10 +64,8 @@ const routes: Routes = [
     { path: 'publickey', loadChildren: './pages/publickey/publickey.module#PublickeyPageModule' },
     { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },
     { path: 'coin-select', loadChildren: './pages/coin/coin-select/coin-select.module#CoinSelectPageModule' },
-    // { path: 'withdraw', loadChildren: './pages/coin/withdraw/withdraw.module#WithdrawPageModule' },
     { path: 'receive', loadChildren: './pages/coin/receive/receive.module#ReceivePageModule' },
     { path: 'recordinfo', loadChildren: './pages/coin/recordinfo/recordinfo.module#RecordinfoPageModule' },
-    // { path: 'recharge', loadChildren: './pages/coin/recharge/recharge.module#RechargePageModule' },
     { path: 'transfer', loadChildren: './pages/coin/transfer/transfer.module#TransferPageModule' },
     { path: 'dposvote', loadChildren: './pages/coin/dposvote/dposvote.module#DPoSVotePageModule' },
     { path: 'address', loadChildren: './pages/wallet/address/address.module#AddressPageModule' },
@@ -79,6 +79,7 @@ const routes: Routes = [
     { path: 'wallet-setting', loadChildren: './pages/wallet/wallet-setting/wallet-setting.module#WalletSettingPageModule' },
     { path: 'access', loadChildren: './pages/wallet/access/access.module#AccessPageModule' },
     { path: 'didtransaction', loadChildren: './pages/coin/didtransaction/didtransaction.module#DidtransactionPageModule' },
+    { path: 'waitforsync', loadChildren: './pages/coin/waitforsync/waitforsync.module#WaitforsyncPageModule' },
 ];
 @NgModule({
     imports: [

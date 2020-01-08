@@ -215,13 +215,8 @@ export class DPoSVotePage implements OnInit {
                 this.native.hideLoading();
                 this.native.toast_trans('send-raw-transaction');
                 this.native.setRootRouter("/tabs");
-                switch (this.transfer.type) {
-                    case "vote-UTXO":
-                        console.log("Sending intent response", this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
-                        this.appService.sendIntentResponse(this.transfer.action, {txid: txId}, this.transfer.intentId);
-                    break;
-                }
-
+                console.log("Sending intent response", this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
+                this.appService.sendIntentResponse(this.transfer.action, {txid: txId}, this.transfer.intentId);
             }, 5000); // wait for 5s for txPublished
         });
     }

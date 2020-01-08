@@ -128,7 +128,8 @@ export class AppService {
                     from: ret.from,
                 };
                 Config.coinObj.transfer.type = "payment-confirm";
-                myService.native.go("/transfer");
+                // myService.native.go("/transfer");
+                myService.native.go("/waitforsync");
                 break;
 
             case "dposvotetransaction":
@@ -147,12 +148,14 @@ export class AppService {
                     from: ret.from,
                 };
                 Config.coinObj.transfer.type = "vote-UTXO";
-                myService.native.go("/dposvote");
+                // myService.native.go("/dposvote");
+
+                myService.native.go("/waitforsync");
                 break;
 
             case "didtransaction":
                 Config.coinObj = {};
-                Config.coinObj.chainId = "ELA";
+                Config.coinObj.chainId = "IDChain"; // maybe use IDChain?
                 Config.coinObj.walletInfo = Config.curMaster.account;
                 Config.coinObj.transfer = {
                     // toAddress: "default",
@@ -163,7 +166,8 @@ export class AppService {
                     from: ret.from,
                 };
                 Config.coinObj.transfer.type = "did-confirm";
-                myService.native.go("/didtransaction");
+                // myService.native.go("/didtransaction");
+                myService.native.go("/waitforsync");
                 break;
 
             case "walletaccess":
@@ -182,7 +186,7 @@ export class AppService {
     }
 
     sendIntentResponse(action, result, intentId) {
-        appManager.sendIntentResponse(action, result, intentId, () => {   
+        appManager.sendIntentResponse(action, result, intentId, () => {
         }, (err)=>{
             console.error("sendIntentResponse error!", err);
         });
