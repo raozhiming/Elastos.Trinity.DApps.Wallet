@@ -1,7 +1,7 @@
 {
   "id": "org.elastos.trinity.dapp.wallet",
-  "version": "1.0.3",
-  "version_code": 4,
+  "version": "1.0.4",
+  "version_code": 5,
   "name": "Wallet",
   "short_name": "Wallet",
   "description": "elastOS SPV ELA wallet",
