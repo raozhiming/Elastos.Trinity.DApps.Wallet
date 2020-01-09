@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -55,6 +55,26 @@ import { LoadingService } from './services/Loading';
 
 import { PaymentboxComponent } from './components/paymentbox/paymentbox.component';
 
+import * as Sentry from "@sentry/browser";
+
+Sentry.init({
+  dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
+});
+
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+
+  handleError(error) {
+    console.error("Globally catched exception:", error);
+
+    console.log(document.URL);
+    // Only send reports to sentry if we are not debugging.
+    if (document.URL.includes('localhost')) { // Prod builds or --nodebug CLI builds use "http://localhost"
+      Sentry.captureException(error.originalError || error);
+    }
+  }
+}
 
 /** 通过类引用方式解析国家化文件 */
 export class CustomTranslateLoader implements TranslateLoader {
@@ -114,7 +134,8 @@ export function TranslateLoaderFactory() {
         PopupProvider,
         WalletManager,
         LoadingService,
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        { provide: ErrorHandler, useClass: SentryErrorHandler }
     ],
     bootstrap: [AppComponent]
 })
