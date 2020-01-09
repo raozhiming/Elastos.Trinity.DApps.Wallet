@@ -13,9 +13,9 @@
 
     <div class="coin-info-top-box">
         <h2>{{Config.curMaster.subWallet[chainId].balance}}</h2>
-        <p>{{Config.curMaster.subWallet[chainId].progress}}%</p>
-
+        <p slot="end">{{Config.curMaster.subWallet[chainId].lastblocktime}} {{Config.curMaster.subWallet[chainId].progress}}%</p>
     </div>
+
     <div id="nodata" *ngIf="isNodata">{{'no-tx-record' | translate }}</div>
 
     <ion-list *ngIf="!isNodata">

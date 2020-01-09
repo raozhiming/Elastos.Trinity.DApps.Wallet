@@ -69,8 +69,6 @@ export class MasterManager {
             }
 
             this.localStorage.getProgress((progress) => {
-                console.log("Got progress", progress);
-
                 if (progress) {
                     this.progress = progress;
                 }
@@ -249,12 +247,11 @@ export class MasterManager {
         this.masterWallet[masterId].chainList.push(chainId);
         if (!this.masterWallet[masterId].subWallet[chainId]) {
             this.masterWallet[masterId].subWallet[chainId] = { balance: 0, progress: 0 };
-        }
-        else {
+        } else {
             if (this.progress && this.progress[masterId] && this.progress[masterId][chainId]) {
-                let progress = this.progress[masterId][chainId]["progress"];
-                if (progress) {
-                    this.masterWallet[masterId].subWallet[chainId].progress = progress;
+                const lastblocktime = this.progress[masterId][chainId].lastblocktime;
+                if (lastblocktime) {
+                    this.masterWallet[masterId].subWallet[chainId].lastblocktime = lastblocktime;
                 }
             }
         }
@@ -288,7 +285,7 @@ export class MasterManager {
         switch (result["Action"]) {
             case "OnTransactionStatusChanged":
                 // console.log('OnTransactionStatusChanged ', result);
-                if (result['confirms'] == 1) {
+                if (result['confirms'] === 1) {
                     this.getWalletBalance(masterId, chainId);
                 }
                 if (this.transactionMap[result.txId]) {
@@ -300,7 +297,7 @@ export class MasterManager {
             case "OnBlockSyncProgress":
                 // console.log('OnBlockSyncProgress ', result);
                 this.zone.run(() => {
-                    this.setProgress(masterId, chainId, result['Progress']);
+                    this.setProgress(masterId, chainId, result.Progress, result.LastBlockTime);
                 });
                 break;
             case "OnBlockSyncStopped":
@@ -308,7 +305,7 @@ export class MasterManager {
             case "OnBalanceChanged":
                 // console.log('OnBalanceChanged ', result);
                 this.zone.run(() => {
-                    chain.balance = parseInt(result["Balance"]) / Config.SELA;
+                    chain.balance = parseInt(result.Balance) / Config.SELA;
                 });
                 break;
             case "OnTxPublished":
@@ -355,8 +352,11 @@ export class MasterManager {
         }
     }
 
-    public setProgress(masterId, coin, progress) {
-        this.masterWallet[masterId].subWallet[coin]["progress"] = progress;
+    public setProgress(masterId, coin, progress, lastBlockTime) {
+        this.masterWallet[masterId].subWallet[coin].progress = progress;
+        const datetime = Util.dateFormat(new Date(lastBlockTime * 1000), 'yyyy-MM-dd HH:mm:ss');
+        this.masterWallet[masterId].subWallet[coin].lastblocktime = datetime;
+
         if (!this.progress[masterId]) {
             this.progress[masterId] = {};
         }
@@ -364,10 +364,9 @@ export class MasterManager {
             this.progress[masterId][coin] = {};
         }
 
-        this.progress[masterId][coin]["progress"] = progress;
-
+        this.progress[masterId][coin].lastblocktime = datetime;
         this.localStorage.setProgress(this.progress);
-        // console.log('setProgress ',coin, ' progress ',progress)
+
         if (!this.hasPromptTransfer2IDChain && (coin === 'IDChain') && (progress === 100)) {
             this.checkIDChainBalance();
         }

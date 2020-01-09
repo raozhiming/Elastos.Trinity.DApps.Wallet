@@ -42,7 +42,7 @@
                         <ion-label solt="end" id="coin-value">
                             <h2 [hidden]="!showOn" class="line-limit-length">{{Config.curMaster.subWallet[chainId].balance}}</h2>
                             <h2 [hidden]="showOn">****</h2>
-                            <p>{{Config.curMaster.subWallet[chainId].progress}}%</p>
+                            <p>{{Config.curMaster.subWallet[chainId].lastblocktime}} {{Config.curMaster.subWallet[chainId].progress}}%</p>
                         </ion-label>
                     </ion-item>
                 </div>
