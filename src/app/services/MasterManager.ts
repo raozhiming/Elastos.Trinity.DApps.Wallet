@@ -63,8 +63,7 @@ export class MasterManager {
 
             if (infos != null) {
                 this.masterInfos = infos;
-            }
-            else {
+            } else {
                 console.warn("Empty Master info returned!");
             }
 
@@ -246,12 +245,13 @@ export class MasterManager {
     public addSubWallet(masterId, chainId) {
         this.masterWallet[masterId].chainList.push(chainId);
         if (!this.masterWallet[masterId].subWallet[chainId]) {
-            this.masterWallet[masterId].subWallet[chainId] = { balance: 0, progress: 0 };
+            this.masterWallet[masterId].subWallet[chainId] = { balance: 0, lastblocktime: '',  timestamp: 0 };
         } else {
             if (this.progress && this.progress[masterId] && this.progress[masterId][chainId]) {
                 const lastblocktime = this.progress[masterId][chainId].lastblocktime;
                 if (lastblocktime) {
                     this.masterWallet[masterId].subWallet[chainId].lastblocktime = lastblocktime;
+                    this.masterWallet[masterId].subWallet[chainId].timestamp = 0;
                 }
             }
         }
@@ -371,6 +371,12 @@ export class MasterManager {
             this.checkIDChainBalance();
         }
 
+        const curTimerstamp = (new Date()).getTime();
+        // console.log('curTimerstamp ', curTimerstamp);
+        if (curTimerstamp - this.masterWallet[masterId].subWallet[coin].timestamp > 5000) { // 5s
+            this.events.publish(coin + ':syncprogress', {coin});
+            this.masterWallet[masterId].subWallet[coin].timestamp = curTimerstamp;
+        }
         if (progress === 100) {
             this.events.publish(coin + ':synccompleted', {coin});
         }

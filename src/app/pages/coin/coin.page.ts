@@ -39,7 +39,7 @@ export class CoinPage implements OnInit {
     masterWalletId = '1';
     transferList = [];
 
-    coinCount = 0;
+    // coinCount = 0;
 
     coinId = 0;
 
@@ -63,11 +63,13 @@ export class CoinPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.startRefreshTimer();
+        this.events.subscribe(this.chainId + ':syncprogress', (coin) => {
+            this.initData();
+        });
     }
 
     ionViewDidLeave() {
-        this.closeRefreshTimer();
+        this.events.unsubscribe(this.chainId + ':syncprogress');
         this.events.unsubscribe(this.chainId + ':synccompleted');
     }
 
@@ -109,12 +111,10 @@ export class CoinPage implements OnInit {
         //         this.votedCount = ret / Config.SELA;
         //     });
         // }
-
         this.pageNo = 0;
         this.start = 0;
         this.MaxCount = 0;
         this.transferList = [];
-
         this.getAllTx();
     }
 
@@ -213,24 +213,6 @@ export class CoinPage implements OnInit {
         });
     }
 
-    startRefreshTimer() {
-        if (this.autoFefreshInterval == null) {
-            this.autoFefreshInterval = setInterval(() => {
-                this.pageNo = 0;
-                this.start = 0;
-                this.transferList = [];
-                this.MaxCount = 0;
-                this.getAllTx();
-            }, 30000); // 30s
-        }
-    }
-    closeRefreshTimer() {
-        if (this.autoFefreshInterval) {
-            clearInterval(this.autoFefreshInterval);
-            this.autoFefreshInterval = null;
-        }
-    }
-
     isVoteTransaction(txId: string): Promise<any> {
         return new Promise((resolve, reject)=>{
             this.walletManager.getAllTransaction(this.masterWalletId, this.chainId, 0, txId, (ret) => {
@@ -297,14 +279,7 @@ export class CoinPage implements OnInit {
     }
 
     doRefresh(event) {
-        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret) => {
-            this.coinCount = ret / Config.SELA;
-        });
-        this.pageNo = 0;
-        this.start = 0;
-        this.transferList = [];
-        this.MaxCount = 0;
-        this.getAllTx();
+        this.initData();
         setTimeout(() => {
             event.target.complete();
         }, 1000);

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Events } from '@ionic/angular';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
 import { Util } from '../../../services/Util';
@@ -25,10 +26,10 @@ export class RecordinfoPage implements OnInit {
     public outputs: any = [];
 
     //TODO: it should use callback if the spvsdk can send callback when the confirm count is 6
-    autoFefreshInterval: any = null;
     preConfirmCount = '';
+    hasSubscribeprogressEvent = false;
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native) {
+    constructor(public events: Events, public route: ActivatedRoute, public walletManager: WalletManager, public native: Native) {
     }
 
     ngOnInit() {
@@ -39,7 +40,7 @@ export class RecordinfoPage implements OnInit {
     }
 
     ionViewDidLeave() {
-        this.closeRefreshTimer();
+        this.unsubscribeprogressEvent();
     }
 
     init() {
@@ -66,15 +67,15 @@ export class RecordinfoPage implements OnInit {
             switch (transaction["Status"]) {
                 case 'Confirmed':
                     status = 'Confirmed';
-                    this.closeRefreshTimer();
+                    this.unsubscribeprogressEvent();
                     break;
                 case 'Pending':
                     status = 'Pending';
-                    this.startRefreshTimer();
+                    this.subscribeprogressEvent();
                     break;
                 case 'Unconfirmed':
                     status = 'Unconfirmed';
-                    this.startRefreshTimer();
+                    this.subscribeprogressEvent();
                     break;
             }
 
@@ -138,17 +139,18 @@ export class RecordinfoPage implements OnInit {
         });
     }
 
-    startRefreshTimer() {
-        if (this.autoFefreshInterval == null) {
-            this.autoFefreshInterval = setInterval(() => {
+    subscribeprogressEvent() {
+        if (!this.hasSubscribeprogressEvent) {
+            this.events.subscribe(this.chainId + ':syncprogress', (coin) => {
                 this.getTransactionInfo();
-            }, 30000); // 30s
+            });
+            this.hasSubscribeprogressEvent = true;
         }
     }
-    closeRefreshTimer() {
-        if (this.autoFefreshInterval) {
-            clearInterval(this.autoFefreshInterval);
-            this.autoFefreshInterval = null;
+    unsubscribeprogressEvent() {
+        if (this.hasSubscribeprogressEvent) {
+            this.events.unsubscribe(this.chainId + ':syncprogress');
+            this.hasSubscribeprogressEvent = false;
         }
     }
 
