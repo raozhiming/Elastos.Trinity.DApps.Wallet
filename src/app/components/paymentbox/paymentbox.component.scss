@@ -2,7 +2,7 @@
 
 .view {
     width: 100%;
-    height: px2rem(670px);
+    // height: px2rem(670px);
     bottom: 0;
     left: 0;
     position: absolute;
@@ -27,9 +27,7 @@
     right: px2rem(30px);
     margin-top: px2rem(15px);
 }
-ion-list {
-    height: px2rem(470px);;
-}
+
 ion-item {
     text-align: left;
     margin-left: px2rem(35px);
@@ -42,8 +40,7 @@ ion-item {
     }
     .right {
         flex: 0 0 px2rem(480px) !important;
-        // --ion-background-color: green;
-        // background-color: green;
+        margin-left: px2rem(0px);
     }
 }
 
