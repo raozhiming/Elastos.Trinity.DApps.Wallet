@@ -40,7 +40,7 @@ export class TransferPage implements OnInit {
     walletType = "";
     transfer: any = null;
 
-    balance = 0;
+    balance = 0; // balance in ELA
 
     chainId: string;
 
@@ -65,7 +65,7 @@ export class TransferPage implements OnInit {
     introText = ''; // to show intro text
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
-        public native: Native, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
+                public native: Native, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
         this.init();
     }
 
@@ -93,7 +93,7 @@ export class TransferPage implements OnInit {
                 break;
             case "recharge":
                 this.transFunction = this.createDepositTransaction;
-                this.transfer.rate = 1;//TODO:: this is sidechain rate
+                this.transfer.rate = 1; //TODO:: this is sidechain rate
                 this.transfer.fee = 10000;
                 this.chainId = "ELA";
                 this.transfer.amount = '0.1'; // for DID
@@ -103,7 +103,7 @@ export class TransferPage implements OnInit {
                 break;
             case "withdraw":
                 this.transFunction = this.createWithdrawTransaction;
-                this.transfer.rate = 1;//TODO:: this is mainchain rate
+                this.transfer.rate = 1; //TODO:: this is mainchain rate
                 break;
         }
         this.initData();
@@ -129,8 +129,8 @@ export class TransferPage implements OnInit {
     }
 
     initData() {
-        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret) => {
-            this.balance = ret;
+        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret: string) => {
+            this.balance = +ret / this.SELA; // this.balance is number, ELA
         });
     }
 
@@ -158,14 +158,14 @@ export class TransferPage implements OnInit {
             return;
         }
 
-        if (this.transfer.amount.toString().indexOf(".") > -1 && this.transfer.amount.toString().split(".")[1].length > 8) {
+        if (this.transfer.amount.toString().indexOf('.') > -1 && this.transfer.amount.toString().split(".")[1].length > 8) {
             this.native.toast_trans('correct-amount');
             return;
         }
 
         this.walletManager.isAddressValid(this.masterWalletId, this.transfer.toAddress,
             () => { this.transFunction(); },
-            () => { this.native.toast_trans("contact-address-digits"); }
+            () => { this.native.toast_trans('contact-address-digits'); }
         );
     }
 

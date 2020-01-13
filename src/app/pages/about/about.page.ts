@@ -20,7 +20,7 @@ export class AboutPage implements OnInit {
     }
 
     init() {
-        this.walletManager.getVersion((data) => {
+        this.walletManager.getVersion((data: string) => {
             this.spvVersion = data;
         });
     }

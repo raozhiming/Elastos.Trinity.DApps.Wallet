@@ -20,10 +20,10 @@
         <ion-item>
             <ion-label>{{ 'text-price' | translate}}</ion-label>
             <ion-note slot="end" *ngIf="!transfer.rate">
-                {{'text-balance' | translate}}：{{balance/SELA}}
+                {{'text-balance' | translate}}：{{balance}}
             </ion-note>
             <ion-note slot="end" *ngIf="transfer.rate>0">
-                {{'text-balance' | translate}}：{{balance/SELA}}({{'text-rate' | translate}}：1:{{transfer.rate}})
+                {{'text-balance' | translate}}：{{balance}}({{'text-rate' | translate}}：1:{{transfer.rate}})
             </ion-note>
         </ion-item>
         <ion-item>

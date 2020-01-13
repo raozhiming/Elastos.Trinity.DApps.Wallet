@@ -127,7 +127,7 @@ export class MasterManager {
 
         this.walletManager.getMasterWalletBasicInfo(masterId, (ret) => {
             this.masterWallet[masterId].account = ret;
-            this.getAllSubWallets(masterId, isAdd)
+            this.getAllSubWallets(masterId, isAdd);
         });
     }
 
@@ -165,9 +165,9 @@ export class MasterManager {
     }
 
     public getWalletBalance(masterId, chainId) {
-        this.walletManager.getBalance(masterId, chainId, (data) => {
+        this.walletManager.getBalance(masterId, chainId, (data: string) => {
             this.zone.run(() => {
-                this.masterWallet[masterId].subWallet[chainId].balance = parseInt(data) / Config.SELA;
+                this.masterWallet[masterId].subWallet[chainId].balance = parseInt(data, 10) / Config.SELA;
 
                 let idChainBalance = 0;
                 if (this.masterWallet[masterId].subWallet[Config.IDCHAIN]) {
@@ -312,7 +312,7 @@ export class MasterManager {
             case "OnBalanceChanged":
                 // console.log('OnBalanceChanged ', result);
                 this.zone.run(() => {
-                    chain.balance = parseInt(result.Balance) / Config.SELA;
+                    chain.balance = parseInt(result.Balance, 10) / Config.SELA;
                 });
                 break;
             case "OnTxPublished":

@@ -106,11 +106,6 @@ export class CoinPage implements OnInit {
     }
 
     initData() {
-        // if (this.chainId === 'ELA') {
-        //     this.walletManager.getBalance(this.masterWalletId, this.chainId, Config.voted, (ret) => {
-        //         this.votedCount = ret / Config.SELA;
-        //     });
-        // }
         this.pageNo = 0;
         this.start = 0;
         this.MaxCount = 0;

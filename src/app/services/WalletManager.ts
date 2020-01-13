@@ -21,11 +21,11 @@
  */
 
 import { Injectable, NgZone } from '@angular/core';
-import { Native } from "./Native";
-import { Config } from "./Config";
-import { PopupProvider } from "./popup";
-import { LocalStorage } from './Localstorage';
 import { Events } from '@ionic/angular';
+import { Config } from './Config';
+import { Native } from './Native';
+import { PopupProvider } from './popup';
+import { LocalStorage } from './Localstorage';
 
 declare let walletManager: WalletPlugin.WalletManager;
 
@@ -55,7 +55,6 @@ export class WalletManager {
         public localStorage: LocalStorage,
         public zone: NgZone,
         public popupProvider: PopupProvider) {
-
     }
 
     init() {
@@ -163,7 +162,6 @@ export class WalletManager {
     /**
     * @param {string} masterWalletId
     * @param {string} chainId
-    * @param {number} BalanceType
     * @param Fun
     */
     getBalance(masterWalletId: string, chainId: string, success) {
