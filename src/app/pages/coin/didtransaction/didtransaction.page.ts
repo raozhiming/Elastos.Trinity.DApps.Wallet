@@ -67,7 +67,7 @@ export class DidtransactionPage implements OnInit {
         this.chainId = Config.coinObj.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
         this.masterWalletId = Config.getCurMasterWalletId();
-        if (this.chainId === 'IDChain') {
+        if (this.chainId === Config.IDCHAIN) {
             let coinList = Config.getSubWalletList();
             if (coinList.length === 1) { // for now, just IDChain
                 this.hasOpenIDChain = true;

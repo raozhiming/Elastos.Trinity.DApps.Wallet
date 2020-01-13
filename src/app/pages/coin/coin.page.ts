@@ -170,7 +170,7 @@ export class CoinPage implements OnInit {
                                 payStatusIcon = './assets/images/vote.png';
                                 name = 'Vote';
                             }
-                        } else if (this.chainId === 'IDChain') {
+                        } else if (this.chainId === Config.IDCHAIN) {
                             if (transaction.Type === 10) { // DID transaction
                                 payStatusIcon = './assets/images/did.png';
                                 name = 'DID';

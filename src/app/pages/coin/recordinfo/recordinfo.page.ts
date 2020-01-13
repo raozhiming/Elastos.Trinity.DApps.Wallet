@@ -90,7 +90,7 @@ export class RecordinfoPage implements OnInit {
             let vtype = "transaction-type-13";
             if ((transaction["Type"] >= 0) && transaction["Type"] <= 12) {
                 if (transaction["Type"] === 10) {
-                    if (this.chainId === 'IDChain') {
+                    if (this.chainId === Config.IDCHAIN) {
                         vtype = "transaction-type-did";
                     } else {
                         vtype = "transaction-type-10";

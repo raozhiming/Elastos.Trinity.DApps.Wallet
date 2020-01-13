@@ -61,7 +61,7 @@ export class WalletImportPage implements OnInit {
         //this.native.showLoading();
         switch (this.selectedTab) {
             case "words":
-                if (this.checkWorld()) {
+                if (this.checkword()) {
                     this.native.showLoading().then(() => {
                         this.importWalletWithMnemonic();
                     });
@@ -104,18 +104,18 @@ export class WalletImportPage implements OnInit {
 
         if (Util.isNull(this.importFileObj.backupPassWord)) {
             //this.native.hideLoading();
-            this.native.toast_trans('text-backup-passworld-input');
+            this.native.toast_trans('text-backup-password-input');
             return false;
         }
         if (Util.isNull(this.importFileObj.payPassword)) {
             //this.native.hideLoading();
-            this.native.toast_trans('text-pay-passworld-input');
+            this.native.toast_trans('text-pay-password-input');
             return false;
         }
 
         if (this.importFileObj.payPassword != this.importFileObj.rePayPassword) {
             //this.native.hideLoading();
-            this.native.toast_trans('text-passworld-compare');
+            this.native.toast_trans('text-password-compare');
             return false;
         }
         return true;
@@ -139,7 +139,7 @@ export class WalletImportPage implements OnInit {
         });
     }
 
-    checkWorld() {
+    checkword() {
         if (Util.isNull(this.mnemonicObj.name)) {
             //this.native.hideLoading();
             this.native.toast_trans("text-wallet-name-validator");
@@ -182,7 +182,7 @@ export class WalletImportPage implements OnInit {
         }
         if (this.mnemonicObj.payPassword != this.mnemonicObj.rePayPassword) {
             //this.native.hideLoading();
-            this.native.toast_trans('text-passworld-compare');
+            this.native.toast_trans('text-password-compare');
             return false;
         }
         return true;
@@ -200,7 +200,7 @@ export class WalletImportPage implements OnInit {
     importWalletWithMnemonic() {
         let mnemonic = this.normalizeMnemonic(this.mnemonicObj.mnemonic);
         this.walletManager.importWalletWithMnemonic(this.masterWalletId, mnemonic, this.mnemonicObj.phrasePassword, this.mnemonicObj.payPassword, this.mnemonicObj.singleAddress, (data) => {
-            this.createSubWallet('import-text-world-sucess');
+            this.createSubWallet('import-text-word-sucess');
         });
     }
 
@@ -238,7 +238,7 @@ export class WalletImportPage implements OnInit {
         //     this.walletManager.importWalletWithOldKeystore(this.masterWalletId,
         //         this.keyStoreContent, this.importFileObj.backupPassWord,
         //         this.importFileObj.payPassword, webKeyStore, () => {
-        //             this.createSubWallet('import-text-world-sucess');
+        //             this.createSubWallet('import-text-word-sucess');
         //         });
         // });
     }

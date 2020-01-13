@@ -110,7 +110,7 @@ export class TransferPage implements OnInit {
     }
 
     getIDChainAddress() {
-        this.walletManager.createAddress(this.masterWalletId, 'IDChain', (ret) => {
+        this.walletManager.createAddress(this.masterWalletId, Config.IDCHAIN, (ret) => {
             this.transfer.toAddress = ret;
         });
     }

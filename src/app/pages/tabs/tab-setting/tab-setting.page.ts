@@ -36,7 +36,7 @@ export class TabSettingPage implements OnInit {
     public fee: number = 0;
     public feePerKb: number = 10000;
     public walletInfo = {};
-    public passworld: string = "";
+    public password: string = "";
     public available = 0;
 
     settings = [{

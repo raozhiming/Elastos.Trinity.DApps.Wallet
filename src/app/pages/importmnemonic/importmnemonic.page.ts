@@ -22,7 +22,7 @@ export class ImportmnemonicPage implements OnInit {
     ngOnInit() {
     }
 
-    checkWorld() {
+    checkword() {
         if (Util.isNull(this.mnemonicObj.name)) {
             //this.native.hideLoading();
             this.native.toast_trans("text-wallet-name-validator");
@@ -65,7 +65,7 @@ export class ImportmnemonicPage implements OnInit {
         }
         if (this.mnemonicObj.payPassword != this.mnemonicObj.rePayPassword) {
             //this.native.hideLoading();
-            this.native.toast_trans('text-passworld-compare');
+            this.native.toast_trans('text-password-compare');
             return false;
         }
         return true;
@@ -80,7 +80,7 @@ export class ImportmnemonicPage implements OnInit {
     };
 
     onNext() {
-        if (this.checkWorld()) {
+        if (this.checkword()) {
 
             this.exatParm["mnemonicStr"] = this.normalizeMnemonic(this.mnemonicObj.mnemonic);
             this.exatParm["mnemonicPassword"] = this.mnemonicObj.phrasePassword;

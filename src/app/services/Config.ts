@@ -55,6 +55,8 @@ export class Config {
     public static masterManager: any = {};
 
     public static SELA = 100000000;
+    public static ELA = 'ELA';
+    public static IDCHAIN = 'IDChain';
 
     public static IDCHAIN_URL: String = 'https://idchain.elastos.org/';
     public static BLOCKCHAIN_URL: String = 'https://blockchain.elastos.org/';

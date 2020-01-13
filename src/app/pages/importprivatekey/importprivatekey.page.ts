@@ -58,7 +58,7 @@ export class ImportprivatekeyPage implements OnInit {
     }
 
     if(this.passWord!=this.rePassword){
-      this.native.toast_trans('text-passworld-compare');
+      this.native.toast_trans('text-password-compare');
       return false;
     }
     return true;

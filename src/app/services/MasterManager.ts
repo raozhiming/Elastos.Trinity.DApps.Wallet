@@ -168,6 +168,13 @@ export class MasterManager {
         this.walletManager.getBalance(masterId, chainId, (data) => {
             this.zone.run(() => {
                 this.masterWallet[masterId].subWallet[chainId].balance = parseInt(data) / Config.SELA;
+
+                let idChainBalance = 0;
+                if (this.masterWallet[masterId].subWallet[Config.IDCHAIN]) {
+                    idChainBalance = this.masterWallet[masterId].subWallet[Config.IDCHAIN].balance;
+                }
+                // rate = 1
+                this.masterWallet[masterId].totalBalance = this.masterWallet[masterId].subWallet[Config.ELA].balance + idChainBalance;
             });
         });
     }
@@ -367,7 +374,7 @@ export class MasterManager {
         this.progress[masterId][coin].lastblocktime = datetime;
         this.localStorage.setProgress(this.progress);
 
-        if (!this.hasPromptTransfer2IDChain && (coin === 'IDChain') && (progress === 100)) {
+        if (!this.hasPromptTransfer2IDChain && (coin === Config.IDCHAIN) && (progress === 100)) {
             this.checkIDChainBalance();
         }
 
@@ -393,17 +400,17 @@ export class MasterManager {
         if (Config.needPromptTransfer2IDChain) { return; }
 
         // // IDChain not open, do not prompt
-        // if (Util.isNull(this.masterWallet[this.curMasterId].subWallet['IDChain'])) {
+        // if (Util.isNull(this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN])) {
         //     return;
         // }
 
-        if (parseFloat(this.masterWallet[this.curMasterId].subWallet['ELA'].balance) <= 0.1) {
-            console.log('ELA balance ', this.masterWallet[this.curMasterId].subWallet['ELA'].balance);
+        if (parseFloat(this.masterWallet[this.curMasterId].subWallet[Config.ELA].balance) <= 0.1) {
+            console.log('ELA balance ', this.masterWallet[this.curMasterId].subWallet[Config.ELA].balance);
             return;
         }
 
-        if (parseFloat(this.masterWallet[this.curMasterId].subWallet['IDChain'].balance) > 0.01) {
-            console.log('IDChain balance ', this.masterWallet[this.curMasterId].subWallet['IDChain'].balance);
+        if (parseFloat(this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN].balance) > 0.01) {
+            console.log('IDChain balance ', this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN].balance);
             return;
         }
 

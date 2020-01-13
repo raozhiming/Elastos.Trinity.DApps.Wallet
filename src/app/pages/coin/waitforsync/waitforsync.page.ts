@@ -63,7 +63,7 @@ export class WaitforsyncPage implements OnInit {
                 break;
         }
 
-        if (this.chainId === 'IDChain') {
+        if (this.chainId === Config.IDCHAIN) {
             let coinList = Config.getSubWalletList();
             if (coinList.length === 1) { // for now, just IDChain
                 this.hasOpenIDChain = true;

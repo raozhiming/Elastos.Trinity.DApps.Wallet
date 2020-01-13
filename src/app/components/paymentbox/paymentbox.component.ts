@@ -70,7 +70,7 @@ export class PaymentboxComponent implements OnInit {
         if (this.transfer.payPassword) {
             this.modalCtrl.dismiss(this.transfer.payPassword);
         } else {
-            this.native.toast_trans('text-pwd-validator');
+            this.native.toast_trans('text-pay-password-input');
         }
     }
 

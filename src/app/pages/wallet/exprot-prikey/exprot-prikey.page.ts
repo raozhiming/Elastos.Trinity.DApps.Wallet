@@ -46,12 +46,12 @@ export class ExprotPrikeyPage implements OnInit {
         }
 
         if (this.exprotObj.backupPassWord != this.exprotObj.reBackupPassWord) {
-            this.native.toast_trans("text-passworld-compare");
+            this.native.toast_trans("text-password-compare");
             return false;
         }
 
         if (Util.isNull(this.exprotObj.payPassword) && (this.readonly != "Readonly")) {
-            this.native.toast_trans("text-pay-passworld-input");
+            this.native.toast_trans("text-pay-password-input");
             return false;
         }
 

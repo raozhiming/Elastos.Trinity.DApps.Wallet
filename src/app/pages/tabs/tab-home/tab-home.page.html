@@ -20,7 +20,7 @@
                 </div>
                 <button (click)="goSetting()">{{'text-wallet-manager' | translate}}</button>
             </div>
-            <div class="valuation" [hidden]="!showOn">{{Config.curMaster.subWallet['ELA'].balance}}</div>
+            <div class="valuation" [hidden]="!showOn">{{Config.curMaster.totalBalance}}</div>
             <div class="valuation" [hidden]="showOn">****</div>
             <!-- <div id="valuation-label">预估资产(元)</div> -->
         </div>
