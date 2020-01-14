@@ -6,16 +6,6 @@
     <div class="mnemonic-write">
 
         <div class="slide-container">
-            <div class="slide-body">
-                <div class="slide-title">{{'text-mnemonic-prompt2' | translate}}</div>
-                <div class="phrase-container">
-                    <div class="phrase">
-                        <ion-button outline *ngFor="let item of selectList; let i = index"
-                            (click)="removeButton(i,item)" style="text-transform: none">{{item.text}}</ion-button>
-                    </div>
-                </div>
-            </div>
-
             <div class="bottom-phrase">
                 <div *ngIf="!selectComplete">
                     <div class="words">
@@ -23,6 +13,16 @@
                             (click)="addButton(i, item)" [disabled]="item.selected" style="text-transform: none">
                             {{item.text}}
                         </ion-button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-body">
+                <div class="slide-title">{{'text-mnemonic-prompt2' | translate}}</div>
+                <div class="phrase-container">
+                    <div class="phrase">
+                        <ion-button outline *ngFor="let item of selectList; let i = index"
+                            (click)="removeButton(i,item)" style="text-transform: none">{{item.text}}</ion-button>
                     </div>
                 </div>
             </div>

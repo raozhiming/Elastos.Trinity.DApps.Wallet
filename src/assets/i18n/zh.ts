@@ -13,10 +13,9 @@ export const zh = {
     'text-wait-info': '与链的数据同步完成后才能执行相关操作，请耐心等待！',
     'text-wait-info-2': '同步完成后将自动进入下一页',
 
-    'welcome': '欢迎使用本应用',
     'tab-home': '首页',
-    'wallet': '钱包',
     'tab-setting': '设置',
+    'wallet': '钱包',
     'launcher-create-wallet': '创建钱包',
     'launcher-backup-import': '导入钱包',
     'launcher-warning-title': '重要提示',
@@ -120,6 +119,7 @@ export const zh = {
     'addwallet-paypassword2-placeholder': '请再次设置钱包支付密码',
     'text-pwd-validator': '密码最少8位，建议数字与字母组合',
     'text-repwd-validator': '两次密码不一致',
+
     //
     'showmnes-optionalpassword1-title': '助记词密码（可选）',
     'showmnes-optionalpassword1-placeholder': '请设置助记词密码',
@@ -146,10 +146,13 @@ export const zh = {
     'updatepaypassword-paypassword1-placeholder': '请设置新的支付密码',
     'updatepaypassword-paypassword2-placeholder': '请重复已输入的新的支付密码',
     //access page
-    'access': '授权',
+    'accaccess-addressess': '访问 ELA 地址',
+    'accaccess-mnemonic': '访问助记词',
     'ela-address': '钱包地址',
     'requester': '请求授权应用',
-    'text-share-address': '分享此地址',
+    'text-allow': '允许',
+    'text-warning': '警告',
+    'text-share-mnemonic-warning': '助记词是区块链资产的唯一凭证，分享前请确认不会有泄露风险！',
 
     'text-pwd': '输入密码',
     'text-wallet-pwd': '请设置私钥文件密码',

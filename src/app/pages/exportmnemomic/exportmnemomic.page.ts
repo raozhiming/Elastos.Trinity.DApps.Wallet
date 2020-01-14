@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Events } from '@ionic/angular';
-import { WalletManager } from '../../services/WalletManager';
+import { AppService } from '../../services/AppService';
 import { Config } from '../../services/Config';
 import { Native } from '../../services/Native';
 import { Util } from '../../services/Util';
-import { ActivatedRoute } from '@angular/router';
+import { WalletManager } from '../../services/WalletManager';
 
 @Component({
     selector: 'app-exportmnemomic',
@@ -13,19 +14,25 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ExportmnemomicPage implements OnInit {
 
+    public title = '';
+    public mnemonicPrompt = '';
     public payPassword: string = '';
     public masterWalletId: string = "1";
     public mnemonicList = [];
     public isShow: boolean = true;
+    public isFromIntent = false;
+    public requestDapp: any = null;
     public mnemonicStr: string = "";
     public walletname: string = "";
     public account: any = {};
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native, public events: Events) {
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public zone: NgZone,
+                public native: Native, public events: Events, public appService: AppService) {
         this.init();
     }
 
     ngOnInit() {
         console.log('ngOnInit ExportmnemomicPage');
+
     }
 
     ionViewWillEnter() {
@@ -39,20 +46,44 @@ export class ExportmnemomicPage implements OnInit {
 
     init() {
         // this.masterWalletId = Config.getCurMasterWalletId();
-        this.masterWalletId = Config.modifyId;
-        this.walletname = Config.getWalletName(this.masterWalletId);
+        this.route.queryParams.subscribe((data) => {
+            this.zone.run(() => {
+                if (!Util.isEmptyObject(data)) {
+                    console.log('From intent');
+                    this.isFromIntent = true;
+                    this.requestDapp = Config.requestDapp;
+                    this.title = 'accaccess-mnemonic';
+                    this.mnemonicPrompt = 'text-share-mnemonic-warning';
+                } else {
+                    this.title = 'text-export-mnemomic';
+                    this.mnemonicPrompt = 'text-mnemonic-prompt';
+                }
+                this.masterWalletId = Config.modifyId;
+                this.walletname = Config.getWalletName(this.masterWalletId);
+            });
+        });
     }
 
     checkparms() {
+        if (Util.isNull(this.payPassword)) {
+            this.native.toast_trans('text-pay-password-input');
+            return;
+        }
         if (!Util.password(this.payPassword)) {
-            this.native.toast_trans("text-pwd-validator");
+            this.native.toast_trans('text-pwd-validator');
             return;
         }
         return true;
     }
 
     onNext() {
-        this.native.go("/checkmnemomic", { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) })
+        this.native.go('/checkmnemomic', { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) });
+    }
+
+    onShare() {
+        this.native.setRootRouter('/tabs');
+        this.appService.sendIntentResponse(this.requestDapp.action,
+            { walletinfo: [{ mnemonic: this.mnemonicStr }] }, this.requestDapp.intentId);
     }
 
     onExport() {
@@ -64,12 +95,12 @@ export class ExportmnemomicPage implements OnInit {
                     this.mnemonicList.push({ "text": mnemonicArr[i], "selected": false });
                 }
                 this.isShow = false;
-            })
+            });
         }
     }
 
     ionViewDidLeave() {
-        this.events.unsubscribe("error:update");
+        this.events.unsubscribe('error:update');
     }
 
 }

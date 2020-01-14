@@ -36,11 +36,9 @@ import { WalletManager } from '../../../services/WalletManager';
     styleUrls: ['./transfer.page.scss'],
 })
 export class TransferPage implements OnInit {
-    masterWalletId: string = "1";
-    walletType = "";
+    masterWalletId = '1';
+    walletType = '';
     transfer: any = null;
-
-    balance = 0; // balance in ELA
 
     chainId: string;
 
@@ -50,12 +48,10 @@ export class TransferPage implements OnInit {
 
     genesisAddress: '';
 
+    Config = Config;
     SELA = Config.SELA;
-    appType: string = null;
-    selectType: string = "";
     parms: any;
     txId: string;
-    did: string;
     isInput = false;
     walletInfo = {};
 
@@ -95,7 +91,7 @@ export class TransferPage implements OnInit {
                 this.transFunction = this.createDepositTransaction;
                 this.transfer.rate = 1; //TODO:: this is sidechain rate
                 this.transfer.fee = 10000;
-                this.chainId = "ELA";
+                this.chainId = 'ELA';
                 this.transfer.amount = '0.1'; // for DID
                 this.getIDChainAddress();
                 this.hideMemo = true;
@@ -106,7 +102,6 @@ export class TransferPage implements OnInit {
                 this.transfer.rate = 1; //TODO:: this is mainchain rate
                 break;
         }
-        this.initData();
     }
 
     getIDChainAddress() {
@@ -116,7 +111,6 @@ export class TransferPage implements OnInit {
     }
 
     rightHeader() {
-        // console.log(Config.coinObj.transfer);
         this.native.go("/scan", { "pageType": "1" });
     }
 
@@ -126,12 +120,6 @@ export class TransferPage implements OnInit {
 
     goTransaction() {
         this.checkValue();
-    }
-
-    initData() {
-        this.walletManager.getBalance(this.masterWalletId, this.chainId, (ret: string) => {
-            this.balance = +ret / this.SELA; // this.balance is number, ELA
-        });
     }
 
     checkValue() {
@@ -153,7 +141,7 @@ export class TransferPage implements OnInit {
             return;
         }
 
-        if (this.transfer.amount > this.balance) {
+        if (this.transfer.amount * this.SELA > Config.curMaster.subWallet[this.chainId].balance) {
             this.native.toast_trans('error-amount');
             return;
         }

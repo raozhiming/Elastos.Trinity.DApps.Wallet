@@ -113,9 +113,9 @@ export class AppService {
         console.log("Intent received message:", ret.action, ". params: ", ret.params, ". from: ", ret.from);
         // console.log(ret);
         switch (ret.action) {
-            case "pay":
+            case 'pay':
                 Config.coinObj = {};
-                Config.coinObj.chainId = "ELA";
+                Config.coinObj.chainId = 'ELA';
                 Config.coinObj.walletInfo = Config.curMaster.account;
                 Config.coinObj.transfer = {
                     toAddress: ret.params.receiver,
@@ -127,35 +127,32 @@ export class AppService {
                     action: ret.action,
                     from: ret.from,
                 };
-                Config.coinObj.transfer.type = "payment-confirm";
-                // myService.native.go("/transfer");
-                myService.native.go("/waitforsync");
+                Config.coinObj.transfer.type = 'payment-confirm';
+                myService.native.go('/waitforsync');
                 break;
 
-            case "dposvotetransaction":
-                console.log("DPOS Transaction intent content:", ret.params);
+            case 'dposvotetransaction':
+                console.log('DPOS Transaction intent content:', ret.params);
                 Config.coinObj = {};
-                Config.coinObj.chainId = "ELA";
+                Config.coinObj.chainId = 'ELA';
                 Config.coinObj.walletInfo = Config.curMaster.account;
                 Config.coinObj.transfer = {
-                    toAddress: "default",
+                    toAddress: 'default',
                     publicKeys: ret.params.publickeys,
-                    memo: "",
+                    memo: '',
                     fee: 0,
                     payPassword: '',
                     intentId: ret.intentId,
                     action: ret.action,
                     from: ret.from,
                 };
-                Config.coinObj.transfer.type = "vote-UTXO";
-                // myService.native.go("/dposvote");
-
-                myService.native.go("/waitforsync");
+                Config.coinObj.transfer.type = 'vote-UTXO';
+                myService.native.go('/waitforsync');
                 break;
 
-            case "didtransaction":
+            case 'didtransaction':
                 Config.coinObj = {};
-                Config.coinObj.chainId = "IDChain"; // maybe use IDChain?
+                Config.coinObj.chainId = 'IDChain';
                 Config.coinObj.walletInfo = Config.curMaster.account;
                 Config.coinObj.transfer = {
                     // toAddress: "default",
@@ -165,20 +162,28 @@ export class AppService {
                     action: ret.action,
                     from: ret.from,
                 };
-                Config.coinObj.transfer.type = "did-confirm";
-                // myService.native.go("/didtransaction");
-                myService.native.go("/waitforsync");
+                Config.coinObj.transfer.type = 'did-confirm';
+                myService.native.go('/waitforsync');
                 break;
 
-            case "walletaccess":
-                console.log("walletaccess");
+            case 'elawalletmnemonicaccess':
+                Config.requestDapp = {
+                    name: ret.from,
+                    intentId: ret.intentId,
+                    action: ret.action,
+                    reason: ''
+                };
+                myService.native.go('/access');
+                break;
+
+            case 'walletaccess':
                 Config.requestDapp = {
                     name: ret.from,
                     intentId: ret.intentId,
                     action: ret.action,
                     reason: ret.params.elaaddress.reason
                 };
-                myService.native.go("/access");
+                myService.native.go('/access');
                 break;
             default:
                 break;
@@ -188,7 +193,7 @@ export class AppService {
     sendIntentResponse(action, result, intentId) {
         appManager.sendIntentResponse(action, result, intentId, () => {
         }, (err)=>{
-            console.error("sendIntentResponse error!", err);
+            console.error('sendIntentResponse error!', err);
         });
     }
 }

@@ -1,15 +1,4 @@
 @import "../../../functions.scss";
-// #rect {
-//     position:absolute;
-//     left: 0;
-//     top: 0;
-//     margin-left: px2rem(45px);
-//     margin-right: px2rem(45px);
-//     margin-top: px2rem(11px);
-//     width: px2rem(660px);
-//     height: px2rem(324px);
-//     z-index: -1;
-// }
 
 #home-top-box {
     margin-left: px2rem(45px);
@@ -26,11 +15,8 @@
         margin-left: px2rem(43px);
         margin-right: px2rem(45px);
         padding-top: px2rem(30px);
-        // height: px2rem(60px);
-        // background-color: #00ff00;
 
         div {
-            // margin: auto;
             float: left;
             padding-top: px2rem(5px);
             font-size: 18px;
@@ -54,7 +40,6 @@
     }
 
     .valuation {
-        // margin-top: px2rem(98px);
         margin-top: px2rem(120px);
         text-align: center;
         font-size: 40px;
@@ -70,7 +55,6 @@ button {
 }
 
 #home-list-box {
-    // position:absolute;
     left: 0;
     top: px2rem(20px);
     width: 100%;
@@ -92,10 +76,33 @@ button {
         }
 
         #ela-address {
-            text-align: center;
-            font-size: 18px;
-            flex: 0 0 px2rem(380px) !important;
+            margin-left: px2rem(45px);
+            font-size: 14px;
         }
+    }
+}
+
+#access-mnemonic-info {
+    margin-left: px2rem(45px);
+    margin-right: px2rem(45px);
+    margin-top: px2rem(60px);
+    color: white;
+
+    img {
+        width: px2rem(80px);
+        height: px2rem(80px);
+    }
+
+    #warning {
+        margin-left: px2rem(25px);
+        margin-bottom: px2rem(25px);
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    #warning-info {
+        font-size: 20px;
     }
 }
 
@@ -111,5 +118,9 @@ button {
         padding-left: 0;
         margin-left: px2rem(45px);
         margin-right: px2rem(45px);
+    }
+
+    ion-label {
+        margin-left: px2rem(45px);
     }
 }

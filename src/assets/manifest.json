@@ -1,58 +1,61 @@
 {
-  "id": "org.elastos.trinity.dapp.wallet",
-  "version": "1.0.5",
-  "version_code": 6,
-  "name": "Wallet",
-  "short_name": "Wallet",
-  "description": "elastOS SPV ELA wallet",
-  "start_url": "index.html",
-  "type": "app",
-  "category":"finance",
-  "icons": [
-    {
-      "src": "assets/images/logo.png",
-      "sizes": "512x512",
-      "type": "image/png"
+    "id": "org.elastos.trinity.dapp.wallet",
+    "version": "1.0.5",
+    "version_code": 6,
+    "name": "Wallet",
+    "short_name": "Wallet",
+    "description": "elastOS SPV ELA wallet",
+    "start_url": "index.html",
+    "type": "app",
+    "category": "finance",
+    "icons": [
+        {
+            "src": "assets/images/logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/images/logo.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        }
+    ],
+    "author": {
+        "name": "Elastos Foundation",
+        "email": "contact@elastos.org",
+        "website": "https://www.elastos.org"
     },
-    {
-      "src": "assets/images/logo.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    }
-  ],
-  "author": {
-    "name": "Elastos Foundation",
-    "email": "contact@elastos.org",
-    "website": "https://www.elastos.org"
-  },
-  "default_locale": "en",
-  "plugins": [
-    "Clipboard",
-    "InAppBrowser",
-    "QRScanner",
-    "SplashScreen",
-    "Wallet"
-  ],
-  "urls": [],
-  "framework": [
-    "ionic@4.12.0"
-  ],
-  "platform": [
-    "android",
-    "ios"
-  ],
-  "intent_filters": [
-    {
-      "action": "pay"
-    },
-    {
-      "action": "didtransaction"
-    },
-    {
-      "action": "dposvotetransaction"
-    },
-    {
-      "action": "walletaccess"
-    }
-  ]
+    "default_locale": "en",
+    "plugins": [
+        "Clipboard",
+        "InAppBrowser",
+        "QRScanner",
+        "SplashScreen",
+        "Wallet"
+    ],
+    "urls": [],
+    "framework": [
+        "ionic@4.12.0"
+    ],
+    "platform": [
+        "android",
+        "ios"
+    ],
+    "intent_filters": [
+        {
+            "action": "pay"
+        },
+        {
+            "action": "didtransaction"
+        },
+        {
+            "action": "dposvotetransaction"
+        },
+        {
+            "action": "elawalletmnemonicaccess"
+        },
+        {
+            "action": "walletaccess"
+        }
+    ]
 }

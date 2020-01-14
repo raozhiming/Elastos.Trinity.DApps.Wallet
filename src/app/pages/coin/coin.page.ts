@@ -56,6 +56,7 @@ export class CoinPage implements OnInit {
     public votedCount = 0;
 
     Config = Config;
+    SELA = Config.SELA;
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager,
                 public native: Native, public events: Events, public popupProvider: PopupProvider) {

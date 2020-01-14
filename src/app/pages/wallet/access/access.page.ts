@@ -6,54 +6,70 @@ import { Native } from '../../../services/Native';
 import { PopupProvider } from '../../../services/popup';
 
 @Component({
-  selector: 'app-access',
-  templateUrl: './access.page.html',
-  styleUrls: ['./access.page.scss'],
+    selector: 'app-access',
+    templateUrl: './access.page.html',
+    styleUrls: ['./access.page.scss'],
 })
 export class AccessPage implements OnInit {
-  Config = Config;
+    Config = Config;
+    SELA = Config.SELA;
 
-  requestDapp: any = null;
-  masterWalletId = "1";
-  elaAddress: string = null;
-  chainId = "ELA";
-  requester = "";
-  reason = "";
+    requestDapp: any = null;
+    masterWalletId = '1';
+    exportMnemonic = false;
+    elaAddress: string = null;
+    chainId = 'ELA';
+    reason = '';
+    title = '';
 
-  constructor(public appService: AppService,
-              public walletManager: WalletManager,
-              public popupProvider: PopupProvider,
-              public native: Native) {}
+    constructor(public appService: AppService,
+                public walletManager: WalletManager,
+                public popupProvider: PopupProvider,
+                public native: Native)
+    {}
 
-  ngOnInit() {
-    this.init();
-  }
+    ngOnInit() {
+        this.init();
+    }
 
-  init() {
-    this.requestDapp = Config.requestDapp;
-    this.masterWalletId = Config.getCurMasterWalletId();
-    this.createAddress();
+    init() {
+        this.requestDapp = Config.requestDapp;
+        this.masterWalletId = Config.getCurMasterWalletId();
+        if (this.requestDapp.action === 'walletaccess') {
+            this.createAddress();
+            this.title = 'access-address';
+        } else {
+            this.exportMnemonic = true;
+            this.title = 'accaccess-mnemonic';
+        }
+    }
 
-    this.onShare();
-  }
+    // getAddress() {
+    //   this.native.go("/address", { chainId: this.chainId });
+    // }
 
-  // getAddress() {
-  //   this.native.go("/address", { chainId: this.chainId });
-  // }
+    createAddress() {
+        this.walletManager.createAddress(this.masterWalletId, this.chainId, (ret) => {
+            this.elaAddress = ret;
+        });
+    }
 
-  createAddress() {
-    this.walletManager.createAddress(this.masterWalletId, this.chainId, (ret) => {
-      this.elaAddress = ret;
-    });
-  }
-
-  onShare() {
-    this.popupProvider.ionicConfirm("confirmTitle", "text-share-address").then((data) => {
-      if (data) {
-        console.log('share the address');
-        this.appService.sendIntentResponse(this.requestDapp.action, {walletinfo: [{elaaddress: this.elaAddress}]}, this.requestDapp.intentId);
+    /**
+     * Cancel the vote operation. Closes the screen and goes back to the calling application after
+     * sending the intent response.
+     */
+    cancelOperation() {
+        this.appService.sendIntentResponse(this.requestDapp.action, { txid: null }, this.requestDapp.intentId);
         this.native.pop();
-      }
-    });
-  }
+    }
+
+    onShare() {
+        if (this.exportMnemonic) {
+            this.native.go('/exportmnemomic', {fromIntent: true});
+        } else {
+            this.appService.sendIntentResponse(this.requestDapp.action,
+                    { walletinfo: [{ elaaddress: this.elaAddress }] }, this.requestDapp.intentId);
+            this.native.pop();
+        }
+    }
 }

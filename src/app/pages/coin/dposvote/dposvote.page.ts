@@ -37,7 +37,7 @@ import { WalletManager } from '../../../services/WalletManager';
     styleUrls: ['./dposvote.page.scss'],
 })
 export class DPoSVotePage implements OnInit {
-    masterWalletId: string = "1";
+    masterWalletId = '1';
     transfer: any = null;
 
     balance: string; // Balance in SELA
@@ -46,8 +46,6 @@ export class DPoSVotePage implements OnInit {
 
     rawTransaction: '';
 
-    appType: string = null;
-    selectType: string = "";
     parms: any;
     txId: string;
     did: string;

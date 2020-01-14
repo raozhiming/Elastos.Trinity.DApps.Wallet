@@ -1,5 +1,5 @@
 <ion-header>
-    <header-bar title="text-export-mnemomic"></header-bar>
+    <header-bar title={{title}} [showMinimize]="!isFromIntent" [showClose]="!isFromIntent"></header-bar>
 </ion-header>
 <ion-content>
     <div class="coin-info-top-box">
@@ -18,7 +18,7 @@
     </ion-item>
     <div class="mnemonic" *ngIf="!isShow">
         <div class="slide-container">
-            <div class="slide-title">{{ 'text-mnemonic-prompt' | translate}}</div>
+            <div class="slide-title">{{ mnemonicPrompt | translate}}</div>
             <div class="slide-body">
                 <div class="phrase-container">
                     <div class="phrase">
@@ -35,5 +35,6 @@
 </ion-content>
 <ion-footer>
     <ion-button class="confirm" (click)="onExport()" *ngIf="isShow">{{ 'text-export-mnemomic' | translate }}</ion-button>
-    <ion-button class="confirm" (click)="onNext()" *ngIf="!isShow">{{ 'text-memory' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="onNext()" *ngIf="!isShow && !isFromIntent">{{ 'text-memory' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="onShare()" *ngIf="!isShow && isFromIntent">{{ 'text-allow' | translate }}</ion-button>
 </ion-footer>

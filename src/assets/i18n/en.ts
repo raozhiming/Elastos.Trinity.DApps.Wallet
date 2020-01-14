@@ -58,6 +58,11 @@ export const en = {
 
     'paypassword-reset': 'Reset pay password',
     'paypassword': 'Paypassword',
+
+
+
+
+
     // TODO remove unused items
     // import wallet page
     'text-from-mnemonic': 'from Mnemonics',
@@ -128,7 +133,7 @@ export const en = {
 
     //
     'unlock-paypassword-title': 'Pay Password',
-    'unlock-paypassword-placeholder': 'Enter the pay password of current wallet',
+    'unlock-paypassword-placeholder': 'Enter the pay password',
     // export wallet page
     'exportwallet-keystorepassword1-title': 'Keystore Password',
     'exportwallet-keystorepassword1-placeholder': 'Set a Keystore password for your wallet',
@@ -145,11 +150,14 @@ export const en = {
     'text-wallet-repwd': 'Repeat SecretKey Password',
     'text-signaddress': 'Single Address Wallet',
     'text-pwd-repeat': 'Repeat Password',
-    //access page
-    'access': 'Authorization',
+    // access page
+    'access-address': 'Request ELA Address',
+    'accaccess-mnemonic': 'Request Mnemonic',
     'ela-address': 'Wallet Address',
     'requester': 'Request from',
-    'text-share-address': 'Share this address',
+    'text-allow': 'Allow',
+    'text-warning': 'Warning',
+    'text-share-mnemonic-warning': 'Mnemonic is the only proof of blockchain assets. Please confirm that there is no risk of leakage before sharing!',
 
     'text-old-pay-password': 'Input Original Pay Password',
     'reset-pwd-success': 'Password Updated Successfully',
@@ -425,8 +433,8 @@ export const en = {
     'text-wallet-name-validator2': 'Wallet Name exist',
     'text-multi-wallet': '(Multi-Sign Wallet)',
     'text-standard-wallet': '(Standard Wallet)',
-    'text-export-mnemomic': 'Backup Mnemonics',
-    'text-export-menmonic-sucess': "Check Mnemonics Success",
+    'text-export-mnemomic': 'Export Mnemonics',
+    'text-export-menmonic-sucess': 'Check Mnemonics Success',
 
     'create-multi-by-mnes': 'Use Existing Seed (Import Mnemonics) ',
     'already-signed-publickey': 'already signed publickey',
@@ -435,7 +443,7 @@ export const en = {
     'super-point': 'super node election',
     'sign-up-for-election': 'sing up for election',
     'i-want-to-vote': 'i want to vote',
-    'sing-up': "sing up",
+    'sing-up': 'sing up',
     'confirmation-of-participation': 'confirmation of participation',
     'lock-details': 'lock details',
     'input-password': 'input password',

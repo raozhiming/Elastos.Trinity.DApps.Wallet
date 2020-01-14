@@ -13,6 +13,7 @@ import { PopupProvider } from '../../../services/popup';
 })
 export class WaitforsyncPage implements OnInit {
     Config = Config;
+    SELA = Config.SELA;
     showOn = true;
 
     masterWalletId = '1';

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
@@ -32,8 +32,9 @@ import { PopupProvider } from '../../../services/popup';
     styleUrls: ['./tab-home.page.scss'],
 })
 export class TabHomePage implements OnInit {
-    showOn: boolean = true;
+    showOn = true;
     Config = Config;
+    SELA = Config.SELA;
 
     constructor(public native: Native, public appService: AppService, public popupProvider: PopupProvider) {
     }
@@ -42,7 +43,7 @@ export class TabHomePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        if (Config.getCurMasterWalletId() != "-1") {
+        if (Config.getCurMasterWalletId() !== '-1') {
             this.appService.setIntentListener();
             this.promptTransfer2IDChain();
         }
@@ -55,25 +56,14 @@ export class TabHomePage implements OnInit {
         this.showOn = !this.showOn;
     }
 
-    goPayment() {
-        // this.localStorage.get('payment').then((val) => {
-        //     if (val) {
-        //         this.localStorage.remove('payment');
-        //         this.native.go("/payment-confirm", JSON.parse(val));
-        //     }
-        // });
-    }
-
     goSetting() {
         Config.modifyId = Config.getCurMasterWalletId();
-        this.native.go("/wallet-setting");
+        this.native.go('/wallet-setting');
         event.stopPropagation();
         return false;
     }
 
     doRefresh(event) {
-        //this.init();
-        // this.walletManager.getWalletBalance(this.masterWalletId, "ELA");
         Config.masterManager.getWalletBalance(Config.getCurMasterWalletId(), "ELA");
         setTimeout(() => {
             event.target.complete();

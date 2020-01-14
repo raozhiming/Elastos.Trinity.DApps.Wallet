@@ -1,47 +1,63 @@
 <ion-header>
-  <header-bar title="access"></header-bar>
+    <header-bar title={{title}} [showBack]="false" [showMinimize]="false" [showClose]="false"></header-bar>
 </ion-header>
 
 <ion-content>
-  <div>
-      <div id="home-top-box">
-          <div id="wallet-bar">
-              <div id="wallet-name" class="line-limit-length"> {{Config.curMaster.name}}
-                  <span *ngIf="Config.curMaster.account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
-                  <span *ngIf="Config.curMaster.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
-              </div>
-          </div>
-          <div class="valuation" >{{Config.curMaster.subWallet['ELA'].balance}}</div>
-      </div>
-
-
-      <div id="home-list-box">
-        <ion-list>
-          <ion-list-header>
-            <div>{{'ela-address' | translate}}</div>
-          </ion-list-header>
-
-          <div>
-            <!-- <ion-item [routerLink]="['/address', chainId]" routerDirection="forward"> -->
-              <ion-label id="ela-address">{{elaAddress}}</ion-label>
-              <!-- </ion-item> -->
+    <div>
+        <div id="home-top-box">
+            <div id="wallet-bar">
+                <div id="wallet-name" class="line-limit-length"> {{Config.curMaster.name}}
+                    <span
+                        *ngIf="Config.curMaster.account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
+                    <span
+                        *ngIf="Config.curMaster.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
+                </div>
             </div>
-          </ion-list>
-      </div>
+            <div class="valuation">{{Config.curMaster.subWallet['ELA'].balance/SELA}}</div>
+        </div>
 
-      <div id="requst-box">
-          <div>{{'requester' | translate}}</div>
-          <div>
-              <ion-label>{{requestDapp.name}}</ion-label>
-          </div>
-          <div *ngIf="requestDapp.reason!=''">
-              <ion-label>{{requestDapp.reason}}</ion-label>
-          </div>
-      </div>
-  </div>
+
+        <div id="home-list-box" *ngIf="!exportMnemonic">
+            <ion-list>
+                <ion-list-header>
+                    <div>{{'ela-address' | translate}}</div>
+                </ion-list-header>
+
+                <div>
+                    <!-- <ion-item [routerLink]="['/address', chainId]" routerDirection="forward"> -->
+                    <ion-label id="ela-address">{{elaAddress}}</ion-label>
+                    <!-- </ion-item> -->
+                </div>
+            </ion-list>
+        </div>
+
+
+        <div id="requst-box">
+            <div>{{'requester' | translate}}</div>
+            <div>
+                <ion-label>{{requestDapp.name}}</ion-label>
+            </div>
+            <div *ngIf="requestDapp.reason!=''">
+                <ion-label>{{requestDapp.reason}}</ion-label>
+            </div>
+        </div>
+
+        <div id="access-mnemonic-info" *ngIf="exportMnemonic">
+            <div>
+                <img src="assets/images/onboarding-warning.svg">
+                <ion-label id="warning" solt="end">{{ 'text-warning' | translate }}</ion-label>
+            </div>
+            <div>
+                <ion-label id="warning-info"> {{ 'text-share-mnemonic-warning' | translate }}</ion-label>
+            </div>
+        </div>
+    </div>
 
 </ion-content>
 
 <ion-footer>
-    <ion-button class="confirm" (click)="onShare()">{{ 'confirm' | translate }}</ion-button>
+    <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="medium" size="large"
+        (click)="cancelOperation()">{{ 'cancel' | translate }}</ion-button>
+    <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="primary" size="large" (click)="onShare()">
+        {{ 'text-allow' | translate }}</ion-button>
 </ion-footer>

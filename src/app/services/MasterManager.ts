@@ -167,8 +167,8 @@ export class MasterManager {
     public getWalletBalance(masterId, chainId) {
         this.walletManager.getBalance(masterId, chainId, (data: string) => {
             this.zone.run(() => {
-                this.masterWallet[masterId].subWallet[chainId].balance = parseInt(data, 10) / Config.SELA;
-
+                // balance in SELA
+                this.masterWallet[masterId].subWallet[chainId].balance = parseInt(data, 10);
                 let idChainBalance = 0;
                 if (this.masterWallet[masterId].subWallet[Config.IDCHAIN]) {
                     idChainBalance = this.masterWallet[masterId].subWallet[Config.IDCHAIN].balance;
@@ -404,12 +404,12 @@ export class MasterManager {
         //     return;
         // }
 
-        if (parseFloat(this.masterWallet[this.curMasterId].subWallet[Config.ELA].balance) <= 0.1) {
+        if (parseFloat(this.masterWallet[this.curMasterId].subWallet[Config.ELA].balance) <= 1000000) {
             console.log('ELA balance ', this.masterWallet[this.curMasterId].subWallet[Config.ELA].balance);
             return;
         }
 
-        if (parseFloat(this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN].balance) > 0.01) {
+        if (parseFloat(this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN].balance) > 100000) {
             console.log('IDChain balance ', this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN].balance);
             return;
         }
