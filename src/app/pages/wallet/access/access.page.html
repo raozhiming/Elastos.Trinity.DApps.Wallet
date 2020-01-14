@@ -13,9 +13,8 @@
                         *ngIf="Config.curMaster.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
                 </div>
             </div>
-            <div class="valuation">{{Config.curMaster.subWallet['ELA'].balance/SELA}}</div>
+            <div class="valuation">{{Config.curMaster.totalBalance/SELA}}</div>
         </div>
-
 
         <div id="home-list-box" *ngIf="!exportMnemonic">
             <ion-list>
@@ -31,7 +30,6 @@
             </ion-list>
         </div>
 
-
         <div id="requst-box">
             <div>{{'requester' | translate}}</div>
             <div>
@@ -43,13 +41,13 @@
         </div>
 
         <div id="access-mnemonic-info" *ngIf="exportMnemonic">
-            <div>
+            <ion-item>
                 <img src="assets/images/onboarding-warning.svg">
                 <ion-label id="warning" solt="end">{{ 'text-warning' | translate }}</ion-label>
-            </div>
-            <div>
-                <ion-label id="warning-info"> {{ 'text-share-mnemonic-warning' | translate }}</ion-label>
-            </div>
+            </ion-item>
+            <ion-item text-wrap>
+                <span id="warning-info"> {{ 'text-share-mnemonic-warning' | translate }}</span>
+            </ion-item>
         </div>
     </div>
 

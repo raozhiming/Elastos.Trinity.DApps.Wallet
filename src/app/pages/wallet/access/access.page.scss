@@ -83,8 +83,6 @@ button {
 }
 
 #access-mnemonic-info {
-    margin-left: px2rem(45px);
-    margin-right: px2rem(45px);
     margin-top: px2rem(60px);
     color: white;
 
@@ -95,14 +93,13 @@ button {
 
     #warning {
         margin-left: px2rem(25px);
-        margin-bottom: px2rem(25px);
-        text-align: center;
+        text-align: left;
         font-size: 24px;
         font-weight: bold;
     }
 
     #warning-info {
-        font-size: 20px;
+        font-size: 18px;
     }
 }
 
