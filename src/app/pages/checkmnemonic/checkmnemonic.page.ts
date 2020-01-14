@@ -4,11 +4,11 @@ import { Util } from '../../services/Util';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-checkmnemomic',
-    templateUrl: './checkmnemomic.page.html',
-    styleUrls: ['./checkmnemomic.page.scss'],
+    selector: 'app-checkmnemonic',
+    templateUrl: './checkmnemonic.page.html',
+    styleUrls: ['./checkmnemonic.page.scss'],
 })
-export class CheckmnemomicPage implements OnInit {
+export class CheckmnemonicPage implements OnInit {
     mnemonicList: Array<any> = [];
     selectList: Array<any> = [];
     mnemonicStr: string;
@@ -18,7 +18,7 @@ export class CheckmnemomicPage implements OnInit {
     }
 
     ngOnInit() {
-        console.log('ngOnInit CheckmnemomicPage');
+        console.log('ngOnInit CheckmnemonicPage');
     }
 
     init() {

@@ -7,12 +7,12 @@ import { ComponentsModule } from '../../components/components.module';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ExportmnemomicPage } from './exportmnemomic.page';
+import { CheckmnemonicPage } from './checkmnemonic.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ExportmnemomicPage
+    component: CheckmnemonicPage
   }
 ];
 
@@ -25,6 +25,6 @@ const routes: Routes = [
     ComponentsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ExportmnemomicPage]
+  declarations: [CheckmnemonicPage]
 })
-export class ExportmnemomicPageModule {}
+export class CheckmnemonicPageModule {}

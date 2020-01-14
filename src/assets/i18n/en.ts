@@ -433,7 +433,7 @@ export const en = {
     'text-wallet-name-validator2': 'Wallet Name exist',
     'text-multi-wallet': '(Multi-Sign Wallet)',
     'text-standard-wallet': '(Standard Wallet)',
-    'text-export-mnemomic': 'Export Mnemonics',
+    'text-export-mnemonic': 'Export Mnemonics',
     'text-export-menmonic-sucess': 'Check Mnemonics Success',
 
     'create-multi-by-mnes': 'Use Existing Seed (Import Mnemonics) ',

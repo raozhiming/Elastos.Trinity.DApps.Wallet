@@ -8,11 +8,11 @@ import { Util } from '../../services/Util';
 import { WalletManager } from '../../services/WalletManager';
 
 @Component({
-    selector: 'app-exportmnemomic',
-    templateUrl: './exportmnemomic.page.html',
-    styleUrls: ['./exportmnemomic.page.scss'],
+    selector: 'app-exportmnemonic',
+    templateUrl: './exportmnemonic.page.html',
+    styleUrls: ['./exportmnemonic.page.scss'],
 })
-export class ExportmnemomicPage implements OnInit {
+export class ExportmnemonicPage implements OnInit {
 
     public title = '';
     public mnemonicPrompt = '';
@@ -31,7 +31,7 @@ export class ExportmnemomicPage implements OnInit {
     }
 
     ngOnInit() {
-        console.log('ngOnInit ExportmnemomicPage');
+        console.log('ngOnInit ExportmnemonicPage');
 
     }
 
@@ -55,7 +55,7 @@ export class ExportmnemomicPage implements OnInit {
                     this.title = 'accaccess-mnemonic';
                     this.mnemonicPrompt = 'text-share-mnemonic-warning';
                 } else {
-                    this.title = 'text-export-mnemomic';
+                    this.title = 'text-export-mnemonic';
                     this.mnemonicPrompt = 'text-mnemonic-prompt';
                 }
                 this.masterWalletId = Config.modifyId;
@@ -77,7 +77,7 @@ export class ExportmnemomicPage implements OnInit {
     }
 
     onNext() {
-        this.native.go('/checkmnemomic', { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) });
+        this.native.go('/checkmnemonic', { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) });
     }
 
     onShare() {

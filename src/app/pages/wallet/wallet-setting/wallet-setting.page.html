@@ -18,9 +18,9 @@
             <ion-label>{{'wallet-export' | translate }}</ion-label>
         </ion-item>
 
-        <ion-item *ngIf="readonly!='Readonly'&&readonly!='simple'" detail [routerLink]="['/exportmnemomic']"
+        <ion-item *ngIf="readonly!='Readonly'&&readonly!='simple'" detail [routerLink]="['/exportmnemonic']"
             routerDirection="forward">
-            <ion-label>{{'text-export-mnemomic' | translate }}</ion-label>
+            <ion-label>{{'text-export-mnemonic' | translate }}</ion-label>
         </ion-item>
 
         <ion-item *ngIf="readonly!='Readonly'" detail [routerLink]="['/paypassword-reset']"

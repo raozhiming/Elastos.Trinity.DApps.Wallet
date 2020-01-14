@@ -65,7 +65,7 @@ export class AccessPage implements OnInit {
 
     onShare() {
         if (this.exportMnemonic) {
-            this.native.go('/exportmnemomic', {fromIntent: true});
+            this.native.go('/exportmnemonic', {fromIntent: true});
         } else {
             this.appService.sendIntentResponse(this.requestDapp.action,
                     { walletinfo: [{ elaaddress: this.elaAddress }] }, this.requestDapp.intentId);

@@ -429,7 +429,7 @@ export const zh = {
     'text-wallet-name-validator2': '钱包名已存在',
     'text-multi-wallet': '(多签钱包)',
     'text-standard-wallet': "(普通钱包)",
-    'text-export-mnemomic': "导出助记词",
+    'text-export-mnemonic': "导出助记词",
     'text-export-menmonic-sucess': "助记词验证成功",
 
     'create-multi-by-mnes': '导入助记词',
