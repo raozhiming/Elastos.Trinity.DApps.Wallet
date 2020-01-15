@@ -68,44 +68,46 @@ export class TransferPage implements OnInit {
     ngOnInit() {
     }
 
-    // ionViewDidLeave() {
-    //    this.events.unsubscribe("error:update");
-    // }
+    ionViewDidLeave() {
+       this.events.unsubscribe('address:update');
+    }
 
     init() {
         // console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
         this.chainId = Config.coinObj.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
-        this.events.subscribe("address:update", (address) => {
+        this.events.subscribe('address:update', (address) => {
             this.transfer.toAddress = address;
         });
         this.masterWalletId = Config.getCurMasterWalletId();
         switch (this.transfer.type) {
-            case "payment-confirm":
+            case 'payment-confirm':
                 this.readonly = true;
-            case "transfer":
+            case 'transfer':
                 this.transFunction = this.createTransaction;
                 break;
-            case "recharge":
+            case 'recharge':
                 this.transFunction = this.createDepositTransaction;
-                this.transfer.rate = 1; //TODO:: this is sidechain rate
+                this.transfer.rate = 1; // TODO:: this is sidechain rate
                 this.transfer.fee = 10000;
                 this.chainId = 'ELA';
                 this.transfer.amount = '0.1'; // for DID
-                this.getIDChainAddress();
+                this.getAddress(Config.IDCHAIN);
                 this.hideMemo = true;
 ;               this.introText = 'text-recharge-intro';
                 break;
-            case "withdraw":
+            case 'withdraw':
                 this.transFunction = this.createWithdrawTransaction;
-                this.transfer.rate = 1; //TODO:: this is mainchain rate
+                this.transfer.rate = 1; // TODO:: this is mainchain rate
+                this.getAddress('ELA');
+                this.hideMemo = true;
                 break;
         }
     }
 
-    getIDChainAddress() {
-        this.walletManager.createAddress(this.masterWalletId, Config.IDCHAIN, (ret) => {
+    getAddress(chainId: string) {
+        this.walletManager.createAddress(this.masterWalletId, chainId, (ret) => {
             this.transfer.toAddress = ret;
         });
     }

@@ -149,12 +149,36 @@ export class CoinPage implements OnInit {
                     let payStatusIcon = transaction.Direction;
                     let name = transaction.Direction;
                     let symbol = '';
+                    const type = transaction.Type;
                     if (payStatusIcon === 'Received') {
                         payStatusIcon = './assets/images/exchange-add.png';
                         symbol = '+';
+
+                        switch (type) {
+                            case 6: // RechargeToSideChain
+                                payStatusIcon = './assets/images/ela-coin.png';
+                                name = 'FromELA';
+                                break;
+                            case 7: // WithdrawFromSideChain
+                                payStatusIcon = './assets/images/id-coin.png';
+                                name = 'FromDID';
+                                break;
+                            default:
+                            break;
+                        }
                     } else if (payStatusIcon === 'Sent') {
                         payStatusIcon = './assets/images/exchange-sub.png';
                         symbol = '-';
+
+                        if (type === 8) { // TransferCrossChainAsset
+                            if (this.chainId === 'ELA') {
+                                payStatusIcon = './assets/images/id-coin.png';
+                                name = 'ToDID';
+                            } else { // IDChain
+                                payStatusIcon = './assets/images/ela-coin.png';
+                                name = 'ToELA';
+                            }
+                        }
                     } else if (payStatusIcon === 'Moved') {
                         payStatusIcon = './assets/images/exchange-sub.png';
                         symbol = '';

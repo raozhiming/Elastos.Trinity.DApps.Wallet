@@ -63,6 +63,11 @@ export const zh = {
     'Sent': '转账',
     'Moved': '移动',
     'Deposit': '押金',
+    'Vote': '投票',
+    'ToDID': 'ID链充值',
+    'FromELA': '主链充值',
+    'ToELA': '主链提现',
+    'FromDID': 'ID链提现',
     // TODO remove unused items
     // import wallet page
     'text-from-mnemonic': '来自助记词',
