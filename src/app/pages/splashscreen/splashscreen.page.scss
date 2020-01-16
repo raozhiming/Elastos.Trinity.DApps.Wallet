@@ -4,16 +4,15 @@
     align-items: center;
     overflow: hidden;
     position: fixed;
-    padding: 0;
+    padding: 50;
     margin: 0;
     height: 100%;
     width: 100%;
     background-color: white;
-    background-image: url("../../../assets/images/logo.png");
+    background-image: url("../../../assets/images/splash.png");
     background-repeat: no-repeat;
-    background-size: 100px 100px;
+    background-size: 100% 100%;
     background-position: center;
-    background-position-y: 260px;
 
     -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
     -moz-animation: fadein 2s; /* Firefox < 16 */
@@ -22,16 +21,16 @@
          animation: fadein 2s;
 
     ion-spinner {
-        margin-top: 50px;
+        margin-top: 20vh;
         color: black;
         position: absolute;
     }
 
     p {
-        margin-top: 300px;
+        margin-top: 60vh;
         margin-left: 20px;
         margin-right: 20px;
-        color: black;
+        color: grey;
         font-size: 24px;
     }
 }
