@@ -287,14 +287,10 @@ export class MasterManager {
     public handleSubWalletCallback(result) {
         let masterId = result["MasterWalletID"];
         let chainId = result["ChainID"];
-        let chain = this.masterWallet[masterId].subWallet[chainId];
 
         switch (result["Action"]) {
             case "OnTransactionStatusChanged":
                 // console.log('OnTransactionStatusChanged ', result);
-                if (result['confirms'] === 1) {
-                    this.getWalletBalance(masterId, chainId);
-                }
                 if (this.transactionMap[result.txId]) {
                     this.transactionMap[result.txId].Status = result.status;
                 }
@@ -311,9 +307,7 @@ export class MasterManager {
                 break;
             case "OnBalanceChanged":
                 // console.log('OnBalanceChanged ', result);
-                this.zone.run(() => {
-                    chain.balance = parseInt(result.Balance, 10) / Config.SELA;
-                });
+                this.getWalletBalance(masterId, chainId);
                 break;
             case "OnTxPublished":
                 // console.log('OnTxPublished ', result);
