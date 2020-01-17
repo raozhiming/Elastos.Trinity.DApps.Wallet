@@ -28,11 +28,15 @@ export class WalletSettingPage implements OnInit {
     /*private app: App,*/ public native: Native) {
 
         this.masterWalletId = Config.modifyId;
-        this.walletName = Config.masterManager.masterWallet[this.masterWalletId].name;
         this.getMasterWalletBasicInfo();
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        // update walletName when modify name
+        this.walletName = Config.masterManager.masterWallet[this.masterWalletId].name;
     }
 
     onDelete() {

@@ -6,7 +6,7 @@
         <ion-item detail [routerLink]="['/modifywalletname']" routerDirection="forward">
             <ion-label>{{'wallet-name' | translate}}</ion-label>
             <ion-note slot="end">
-                {{ Config.masterManager.masterWallet[Config.modifyId].name }}
+                {{ walletName }}
             </ion-note>
         </ion-item>
 
