@@ -56,7 +56,7 @@ export class WaitforsyncPage implements OnInit {
                 this.nextScreen = '/dposvote';
                 break;
             case 'pay':
-                this.action = 'text-dposvote';
+                this.action = 'text-transfer';
                 this.nextScreen = '/transfer';
                 break;
             default:
