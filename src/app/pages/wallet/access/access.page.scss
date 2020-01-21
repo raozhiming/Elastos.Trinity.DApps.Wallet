@@ -76,7 +76,6 @@ button {
         }
 
         #ela-address {
-            margin-left: px2rem(45px);
             font-size: 14px;
         }
     }
@@ -113,11 +112,9 @@ button {
     ion-list-header {
         color: #77777D;
         padding-left: 0;
-        margin-left: px2rem(45px);
-        margin-right: px2rem(45px);
     }
 
-    ion-label {
-        margin-left: px2rem(45px);
+    #reason {
+        margin-top: px2rem(45px);
     }
 }

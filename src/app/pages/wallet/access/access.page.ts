@@ -59,17 +59,19 @@ export class AccessPage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.appService.sendIntentResponse(this.requestDapp.action, { txid: null }, this.requestDapp.intentId);
-        this.native.pop();
+        this.appService.sendIntentResponse(this.requestDapp.action, { elaaddress: null }, this.requestDapp.intentId);
+        this.native.setRootRouter('/tabs');
     }
 
     onShare() {
         if (this.exportMnemonic) {
             this.native.go('/exportmnemonic', {fromIntent: true});
         } else {
+            // this.appService.sendIntentResponse(this.requestDapp.action,
+            //         { walletinfo: [{ elaaddress: this.elaAddress }] }, this.requestDapp.intentId);
             this.appService.sendIntentResponse(this.requestDapp.action,
-                    { walletinfo: [{ elaaddress: this.elaAddress }] }, this.requestDapp.intentId);
-            this.native.pop();
+                { elaaddress: this.elaAddress }, this.requestDapp.intentId);
+            this.native.setRootRouter('/tabs');
         }
     }
 }

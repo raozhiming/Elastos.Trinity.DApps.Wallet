@@ -22,7 +22,7 @@
                     <div>{{'ela-address' | translate}}</div>
                 </ion-list-header>
 
-                <div>
+                <div class="ion-text-center">
                     <!-- <ion-item [routerLink]="['/address', chainId]" routerDirection="forward"> -->
                     <ion-label id="ela-address">{{elaAddress}}</ion-label>
                     <!-- </ion-item> -->
@@ -31,11 +31,13 @@
         </div>
 
         <div id="requst-box">
-            <div>{{'requester' | translate}}</div>
-            <div>
+            <ion-list-header>
+                <div>{{'requester' | translate}}</div>
+            </ion-list-header>
+            <div class="ion-text-center">
                 <ion-label>{{requestDapp.name}}</ion-label>
             </div>
-            <div *ngIf="requestDapp.reason!=''">
+            <div id="reason" class="ion-text-center" *ngIf="requestDapp.reason!=''">
                 <ion-label>{{requestDapp.reason}}</ion-label>
             </div>
         </div>

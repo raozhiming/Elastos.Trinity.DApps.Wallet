@@ -181,7 +181,8 @@ export class AppService {
                     name: ret.from,
                     intentId: ret.intentId,
                     action: ret.action,
-                    reason: ret.params.elaaddress.reason
+                    // reason: ret.params.elaaddress.reason || ''
+                    reason: ret.params.reason || ''
                 };
                 myService.native.go('/access');
                 break;
@@ -192,7 +193,7 @@ export class AppService {
 
     sendIntentResponse(action, result, intentId) {
         appManager.sendIntentResponse(action, result, intentId, () => {
-        }, (err)=>{
+        }, (err) => {
             console.error('sendIntentResponse error!', err);
         });
     }

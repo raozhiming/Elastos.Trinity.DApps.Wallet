@@ -157,7 +157,7 @@ export const en = {
     'text-pwd-repeat': 'Repeat Password',
     // access page
     'access-address': 'Request ELA Address',
-    'accaccess-mnemonic': 'Request Mnemonic',
+    'access-mnemonic': 'Request Mnemonic',
     'ela-address': 'Wallet Address',
     'requester': 'Request from',
     'text-allow': 'Allow',

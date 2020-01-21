@@ -32,15 +32,18 @@ export class WaitforsyncPage implements OnInit {
     constructor(public appService: AppService,
                 public native: Native,
                 public events: Events,
+                public zone: NgZone,
                 public popupProvider: PopupProvider) {
-        this.init();
+        // why? if do not use zone.run, then next screen may have refresh issue: text can not show.
+        this.zone.run(() => {
+            this.init();
+        });
     }
 
     ngOnInit() {
     }
 
     init() {
-        console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
         this.chainId = Config.coinObj.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
