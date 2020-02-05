@@ -29,6 +29,8 @@ import { Native } from '../../../services/Native';
 import { PopupProvider } from '../../../services/popup';
 import { WalletManager } from '../../../services/WalletManager';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 @Component({
     selector: 'app-didtransaction',
     templateUrl: './didtransaction.page.html',
@@ -59,6 +61,8 @@ export class DidtransactionPage implements OnInit {
           // TODO: reject didtransaction if multi sign (show error popup)
           this.appService.close();
       }
+      
+      appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     init() {

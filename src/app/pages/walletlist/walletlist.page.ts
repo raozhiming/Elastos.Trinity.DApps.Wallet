@@ -6,6 +6,8 @@ import { WalletManager } from '../../services/WalletManager';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 @Component({
     selector: 'app-walletlist',
     templateUrl: './walletlist.page.html',
@@ -38,6 +40,10 @@ export class WalletlistPage implements OnInit {
             this.masterWallet = Config.masterManager.masterWallet;
         })
 
+    }
+
+    ionViewDidEnter() {
+        appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     itemSelected(id) {

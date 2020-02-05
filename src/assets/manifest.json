@@ -7,6 +7,7 @@
     "description": "elastOS SPV ELA wallet",
     "start_url": "index.html",
     "type": "app",
+    "start_visible": "hide",
     "category": "finance",
     "icons": [
         {
@@ -30,7 +31,6 @@
         "Clipboard",
         "InAppBrowser",
         "QRScanner",
-        "SplashScreen",
         "Wallet"
     ],
     "urls": [],

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Config } from '../../services/Config';
 import { Native } from '../../services/Native';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 @Component({
     selector: 'app-launcher',
     templateUrl: './launcher.page.html',
@@ -17,6 +19,9 @@ export class LauncherPage implements OnInit {
 
     }
 
+    ionViewDidEnter() {
+        appManager.setVisible("show", ()=>{}, (err)=>{});
+    }
 
     onNext(type) {
         Config.walletObj = {isMulti: false};

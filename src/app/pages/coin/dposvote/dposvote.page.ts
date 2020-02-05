@@ -31,6 +31,8 @@ import { Native } from '../../../services/Native';
 import { PopupProvider } from '../../../services/popup';
 import { WalletManager } from '../../../services/WalletManager';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 @Component({
     selector: 'app-dposvote',
     templateUrl: './dposvote.page.html',
@@ -66,6 +68,8 @@ export class DPoSVotePage implements OnInit {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
             this.appService.close();
         }
+        
+        appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     // ionViewDidLeave() {

@@ -26,6 +26,8 @@ import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
 import { PopupProvider } from '../../../services/popup';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 @Component({
     selector: 'app-tab-home',
     templateUrl: './tab-home.page.html',
@@ -47,6 +49,10 @@ export class TabHomePage implements OnInit {
             this.appService.setIntentListener();
             this.promptTransfer2IDChain();
         }
+    }
+
+    ionViewDidEnter() {
+        appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     ionViewDidLeave() {

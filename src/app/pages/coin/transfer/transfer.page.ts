@@ -30,6 +30,8 @@ import { Native } from '../../../services/Native';
 import { Util } from '../../../services/Util';
 import { WalletManager } from '../../../services/WalletManager';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 @Component({
     selector: 'app-transfer',
     templateUrl: './transfer.page.html',
@@ -66,6 +68,10 @@ export class TransferPage implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    ionViewDidEnter() {
+        appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     ionViewDidLeave() {
