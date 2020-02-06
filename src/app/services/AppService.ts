@@ -120,7 +120,7 @@ export class AppService {
                 Config.coinObj.transfer = {
                     toAddress: ret.params.receiver,
                     amount: ret.params.amount,
-                    memo: ret.params.memo,
+                    memo: ret.params.memo || "",
                     fee: 0,
                     payPassword: '',
                     intentId: ret.intentId,
