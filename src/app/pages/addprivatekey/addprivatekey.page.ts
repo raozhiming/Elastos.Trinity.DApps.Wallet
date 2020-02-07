@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
+import { AppService } from '../../services/AppService';
 import { WalletManager } from '../../services/WalletManager';
 import { Native } from '../../services/Native';
 import { Config } from '../../services/Config';
@@ -20,7 +21,12 @@ export class AddprivatekeyPage implements OnInit {
     public name: string = "";
     public curIndex = 0;
     public qrcode: string = null;
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events) {
+    constructor(public route: ActivatedRoute,
+                public walletManager: WalletManager,
+                public native: Native,
+                public appService: AppService,
+                public localStorage: LocalStorage,
+                public events: Events) {
         this.route.queryParams.subscribe((data) => {
             this.native.info(data);
             this.msobj = data;
@@ -51,7 +57,7 @@ export class AddprivatekeyPage implements OnInit {
 
     saomiao(index) {
         this.curIndex = index;
-        this.native.go("/scan", { "pageType": "6" });
+        this.appService.scan('6');
     }
 
     onNext() {

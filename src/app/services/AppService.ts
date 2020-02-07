@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Events } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Native } from './Native';
 import { Config } from './Config';
@@ -30,7 +31,7 @@ export class AppService {
     // private currentLang: string = null;
     private isReceiveIntentReady = false;
 
-    constructor(private translate: TranslateService, public native: Native) {
+    constructor(private translate: TranslateService, public events: Events, public native: Native) {
         myService = this;
 
         var me = this;
@@ -195,6 +196,35 @@ export class AppService {
         appManager.sendIntentResponse(action, result, intentId, () => {
         }, (err) => {
             console.error('sendIntentResponse error!', err);
+        });
+    }
+
+    scan(type) {
+        appManager.sendIntent('scanqrcode', {}, {}, (res) => {
+            const content = res.result.scannedContent;
+            console.log('Got scan result:', content);
+
+            switch (type) {
+                case '1':
+                    this.events.publish('address:update', content);
+                    break;
+                case '3':
+                    const senddata = { 'content': content, type: 4 };
+                    this.native.go('/txdetails', senddata);
+                    break;
+                case '4':
+                    const senddata1 = { 'content': content, type: 3 };
+                    this.native.go('/txdetails', senddata1);
+                    break;
+                case '5':
+                    this.events.publish('publickey:update', content);
+                    break;
+                case '6':
+                    this.events.publish('privatekey:update', content);
+                    break;
+            }
+        }, (err: any) => {
+            console.error(err);
         });
     }
 }

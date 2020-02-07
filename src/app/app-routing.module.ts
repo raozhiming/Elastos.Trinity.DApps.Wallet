@@ -51,7 +51,6 @@ const routes: Routes = [
     { path: 'mpublickey', loadChildren: './pages/mpublickey/mpublickey.module#MpublickeyPageModule' },
     { path: 'addpublickey', loadChildren: './pages/addpublickey/addpublickey.module#AddpublickeyPageModule' },
     { path: 'addprivatekey', loadChildren: './pages/addprivatekey/addprivatekey.module#AddprivatekeyPageModule' },
-    { path: 'scan', loadChildren: './pages/scan/scan.module#ScanPageModule' },
     { path: 'txdetails', loadChildren: './pages/txdetails/txdetails.module#TxdetailsPageModule' },
     { path: 'scancode', loadChildren: './pages/scancode/scancode.module#ScancodePageModule' },
     { path: 'mnemonic-write', loadChildren: './pages/mnemonic/mnemonic-write/mnemonic-write.module#MnemonicWritePageModule' },

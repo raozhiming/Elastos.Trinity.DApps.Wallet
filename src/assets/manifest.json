@@ -30,7 +30,6 @@
     "plugins": [
         "Clipboard",
         "InAppBrowser",
-        "QRScanner",
         "Wallet"
     ],
     "urls": [],

@@ -84,7 +84,9 @@ export class TransferPage implements OnInit {
         this.chainId = Config.coinObj.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
         this.events.subscribe('address:update', (address) => {
-            this.transfer.toAddress = address;
+            this.zone.run(() => {
+                this.transfer.toAddress = address;
+            });
         });
         this.masterWalletId = Config.getCurMasterWalletId();
         switch (this.transfer.type) {
@@ -119,7 +121,7 @@ export class TransferPage implements OnInit {
     }
 
     rightHeader() {
-        this.native.go("/scan", { "pageType": "1" });
+        this.appService.scan('1');
     }
 
     goContact() {
