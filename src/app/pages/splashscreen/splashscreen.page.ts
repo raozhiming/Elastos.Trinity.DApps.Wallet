@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { Events, ModalController } from '@ionic/angular';
+
+declare let appManager: AppManagerPlugin.AppManager;
 
 @Component({
   selector: 'app-splashscreen',
@@ -9,11 +9,12 @@ import { Events, ModalController } from '@ionic/angular';
 })
 export class SplashscreenPage implements OnInit {
 
-  constructor(public events: Events, public modalCtrl: ModalController, public splashScreen: SplashScreen) {}
+    constructor() {}
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     ionViewDidEnter() {
-        this.splashScreen.hide();
+        appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 }
