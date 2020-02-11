@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastController, LoadingController, NavController } from '@ionic/angular';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { TranslateService } from '@ngx-translate/core';
-import { HttpService } from "../services/HttpService";
-import { Logger } from "../services/Logger";
-import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { TranslateService } from '@ngx-translate/core';
+import { HttpService } from '../services/HttpService';
+import { Logger } from '../services/Logger';
 
 /***
  * APP底层交互
@@ -37,15 +37,14 @@ export class Native {
     private mnemonicLang: string = "english";
     private loadingIsOpen: boolean = false;
     constructor(public toastCtrl: ToastController,
-        private clipboard: Clipboard,
-        public translate: TranslateService,
-        // public app:IonApp,
-        private loadingCtrl: LoadingController,
-        public http: HttpService,
-        private inappBrowser: InAppBrowser,
-        private navCtrl: NavController,
-        private router: Router) {
-
+                private clipboard: Clipboard,
+                public translate: TranslateService,
+                private loadingCtrl: LoadingController,
+                public http: HttpService,
+                private inappBrowser: InAppBrowser,
+                private navCtrl: NavController,
+                private zone: NgZone,
+                private router: Router) {
     }
 
     public info(message) {
@@ -61,7 +60,6 @@ export class Native {
     }
 
     public toast(_message: string = '操作完成', duration: number = 2000): void {
-        //this.toast.show(message, String(duration), 'bottom').subscribe();
         this.toastCtrl.create({
             message: _message,
             duration: 2000,
@@ -70,7 +68,6 @@ export class Native {
     }
 
     public toast_trans(_message: string = '', duration: number = 2000): void {
-        //this.toast.show(message, String(duration), 'bottom').subscribe();
         _message = this.translate.instant(_message);
         this.toastCtrl.create({
             message: _message,
@@ -79,23 +76,17 @@ export class Native {
         }).then(toast => toast.present());
     }
 
-
-    /**
-     * 复制到剪贴板
-     * @param options
-     * @constructor
-     */
     copyClipboard(text) {
         return this.clipboard.copy(text);
     }
 
     public go(page: any, options: any = {}) {
         console.log("Navigating to:", page);
-        // console.log(options);
-        this.hideLoading();
-        this.navCtrl.setDirection('forward');
-        this.router.navigate([page], { queryParams: options });
-        // this.navCtrl.navigateForward(page, options);
+        this.zone.run(()=>{
+            this.hideLoading();
+            this.navCtrl.setDirection('forward');
+            this.router.navigate([page], { queryParams: options });
+        });
     }
 
     public pop() {
@@ -110,11 +101,11 @@ export class Native {
 
     public setRootRouter(page: any,  options: any = {}) {
         console.log("Setting root router path to:", page);
-
-        this.hideLoading();
-        this.navCtrl.setDirection('root');
-        this.router.navigate([page], { queryParams: options });
-        // this.navCtrl.navigateRoot(router, { queryParams: options });
+        this.zone.run(()=>{
+            this.hideLoading();
+            this.navCtrl.setDirection('root');
+            this.router.navigate([page], { queryParams: options });
+        });
     }
 
     public getMnemonicLang(): string {
@@ -154,12 +145,8 @@ export class Native {
                 message: content
             });
             return await loading.present();
-            // setTimeout(() => {//最长显示10秒
-            //   this.loadingIsOpen && this.loading.dismiss();
-            //   this.loadingIsOpen = false;
-            // }, 20000);
         }
-    };
+    }
 
     /**
      * 关闭loading
@@ -167,7 +154,7 @@ export class Native {
     public hideLoading(): void {
         this.loadingIsOpen && this.loadingCtrl.dismiss();
         this.loadingIsOpen = false;
-    };
+    }
 
     public getHttp() {
         return this.http;

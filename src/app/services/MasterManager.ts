@@ -345,7 +345,7 @@ export class MasterManager {
         }
 
         if (code !== 0) {
-            this.popupProvider.ionicAlert_PublishedTx_fail('confirmTitle', tx + code, hash);
+            this.popupProvider.ionicAlert_PublishedTx_fail('confirmTitle', tx + code, hash, reason);
             if (this.transactionMap[hash].lock !== true) {
                 delete this.transactionMap[hash];
                 this.localStorage.savePublishTxList(this.transactionMap);
