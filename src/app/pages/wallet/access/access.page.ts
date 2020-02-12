@@ -40,7 +40,7 @@ export class AccessPage implements OnInit {
             this.title = 'access-address';
         } else {
             this.exportMnemonic = true;
-            this.title = 'accaccess-mnemonic';
+            this.title = 'access-mnemonic';
         }
     }
 

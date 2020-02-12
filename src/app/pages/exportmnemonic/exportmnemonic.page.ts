@@ -52,7 +52,7 @@ export class ExportmnemonicPage implements OnInit {
                     console.log('From intent');
                     this.isFromIntent = true;
                     this.requestDapp = Config.requestDapp;
-                    this.title = 'accaccess-mnemonic';
+                    this.title = 'access-mnemonic';
                     this.mnemonicPrompt = 'text-share-mnemonic-warning';
                 } else {
                     this.title = 'text-export-mnemonic';
