@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController, Events } from '@ionic/angular';
 import { Config } from '../../../services/Config';
 import { LocalStorage } from '../../../services/Localstorage';
@@ -11,7 +11,7 @@ import { WalletManager } from '../../../services/WalletManager';
     templateUrl: './coin-list.page.html',
     styleUrls: ['./coin-list.page.scss'],
 })
-export class CoinListPage implements OnInit {
+export class CoinListPage implements OnInit, OnDestroy {
     masterWalletId: string = "1";
     coinList = [];
     coinListCache = {};
@@ -100,7 +100,7 @@ export class CoinListPage implements OnInit {
         });
     }
 
-    ionViewDidLeave() {
+    ngOnDestroy() {
         this.events.unsubscribe("error:update");
         this.events.unsubscribe("error:destroySubWallet");
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
@@ -12,7 +12,7 @@ import { PopupProvider } from '../../../services/popup';
     templateUrl: './wallet-import.page.html',
     styleUrls: ['./wallet-import.page.scss'],
 })
-export class WalletImportPage implements OnInit {
+export class WalletImportPage implements OnInit, OnDestroy {
 
     masterWalletId: string = "1";
     public selectedTab: string = "words";
@@ -228,7 +228,7 @@ export class WalletImportPage implements OnInit {
 
     }
 
-    ionViewDidLeave() {
+    ngOnDestroy() {
         this.events.unsubscribe("error:update");
     }
 

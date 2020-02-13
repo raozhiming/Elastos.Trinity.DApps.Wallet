@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, Events } from '@ionic/angular';
 import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
@@ -37,7 +37,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     templateUrl: './transfer.page.html',
     styleUrls: ['./transfer.page.scss'],
 })
-export class TransferPage implements OnInit {
+export class TransferPage implements OnInit, OnDestroy {
     masterWalletId = '1';
     walletType = '';
     transfer: any = null;
@@ -74,8 +74,8 @@ export class TransferPage implements OnInit {
         appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
-    ionViewDidLeave() {
-       this.events.unsubscribe('address:update');
+    ngOnDestroy() {
+        this.events.unsubscribe('address:update');
     }
 
     init() {
