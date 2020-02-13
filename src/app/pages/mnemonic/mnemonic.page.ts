@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { NavParams, Events } from '@ionic/angular';
 import { Native } from '../../services/Native';
 import { WalletManager } from '../../services/WalletManager';
@@ -22,7 +22,8 @@ export class MnemonicPage implements OnInit {
     isSelect: boolean = false;
 
     constructor(public route: ActivatedRoute,
-        public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events) {
+        public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events,
+        public zone: NgZone) {
         native.showLoading().then(() => {
             this.init();
         })
@@ -38,9 +39,11 @@ export class MnemonicPage implements OnInit {
             this.native.hideLoading();
             this.mnemonicStr = ret;
             let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);
-            for (var i = 0; i < mnemonicArr.length; i++) {
-                this.mnemonicList.push({ text: mnemonicArr[i], selected: false });
-            }
+            this.zone.run(()=>{
+                for (var i = 0; i < mnemonicArr.length; i++) {
+                    this.mnemonicList.push({ text: mnemonicArr[i], selected: false });
+                }
+            });  
 
         });
 
