@@ -57,7 +57,10 @@ export const en = {
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
 
     'paypassword-reset': 'Reset pay password',
-    'paypassword': 'Paypassword',
+    'paypassword': 'Pay Password',
+    'activate-fingerprint-popup-content': 'Do you want to enable fingerprint authentication? The password you\'ve just typed will be used.',
+    'use-fingerprint-authentication': 'Use fingerprint',
+    'security-check-fingerprint-do': 'Please touch your fingerprint sensor',
 
 
 

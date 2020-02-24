@@ -97,7 +97,7 @@ export class ContactCreatePage implements OnInit {
                     let contactUsers = JSON.parse(val);
                     let id = this.id;
                     delete (contactUsers[this.contactUser["id"]]);
-                    this.localStorage.set('contactUsers', contactUsers);
+                    this.localStorage.set('contactUsers', JSON.stringify(contactUsers));
                     this.events.publish("contanctList:update");
                     this.native.pop();
                 });

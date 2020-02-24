@@ -23,8 +23,8 @@ export class LocalStorage {
         });
     }
 
-    public set(key: string, value: any): any {
-        return this.storage.set(key, JSON.stringify(value));
+    public set(key: string, value: any): Promise<any> {
+        return this.storage.set(key, value);
     }
 
     public get(key: string): Promise<any> {
@@ -33,7 +33,7 @@ export class LocalStorage {
 
     public getVal(key, func) {
         this.storage.get(key).then((val) => {
-            if (typeof(val) == "string") {
+            if (typeof(val) === "string") {
                 val = JSON.parse(val);
             }
             func(val);
@@ -58,7 +58,6 @@ export class LocalStorage {
     }
 
     public saveCurMasterId(value) {
-        // {masterId:"123"}
         let key = "cur-masterId";
         return this.storage.set(key, JSON.stringify(value));
     }

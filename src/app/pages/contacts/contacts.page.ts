@@ -39,24 +39,9 @@ export class ContactsPage implements OnInit {
         });
     }
 
-    // rightHeader(): void {
-    //     this.popupProvider.ionicConfirm("confirmTitle", "text-delete-contact-confirm").then((data) => {
-    //         if (data) {
-    //             this.localStorage.get('contactUsers').then((val) => {
-    //                 let contactUsers = JSON.parse(val);
-    //                 delete (contactUsers[this.contactUser["id"]]);
-    //                 this.localStorage.set('contactUsers', contactUsers);
-    //                 this.events.publish("contanctList:update");
-    //                 this.native.pop();
-    //             });
-    //         }
-    //     });
-    // }
-
     pay(address): void {
         this.native.go("/transfer", { addr: this.contactUser['address'] });
         this.events.publish("address:update", address);
-        // this.navCtrl.popTo(this.navCtrl.getByIndex(this.navCtrl.length()-3));
     }
 }
 

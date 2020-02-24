@@ -26,7 +26,6 @@ import { ToastController, LoadingController, NavController } from '@ionic/angula
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TranslateService } from '@ngx-translate/core';
-import { HttpService } from '../services/HttpService';
 import { Logger } from '../services/Logger';
 
 /***
@@ -40,7 +39,6 @@ export class Native {
                 private clipboard: Clipboard,
                 public translate: TranslateService,
                 private loadingCtrl: LoadingController,
-                public http: HttpService,
                 private inappBrowser: InAppBrowser,
                 private navCtrl: NavController,
                 private zone: NgZone,
@@ -154,10 +152,6 @@ export class Native {
     public hideLoading(): void {
         this.loadingIsOpen && this.loadingCtrl.dismiss();
         this.loadingIsOpen = false;
-    }
-
-    public getHttp() {
-        return this.http;
     }
 
     public getTimestamp() {

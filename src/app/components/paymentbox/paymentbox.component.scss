@@ -55,3 +55,17 @@ ion-item {
     background: black;
     opacity: 0.7;
 }
+
+.fingerprint-preview {
+    height:px2rem(40px);
+    margin-right:px2rem(40px);
+}
+
+.fingerprint-large {
+    height:px2rem(60px);
+    margin-bottom:px2rem(20px);
+}
+
+.touch-fingerprint {
+    color: #918EFF;
+}

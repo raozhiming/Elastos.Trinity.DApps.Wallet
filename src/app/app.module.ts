@@ -25,7 +25,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { HttpModule } from '@angular/http';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -39,7 +38,7 @@ import { en } from './../assets/i18n/en';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { IonicStorageModule } from "@ionic/storage";
+import { IonicStorageModule } from '@ionic/storage';
 
 /**provider*/
 import { Clipboard } from '@ionic-native/clipboard/ngx';
@@ -47,9 +46,8 @@ import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { LocalStorage } from './services/Localstorage';
 import { Native } from './services/Native';
 import { Logger } from './services/Logger';
-import { HttpService } from "./services/HttpService";
 import { PopupProvider } from './services/popup';
-import { WalletManager } from "./services/WalletManager";
+import { WalletManager } from './services/WalletManager';
 import { LoadingService } from './services/Loading';
 
 import { PaymentboxComponent } from './components/paymentbox/paymentbox.component';
@@ -108,7 +106,6 @@ export function TranslateLoaderFactory() {
         AppRoutingModule,
         IonicStorageModule,
         FormsModule,
-        HttpModule,
         IonicStorageModule.forRoot({
             name: '__walletdb',
             driverOrder: ['localstorage', 'indexeddb', 'sqlite', 'websql']
@@ -128,7 +125,6 @@ export function TranslateLoaderFactory() {
         LocalStorage,
         Native,
         Logger,
-        HttpService,
         PopupProvider,
         WalletManager,
         LoadingService,
