@@ -115,7 +115,7 @@ export class PaymentboxComponent implements OnInit {
         } else {
             this.fingerprintPluginAuthenticationOnGoing = false;
         }
-      }
+    }
 
     async disableFingerprintAuthentication() {
         this.useFingerprintAuthentication = false;

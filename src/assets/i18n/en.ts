@@ -56,11 +56,11 @@ export const en = {
     'text-did-action': 'Publish',
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
 
-    'paypassword-reset': 'Reset pay password',
     'paypassword': 'Pay Password',
     'activate-fingerprint-popup-content': 'Do you want to enable fingerprint authentication? The password you\'ve just typed will be used.',
     'use-fingerprint-authentication': 'Use fingerprint',
     'security-check-fingerprint-do': 'Please touch your fingerprint sensor',
+
 
 
 
@@ -147,9 +147,9 @@ export const en = {
     'exportwallet-keystorepassword1-placeholder': 'Set a Keystore password for your wallet',
     'exportwallet-keystorepassword2-placeholder': 'Repeat the Keystore password you set',
     // change pay password
-    'updatepaypassword-origin_paypassword1-title': 'Original Pay Password',
+    'updatepaypassword-origin_paypassword1-title': 'Original Password',
     'updatepaypassword-origin_paypassword1-placeholder': 'Enter the original pay password of current wallet',
-    'updatepaypassword-paypassword1-title': 'New Pay Password',
+    'updatepaypassword-paypassword1-title': 'New Password',
     'updatepaypassword-paypassword1-placeholder': 'Set a new pay password for your wallet',
     'updatepaypassword-paypassword2-placeholder': 'Repeat the new pay password you set',
 
@@ -166,9 +166,12 @@ export const en = {
     'text-allow': 'Allow',
     'text-warning': 'Warning',
     'text-share-mnemonic-warning': 'Mnemonic is the only proof of blockchain assets. Please confirm that there is no risk of leakage before sharing!',
-
+    // reset password
+    'paypassword-reset': 'Reset pay password',
     'text-old-pay-password': 'Input Original Pay Password',
     'reset-pwd-success': 'Password Updated Successfully',
+    'click-fingerprint-prompt': 'Click for fingerprint login',
+    'update-fingerprint-title': 'Password updated, you need to reset your fingerprint login',
     'text-keystore-pwd': 'Set KeyStore Password',
     'text-wallet-create-ok': 'Wallet Created and Backuped',
     'text-select-key': 'Select SecretKey File',
