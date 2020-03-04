@@ -21,7 +21,7 @@
 
     <ion-list *ngIf="!isNodata">
         <div *ngFor="let item of transferList; let i = index">
-            <ion-item (click)="onItem(item)">
+            <ion-item (click)="onItem(item)" lines="none">
                 <img src={{item.payStatusIcon}} />
                 <ion-label id="coin-name">
                     <h2 id="exchange-name">{{item.name | translate }}</h2>
