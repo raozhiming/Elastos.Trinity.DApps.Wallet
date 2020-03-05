@@ -646,11 +646,11 @@ export class WalletManager {
 
         if (err["code"] === 20013) {
             let amount = err["Data"] / Config.SELA;
-            this.popupProvider.ionicAlert_data('confirmTitle', error, amount);
+            this.popupProvider.ionicAlert_data('transaction-fail', error, amount);
         } else if (err["code"] === 20036) {
             //this.event.publish("error:update");
         } else {
-            this.popupProvider.ionicAlert('confirmTitle', error);
+            this.popupProvider.ionicAlert('transaction-fail', 'Error-' + err["code"]);
         }
         //alert("错误信息：" + JSON.stringify(error));
         if (err["code"] === 20036) {
