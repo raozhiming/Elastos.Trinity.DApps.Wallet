@@ -59,7 +59,6 @@ export const zh = {
     'paypassword': '支付密码',
     'activate-fingerprint-popup-content': '是否启动指纹登录? 此指纹将与您输入的密码进行绑定。',
     'use-fingerprint-authentication': '启用指纹',
-    'security-check-fingerprint-do': '请验证指纹',
 
 
     'Received': '收到',

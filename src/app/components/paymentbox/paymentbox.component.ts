@@ -67,9 +67,6 @@ export class PaymentboxComponent implements OnInit {
     }
 
     ionViewDidEnter() {
-        if (this.pwd) {
-            this.pwd.setFocus();
-        }
     }
 
     click_close() {
@@ -97,11 +94,12 @@ export class PaymentboxComponent implements OnInit {
                 // save the typed password securely using the fingerprint.
                 const couldActivate = await this.authService.activateFingerprintAuthentication(this.walletId, this.transfer.payPassword);
                 this.useFingerprintAuthentication = couldActivate;
+                this.fingerprintPluginAuthenticationOnGoing = false;
                 if (couldActivate) {
-                    this.fingerprintPluginAuthenticationOnGoing = false;
                     this.click_button();
                 } else {
                     // Failed to activate
+                    console.log('activateFingerprintAuthentication  error');
                 }
             }
         });
@@ -110,10 +108,11 @@ export class PaymentboxComponent implements OnInit {
     async promptFingerprintAuthentication() {
         this.fingerprintPluginAuthenticationOnGoing = true;
         this.transfer.payPassword = await this.authService.authenticateByFingerprintAndGetPassword(this.walletId);
+        this.fingerprintPluginAuthenticationOnGoing = false;
         if (this.transfer.payPassword) {
             this.click_button();
         } else {
-            this.fingerprintPluginAuthenticationOnGoing = false;
+            console.log('authenticateByFingerprintAndGetPassword  error');
         }
     }
 

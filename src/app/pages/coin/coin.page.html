@@ -3,7 +3,7 @@
 </ion-header>
 <ion-content>
     <!-- <nodata keyText='no-tx-record' *ngIf="isNodata"></nodata> -->
-    <ion-refresher (ionRefresh)="doRefresh($event)" *ngIf="!isNodata">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="!isNodata">
         <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles"
             refreshingText="">
         </ion-refresher-content>

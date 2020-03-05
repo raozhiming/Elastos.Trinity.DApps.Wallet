@@ -59,7 +59,6 @@ export const en = {
     'paypassword': 'Pay Password',
     'activate-fingerprint-popup-content': 'Do you want to enable fingerprint authentication? The password you\'ve just typed will be used.',
     'use-fingerprint-authentication': 'Use fingerprint',
-    'security-check-fingerprint-do': 'Please touch your fingerprint sensor',
 
 
 

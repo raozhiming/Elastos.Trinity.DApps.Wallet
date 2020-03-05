@@ -22,9 +22,6 @@
                 <ion-label class="left">{{'text-rate' | translate}}:</ion-label>
                 <ion-label class="right" slot="end">1 : {{transfer.rate}}</ion-label>
             </ion-item>
-            <ion-item *ngIf="fingerprintPluginAuthenticationOnGoing">
-                <p class="touch-fingerprint" > {{'security-check-fingerprint-do'|translate}} </p>
-            </ion-item>
             <ion-item *ngIf="!useFingerprintAuthentication">
                 <ion-label class="left">{{'paypassword' | translate}}:</ion-label>
                 <ion-input slot="end" type="password" placeholder="{{ 'text-pay-password-input' | translate }}" #pwd
