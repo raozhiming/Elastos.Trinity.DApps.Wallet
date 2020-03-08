@@ -23,13 +23,9 @@ enum MessageType {
 })
 export class AppService {
 
-    public appInfos: any = {};
-    public appList: any = [];
-    public runningList: any = [];
-    public lastList: any = [];
-    public rows: any = [];
     // private currentLang: string = null;
     private isReceiveIntentReady = false;
+    private app_version = '';
 
     constructor(private translate: TranslateService, public events: Events, public native: Native) {
         myService = this;
@@ -75,6 +71,29 @@ export class AppService {
             this.native.setMnemonicLang("chinese");
         } else {
             this.native.setMnemonicLang("english");
+        }
+    }
+
+    getVersionReal(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            appManager.getInfo(
+                (appInfo) => {
+                    console.log('appInfo', appInfo);
+                    resolve(appInfo.version);
+                },
+                (err) => {
+                    reject(err);
+                }
+            );
+        });
+    }
+
+    async getVersion() {
+        if (this.app_version !== '') {
+            return this.app_version;
+        } else {
+            this.app_version = await this.getVersionReal();
+            return this.app_version;
         }
     }
 
