@@ -2,7 +2,7 @@
     <header-bar title="text-wallet-manager"></header-bar>
 </ion-header>
 <ion-content no-bounce>
-    <ion-list>
+    <ion-list lines="none">
         <ion-item *ngFor="let id of masterList" detail (click)="itemSelected(id)">
             <ion-label>
                 <h2>{{ masterWallet[id].name }}</h2>

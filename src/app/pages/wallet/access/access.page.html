@@ -17,7 +17,7 @@
         </div>
 
         <div id="home-list-box" *ngIf="!exportMnemonic">
-            <ion-list>
+            <ion-list lines="none">
                 <ion-list-header>
                     <div>{{'ela-address' | translate}}</div>
                 </ion-list-header>
@@ -43,11 +43,11 @@
         </div>
 
         <div id="access-mnemonic-info" *ngIf="exportMnemonic">
-            <ion-item>
+            <ion-item lines="none">
                 <img src="assets/images/onboarding-warning.svg">
                 <ion-label id="warning" solt="end">{{ 'text-warning' | translate }}</ion-label>
             </ion-item>
-            <ion-item text-wrap>
+            <ion-item text-wrap lines="none">
                 <span id="warning-info"> {{ 'text-share-mnemonic-warning' | translate }}</span>
             </ion-item>
         </div>

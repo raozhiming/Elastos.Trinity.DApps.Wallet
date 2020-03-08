@@ -11,7 +11,7 @@
                 style="font-size: 1.3px">{{'text-multi-wallet' | translate}}</span></div>
     </div>
     <div *ngIf="!backupWalletPlainText">
-        <ion-list>
+        <ion-list lines="none">
             <ion-item>
                 <ion-label stacked>{{'exportwallet-keystorepassword1-title' | translate }}</ion-label>
                 <ion-input type="password" placeholder="{{ 'exportwallet-keystorepassword1-placeholder' | translate }}"

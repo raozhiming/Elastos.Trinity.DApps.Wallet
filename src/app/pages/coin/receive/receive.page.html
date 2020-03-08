@@ -4,7 +4,7 @@
 <ion-content>
     <div class="receive-box">
         <my-qrcode [address]="qrcode" [title]="'my-qrcode' | translate"></my-qrcode>
-        <ion-item detail (click)="getAddress()">
+        <ion-item detail (click)="getAddress()" lines="none">
             <ion-label>{{ 'text-manager-address' | translate }}</ion-label>
         </ion-item>
     </div>

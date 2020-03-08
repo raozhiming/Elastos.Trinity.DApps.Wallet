@@ -19,9 +19,9 @@
 
     <div id="nodata" *ngIf="isNodata">{{'no-tx-record' | translate }}</div>
 
-    <ion-list *ngIf="!isNodata">
+    <ion-list *ngIf="!isNodata" lines="none">
         <div *ngFor="let item of transferList; let i = index">
-            <ion-item (click)="onItem(item)" lines="none">
+            <ion-item (click)="onItem(item)">
                 <img src={{item.payStatusIcon}} />
                 <ion-label id="coin-name">
                     <h2 id="exchange-name">{{item.name | translate }}</h2>

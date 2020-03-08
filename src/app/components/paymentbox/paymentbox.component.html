@@ -5,7 +5,7 @@
             <img class="close" src="./assets/images/icon/icon-close.svg" (click)="click_close()">
         </p>
 
-        <ion-list>
+        <ion-list lines="none">
             <ion-item *ngIf="toAddress!=''">
                 <ion-label class="left">{{'transfer-address' | translate}}:</ion-label>
                 <ion-label class="right" id="address" slot="end">{{toAddress}}</ion-label>
@@ -33,7 +33,7 @@
         <div *ngIf="useFingerprintAuthentication && !fingerprintPluginAuthenticationOnGoing">
             <ion-img src="assets/images/fingerprint-24px.svg" class="fingerprint-large text-align-center" (click)="promptFingerprintAuthentication()"></ion-img>
 
-            <ion-item>
+            <ion-item lines="none">
                <ion-label>{{'use-fingerprint-authentication' | translate}}</ion-label>
                <ion-toggle (ionChange)="disableFingerprintAuthentication()" checked="true"></ion-toggle>
             </ion-item>

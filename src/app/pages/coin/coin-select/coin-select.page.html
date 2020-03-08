@@ -4,7 +4,7 @@
 
 <ion-content>
     <div *ngIf="isNoData" id="nodata">{{'no-open-side-chain' | translate }}</div>
-    <ion-list *ngIf="!isNoData">
+    <ion-list *ngIf="!isNoData" lines="none">
         <ion-item *ngFor="let item of coinList" (click)="onItem(item)">
             <ion-thumbnail>
                 <img src="./assets/images/logo-maincolor.svg"/>

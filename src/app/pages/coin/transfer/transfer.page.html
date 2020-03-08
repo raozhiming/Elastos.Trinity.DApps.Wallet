@@ -2,8 +2,8 @@
     <header-bar title="text-transfer"></header-bar>
 </ion-header>
 <ion-content>
-    <ion-list>
-        <ion-item *ngIf="introText!=''" >
+    <ion-list lines="none">
+        <ion-item *ngIf="introText!=''">
             <p>{{ this.introText | translate}}</p>
         </ion-item>
         <ion-item>

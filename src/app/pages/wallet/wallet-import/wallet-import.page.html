@@ -19,7 +19,7 @@
             <textarea rows="4" class="backupWalletTextArea"
                 placeholder="{{ 'import-text-keystroe-message' | translate}}" [(ngModel)]="keyStoreContent"></textarea>
         </div>
-        <ion-list>
+        <ion-list lines="none">
             <ion-item>
                 <ion-label stacked>{{ 'addwallet-walletname-title' | translate }}</ion-label>
                 <ion-note slot="end">{{ 'text-wallet-name-validator' | translate }}</ion-note>
@@ -50,7 +50,7 @@
             <textarea class="backupWalletTextArea" placeholder="{{ 'text-mnemonic-format' | translate}}" rows="4"
                 [(ngModel)]="mnemonicObj.mnemonic"></textarea>
         </div>
-        <ion-list>
+        <ion-list lines="none">
             <ion-item>
                 <ion-label stacked>{{ 'addwallet-walletname-title' | translate }}</ion-label>
                 <ion-note slot="end">{{ 'text-wallet-name-validator' | translate }}</ion-note>
@@ -78,13 +78,13 @@
             </ion-item>
         </ion-list>
 
-        <ion-item>
+        <ion-item lines="none">
             <ion-label *ngIf="!showAdvOpts">{{'show-advanced-options' | translate}}</ion-label>
             <ion-label *ngIf="showAdvOpts"> {{'hide-advanced-options' | translate}}</ion-label>
             <my-toggle [checked]="showAdvOpts" (onChange)=toggleShowAdvOpts($event)></my-toggle>
         </ion-item>
 
-        <ion-item *ngIf="showAdvOpts">
+        <ion-item *ngIf="showAdvOpts" lines="none">
             <ion-label stacked>{{ 'importmnes-optionalpassword-title' | translate }}</ion-label>
             <ion-input type="password" placeholder="{{ 'importmnes-optionalpassword-placeholder' | translate }}"
                 [(ngModel)]="mnemonicObj.phrasePassword"></ion-input>

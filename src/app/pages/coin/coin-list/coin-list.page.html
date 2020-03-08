@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content>
-    <ion-list>
+    <ion-list lines="none">
         <ion-item *ngFor="let item of coinList">
             <ion-label>{{item.name}}</ion-label>
             <my-toggle *ngIf="item.name!='ELA'" [checked]="item.open" [auto]='false' (onChange)="onSelect(item, $event)"></my-toggle>

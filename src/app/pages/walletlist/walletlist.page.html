@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content no-bounce>
-    <ion-list>
+    <ion-list lines="none">
         <ion-item *ngFor="let id of masterList"  (click)="itemSelected(id)">
             <ion-label>
                 <h2>{{ masterWallet[id].name }}</h2>

@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content class="no-padding">
-    <ion-list>
+    <ion-list lines="none">
         <ion-item *ngFor="let item of settings" detail [routerLink]="[item.route]" routerDirection="forward">
             <ion-icon name="{{item.icon}}"></ion-icon>
             <ion-label>{{item.label | translate}}</ion-label>

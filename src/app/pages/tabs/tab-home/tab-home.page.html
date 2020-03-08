@@ -27,7 +27,7 @@
 
         <div id="home-list-box">
 
-            <ion-list>
+            <ion-list lines="none">
                 <ion-list-header>
                     <div>{{'text-coin-list' | translate}}</div>
                     <div class="home-eye" (click)="onOpen()" [ngClass]="{'home-eye-on':showOn,'home-eye-off':!showOn }">
@@ -35,7 +35,7 @@
                 </ion-list-header>
 
                 <div *ngFor="let chainId of Config.curMaster.chainList">
-                    <ion-item [routerLink]="['/coin', chainId]" routerDirection="forward" lines="none">
+                    <ion-item [routerLink]="['/coin', chainId]" routerDirection="forward">
                         <img *ngIf="chainId=='ELA'" src="assets/images/ela-coin.png" />
                         <img *ngIf="chainId!='ELA'"  src="assets/images/id-coin.png" />
                         <ion-label id="coin-name">{{chainId}}</ion-label>
