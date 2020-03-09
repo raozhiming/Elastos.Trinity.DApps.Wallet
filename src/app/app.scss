@@ -29,6 +29,7 @@ ion-button {
 }
 
 ion-item {
+    --background-activated: none;
     --padding-start: 0;
     --inner-padding-end:0;
     margin-left: px2rem(45px);

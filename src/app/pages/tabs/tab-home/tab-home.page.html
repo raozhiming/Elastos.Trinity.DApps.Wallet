@@ -35,7 +35,7 @@
                 </ion-list-header>
 
                 <div *ngFor="let chainId of Config.curMaster.chainList">
-                    <ion-item [routerLink]="['/coin', chainId]" routerDirection="forward">
+                    <ion-item [routerLink]="['/coin', chainId]" routerDirection="forward" detail="false">
                         <img *ngIf="chainId=='ELA'" src="assets/images/ela-coin.png" />
                         <img *ngIf="chainId!='ELA'"  src="assets/images/id-coin.png" />
                         <ion-label id="coin-name">{{chainId}}</ion-label>
