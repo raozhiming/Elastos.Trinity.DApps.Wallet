@@ -341,7 +341,7 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    createTransaction(masterWalletId: string, chainId: string, fromAddress: string, toAddress: string, amount: number, memo: string, success) {
+    createTransaction(masterWalletId: string, chainId: string, fromAddress: string, toAddress: string, amount: string, memo: string, success) {
         this.walletManager.createTransaction([masterWalletId, chainId, fromAddress, toAddress, amount, memo],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });

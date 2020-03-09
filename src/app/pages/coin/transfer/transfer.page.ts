@@ -198,7 +198,7 @@ export class TransferPage implements OnInit, OnDestroy {
 
         this.walletManager.createTransaction(this.masterWalletId, this.chainId, "",
             this.transfer.toAddress,
-            toAmount,
+            toAmount.toString(),
             this.transfer.memo,
             (data) => {
                 me.rawTransaction = data;
