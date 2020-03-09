@@ -401,14 +401,14 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    createDepositTransaction(masterWalletId: string, chainId: string, fromAddress: string, sideChainID: string, amount: number
+    createDepositTransaction(masterWalletId: string, chainId: string, fromAddress: string, sideChainID: string, amount: string
         , sideChainAddress: string, memo: string, success) {
         this.walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress,sideChainID, amount, sideChainAddress, memo],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
-    createWithdrawTransaction(masterWalletId: string, chainId: string, fromAddress: string, amount: number
+    createWithdrawTransaction(masterWalletId: string, chainId: string, fromAddress: string, amount: string
         , mainchainAccounts: string, memo: string, success) {
         this.walletManager.createWithdrawTransaction([masterWalletId, chainId, fromAddress, amount, mainchainAccounts, memo],
             (ret) => { this.successFun(ret, success); },

@@ -68,7 +68,7 @@ export class DPoSVotePage implements OnInit {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
             this.appService.close();
         }
-        
+
         appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
@@ -191,7 +191,7 @@ export class DPoSVotePage implements OnInit {
         this.walletManager.createVoteProducerTransaction(this.masterWalletId, this.chainId,
             this.transfer.toAddress,
             stakeAmount,
-            this.transfer.publicKeys,
+            JSON.stringify(this.transfer.publicKeys),
             this.transfer.memo,
             (data) => {
                 this.rawTransaction = data;

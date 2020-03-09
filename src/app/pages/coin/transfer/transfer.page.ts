@@ -210,7 +210,7 @@ export class TransferPage implements OnInit, OnDestroy {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
         this.walletManager.createDepositTransaction(this.masterWalletId, 'ELA', "",
             Config.coinObj.chainId,
-            toAmount, // user input amount
+            toAmount.toString(), // user input amount
             this.transfer.toAddress, // user input address
             this.transfer.memo,
             (data) => {
@@ -222,7 +222,7 @@ export class TransferPage implements OnInit, OnDestroy {
     createWithdrawTransaction() {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
         this.walletManager.createWithdrawTransaction(this.masterWalletId, this.chainId, "",
-            toAmount,
+            toAmount.toString(),
             this.transfer.toAddress,
             this.transfer.memo,
             (data) => {
