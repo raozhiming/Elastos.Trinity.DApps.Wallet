@@ -24,8 +24,6 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-    // { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: '', redirectTo: 'splashscreen', pathMatch: 'full' },
     { path: 'splashscreen', loadChildren: './pages/splashscreen/splashscreen.module#SplashscreenPageModule' },
     { path: 'home', loadChildren: './home/home.module#HomePageModule' },
     { path: 'launcher', loadChildren: './pages/launcher/launcher.module#LauncherPageModule' },
