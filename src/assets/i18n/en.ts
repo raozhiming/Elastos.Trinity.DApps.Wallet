@@ -66,10 +66,10 @@ export const en = {
 
 
 
-    'ToDID': 'Send to ID chain',
-    'FromELA': 'From ELA chain',
-    'ToELA': 'Send to ELA chain',
-    'FromDID': 'From ID chain',
+    'ToDID': 'Send to ID Chain',
+    'FromELA': 'From ELA Chain',
+    'ToELA': 'Send to ELA Chain',
+    'FromDID': 'From ID Chain',
     // TODO remove unused items
     // import wallet page
     'text-from-mnemonic': 'from Mnemonics',
