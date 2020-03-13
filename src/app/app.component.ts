@@ -32,7 +32,6 @@ import { AppService } from './services/AppService';
 import { MasterManager } from './services/MasterManager';
 import { PopupProvider } from './services/popup';
 
-
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html'
@@ -64,6 +63,8 @@ export class AppComponent {
             Config.masterManager = new MasterManager(
                     this.events, this.native, this.zone, this.localStorage,
                     this.popupProvider, this.walletManager);
+
+
         });
     }
 }

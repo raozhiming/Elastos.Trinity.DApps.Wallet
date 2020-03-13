@@ -5,6 +5,8 @@ import { Native } from './Native';
 import { Config } from './Config';
 
 declare let appManager: AppManagerPlugin.AppManager;
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
+
 let myService = null;
 
 enum MessageType {
@@ -42,6 +44,9 @@ export class AppService {
         appManager.setListener(this.onReceive);
         this.getLanguage();
         // alert(screen.width + " + " + document.documentElement.clientWidth + " + " + window.innerWidth + " " + window.devicePixelRatio);
+
+        titleBarManager.setBackgroundColor("#000000");
+        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
     }
 
     setIntentListener() {
