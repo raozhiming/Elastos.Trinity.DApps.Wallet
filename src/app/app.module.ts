@@ -79,10 +79,10 @@ export class CustomTranslateLoader implements TranslateLoader {
         return Observable.create(observer => {
             switch (lang) {
                 case 'zh':
-                default:
                     observer.next(zh);
                     break;
                 case 'en':
+                default:
                     observer.next(en);
             }
 
