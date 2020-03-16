@@ -10,7 +10,7 @@
     <ion-item *ngFor="let copayer of publicKeyArr" lines="none">
         <ion-input type="text" placeholder="{{'text-publickey-placeholder'|translate}}"
             [(ngModel)]="copayer['publicKey']"></ion-input>
-        <ion-thumbnail slot="end" (click)="saomiao(copayer['index'])">
+        <ion-thumbnail slot="end" (click)="scan(copayer['index'])">
             <img src="assets/images/icon/ico-scan.svg" />
         </ion-thumbnail>
     </ion-item>

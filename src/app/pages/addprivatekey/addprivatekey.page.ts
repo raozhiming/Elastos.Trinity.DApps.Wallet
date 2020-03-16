@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
-import { AppService } from '../../services/AppService';
+import { ActivatedRoute } from '@angular/router';
+import { AppService, ScanType } from '../../services/AppService';
 import { WalletManager } from '../../services/WalletManager';
 import { Native } from '../../services/Native';
 import { Config } from '../../services/Config';
 import { LocalStorage } from '../../services/Localstorage';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-addprivatekey',
@@ -55,9 +55,9 @@ export class AddprivatekeyPage implements OnInit {
         this.native.toast_trans('copy-ok');
     }
 
-    saomiao(index) {
+    scan(index) {
         this.curIndex = index;
-        this.appService.scan('6');
+        this.appService.scan(ScanType.PrivateKey);
     }
 
     onNext() {

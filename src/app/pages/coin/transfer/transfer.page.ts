@@ -24,7 +24,7 @@ import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, Events } from '@ionic/angular';
 import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
-import { AppService } from '../../../services/AppService';
+import { AppService, ScanType } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
 import { Util } from '../../../services/Util';
@@ -121,7 +121,7 @@ export class TransferPage implements OnInit, OnDestroy {
     }
 
     rightHeader() {
-        this.appService.scan('1');
+        this.appService.scan(ScanType.Address);
     }
 
     goContact() {

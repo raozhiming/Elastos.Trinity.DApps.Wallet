@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
-import { AppService } from '../../services/AppService';
+import { AppService, ScanType } from '../../services/AppService';
 import { WalletManager } from '../../services/WalletManager';
 import { Native } from '../../services/Native';
 import { Config } from '../../services/Config';
@@ -64,9 +64,9 @@ export class AddpublickeyPage implements OnInit {
         console.log('ngOnInit AddpublickeyPage');
     }
 
-    saomiao(index) {
+    scan(index) {
         this.curIndex = index;
-        this.appService.scan('5');
+        this.appService.scan(ScanType.Publickey);
     }
 
     isRepeat(arr) {

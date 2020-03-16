@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Native } from './Native';
@@ -18,7 +18,13 @@ enum MessageType {
     EX_LAUNCHER = 12,
     EX_INSTALL = 13,
     EX_RETURN = 14,
-};
+}
+
+export enum ScanType {
+    Address     = 1,
+    Publickey   = 2,
+    PrivateKey  = 3,
+}
 
 @Injectable({
     providedIn: 'root'
@@ -29,7 +35,7 @@ export class AppService {
     private isReceiveIntentReady = false;
     private app_version = '';
 
-    constructor(private translate: TranslateService, public events: Events, public native: Native) {
+    constructor(private zone: NgZone, private translate: TranslateService, public events: Events, public native: Native) {
         myService = this;
 
         var me = this;
@@ -69,13 +75,15 @@ export class AppService {
     }
 
     setCurLang(lang: string) {
-        this.translate.use(lang);
-        if (lang == 'en') {
-            this.native.setMnemonicLang("english");
-        } else if (lang == "zh") {
-            this.native.setMnemonicLang("chinese");
+        this.zone.run(()=> {
+            this.translate.use(lang);
+        });
+        if (lang === 'en') {
+            this.native.setMnemonicLang('english');
+        } else if (lang === 'zh') {
+            this.native.setMnemonicLang('chinese');
         } else {
-            this.native.setMnemonicLang("english");
+            this.native.setMnemonicLang('english');
         }
     }
 
@@ -116,15 +124,15 @@ export class AppService {
 
     onReceive(ret) {
         // console.log("ElastosJS  HomePage receive message:" + ret.message + ". type: " + ret.type + ". from: " + ret.from);
-        var params: any = ret.message;
-        if (typeof (params) == "string") {
+        let params: any = ret.message;
+        if (typeof (params) === 'string') {
             params = JSON.parse(params);
         }
         // console.log(params);
         switch (ret.type) {
             case MessageType.IN_REFRESH:
                 switch (params.action) {
-                    case "currentLocaleChanged":
+                    case 'currentLocaleChanged':
                         myService.setCurLang(params.code);
                         break;
                 }
@@ -145,7 +153,7 @@ export class AppService {
                 Config.coinObj.transfer = {
                     toAddress: ret.params.receiver,
                     amount: ret.params.amount,
-                    memo: ret.params.memo || "",
+                    memo: ret.params.memo || '',
                     fee: 0,
                     payPassword: '',
                     intentId: ret.intentId,
@@ -223,27 +231,19 @@ export class AppService {
         });
     }
 
-    scan(type) {
+    scan(type: ScanType) {
         appManager.sendIntent('scanqrcode', {}, {}, (res) => {
             const content = res.result.scannedContent;
             console.log('Got scan result:', content);
 
             switch (type) {
-                case '1':
+                case ScanType.Address:
                     this.events.publish('address:update', content);
                     break;
-                case '3':
-                    const senddata = { 'content': content, type: 4 };
-                    this.native.go('/txdetails', senddata);
-                    break;
-                case '4':
-                    const senddata1 = { 'content': content, type: 3 };
-                    this.native.go('/txdetails', senddata1);
-                    break;
-                case '5':
+                case ScanType.Publickey:
                     this.events.publish('publickey:update', content);
                     break;
-                case '6':
+                case ScanType.PrivateKey:
                     this.events.publish('privatekey:update', content);
                     break;
             }
