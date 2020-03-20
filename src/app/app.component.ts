@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-import { Component, NgZone } from '@angular/core';
-import { Events, Platform, ModalController } from '@ionic/angular';
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { Events, Platform, ModalController, IonRouterOutlet } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { Config } from './services/Config';
@@ -37,6 +37,8 @@ import { PopupProvider } from './services/popup';
     templateUrl: 'app.component.html'
 })
 export class AppComponent {
+    @ViewChild(IonRouterOutlet) routerOutlet: IonRouterOutlet;
+    
     constructor(
         private platform: Platform,
         private statusBar: StatusBar,
@@ -57,14 +59,29 @@ export class AppComponent {
         this.platform.ready().then(() => {
             console.log("Platform is ready");
             this.statusBar.styleDefault();
+
+            this.setupBackKeyNavigation();
+
             this.native.setRootRouter('/splashscreen');
             this.appService.init();
             this.walletManager.init();
             Config.masterManager = new MasterManager(
                     this.events, this.native, this.zone, this.localStorage,
                     this.popupProvider, this.walletManager);
+        });
+    }
 
-
+    /**
+     * Listen to back key events. If the default router can go back, just go back.
+     * Otherwise, exit the application.
+     */
+    setupBackKeyNavigation() {
+        this.platform.backButton.subscribeWithPriority(0, () => {
+            if (this.routerOutlet && this.routerOutlet.canGoBack()) {
+                this.routerOutlet.pop();
+            } else {
+                navigator['app'].exitApp();
+            }
         });
     }
 }
