@@ -37,13 +37,13 @@ declare let walletManager: WalletPlugin.WalletManager;
 @Injectable()
 export class WalletManager {
 
-    private walletManager: any;
     public static COINTYPE_ELA = 0;
     public static COINTYPE_ID = 1;
     public static LIMITGAP = 500;
     public static FEEPERKb = 500;
     public static PAGECOUNT = 20;
 
+    private walletManager: any;
     public masterWallet: any = {};
     public curMasterId: string = "-1";
     public curMaster: any = {};
@@ -347,6 +347,18 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
+    getAllUTXOs(masterWalletId: string, chainId: string, start: number, count: number, address: string, success) {
+        this.walletManager.getAllUTXOs([masterWalletId, chainId, start, count, address],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createConsolidateTransaction(masterWalletId: string, chainId: string, memo: string, success) {
+        this.walletManager.createConsolidateTransaction([masterWalletId, chainId, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
     /*calculateTransactionFee(masterWalletId: string, chainId: string, rawTransaction: string, feePerKb: number, success) {
         this.walletManager.calculateTransactionFee([masterWalletId, chainId, rawTransaction, feePerKb],
             (ret) => { this.successFun(ret, success); },
@@ -563,13 +575,11 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-
     getRegisteredProducerInfo(masterWalletId: string, chainId: string, success) {
         this.walletManager.getRegisteredProducerInfo([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
-
 
     createRegisterProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, amount: number, memo: string, success) {
         this.walletManager.createRegisterProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, amount, memo],
@@ -602,6 +612,144 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
+    createUpdateProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, success) {
+        this.walletManager.createUpdateProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    //CR
+    generateCRInfoPayload(masterWalletId: string, chainId: string, publicKey: string, did: string, nickName: string, url: string, location: number, success) {
+        this.walletManager.generateCRInfoPayload([masterWalletId, chainId, publicKey, did, nickName, url, location],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    generateUnregisterCRPayload(masterWalletId: string, chainId: string, CID: string, success) {
+        this.walletManager.generateUnregisterCRPayload([masterWalletId, chainId, CID],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createRegisterCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, amount: string, memo: string, success) {
+        this.walletManager.createRegisterCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, amount, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createUpdateCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, success) {
+        this.walletManager.createUpdateCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createUnregisterCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, success) {
+        this.walletManager.createUnregisterCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createRetrieveCRDepositTransaction(masterWalletId: string, chainId: string, publicKey: string, amount: string, memo: string, success) {
+        this.walletManager.createRetrieveCRDepositTransaction([masterWalletId, chainId, publicKey, amount, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createVoteCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, publicKeys: string, memo: string, invalidCandidates: string, success) {
+        this.walletManager.createVoteCRTransaction([masterWalletId, chainId, fromAddress, publicKeys, memo, invalidCandidates],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    getVotedCRList(masterWalletId: string, chainId: string, success) {
+        this.walletManager.getVotedCRList([masterWalletId, chainId],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    getRegisteredCRInfo(masterWalletId: string, chainId: string, success) {
+        this.walletManager.getRegisteredCRInfo([masterWalletId, chainId],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    getVoteInfo(masterWalletId: string, chainId: string, type: string, success) {
+        this.walletManager.getVoteInfo([masterWalletId, chainId, type],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    sponsorProposalDigest(masterWalletId: string, chainId: string, type: number, sponsorPublicKey: string,
+                          draftHash: string, budgets: string, recipient: string, success) {
+        this.walletManager.sponsorProposalDigest([masterWalletId, chainId, type, sponsorPublicKey, draftHash, budgets, recipient],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    CRSponsorProposalDigest(masterWalletId: string, chainId: string, sponsorSignedProposal: string, crSponsorDID: string, success) {
+        this.walletManager.CRSponsorProposalDigest([masterWalletId, chainId, sponsorSignedProposal, crSponsorDID],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createCRCProposalTransaction(masterWalletId: string, chainId: string, crSignedProposal: string, memo: string, success) {
+        this.walletManager.createCRCProposalTransaction([masterWalletId, chainId, crSignedProposal, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    generateCRCProposalReview(masterWalletId: string, chainId: string, proposalHash: string, voteResult: string, did: string, success) {
+        this.walletManager.generateCRCProposalReview([masterWalletId, chainId, proposalHash, voteResult, did],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createCRCProposalReviewTransaction(masterWalletId: string, chainId: string, proposalReview: string, memo: string, success) {
+        this.walletManager.createCRCProposalReviewTransaction([masterWalletId, chainId, proposalReview, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createVoteCRCProposalTransaction(masterWalletId: string, chainId: string, fromAddress: string, votes: string, memo: string,
+                                     invalidCandidates: string, success) {
+        this.walletManager.createVoteCRCProposalTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createImpeachmentCRCTransaction(masterWalletId: string, chainId: string, fromAddress: string, votes: string, memo: string,
+                                    invalidCandidates: string, success) {
+        this.walletManager.createImpeachmentCRCTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    leaderProposalTrackDigest(masterWalletId: string, chainId: string, type: number, proposalHash: string, documentHash: string,
+                              stage: number, appropriation: string, leaderPubKey: string, newLeaderPubKey: string, success) {
+        this.walletManager.leaderProposalTrackDigest([masterWalletId, chainId, type, proposalHash, documentHash, stage,
+                                                      appropriation, leaderPubKey, newLeaderPubKey],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    newLeaderProposalTrackDigest(masterWalletId: string, chainId: string, leaderSignedProposalTracking: string, success) {
+        this.walletManager.newLeaderProposalTrackDigest([masterWalletId, chainId, leaderSignedProposalTracking],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    secretaryGeneralProposalTrackDigest(masterWalletId: string, chainId: string, leaderSignedProposalTracking: string, success) {
+        this.walletManager.secretaryGeneralProposalTrackDigest([masterWalletId, chainId, leaderSignedProposalTracking],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
+    createProposalTrackingTransaction(masterWalletId: string, chainId: string, SecretaryGeneralSignedPayload: string, memo: string, success) {
+        this.walletManager.createProposalTrackingTransaction([masterWalletId, chainId, SecretaryGeneralSignedPayload, memo],
+            (ret) => { this.successFun(ret, success); },
+            (err) => { this.errorFun(err); });
+    }
+
     /**
      * @param {string} masterWalletId
      * @param {string} chainId
@@ -615,11 +763,6 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    createUpdateProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, success) {
-        this.walletManager.createUpdateProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
-    }
 
     successFun(ret, okFun = null) {
         // this.native.hideLoading(); //TODO::
