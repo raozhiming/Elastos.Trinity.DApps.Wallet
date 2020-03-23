@@ -38,7 +38,7 @@ import { PopupProvider } from './services/popup';
 })
 export class AppComponent {
     @ViewChild(IonRouterOutlet) routerOutlet: IonRouterOutlet;
-    
+
     constructor(
         private platform: Platform,
         private statusBar: StatusBar,

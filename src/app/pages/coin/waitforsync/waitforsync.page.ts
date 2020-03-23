@@ -4,7 +4,6 @@ import { AppService } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
 import { PopupProvider } from '../../../services/popup';
-// import { WalletManager } from '../../../services/WalletManager';
 
 @Component({
   selector: 'app-waitforsync',
@@ -50,6 +49,10 @@ export class WaitforsyncPage implements OnInit {
         this.masterWalletId = Config.getCurMasterWalletId();
 
         switch (this.transfer.action) {
+            case 'crmembervote':
+                this.action = 'text-vote-crcouncil';
+                this.nextScreen = '/crmembervote';
+                break;
             case 'didtransaction':
                 this.action = 'text-did';
                 this.nextScreen = '/didtransaction';

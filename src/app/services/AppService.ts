@@ -164,6 +164,25 @@ export class AppService {
                 myService.native.go('/waitforsync');
                 break;
 
+            case 'crmembervote':
+                console.log('CR member vote Transaction intent content:', ret.params);
+                Config.coinObj = {};
+                Config.coinObj.chainId = 'ELA';
+                Config.coinObj.walletInfo = Config.curMaster.account;
+                Config.coinObj.transfer = {
+                    votes: ret.params.votes,
+                    invalidCandidates: ret.params.invalidCandidates || '[]',
+                    memo: ret.params.memo || '',
+                    fee: 0,
+                    payPassword: '',
+                    intentId: ret.intentId,
+                    action: ret.action,
+                    from: ret.from,
+                };
+                Config.coinObj.transfer.type = 'vote-CR-member';
+                myService.native.go('/waitforsync');
+                break;
+
             case 'dposvotetransaction':
                 console.log('DPOS Transaction intent content:', ret.params);
                 Config.coinObj = {};

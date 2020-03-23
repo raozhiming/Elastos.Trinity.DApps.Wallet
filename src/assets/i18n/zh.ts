@@ -56,6 +56,9 @@ export const zh = {
     'text-did-action': '发布',
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从您的主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
 
+    'text-vote-crcouncil': 'CR委员选举',
+    'text-you-are-going-to-vote-cr-intro': '您将给 <b>{{ votecount }}</> 个CR委员投票',
+
     'paypassword': '支付密码',
     'activate-fingerprint-popup-content': '是否启动指纹登录? 此指纹将与您输入的密码进行绑定。',
     'use-fingerprint-authentication': '启用指纹',

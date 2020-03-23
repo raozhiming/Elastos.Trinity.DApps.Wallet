@@ -655,8 +655,8 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    createVoteCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, publicKeys: string, memo: string, invalidCandidates: string, success) {
-        this.walletManager.createVoteCRTransaction([masterWalletId, chainId, fromAddress, publicKeys, memo, invalidCandidates],
+    createVoteCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, votes: string, memo: string, invalidCandidates: string, success) {
+        this.walletManager.createVoteCRTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }

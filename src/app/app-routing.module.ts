@@ -77,6 +77,7 @@ const routes: Routes = [
     { path: 'access', loadChildren: './pages/wallet/access/access.module#AccessPageModule' },
     { path: 'didtransaction', loadChildren: './pages/coin/didtransaction/didtransaction.module#DidtransactionPageModule' },
     { path: 'waitforsync', loadChildren: './pages/coin/waitforsync/waitforsync.module#WaitforsyncPageModule' },
+    { path: 'crmembervote', loadChildren: './pages/coin/crmembervote/crmembervote.module#CRmembervotePageModule' },
 ];
 @NgModule({
     imports: [

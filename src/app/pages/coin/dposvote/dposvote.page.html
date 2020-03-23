@@ -5,20 +5,20 @@
         <div class="intro ion-text-center"
         [innerHtml]="'text-you-are-going-to-vote-intro' | translate:{votecount:transfer.publicKeys.length, maxvotes:36}">
         </div>
-    
+
         <div class="number-of-votes ion-text-center">
             Number of votes:
 
             <div class="number-of-votes-value">
-                {{getBalanceInELA() | number:'1.0-2'}}
+                {{getBalanceInELA() | number:'1.0-3'}}
             </div>
         </div>
-        
+
         <div class="notes">
             <div class="note">
                 {{ 'text-note' | translate }}
             </div>
-        
+
             <div class="note-entry">
                 {{ 'text-vote-note-1' | translate }}
             </div>
