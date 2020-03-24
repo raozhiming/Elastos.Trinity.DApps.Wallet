@@ -21,8 +21,6 @@
  */
 
 import { Component, OnInit, NgZone } from '@angular/core';
-import { ModalController, Events } from '@ionic/angular';
-import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
 import { AppService } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
@@ -41,20 +39,11 @@ export class DPoSVotePage implements OnInit {
     transfer: any = null;
 
     balance: string; // Balance in SELA
-
     chainId: string;
-
-    rawTransaction: '';
-
-    parms: any;
-    txId: string;
-    did: string;
-    isInput = false;
     walletInfo = {};
 
     constructor(public walletManager: WalletManager, public appService: AppService,
-                public native: Native, public modalCtrl: ModalController,
-                public events: Events, public zone: NgZone, public popupProvider: PopupProvider) {
+                public native: Native, public zone: NgZone, public popupProvider: PopupProvider) {
         this.init();
     }
 
@@ -69,10 +58,6 @@ export class DPoSVotePage implements OnInit {
 
         appManager.setVisible("show", ()=>{}, (err)=>{});
     }
-
-    // ionViewDidLeave() {
-    //    this.events.unsubscribe("error:update");
-    // }
 
     init() {
         console.log(Config.coinObj);
@@ -130,24 +115,6 @@ export class DPoSVotePage implements OnInit {
         );
     }
 
-    async openPayModal(transfer) {
-        let props = this.native.clone(transfer);
-        const modal = await this.modalCtrl.create({
-            component: PaymentboxComponent,
-            componentProps: props
-        });
-        modal.onDidDismiss().then((params) => {
-            if (params.data) {
-                this.native.showLoading().then(() => {
-                    this.transfer.payPassword = params.data;
-                    // console.log(params.data);
-                    this.signTx();
-                });
-            }
-        });
-        return modal.present();
-    }
-
     elaToSELAString(elaAmount: number) {
         let integerPart = Math.trunc(elaAmount);
         let fracPart = elaAmount - integerPart;
@@ -192,34 +159,9 @@ export class DPoSVotePage implements OnInit {
             JSON.stringify(this.transfer.publicKeys),
             this.transfer.memo,
             (data) => {
-                this.rawTransaction = data;
-                this.openPayModal(this.transfer);
+                this.transfer.rawTransaction = data;
+                Config.masterManager.openPayModal(this.transfer);
             });
-    }
-
-    signTx() {
-        this.walletManager.signTransaction(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.payPassword, (ret) => {
-            this.sendTx(ret);
-        });
-    }
-
-    sendTx(rawTransaction) {
-        this.native.info(rawTransaction);
-        this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
-            Config.masterManager.lockTx(ret.TxHash);
-            setTimeout(() => {
-                let txId = ret.TxHash;
-                const code = Config.masterManager.getTxCode(txId);
-                if (code !== 0) {
-                    txId = null;
-                }
-                this.native.hideLoading();
-                this.native.toast_trans('send-raw-transaction');
-                this.native.setRootRouter("/tabs");
-                console.log("Sending intent response", this.transfer.action, {txid: txId}, this.transfer.intentId);
-                this.appService.sendIntentResponse(this.transfer.action, {txid: txId}, this.transfer.intentId);
-            }, 5000); // wait for 5s for txPublished
-        });
     }
 }
 

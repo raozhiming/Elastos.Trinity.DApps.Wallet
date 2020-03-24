@@ -144,103 +144,73 @@ export class AppService {
 
     onReceiveIntent(ret: AppManagerPlugin.ReceivedIntent) {
         console.log("Intent received message:", ret.action, ". params: ", ret.params, ". from: ", ret.from);
-        // console.log(ret);
-        switch (ret.action) {
-            case 'pay':
-                Config.coinObj = {};
-                Config.coinObj.chainId = 'ELA';
-                Config.coinObj.walletInfo = Config.curMaster.account;
-                Config.coinObj.transfer = {
-                    toAddress: ret.params.receiver,
-                    amount: ret.params.amount,
-                    memo: ret.params.memo || '',
-                    fee: 0,
-                    payPassword: '',
-                    intentId: ret.intentId,
-                    action: ret.action,
-                    from: ret.from,
-                };
-                Config.coinObj.transfer.type = 'payment-confirm';
-                myService.native.go('/waitforsync');
-                break;
 
+        switch (ret.action) {
+            case 'elawalletmnemonicaccess':
+            case 'walletaccess':
+                this.handleAccessIntent(ret);
+                break;
+            default:
+                this.handleTransactionIntent(ret);
+                break;
+        }
+    }
+
+    handleTransactionIntent(ret: AppManagerPlugin.ReceivedIntent) {
+        Config.coinObj = {};
+        Config.coinObj.chainId = 'ELA';
+        Config.coinObj.walletInfo = Config.curMaster.account;
+        Config.coinObj.transfer = {
+            memo: ret.params.memo || '',
+            intentId: ret.intentId,
+            action: ret.action,
+            from: ret.from,
+            payPassword: '',
+            fee: 0,
+        };
+
+        switch (ret.action) {
             case 'crmembervote':
                 console.log('CR member vote Transaction intent content:', ret.params);
-                Config.coinObj = {};
-                Config.coinObj.chainId = 'ELA';
-                Config.coinObj.walletInfo = Config.curMaster.account;
-                Config.coinObj.transfer = {
-                    votes: ret.params.votes,
-                    invalidCandidates: ret.params.invalidCandidates || '[]',
-                    memo: ret.params.memo || '',
-                    fee: 0,
-                    payPassword: '',
-                    intentId: ret.intentId,
-                    action: ret.action,
-                    from: ret.from,
-                };
+                Config.coinObj.transfer.votes = ret.params.votes,
+                Config.coinObj.transfer.invalidCandidates = ret.params.invalidCandidates || '[]',
                 Config.coinObj.transfer.type = 'vote-CR-member';
-                myService.native.go('/waitforsync');
                 break;
 
             case 'dposvotetransaction':
                 console.log('DPOS Transaction intent content:', ret.params);
-                Config.coinObj = {};
-                Config.coinObj.chainId = 'ELA';
-                Config.coinObj.walletInfo = Config.curMaster.account;
-                Config.coinObj.transfer = {
-                    toAddress: 'default',
-                    publicKeys: ret.params.publickeys,
-                    memo: '',
-                    fee: 0,
-                    payPassword: '',
-                    intentId: ret.intentId,
-                    action: ret.action,
-                    from: ret.from,
-                };
+                // Config.coinObj.transfer.toAddress = 'default',
+                Config.coinObj.transfer.publicKeys = ret.params.publickeys,
                 Config.coinObj.transfer.type = 'vote-UTXO';
-                myService.native.go('/waitforsync');
                 break;
 
             case 'didtransaction':
-                Config.coinObj = {};
                 Config.coinObj.chainId = 'IDChain';
-                Config.coinObj.walletInfo = Config.curMaster.account;
-                Config.coinObj.transfer = {
-                    // toAddress: "default",
-                    didrequest: ret.params.didrequest,
-                    memo: ret.params.memo || '',
-                    intentId: ret.intentId,
-                    action: ret.action,
-                    from: ret.from,
-                };
+                Config.coinObj.transfer.didrequest = ret.params.didrequest,
                 Config.coinObj.transfer.type = 'did-confirm';
-                myService.native.go('/waitforsync');
                 break;
 
-            case 'elawalletmnemonicaccess':
-                Config.requestDapp = {
-                    name: ret.from,
-                    intentId: ret.intentId,
-                    action: ret.action,
-                    reason: ''
-                };
-                myService.native.go('/access');
-                break;
-
-            case 'walletaccess':
-                Config.requestDapp = {
-                    name: ret.from,
-                    intentId: ret.intentId,
-                    action: ret.action,
-                    // reason: ret.params.elaaddress.reason || ''
-                    reason: ret.params.reason || ''
-                };
-                myService.native.go('/access');
+            case 'pay':
+                Config.coinObj.transfer.toAddress = ret.params.receiver,
+                Config.coinObj.transfer.amount = ret.params.amount,
+                Config.coinObj.transfer.type = 'payment-confirm';
                 break;
             default:
-                break;
+                console.log('AppService unknown intent:', ret);
+                return;
         }
+
+        myService.native.go('/waitforsync');
+    }
+
+    handleAccessIntent(ret: AppManagerPlugin.ReceivedIntent) {
+        Config.requestDapp = {
+            name: ret.from,
+            intentId: ret.intentId,
+            action: ret.action,
+            reason: ret.params.reason || ''
+        };
+        myService.native.go('/access');
     }
 
     sendIntentResponse(action, result, intentId) {

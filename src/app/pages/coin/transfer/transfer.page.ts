@@ -22,8 +22,7 @@
 
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController, Events } from '@ionic/angular';
-import { PaymentboxComponent } from '../../../components/paymentbox/paymentbox.component';
+import { Events } from '@ionic/angular';
 import { AppService, ScanType } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
@@ -44,26 +43,17 @@ export class TransferPage implements OnInit, OnDestroy {
 
     chainId: string;
 
-    feePerKb = 10000;
-
-    rawTransaction: '';
-
-    genesisAddress: '';
-
     Config = Config;
     SELA = Config.SELA;
-    parms: any;
-    txId: string;
-    isInput = false;
     walletInfo = {};
 
     transFunction: any;
-    readonly: boolean = false;
-    hideMemo: boolean = false;
+    readonly = false;
+    hideMemo = false;
     introText = ''; // to show intro text
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
-                public native: Native, public modalCtrl: ModalController, public events: Events, public zone: NgZone) {
+                public native: Native, public events: Events, public zone: NgZone) {
         this.init();
     }
 
@@ -167,24 +157,6 @@ export class TransferPage implements OnInit, OnDestroy {
         );
     }
 
-    async openPayModal(transfer) {
-        let props = this.native.clone(transfer);
-        const modal = await this.modalCtrl.create({
-            component: PaymentboxComponent,
-            componentProps: props
-        });
-        modal.onDidDismiss().then((params) => {
-            if (params.data) {
-                this.native.showLoading().then(() => {
-                    this.transfer.payPassword = params.data;
-                    // console.log(params.data);
-                    this.signTx();
-                });
-            }
-        });
-        return modal.present();
-    }
-
     accMul(arg1, arg2) {
         let m = 0, s1 = arg1.toString(), s2 = arg2.toString();
         try { m += s1.split(".")[1].length } catch (e) { }
@@ -201,8 +173,8 @@ export class TransferPage implements OnInit, OnDestroy {
             toAmount.toString(),
             this.transfer.memo,
             (data) => {
-                me.rawTransaction = data;
-                me.openPayModal(me.transfer);
+                this.transfer.rawTransaction = data;
+                Config.masterManager.openPayModal(this.transfer);
             });
     }
 
@@ -214,8 +186,8 @@ export class TransferPage implements OnInit, OnDestroy {
             this.transfer.toAddress, // user input address
             this.transfer.memo,
             (data) => {
-                this.rawTransaction = data;
-                this.openPayModal(this.transfer);
+                this.transfer.rawTransaction = data;
+                Config.masterManager.openPayModal(this.transfer);
             });
     }
 
@@ -226,46 +198,8 @@ export class TransferPage implements OnInit, OnDestroy {
             this.transfer.toAddress,
             this.transfer.memo,
             (data) => {
-                this.rawTransaction = data;
-                this.openPayModal(this.transfer);
+                this.transfer.rawTransaction = data;
+                Config.masterManager.openPayModal(this.transfer);
             });
     }
-
-    signTx() {
-        this.walletManager.signTransaction(this.masterWalletId, this.chainId, this.rawTransaction, this.transfer.payPassword, (ret) => {
-            if (this.walletInfo["Type"] === "Standard") {
-                this.sendTx(ret);
-            } else if (this.walletInfo["Type"] === "Multi-Sign") {
-                this.native.hideLoading();
-                this.native.go("/scancode", { "tx": { "chainId": this.chainId, "fee": this.transfer.fee / Config.SELA, "raw": ret } });
-            }
-        });
-    }
-
-    sendTx(rawTransaction) {
-        this.native.info(rawTransaction);
-        this.walletManager.publishTransaction(this.masterWalletId, this.chainId, rawTransaction, (ret) => {
-            if (this.transfer.type === 'payment-confirm') {
-                Config.masterManager.lockTx(ret.TxHash);
-                setTimeout(() => {
-                    let txId = ret.TxHash;
-                    const code = Config.masterManager.getTxCode(txId);
-                    if (code !== 0) {
-                        txId = null;
-                    }
-                    this.native.hideLoading();
-                    this.native.toast_trans('send-raw-transaction');
-                    this.native.setRootRouter("/tabs");
-                    console.log("Sending intent response", this.transfer.action, {txid: ret.TxHash}, this.transfer.intentId);
-                    this.appService.sendIntentResponse(this.transfer.action, {txid: txId}, this.transfer.intentId);
-                }, 5000); // wait for 5s for txPublished
-            } else {
-                console.log(ret.TxHash);
-                this.native.hideLoading();
-                this.native.toast_trans('send-raw-transaction');
-                this.native.setRootRouter("/tabs");
-            }
-        });
-    }
 }
-

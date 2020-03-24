@@ -66,8 +66,8 @@ export class AppComponent {
             this.appService.init();
             this.walletManager.init();
             Config.masterManager = new MasterManager(
-                    this.events, this.native, this.zone, this.localStorage,
-                    this.popupProvider, this.walletManager);
+                    this.events, this.native, this.zone, this.modalCtrl, this.appService,
+                    this.localStorage, this.popupProvider, this.walletManager);
         });
     }
 

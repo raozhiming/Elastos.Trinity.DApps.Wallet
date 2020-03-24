@@ -21,7 +21,9 @@
  */
 
 import { NgZone } from '@angular/core';
-import { Events } from '@ionic/angular';
+import { Events, ModalController } from '@ionic/angular';
+import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
+import { AppService } from './AppService';
 import { Native } from './Native';
 import { Config } from './Config';
 import { LocalStorage } from './Localstorage';
@@ -47,6 +49,8 @@ export class MasterManager {
     constructor(public events: Events,
                 public native: Native,
                 public zone: NgZone,
+                public modalCtrl: ModalController,
+                public appService: AppService,
                 public localStorage: LocalStorage,
                 public popupProvider: PopupProvider,
                 public walletManager: WalletManager) {
@@ -443,6 +447,63 @@ export class MasterManager {
         this.transactionMap = [];
         this.localStorage.savePublishTxList(this.transactionMap);
     }
+
+    // publish transaction
+    async openPayModal(transfer) {
+        const props = this.native.clone(transfer);
+        const modal = await this.modalCtrl.create({
+            component: PaymentboxComponent,
+            componentProps: props
+        });
+        modal.onDidDismiss().then((params) => {
+            if (params.data) {
+                this.native.showLoading().then(() => {
+                    transfer.payPassword = params.data;
+                    this.signTransaction(transfer);
+                });
+            }
+        });
+        return modal.present();
+    }
+
+    signTransaction(transfer) {
+        this.walletManager.signTransaction(this.curMasterId,
+                                           transfer.chainId,
+                                           transfer.rawTransaction,
+                                           transfer.payPassword, (signedTx: string) => {
+
+            // if (this.walletInfo["Type"] === "Standard") {
+                this.sendTransaction(transfer, signedTx);
+            // } else if (this.walletInfo["Type"] === "Multi-Sign") {
+            //     this.native.hideLoading();
+            //     this.native.go("/scancode", { "tx": { "chainId": transfer.chainId, "fee": transfer.fee / Config.SELA, "raw": signedTx } });
+            // }
+        });
+    }
+
+    sendTransaction(transfer, signedTx) {
+        this.native.info(signedTx);
+        this.walletManager.publishTransaction(this.curMasterId, transfer.chainId, signedTx, (ret) => {
+            if (!Util.isEmptyObject(transfer.action)) {
+                this.lockTx(ret.TxHash);
+                setTimeout(() => {
+                    let txId = ret.TxHash;
+                    const code = this.getTxCode(txId);
+                    if (code !== 0) {
+                        txId = null;
+                    }
+                    this.native.hideLoading();
+                    this.native.toast_trans('send-raw-transaction');
+                    this.native.setRootRouter('/tabs');
+                    console.log('Sending intent response', transfer.action, {txid: txId}, transfer.intentId);
+                    this.appService.sendIntentResponse(transfer.action, {txid: txId}, transfer.intentId);
+                }, 5000); // wait for 5s for txPublished
+            } else {
+                console.log(ret.TxHash);
+                this.native.hideLoading();
+                this.native.toast_trans('send-raw-transaction');
+                this.native.setRootRouter('/tabs');
+            }
+        });
+    }
 }
-
-
