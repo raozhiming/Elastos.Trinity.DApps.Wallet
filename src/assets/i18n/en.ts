@@ -63,7 +63,9 @@ export const en = {
     'activate-fingerprint-popup-content': 'Do you want to enable fingerprint authentication? The password you\'ve just typed will be used.',
     'use-fingerprint-authentication': 'Use fingerprint',
 
-
+    'text-consolidate-prompt': 'Consolidate?',
+    'text-consolidate-UTXO-counts': 'Number of UTXOs: {{ count }}',
+    'text-consolidate-note': 'Too many UTXOs may cause some transactions to fail, and the consolidation will not affect existing voting',
 
 
 

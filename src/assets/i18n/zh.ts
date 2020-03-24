@@ -63,6 +63,9 @@ export const zh = {
     'activate-fingerprint-popup-content': '是否启动指纹登录? 此指纹将与您输入的密码进行绑定。',
     'use-fingerprint-authentication': '启用指纹',
 
+    'text-consolidate-prompt': '是否零钱换整？',
+    'text-consolidate-UTXO-counts': 'UTXO 个数已达到：{{ count }}',
+    'text-consolidate-note': 'UTXO 数量过多可能会导致一些交易失败，执行零钱换整后不影响已有的投票',
 
     'Received': '收到',
     'Sent': '转账',

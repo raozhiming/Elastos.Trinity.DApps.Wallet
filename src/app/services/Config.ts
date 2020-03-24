@@ -43,6 +43,9 @@ export class Config {
     public static initialized: boolean = false;
     public static needPromptTransfer2IDChain = false; // for now just show once atmost?
 
+    public static UTXOThreshold = 500;
+    public static needCheckUTXOCount = true;
+
     public static masterWallet: any = {};
     public static curMasterId: string = "-1";
     // public static curMaster: any = {};

@@ -28,6 +28,7 @@ import { Native } from '../../services/Native';
 import { PopupProvider } from '../../services/popup';
 import { Util } from '../../services/Util';
 import { WalletManager } from '../../services/WalletManager';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-coin',
@@ -38,10 +39,6 @@ export class CoinPage implements OnInit {
     public masterWalletInfo = '';
     masterWalletId = '1';
     transferList = [];
-
-    // coinCount = 0;
-
-    coinId = 0;
 
     chainId = '';
     pageNo = 0;
@@ -58,7 +55,7 @@ export class CoinPage implements OnInit {
     Config = Config;
     SELA = Config.SELA;
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public translate: TranslateService,
                 public native: Native, public events: Events, public popupProvider: PopupProvider) {
         this.init();
     }
@@ -96,9 +93,11 @@ export class CoinPage implements OnInit {
             if (Config.curMaster.subWallet[this.chainId].progress !== 100) {
                 this.events.subscribe(this.chainId + ':synccompleted', (coin) => {
                     this.CheckPublishTx();
+                    this.checkUTXOCount();
                 });
             } else {
                 this.CheckPublishTx();
+                this.checkUTXOCount();
             }
         });
     }
@@ -322,5 +321,41 @@ export class CoinPage implements OnInit {
 
     getIndexByTxId(txId: string) {
         return this.transferList.findIndex(e => e.txId === txId);
+    }
+
+    checkUTXOCount() {
+        if (Config.needCheckUTXOCount) {
+            this.walletManager.getAllUTXOs(this.masterWalletId, this.chainId, 0, 1, '', (UTXOsJson) => {
+                console.log('UTXOsJson:', UTXOsJson);
+                const UTXOsCount = this.translate.instant('text-consolidate-UTXO-counts', {count: UTXOsJson.MaxCount});
+                if (UTXOsJson.MaxCount >= Config.UTXOThreshold) {
+                    this.popupProvider.ionicConfirmWithSubTitle('text-consolidate-prompt',
+                                                                UTXOsCount,
+                                                                'text-consolidate-note').then((ret: boolean) => {
+                        if (ret) {
+                            this.createConsolidateTransaction();
+                        }
+                    });
+                }
+            });
+
+            Config.needCheckUTXOCount = false;
+        }
+    }
+
+    createConsolidateTransaction() {
+        this.walletManager.createConsolidateTransaction(this.masterWalletId, this.chainId, '', (txJson: string) => {
+            console.log('coin.page createConsolidateTransaction');
+            let transfer = {
+                chainId: this.chainId,
+                toAddress: '',
+                amount: '',
+                memo: '',
+                fee: 0,
+                payPassword: '',
+                rawTransaction: txJson,
+            };
+            Config.masterManager.openPayModal(transfer);
+        });
     }
 }

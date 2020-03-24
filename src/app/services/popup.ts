@@ -145,6 +145,33 @@ export class PopupProvider {
     });
   };
 
+  public ionicConfirmWithSubTitle(title: string, subTitle: string, message: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.alertCtrl.create({
+        header: this.translate.instant(title),
+        subHeader : subTitle,
+        message  : this.translate.instant(message),
+        cssClass: 'my-custom-alert',
+        buttons: [
+          {
+            text: this.translate.instant('cancel'),
+            handler: () => {
+              console.log('ionicConfirm Disagree clicked');
+              resolve(false);
+            }
+          },
+          {
+            text: this.translate.instant('confirm'),
+            handler: () => {
+              console.log('Agree clicked');
+              resolve(true);
+            }
+          }
+        ]
+      }).then(confirm => confirm.present());
+    });
+  };
+
   public ionicPrompt(title: string, message: string, opts?: any, okText?: string, cancelText?: string): Promise<any> {
     return new Promise((resolve, reject) => {
       let defaultText = opts && opts.defaultText ? opts.defaultText : null;
