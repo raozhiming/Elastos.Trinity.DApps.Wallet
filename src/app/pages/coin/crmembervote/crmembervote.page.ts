@@ -37,7 +37,7 @@ declare let appManager: AppManagerPlugin.AppManager;
 export class CRmembervotePage implements OnInit {
 
     masterWalletId = '1';
-    chainId: string;
+    chainId: string; // ELA
     transfer: any = null;
     votecount = 0;
 
@@ -64,7 +64,7 @@ export class CRmembervotePage implements OnInit {
     init() {
         console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.chainId;
+        this.chainId = Config.coinObj.transfer.chainId;
         this.masterWalletId = Config.getCurMasterWalletId();
 
         this.parseVotes();
@@ -116,18 +116,12 @@ export class CRmembervotePage implements OnInit {
         return true;
     }
 
-    createVoteCRTransaction() {
+    async createVoteCRTransaction() {
         console.log('Creating vote CR transaction');
-        this.walletManager.createVoteCRTransaction(this.masterWalletId, this.chainId,
-            '',
-            this.transfer.votes,
-            this.transfer.memo,
-            this.transfer.invalidCandidates,
-            (data) => {
-                // TODO need to check DropVotes
-                this.transfer.rawTransaction = data;
-                Config.masterManager.openPayModal(this.transfer);
-            });
+        this.transfer.rawTransaction =  await this.walletManager.createVoteCRTransaction(this.masterWalletId, this.chainId,
+                '', this.transfer.votes, this.transfer.memo, this.transfer.invalidCandidates);
+        // TODO need to check DropVotes
+        Config.masterManager.openPayModal(this.transfer);
     }
 }
 

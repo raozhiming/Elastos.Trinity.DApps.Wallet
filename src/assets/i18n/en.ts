@@ -59,6 +59,18 @@ export const en = {
     'text-vote-crcouncil': 'CR Council Election',
     'text-you-are-going-to-vote-cr-intro': 'You are going to vote for <b>{{ votecount }}</b> CR council members',
 
+    'text-crmember-update': 'CR Council Member Update',
+    'text-you-are-going-to-update-crmember': 'You are going to update CR council members',
+
+    'text-crmember-register': 'CR Council Member Register',
+    'text-you-are-going-to-register-crmember': 'You are going to register CR council members',
+
+    'text-crmember-unregister': 'CR Council Member Unregister',
+    'text-you-are-going-to-unregister-crmember': 'You are going to unregister CR council members',
+
+    'text-crmember-retrieve': 'Retrieve CR Deposit',
+    'text-you-are-going-to-uretrive-deposit': 'You are going to retrieve CR Deposit',
+
     'paypassword': 'Pay Password',
     'activate-fingerprint-popup-content': 'Do you want to enable fingerprint authentication? The password you\'ve just typed will be used.',
     'use-fingerprint-authentication': 'Use fingerprint',

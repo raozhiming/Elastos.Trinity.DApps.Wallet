@@ -81,7 +81,6 @@ export class CoinPage implements OnInit {
 
         this.route.paramMap.subscribe((params) => {
             this.chainId = params.get('name');
-            Config.coinObj.chainId = this.chainId;
             if (this.chainId === 'ELA') {
                 this.textShow = 'text-recharge';
             } else {
@@ -249,13 +248,13 @@ export class CoinPage implements OnInit {
     }
 
     onNext(type) {
-        Config.coinObj.chainId = this.chainId;
         Config.coinObj.transfer = {
             toAddress: '',
             amount: '',
             memo: '',
             fee: 0,
             payPassword: '',
+            chainId: this.chainId,
         };
         switch (type) {
             case 1:
@@ -270,7 +269,7 @@ export class CoinPage implements OnInit {
                     Config.coinObj.transfer.type = 'recharge';
                     const coinList = Config.getSubWalletList();
                     if (coinList.length === 1) {
-                        Config.coinObj.chainId = coinList[0].name;
+                        Config.coinObj.transfer.sideChainId = coinList[0].name;
                         this.native.go('/transfer');
                     } else {
                         this.native.go('/coin-select');

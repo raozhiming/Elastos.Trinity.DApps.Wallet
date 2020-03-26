@@ -71,7 +71,7 @@ export class TransferPage implements OnInit, OnDestroy {
     init() {
         // console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.chainId;
+        this.chainId = Config.coinObj.transfer.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
         this.events.subscribe('address:update', (address) => {
             this.zone.run(() => {
@@ -93,7 +93,7 @@ export class TransferPage implements OnInit, OnDestroy {
                 this.transfer.amount = '0.1'; // for DID
                 this.getAddress(Config.IDCHAIN);
                 this.hideMemo = true;
-;               this.introText = 'text-recharge-intro';
+                this.introText = 'text-recharge-intro';
                 break;
             case 'withdraw':
                 this.transFunction = this.createWithdrawTransaction;
@@ -168,7 +168,7 @@ export class TransferPage implements OnInit, OnDestroy {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
         let me = this;
 
-        this.walletManager.createTransaction(this.masterWalletId, this.chainId, "",
+        this.walletManager.createTransaction(this.masterWalletId, this.chainId, '',
             this.transfer.toAddress,
             toAmount.toString(),
             this.transfer.memo,
@@ -179,9 +179,9 @@ export class TransferPage implements OnInit, OnDestroy {
     }
 
     createDepositTransaction() {
-        let toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.createDepositTransaction(this.masterWalletId, 'ELA', "",
-            Config.coinObj.chainId,
+        const toAmount = this.accMul(this.transfer.amount, Config.SELA);
+        this.walletManager.createDepositTransaction(this.masterWalletId, 'ELA', '',
+            Config.coinObj.transfer.sideChainId,
             toAmount.toString(), // user input amount
             this.transfer.toAddress, // user input address
             this.transfer.memo,
@@ -192,8 +192,8 @@ export class TransferPage implements OnInit, OnDestroy {
     }
 
     createWithdrawTransaction() {
-        let toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.createWithdrawTransaction(this.masterWalletId, this.chainId, "",
+        const toAmount = this.accMul(this.transfer.amount, Config.SELA);
+        this.walletManager.createWithdrawTransaction(this.masterWalletId, this.chainId, '',
             toAmount.toString(),
             this.transfer.toAddress,
             this.transfer.memo,

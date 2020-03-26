@@ -46,6 +46,15 @@
             "action": "pay"
         },
         {
+            "action": "crmemberregister"
+        },
+        {
+            "action": "crmemberunregister"
+        },
+        {
+            "action": "crmemberretrieve"
+        },
+        {
             "action": "crmembervote"
         },
         {

@@ -40,7 +40,7 @@ export class DidtransactionPage implements OnInit {
 
     balance: number; // ELA
 
-    chainId: string;
+    chainId: string; // IDChain
     hasOpenIDChain = false;
     walletInfo = {};
 
@@ -64,7 +64,7 @@ export class DidtransactionPage implements OnInit {
     init() {
         console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.chainId;
+        this.chainId = Config.coinObj.transfer.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
         this.masterWalletId = Config.getCurMasterWalletId();
         if (this.chainId === Config.IDCHAIN) {

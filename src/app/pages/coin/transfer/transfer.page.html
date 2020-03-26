@@ -8,7 +8,7 @@
         </ion-item>
         <ion-item>
             <ion-label>{{ 'text-receiver-address' | translate}}</ion-label>
-            <ion-buttons slot="end" *ngIf="transfer.type!='payment-confirm' || transfer.type!='vote-UTXO'">
+            <ion-buttons slot="end" *ngIf="transfer.type!='payment-confirm'">
                 <ion-icon name="scan" (click)="rightHeader()"></ion-icon>
                 <ion-icon *ngIf="transfer.type=='transfer'" name="contact" (click)="goContact()"></ion-icon>
             </ion-buttons>

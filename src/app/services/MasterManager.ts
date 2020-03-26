@@ -449,24 +449,37 @@ export class MasterManager {
     }
 
     // publish transaction
-    async openPayModal(transfer) {
-        const props = this.native.clone(transfer);
-        const modal = await this.modalCtrl.create({
-            component: PaymentboxComponent,
-            componentProps: props
+    getPassword(transfer): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            const props = this.native.clone(transfer);
+            const modal = await this.modalCtrl.create({
+                component: PaymentboxComponent,
+                componentProps: props
+            });
+            modal.onDidDismiss().then((params) => {
+                if (params.data) {
+                    resolve(params.data);
+                } else {
+                    resolve(null);
+                }
+            });
+            modal.present();
         });
-        modal.onDidDismiss().then((params) => {
-            if (params.data) {
-                this.native.showLoading().then(() => {
-                    transfer.payPassword = params.data;
-                    this.signTransaction(transfer);
-                });
-            }
-        });
-        return modal.present();
     }
 
-    signTransaction(transfer) {
+    async openPayModal(transfer) {
+        const payPassword = await this.getPassword(transfer);
+        if (payPassword === null) {
+            return;
+        }
+        transfer.payPassword = payPassword;
+
+        this.native.showLoading().then(() => {
+            this.signAndSendTransaction(transfer);
+        });
+    }
+
+    signAndSendTransaction(transfer) {
         this.walletManager.signTransaction(this.curMasterId,
                                            transfer.chainId,
                                            transfer.rawTransaction,
@@ -482,7 +495,7 @@ export class MasterManager {
     }
 
     sendTransaction(transfer, signedTx) {
-        this.native.info(signedTx);
+        // this.native.info(signedTx);
         this.walletManager.publishTransaction(this.curMasterId, transfer.chainId, signedTx, (ret) => {
             if (!Util.isEmptyObject(transfer.action)) {
                 this.lockTx(ret.TxHash);

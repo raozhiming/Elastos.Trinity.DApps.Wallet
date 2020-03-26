@@ -38,8 +38,7 @@
 </ion-content>
 <ion-footer>
     <div class="coin-bottom">
-        <ion-button [routerLink]="['/receive']" routerDirection="forward">
-            {{ 'text-receive' | translate }}</ion-button>
+        <ion-button (click)="onNext(1)">{{ 'text-receive' | translate }}</ion-button>
         <ion-button (click)="onNext(3)">{{ this.textShow | translate }}</ion-button>
         <ion-button (click)="onNext(2)">{{ 'text-transfer' | translate }}</ion-button>
     </div>

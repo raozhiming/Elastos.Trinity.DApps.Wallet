@@ -158,7 +158,6 @@ export class AppService {
 
     handleTransactionIntent(ret: AppManagerPlugin.ReceivedIntent) {
         Config.coinObj = {};
-        Config.coinObj.chainId = 'ELA';
         Config.coinObj.walletInfo = Config.curMaster.account;
         Config.coinObj.transfer = {
             memo: ret.params.memo || '',
@@ -167,32 +166,57 @@ export class AppService {
             from: ret.from,
             payPassword: '',
             fee: 0,
+            chainId: 'ELA',
         };
 
         switch (ret.action) {
             case 'crmembervote':
                 console.log('CR member vote Transaction intent content:', ret.params);
-                Config.coinObj.transfer.votes = ret.params.votes,
-                Config.coinObj.transfer.invalidCandidates = ret.params.invalidCandidates || '[]',
-                Config.coinObj.transfer.type = 'vote-CR-member';
+                Config.coinObj.transfer.votes = ret.params.votes;
+                Config.coinObj.transfer.invalidCandidates = ret.params.invalidCandidates || '[]';
+                break;
+
+            case 'crmemberregister':
+                console.log('CR member register Transaction intent content:', ret.params);
+                Config.coinObj.transfer.did = ret.params.did;
+                Config.coinObj.transfer.nickName = ret.params.nickName;
+                Config.coinObj.transfer.url = ret.params.url;
+                Config.coinObj.transfer.location = ret.params.location;
+                break;
+
+            case 'crmemberupdate':
+                console.log('CR member update Transaction intent content:', ret.params);
+                Config.coinObj.transfer.nickname = ret.params.nickname;
+                Config.coinObj.transfer.url = ret.params.url;
+                Config.coinObj.transfer.location = ret.params.location;
+                break;
+
+            case 'crmemberunregister':
+                console.log('CR member unregister Transaction intent content:', ret.params);
+                Config.coinObj.transfer.crDID = ret.params.crDID;
+                break;
+
+            case 'crmemberretrieve':
+                console.log('CR member retrieve Transaction intent content:', ret.params);
+                Config.coinObj.transfer.chainId = 'IDChain';
+                Config.coinObj.transfer.amount = ret.params.amount;
+                Config.coinObj.transfer.publickey = ret.params.publickey;
                 break;
 
             case 'dposvotetransaction':
                 console.log('DPOS Transaction intent content:', ret.params);
-                // Config.coinObj.transfer.toAddress = 'default',
-                Config.coinObj.transfer.publicKeys = ret.params.publickeys,
-                Config.coinObj.transfer.type = 'vote-UTXO';
+                Config.coinObj.transfer.toAddress = 'default';
+                Config.coinObj.transfer.publicKeys = ret.params.publickeys;
                 break;
 
             case 'didtransaction':
-                Config.coinObj.chainId = 'IDChain';
-                Config.coinObj.transfer.didrequest = ret.params.didrequest,
-                Config.coinObj.transfer.type = 'did-confirm';
+                Config.coinObj.transfer.chainId = 'IDChain';
+                Config.coinObj.transfer.didrequest = ret.params.didrequest;
                 break;
 
             case 'pay':
-                Config.coinObj.transfer.toAddress = ret.params.receiver,
-                Config.coinObj.transfer.amount = ret.params.amount,
+                Config.coinObj.transfer.toAddress = ret.params.receiver;
+                Config.coinObj.transfer.amount = ret.params.amount;
                 Config.coinObj.transfer.type = 'payment-confirm';
                 break;
             default:

@@ -30,7 +30,7 @@ export class CoinSelectPage implements OnInit {
     }
 
     onItem(item) {
-        Config.coinObj.chainId = item.name;
+        Config.coinObj.transfer.chainId = item.name;
         this.native.go("/recharge");
     }
 

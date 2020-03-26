@@ -59,6 +59,18 @@ export const zh = {
     'text-vote-crcouncil': 'CR委员选举',
     'text-you-are-going-to-vote-cr-intro': '您将给 <b>{{ votecount }}</> 个CR委员投票',
 
+    'text-crmember-register': '注册CR委员会成员',
+    'text-you-are-going-to-register-crmember': '您将要注册 CR委员会成员',
+
+    'text-crmember-update': '更新CR委员会成员信息',
+    'text-you-are-going-to-update-crmember': '您将要更新 CR委员会成员信息',
+
+    'text-crmember-unregister': '注销CR委员会成员',
+    'text-you-are-going-to-unregister-crmember': '您将要注消 CR委员会成员',
+
+    'text-crmember-retrieve': '取回 CR 委员会成员注册押金',
+    'text-you-are-going-to-uretrive-deposit': '您将要取回 CR 委员会成员注册押金',
+
     'paypassword': '支付密码',
     'activate-fingerprint-popup-content': '是否启动指纹登录? 此指纹将与您输入的密码进行绑定。',
     'use-fingerprint-authentication': '启用指纹',

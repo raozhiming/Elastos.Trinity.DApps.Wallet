@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Util } from "../../../services/Util";
+import { ActivatedRoute } from '@angular/router';
 import { Config } from '../../../services/Config';
 import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-receive',
@@ -23,8 +22,8 @@ export class ReceivePage implements OnInit {
     }
 
     init() {
-        this.masterWalletId = Config.getCurMasterWalletId()
-        this.chainId = Config.coinObj.chainId;
+        this.masterWalletId = Config.getCurMasterWalletId();
+        this.chainId = Config.coinObj.transfer.chainId;
         this.createAddress();
     }
 

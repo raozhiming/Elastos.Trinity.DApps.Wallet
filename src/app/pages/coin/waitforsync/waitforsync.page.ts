@@ -44,7 +44,7 @@ export class WaitforsyncPage implements OnInit {
 
     init() {
         this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.chainId;
+        this.chainId = Config.coinObj.transfer.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
         this.masterWalletId = Config.getCurMasterWalletId();
 
@@ -52,6 +52,22 @@ export class WaitforsyncPage implements OnInit {
             case 'crmembervote':
                 this.action = 'text-vote-crcouncil';
                 this.nextScreen = '/crmembervote';
+                break;
+            case 'crmemberregister':
+                this.action = 'text-crmember-register';
+                this.nextScreen = '/crmemberregister';
+                break;
+            case 'crmemberunregister':
+                this.action = 'text-crmember-unregister';
+                this.nextScreen = '/crmemberregister';
+                break;
+            case 'crmemberupdate':
+                this.action = 'text-crmember-update';
+                this.nextScreen = '/crmemberregister';
+                break;
+            case 'crmemberretrieve':
+                this.action = 'text-crmember-retrieve';
+                this.nextScreen = '/crmemberregister';
                 break;
             case 'didtransaction':
                 this.action = 'text-did';
@@ -71,7 +87,7 @@ export class WaitforsyncPage implements OnInit {
         }
 
         if (this.chainId === Config.IDCHAIN) {
-            let coinList = Config.getSubWalletList();
+            const coinList = Config.getSubWalletList();
             if (coinList.length === 1) { // for now, just IDChain
                 this.hasOpenIDChain = true;
             } else {

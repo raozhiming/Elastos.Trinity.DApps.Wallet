@@ -192,6 +192,14 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
+    getAllPublicKeys(masterWalletId: string, chainId: string, start: number, count: number): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.getAllPublicKeys([masterWalletId, chainId, start, count],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
+    }
+
     /**
     * @param {string} masterWalletId
     * @param {string} chainId
@@ -295,6 +303,7 @@ export class WalletManager {
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
+
     /**
      * @param {string} masterWalletId
      */
@@ -383,14 +392,14 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    didSign(masterWalletId: string, chainId: string, did: string, message: string, payPassword: string, success) {
-        this.walletManager.didSign([masterWalletId, chainId, did, message, payPassword],
+    didSign(masterWalletId: string, did: string, message: string, payPassword: string, success) {
+        this.walletManager.didSign([masterWalletId, did, message, payPassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
 
-    didSignDigest(masterWalletId: string, chainId: string, did: string, digest: string, payPassword: string, success) {
-        this.walletManager.didSignDigest([masterWalletId, chainId, did, digest, payPassword],
+    didSignDigest(masterWalletId: string, did: string, digest: string, payPassword: string, success) {
+        this.walletManager.didSignDigest([masterWalletId, did, digest, payPassword],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -415,7 +424,7 @@ export class WalletManager {
 
     createDepositTransaction(masterWalletId: string, chainId: string, fromAddress: string, sideChainID: string, amount: string
         , sideChainAddress: string, memo: string, success) {
-        this.walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress,sideChainID, amount, sideChainAddress, memo],
+        this.walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress, sideChainID, amount, sideChainAddress, memo],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -546,11 +555,7 @@ export class WalletManager {
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
-    /**
-    * @param {string} masterWalletId
-    * @param {string} chainId
-    * @param Fun
-    */
+
     destroySubWallet(masterWalletId: string, chainId: string, success) {
         this.walletManager.destroySubWallet([masterWalletId, chainId],
             (ret) => { this.successFun(ret, success); },
@@ -605,7 +610,6 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-
     createRetrieveDepositTransaction(masterWalletId: string, chainId: string, amount, memo: string, success) {
         this.walletManager.createRetrieveDepositTransaction([masterWalletId, chainId, amount, memo],
             (ret) => { this.successFun(ret, success); },
@@ -618,145 +622,181 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    //CR
-    generateCRInfoPayload(masterWalletId: string, chainId: string, publicKey: string, did: string, nickName: string, url: string, location: number, success) {
-        this.walletManager.generateCRInfoPayload([masterWalletId, chainId, publicKey, did, nickName, url, location],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    // CR
+    generateCRInfoPayload(masterWalletId: string, chainId: string, publicKey: string,
+                          did: string, nickName: string, url: string, location: number): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.generateCRInfoPayload([masterWalletId, chainId, publicKey, did, nickName, url, location],
+            (ret) => { resolve(ret); },
+            (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    generateUnregisterCRPayload(masterWalletId: string, chainId: string, CID: string, success) {
-        this.walletManager.generateUnregisterCRPayload([masterWalletId, chainId, CID],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    generateUnregisterCRPayload(masterWalletId: string, chainId: string, CID: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.generateUnregisterCRPayload([masterWalletId, chainId, CID],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    createRegisterCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, amount: string, memo: string, success) {
-        this.walletManager.createRegisterCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, amount, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createRegisterCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, amount: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createRegisterCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, amount, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    createUpdateCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, success) {
-        this.walletManager.createUpdateCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createUpdateCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createUpdateCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    createUnregisterCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, success) {
-        this.walletManager.createUnregisterCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createUnregisterCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createUnregisterCRTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    createRetrieveCRDepositTransaction(masterWalletId: string, chainId: string, publicKey: string, amount: string, memo: string, success) {
-        this.walletManager.createRetrieveCRDepositTransaction([masterWalletId, chainId, publicKey, amount, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createRetrieveCRDepositTransaction(masterWalletId: string, chainId: string, publicKey: string, amount: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createRetrieveCRDepositTransaction([masterWalletId, chainId, publicKey, amount, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    createVoteCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, votes: string, memo: string, invalidCandidates: string, success) {
-        this.walletManager.createVoteCRTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createVoteCRTransaction(masterWalletId: string, chainId: string, fromAddress: string, votes: string, memo: string, invalidCandidates: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createVoteCRTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    getVotedCRList(masterWalletId: string, chainId: string, success) {
-        this.walletManager.getVotedCRList([masterWalletId, chainId],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    getVotedCRList(masterWalletId: string, chainId: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.getVotedCRList([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+            });
     }
 
-    getRegisteredCRInfo(masterWalletId: string, chainId: string, success) {
-        this.walletManager.getRegisteredCRInfo([masterWalletId, chainId],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    getRegisteredCRInfo(masterWalletId: string, chainId: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.getRegisteredCRInfo([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+            });
     }
 
-    getVoteInfo(masterWalletId: string, chainId: string, type: string, success) {
-        this.walletManager.getVoteInfo([masterWalletId, chainId, type],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    getVoteInfo(masterWalletId: string, chainId: string, type: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.getVoteInfo([masterWalletId, chainId, type],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
     sponsorProposalDigest(masterWalletId: string, chainId: string, type: number, sponsorPublicKey: string,
-                          draftHash: string, budgets: string, recipient: string, success) {
-        this.walletManager.sponsorProposalDigest([masterWalletId, chainId, type, sponsorPublicKey, draftHash, budgets, recipient],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+                          draftHash: string, budgets: string, recipient: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.sponsorProposalDigest([masterWalletId, chainId, type, sponsorPublicKey, draftHash, budgets, recipient],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    CRSponsorProposalDigest(masterWalletId: string, chainId: string, sponsorSignedProposal: string, crSponsorDID: string, success) {
-        this.walletManager.CRSponsorProposalDigest([masterWalletId, chainId, sponsorSignedProposal, crSponsorDID],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    CRSponsorProposalDigest(masterWalletId: string, chainId: string, sponsorSignedProposal: string, crSponsorDID: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.CRSponsorProposalDigest([masterWalletId, chainId, sponsorSignedProposal, crSponsorDID],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    createCRCProposalTransaction(masterWalletId: string, chainId: string, crSignedProposal: string, memo: string, success) {
-        this.walletManager.createCRCProposalTransaction([masterWalletId, chainId, crSignedProposal, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createCRCProposalTransaction(masterWalletId: string, chainId: string, crSignedProposal: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createCRCProposalTransaction([masterWalletId, chainId, crSignedProposal, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    generateCRCProposalReview(masterWalletId: string, chainId: string, proposalHash: string, voteResult: string, did: string, success) {
-        this.walletManager.generateCRCProposalReview([masterWalletId, chainId, proposalHash, voteResult, did],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    generateCRCProposalReview(masterWalletId: string, chainId: string, proposalHash: string, voteResult: string, did: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.generateCRCProposalReview([masterWalletId, chainId, proposalHash, voteResult, did],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    createCRCProposalReviewTransaction(masterWalletId: string, chainId: string, proposalReview: string, memo: string, success) {
-        this.walletManager.createCRCProposalReviewTransaction([masterWalletId, chainId, proposalReview, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createCRCProposalReviewTransaction(masterWalletId: string, chainId: string, proposalReview: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createCRCProposalReviewTransaction([masterWalletId, chainId, proposalReview, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
     createVoteCRCProposalTransaction(masterWalletId: string, chainId: string, fromAddress: string, votes: string, memo: string,
-                                     invalidCandidates: string, success) {
-        this.walletManager.createVoteCRCProposalTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+                                     invalidCandidates: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createVoteCRCProposalTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
     createImpeachmentCRCTransaction(masterWalletId: string, chainId: string, fromAddress: string, votes: string, memo: string,
-                                    invalidCandidates: string, success) {
-        this.walletManager.createImpeachmentCRCTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+                                    invalidCandidates: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createImpeachmentCRCTransaction([masterWalletId, chainId, fromAddress, votes, memo, invalidCandidates],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
     leaderProposalTrackDigest(masterWalletId: string, chainId: string, type: number, proposalHash: string, documentHash: string,
-                              stage: number, appropriation: string, leaderPubKey: string, newLeaderPubKey: string, success) {
-        this.walletManager.leaderProposalTrackDigest([masterWalletId, chainId, type, proposalHash, documentHash, stage,
-                                                      appropriation, leaderPubKey, newLeaderPubKey],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+                              stage: number, appropriation: string, leaderPubKey: string, newLeaderPubKey: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.leaderProposalTrackDigest([masterWalletId, chainId, type, proposalHash, documentHash, stage,
+                                                        appropriation, leaderPubKey, newLeaderPubKey],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    newLeaderProposalTrackDigest(masterWalletId: string, chainId: string, leaderSignedProposalTracking: string, success) {
-        this.walletManager.newLeaderProposalTrackDigest([masterWalletId, chainId, leaderSignedProposalTracking],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    newLeaderProposalTrackDigest(masterWalletId: string, chainId: string, leaderSignedProposalTracking: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.newLeaderProposalTrackDigest([masterWalletId, chainId, leaderSignedProposalTracking],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    secretaryGeneralProposalTrackDigest(masterWalletId: string, chainId: string, leaderSignedProposalTracking: string, success) {
-        this.walletManager.secretaryGeneralProposalTrackDigest([masterWalletId, chainId, leaderSignedProposalTracking],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    secretaryGeneralProposalTrackDigest(masterWalletId: string, chainId: string, leaderSignedProposalTracking: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.secretaryGeneralProposalTrackDigest([masterWalletId, chainId, leaderSignedProposalTracking],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    createProposalTrackingTransaction(masterWalletId: string, chainId: string, SecretaryGeneralSignedPayload: string, memo: string, success) {
-        this.walletManager.createProposalTrackingTransaction([masterWalletId, chainId, SecretaryGeneralSignedPayload, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createProposalTrackingTransaction(masterWalletId: string, chainId: string, SecretaryGeneralSignedPayload: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createProposalTrackingTransaction([masterWalletId, chainId, SecretaryGeneralSignedPayload, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+        });
     }
 
-    /**
-     * @param {string} masterWalletId
-     * @param {string} chainId
-     * @param {string} start
-     * @param {string} addressOrTxId
-     * @param Fun
-     */
     getAllMyTransaction(masterWalletId: string, chainId: string, start, addressOrTxId, success) {
         this.walletManager.getAllTransaction([masterWalletId, chainId, start, -1, addressOrTxId],
             (ret) => { this.successFun(ret, success); },
@@ -791,11 +831,11 @@ export class WalletManager {
             let amount = err["Data"] / Config.SELA;
             this.popupProvider.ionicAlert_data('transaction-fail', error, amount);
         } else if (err["code"] === 20036) {
-            //this.event.publish("error:update");
+            // this.event.publish("error:update");
         } else {
             this.popupProvider.ionicAlert('transaction-fail', 'Error-' + err["code"]);
         }
-        //alert("错误信息：" + JSON.stringify(error));
+        // alert("错误信息：" + JSON.stringify(error));
         if (err["code"] === 20036) {
             this.event.publish("error:update", err);
         } else if (err["code"] === 20028) {

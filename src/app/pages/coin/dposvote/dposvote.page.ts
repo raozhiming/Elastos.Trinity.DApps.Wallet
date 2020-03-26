@@ -62,7 +62,7 @@ export class DPoSVotePage implements OnInit {
     init() {
         console.log(Config.coinObj);
         this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.chainId;
+        this.chainId = Config.coinObj.transfer.chainId;
         this.walletInfo = Config.coinObj.walletInfo;
         this.masterWalletId = Config.getCurMasterWalletId();
         this.fetchBalance();
