@@ -171,9 +171,10 @@ export const zh = {
     'updatepaypassword-paypassword1-placeholder': '请设置新的支付密码',
     'updatepaypassword-paypassword2-placeholder': '请重复已输入的新的支付密码',
     //access page
-    'access-address': '访问 ELA 地址',
-    'access-mnemonic': '访问助记词',
-    'ela-address': '钱包地址',
+    'access-walletinfo': '获取钱包信息',
+    'access-mnemonic': '获取助记词',
+    'elaaddress': '钱包地址',
+    'elaamount': 'ELA 金额',
     'requester': '请求授权应用',
     'text-allow': '允许',
     'text-warning': '警告',

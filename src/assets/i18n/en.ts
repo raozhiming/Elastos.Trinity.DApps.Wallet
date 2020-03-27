@@ -175,9 +175,10 @@ export const en = {
     'text-signaddress': 'Single Address Wallet',
     'text-pwd-repeat': 'Repeat Password',
     // access page
-    'access-address': 'Request ELA Address',
+    'access-walletinfo': 'Request Wallet Info',
     'access-mnemonic': 'Request Mnemonic',
-    'ela-address': 'Wallet Address',
+    'elaaddress': 'Wallet Address',
+    'elaamount': 'ELA Balance',
     'requester': 'Request from',
     'text-allow': 'Allow',
     'text-warning': 'Warning',

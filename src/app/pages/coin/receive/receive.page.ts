@@ -31,10 +31,8 @@ export class ReceivePage implements OnInit {
         this.native.go("/address", { chainId: this.chainId });
     }
 
-    createAddress() {
-        this.walletManager.createAddress(this.masterWalletId, this.chainId, (ret) => {
-            this.qrcode = ret;
-        });
+    async createAddress() {
+        this.qrcode = await this.walletManager.createAddress(this.masterWalletId, this.chainId);
     }
 
 }

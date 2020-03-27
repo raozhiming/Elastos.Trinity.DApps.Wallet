@@ -13,19 +13,19 @@
                         *ngIf="Config.curMaster.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
                 </div>
             </div>
-            <div class="valuation">{{Config.curMaster.totalBalance/SELA}}</div>
+            <div class="valuation">{{Config.curMaster.totalBalance/Config.SELA}}</div>
         </div>
 
         <div id="home-list-box" *ngIf="!exportMnemonic">
             <ion-list lines="none">
-                <ion-list-header>
-                    <div>{{'ela-address' | translate}}</div>
-                </ion-list-header>
+                <div *ngFor="let item of requestItems">
+                    <ion-list-header>
+                        <div>{{ item.name | translate}}</div>
+                    </ion-list-header>
 
-                <div class="ion-text-center">
-                    <!-- <ion-item [routerLink]="['/address', chainId]" routerDirection="forward"> -->
-                    <ion-label id="ela-address">{{elaAddress}}</ion-label>
-                    <!-- </ion-item> -->
+                    <div class="ion-text-center">
+                        <ion-label id="request-value">{{ item.value }}</ion-label>
+                    </div>
                 </div>
             </ion-list>
         </div>
@@ -52,12 +52,11 @@
             </ion-item>
         </div>
     </div>
-
 </ion-content>
 
 <ion-footer>
     <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="medium" size="large"
         (click)="cancelOperation()">{{ 'cancel' | translate }}</ion-button>
-    <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="primary" size="large" (click)="onShare()">
-        {{ 'text-allow' | translate }}</ion-button>
+    <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="primary" size="large"
+        (click)="onShare()">{{ 'text-allow' | translate }}</ion-button>
 </ion-footer>

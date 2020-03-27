@@ -104,10 +104,8 @@ export class TransferPage implements OnInit, OnDestroy {
         }
     }
 
-    getAddress(chainId: string) {
-        this.walletManager.createAddress(this.masterWalletId, chainId, (ret) => {
-            this.transfer.toAddress = ret;
-        });
+    async getAddress(chainId: string) {
+        this.transfer.toAddress = await this.walletManager.createAddress(this.masterWalletId, chainId);
     }
 
     rightHeader() {

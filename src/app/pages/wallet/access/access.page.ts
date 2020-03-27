@@ -5,6 +5,12 @@ import { WalletManager } from '../../../services/WalletManager';
 import { Native } from '../../../services/Native';
 import { PopupProvider } from '../../../services/popup';
 
+type ClaimRequest = {
+    name: string,
+    value: string,
+    reason: string // Additional usage info string provided by the caller
+};
+
 @Component({
     selector: 'app-access',
     templateUrl: './access.page.html',
@@ -12,7 +18,6 @@ import { PopupProvider } from '../../../services/popup';
 })
 export class AccessPage implements OnInit {
     Config = Config;
-    SELA = Config.SELA;
 
     requestDapp: any = null;
     masterWalletId = '1';
@@ -22,11 +27,12 @@ export class AccessPage implements OnInit {
     reason = '';
     title = '';
 
+    requestItems: ClaimRequest[] = [];
+
     constructor(public appService: AppService,
                 public walletManager: WalletManager,
                 public popupProvider: PopupProvider,
-                public native: Native)
-    {}
+                public native: Native) { }
 
     ngOnInit() {
         this.init();
@@ -36,22 +42,75 @@ export class AccessPage implements OnInit {
         this.requestDapp = Config.requestDapp;
         this.masterWalletId = Config.getCurMasterWalletId();
         if (this.requestDapp.action === 'walletaccess') {
-            this.createAddress();
-            this.title = 'access-address';
+            this.organizeRequestedFields();
+            this.title = 'access-walletinfo';
         } else {
             this.exportMnemonic = true;
             this.title = 'access-mnemonic';
         }
     }
 
-    // getAddress() {
-    //   this.native.go("/address", { chainId: this.chainId });
-    // }
+    async organizeRequestedFields() {
+        console.log('organizeRequestedFields:', this.requestDapp.requestFields);
+        for (const key of Object.keys(this.requestDapp.requestFields)) {
+            console.log('key:', key);
+            const claim = this.requestDapp.requestFields[key];
+            const claimValue = await this.getClaimValue(key);
+            const claimRequest: ClaimRequest = {
+                name: key,
+                value: claimValue,
+                reason: ''
+            };
 
-    createAddress() {
-        this.walletManager.createAddress(this.masterWalletId, this.chainId, (ret) => {
-            this.elaAddress = ret;
-        });
+            this.requestItems.push(claimRequest);
+        }
+    }
+
+    claimReason(claimValue: any): string {
+        if (claimValue instanceof Object) {
+            return claimValue.reason || null;
+        }
+        return null;
+    }
+
+    async getClaimValue(key) {
+        let value = '';
+        switch (key) {
+            case 'elaaddress':
+                value = await this.createAddress();
+                break;
+            case 'elaamount':
+                // for now just return the amount of ELA Chain, not include IDChain
+                value = Config.curMaster.subWallet.ELA.balance.toString();
+                break;
+            default:
+                break;
+        }
+        return value;
+    }
+
+    async createAddress() {
+        this.elaAddress = await this.walletManager.createAddress(this.masterWalletId, this.chainId);
+        return this.elaAddress;
+    }
+
+    reduceArrayToDict(keyProperty: string) {
+        let key: string;
+        return (acc, curr, index, array) => {
+            acc = acc || {};
+            key = curr[keyProperty];
+            acc[key] = curr.value;
+            return acc;
+        };
+    }
+
+    buildDeliverableList() {
+        const selectedClaim = [];
+        const mandatoryDict = this.requestItems.reduce(this.reduceArrayToDict('name'), {});
+        selectedClaim.push(mandatoryDict);
+
+        console.log('selectedClaim:', selectedClaim);
+        return selectedClaim;
     }
 
     /**
@@ -65,12 +124,11 @@ export class AccessPage implements OnInit {
 
     onShare() {
         if (this.exportMnemonic) {
-            this.native.go('/exportmnemonic', {fromIntent: true});
+            this.native.go('/exportmnemonic', { fromIntent: true });
         } else {
-            // this.appService.sendIntentResponse(this.requestDapp.action,
-            //         { walletinfo: [{ elaaddress: this.elaAddress }] }, this.requestDapp.intentId);
+            const selectedClaim = this.buildDeliverableList();
             this.appService.sendIntentResponse(this.requestDapp.action,
-                { elaaddress: this.elaAddress }, this.requestDapp.intentId);
+                    {walletinfo: selectedClaim}, this.requestDapp.intentId);
             this.native.setRootRouter('/tabs');
         }
     }

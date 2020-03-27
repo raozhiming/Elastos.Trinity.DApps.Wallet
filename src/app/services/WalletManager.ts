@@ -174,10 +174,12 @@ export class WalletManager {
     * @param {string} chainId
     * @param Fun
     */
-    createAddress(masterWalletId: string, chainId: string, success) {
-        this.walletManager.createAddress([masterWalletId, chainId],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.errorFun(err); });
+    createAddress(masterWalletId: string, chainId: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            this.walletManager.createAddress([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.errorFun(err); reject(err); });
+            });
     }
 
     /**

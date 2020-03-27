@@ -3,6 +3,7 @@ import { Events } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Native } from './Native';
 import { Config } from './Config';
+import { Util } from './Util';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -142,97 +143,102 @@ export class AppService {
         }
     }
 
-    onReceiveIntent(ret: AppManagerPlugin.ReceivedIntent) {
-        console.log("Intent received message:", ret.action, ". params: ", ret.params, ". from: ", ret.from);
+    onReceiveIntent(intent: AppManagerPlugin.ReceivedIntent) {
+        console.log("Intent received message:", intent.action, ". params: ", intent.params, ". from: ", intent.from);
 
-        switch (ret.action) {
+        switch (intent.action) {
             case 'elawalletmnemonicaccess':
             case 'walletaccess':
-                this.handleAccessIntent(ret);
+                this.handleAccessIntent(intent);
                 break;
             default:
-                this.handleTransactionIntent(ret);
+                this.handleTransactionIntent(intent);
                 break;
         }
     }
 
-    handleTransactionIntent(ret: AppManagerPlugin.ReceivedIntent) {
+    handleTransactionIntent(intent: AppManagerPlugin.ReceivedIntent) {
+        if (Util.isEmptyObject(intent.params)) {
+            console.error('Invalid intent parameters received. No params.', intent.params);
+            return false;
+        }
+
         Config.coinObj = {};
         Config.coinObj.walletInfo = Config.curMaster.account;
         Config.coinObj.transfer = {
-            memo: ret.params.memo || '',
-            intentId: ret.intentId,
-            action: ret.action,
-            from: ret.from,
+            memo: intent.params.memo || '',
+            intentId: intent.intentId,
+            action: intent.action,
+            from: intent.from,
             payPassword: '',
             fee: 0,
             chainId: 'ELA',
         };
 
-        switch (ret.action) {
+        switch (intent.action) {
             case 'crmembervote':
-                console.log('CR member vote Transaction intent content:', ret.params);
-                Config.coinObj.transfer.votes = ret.params.votes;
-                Config.coinObj.transfer.invalidCandidates = ret.params.invalidCandidates || '[]';
+                console.log('CR member vote Transaction intent content:', intent.params);
+                Config.coinObj.transfer.votes = intent.params.votes;
+                Config.coinObj.transfer.invalidCandidates = intent.params.invalidCandidates || '[]';
                 break;
 
             case 'crmemberregister':
-                console.log('CR member register Transaction intent content:', ret.params);
-                Config.coinObj.transfer.did = ret.params.did;
-                Config.coinObj.transfer.nickName = ret.params.nickName;
-                Config.coinObj.transfer.url = ret.params.url;
-                Config.coinObj.transfer.location = ret.params.location;
+                console.log('CR member register Transaction intent content:', intent.params);
+                Config.coinObj.transfer.did = intent.params.did;
+                Config.coinObj.transfer.nickName = intent.params.nickName;
+                Config.coinObj.transfer.url = intent.params.url;
+                Config.coinObj.transfer.location = intent.params.location;
                 break;
 
             case 'crmemberupdate':
-                console.log('CR member update Transaction intent content:', ret.params);
-                Config.coinObj.transfer.nickname = ret.params.nickname;
-                Config.coinObj.transfer.url = ret.params.url;
-                Config.coinObj.transfer.location = ret.params.location;
+                console.log('CR member update Transaction intent content:', intent.params);
+                Config.coinObj.transfer.nickname = intent.params.nickname;
+                Config.coinObj.transfer.url = intent.params.url;
+                Config.coinObj.transfer.location = intent.params.location;
                 break;
 
             case 'crmemberunregister':
-                console.log('CR member unregister Transaction intent content:', ret.params);
-                Config.coinObj.transfer.crDID = ret.params.crDID;
+                console.log('CR member unregister Transaction intent content:', intent.params);
+                Config.coinObj.transfer.crDID = intent.params.crDID;
                 break;
 
             case 'crmemberretrieve':
-                console.log('CR member retrieve Transaction intent content:', ret.params);
+                console.log('CR member retrieve Transaction intent content:', intent.params);
                 Config.coinObj.transfer.chainId = 'IDChain';
-                Config.coinObj.transfer.amount = ret.params.amount;
-                Config.coinObj.transfer.publickey = ret.params.publickey;
+                Config.coinObj.transfer.amount = intent.params.amount;
+                Config.coinObj.transfer.publickey = intent.params.publickey;
                 break;
 
             case 'dposvotetransaction':
-                console.log('DPOS Transaction intent content:', ret.params);
+                console.log('DPOS Transaction intent content:', intent.params);
                 Config.coinObj.transfer.toAddress = 'default';
-                Config.coinObj.transfer.publicKeys = ret.params.publickeys;
+                Config.coinObj.transfer.publicKeys = intent.params.publickeys;
                 break;
 
             case 'didtransaction':
                 Config.coinObj.transfer.chainId = 'IDChain';
-                Config.coinObj.transfer.didrequest = ret.params.didrequest;
+                Config.coinObj.transfer.didrequest = intent.params.didrequest;
                 break;
 
             case 'pay':
-                Config.coinObj.transfer.toAddress = ret.params.receiver;
-                Config.coinObj.transfer.amount = ret.params.amount;
+                Config.coinObj.transfer.toAddress = intent.params.receiver;
+                Config.coinObj.transfer.amount = intent.params.amount;
                 Config.coinObj.transfer.type = 'payment-confirm';
                 break;
             default:
-                console.log('AppService unknown intent:', ret);
+                console.log('AppService unknown intent:', intent);
                 return;
         }
 
         myService.native.go('/waitforsync');
     }
 
-    handleAccessIntent(ret: AppManagerPlugin.ReceivedIntent) {
+    handleAccessIntent(intent: AppManagerPlugin.ReceivedIntent) {
         Config.requestDapp = {
-            name: ret.from,
-            intentId: ret.intentId,
-            action: ret.action,
-            reason: ret.params.reason || ''
+            name: intent.from,
+            intentId: intent.intentId,
+            action: intent.action,
+            requestFields: intent.params.reqfields || intent.params,
         };
         myService.native.go('/access');
     }
