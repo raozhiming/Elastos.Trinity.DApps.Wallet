@@ -25,8 +25,8 @@ export class MnemonicWritePage implements OnInit {
         public walletManager: WalletManager,
         public zone: NgZone) {
 
-        this.mnemonicStr = Config.walletObj.mnemonicStr;
-        this.mnemonicList = Config.walletObj.mnemonicList;
+        this.mnemonicStr = this.native.clone(Config.walletObj.mnemonicStr);
+        this.mnemonicList = this.native.clone(Config.walletObj.mnemonicList);
         this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
     }
 
