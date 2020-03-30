@@ -134,7 +134,7 @@ export class AppService {
             case MessageType.IN_REFRESH:
                 switch (params.action) {
                     case 'currentLocaleChanged':
-                        myService.setCurLang(params.code);
+                        myService.setCurLang(params.data);
                         break;
                 }
                 break;
