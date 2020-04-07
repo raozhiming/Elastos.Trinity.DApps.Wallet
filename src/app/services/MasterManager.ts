@@ -38,6 +38,7 @@ export class MasterManager {
 
     public masterWallet: any = {};
     public curMasterId: string = "-1";
+    private masterIdFromStorage = '-1';
     public curMaster: any = {};
     public masterInfos: any = {};
     public progress: any = {};
@@ -61,6 +62,8 @@ export class MasterManager {
 
     init() {
         console.log("Master manager is initializing");
+
+        this.getCurMasterIdFromStorage();
 
         this.localStorage.getMasterInfos((infos) => {
             console.log("Got master infos", infos);
@@ -126,6 +129,14 @@ export class MasterManager {
         this.native.setRootRouter('/launcher');
     }
 
+    getCurMasterIdFromStorage() {
+        this.localStorage.getCurMasterId((data) => {
+            if (data && data["masterId"]) {
+                this.masterIdFromStorage = data["masterId"];
+            }
+        });
+    }
+
     getMasterWalletBasicInfo(masterId, isAdd = false) {
         console.log("Getting basic wallet info for wallet:", masterId);
 
@@ -136,7 +147,7 @@ export class MasterManager {
     }
 
     public getAllSubWallets(masterId, isAdd = false) {
-        console.log("Getting all subwallets for wallet:", masterId);
+        console.log("Getting all subwallets for wallet:", masterId, isAdd);
 
         this.walletManager.getAllSubWallets(masterId, (data) => {
             this.masterWallet[masterId].chainList = [];
@@ -152,17 +163,15 @@ export class MasterManager {
                 this.saveInfos();
                 this.setCurMasterId(masterId);
                 this.native.setRootRouter("/tabs");
-            }
-            else {
-                if (this.curMasterId == "-1") {
-                    this.localStorage.getCurMasterId((data) => {
-                        var curMasterId = this.masterList[0];
-                        if (data && data["masterId"] && this.masterList.indexOf(data["masterId"]) > -1) {
-                            curMasterId = data["masterId"]
-                        }
-                        this.setCurMasterId(curMasterId);
-                        this.native.setRootRouter("/tabs");
-                    });
+            } else {
+                let currentMasterId = this.masterIdFromStorage;
+                if (this.masterIdFromStorage === '-1') {
+                    this.curMasterId = this.masterList[0];
+                }
+
+                if (masterId === currentMasterId) {
+                    this.setCurMasterId(masterId);
+                    this.native.setRootRouter("/tabs");
                 }
             }
         });
