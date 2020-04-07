@@ -24,7 +24,8 @@
                     </ion-list-header>
 
                     <div class="ion-text-center">
-                        <ion-label id="request-value">{{ item.value }}</ion-label>
+                        <ion-label id="request-value" *ngIf="item.name==='elaamount'">{{ item.value/Config.SELA }}</ion-label>
+                        <ion-label id="request-value" *ngIf="item.name!=='elaamount'">{{ item.value }}</ion-label>
                     </div>
                 </div>
             </ion-list>
