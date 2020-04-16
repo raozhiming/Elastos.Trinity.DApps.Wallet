@@ -151,7 +151,7 @@ export class CrmemberregisterPage implements OnInit {
         const crPublicKey = crPublickeys.PublicKeys[0];
 
         const payload = await this.walletManager.generateCRInfoPayload(this.masterWalletId, this.chainId,
-                crPublicKey, this.transfer.did, this.transfer.nickName, this.transfer.url, this.transfer.location);
+                crPublicKey, this.transfer.did, this.transfer.nickname, this.transfer.url, this.transfer.location);
         const digest = payload.Digest;
 
         const payPassword = await Config.masterManager.getPassword(this.transfer);

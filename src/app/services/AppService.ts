@@ -185,7 +185,7 @@ export class AppService {
             case 'crmemberregister':
                 console.log('CR member register Transaction intent content:', intent.params);
                 Config.coinObj.transfer.did = intent.params.did;
-                Config.coinObj.transfer.nickName = intent.params.nickName;
+                Config.coinObj.transfer.nickname = intent.params.nickname;
                 Config.coinObj.transfer.url = intent.params.url;
                 Config.coinObj.transfer.location = intent.params.location;
                 break;

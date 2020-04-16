@@ -594,8 +594,8 @@ export class WalletManager {
             (err) => { this.errorFun(err); });
     }
 
-    generateProducerPayload(masterWalletId: string, chainId: string, publicKey: string, nodePublicKey: string, nickName: string, url: string, IPAddress: string, location: number, payPasswd: string, success) {
-        this.walletManager.generateProducerPayload([masterWalletId, chainId, publicKey, nodePublicKey, nickName, url, IPAddress, location, payPasswd],
+    generateProducerPayload(masterWalletId: string, chainId: string, publicKey: string, nodePublicKey: string, nickname: string, url: string, IPAddress: string, location: number, payPasswd: string, success) {
+        this.walletManager.generateProducerPayload([masterWalletId, chainId, publicKey, nodePublicKey, nickname, url, IPAddress, location, payPasswd],
             (ret) => { this.successFun(ret, success); },
             (err) => { this.errorFun(err); });
     }
@@ -626,9 +626,9 @@ export class WalletManager {
 
     // CR
     generateCRInfoPayload(masterWalletId: string, chainId: string, publicKey: string,
-                          did: string, nickName: string, url: string, location: number): Promise<any> {
+                          did: string, nickname: string, url: string, location: number): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            this.walletManager.generateCRInfoPayload([masterWalletId, chainId, publicKey, did, nickName, url, location],
+            this.walletManager.generateCRInfoPayload([masterWalletId, chainId, publicKey, did, nickname, url, location],
             (ret) => { resolve(ret); },
             (err) => { this.errorFun(err); reject(err); });
         });
