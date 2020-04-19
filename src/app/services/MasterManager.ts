@@ -165,7 +165,12 @@ export class MasterManager {
                 this.native.setRootRouter("/tabs");
             } else {
                 let currentMasterId = this.masterIdFromStorage;
-                if (this.masterIdFromStorage === '-1') {
+                // Choose the first wallet if switch Network(MainNet,TestNet).
+                if (this.masterList.indexOf(currentMasterId) === -1) {
+                    currentMasterId = this.masterList[0];
+                }
+
+                if (currentMasterId === '-1') {
                     this.curMasterId = this.masterList[0];
                 }
 
