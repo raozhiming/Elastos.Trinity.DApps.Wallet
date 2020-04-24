@@ -1,7 +1,7 @@
 {
     "id": "org.elastos.trinity.dapp.wallet",
-    "version": "1.0.9",
-    "version_code": 10,
+    "version": "1.1.1",
+    "version_code": 11,
     "name": "Wallet",
     "short_name": "Wallet",
     "description": "elastOS SPV ELA wallet",
@@ -22,9 +22,9 @@
         }
     ],
     "author": {
-        "name": "Elastos Foundation",
-        "email": "contact@elastos.org",
-        "website": "https://www.elastos.org"
+        "name": "Trinity Tech Co., Ltd.",
+        "email": "contact@trinity-tech.io",
+        "website": "https://www.trinity-tech.io"
     },
     "default_locale": "en",
     "plugins": [
