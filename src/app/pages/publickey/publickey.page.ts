@@ -27,7 +27,7 @@ export class PublickeyPage implements OnInit {
     getPublicKey() {
         // this.masterWalletId = Config.getCurMasterWalletId();
         this.masterWalletId = Config.modifyId;
-        this.walletManager.getMasterWalletPublicKey(this.masterWalletId,
+        this.walletManager.getOwnerPublicKey(this.masterWalletId, 'ELA',
             (ret) => this.qrcode = ret);
     }
 
