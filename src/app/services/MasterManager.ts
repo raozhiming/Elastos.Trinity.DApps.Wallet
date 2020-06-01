@@ -22,6 +22,7 @@
 
 import { NgZone } from '@angular/core';
 import { Events, ModalController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
 import { AppService } from './AppService';
 import { Native } from './Native';
@@ -30,6 +31,8 @@ import { LocalStorage } from './Localstorage';
 import { PopupProvider } from './popup';
 import { WalletManager } from './WalletManager';
 import { Util } from './Util';
+
+declare let notificationManager: NotificationManagerPlugin.NotificationManager;
 
 export class MasterManager {
 
@@ -47,10 +50,13 @@ export class MasterManager {
 
     public hasPromptTransfer2IDChain = true;
 
+    public hasSendSyncCompletedNotification = {ELA: false, IDChain: false};
+
     constructor(public events: Events,
                 public native: Native,
                 public zone: NgZone,
                 public modalCtrl: ModalController,
+                public translate: TranslateService,
                 public appService: AppService,
                 public localStorage: LocalStorage,
                 public popupProvider: PopupProvider,
@@ -390,6 +396,10 @@ export class MasterManager {
             this.checkIDChainBalance();
         }
 
+        if (progress === 100) {
+          this.sendSyncCompletedNotification(coin);
+        }
+
         const curTimerstamp = (new Date()).getTime();
         // console.log('curTimerstamp ', curTimerstamp);
         if (curTimerstamp - this.masterWallet[masterId].subWallet[coin].timestamp > 5000) { // 5s
@@ -416,12 +426,12 @@ export class MasterManager {
         //     return;
         // }
 
-        if (parseFloat(this.masterWallet[this.curMasterId].subWallet[Config.ELA].balance) <= 1000000) {
+        if (parseInt(this.masterWallet[this.curMasterId].subWallet[Config.ELA].balance, 10) <= 1000000) {
             console.log('ELA balance ', this.masterWallet[this.curMasterId].subWallet[Config.ELA].balance);
             return;
         }
 
-        if (parseFloat(this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN].balance) > 100000) {
+        if (parseInt(this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN].balance, 10) > 100000) {
             console.log('IDChain balance ', this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN].balance);
             return;
         }
@@ -532,5 +542,20 @@ export class MasterManager {
                 this.native.setRootRouter('/tabs');
             }
         });
+    }
+
+    sendSyncCompletedNotification(chainId) {
+
+      if (this.hasSendSyncCompletedNotification[chainId] === false) {
+        console.log('sendSyncCompletedNotification:', chainId);
+
+        const request: NotificationManagerPlugin.NotificationRequest = {
+          key: chainId + '-syncCompleted',
+          title: chainId + ': ' + this.translate.instant('sync-completed'),
+        };
+        notificationManager.sendNotification(request);
+
+        this.hasSendSyncCompletedNotification[chainId] = true;
+      }
     }
 }

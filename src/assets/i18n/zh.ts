@@ -473,6 +473,8 @@ export const zh = {
     'no-open-side-chain': '没有打开侧链',
     'no-tx-record': '没有交易记录',
     'no-add-contact': '暂无联系人',
+    'sync-completed': '已完成数据同步',
+
     'suggest-amount': '金额应小于',
     'text-wallet-name-validator1': '钱包名长度超过30字',
     'text-wallet-name-validator2': '钱包名已存在',

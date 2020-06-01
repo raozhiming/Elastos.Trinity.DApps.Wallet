@@ -4,3 +4,4 @@ www
 
 .vscode/
 package-lock.json
+typings/

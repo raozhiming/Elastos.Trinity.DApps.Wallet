@@ -23,6 +23,7 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { Events, Platform, ModalController, IonRouterOutlet } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Config } from './services/Config';
 import { LocalStorage } from './services/Localstorage';
@@ -47,6 +48,7 @@ export class AppComponent {
         public events: Events,
         private native: Native,
         public zone: NgZone,
+        public translate: TranslateService,
         public appService: AppService,
         public popupProvider: PopupProvider,
         public modalCtrl: ModalController
@@ -66,7 +68,7 @@ export class AppComponent {
             this.appService.init();
             this.walletManager.init();
             Config.masterManager = new MasterManager(
-                    this.events, this.native, this.zone, this.modalCtrl, this.appService,
+                    this.events, this.native, this.zone, this.modalCtrl, this.translate, this.appService,
                     this.localStorage, this.popupProvider, this.walletManager);
         });
     }
