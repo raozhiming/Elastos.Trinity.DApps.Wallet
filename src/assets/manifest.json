@@ -1,7 +1,7 @@
 {
     "id": "org.elastos.trinity.dapp.wallet",
-    "version": "1.1.2",
-    "version_code": 12,
+    "version": "1.2.0",
+    "version_code": 13,
     "name": "Wallet",
     "short_name": "Wallet",
     "description": "elastOS SPV ELA wallet",
@@ -31,6 +31,7 @@
         "Clipboard",
         "FingerprintPlugin",
         "InAppBrowser",
+        "PasswordManagerPlugin",
         "Wallet"
     ],
     "urls": [],
