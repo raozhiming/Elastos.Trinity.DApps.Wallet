@@ -172,7 +172,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
         if (Util.isNull(this.mnemonicObj.payPassword)) {
             //this.native.hideLoading();
-            this.native.toast_trans('text-pay-password');
+            this.native.toast_trans('text-pay-password-input');
             return false;
         }
         if (!Util.password(this.mnemonicObj.payPassword)) {

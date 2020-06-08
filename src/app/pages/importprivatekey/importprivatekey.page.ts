@@ -53,7 +53,7 @@ export class ImportprivatekeyPage implements OnInit {
       return false;
     }
     if(Util.isNull(this.passWord)){
-      this.native.toast_trans('text-pay-password');
+      this.native.toast_trans('text-pay-password-input');
       return false;
     }
 
