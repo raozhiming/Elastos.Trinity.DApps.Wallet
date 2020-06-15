@@ -64,7 +64,6 @@ export class AppComponent {
 
             this.setupBackKeyNavigation();
 
-            this.native.setRootRouter('/splashscreen');
             this.appService.init();
             this.walletManager.init();
             Config.masterManager = new MasterManager(

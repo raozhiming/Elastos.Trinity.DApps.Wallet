@@ -61,9 +61,7 @@ export class MasterManager {
                 public localStorage: LocalStorage,
                 public popupProvider: PopupProvider,
                 public walletManager: WalletManager) {
-        setTimeout(() => {
-            this.init();
-        }, 2000);
+      this.init();
     }
 
     init() {
