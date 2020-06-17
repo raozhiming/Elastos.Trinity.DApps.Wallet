@@ -20,7 +20,7 @@
                 </div>
                 <button (click)="goSetting()">{{'text-wallet-manager' | translate}}</button>
             </div>
-            <div class="valuation" [hidden]="!showOn">{{Config.curMaster.totalBalance/SELA}}</div>
+            <div *ngIf="Config.curMaster.totalBalance >= 0" class="valuation" [hidden]="!showOn">{{Config.curMaster.totalBalance/SELA}}</div>
             <div class="valuation" [hidden]="showOn">****</div>
             <!-- <div id="valuation-label">预估资产(元)</div> -->
         </div>

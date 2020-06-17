@@ -53,7 +53,8 @@ export class Config {
 
     public static curMaster: any = {
         name: "myWallet", subWallet: { "ELA": { balance: 0 } }, chainList: [],
-        account: { 'Type': 'Standard' }
+        account: { 'Type': 'Standard' },
+        totalBalance: 0
     };
     public static masterManager: any = {};
 
