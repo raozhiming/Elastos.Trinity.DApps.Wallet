@@ -46,7 +46,6 @@ export class TabHomePage implements OnInit {
 
     ionViewWillEnter() {
         if (Config.getCurMasterWalletId() !== '-1') {
-            this.appService.setIntentListener();
             this.promptTransfer2IDChain();
         }
     }

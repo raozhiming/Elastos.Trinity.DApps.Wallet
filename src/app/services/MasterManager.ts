@@ -166,6 +166,7 @@ export class MasterManager {
             if (isAdd) {
                 this.saveInfos();
                 this.setCurMasterId(masterId);
+                this.appService.setIntentListener();
                 this.native.setRootRouter("/tabs");
             } else {
                 let currentMasterId = this.masterIdFromStorage;
@@ -180,6 +181,7 @@ export class MasterManager {
 
                 if (masterId === currentMasterId) {
                     this.setCurMasterId(masterId);
+                    this.appService.setIntentListener();
                     this.native.setRootRouter("/tabs");
                 }
             }
