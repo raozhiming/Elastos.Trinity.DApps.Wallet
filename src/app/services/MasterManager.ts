@@ -369,6 +369,7 @@ export class MasterManager {
         }
 
         if (code !== 0) {
+            console.log('OnTxPublished fail:', JSON.stringify(data));
             this.popupProvider.ionicAlert_PublishedTx_fail('transaction-fail', tx + code, hash, reason);
             if (this.transactionMap[hash].lock !== true) {
                 delete this.transactionMap[hash];
