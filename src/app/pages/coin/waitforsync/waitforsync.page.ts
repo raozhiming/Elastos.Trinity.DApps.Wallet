@@ -5,6 +5,8 @@ import { Config } from '../../../services/Config';
 import { Native } from '../../../services/Native';
 import { PopupProvider } from '../../../services/popup';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 @Component({
   selector: 'app-waitforsync',
   templateUrl: './waitforsync.page.html',
@@ -40,6 +42,10 @@ export class WaitforsyncPage implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    ionViewDidEnter() {
+      appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     init() {

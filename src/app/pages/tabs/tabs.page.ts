@@ -22,6 +22,8 @@
 
 import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 @Component({
     selector: 'app-tabs',
     templateUrl: './tabs.page.html',
@@ -32,6 +34,10 @@ export class TabsPage implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    ionViewDidEnter() {
+      appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     changeTabs() {
