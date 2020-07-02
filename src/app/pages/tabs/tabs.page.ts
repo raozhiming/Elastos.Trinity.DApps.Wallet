@@ -36,10 +36,6 @@ export class TabsPage implements OnInit {
     ngOnInit() {
     }
 
-    ionViewDidEnter() {
-      appManager.setVisible("show", ()=>{}, (err)=>{});
-    }
-
     changeTabs() {
         this.zone.run(() => {
             this.changeDetectorRef.markForCheck();
