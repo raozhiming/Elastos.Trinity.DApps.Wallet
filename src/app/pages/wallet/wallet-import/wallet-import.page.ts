@@ -7,6 +7,11 @@ import { Util } from "../../../services/Util";
 import { Config } from '../../../services/Config';
 import { PopupProvider } from '../../../services/popup';
 
+export enum MnemonicLanguage {
+  CHINESE_SIMPLIFIED,
+  OTHERS
+}
+
 @Component({
     selector: 'app-wallet-import',
     templateUrl: './wallet-import.page.html',
@@ -163,11 +168,26 @@ export class WalletImportPage implements OnInit, OnDestroy {
             return false;
         }
 
-        let mnemonic = this.normalizeMnemonic(this.mnemonicObj.mnemonic).replace(/^\s+|\s+$/g, "");
-        if (mnemonic.split(/[\u3000\s]+/).length != 12) {
-            //this.native.hideLoading();
-            this.native.toast_trans('text-mnemonic-validator');
-            return false;
+        if (this.getMnemonicLang() === MnemonicLanguage.CHINESE_SIMPLIFIED) {
+          let mnemonic = this.mnemonicObj.mnemonic.trim().replace(/ /g, '');
+          if (mnemonic.length !== 12) {
+              this.native.toast_trans('text-mnemonic-validator');
+              return false;
+          }
+
+          // add space
+          this.mnemonicObj.mnemonic = '';
+          for (let i = 0; i < mnemonic.length; i++) {
+            this.mnemonicObj.mnemonic += mnemonic[i] + ' '
+          }
+        }
+        else {
+          let mnemonic = this.normalizeMnemonic(this.mnemonicObj.mnemonic).replace(/^\s+|\s+$/g, "");
+          if (mnemonic.split(/[\u3000\s]+/).length != 12) {
+              //this.native.hideLoading();
+              this.native.toast_trans('text-mnemonic-validator');
+              return false;
+          }
         }
 
         if (Util.isNull(this.mnemonicObj.payPassword)) {
@@ -244,6 +264,12 @@ export class WalletImportPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+    }
+
+    getMnemonicLang(): MnemonicLanguage {
+      if (Util.chinese(this.mnemonicObj.mnemonic[0])) return MnemonicLanguage.CHINESE_SIMPLIFIED;
+      // TODO
+      return MnemonicLanguage.OTHERS
     }
 
 }
