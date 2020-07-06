@@ -3,7 +3,7 @@ import { ModalController, Events } from '@ionic/angular';
 import { Config } from '../../../../config/Config';
 import { LocalStorage } from '../../../../services/storage.service';
 import { Native } from '../../../../services/native.service';
-import { PopupProvider} from '../../../../services/popup.Service';
+import { PopupProvider} from '../../../../services/popup.service';
 import { WalletManager } from '../../../../services/wallet.service';
 
 @Component({

@@ -5,7 +5,7 @@ import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { LocalStorage } from '../../../services/storage.service';
-import { PopupProvider } from '../../../services/popup.Service';
+import { PopupProvider } from '../../../services/popup.service';
 
 @Component({
     selector: 'app-contact-create',

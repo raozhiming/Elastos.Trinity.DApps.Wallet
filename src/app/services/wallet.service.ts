@@ -24,7 +24,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Events, ModalController } from '@ionic/angular';
 import { Config } from '../config/Config';
 import { Native } from './native.service';
-import { PopupProvider } from './popup.Service';
+import { PopupProvider } from './popup.service';
 import { Util } from '../model/Util';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from './app.service';
@@ -224,7 +224,7 @@ export class WalletManager {
     public walletNameExists(name: string): boolean {
         // TODO: Make sure this new post-rework implementation works as expected.
         let existingWallet = Object.values(this.masterWallets).find((wallet)=>{
-            wallet.name === name;
+            return wallet.name === name;
         });
         return existingWallet != null;
        

@@ -24,7 +24,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../../../services/app.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
-import { PopupProvider } from '../../../../services/popup.Service';
+import { PopupProvider } from '../../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;

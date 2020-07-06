@@ -45,7 +45,6 @@ import { WalletImportPage } from './pages/wallet/wallet-import/wallet-import.pag
 import { WalletCreateNamePage } from './pages/wallet/wallet-create-name/wallet-create-name.page';
 import { MnemonicWritePage } from './pages/wallet/mnemonic/mnemonic-write/mnemonic-write.page';
 import { WalletlistPage } from './pages/wallet/wallet-list/wallet-list.page';
-import { WalletManagerPage } from 'src-deprecated/pages/wallet-manager/wallet-manager.page';
 import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wallet-password-reset.page';
 import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
 import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
@@ -61,7 +60,7 @@ const routes: Routes = [
     // Wallet
     { path: '', redirectTo: "wallet-home" },
     {
-        path: 'wallet-home', loadChildren: './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.module#WalletTabsRootPageModule',
+        path: 'wallet-home', loadChildren: './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.router.module#WalletTabsRootRoutingModule',
     },
     { path: 'wallet-create', component: WalletCreatePage },
     { path: 'wallet-import', component: WalletImportPage },
@@ -70,7 +69,6 @@ const routes: Routes = [
     { path: 'scancode', component: ScanCodePage },
     { path: 'mnemonic-write', component: MnemonicWritePage },
     { path: 'wallet-list', component: WalletlistPage },
-    { path: 'wallet-manager', component: WalletManagerPage },
     { path: 'wallet-password-reset', component: WalletPasswordResetPage },
     { path: 'wallet-edit-name', component: WalletEditNamePage },
     { path: 'mnemonic-export', component: MnemonicExportPage },

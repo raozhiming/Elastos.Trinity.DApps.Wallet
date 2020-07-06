@@ -175,28 +175,26 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.walletManager.openPayModal(this.transfer);
     }
 
-    createDepositTransaction() {
+    async createDepositTransaction() {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.spvBridge.createDepositTransaction(this.masterWalletId, 'ELA', '',
+        
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createDepositTransaction(this.masterWalletId, 'ELA', '',
             this.walletManager.coinObj.transfer.sideChainId,
             toAmount.toString(), // user input amount
             this.transfer.toAddress, // user input address
-            this.transfer.memo,
-            (data) => {
-                this.transfer.rawTransaction = data;
-                this.walletManager.openPayModal(this.transfer);
-            });
+            this.transfer.memo);
+        
+        this.walletManager.openPayModal(this.transfer);
     }
 
-    createWithdrawTransaction() {
+    async createWithdrawTransaction() {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.spvBridge.createWithdrawTransaction(this.masterWalletId, this.chainId, '',
+
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createWithdrawTransaction(this.masterWalletId, this.chainId, '',
             toAmount.toString(),
             this.transfer.toAddress,
-            this.transfer.memo,
-            (data) => {
-                this.transfer.rawTransaction = data;
-                this.walletManager.openPayModal(this.transfer);
-            });
+            this.transfer.memo);
+
+        this.walletManager.openPayModal(this.transfer);
     }
 }

@@ -45,8 +45,8 @@ import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { LocalStorage } from './services/storage.service';
 import { Native } from './services/native.service';
-import { Logger } from './model/logger';
-import { PopupProvider } from './services/popup.Service';
+import { Logger } from './model/Logger';
+import { PopupProvider } from './services/popup.service';
 import { WalletManager } from './services/wallet.service';
 import { LoadingService } from './services/loading.service';
 
@@ -73,7 +73,6 @@ import { WalletImportPage } from './pages/wallet/wallet-import/wallet-import.pag
 import { WalletCreateNamePage } from './pages/wallet/wallet-create-name/wallet-create-name.page';
 import { MnemonicWritePage } from './pages/wallet/mnemonic/mnemonic-write/mnemonic-write.page';
 import { WalletlistPage } from './pages/wallet/wallet-list/wallet-list.page';
-import { WalletManagerPage } from 'src-deprecated/pages/wallet-manager/wallet-manager.page';
 import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wallet-password-reset.page';
 import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
 import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
@@ -153,7 +152,6 @@ export function TranslateLoaderFactory() {
         CRMemberRegisterPage,
         WalletCreatePage,
         ScanCodePage,
-        WalletManagerPage,
         WaitForSyncPage,
         MnemonicWritePage,
         WalletlistPage,

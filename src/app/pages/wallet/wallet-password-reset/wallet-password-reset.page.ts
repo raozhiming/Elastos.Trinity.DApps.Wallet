@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
-import { PopupProvider} from '../../../services/popup.Service';
+import { PopupProvider} from '../../../services/popup.service';
 import { Util } from '../../../model/Util';
 import { WalletManager } from '../../../services/wallet.service';
 

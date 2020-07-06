@@ -54,9 +54,9 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     async getTransactionInfo() {
-        let allTransaction = await this.walletManager.spvBridge.getAllTransactions(this.masterWalletId, this.chainId, this.start, this.txId);
+        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWalletId, this.chainId, this.start, this.txId);
             
-        let transactions = allTransaction['Transactions'];
+        let transactions = allTransactions['Transactions'];
         let transaction = transactions[0];
         this.inputs = this.objtoarr(transaction["Inputs"]);
         this.outputs = this.objtoarr(transaction["Outputs"]);

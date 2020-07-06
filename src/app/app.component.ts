@@ -30,7 +30,7 @@ import { LocalStorage } from './services/storage.service';
 import { Native } from './services/native.service';
 import { WalletManager } from './services/wallet.service';
 import { AppService } from './services/app.service';
-import { PopupProvider } from './services/popup.Service';
+import { PopupProvider } from './services/popup.service';
 
 @Component({
     selector: 'app-root',

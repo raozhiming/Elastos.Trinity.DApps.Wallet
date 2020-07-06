@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { LocalStorage } from '../../../services/storage.service';
-import { PopupProvider } from "../../../services/popup.Service";
+import { PopupProvider } from "../../../services/popup.service";
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';

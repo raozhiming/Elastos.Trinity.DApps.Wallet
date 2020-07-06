@@ -24,7 +24,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
-import { PopupProvider } from '../../../services/popup.Service';
+import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -151,20 +151,19 @@ export class DPoSVotePage implements OnInit {
         return 0.001; // ELA
     }
 
-    createVoteProducerTransaction() {
+    async createVoteProducerTransaction() {
         let stakeAmount = this.elaToSELAString(this.getBalanceInELA() - this.votingFees());
         console.log("Creating vote transaction with amount", stakeAmount);
 
         this.transfer.toAddress = "";
-        this.walletManager.spvBridge.createVoteProducerTransaction(this.masterWalletId, this.chainId,
+
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createVoteProducerTransaction(this.masterWalletId, this.chainId,
             this.transfer.toAddress,
             stakeAmount,
             JSON.stringify(this.transfer.publicKeys),
-            this.transfer.memo,
-            (data) => {
-                this.transfer.rawTransaction = data;
-                this.walletManager.openPayModal(this.transfer);
-            });
+            this.transfer.memo);
+        
+        this.walletManager.openPayModal(this.transfer);
     }
 }
 

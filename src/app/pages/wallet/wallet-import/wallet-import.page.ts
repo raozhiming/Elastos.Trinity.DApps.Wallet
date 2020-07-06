@@ -5,7 +5,7 @@ import { Native } from '../../../services/native.service';
 import { LocalStorage } from '../../../services/storage.service';
 import { Util } from "../../../model/Util";
 import { Config } from '../../../config/Config';
-import { PopupProvider } from '../../../services/popup.Service';
+import { PopupProvider } from '../../../services/popup.service';
 
 export enum MnemonicLanguage {
   CHINESE_SIMPLIFIED,

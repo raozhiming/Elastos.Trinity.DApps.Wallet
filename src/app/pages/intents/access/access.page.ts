@@ -3,7 +3,7 @@ import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
-import { PopupProvider } from '../../../services/popup.Service';
+import { PopupProvider } from '../../../services/popup.service';
 
 type ClaimRequest = {
     name: string,

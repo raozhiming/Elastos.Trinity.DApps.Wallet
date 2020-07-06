@@ -26,7 +26,7 @@ import { ToastController, LoadingController, NavController } from '@ionic/angula
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TranslateService } from '@ngx-translate/core';
-import { Logger } from '../model/logger';
+import { Logger } from '../model/Logger';
 
 @Injectable()
 export class Native {

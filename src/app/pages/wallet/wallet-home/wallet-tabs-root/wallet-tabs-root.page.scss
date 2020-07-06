@@ -12,9 +12,9 @@ ion-icon {
     }
     // custom icons
     &[class*="tab-home"] {
-        mask-image: url(../../../assets/images/ico-home.svg);
+        mask-image: url(../../../../../assets/images/ico-home.svg);
     }
     &[class*="tab-settings"] {
-        mask-image: url(../../../assets/images/ico-settings.svg);
+        mask-image: url(../../../../../assets/images/ico-settings.svg);
     }
 }

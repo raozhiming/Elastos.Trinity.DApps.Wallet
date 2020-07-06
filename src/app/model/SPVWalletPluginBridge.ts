@@ -1,7 +1,7 @@
 import { Util } from './Util';
 import { Native } from '../services/native.service';
 import { Events } from '@ionic/angular';
-import { PopupProvider } from '../services/popup.Service';
+import { PopupProvider } from '../services/popup.service';
 import { Config } from '../config/Config';
 
 declare let walletManager: WalletPlugin.WalletManager;
@@ -21,7 +21,7 @@ export type PublishedTransaction = {
 }
 
 export type Transaction = {
-    Amount: string;
+    Amount: number;
     ConfirmStatus: string;
     Direction: string;
     Height: number;
@@ -29,6 +29,7 @@ export type Transaction = {
     Timestamp: number;
     TxHash: string;
     Type: number;
+    OutputPayload: string;
 };
 
 export type AllTransactions = {
@@ -314,140 +315,142 @@ export class SPVWalletPluginBridge {
             (err) => { this.handleError(err, null);  });
     }
 
-    removeWalletListener(masterWalletId: string, chainId: string, success) {
+    removeWalletListener(masterWalletId: string, chainId: string) {
         walletManager.removeWalletListener([masterWalletId, chainId],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+            (ret) => { },
+            (err) => { this.handleError(err, null); });
     }
 
     createWithdrawTransaction(masterWalletId: string, chainId: string, fromAddress: string, amount: string
-        , mainchainAccounts: string, memo: string, success) {
-        walletManager.createWithdrawTransaction([masterWalletId, chainId, fromAddress, amount, mainchainAccounts, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+        , mainchainAccounts: string, memo: string): Promise<string> {
+            return new Promise(async (resolve, reject) => {
+            walletManager.createWithdrawTransaction([masterWalletId, chainId, fromAddress, amount, mainchainAccounts, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    getGenesisAddress(masterWalletId: string, chainId: string, success) {
-        walletManager.getGenesisAddress([masterWalletId, chainId],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    getGenesisAddress(masterWalletId: string, chainId: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.getGenesisAddress([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
     // IDChainSubWallet
 
-    createIdTransaction(masterWalletId: string, chainId: string, payloadJson: string, memo: string, success) {
-        walletManager.createIdTransaction([masterWalletId, chainId, payloadJson, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    createIdTransaction(masterWalletId: string, chainId: string, payloadJson: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createIdTransaction([masterWalletId, chainId, payloadJson, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    getAllDID(masterWalletId: string, chainId: string, start: number, count: number, success) {
-        walletManager.getAllDID([masterWalletId, chainId, start, count],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    didSign(masterWalletId: string, did: string, message: string, payPassword: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.didSign([masterWalletId, did, message, payPassword],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    getAllCID(masterWalletId: string, chainId: string, start: number, count: number, success) {
-        walletManager.getAllCID([masterWalletId, chainId, start, count],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
-    }
-
-    didSign(masterWalletId: string, did: string, message: string, payPassword: string, success) {
-        walletManager.didSign([masterWalletId, did, message, payPassword],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
-    }
-
-    didSignDigest(masterWalletId: string, did: string, digest: string, payPassword: string, success) {
-        walletManager.didSignDigest([masterWalletId, did, digest, payPassword],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
-    }
-
-    verifySignature(masterWalletId: string, chainId: string, publicKey: string, message: string, signature: string, success) {
-        walletManager.verifySignature([masterWalletId, chainId, publicKey, message, signature],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
-    }
-
-    getPublicKeyDID(masterWalletId: string, chainId: string, pubkey: string, success) {
-        walletManager.getPublicKeyDID([masterWalletId, chainId, pubkey],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
-    }
-
-    getPublicKeyCID(masterWalletId: string, chainId: string, pubkey: string, success) {
-        walletManager.getPublicKeyCID([masterWalletId, chainId, pubkey],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    didSignDigest(masterWalletId: string, did: string, digest: string, payPassword: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.didSignDigest([masterWalletId, did, digest, payPassword],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
     createDepositTransaction(masterWalletId: string, chainId: string, fromAddress: string, sideChainID: string, amount: string
-        , sideChainAddress: string, memo: string, success) {
-        walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress, sideChainID, amount, sideChainAddress, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+        , sideChainAddress: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress, sideChainID, amount, sideChainAddress, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    createCancelProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, success) {
-        walletManager.createCancelProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    createCancelProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createCancelProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    createVoteProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, stake: string, publicKey: string, memo: string, success) {
-        walletManager.createVoteProducerTransaction([masterWalletId, chainId, fromAddress, stake, publicKey, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    createVoteProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, stake: string, publicKey: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createVoteProducerTransaction([masterWalletId, chainId, fromAddress, stake, publicKey, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    getVotedProducerList(masterWalletId: string, chainId: string, success) {
-        walletManager.getVotedProducerList([masterWalletId, chainId],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    getVotedProducerList(masterWalletId: string, chainId: string): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.getVotedProducerList([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    getRegisteredProducerInfo(masterWalletId: string, chainId: string, success) {
-        walletManager.getRegisteredProducerInfo([masterWalletId, chainId],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    getRegisteredProducerInfo(masterWalletId: string, chainId: string): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.getRegisteredProducerInfo([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    createRegisterProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, amount: number, memo: string, success) {
-        walletManager.createRegisterProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, amount, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    createRegisterProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, amount: number, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createRegisterProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, amount, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    generateProducerPayload(masterWalletId: string, chainId: string, publicKey: string, nodePublicKey: string, nickname: string, url: string, IPAddress: string, location: number, payPasswd: string, success) {
-        walletManager.generateProducerPayload([masterWalletId, chainId, publicKey, nodePublicKey, nickname, url, IPAddress, location, payPasswd],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    generateProducerPayload(masterWalletId: string, chainId: string, publicKey: string, nodePublicKey: string, nickname: string, url: string, IPAddress: string, location: number, payPasswd: string): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.generateProducerPayload([masterWalletId, chainId, publicKey, nodePublicKey, nickname, url, IPAddress, location, payPasswd],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    generateCancelProducerPayload(masterWalletId: string, chainId: string, publicKey: string, payPasswd: string, success) {
-        walletManager.generateCancelProducerPayload([masterWalletId, chainId, publicKey, payPasswd],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    generateCancelProducerPayload(masterWalletId: string, chainId: string, publicKey: string, payPasswd: string): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.generateCancelProducerPayload([masterWalletId, chainId, publicKey, payPasswd],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    createRetrieveDepositTransaction(masterWalletId: string, chainId: string, amount, memo: string, success) {
-        walletManager.createRetrieveDepositTransaction([masterWalletId, chainId, amount, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    createRetrieveDepositTransaction(masterWalletId: string, chainId: string, amount, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createRetrieveDepositTransaction([masterWalletId, chainId, amount, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    createUpdateProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string, success) {
-        walletManager.createUpdateProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    createUpdateProducerTransaction(masterWalletId: string, chainId: string, fromAddress: string, payloadJson: string, memo: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createUpdateProducerTransaction([masterWalletId, chainId, fromAddress, payloadJson, memo],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
-    getOwnerPublicKey(masterWalletId: string, chainId: string, success) {
-        walletManager.getOwnerPublicKey([masterWalletId, chainId],
-            (ret) => { this.successFun(ret, success); },
-            (err) => { this.handleError(err); });
+    getOwnerPublicKey(masterWalletId: string, chainId: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.getOwnerPublicKey([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
     // CR
@@ -649,7 +652,7 @@ export class SPVWalletPluginBridge {
     // TODO: Replace this to improve the error object (exception, message) only, not
     // show any popup or send message. Each method should handle that case by case
     // TODO: replace hardcoded error code with enum: http://elastos.ela.spv.cpp/SDK/Common/ErrorChecker.h
-    handleError(err: any, promiseRejectHandler?: (reason?: any)=>void): any {
+    handleError(err: any, promiseRejectHandler: (reason?: any)=>void): any {
         this.native.hideLoading();
         this.native.error(err);
 

@@ -24,8 +24,9 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
-import { PopupProvider } from '../../../services/popup.Service';
+import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager, CoinName } from '../../../services/wallet.service';
+import { Transfer } from 'src/app/model/Transfer';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -160,13 +161,12 @@ export class CRMemberRegisterPage implements OnInit {
         }
         this.transfer.payPassword = payPassword;
 
-        this.walletManager.spvBridge.didSignDigest(this.masterWalletId,
-                this.transfer.did, digest, payPassword, async (signature) => {
-            payload.Signature = signature;
-            this.transfer.rawTransaction  = await this.walletManager.spvBridge.createRegisterCRTransaction(this.masterWalletId, this.chainId,
-                    '', payload, this.depositAmount, this.transfer.memo);
-            this.walletManager.openPayModal(this.transfer);
-        });
+        payload.Signature = await this.walletManager.spvBridge.didSignDigest(this.masterWalletId,
+                this.transfer.did, digest, payPassword);
+        
+        this.transfer.rawTransaction  = await this.walletManager.spvBridge.createRegisterCRTransaction(this.masterWalletId, this.chainId,
+                '', payload, this.depositAmount, this.transfer.memo);
+        this.walletManager.openPayModal(this.transfer);
     }
 
     async createUpdateCRTransaction() {

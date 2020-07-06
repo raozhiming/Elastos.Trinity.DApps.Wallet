@@ -24,7 +24,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
-import { PopupProvider } from '../../../services/popup.Service';
+import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager, CoinName } from '../../../services/wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -98,6 +98,7 @@ export class DidTransactionPage implements OnInit {
         }
         return this.hasOpenIDChain;
     }
+
     checkValue() {
         if (!this.confirmOpenIDChain()) {
             return;
@@ -111,16 +112,16 @@ export class DidTransactionPage implements OnInit {
         this.createIDTransaction();
     }
 
-    createIDTransaction() {
+    async createIDTransaction() {
         console.log("Calling createIdTransaction(): ", this.transfer.didrequest, this.transfer.memo)
-        this.walletManager.spvBridge.createIdTransaction(this.masterWalletId, this.chainId,
+        
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createIdTransaction(this.masterWalletId, this.chainId,
             this.transfer.didrequest,
-            this.transfer.memo,
-            (data) => {
-                console.log("Created raw DID transaction:", data);
-                this.transfer.rawTransaction = data;
-                this.walletManager.openPayModal(this.transfer);
-            });
+            this.transfer.memo);
+            
+        console.log("Created raw DID transaction:", this.transfer.rawTransaction);
+        
+        this.walletManager.openPayModal(this.transfer);
     }
 }
 
