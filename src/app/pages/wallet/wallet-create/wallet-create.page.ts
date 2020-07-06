@@ -1,7 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { Util } from "../../../services/Util";
-import { Native } from '../../../services/Native';
-import { Config } from '../../../services/Config';
+import { Util } from "../../../model/Util";
+import { Native } from '../../../services/native.service';
+import { Config } from '../../../config/Config';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

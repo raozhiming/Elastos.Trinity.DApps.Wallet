@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Util } from "../../../services/Util";
+import { Util } from "../../../model/Util";
 import { Events } from '@ionic/angular';
-import { WalletManager } from '../../../services/WalletManager';
-import { Native } from '../../../services/Native';
+import { WalletManager } from '../../../services/wallet.service';
+import { Native } from '../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
-import { LocalStorage } from '../../../services/Localstorage';
-import { PopupProvider } from '../../../services/popup';
+import { LocalStorage } from '../../../services/storage.service';
+import { PopupProvider } from '../../../services/popup.Service';
 
 @Component({
     selector: 'app-contact-create',

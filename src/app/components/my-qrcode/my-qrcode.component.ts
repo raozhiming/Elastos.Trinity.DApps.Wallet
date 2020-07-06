@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Native } from '../../services/Native';
+import { Native } from '../../services/native.service';
 
 @Component({
   selector: 'my-qrcode',

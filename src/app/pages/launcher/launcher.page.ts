@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Config } from '../../services/Config';
-import { Native } from '../../services/Native';
+import { Config } from '../../config/Config';
+import { Native } from '../../services/native.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 

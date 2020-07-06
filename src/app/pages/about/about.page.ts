@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WalletManager } from '../../services/WalletManager';
-import { AppService } from '../../services/AppService';
-import { Native } from '../../services/Native';
+import { WalletManager } from '../../services/wallet.service';
+import { AppService } from '../../services/app.service';
+import { Native } from '../../services/native.service';
 
 @Component({
     selector: 'app-about',
@@ -23,9 +23,7 @@ export class AboutPage implements OnInit {
 
     async init() {
         this.version = await this.appService.getVersion();
-        this.walletManager.getVersion((data: string) => {
-            this.spvVersion = data;
-        });
+        this.spvVersion = await this.walletManager.getVersion();
     }
 
     goWebsite() {

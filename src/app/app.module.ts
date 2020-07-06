@@ -43,16 +43,46 @@ import { IonicStorageModule } from '@ionic/storage';
 /**provider*/
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 
-import { LocalStorage } from './services/Localstorage';
-import { Native } from './services/Native';
-import { Logger } from './services/Logger';
-import { PopupProvider } from './services/popup';
-import { WalletManager } from './services/WalletManager';
-import { LoadingService } from './services/Loading';
+import { LocalStorage } from './services/storage.service';
+import { Native } from './services/native.service';
+import { Logger } from './model/logger';
+import { PopupProvider } from './services/popup.Service';
+import { WalletManager } from './services/wallet.service';
+import { LoadingService } from './services/loading.service';
 
-import { PaymentboxComponent } from './components/paymentbox/paymentbox.component';
+import { LauncherPage } from './pages/launcher/launcher.page';
+import { WalletSettingsPage } from './pages/wallet/wallet-settings/wallet-settings.page';
+import { ContactCreatePage } from './pages/contacts/contact-create/contact-create.page';
+import { ContactListPage } from './pages/contacts/contact-list/contact-list.page';
+import { ContactsPage } from './pages/contacts/contact/contacts.page';
+import { AboutPage } from './pages/about/about.page';
+import { AccessPage } from './pages/intents/access/access.page';
+import { DidTransactionPage } from './pages/intents/didtransaction/didtransaction.page';
+import { WaitForSyncPage } from './pages/intents/waitforsync/waitforsync.page';
+import { CRmembervotePage } from './pages/intents/crmembervote/crmembervote.page';
+import { DPoSVotePage } from './pages/intents/dposvote/dposvote.page';
+import { CRMemberRegisterPage } from './pages/intents/crmemberregister/crmemberregister.page';
+import { CoinTransferPage } from './pages/wallet/coin/coin-transfer/coin-transfer.page';
+import { CoinTxInfoPage } from './pages/wallet/coin/coin-tx-info/coin-tx-info.page';
+import { CoinReceivePage } from './pages/wallet/coin/coin-receive/coin-receive.page';
+import { CoinSelectPage } from './pages/wallet/coin/coin-select/coin-select.page';
+import { CoinListPage } from './pages/wallet/coin/coin-list/coin-list.page';
+import { CoinHomePage } from './pages/wallet/coin/coin-home/coin-home.page';
+import { WalletCreatePage } from './pages/wallet/wallet-create/wallet-create.page';
+import { WalletImportPage } from './pages/wallet/wallet-import/wallet-import.page';
+import { WalletCreateNamePage } from './pages/wallet/wallet-create-name/wallet-create-name.page';
+import { MnemonicWritePage } from './pages/wallet/mnemonic/mnemonic-write/mnemonic-write.page';
+import { WalletlistPage } from './pages/wallet/wallet-list/wallet-list.page';
+import { WalletManagerPage } from 'src-deprecated/pages/wallet-manager/wallet-manager.page';
+import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wallet-password-reset.page';
+import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
+import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
+import { MnemonicCheckPage } from './pages/wallet/mnemonic/mnemonic-check/mnemonic-check.page';
+import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
+import { ScanCodePage } from './pages/scancode/scancode.page';
 
 import * as Sentry from "@sentry/browser";
+import { ComponentsModule } from './components/components.module';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -96,16 +126,50 @@ export function TranslateLoaderFactory() {
 }
 
 @NgModule({
-    declarations: [AppComponent,
-        PaymentboxComponent
+    declarations: [
+        AppComponent,
+
+        LauncherPage,
+        WalletSettingsPage,
+        ContactsPage,
+        ContactCreatePage,
+        ContactListPage,
+        CRmembervotePage,
+        DPoSVotePage,
+        CoinTransferPage,
+        DidTransactionPage,
+        WalletPasswordResetPage,
+        WalletEditNamePage,
+        WalletImportPage,
+        CoinHomePage,
+        CoinListPage,
+        CoinSelectPage,
+        CoinTxInfoPage,
+        CoinReceivePage,
+        CoinTransferPage,
+        AboutPage,
+        AccessPage,
+        WalletCreateNamePage,
+        CRMemberRegisterPage,
+        WalletCreatePage,
+        ScanCodePage,
+        WalletManagerPage,
+        WaitForSyncPage,
+        MnemonicWritePage,
+        WalletlistPage,
+        MnemonicExportPage,
+        MnemonicCheckPage,
+        MnemonicWritePage,
+        MnemonicCreatePage
     ],
-    entryComponents: [PaymentboxComponent],
+    entryComponents: [],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),
         AppRoutingModule,
         IonicStorageModule,
         FormsModule,
+        ComponentsModule,
         IonicStorageModule.forRoot({
             name: '__walletdb',
             driverOrder: ['localstorage', 'indexeddb', 'sqlite', 'websql']

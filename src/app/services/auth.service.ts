@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { LocalStorage } from './Localstorage';
+import { LocalStorage } from './storage.service';
 
 declare let fingerprintManager: FingerprintPlugin.FingerprintManager;
 

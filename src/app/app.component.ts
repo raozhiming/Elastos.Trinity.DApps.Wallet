@@ -25,13 +25,13 @@ import { Events, Platform, ModalController, IonRouterOutlet } from '@ionic/angul
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { TranslateService } from '@ngx-translate/core';
 
-import { Config } from './services/Config';
-import { LocalStorage } from './services/Localstorage';
-import { Native } from './services/Native';
-import { WalletManager } from './services/WalletManager';
-import { AppService } from './services/AppService';
-import { MasterManager } from './services/MasterManager';
-import { PopupProvider } from './services/popup';
+import { Config } from './config/Config';
+import { LocalStorage } from './services/storage.service';
+import { Native } from './services/native.service';
+import { WalletManager } from './services/wallet.service';
+import { AppService } from './services/app.service';
+import { MasterManager } from './model/MasterManager';
+import { PopupProvider } from './services/popup.Service';
 
 @Component({
     selector: 'app-root',

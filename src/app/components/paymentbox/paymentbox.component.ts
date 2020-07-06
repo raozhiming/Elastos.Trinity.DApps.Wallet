@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavParams, IonInput } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
-import { Config } from '../../services/Config';
-import { Native } from '../../services/Native';
-import { PopupProvider} from '../../services/popup';
+import { Config } from '../../config/Config';
+import { Native } from '../../services/native.service';
+import { PopupProvider} from '../../services/popup.Service';
 
 @Component({
     selector: 'app-paymentbox',

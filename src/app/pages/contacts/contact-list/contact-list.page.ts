@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
-import { WalletManager } from '../../../services/WalletManager';
-import { Native } from '../../../services/Native';
+import { WalletManager } from '../../../services/wallet.service';
+import { Native } from '../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
-import { LocalStorage } from '../../../services/Localstorage';
-import { Util } from "../../../services/Util";
+import { LocalStorage } from '../../../services/storage.service';
+import { Util } from "../../../model/Util";
 
 @Component({
     selector: 'app-contact-list',

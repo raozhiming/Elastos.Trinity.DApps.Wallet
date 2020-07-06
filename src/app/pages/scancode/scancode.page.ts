@@ -1,8 +1,8 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Platform } from '@ionic/angular';
-import { Native } from '../../services/Native';
-import { WalletManager } from '../../services/WalletManager'
-import { Config } from '../../services/Config';
+import { Native } from '../../services/native.service';
+import { WalletManager } from '../../services/wallet.service'
+import { Config } from '../../config/Config';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
     templateUrl: './scancode.page.html',
     styleUrls: ['./scancode.page.scss'],
 })
-export class ScancodePage implements OnInit {
+export class ScanCodePage implements OnInit {
     public qrcode: string = null;
     public txHash: string = "";
     public toAddress: string = "";

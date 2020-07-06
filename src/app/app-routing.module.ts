@@ -22,63 +22,81 @@
 
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { LauncherPage } from './pages/launcher/launcher.page';
+import { WalletSettingsPage } from './pages/wallet/wallet-settings/wallet-settings.page';
+import { ContactCreatePage } from './pages/contacts/contact-create/contact-create.page';
+import { ContactListPage } from './pages/contacts/contact-list/contact-list.page';
+import { ContactsPage } from './pages/contacts/contact/contacts.page';
+import { AboutPage } from './pages/about/about.page';
+import { AccessPage } from './pages/intents/access/access.page';
+import { DidTransactionPage } from './pages/intents/didtransaction/didtransaction.page';
+import { WaitForSyncPage } from './pages/intents/waitforsync/waitforsync.page';
+import { CRmembervotePage } from './pages/intents/crmembervote/crmembervote.page';
+import { DPoSVotePage } from './pages/intents/dposvote/dposvote.page';
+import { CRMemberRegisterPage } from './pages/intents/crmemberregister/crmemberregister.page';
+import { CoinTransferPage } from './pages/wallet/coin/coin-transfer/coin-transfer.page';
+import { CoinTxInfoPage } from './pages/wallet/coin/coin-tx-info/coin-tx-info.page';
+import { CoinReceivePage } from './pages/wallet/coin/coin-receive/coin-receive.page';
+import { CoinSelectPage } from './pages/wallet/coin/coin-select/coin-select.page';
+import { CoinListPage } from './pages/wallet/coin/coin-list/coin-list.page';
+import { CoinHomePage } from './pages/wallet/coin/coin-home/coin-home.page';
+import { WalletCreatePage } from './pages/wallet/wallet-create/wallet-create.page';
+import { WalletImportPage } from './pages/wallet/wallet-import/wallet-import.page';
+import { WalletCreateNamePage } from './pages/wallet/wallet-create-name/wallet-create-name.page';
+import { MnemonicWritePage } from './pages/wallet/mnemonic/mnemonic-write/mnemonic-write.page';
+import { WalletlistPage } from './pages/wallet/wallet-list/wallet-list.page';
+import { WalletManagerPage } from 'src-deprecated/pages/wallet-manager/wallet-manager.page';
+import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wallet-password-reset.page';
+import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
+import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
+import { MnemonicCheckPage } from './pages/wallet/mnemonic/mnemonic-check/mnemonic-check.page';
+import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
+import { ScanCodePage } from './pages/scancode/scancode.page';
 
 const routes: Routes = [
-    { path: 'splashscreen', loadChildren: './pages/splashscreen/splashscreen.module#SplashscreenPageModule' },
-    { path: 'home', loadChildren: './home/home.module#HomePageModule' },
-    { path: 'launcher', loadChildren: './pages/launcher/launcher.module#LauncherPageModule' },
-    { path: 'wallet-create', loadChildren: './pages/wallet/wallet-create/wallet-create.module#WalletCreatePageModule' },
-    { path: 'wallet-import', loadChildren: './pages/wallet/wallet-import/wallet-import.module#WalletImportPageModule' },
-    { path: 'createmultiwallet', loadChildren: './pages/createmultiwallet/createmultiwallet.module#CreatemultiwalletPageModule' },
-    { path: 'mnemonic', loadChildren: './pages/mnemonic/mnemonic.module#MnemonicPageModule' },
+    // Global
+    { path: 'launcher', component: LauncherPage },
+    { path: 'about', component: AboutPage },
+
+    // Wallet
+    { path: '', redirectTo: "wallet-home" },
     {
-        path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule',
-        // children: [
-        //   { path: '', redirectTo: 'tab-home', pathMatch: 'full' },
-        //   { path: 'tab-home', loadChildren: './pages/tabs/tab-home/tab-home.module#TabHomePageModule' },
-        //   { path: 'tab-setting', loadChildren: './pages/tabs/tab-setting/tab-setting.module#TabSettingPageModule' },
-        // ]
+        path: 'wallet-home', loadChildren: './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.module#WalletTabsRootPageModule',
     },
-    { path: '', loadChildren: './pages/tabs/tabs.module#TabsPageModule' },
-    // { path: 'tab-home', loadChildren: './pages/tabs/tab-home/tab-home.module#TabHomePageModule' },
-    // { path: 'tab-setting', loadChildren: './pages/tabs/tab-setting/tab-setting.module#TabSettingPageModule' },
-    { path: 'walletmode', loadChildren: './pages/walletmode/walletmode.module#WalletmodePageModule' },
-    { path: 'importprivatekey', loadChildren: './pages/importprivatekey/importprivatekey.module#ImportprivatekeyPageModule' },
-    { path: 'createwalletname', loadChildren: './pages/createwalletname/createwalletname.module#CreatewalletnamePageModule' },
-    { path: 'importmnemonic', loadChildren: './pages/importmnemonic/importmnemonic.module#ImportmnemonicPageModule' },
-    { path: 'mpublickey', loadChildren: './pages/mpublickey/mpublickey.module#MpublickeyPageModule' },
-    { path: 'addpublickey', loadChildren: './pages/addpublickey/addpublickey.module#AddpublickeyPageModule' },
-    { path: 'addprivatekey', loadChildren: './pages/addprivatekey/addprivatekey.module#AddprivatekeyPageModule' },
-    { path: 'txdetails', loadChildren: './pages/txdetails/txdetails.module#TxdetailsPageModule' },
-    { path: 'scancode', loadChildren: './pages/scancode/scancode.module#ScancodePageModule' },
-    { path: 'mnemonic-write', loadChildren: './pages/mnemonic/mnemonic-write/mnemonic-write.module#MnemonicWritePageModule' },
-    { path: 'coin/:name', loadChildren: './pages/coin/coin.module#CoinPageModule' },
-    { path: 'coin-list', loadChildren: './pages/coin/coin-list/coin-list.module#CoinListPageModule' },
-    { path: 'walletlist', loadChildren: './pages/walletlist/walletlist.module#WalletlistPageModule' },
-    { path: 'wallet-manager', loadChildren: './pages/wallet/wallet-manager/wallet-manager.module#WalletManagerPageModule' },
-    { path: 'contacts', loadChildren: './pages/contacts/contacts.module#ContactsPageModule' },
-    { path: 'contact-list', loadChildren: './pages/contacts/contact-list/contact-list.module#ContactListPageModule' },
-    { path: 'publickey', loadChildren: './pages/publickey/publickey.module#PublickeyPageModule' },
-    { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },
-    { path: 'coin-select', loadChildren: './pages/coin/coin-select/coin-select.module#CoinSelectPageModule' },
-    { path: 'receive', loadChildren: './pages/coin/receive/receive.module#ReceivePageModule' },
-    { path: 'recordinfo', loadChildren: './pages/coin/recordinfo/recordinfo.module#RecordinfoPageModule' },
-    { path: 'transfer', loadChildren: './pages/coin/transfer/transfer.module#TransferPageModule' },
-    { path: 'dposvote', loadChildren: './pages/coin/dposvote/dposvote.module#DPoSVotePageModule' },
-    { path: 'address', loadChildren: './pages/wallet/address/address.module#AddressPageModule' },
-    { path: 'id-result', loadChildren: './pages/id/id-result/id-result.module#IdResultPageModule' },
-    { path: 'contact-create', loadChildren: './pages/contacts/contact-create/contact-create.module#ContactCreatePageModule' },
-    { path: 'exprot-prikey', loadChildren: './pages/wallet/exprot-prikey/exprot-prikey.module#ExprotPrikeyPageModule' },
-    { path: 'paypassword-reset', loadChildren: './pages/wallet/paypassword-reset/paypassword-reset.module#PaypasswordResetPageModule' },
-    { path: 'modifywalletname', loadChildren: './pages/modifywalletname/modifywalletname.module#ModifywalletnamePageModule' },
-    { path: 'exportmnemonic', loadChildren: './pages/exportmnemonic/exportmnemonic.module#ExportmnemonicPageModule' },
-    { path: 'checkmnemonic', loadChildren: './pages/checkmnemonic/checkmnemonic.module#CheckmnemonicPageModule' },
-    { path: 'wallet-setting', loadChildren: './pages/wallet/wallet-setting/wallet-setting.module#WalletSettingPageModule' },
-    { path: 'access', loadChildren: './pages/wallet/access/access.module#AccessPageModule' },
-    { path: 'didtransaction', loadChildren: './pages/coin/didtransaction/didtransaction.module#DidtransactionPageModule' },
-    { path: 'waitforsync', loadChildren: './pages/coin/waitforsync/waitforsync.module#WaitforsyncPageModule' },
-    { path: 'crmembervote', loadChildren: './pages/coin/crmembervote/crmembervote.module#CRmembervotePageModule' },
-  { path: 'crmemberregister', loadChildren: './pages/coin/crmemberregister/crmemberregister.module#CrmemberregisterPageModule' },
+    { path: 'wallet-create', component: WalletCreatePage },
+    { path: 'wallet-import', component: WalletImportPage },
+    { path: 'mnemonic-create', component: MnemonicCreatePage },
+    { path: 'wallet-create-name', component: WalletCreateNamePage },
+    { path: 'scancode', component: ScanCodePage },
+    { path: 'mnemonic-write', component: MnemonicWritePage },
+    { path: 'wallet-list', component: WalletlistPage },
+    { path: 'wallet-manager', component: WalletManagerPage },
+    { path: 'wallet-password-reset', component: WalletPasswordResetPage },
+    { path: 'wallet-edit-name', component: WalletEditNamePage },
+    { path: 'mnemonic-export', component: MnemonicExportPage },
+    { path: 'mnemonic-check', component: MnemonicCheckPage },
+    { path: 'wallet-settings', component: WalletSettingsPage },
+
+    // Coin
+    { path: 'coin/:name', component: CoinHomePage },
+    { path: 'coin-list', component: CoinListPage },
+    { path: 'coin-select', component: CoinSelectPage },
+    { path: 'coin-receive', component: CoinReceivePage },
+    { path: 'coin-tx-info', component: CoinTxInfoPage },
+    { path: 'coin-transfer', component: CoinTransferPage },
+
+    // Contacts
+    { path: 'contacts', component: ContactsPage },
+    { path: 'contact-list', component: ContactListPage },
+    { path: 'contact-create', component: ContactCreatePage},
+
+    // Intents
+    { path: 'access', component: AccessPage },
+    { path: 'didtransaction', component: DidTransactionPage },
+    { path: 'waitforsync', component: WaitForSyncPage },
+    { path: 'crmembervote', component: CRmembervotePage },
+    { path: 'dposvote', component: DPoSVotePage },
+    { path: 'crmemberregister', component: CRMemberRegisterPage },
 ];
 @NgModule({
     imports: [

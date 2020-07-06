@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AppService } from '../../services/AppService';
+import { AppService } from '../../services/app.service';
 
 @Component({
     selector: 'header-bar',
