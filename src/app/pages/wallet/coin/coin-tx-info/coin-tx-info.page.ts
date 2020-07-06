@@ -4,7 +4,7 @@ import { Events } from '@ionic/angular';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
-import { WalletManager } from '../../../../services/wallet.service';
+import { WalletManager, CoinName } from '../../../../services/wallet.service';
 
 @Component({
     selector: 'app-coin-tx-info',
@@ -44,7 +44,7 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     init() {
-        this.masterWalletId = Config.getCurMasterWalletId();
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
         this.route.queryParams.subscribe((data) => {
             this.txId = data["txId"];
             this.chainId = data["chainId"];
@@ -53,90 +53,89 @@ export class CoinTxInfoPage implements OnInit {
         });
     }
 
-    getTransactionInfo() {
-        this.walletManager.getAllTransaction(this.masterWalletId, this.chainId, this.start, this.txId, (ret) => {
-            let allTransaction = ret;
-            let transactions = allTransaction['Transactions'];
-            let transaction = transactions[0];
-            this.inputs = this.objtoarr(transaction["Inputs"]);
-            this.outputs = this.objtoarr(transaction["Outputs"]);
-            let timestamp = transaction['Timestamp'] * 1000;
-            let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
-            let status = '';
+    async getTransactionInfo() {
+        let allTransaction = await this.walletManager.spvBridge.getAllTransactions(this.masterWalletId, this.chainId, this.start, this.txId);
+            
+        let transactions = allTransaction['Transactions'];
+        let transaction = transactions[0];
+        this.inputs = this.objtoarr(transaction["Inputs"]);
+        this.outputs = this.objtoarr(transaction["Outputs"]);
+        let timestamp = transaction['Timestamp'] * 1000;
+        let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
+        let status = '';
 
-            switch (transaction["Status"]) {
-                case 'Confirmed':
-                    status = 'Confirmed';
-                    this.unsubscribeprogressEvent();
-                    break;
-                case 'Pending':
-                    status = 'Pending';
-                    this.subscribeprogressEvent();
-                    break;
-                case 'Unconfirmed':
-                    status = 'Unconfirmed';
-                    this.subscribeprogressEvent();
-                    break;
-            }
+        switch (transaction["Status"]) {
+            case 'Confirmed':
+                status = 'Confirmed';
+                this.unsubscribeprogressEvent();
+                break;
+            case 'Pending':
+                status = 'Pending';
+                this.subscribeprogressEvent();
+                break;
+            case 'Unconfirmed':
+                status = 'Unconfirmed';
+                this.subscribeprogressEvent();
+                break;
+        }
 
-            if (this.preConfirmCount === transaction["ConfirmStatus"]) {
-                //do nothing
-                console.log('getTransactionInfo do nothing ConfirmStatus:', transaction["ConfirmStatus"]);
-                return;
+        if (this.preConfirmCount === transaction["ConfirmStatus"]) {
+            //do nothing
+            console.log('getTransactionInfo do nothing ConfirmStatus:', transaction["ConfirmStatus"]);
+            return;
+        } else {
+            this.preConfirmCount = transaction["ConfirmStatus"];
+        }
+
+        let vtype = "transaction-type-13";
+        if ((transaction["Type"] >= 0) && transaction["Type"] <= 12) {
+            if (transaction["Type"] === 10) {
+                if (this.chainId === CoinName.IDCHAIN) {
+                    vtype = "transaction-type-did";
+                } else {
+                    vtype = "transaction-type-10";
+                }
             } else {
-                this.preConfirmCount = transaction["ConfirmStatus"];
+                vtype = "transaction-type-" + transaction["Type"];
             }
+        }
 
-            let vtype = "transaction-type-13";
-            if ((transaction["Type"] >= 0) && transaction["Type"] <= 12) {
-                if (transaction["Type"] === 10) {
-                    if (this.chainId === Config.IDCHAIN) {
-                        vtype = "transaction-type-did";
-                    } else {
-                        vtype = "transaction-type-10";
-                    }
-                } else {
-                    vtype = "transaction-type-" + transaction["Type"];
-                }
-            }
-
-            let payStatusIcon = transaction["Direction"];
-            if (payStatusIcon === "Received") {
-                this.payStatusIcon = './assets/images/tx-state/icon-tx-received-outline.svg';
-                this.symbol = "+";
-            } else if (payStatusIcon === "Sent") {
-                this.payStatusIcon = './assets/images/tx-state/icon-tx-sent.svg';
+        let payStatusIcon = transaction["Direction"];
+        if (payStatusIcon === "Received") {
+            this.payStatusIcon = './assets/images/tx-state/icon-tx-received-outline.svg';
+            this.symbol = "+";
+        } else if (payStatusIcon === "Sent") {
+            this.payStatusIcon = './assets/images/tx-state/icon-tx-sent.svg';
+            this.symbol = "-";
+        } else if (payStatusIcon === "Moved") {
+            this.payStatusIcon = './assets/images/tx-state/icon-tx-moved.svg';
+            this.symbol = "";
+        } else if (payStatusIcon === "Deposit") {
+            this.payStatusIcon = './assets/images/tx-state/icon-tx-moved.svg';
+            if (transaction["Amount"] > 0) {
                 this.symbol = "-";
-            } else if (payStatusIcon === "Moved") {
-                this.payStatusIcon = './assets/images/tx-state/icon-tx-moved.svg';
+            } else {
                 this.symbol = "";
-            } else if (payStatusIcon === "Deposit") {
-                this.payStatusIcon = './assets/images/tx-state/icon-tx-moved.svg';
-                if (transaction["Amount"] > 0) {
-                    this.symbol = "-";
-                } else {
-                    this.symbol = "";
-                }
             }
+        }
 
-            //for vote transaction
-            if (!Util.isNull(transaction['OutputPayload']) && (transaction['OutputPayload'].length > 0)) {
-                vtype = "transaction-type-vote";
-            }
+        //for vote transaction
+        if (!Util.isNull(transaction['OutputPayload']) && (transaction['OutputPayload'].length > 0)) {
+            vtype = "transaction-type-vote";
+        }
 
-            this.transactionRecord = {
-                name: this.chainId,
-                status: status,
-                resultAmount: Util.scientificToNumber(transaction["Amount"] / Config.SELA),
-                txId: this.txId,
-                transactionTime: datetime,
-                timestamp: timestamp,
-                payfees: Util.scientificToNumber(transaction['Fee'] / Config.SELA),
-                confirmCount: transaction["ConfirmStatus"],
-                memo: transaction["Memo"],
-                payType: vtype
-            };
-        });
+        this.transactionRecord = {
+            name: this.chainId,
+            status: status,
+            resultAmount: Util.scientificToNumber(transaction["Amount"] / Config.SELA),
+            txId: this.txId,
+            transactionTime: datetime,
+            timestamp: timestamp,
+            payfees: Util.scientificToNumber(transaction['Fee'] / Config.SELA),
+            confirmCount: transaction["ConfirmStatus"],
+            memo: transaction["Memo"],
+            payType: vtype
+        };
     }
 
     subscribeprogressEvent() {

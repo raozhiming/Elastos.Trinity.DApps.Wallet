@@ -10,7 +10,6 @@ import { Native } from '../../../../services/native.service';
     styleUrls: ['./coin-receive.page.scss'],
 })
 export class CoinReceivePage implements OnInit {
-
     masterWalletId: string = "1";
     qrcode: string = null;
     chainId: string;
@@ -22,8 +21,8 @@ export class CoinReceivePage implements OnInit {
     }
 
     init() {
-        this.masterWalletId = Config.getCurMasterWalletId();
-        this.chainId = Config.coinObj.transfer.chainId;
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        this.chainId = this.walletManager.coinObj.transfer.chainId;
         this.createAddress();
     }
 
@@ -32,7 +31,7 @@ export class CoinReceivePage implements OnInit {
     }
 
     async createAddress() {
-        this.qrcode = await this.walletManager.createAddress(this.masterWalletId, this.chainId);
+        this.qrcode = await this.walletManager.spvBridge.createAddress(this.masterWalletId, this.chainId);
     }
 
 }

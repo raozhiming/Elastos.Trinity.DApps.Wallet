@@ -60,18 +60,18 @@ export class DPoSVotePage implements OnInit {
     }
 
     init() {
-        console.log(Config.coinObj);
-        this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.transfer.chainId;
-        this.walletInfo = Config.coinObj.walletInfo;
-        this.masterWalletId = Config.getCurMasterWalletId();
+        console.log(this.walletManager.coinObj);
+        this.transfer = this.walletManager.coinObj.transfer;
+        this.chainId = this.walletManager.coinObj.transfer.chainId;
+        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
         this.fetchBalance();
 
         this.hasPendingVoteTransaction();
     }
 
     async fetchBalance() {
-        let balance = await this.walletManager.getBalance(this.masterWalletId, this.chainId);
+        let balance = await this.walletManager.spvBridge.getBalance(this.masterWalletId, this.chainId);
 
         this.zone.run(()=>{
             console.log("Received balance:", balance);
@@ -80,7 +80,7 @@ export class DPoSVotePage implements OnInit {
     }
 
     async hasPendingVoteTransaction() {
-        let jsonInfo = await this.walletManager.getBalanceInfo(this.masterWalletId, this.chainId);
+        let jsonInfo = await this.walletManager.spvBridge.getBalanceInfo(this.masterWalletId, this.chainId);
         
         let balanceInfo = JSON.parse(jsonInfo);
         // TODO: replace line below with a real BalanceInfo type (to be descypted manually, doesn't exist)
@@ -110,7 +110,7 @@ export class DPoSVotePage implements OnInit {
         }
 
         try {
-            await this.walletManager.isAddressValid(this.masterWalletId, this.transfer.toAddress);
+            await this.walletManager.spvBridge.isAddressValid(this.masterWalletId, this.transfer.toAddress);
             this.createVoteProducerTransaction();
         }
         catch (error) {
@@ -156,14 +156,14 @@ export class DPoSVotePage implements OnInit {
         console.log("Creating vote transaction with amount", stakeAmount);
 
         this.transfer.toAddress = "";
-        this.walletManager.createVoteProducerTransaction(this.masterWalletId, this.chainId,
+        this.walletManager.spvBridge.createVoteProducerTransaction(this.masterWalletId, this.chainId,
             this.transfer.toAddress,
             stakeAmount,
             JSON.stringify(this.transfer.publicKeys),
             this.transfer.memo,
             (data) => {
                 this.transfer.rawTransaction = data;
-                Config.masterManager.openPayModal(this.transfer);
+                this.walletManager.openPayModal(this.transfer);
             });
     }
 }

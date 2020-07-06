@@ -23,7 +23,7 @@ export class AboutPage implements OnInit {
 
     async init() {
         this.version = await this.appService.getVersion();
-        this.spvVersion = await this.walletManager.getVersion();
+        this.spvVersion = await this.walletManager.spvBridge.getVersion();
     }
 
     goWebsite() {

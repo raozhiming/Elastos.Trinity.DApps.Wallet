@@ -90,7 +90,6 @@ export class AddprivatekeyPage implements OnInit {
     }
 
     saveWalletList() {
-
         Config.getMasterWalletIdList().push(this.masterWalletId);
         this.localStorage.saveCurMasterId({ masterId: this.masterWalletId }).then((data) => {
             let walletObj = this.native.clone(Config.masterWallObj);

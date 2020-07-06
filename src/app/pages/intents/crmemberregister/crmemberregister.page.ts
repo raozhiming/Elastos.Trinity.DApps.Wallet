@@ -25,24 +25,9 @@ import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.Service';
-import { WalletManager } from '../../../services/wallet.service';
+import { WalletManager, CoinName } from '../../../services/wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
-
-type Transfer = {
-    action: string;
-    intentId: string;
-    memo: string;
-    did: string;
-    nickname: string;
-    url: string;
-    crPublicKey: string;
-    account: string;
-    rawTransaction: string;
-    payPassword: string;
-    location: number;
-    crDID: string;
-}
 
 @Component({
     selector: 'app-crmemberregister',
@@ -86,10 +71,10 @@ export class CRMemberRegisterPage implements OnInit {
     }
 
     init() {
-        this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.transfer.chainId;
-        this.walletInfo = Config.coinObj.walletInfo;
-        this.masterWalletId = Config.getCurMasterWalletId();
+        this.transfer = this.walletManager.coinObj.transfer;
+        this.chainId = this.walletManager.coinObj.transfer.chainId;
+        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
 
         switch (this.transfer.action) {
             case 'crmemberregister':
@@ -116,10 +101,10 @@ export class CRMemberRegisterPage implements OnInit {
                 break;
         }
 
-        const coinList = Config.getSubWalletList();
+        const coinList = this.walletManager.getSubWalletList();
         if (coinList.length === 1) { // for now, just IDChain
             this.hasOpenIDChain = true;
-            this.balance = Config.masterManager.masterWallet[this.masterWalletId].subWallet[this.chainId].balance / Config.SELA;
+            this.balance = this.walletManager.masterWallets[this.masterWalletId].subWallets[this.chainId].balance / Config.SELA;
         } else {
             this.hasOpenIDChain = false;
             this.confirmOpenIDChain();
@@ -162,54 +147,54 @@ export class CRMemberRegisterPage implements OnInit {
     async createRegisterCRTransaction() {
         console.log('Calling createRegisterCRTransaction()');
 
-        const crPublickeys = await this.walletManager.getAllPublicKeys(this.masterWalletId, Config.IDCHAIN, 0, 1);
+        const crPublickeys = await this.walletManager.spvBridge.getAllPublicKeys(this.masterWalletId, CoinName.IDCHAIN, 0, 1);
         const crPublicKey = crPublickeys.PublicKeys[0];
 
-        const payload = await this.walletManager.generateCRInfoPayload(this.masterWalletId, this.chainId,
+        const payload = await this.walletManager.spvBridge.generateCRInfoPayload(this.masterWalletId, this.chainId,
                 crPublicKey, this.transfer.did, this.transfer.nickname, this.transfer.url, this.transfer.location);
         const digest = payload.Digest;
 
-        const payPassword = await Config.masterManager.getPassword(this.transfer);
+        const payPassword = await this.walletManager.getPassword(this.transfer);
         if (payPassword === null) {// cancle by user
             return;
         }
         this.transfer.payPassword = payPassword;
 
-        this.walletManager.didSignDigest(this.masterWalletId,
+        this.walletManager.spvBridge.didSignDigest(this.masterWalletId,
                 this.transfer.did, digest, payPassword, async (signature) => {
             payload.Signature = signature;
-            this.transfer.rawTransaction  = await this.walletManager.createRegisterCRTransaction(this.masterWalletId, this.chainId,
+            this.transfer.rawTransaction  = await this.walletManager.spvBridge.createRegisterCRTransaction(this.masterWalletId, this.chainId,
                     '', payload, this.depositAmount, this.transfer.memo);
-            Config.masterManager.openPayModal(this.transfer);
+            this.walletManager.openPayModal(this.transfer);
         });
     }
 
     async createUpdateCRTransaction() {
         console.log('Calling createUpdateCRTransaction()');
 
-        const payload = await this.walletManager.generateCRInfoPayload(this.masterWalletId,
+        const payload = await this.walletManager.spvBridge.generateCRInfoPayload(this.masterWalletId,
                 this.chainId, this.transfer.crPublicKey, this.transfer.did, this.transfer.nickname,
                 this.transfer.url, this.transfer.location);
-        this.transfer.rawTransaction  = await this.walletManager.createUpdateCRTransaction(this.masterWalletId, this.chainId,
+        this.transfer.rawTransaction  = await this.walletManager.spvBridge.createUpdateCRTransaction(this.masterWalletId, this.chainId,
                 '', payload, this.transfer.memo);
-        Config.masterManager.openPayModal(this.transfer);
+        this.walletManager.openPayModal(this.transfer);
     }
 
     async createUnregisterCRTransaction() {
         console.log('Calling createUnregisterCRTransaction()');
 
-        const payload = await this.walletManager.generateUnregisterCRPayload(this.masterWalletId, this.chainId,
+        const payload = await this.walletManager.spvBridge.generateUnregisterCRPayload(this.masterWalletId, this.chainId,
                 this.transfer.crDID);
-        this.transfer.rawTransaction  = await this.walletManager.createUnregisterCRTransaction(this.masterWalletId, this.chainId,
+        this.transfer.rawTransaction  = await this.walletManager.spvBridge.createUnregisterCRTransaction(this.masterWalletId, this.chainId,
                 '', payload, this.transfer.memo);
-        Config.masterManager.openPayModal(this.transfer);
+        this.walletManager.openPayModal(this.transfer);
     }
 
     async createRetrieveCRDepositTransaction() {
         console.log('Calling createRetrieveCRDepositTransaction()');
 
-        this.transfer.rawTransaction  = await this.walletManager.createRetrieveCRDepositTransaction(this.masterWalletId, this.chainId,
+        this.transfer.rawTransaction  = await this.walletManager.spvBridge.createRetrieveCRDepositTransaction(this.masterWalletId, this.chainId,
             this.transfer.crPublicKey, this.transfer.account, this.transfer.memo);
-        Config.masterManager.openPayModal(this.transfer);
+        this.walletManager.openPayModal(this.transfer);
     }
 }

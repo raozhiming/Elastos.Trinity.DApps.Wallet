@@ -35,9 +35,10 @@ export class MnemonicExportPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.masterWalletId = Config.getCurMasterWalletId();
-        this.walletname = Config.getWalletName(this.masterWalletId);
-        this.account = Config.getAccountType(this.masterWalletId);
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        this.walletname = this.walletManager.getWalletName(this.masterWalletId);
+        this.account = this.walletManager.getAccountType(this.masterWalletId);
+
         this.events.subscribe("error:update", () => {
             this.isShow = true;
         });
@@ -58,7 +59,7 @@ export class MnemonicExportPage implements OnInit {
                     this.mnemonicPrompt = 'text-mnemonic-prompt';
                 }
                 this.masterWalletId = Config.modifyId;
-                this.walletname = Config.getWalletName(this.masterWalletId);
+                this.walletname = this.walletManager.getWalletName(this.masterWalletId);
             });
         });
     }
@@ -87,7 +88,7 @@ export class MnemonicExportPage implements OnInit {
 
     async onExport() {
         if (this.checkparms()) {
-            let ret = await this.walletManager.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
+            let ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
             
             this.mnemonicStr = ret.toString();
             let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);

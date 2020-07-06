@@ -3,6 +3,7 @@ import { Native } from '../../../services/native.service';
 import { Config } from '../../../config/Config';
 import { Util } from '../../../model/Util';
 import { ActivatedRoute } from '@angular/router';
+import { WalletManager } from 'src/app/services/wallet.service';
 
 @Component({
     selector: 'app-wallet-create-name',
@@ -11,8 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class WalletCreateNamePage implements OnInit {
     public name: string = "";
-    constructor(public route: ActivatedRoute, public native: Native) {
-
+    constructor(public route: ActivatedRoute, public native: Native, private walletManager: WalletManager) {
     }
 
     ngOnInit() {
@@ -21,7 +21,7 @@ export class WalletCreateNamePage implements OnInit {
 
     import() {
         if (this.checkParms()) {
-            Config.walletObj.name = this.name;
+            this.walletManager.walletObj.name = this.name;
             this.native.go("/addpublickey");
         }
     }
@@ -37,7 +37,7 @@ export class WalletCreateNamePage implements OnInit {
             return;
         }
 
-        if (Util.isWallNameExit(this.name)) {
+        if (this.walletManager.walletNameExists(this.name)) {
             this.native.toast_trans("text-wallet-name-validator2");
             return;
         }

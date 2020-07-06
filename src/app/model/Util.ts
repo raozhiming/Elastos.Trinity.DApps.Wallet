@@ -209,27 +209,6 @@ export class Util {
 
     };
 
-    static isWallNameExit(name) {
-        let data = Config.getMappingList();
-        if (this.isEmptyObject(data)) {
-            return false;
-        }
-        var isexit = true;
-        for (var key in data) {
-            var item = data[key];
-
-            if (item["wallname"] === name) {
-                isexit = true;
-                break;
-            } else {
-                isexit = false;
-            }
-        }
-
-        return isexit;
-
-    }
-
     static scientificToNumber(num) {
         let str = num.toString();
         let reg = /^(\d+)(e)([\-]?\d+)$/;

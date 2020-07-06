@@ -40,7 +40,7 @@ export class AccessPage implements OnInit {
 
     init() {
         this.requestDapp = Config.requestDapp;
-        this.masterWalletId = Config.getCurMasterWalletId();
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
         if (this.requestDapp.action === 'walletaccess') {
             this.organizeRequestedFields();
             this.title = 'access-walletinfo';
@@ -81,7 +81,7 @@ export class AccessPage implements OnInit {
                 break;
             case 'elaamount':
                 // for now just return the amount of ELA Chain, not include IDChain
-                value = this.walletManager.curMaster.subWallet.ELA.balance.toString();
+                value = this.walletManager.curMaster.subWallets.ELA.balance.toString();
                 break;
             default:
                 break;
@@ -90,7 +90,7 @@ export class AccessPage implements OnInit {
     }
 
     async createAddress() {
-        this.elaAddress = await this.walletManager.createAddress(this.masterWalletId, this.chainId);
+        this.elaAddress = await this.walletManager.spvBridge.createAddress(this.masterWalletId, this.chainId);
         return this.elaAddress;
     }
 

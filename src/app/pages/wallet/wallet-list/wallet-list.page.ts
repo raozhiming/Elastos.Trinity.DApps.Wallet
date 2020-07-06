@@ -14,10 +14,9 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./wallet-list.page.scss'],
 })
 export class WalletlistPage implements OnInit {
-
     masterWalletId: string = "1";
     masterList = [];
-    masterWallet = {};
+    masterWallets = {};
     Config = Config;
 
     constructor(public route: ActivatedRoute,
@@ -34,12 +33,11 @@ export class WalletlistPage implements OnInit {
     }
 
     init() {
-        this.masterWalletId = Config.getCurMasterWalletId();
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
         this.zone.run(() => {
-            this.masterList = Config.masterManager.masterList;
-            this.masterWallet = Config.masterManager.masterWallet;
+            this.masterList = this.walletManager.masterList;
+            this.masterWallets = this.walletManager.masterWallets;
         })
-
     }
 
     ionViewDidEnter() {
@@ -47,7 +45,7 @@ export class WalletlistPage implements OnInit {
     }
 
     itemSelected(id) {
-        Config.setCurMasterWalletId(id);
+        this.walletManager.setCurMasterWalletId(id);
     }
 
     onNext() {

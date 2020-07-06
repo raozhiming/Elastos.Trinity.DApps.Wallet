@@ -39,7 +39,7 @@ export class MnemonicCreatePage implements OnInit {
 
     async init() {
         this.masterWalletId = Config.uuid(6, 16);
-        let ret = await this.walletManager.generateMnemonic(this.native.getMnemonicLang());
+        let ret = await this.walletManager.spvBridge.generateMnemonic(this.native.getMnemonicLang());
         this.native.hideLoading();
         this.mnemonicStr = ret;
         let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);
@@ -74,11 +74,11 @@ export class MnemonicCreatePage implements OnInit {
     }
 
     goMnemonicWrite() {
-        Config.walletObj.masterId = this.masterWalletId;
-        Config.walletObj.mnemonicStr = this.mnemonicStr;
-        Config.walletObj.mnemonicList = this.mnemonicList;
-        Config.walletObj.mnemonicPassword = this.mnemonicPassword;
-        // console.log(Config.walletObj);
+        this.walletManager.walletObj.masterId = this.masterWalletId;
+        this.walletManager.walletObj.mnemonicStr = this.mnemonicStr;
+        this.walletManager.walletObj.mnemonicList = this.mnemonicList;
+        this.walletManager.walletObj.mnemonicPassword = this.mnemonicPassword;
+
         this.native.go("/mnemonic-write");
     }
 }

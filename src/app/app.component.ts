@@ -30,7 +30,6 @@ import { LocalStorage } from './services/storage.service';
 import { Native } from './services/native.service';
 import { WalletManager } from './services/wallet.service';
 import { AppService } from './services/app.service';
-import { MasterManager } from './model/MasterManager';
 import { PopupProvider } from './services/popup.Service';
 
 @Component({
@@ -66,9 +65,6 @@ export class AppComponent {
 
             this.appService.init();
             this.walletManager.init();
-            Config.masterManager = new MasterManager(
-                    this.events, this.native, this.zone, this.modalCtrl, this.translate, this.appService,
-                    this.localStorage, this.popupProvider, this.walletManager);
         });
     }
 

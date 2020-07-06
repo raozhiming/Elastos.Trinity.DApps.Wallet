@@ -95,7 +95,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
             return;
         }
 
-        if (Util.isWallNameExit(this.importFileObj.name)) {
+        if (this.walletManager.walletNameExists(this.importFileObj.name)) {
             this.native.toast_trans("text-wallet-name-validator2");
             return;
         }
@@ -117,16 +117,16 @@ export class WalletImportPage implements OnInit, OnDestroy {
     }
 
     async importWalletWithKeystore() {
-        await this.walletManager.importWalletWithKeystore(this.masterWalletId, this.keyStoreContent, this.importFileObj.backupPassWord, this.importFileObj.payPassword);
+        await this.walletManager.spvBridge.importWalletWithKeystore(this.masterWalletId, this.keyStoreContent, this.importFileObj.backupPassWord, this.importFileObj.payPassword);
         await this.createSubWallet('import-text-keystroe-sucess');
     }
 
     // TODO: Other screens also have a createSubWallet() method. Merge them into the wallet service
     async createSubWallet(msg) {
-        await this.walletManager.createSubWallet(this.masterWalletId, "ELA");
+        await this.walletManager.spvBridge.createSubWallet(this.masterWalletId, "ELA");
         
         // open IDChain for did
-        await this.walletManager.createSubWallet(this.masterWalletId, "IDChain");
+        await this.walletManager.spvBridge.createSubWallet(this.masterWalletId, "IDChain");
 
         this.native.toast_trans(msg);
         this.saveWalletList();
@@ -143,11 +143,10 @@ export class WalletImportPage implements OnInit, OnDestroy {
             return;
         }
 
-        if (Util.isWallNameExit(this.mnemonicObj.name)) {
+        if (this.walletManager.walletNameExists(this.mnemonicObj.name)) {
             this.native.toast_trans("text-wallet-name-validator2");
             return;
         }
-
 
         if (Util.isNull(this.mnemonicObj.mnemonic)) {
             this.native.toast_trans('text-input-mnemonic');
@@ -201,7 +200,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     async importWalletWithMnemonic() {
         let mnemonic = this.normalizeMnemonic(this.mnemonicObj.mnemonic);
-        await this.walletManager.importWalletWithMnemonic(this.masterWalletId, mnemonic, this.mnemonicObj.phrasePassword, this.mnemonicObj.payPassword, this.mnemonicObj.singleAddress);
+        await this.walletManager.spvBridge.importWalletWithMnemonic(this.masterWalletId, mnemonic, this.mnemonicObj.phrasePassword, this.mnemonicObj.payPassword, this.mnemonicObj.singleAddress);
         await this.createSubWallet('import-text-word-sucess');
     }
 
@@ -225,8 +224,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
             name = this.importFileObj.name;
         }
 
-        Config.masterManager.addMasterWallet(this.masterWalletId, name, this.accontObj);
-
+        this.walletManager.addMasterWallet(this.masterWalletId, name /* TODO, this.accontObj */);
     }
 
     ngOnDestroy() {

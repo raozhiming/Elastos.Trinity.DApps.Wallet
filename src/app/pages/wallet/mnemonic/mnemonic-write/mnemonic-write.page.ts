@@ -25,8 +25,8 @@ export class MnemonicWritePage implements OnInit {
         public walletManager: WalletManager,
         public zone: NgZone) {
 
-        this.mnemonicStr = this.native.clone(Config.walletObj.mnemonicStr);
-        this.mnemonicList = this.native.clone(Config.walletObj.mnemonicList);
+        this.mnemonicStr = this.native.clone(this.walletManager.walletObj.mnemonicStr);
+        this.mnemonicList = this.native.clone(this.walletManager.walletObj.mnemonicList);
         this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
     }
 
@@ -40,15 +40,18 @@ export class MnemonicWritePage implements OnInit {
         }
 
         if (!Util.isNull(mn) && mn == this.mnemonicStr.replace(/\s+/g, "")) {
-            if (Config.walletObj.isMulti) {
+            if (this.walletManager.walletObj.isMulti) {
                 this.native.go("/mpublickey", this.exatParm);
             }
             else {
                 this.native.toast_trans('text-mnemonic-ok');
                 await this.native.showLoading();
-                await this.walletManager.createMasterWallet(Config.walletObj.masterId, this.mnemonicStr,
-                    Config.walletObj.mnemonicPassword, Config.walletObj.payPassword,
-                    Config.walletObj.singleAddress);
+                await this.walletManager.spvBridge.createMasterWallet(
+                    this.walletManager.walletObj.masterId, 
+                    this.mnemonicStr,
+                    this.walletManager.walletObj.mnemonicPassword, 
+                    this.walletManager.walletObj.payPassword,
+                    this.walletManager.walletObj.singleAddress);
                 await this.createSubWallet();
             }
 
@@ -58,12 +61,13 @@ export class MnemonicWritePage implements OnInit {
     }
 
     async createSubWallet() {
-        await this.walletManager.createSubWallet(Config.walletObj.masterId, "ELA");
+        await this.walletManager.spvBridge.createSubWallet(this.walletManager.walletObj.masterId, "ELA");
         
-        let account = { "singleAddress": Config.walletObj.singleAddress, "Type": "Standard" };
-        Config.masterManager.addMasterWallet(Config.walletObj.masterId, Config.walletObj.name, account);
+        let account = { "singleAddress": this.walletManager.walletObj.singleAddress, "Type": "Standard" };
+        this.walletManager.addMasterWallet(this.walletManager.walletObj.masterId, this.walletManager.walletObj.name/*, account*/);
+        
         // open IDChain for did
-        await this.walletManager.createSubWallet(Config.walletObj.masterId, "IDChain");
+        await this.walletManager.spvBridge.createSubWallet(this.walletManager.walletObj.masterId, "IDChain");
     }
 
     public addButton(index: number, item: any): void {

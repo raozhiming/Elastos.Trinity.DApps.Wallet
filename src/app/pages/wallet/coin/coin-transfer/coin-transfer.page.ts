@@ -27,7 +27,7 @@ import { AppService, ScanType } from '../../../../services/app.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
-import { WalletManager } from '../../../../services/wallet.service';
+import { WalletManager, CoinName } from '../../../../services/wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -69,16 +69,15 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     init() {
-        // console.log(Config.coinObj);
-        this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.transfer.chainId;
-        this.walletInfo = Config.coinObj.walletInfo;
+        this.transfer = this.walletManager.coinObj.transfer;
+        this.chainId = this.walletManager.coinObj.transfer.chainId;
+        this.walletInfo = this.walletManager.coinObj.walletInfo;
         this.events.subscribe('address:update', (address) => {
             this.zone.run(() => {
                 this.transfer.toAddress = address;
             });
         });
-        this.masterWalletId = Config.getCurMasterWalletId();
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
         switch (this.transfer.type) {
             case 'payment-confirm':
                 this.readonly = true;
@@ -91,7 +90,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.transfer.fee = 10000;
                 this.chainId = 'ELA';
                 this.transfer.amount = '0.1'; // for DID
-                this.getAddress(Config.IDCHAIN);
+                this.getAddress(CoinName.IDCHAIN);
                 this.hideMemo = true;
                 this.introText = 'text-recharge-intro';
                 break;
@@ -105,7 +104,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     async getAddress(chainId: string) {
-        this.transfer.toAddress = await this.walletManager.createAddress(this.masterWalletId, chainId);
+        this.transfer.toAddress = await this.walletManager.spvBridge.createAddress(this.masterWalletId, chainId);
     }
 
     rightHeader() {
@@ -139,7 +138,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             return;
         }
 
-        if (this.transfer.amount * this.SELA > this.walletManager.curMaster.subWallet[this.chainId].balance) {
+        if (this.transfer.amount * this.SELA > this.walletManager.curMaster.subWallets[this.chainId].balance) {
             this.native.toast_trans('error-amount');
             return;
         }
@@ -150,7 +149,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         }
 
         try {
-            await this.walletManager.isAddressValid(this.masterWalletId, this.transfer.toAddress);
+            await this.walletManager.spvBridge.isAddressValid(this.masterWalletId, this.transfer.toAddress);
             this.transFunction();
         }
         catch (error) {
@@ -168,36 +167,36 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async createTransaction() {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
 
-        this.transfer.rawTransaction = await this.walletManager.createTransaction(this.masterWalletId, this.chainId, '',
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createTransaction(this.masterWalletId, this.chainId, '',
             this.transfer.toAddress,
             toAmount.toString(),
             this.transfer.memo);
             
-        Config.masterManager.openPayModal(this.transfer);
+        this.walletManager.openPayModal(this.transfer);
     }
 
     createDepositTransaction() {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.createDepositTransaction(this.masterWalletId, 'ELA', '',
-            Config.coinObj.transfer.sideChainId,
+        this.walletManager.spvBridge.createDepositTransaction(this.masterWalletId, 'ELA', '',
+            this.walletManager.coinObj.transfer.sideChainId,
             toAmount.toString(), // user input amount
             this.transfer.toAddress, // user input address
             this.transfer.memo,
             (data) => {
                 this.transfer.rawTransaction = data;
-                Config.masterManager.openPayModal(this.transfer);
+                this.walletManager.openPayModal(this.transfer);
             });
     }
 
     createWithdrawTransaction() {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        this.walletManager.createWithdrawTransaction(this.masterWalletId, this.chainId, '',
+        this.walletManager.spvBridge.createWithdrawTransaction(this.masterWalletId, this.chainId, '',
             toAmount.toString(),
             this.transfer.toAddress,
             this.transfer.memo,
             (data) => {
                 this.transfer.rawTransaction = data;
-                Config.masterManager.openPayModal(this.transfer);
+                this.walletManager.openPayModal(this.transfer);
             });
     }
 }

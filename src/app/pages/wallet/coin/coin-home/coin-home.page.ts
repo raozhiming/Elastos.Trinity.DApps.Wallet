@@ -27,8 +27,9 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.Service';
 import { Util } from '../../../../model/Util';
-import { WalletManager } from '../../../../services/wallet.service';
+import { WalletManager, CoinName, CoinObjTEMP } from '../../../../services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Transfer } from 'src/app/model/Transfer';
 
 @Component({
     selector: 'app-coin-home',
@@ -72,10 +73,10 @@ export class CoinHomePage implements OnInit {
     }
 
     async init() {
-        Config.coinObj = {};
+        this.walletManager.coinObj = new CoinObjTEMP();
 
-        this.masterWalletId = Config.getCurMasterWalletId();
-        Config.coinObj.walletInfo = await this.walletManager.getMasterWalletBasicInfo(this.masterWalletId);
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        this.walletManager.coinObj.walletInfo = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWalletId);
 
         this.route.paramMap.subscribe((params) => {
             this.chainId = params.get('name');
@@ -87,7 +88,7 @@ export class CoinHomePage implements OnInit {
 
             this.initData();
 
-            if (this.walletManager.curMaster.subWallet[this.chainId].progress !== 100) {
+            if (this.walletManager.curMaster.subWallets[this.chainId].progress !== 100) {
                 this.events.subscribe(this.chainId + ':synccompleted', (coin) => {
                     this.CheckPublishTx();
                     this.checkUTXOCount();
@@ -110,134 +111,134 @@ export class CoinHomePage implements OnInit {
         this.getAllTx();
     }
 
-    getAllTx() {
-        this.walletManager.getAllTransaction(this.masterWalletId, this.chainId, this.start, '', async (ret) => {
-            const allTransaction = ret;
-            const transactions = allTransaction.Transactions;
-            this.MaxCount = allTransaction.MaxCount;
-            if (this.MaxCount > 0) {
-                this.isNodata = false;
-            } else {
-                this.isNodata = true;
-            }
+    async getAllTx() {
+        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWalletId, this.chainId, this.start, '');
+        const transactions = allTransactions.Transactions;
+        this.MaxCount = allTransactions.MaxCount;
+        if (this.MaxCount > 0) {
+            this.isNodata = false;
+        } else {
+            this.isNodata = true;
+        }
 
-            if (this.start >= this.MaxCount) {
-                this.isShowMore = false;
-                return;
-            } else {
-                this.isShowMore = true;
-            }
-            if (!transactions) {
-                this.isShowMore = false;
-                return;
-            }
+        if (this.start >= this.MaxCount) {
+            this.isShowMore = false;
+            return;
+        } else {
+            this.isShowMore = true;
+        }
+        if (!transactions) {
+            this.isShowMore = false;
+            return;
+        }
 
-            if (this.MaxCount <= 20) {
-                this.isShowMore = false;
-            }
+        if (this.MaxCount <= 20) {
+            this.isShowMore = false;
+        }
 
-            for (const key in transactions) {
-                if (transactions.hasOwnProperty(key)) {
-                    const transaction = transactions[key];
-                    const timestamp = transaction.Timestamp * 1000;
-                    const datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
-                    const txId = transaction.TxHash;
-                    let payStatusIcon = transaction.Direction;
-                    let name = transaction.Direction;
-                    let symbol = '';
-                    const type = transaction.Type;
-                    if (payStatusIcon === 'Received') {
-                        payStatusIcon = './assets/images/exchange-add.png';
-                        symbol = '+';
+        for (const key in transactions) {
+            if (transactions.hasOwnProperty(key)) {
+                const transaction = transactions[key];
+                const timestamp = transaction.Timestamp * 1000;
+                const datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
+                const txId = transaction.TxHash;
+                let payStatusIcon = transaction.Direction;
+                let name = transaction.Direction;
+                let symbol = '';
+                const type = transaction.Type;
+                if (payStatusIcon === 'Received') {
+                    payStatusIcon = './assets/images/exchange-add.png';
+                    symbol = '+';
 
-                        switch (type) {
-                            case 6: // RechargeToSideChain
-                                payStatusIcon = './assets/images/ela-coin.png';
-                                name = 'FromELA';
-                                break;
-                            case 7: // WithdrawFromSideChain
-                                payStatusIcon = './assets/images/id-coin.png';
-                                name = 'FromDID';
-                                break;
-                            default:
+                    switch (type) {
+                        case 6: // RechargeToSideChain
+                            payStatusIcon = './assets/images/ela-coin.png';
+                            name = 'FromELA';
                             break;
+                        case 7: // WithdrawFromSideChain
+                            payStatusIcon = './assets/images/id-coin.png';
+                            name = 'FromDID';
+                            break;
+                        default:
+                        break;
+                    }
+                } else if (payStatusIcon === 'Sent') {
+                    payStatusIcon = './assets/images/exchange-sub.png';
+                    symbol = '-';
+
+                    if (type === 8) { // TransferCrossChainAsset
+                        if (this.chainId === 'ELA') {
+                            payStatusIcon = './assets/images/id-coin.png';
+                            name = 'ToDID';
+                        } else { // IDChain
+                            payStatusIcon = './assets/images/ela-coin.png';
+                            name = 'ToELA';
                         }
-                    } else if (payStatusIcon === 'Sent') {
-                        payStatusIcon = './assets/images/exchange-sub.png';
+                    }
+                } else if (payStatusIcon === 'Moved') {
+                    payStatusIcon = './assets/images/exchange-sub.png';
+                    symbol = '';
+
+                    if (this.chainId === 'ELA') { // for now IDChian no vote
+                        // vote transaction
+                        const isVote = await this.isVoteTransaction(txId);
+                        if (isVote) {
+                            payStatusIcon = './assets/images/vote.png';
+                            name = 'Vote';
+                        }
+                    } else if (this.chainId === CoinName.IDCHAIN) {
+                        if (transaction.Type === 10) { // DID transaction
+                            payStatusIcon = './assets/images/did.png';
+                            name = 'DID';
+                        }
+                    }
+                } else if (payStatusIcon === 'Deposit') {
+                    payStatusIcon = './assets/images/exchange-sub.png';
+                    if (transaction.Amount > 0) {
                         symbol = '-';
-
-                        if (type === 8) { // TransferCrossChainAsset
-                            if (this.chainId === 'ELA') {
-                                payStatusIcon = './assets/images/id-coin.png';
-                                name = 'ToDID';
-                            } else { // IDChain
-                                payStatusIcon = './assets/images/ela-coin.png';
-                                name = 'ToELA';
-                            }
-                        }
-                    } else if (payStatusIcon === 'Moved') {
-                        payStatusIcon = './assets/images/exchange-sub.png';
+                    } else {
                         symbol = '';
-
-                        if (this.chainId === 'ELA') { // for now IDChian no vote
-                            // vote transaction
-                            const isVote = await this.isVoteTransaction(txId);
-                            if (isVote) {
-                                payStatusIcon = './assets/images/vote.png';
-                                name = 'Vote';
-                            }
-                        } else if (this.chainId === Config.IDCHAIN) {
-                            if (transaction.Type === 10) { // DID transaction
-                                payStatusIcon = './assets/images/did.png';
-                                name = 'DID';
-                            }
-                        }
-                    } else if (payStatusIcon === 'Deposit') {
-                        payStatusIcon = './assets/images/exchange-sub.png';
-                        if (transaction.Amount > 0) {
-                            symbol = '-';
-                        } else {
-                            symbol = '';
-                        }
                     }
-                    let status = '';
-                    switch (transaction.Status) {
-                        case 'Confirmed':
-                            status = 'Confirmed';
-                            break;
-                        case 'Pending':
-                            status = 'Pending';
-                            break;
-                        case 'Unconfirmed':
-                            status = 'Unconfirmed';
-                            break;
-                    }
-
-                    const transfer = {
-                        'name': name,
-                        'status': status,
-                        'resultAmount': transaction.Amount / Config.SELA,
-                        'datetime': datetime,
-                        'timestamp': timestamp,
-                        'txId': txId,
-                        'payStatusIcon': payStatusIcon,
-                        'symbol': symbol
-                    };
-                    this.transferList.push(transfer);
                 }
+                let status = '';
+                switch (transaction.Status) {
+                    case 'Confirmed':
+                        status = 'Confirmed';
+                        break;
+                    case 'Pending':
+                        status = 'Pending';
+                        break;
+                    case 'Unconfirmed':
+                        status = 'Unconfirmed';
+                        break;
+                }
+
+                const transfer = {
+                    'name': name,
+                    'status': status,
+                    'resultAmount': transaction.Amount / Config.SELA,
+                    'datetime': datetime,
+                    'timestamp': timestamp,
+                    'txId': txId,
+                    'payStatusIcon': payStatusIcon,
+                    'symbol': symbol
+                };
+                this.transferList.push(transfer);
             }
-        });
+        }
     }
 
     isVoteTransaction(txId: string): Promise<any> {
-        return new Promise((resolve, reject)=>{
-            this.walletManager.getAllTransaction(this.masterWalletId, this.chainId, 0, txId, (ret) => {
-                const transaction = ret['Transactions'][0];
-                if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
-                    resolve(true);
-                }
+        return new Promise(async (resolve, reject)=>{
+            let transactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWalletId, this.chainId, 0, txId);
+            
+            const transaction = transactions['Transactions'][0];
+            if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
+                resolve(true);
+            }
+            else {
                 resolve(false);
-            });
+            }
         });
     }
 
@@ -246,34 +247,29 @@ export class CoinHomePage implements OnInit {
     }
 
     onNext(type) {
-        Config.coinObj.transfer = {
-            toAddress: '',
-            amount: '',
-            memo: '',
-            fee: 0,
-            payPassword: '',
-            chainId: this.chainId,
-        };
+        this.walletManager.coinObj.transfer = new Transfer();
+        this.walletManager.coinObj.transfer.chainId = this.chainId;
+        
         switch (type) {
             case 1:
                 this.native.go('/receive');
                 break;
             case 2:
-                Config.coinObj.transfer.type = 'transfer';
+                this.walletManager.coinObj.transfer.type = 'transfer';
                 this.native.go('/transfer');
                 break;
             case 3:
                 if (this.chainId === 'ELA') {
-                    Config.coinObj.transfer.type = 'recharge';
-                    const coinList = Config.getSubWalletList();
+                    this.walletManager.coinObj.transfer.type = 'recharge';
+                    const coinList = this.walletManager.getSubWalletList();
                     if (coinList.length === 1) {
-                        Config.coinObj.transfer.sideChainId = coinList[0].name;
+                        this.walletManager.coinObj.transfer.sideChainId = coinList[0].name;
                         this.native.go('/transfer');
                     } else {
                         this.native.go('/coin-select');
                     }
                 } else {
-                    Config.coinObj.transfer.type = 'withdraw';
+                    this.walletManager.coinObj.transfer.type = 'withdraw';
                     this.native.go('/transfer');
                 }
                 break;
@@ -302,18 +298,18 @@ export class CoinHomePage implements OnInit {
     }
 
     CheckPublishTx() {
-        for (const txId in Config.masterManager.transactionMap) {
+        for (const txId in this.walletManager.transactionMap) {
             if (this.getIndexByTxId(txId)) {
-                delete Config.masterManager.transactionMap[txId];
+                delete this.walletManager.transactionMap[txId];
             }
         }
 
-        console.log('Fail txId:', Config.masterManager.transactionMap);
-        for (const txId in Config.masterManager.transactionMap) {
+        console.log('Fail txId:', this.walletManager.transactionMap);
+        for (const txId in this.walletManager.transactionMap) {
             this.popupProvider.ionicAlert_PublishedTx_fail('confirmTitle', txId, txId);
         }
 
-        Config.masterManager.cleanTransactionMap();
+        this.walletManager.cleanTransactionMap();
     }
 
     getIndexByTxId(txId: string) {
@@ -322,7 +318,7 @@ export class CoinHomePage implements OnInit {
 
     async checkUTXOCount() {
         if (Config.needCheckUTXOCount) {
-            let UTXOsJson = await this.walletManager.getAllUTXOs(this.masterWalletId, this.chainId, 0, 1, '');
+            let UTXOsJson = await this.walletManager.spvBridge.getAllUTXOs(this.masterWalletId, this.chainId, 0, 1, '');
             console.log('UTXOsJson:', UTXOsJson);
             const UTXOsCount = this.translate.instant('text-consolidate-UTXO-counts', {count: UTXOsJson.MaxCount});
             if (UTXOsJson.MaxCount >= Config.UTXOThreshold) {
@@ -337,7 +333,7 @@ export class CoinHomePage implements OnInit {
     }
 
     async createConsolidateTransaction() {
-        let txJson = await this.walletManager.createConsolidateTransaction(this.masterWalletId, this.chainId, '');
+        let txJson = await this.walletManager.spvBridge.createConsolidateTransaction(this.masterWalletId, this.chainId, '');
         console.log('coin.page createConsolidateTransaction');
         let transfer = {
             chainId: this.chainId,
@@ -348,6 +344,6 @@ export class CoinHomePage implements OnInit {
             payPassword: '',
             rawTransaction: txJson,
         };
-        Config.masterManager.openPayModal(transfer);
+        this.walletManager.openPayModal(transfer);
     }
 }

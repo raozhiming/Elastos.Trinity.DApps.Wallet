@@ -4,7 +4,7 @@ import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.Service';
-import { WalletManager } from 'src/app/services/wallet.service';
+import { WalletManager, CoinName } from 'src/app/services/wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -51,10 +51,10 @@ export class WaitForSyncPage implements OnInit {
     }
 
     init() {
-        this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.transfer.chainId;
-        this.walletInfo = Config.coinObj.walletInfo;
-        this.masterWalletId = Config.getCurMasterWalletId();
+        this.transfer = this.walletManager.coinObj.transfer;
+        this.chainId = this.walletManager.coinObj.transfer.chainId;
+        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
 
         switch (this.transfer.action) {
             case 'crmembervote':
@@ -94,8 +94,8 @@ export class WaitForSyncPage implements OnInit {
                 break;
         }
 
-        if (this.chainId === Config.IDCHAIN) {
-            const coinList = Config.getSubWalletList();
+        if (this.chainId === CoinName.IDCHAIN) {
+            const coinList = this.walletManager.getSubWalletList();
             if (coinList.length === 1) { // for now, just IDChain
                 this.hasOpenIDChain = true;
             } else {
@@ -104,7 +104,7 @@ export class WaitForSyncPage implements OnInit {
             }
         }
 
-        if (this.walletManager.curMaster.subWallet[this.chainId].progress !== 100) {
+        if (this.walletManager.curMaster.subWallets[this.chainId].progress !== 100) {
             this.eventType = this.chainId + ':synccompleted';
             this.events.subscribe(this.eventType, (coin) => {
                 console.log('WaitforsyncPage coin:', coin);

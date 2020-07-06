@@ -5,6 +5,7 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { LocalStorage } from '../../../services/storage.service';
 import { ActivatedRoute } from '@angular/router';
+import { WalletManager } from 'src/app/services/wallet.service';
 
 @Component({
     selector: 'app-wallet-edit-name',
@@ -14,9 +15,10 @@ import { ActivatedRoute } from '@angular/router';
 export class WalletEditNamePage implements OnInit {
     public walletname: string = "";
     public masterWalletId: string = "1";
-    constructor(public route: ActivatedRoute, public native: Native, public localStorage: LocalStorage, public events: Events) {
+    
+    constructor(public route: ActivatedRoute, public native: Native, public localStorage: LocalStorage, public events: Events, private walletManager: WalletManager) {
         this.masterWalletId = Config.modifyId
-        this.walletname = Config.masterManager.masterWallet[this.masterWalletId].name;
+        this.walletname = this.walletManager.masterWallets[this.masterWalletId].name;
     }
 
     ngOnInit() {
@@ -34,7 +36,7 @@ export class WalletEditNamePage implements OnInit {
             return;
         }
 
-        if (Util.isWallNameExit(this.walletname)) {
+        if (this.walletManager.walletNameExists(this.walletname)) {
             this.native.toast_trans("text-wallet-name-validator2");
             return;
         }
@@ -43,8 +45,8 @@ export class WalletEditNamePage implements OnInit {
     }
 
     modifyName() {
-        Config.masterManager.masterWallet[this.masterWalletId].name = this.walletname;
-        Config.masterManager.saveInfos();
+        this.walletManager.masterWallets[this.masterWalletId].name = this.walletname;
+        this.walletManager.saveInfos();
         this.native.pop();
     }
 }

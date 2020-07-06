@@ -53,7 +53,7 @@ export class CRmembervotePage implements OnInit {
     }
 
     ionViewDidEnter() {
-        if (Config.coinObj.walletInfo['Type'] === 'Multi-Sign') {
+        if (this.walletManager.coinObj.walletInfo['Type'] === 'Multi-Sign') {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
             this.appService.close();
         }
@@ -62,10 +62,10 @@ export class CRmembervotePage implements OnInit {
     }
 
     init() {
-        console.log(Config.coinObj);
-        this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.transfer.chainId;
-        this.masterWalletId = Config.getCurMasterWalletId();
+        console.log(this.walletManager.coinObj);
+        this.transfer = this.walletManager.coinObj.transfer;
+        this.chainId = this.walletManager.coinObj.transfer.chainId;
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
 
         this.parseVotes();
 
@@ -86,7 +86,7 @@ export class CRmembervotePage implements OnInit {
     }
 
     async hasPendingVoteTransaction() {
-        let info = await this.walletManager.getBalanceInfo(this.masterWalletId, this.chainId);
+        let info = await this.walletManager.spvBridge.getBalanceInfo(this.masterWalletId, this.chainId);
         
         let balanceInfo = JSON.parse(info);
         // console.log('balanceInfo ', balanceInfo);
@@ -118,10 +118,10 @@ export class CRmembervotePage implements OnInit {
 
     async createVoteCRTransaction() {
         console.log('Creating vote CR transaction');
-        this.transfer.rawTransaction =  await this.walletManager.createVoteCRTransaction(this.masterWalletId, this.chainId,
+        this.transfer.rawTransaction =  await this.walletManager.spvBridge.createVoteCRTransaction(this.masterWalletId, this.chainId,
                 '', this.transfer.votes, this.transfer.memo, this.transfer.invalidCandidates);
         // TODO need to check DropVotes
-        Config.masterManager.openPayModal(this.transfer);
+        this.walletManager.openPayModal(this.transfer);
     }
 }
 

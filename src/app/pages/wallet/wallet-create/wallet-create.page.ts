@@ -3,6 +3,7 @@ import { Util } from "../../../model/Util";
 import { Native } from '../../../services/native.service';
 import { Config } from '../../../config/Config';
 import { ActivatedRoute } from '@angular/router';
+import { WalletManager } from 'src/app/services/wallet.service';
 
 @Component({
     selector: 'app-wallet-create',
@@ -19,12 +20,14 @@ export class WalletCreatePage implements OnInit {
         rePayPassword: ''
     };
 
-    constructor(public route: ActivatedRoute, public native: Native, public zone: NgZone) {
-        if (Config.walletObj.isMulti) {
+    constructor(public route: ActivatedRoute, 
+        public native: Native,
+        private walletManager: WalletManager, 
+        public zone: NgZone) {
+        if (this.walletManager.walletObj.isMulti) {
             this.wallet.singleAddress = true;
             this.isShow = true;
         }
-
     }
 
     ngOnInit() {
@@ -38,7 +41,6 @@ export class WalletCreatePage implements OnInit {
 
 
     onCreate() {
-
         if (Util.isNull(this.wallet.name)) {
             this.native.toast_trans("text-wallet-name-validator");
             return;
@@ -49,7 +51,7 @@ export class WalletCreatePage implements OnInit {
             return;
         }
 
-        if (Util.isWallNameExit(this.wallet.name)) {
+        if (this.walletManager.walletNameExists(this.wallet.name)) {
             this.native.toast_trans("text-wallet-name-validator2");
             return;
         }
@@ -71,10 +73,10 @@ export class WalletCreatePage implements OnInit {
             payPassword: this.wallet.payPassword, name: this.wallet.name,
             singleAddress: this.wallet.singleAddress, mult: JSON.stringify(this.MultObj)
         };
-        Config.walletObj.payPassword = this.wallet.payPassword;
-        Config.walletObj.name = this.wallet.name;
-        Config.walletObj.singleAddress = this.wallet.singleAddress;
-        // console.log(Config.walletObj);
+        this.walletManager.walletObj.payPassword = this.wallet.payPassword;
+        this.walletManager.walletObj.name = this.wallet.name;
+        this.walletManager.walletObj.singleAddress = this.wallet.singleAddress;
+
         this.native.go("/mnemonic", params);
     }
 }

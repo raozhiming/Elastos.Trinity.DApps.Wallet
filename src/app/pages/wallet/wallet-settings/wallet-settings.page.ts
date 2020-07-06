@@ -34,7 +34,7 @@ export class WalletSettingsPage implements OnInit {
 
     ionViewWillEnter() {
         // update walletName when modify name
-        this.walletName = Config.masterManager.masterWallet[this.masterWalletId].name;
+        this.walletName = this.walletManager.masterWallets[this.masterWalletId].name;
     }
 
     async onDelete() {
@@ -45,12 +45,12 @@ export class WalletSettingsPage implements OnInit {
     }
 
     destroyWallet(id: string) {
-        Config.masterManager.destroyMasterWallet(id);
+        this.walletManager.destroyMasterWallet(id);
     }
 
     private async getMasterWalletBasicInfo() {
-        let ret = await this.walletManager.getMasterWalletBasicInfo(this.masterWalletId);
-        
+        let ret = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWalletId);
+
         this.masterWalletType = ret["Type"];
         this.singleAddress = ret["SingleAddress"];
         this.readonly = ret["InnerType"] || "";

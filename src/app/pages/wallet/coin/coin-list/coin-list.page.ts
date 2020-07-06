@@ -63,9 +63,9 @@ export class CoinListPage implements OnInit, OnDestroy {
         this.masterWalletId = Config.modifyId;
         // let subWallet = Config.getSubWallet(this.masterWalletId);
         
-        let supportedChains = await this.walletManager.getSupportedChains(this.masterWalletId);
+        let supportedChains = await this.walletManager.spvBridge.getSupportedChains(this.masterWalletId);
         this.native.hideLoading();
-        let subWallet = Config.masterManager.masterWallet[this.masterWalletId].chainList;
+        let subWallet = this.walletManager.masterWallets[this.masterWalletId].chainList;
         for (let index in supportedChains) {
             let chain = supportedChains[index];
             let isOpen = false;
@@ -82,13 +82,13 @@ export class CoinListPage implements OnInit, OnDestroy {
     async createSubWallet(chainId) {
         try {
             // Sub Wallet IDChain
-            await this.walletManager.createSubWallet(this.masterWalletId, chainId);
+            await this.walletManager.spvBridge.createSubWallet(this.masterWalletId, chainId);
 
             this.native.hideLoading();
-            Config.masterManager.addSubWallet(this.masterWalletId, chainId);
-            Config.masterManager.saveInfos();
+            this.walletManager.addSubWallet(this.masterWalletId, chainId);
+            this.walletManager.saveInfos();
 
-            this.walletManager.syncStart(this.masterWalletId, chainId);
+            this.walletManager.spvBridge.syncStart(this.masterWalletId, chainId);
         }
         catch (error) {
             this.currentCoin["open"] = false;
@@ -96,10 +96,10 @@ export class CoinListPage implements OnInit, OnDestroy {
     }
 
     async destroySubWallet(chainId) {
-        await this.walletManager.destroySubWallet(this.masterWalletId, chainId);
+        await this.walletManager.spvBridge.destroySubWallet(this.masterWalletId, chainId);
         
-        Config.masterManager.removeSubWallet(this.masterWalletId, chainId);
-        Config.masterManager.saveInfos();
+        this.walletManager.removeSubWallet(this.masterWalletId, chainId);
+        this.walletManager.saveInfos();
         this.native.hideLoading();
     }
 

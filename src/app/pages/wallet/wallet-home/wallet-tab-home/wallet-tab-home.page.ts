@@ -25,6 +25,7 @@ import { AppService } from '../../../../services/app.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.Service';
+import { WalletManager } from 'src/app/services/wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -38,14 +39,14 @@ export class WalletTabHomePage implements OnInit {
     Config = Config;
     SELA = Config.SELA;
 
-    constructor(public native: Native, public appService: AppService, public popupProvider: PopupProvider) {
+    constructor(public native: Native, public appService: AppService, public popupProvider: PopupProvider, private walletManager: WalletManager) {
     }
 
     ngOnInit() {
     }
 
     ionViewWillEnter() {
-        if (Config.getCurMasterWalletId() !== '-1') {
+        if (this.walletManager.getCurMasterWalletId() !== '-1') {
             this.promptTransfer2IDChain();
         }
     }
@@ -62,14 +63,14 @@ export class WalletTabHomePage implements OnInit {
     }
 
     goSetting() {
-        Config.modifyId = Config.getCurMasterWalletId();
+        Config.modifyId = this.walletManager.getCurMasterWalletId();
         this.native.go('/wallet-setting');
         event.stopPropagation();
         return false;
     }
 
     doRefresh(event) {
-        Config.masterManager.getWalletBalance(Config.getCurMasterWalletId(), "ELA");
+        this.walletManager.getWalletBalance(this.walletManager.getCurMasterWalletId(), "ELA");
         setTimeout(() => {
             event.target.complete();
         }, 1000);
@@ -78,7 +79,7 @@ export class WalletTabHomePage implements OnInit {
     promptTransfer2IDChain() {
         if (Config.needPromptTransfer2IDChain) {
             this.popupProvider.ionicAlert('text-did-balance-not-enough');
-            Config.masterManager.setHasPromptTransfer2IDChain();
+            this.walletManager.setHasPromptTransfer2IDChain();
         }
     }
 }

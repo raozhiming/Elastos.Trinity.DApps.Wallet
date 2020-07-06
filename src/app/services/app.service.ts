@@ -4,7 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Native } from './native.service';
 import { Config } from '../config/Config';
 import { Util } from '../model/Util';
-import { WalletManager } from './wallet.service';
+import { WalletManager, CoinObjTEMP } from './wallet.service';
+import { Transfer } from '../model/Transfer';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -149,67 +150,67 @@ export class AppService {
             return false;
         }
 
-        Config.coinObj = {};
-        Config.coinObj.walletInfo = this.walletManager.curMaster.account;
-        Config.coinObj.transfer = {
-            memo: intent.params.memo || '',
-            intentId: intent.intentId,
-            action: intent.action,
-            from: intent.from,
-            payPassword: '',
-            fee: 0,
-            chainId: 'ELA',
-        };
+        this.walletManager.coinObj = new CoinObjTEMP();
+        this.walletManager.coinObj.walletInfo = this.walletManager.curMaster.account;
+        this.walletManager.coinObj.transfer = new Transfer();
+        
+        this.walletManager.coinObj.transfer.memo = intent.params.memo || '';
+        this.walletManager.coinObj.transfer.intentId = intent.intentId;
+        this.walletManager.coinObj.transfer.action = intent.action;
+        this.walletManager.coinObj.transfer.from = intent.from;
+        this.walletManager.coinObj.transfer.payPassword = '';
+        this.walletManager.coinObj.transfer.fee = 0;
+        this.walletManager.coinObj.transfer.chainId = 'ELA';
 
         switch (intent.action) {
             case 'crmembervote':
                 console.log('CR member vote Transaction intent content:', intent.params);
-                Config.coinObj.transfer.votes = intent.params.votes;
-                Config.coinObj.transfer.invalidCandidates = intent.params.invalidCandidates || '[]';
+                this.walletManager.coinObj.transfer.votes = intent.params.votes;
+                this.walletManager.coinObj.transfer.invalidCandidates = intent.params.invalidCandidates || '[]';
                 break;
 
             case 'crmemberregister':
                 console.log('CR member register Transaction intent content:', intent.params);
-                Config.coinObj.transfer.did = intent.params.did;
-                Config.coinObj.transfer.nickname = intent.params.nickname;
-                Config.coinObj.transfer.url = intent.params.url;
-                Config.coinObj.transfer.location = intent.params.location;
+                this.walletManager.coinObj.transfer.did = intent.params.did;
+                this.walletManager.coinObj.transfer.nickname = intent.params.nickname;
+                this.walletManager.coinObj.transfer.url = intent.params.url;
+                this.walletManager.coinObj.transfer.location = intent.params.location;
                 break;
 
             case 'crmemberupdate':
                 console.log('CR member update Transaction intent content:', intent.params);
-                Config.coinObj.transfer.nickname = intent.params.nickname;
-                Config.coinObj.transfer.url = intent.params.url;
-                Config.coinObj.transfer.location = intent.params.location;
+                this.walletManager.coinObj.transfer.nickname = intent.params.nickname;
+                this.walletManager.coinObj.transfer.url = intent.params.url;
+                this.walletManager.coinObj.transfer.location = intent.params.location;
                 break;
 
             case 'crmemberunregister':
                 console.log('CR member unregister Transaction intent content:', intent.params);
-                Config.coinObj.transfer.crDID = intent.params.crDID;
+                this.walletManager.coinObj.transfer.crDID = intent.params.crDID;
                 break;
 
             case 'crmemberretrieve':
                 console.log('CR member retrieve Transaction intent content:', intent.params);
-                Config.coinObj.transfer.chainId = 'IDChain';
-                Config.coinObj.transfer.amount = intent.params.amount;
-                Config.coinObj.transfer.publickey = intent.params.publickey;
+                this.walletManager.coinObj.transfer.chainId = 'IDChain';
+                this.walletManager.coinObj.transfer.amount = intent.params.amount;
+                this.walletManager.coinObj.transfer.publickey = intent.params.publickey;
                 break;
 
             case 'dposvotetransaction':
                 console.log('DPOS Transaction intent content:', intent.params);
-                Config.coinObj.transfer.toAddress = 'default';
-                Config.coinObj.transfer.publicKeys = intent.params.publickeys;
+                this.walletManager.coinObj.transfer.toAddress = 'default';
+                this.walletManager.coinObj.transfer.publicKeys = intent.params.publickeys;
                 break;
 
             case 'didtransaction':
-                Config.coinObj.transfer.chainId = 'IDChain';
-                Config.coinObj.transfer.didrequest = intent.params.didrequest;
+                this.walletManager.coinObj.transfer.chainId = 'IDChain';
+                this.walletManager.coinObj.transfer.didrequest = intent.params.didrequest;
                 break;
 
             case 'pay':
-                Config.coinObj.transfer.toAddress = intent.params.receiver;
-                Config.coinObj.transfer.amount = intent.params.amount;
-                Config.coinObj.transfer.type = 'payment-confirm';
+                this.walletManager.coinObj.transfer.toAddress = intent.params.receiver;
+                this.walletManager.coinObj.transfer.amount = intent.params.amount;
+                this.walletManager.coinObj.transfer.type = 'payment-confirm';
                 break;
             default:
                 console.log('AppService unknown intent:', intent);

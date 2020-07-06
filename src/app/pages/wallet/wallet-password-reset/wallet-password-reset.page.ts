@@ -53,7 +53,7 @@ export class WalletPasswordResetPage implements OnInit {
         }
 
         // Reset pay password
-        await this.walletManager.changePassword(this.masterWalletId, this.oldPayPassword, this.payPassword);
+        await this.walletManager.spvBridge.changePassword(this.masterWalletId, this.oldPayPassword, this.payPassword);
         if (this.useFingerprintAuthentication) {
             this.promptFingerprintActivation();
         } else {

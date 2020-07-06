@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { Config } from '../../config/Config';
 import { Native } from '../../services/native.service';
 import { PopupProvider} from '../../services/popup.Service';
+import { WalletManager } from 'src/app/services/wallet.service';
 
 @Component({
     selector: 'app-paymentbox',
@@ -36,9 +37,10 @@ export class PaymentboxComponent implements OnInit {
                 public navParams: NavParams,
                 private authService: AuthService,
                 public popupProvider: PopupProvider,
+                private walletManager: WalletManager,
                 public native: Native) {
-        this.walletId = Config.getCurMasterWalletId();
-        const accountObj = Config.getAccountType(this.walletId);
+        this.walletId = this.walletManager.getCurMasterWalletId();
+        const accountObj = this.walletManager.getAccountType(this.walletId);
         if (accountObj["Type"] === "Multi-Sign" && accountObj["InnerType"] === "Readonly") {
             this.walltype = false;
         } else {

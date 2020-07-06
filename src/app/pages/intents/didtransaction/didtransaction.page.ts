@@ -25,7 +25,7 @@ import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.Service';
-import { WalletManager } from '../../../services/wallet.service';
+import { WalletManager, CoinName } from '../../../services/wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -62,16 +62,16 @@ export class DidTransactionPage implements OnInit {
     }
 
     init() {
-        console.log(Config.coinObj);
-        this.transfer = Config.coinObj.transfer;
-        this.chainId = Config.coinObj.transfer.chainId;
-        this.walletInfo = Config.coinObj.walletInfo;
-        this.masterWalletId = Config.getCurMasterWalletId();
-        if (this.chainId === Config.IDCHAIN) {
-            let coinList = Config.getSubWalletList();
+        console.log(this.walletManager.coinObj);
+        this.transfer = this.walletManager.coinObj.transfer;
+        this.chainId = this.walletManager.coinObj.transfer.chainId;
+        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        if (this.chainId === CoinName.IDCHAIN) {
+            let coinList = this.walletManager.getSubWalletList();
             if (coinList.length === 1) { // for now, just IDChain
                 this.hasOpenIDChain = true;
-                this.balance = Config.masterManager.masterWallet[this.masterWalletId].subWallet[this.chainId].balance / Config.SELA;
+                this.balance = this.walletManager.masterWallets[this.masterWalletId].subWallets[this.chainId].balance / Config.SELA;
             } else {
                 this.hasOpenIDChain = false;
                 this.confirmOpenIDChain();
@@ -113,13 +113,13 @@ export class DidTransactionPage implements OnInit {
 
     createIDTransaction() {
         console.log("Calling createIdTransaction(): ", this.transfer.didrequest, this.transfer.memo)
-        this.walletManager.createIdTransaction(this.masterWalletId, this.chainId,
+        this.walletManager.spvBridge.createIdTransaction(this.masterWalletId, this.chainId,
             this.transfer.didrequest,
             this.transfer.memo,
             (data) => {
                 console.log("Created raw DID transaction:", data);
                 this.transfer.rawTransaction = data;
-                Config.masterManager.openPayModal(this.transfer);
+                this.walletManager.openPayModal(this.transfer);
             });
     }
 }

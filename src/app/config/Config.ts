@@ -21,20 +21,11 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Logger } from "../model/logger";
-// import { WalletObjs } from "./WalletObjs";
 
-/***
- * 封装配置信息
- */
 @Injectable()
 export class Config {
     public static isDebug = true;
-    public static masterWallObj = { id: "", name: "" };
     public static progressObj = {}; // TODO: MOVE...
-    public static masterWalletList = [];    // TODO: MOVE...
-    public static coinObj: any; // TODO: MOVE...
-    public static walletObj: any;   // TODO: MOVE...
     public static requestDapp: any;
     public static modifyId = "";    // TODO: ???
     public static initialized: boolean = false;
@@ -43,34 +34,14 @@ export class Config {
     public static UTXOThreshold = 500;
     public static needCheckUTXOCount = true;
 
-    public static masterManager: any = {};
-
     public static SELA = 100000000;
-    public static ELA = 'ELA';
-    public static IDCHAIN = 'IDChain';
+    //public static ELA = 'ELA';
+    //public static IDCHAIN = 'IDChain';
 
     public static IDCHAIN_URL: String = 'https://idchain.elastos.org/';
     public static BLOCKCHAIN_URL: String = 'https://blockchain.elastos.org/';
     // public static BLOCKCHAIN_URL: String = 'https://blockchain-beta.elastos.org/';
     //public static BLOCKCHAIN_URL: String = 'https://blockchain-regtest.elastos.org/';
-
-    private static walletResregister: any = {};
-
-    public static getCurMasterWalletId() {
-        return this.masterManager.curMasterId;
-    }
-
-    public static setCurMasterWalletId(id) {
-        this.masterManager.setCurMasterId(id);
-    }
-
-    public static getMasterWalletIdList() {
-        return this.masterWalletList;
-    }
-
-    public static setMasterWalletIdList(masterWalletList) {
-        this.masterWalletList = masterWalletList;
-    }
 
     public static uuid(len, radix) {
         var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
@@ -101,15 +72,6 @@ export class Config {
         return uuid.join('');
     }
 
-
-    public static setMappingList(list) {
-        this.walletInfos = list;
-    }
-
-    public static getMappingList() {
-        return this.walletInfos;
-    }
-
     public static objtoarr(obj) {
         let arr = [];
         for (let key in obj) {
@@ -117,73 +79,4 @@ export class Config {
         }
         return arr;
     }
-
-    public static getWalletName(id) {
-        if (this.walletInfos[id]) {
-            return this.walletInfos[id]["wallname"] || "";
-        }
-        else {
-            return "";
-        }
-
-    }
-
-    public static setWalletName(id, walletname) {
-        this.walletInfos[id]["wallname"] = walletname;
-    }
-
-    public static getSubWallet(id) {
-        return Config.masterManager.masterWallet[id].chainList || null;
-    }
-
-    public static getSubWalletList() {
-        var coinList = [];
-        let mastId = Config.getCurMasterWalletId();
-        let subwallet = Config.getSubWallet(mastId);
-        if (subwallet != null) {
-            for (let index in subwallet) {
-                let coin = subwallet[index];
-                if (coin != 'ELA') {
-                    coinList.push({ name: coin });
-                }
-            }
-        }
-
-        return coinList;
-    }
-
-    public static isResregister(id, coin) {
-        if (this.walletResregister[id]) {
-            if (this.walletResregister[id][coin]) {
-                return this.walletResregister[id][coin];
-            } else {
-                return false;
-            }
-
-        } else {
-            return false;
-        }
-    }
-
-    public static setResregister(id, coin, isOpen) {
-        if (this.walletResregister[id]) {
-            this.walletResregister[id][coin] = isOpen;
-        } else {
-            this.walletResregister[id] = {};
-            this.walletResregister[id][coin] = isOpen;
-        }
-
-    }
-
-    public static getAccountType(curMasterId) {
-        if (this.walletInfos[curMasterId]) {
-            return this.walletInfos[curMasterId]["Account"] || {};
-        }
-        else {
-            return {};
-        }
-    }
-
 }
-
-
