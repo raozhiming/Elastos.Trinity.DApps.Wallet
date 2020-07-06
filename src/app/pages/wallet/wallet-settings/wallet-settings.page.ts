@@ -44,7 +44,7 @@ export class WalletSettingsPage implements OnInit {
         }
     }
 
-    destroyWallet(id: string) {
+    public destroyWallet(id: string) {
         this.walletManager.destroyMasterWallet(id);
     }
 

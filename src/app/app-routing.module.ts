@@ -51,6 +51,9 @@ import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnem
 import { MnemonicCheckPage } from './pages/wallet/mnemonic/mnemonic-check/mnemonic-check.page';
 import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
 import { ScanCodePage } from './pages/scancode/scancode.page';
+import { AppModule } from './app.module';
+import { WalletTabsRootPage } from './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.page';
+import { WalletTabSettingsPage } from './pages/wallet/wallet-home/wallet-tab-settings/wallet-tab-settings.page';
 
 const routes: Routes = [
     // Global
@@ -58,9 +61,35 @@ const routes: Routes = [
     { path: 'about', component: AboutPage },
 
     // Wallet
-    { path: '', redirectTo: "wallet-home" },
+    { path: '', redirectTo: "wallet-home", pathMatch: "full"},
     {
-        path: 'wallet-home', loadChildren: './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.router.module#WalletTabsRootRoutingModule',
+        path: 'wallet-home',
+        component: WalletTabsRootPage,
+        children: [
+            {
+            path: 'wallet-tab-home',
+            children: [
+                {
+                path: '',
+                component: WalletTabsRootPage
+                }
+            ]
+            },
+            {
+            path: 'wallet-tab-setting',
+            children: [
+                {
+                path: '',
+                component: WalletTabSettingsPage
+                }
+            ]
+            },
+            {
+                path: '',
+                redirectTo: '/wallet-home/wallet-tab-home',
+                pathMatch: 'full'
+            }
+        ]
     },
     { path: 'wallet-create', component: WalletCreatePage },
     { path: 'wallet-import', component: WalletImportPage },

@@ -317,18 +317,18 @@ export class CoinHomePage implements OnInit {
     }
 
     async checkUTXOCount() {
-        if (Config.needCheckUTXOCount) {
+        if (this.walletManager.needToCheckUTXOCountForConsolidation) {
             let UTXOsJson = await this.walletManager.spvBridge.getAllUTXOs(this.masterWalletId, this.chainId, 0, 1, '');
             console.log('UTXOsJson:', UTXOsJson);
             const UTXOsCount = this.translate.instant('text-consolidate-UTXO-counts', {count: UTXOsJson.MaxCount});
-            if (UTXOsJson.MaxCount >= Config.UTXOThreshold) {
+            if (UTXOsJson.MaxCount >= Config.UTXO_CONSOLIDATE_PROMPT_THRESHOLD) {
                 let ret = await this.popupProvider.ionicConfirmWithSubTitle('text-consolidate-prompt', UTXOsCount, 'text-consolidate-note')
                 if (ret) {
                     await this.createConsolidateTransaction();
                 }
             }
 
-            Config.needCheckUTXOCount = false;
+            this.walletManager.needToCheckUTXOCountForConsolidation = false;
         }
     }
 

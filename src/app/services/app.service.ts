@@ -41,6 +41,8 @@ export class AppService {
 
         titleBarManager.setBackgroundColor("#000000");
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
+
+        this.setIntentListener();
     }
 
     setIntentListener() {

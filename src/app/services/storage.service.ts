@@ -74,15 +74,6 @@ export class LocalStorage {
         return await this.get("infos");
     }
 
-    public setProgress(obj) {
-        let key = "progress";
-        this.storage.set(key, JSON.stringify(obj));
-    }
-
-    public async getProgress(): Promise<number> {
-        return await this.get("progress");
-    }
-
     public savePublishTxList(obj) {
         let key = "publishTx";
         this.storage.set(key, JSON.stringify(obj));
@@ -91,7 +82,6 @@ export class LocalStorage {
     public async getPublishTxList(): Promise<any> {
         return await this.get("publishTx");
     }
-
 }
 
 

@@ -81,7 +81,7 @@ export class MnemonicExportPage implements OnInit {
     }
 
     onShare() {
-        this.native.setRootRouter('/tabs');
+        this.native.setRootRouter('/wallet-home');
         this.appService.sendIntentResponse(this.requestDapp.action,
             { mnemonic: this.mnemonicStr }, this.requestDapp.intentId);
     }

@@ -119,7 +119,7 @@ export class AccessPage implements OnInit {
      */
     cancelOperation() {
         this.appService.sendIntentResponse(this.requestDapp.action, { elaaddress: null }, this.requestDapp.intentId);
-        this.native.setRootRouter('/tabs');
+        this.native.setRootRouter('/wallet-home');
     }
 
     onShare() {
@@ -129,7 +129,7 @@ export class AccessPage implements OnInit {
             const selectedClaim = this.buildDeliverableList();
             this.appService.sendIntentResponse(this.requestDapp.action,
                     {walletinfo: selectedClaim}, this.requestDapp.intentId);
-            this.native.setRootRouter('/tabs');
+            this.native.setRootRouter('/wallet-home');
         }
     }
 }

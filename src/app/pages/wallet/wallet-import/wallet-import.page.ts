@@ -28,7 +28,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
     public walletType: string;
     public accontObj: any = {};
     constructor(public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events, public popupProvider: PopupProvider, public zone: NgZone) {
-        this.masterWalletId = Config.uuid(6, 16);
+        this.masterWalletId = Util.uuid(6, 16);
         this.events.subscribe("error:update", (item) => {
             if (item["error"]) {
                 if (item["error"]["code"] === 20036) {

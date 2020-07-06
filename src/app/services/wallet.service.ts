@@ -21,20 +21,20 @@
  */
 
 import { Injectable, NgZone } from '@angular/core';
-import { Events, ModalController } from '@ionic/angular';
+import { Events, ModalController, Platform } from '@ionic/angular';
 import { Config } from '../config/Config';
 import { Native } from './native.service';
 import { PopupProvider } from './popup.service';
 import { Util } from '../model/Util';
 import { TranslateService } from '@ngx-translate/core';
-import { AppService } from './app.service';
 import { LocalStorage } from './storage.service';
-import { WalletID, SignedTransaction, SPVWalletPluginBridge } from '../model/SPVWalletPluginBridge';
+import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult } from '../model/SPVWalletPluginBridge';
 import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
-import { MasterWallet } from '../model/MasterWallet';
+import { MasterWallet, WalletID, CoinName } from '../model/MasterWallet';
 import { SubWallet } from '../model/SubWallet';
 import { Transfer } from '../model/Transfer';
 
+declare let appManager: AppManagerPlugin.AppManager;
 declare let notificationManager: NotificationManagerPlugin.NotificationManager;
 
 export class WalletObjTEMP {
@@ -53,9 +53,17 @@ export class CoinObjTEMP {
     walletInfo: any; // TODO: type
 }
 
-export enum CoinName {
-    ELA = 'ELA',
-    IDCHAIN = 'IDChain'
+class TransactionMapEntry {
+    Code: number = null;
+    Reason: string = null;
+    WalletID: string = null;
+    ChainID: string = null;
+    Status: string = null;
+    lock: boolean = false;
+}
+
+type TransactionMap = {
+    [k: string]: TransactionMapEntry;
 }
 
 // TODO: Replace all the Promise<any> with real data structures
@@ -71,11 +79,11 @@ export class WalletManager {
     public static LIMITGAP = 500;   // TODO: What's this?
     public static FEEPERKb = 500;   // TODO: feed for what? Rename
 
-    public curMaster: MasterWallet = new MasterWallet();
+    public curMaster: MasterWallet = null;
 
     public masterWallets: {
         [index: string]: MasterWallet
-    };
+    } = {};
 
     public curMasterId: string = "-1"; // TODO: why can't we get this from "masterWallet" ?
     public walletInfos: any = {}; // TODO: typings + what's this?
@@ -91,13 +99,14 @@ export class WalletManager {
 
     private masterIdFromStorage = '-1';
     public masterInfos: any = {};
-    public progress: any = {};
     public masterList: any = {};
-    public transactionMap: any = {}; // when sync over, need to cleanup transactionMap
+    public transactionMap: TransactionMap = {}; // when sync over, need to cleanup transactionMap
 
     public hasPromptTransfer2IDChain = true;
 
     public hasSendSyncCompletedNotification = {ELA: false, IDChain: false};
+    public needToCheckUTXOCountForConsolidation = true;
+    public needToPromptTransferToIDChain = false; // Whether it's time to ask user to transfer some funds to the ID chain for better user experience or not.
 
     public spvBridge: SPVWalletPluginBridge = null;
 
@@ -106,10 +115,14 @@ export class WalletManager {
                 public zone: NgZone,
                 public modalCtrl: ModalController,
                 public translate: TranslateService,
-                public appService: AppService,
                 public localStorage: LocalStorage,
+                private platform: Platform,
                 public popupProvider: PopupProvider) {
-      this.init();
+    
+        // Wait for trinity plugins to be erady before doing anything.
+        this.platform.ready().then(()=>{
+            this.init();
+        });
     }
 
     async init() {
@@ -117,7 +130,7 @@ export class WalletManager {
 
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
 
-        await this.getCurMasterIdFromStorage();
+        await this.getCurrentMasterIdFromStorage();
 
         let infos = await this.localStorage.getMasterInfos();
         console.log("Got master infos", infos);
@@ -128,11 +141,6 @@ export class WalletManager {
             console.warn("Empty Master info returned!");
         }
 
-        let progress = await this.localStorage.getProgress();
-        if (progress) {
-            this.progress = progress;
-        }
-        
         try {
             let idList = await this.spvBridge.getAllMasterWallets();
             this.masterList = idList;
@@ -153,9 +161,9 @@ export class WalletManager {
                     this.masterWallets[id] = this.masterInfos[id];
                 }
                 else {
-                    this.masterWallets[id] = new MasterWallet();
+                    this.masterWallets[id] = new MasterWallet(this, id);
                 }
-                await this.getMasterWalletBasicInfo(id);
+                await this.masterWallets[id].populateMasterWalletSPVInfo();
             }
         }
         catch (error) {
@@ -248,84 +256,33 @@ export class WalletManager {
     }
 
     handleNull() {
+        console.log("HANDLE NULL");
         this.native.setRootRouter('/launcher');
     }
 
-    private async getCurMasterIdFromStorage(): Promise<any> {
+    private async getCurrentMasterIdFromStorage(): Promise<any> {
         let data = await this.localStorage.getCurMasterId();
         if (data && data["masterId"]) {
             this.masterIdFromStorage = data["masterId"];
         }
     }
 
-    private async getMasterWalletBasicInfo(masterId, isAdd = false) {
-        console.log("Getting basic wallet info for wallet:", masterId);
-
-        this.masterWallets[masterId].account = await this.spvBridge.getMasterWalletBasicInfo(masterId);
-        await this.getAllSubWallets(masterId, isAdd);
-    }
-
-    public async getAllSubWallets(masterId, isAdd = false) {
-        console.log("Getting all subwallets for wallet:", masterId, isAdd);
-
-        let data = await this.spvBridge.getAllSubWallets(masterId);
-        this.masterWallets[masterId].chainList = [];
-        if (!this.masterWallets[masterId].subWallets) {
-            this.masterWallets[masterId].subWallets = {};
-        }
-        for (let index in data) {
-            let chainId = data[index];
-            this.addSubWallet(masterId, chainId);
-        }
-
-        if (isAdd) {
-            this.saveInfos();
-            this.setCurMasterId(masterId);
-            this.appService.setIntentListener();
-            this.native.setRootRouter("/tabs");
-        } else {
-            let currentMasterId = this.masterIdFromStorage;
-            // Choose the first wallet if switch Network(MainNet,TestNet).
-            if (this.masterList.indexOf(currentMasterId) === -1) {
-                currentMasterId = this.masterList[0];
-            }
-
-            if (currentMasterId === '-1') {
-                this.curMasterId = this.masterList[0];
-            }
-
-            if (masterId === currentMasterId) {
-                this.setCurMasterId(masterId);
-                this.appService.setIntentListener();
-                this.native.setRootRouter("/tabs");
-            }
-        }
-    }
-
-    // TODO: a "get" api should not "update" anything. Rename.
-    public async getWalletBalance(masterId: string, chainId: string) {
-        let balance = await this.spvBridge.getBalance(masterId, chainId);
-        // TODO: Why a zone run here? Let's hope we are not updating UI directly from this sercicxe model...
-        this.zone.run(() => {
-            // balance in SELA
-            this.masterWallets[masterId].subWallets[chainId].balance = parseInt(balance, 10);
-            let idChainBalance = 0;
-            if (this.masterWallets[masterId].subWallets[CoinName.IDCHAIN]) {
-                idChainBalance = this.masterWallets[masterId].subWallets[CoinName.IDCHAIN].balance;
-            }
-            // rate = 1
-            this.masterWallets[masterId].totalBalance = this.masterWallets[masterId].subWallets[CoinName.ELA].balance + idChainBalance;
-        });
-    }
-
     public async addMasterWallet(id, name) {
-        this.masterWallets[id] = new MasterWallet(name);
+        // Add a new wallet to our local model
+        this.masterWallets[id] = new MasterWallet(id, name);
         this.masterList.push(id);
-        await this.getMasterWalletBasicInfo(id, true);
+
+        await this.masterWallets[id].populateMasterWalletSPVInfo(true);
     }
 
-    async destroyMasterWallet(id) {
+    /**
+     * Destroy a master wallet, active or not, base on its id
+     */
+    async destroyMasterWallet(id: string) {
+        // Destroy the wallet in the wallet plugin
         await this.spvBridge.destroyWallet(id);
+
+        // Destroy from our local model
         this.masterWallets[id] = null;
         for (var i = 0; i < this.masterList.length; i++) {
             if (this.masterList[i] === id) {
@@ -336,7 +293,11 @@ export class WalletManager {
         if (this.curMasterId === id) {
             this.curMasterId = '-1';
         }
+
+        // Save this modification to our permanent local storage
         this.saveInfos();
+
+        // If there is at least one remaining wallet, select it as the new active wallet in the app.
         if (this.masterList.length > 0) {
             this.setCurMasterId(this.masterList[0]);
         }
@@ -388,30 +349,7 @@ export class WalletManager {
         return this.curMasterId;
     }
 
-    public async addSubWallet(masterId, chainId) {
-        this.masterWallets[masterId].chainList.push(chainId);
-        if (!this.masterWallets[masterId].subWallets[chainId]) {
-            this.masterWallets[masterId].subWallets[chainId] = new SubWallet();
-        } else {
-            if (this.progress && this.progress[masterId] && this.progress[masterId][chainId]) {
-                const lastblocktime = this.progress[masterId][chainId].lastblocktime;
-                if (lastblocktime) {
-                    this.masterWallets[masterId].subWallets[chainId].lastblocktime = lastblocktime;
-                    this.masterWallets[masterId].subWallets[chainId].timestamp = 0;
-                }
-            }
-        }
-
-        this.spvBridge.registerWalletListener(masterId, chainId, (ret)=>{
-            this.zone.run(() => {
-                this.handleSubWalletCallback(ret);
-            });
-        });
-
-        this.getWalletBalance(masterId, chainId);
-    }
-
-    public removeSubWallet(masterId, chainId) {
+    public removeSubWallet(masterId: string, chainId: string) {
         this.zone.run(() => {
             this.masterWallets[masterId].subWallets[chainId] = null;
             for (var i = 0; i < this.masterWallets[masterId].chainList.length; i++) {
@@ -424,11 +362,11 @@ export class WalletManager {
         });
     }
 
-    public handleSubWalletCallback(result) {
-        let masterId = result["MasterWalletID"];
-        let chainId = result["ChainID"];
+    public handleSubWalletCallback(result: SPVWalletMessage) {
+        let masterId = result.MasterWalletID;
+        let chainId = result.ChainID;
 
-        switch (result["Action"]) {
+        switch (result.Action) {
             case "OnTransactionStatusChanged":
                 // console.log('OnTransactionStatusChanged ', result);
                 if (this.transactionMap[result.txId]) {
@@ -439,15 +377,13 @@ export class WalletManager {
                 break;
             case "OnBlockSyncProgress":
                 // console.log('OnBlockSyncProgress ', result);
-                this.zone.run(() => {
-                    this.setProgress(masterId, chainId, result.Progress, result.LastBlockTime);
-                });
+                this.masterWallets[masterId].setProgress(chainId, result.Progress, result.LastBlockTime);
                 break;
             case "OnBlockSyncStopped":
                 break;
             case "OnBalanceChanged":
                 // console.log('OnBalanceChanged ', result);
-                this.getWalletBalance(masterId, chainId);
+                this.updateWalletBalance(masterId, chainId);
                 break;
             case "OnTxPublished":
                 // console.log('OnTxPublished ', result);
@@ -460,27 +396,34 @@ export class WalletManager {
         }
     }
 
-    OnTxPublished(data) {
-        let hash = data["hash"];
-        let result = JSON.parse(data["result"]);
-        let code = result["Code"];
-        let reason = result["Reason"];
-        let tx = "txPublished-";
-        let MasterWalletID = data["MasterWalletID"];
-        let chainId = data["ChainID"];
+    private updateWalletBalance(masterId: WalletID, chainId: CoinName) {
+        this.masterWallets[masterId].updateWalletBalance(chainId);
+    }
 
+    OnTxPublished(data: SPVWalletMessage) {
+        let MasterWalletID = data.MasterWalletID;
+        let chainId = data.ChainID;
+        let hash = data.hash;
+
+        let result = JSON.parse(data["result"]) as TxPublishedResult;
+        let code = result.Code;
+        let reason = result.Reason;
+
+        let tx = "txPublished-";
+
+        // TODO: messy again - what is the transaction map type? Mix of TxPublishedResult and SPVWalletMessage ?
         if (this.transactionMap[hash]) {
             this.transactionMap[hash].Code = code;
             this.transactionMap[hash].Reason = reason;
             this.transactionMap[hash].WalletID = MasterWalletID;
             this.transactionMap[hash].ChainID = chainId;
         } else {
-            this.transactionMap[hash] = {
-                WalletID : MasterWalletID,
-                ChainID : chainId,
-                Code : code,
-                Reason: reason,
-            };
+            this.transactionMap[hash] = new TransactionMapEntry();
+            this.transactionMap[hash].WalletID = MasterWalletID;
+            this.transactionMap[hash].ChainID = chainId;
+            this.transactionMap[hash].Code = code;
+            this.transactionMap[hash].Reason = reason;
+  
             this.localStorage.savePublishTxList(this.transactionMap);
         }
 
@@ -494,49 +437,15 @@ export class WalletManager {
         }
     }
 
-    public setProgress(masterId, coin, progress, lastBlockTime) {
-        this.masterWallets[masterId].subWallets[coin].progress = progress;
-        const datetime = Util.dateFormat(new Date(lastBlockTime * 1000), 'yyyy-MM-dd HH:mm:ss');
-        this.masterWallets[masterId].subWallets[coin].lastblocktime = datetime;
-
-        if (!this.progress[masterId]) {
-            this.progress[masterId] = {};
-        }
-        if (!this.progress[masterId][coin]) {
-            this.progress[masterId][coin] = {};
-        }
-
-        this.progress[masterId][coin].lastblocktime = datetime;
-        this.localStorage.setProgress(this.progress);
-
-        if (!this.hasPromptTransfer2IDChain && (coin === CoinName.IDCHAIN) && (progress === 100)) {
-            this.checkIDChainBalance();
-        }
-
-        if (progress === 100) {
-          this.sendSyncCompletedNotification(coin);
-        }
-
-        const curTimerstamp = (new Date()).getTime();
-        // console.log('curTimerstamp ', curTimerstamp);
-        if (curTimerstamp - this.masterWallets[masterId].subWallets[coin].timestamp > 5000) { // 5s
-            this.events.publish(coin + ':syncprogress', {coin});
-            this.masterWallets[masterId].subWallets[coin].timestamp = curTimerstamp;
-        }
-        if (progress === 100) {
-            this.events.publish(coin + ':synccompleted', {coin});
-        }
-    }
-
     public setHasPromptTransfer2IDChain() {
         this.hasPromptTransfer2IDChain = true;
-        Config.needPromptTransfer2IDChain = false;
-        this.localStorage.set('hasPrompt', true);
+        this.needToPromptTransferToIDChain = false;
+        this.localStorage.set('hasPrompt', true); // TODO: rename to something better than "hasPrompt"
     }
 
     public checkIDChainBalance() {
         if (this.hasPromptTransfer2IDChain) { return; }
-        if (Config.needPromptTransfer2IDChain) { return; }
+        if (this.needToPromptTransferToIDChain) { return; }
 
         // // IDChain not open, do not prompt
         // if (Util.isNull(this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN])) {
@@ -553,28 +462,29 @@ export class WalletManager {
             return;
         }
 
-        console.log('set needPromptTransfer2IDChain true');
-        Config.needPromptTransfer2IDChain = true;
+        this.needToPromptTransferToIDChain = true;
     }
 
     // for intent
+    // TODO: What's this? lock what for what?
     lockTx(hash) {
         if (this.transactionMap[hash]) {
             this.transactionMap[hash].lock = true;
         } else {
-            this.transactionMap[hash] = {lock : true};
-            //
+            this.transactionMap[hash] = new TransactionMapEntry();
+            this.transactionMap[hash].lock = true;
+
             this.localStorage.savePublishTxList(this.transactionMap);
         }
     }
 
-    public getTxCode(hash) {
+    private getTxCode(hash) {
         let code = 0;
         if (this.transactionMap[hash].Code) {
             code = this.transactionMap[hash].Code;
         }
 
-        if (this.transactionMap[hash].Status === 'Deleted') {// success also need delete
+        if (this.transactionMap[hash].Status === 'Deleted') { // success also need delete
             delete this.transactionMap[hash];
             this.localStorage.savePublishTxList(this.transactionMap);
         } else {
@@ -585,11 +495,13 @@ export class WalletManager {
     }
 
     cleanTransactionMap() {
-        this.transactionMap = [];
+        this.transactionMap = {};
         this.localStorage.savePublishTxList(this.transactionMap);
     }
 
-    // publish transaction
+    /**
+     * Prompts and returns wallet password to user.
+     */
     getPassword(transfer): Promise<string> {
         return new Promise(async (resolve, reject) => {
             const props = this.native.clone(transfer);
@@ -608,6 +520,11 @@ export class WalletManager {
         });
     }
 
+    /**
+     * Opens the payment popup with all the necessary transaction information.
+     * Once password is entered by the user, a transaction is created and signed, then sent
+     * for the SPV SDK for publishing.
+     */
     async openPayModal(transfer) {
         const payPassword = await this.getPassword(transfer);
         if (payPassword === null) {
@@ -619,6 +536,9 @@ export class WalletManager {
         this.signAndSendTransaction(transfer);
     }
 
+    /**
+     * Signs raw transaction and sends the signed transaction to the SPV SDK for publication.
+     */
     async signAndSendTransaction(transfer) {
         let signedTx = await this.spvBridge.signTransaction(this.curMasterId,
                                            transfer.chainId,
@@ -628,7 +548,7 @@ export class WalletManager {
         this.sendTransaction(transfer, signedTx);
     }
 
-    async sendTransaction(transfer, signedTx: SignedTransaction) {
+    private async sendTransaction(transfer, signedTx: SignedTransaction) {
         let publishedTransaction = await this.spvBridge.publishTransaction(this.curMasterId, transfer.chainId, signedTx);
         
         if (!Util.isEmptyObject(transfer.action)) {
@@ -642,19 +562,23 @@ export class WalletManager {
                 }
                 this.native.hideLoading();
                 this.native.toast_trans('send-raw-transaction');
-                this.native.setRootRouter('/tabs');
+                this.native.setRootRouter('/wallet-home');
                 console.log('Sending intent response', transfer.action, {txid: txId}, transfer.intentId);
-                this.appService.sendIntentResponse(transfer.action, {txid: txId}, transfer.intentId);
+                appManager.sendIntentResponse(transfer.action, {txid: txId}, transfer.intentId);
             }, 5000); // wait for 5s for txPublished
         } else {
             console.log(publishedTransaction.TxHash);
 
             this.native.hideLoading();
             this.native.toast_trans('send-raw-transaction');
-            this.native.setRootRouter('/tabs');
+            this.native.setRootRouter('/wallet-home');
         }
     }
 
+    /**
+     * Sends a system notification inside elastOS when the wallet completes his synchronization for the first time.
+     * This way, users know when they can start using their wallet in third party apps.
+     */
     sendSyncCompletedNotification(chainId) {
       if (this.hasSendSyncCompletedNotification[chainId] === false) {
         console.log('sendSyncCompletedNotification:', chainId);

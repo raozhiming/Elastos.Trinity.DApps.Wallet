@@ -77,6 +77,6 @@ export class WalletCreatePage implements OnInit {
         this.walletManager.walletObj.name = this.wallet.name;
         this.walletManager.walletObj.singleAddress = this.wallet.singleAddress;
 
-        this.native.go("/mnemonic", params);
+        this.native.go("/mnemonic-create", params);
     }
 }

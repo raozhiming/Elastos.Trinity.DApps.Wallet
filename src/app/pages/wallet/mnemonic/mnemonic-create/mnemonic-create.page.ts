@@ -38,7 +38,7 @@ export class MnemonicCreatePage implements OnInit {
     }
 
     async init() {
-        this.masterWalletId = Config.uuid(6, 16);
+        this.masterWalletId = Util.uuid(6, 16);
         let ret = await this.walletManager.spvBridge.generateMnemonic(this.native.getMnemonicLang());
         this.native.hideLoading();
         this.mnemonicStr = ret;

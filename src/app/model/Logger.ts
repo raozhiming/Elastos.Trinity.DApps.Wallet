@@ -32,7 +32,7 @@ export class Logger {
     }
 
     public static log(message: any, type: string): void {
-        if (Config.isDebug) {
+        if (Config.DEBUG_LOGS_ENABLED) {
             let msg = type +  ": " + (_.isString(message) ? message : JSON.stringify(message));
             console.log(msg);
         }

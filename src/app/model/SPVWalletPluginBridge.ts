@@ -3,10 +3,10 @@ import { Native } from '../services/native.service';
 import { Events } from '@ionic/angular';
 import { PopupProvider } from '../services/popup.service';
 import { Config } from '../config/Config';
+import { ChainID, CoinName } from './MasterWallet';
 
 declare let walletManager: WalletPlugin.WalletManager;
 
-export type WalletID = string;
 export type ELAAmountString = string; // string representation of an ELA amount (encoded like this in the wallet plugin)
 export type TransactionID = string;
 export type SignedTransaction = string;
@@ -35,6 +35,27 @@ export type Transaction = {
 export type AllTransactions = {
     MaxCount: number,
     Transactions: Transaction[]
+}
+
+export type SPVWalletMessage = {
+    MasterWalletID: string;
+    ChainID: CoinName;
+    Action: string;
+    txId: string;
+    status: string;
+    Progress: number;
+    LastBlockTime: string;
+
+    // TODO: Tx published only? Inherit?
+    hash: string;
+    result: string;
+    Code: string;
+    Reason: string;
+}
+
+export type TxPublishedResult = {
+    Code: number;
+    Reason: string;
 }
 
 export class SPVWalletPluginBridge {
@@ -131,7 +152,7 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    getAllSubWallets(masterWalletId: string): Promise<any> {
+    getAllSubWallets(masterWalletId: string): Promise<ChainID[]> {
         return new Promise((resolve, reject)=>{
             walletManager.getAllSubWallets([masterWalletId],
                 (ret) => { resolve(ret); },
@@ -309,7 +330,7 @@ export class SPVWalletPluginBridge {
     }
 
     // TODO: Types for listener data
-    registerWalletListener(masterWalletId: string, chainId: string, listener: (ret)=>void) {
+    registerWalletListener(masterWalletId: string, chainId: string, listener: (ret: SPVWalletMessage)=>void) {
         walletManager.registerWalletListener([masterWalletId, chainId],
             (ret) => { listener(ret); },
             (err) => { this.handleError(err, null);  });

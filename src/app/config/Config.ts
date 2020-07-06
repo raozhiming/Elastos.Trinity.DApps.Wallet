@@ -22,61 +22,36 @@
 
 import { Injectable } from '@angular/core';
 
+// TODO: translate comments to english
 @Injectable()
 export class Config {
-    public static isDebug = true;
-    public static progressObj = {}; // TODO: MOVE...
-    public static requestDapp: any;
-    public static modifyId = "";    // TODO: ???
-    public static initialized: boolean = false;
-    public static needPromptTransfer2IDChain = false; // for now just show once atmost?
+    /**后台服务*/ 
+    public static SERVER:string = 'https://39.106.96.168:8446/api';
+    /**后台服务*/
+    public static SERVER1:string = 'https://123.206.52.29/api';
+    public static SERVER2:string = 'https://52.81.8.194:442/api';
+    /**获取认证费用定价 */
+    public static GET_PRICE:string = Config.SERVER +'/getPrice';
+    public static SEND_CODE:string = Config.SERVER +'/sendCode';
+    /**用户信息认证接口*/
+    public static AUTH:string = Config.SERVER +'/authreqstatus/auth';
+    /**APP认证结果请求接口 */
+    public static APP_AUTH:string = Config.SERVER +'/app/auth';
 
-    public static UTXOThreshold = 500;
-    public static needCheckUTXOCount = true;
+    public static DEBUG_LOGS_ENABLED = true;
 
-    public static SELA = 100000000;
-    //public static ELA = 'ELA';
-    //public static IDCHAIN = 'IDChain';
+    public static UTXO_CONSOLIDATE_PROMPT_THRESHOLD = 500; // Number of UTXOs after which the app will ask user to consolidate.
 
+    public static SELA = 100000000; // Number of SELA per ELA.
+
+    // TODO: comment what those below urls are
     public static IDCHAIN_URL: String = 'https://idchain.elastos.org/';
     public static BLOCKCHAIN_URL: String = 'https://blockchain.elastos.org/';
+
+    // TODO: cleanup the below urls / find a better way
     // public static BLOCKCHAIN_URL: String = 'https://blockchain-beta.elastos.org/';
     //public static BLOCKCHAIN_URL: String = 'https://blockchain-regtest.elastos.org/';
 
-    public static uuid(len, radix) {
-        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-        var uuid = [], i;
-        radix = radix || chars.length;
-
-        if (len) {
-            // Compact form
-            for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
-        } else {
-            // rfc4122, version 4 form
-            var r;
-
-            // rfc4122 requires these characters
-            uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
-            uuid[14] = '4';
-
-            // Fill in random data. At i==19 set the high bits of clock sequence as
-            // per rfc4122, sec. 4.1.5
-            for (i = 0; i < 36; i++) {
-                if (!uuid[i]) {
-                    r = 0 | Math.random() * 16;
-                    uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
-                }
-            }
-        }
-
-        return uuid.join('');
-    }
-
-    public static objtoarr(obj) {
-        let arr = [];
-        for (let key in obj) {
-            arr.push(obj[key]);
-        }
-        return arr;
-    }
+    public static requestDapp: any; // TODO: ???
+    public static modifyId = "";    // TODO: ???
 }

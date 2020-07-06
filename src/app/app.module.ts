@@ -79,9 +79,12 @@ import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnem
 import { MnemonicCheckPage } from './pages/wallet/mnemonic/mnemonic-check/mnemonic-check.page';
 import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
 import { ScanCodePage } from './pages/scancode/scancode.page';
+import { WalletTabSettingsPage } from './pages/wallet/wallet-home/wallet-tab-settings/wallet-tab-settings.page';
+import { WalletTabsRootPage } from './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.page';
+
+import { ComponentsModule } from './components/components.module';
 
 import * as Sentry from "@sentry/browser";
-import { ComponentsModule } from './components/components.module';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -137,6 +140,8 @@ export function TranslateLoaderFactory() {
         DPoSVotePage,
         CoinTransferPage,
         DidTransactionPage,
+        WalletTabSettingsPage,
+        WalletTabsRootPage,
         WalletPasswordResetPage,
         WalletEditNamePage,
         WalletImportPage,
@@ -160,7 +165,10 @@ export function TranslateLoaderFactory() {
         MnemonicWritePage,
         MnemonicCreatePage
     ],
-    entryComponents: [],
+    entryComponents: [
+        LauncherPage,
+        WalletTabsRootPage
+    ],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),

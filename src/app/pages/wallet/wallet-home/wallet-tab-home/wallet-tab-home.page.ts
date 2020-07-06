@@ -77,7 +77,7 @@ export class WalletTabHomePage implements OnInit {
     }
 
     promptTransfer2IDChain() {
-        if (Config.needPromptTransfer2IDChain) {
+        if (this.walletManager.needToPromptTransferToIDChain) {
             this.popupProvider.ionicAlert('text-did-balance-not-enough');
             this.walletManager.setHasPromptTransfer2IDChain();
         }
