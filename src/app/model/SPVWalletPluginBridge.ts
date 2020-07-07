@@ -3,7 +3,7 @@ import { Native } from '../services/native.service';
 import { Events } from '@ionic/angular';
 import { PopupProvider } from '../services/popup.service';
 import { Config } from '../config/Config';
-import { ChainID, CoinName } from './MasterWallet';
+import { CoinName } from './MasterWallet';
 
 declare let walletManager: WalletPlugin.WalletManager;
 
@@ -20,16 +20,33 @@ export type PublishedTransaction = {
     TxHash: string;
 }
 
+export enum TransactionStatus {
+    CONFIRMED = 'Confirmed',
+    PENDING = 'Pending',
+    UNCONFIRMED = 'Unconfirmed'
+}
+
+export enum TransactionDirection {
+    RECEIVED = "Received",
+    SENT = "Sent",
+    MOVED = "Moved",
+    DEPOSIT = "Deposit"
+}
+
 export type Transaction = {
     Amount: number;
+    Fee: number;
     ConfirmStatus: string;
-    Direction: string;
+    Direction: TransactionDirection;
     Height: number;
-    Status: string;
+    Status: TransactionStatus;
     Timestamp: number;
     TxHash: string;
     Type: number;
     OutputPayload: string;
+    Inputs: any; // TODO: type
+    Outputs: any; // TODO: type
+    Memo: string;
 };
 
 export type AllTransactions = {
@@ -44,7 +61,7 @@ export type SPVWalletMessage = {
     txId: string;
     status: string;
     Progress: number;
-    LastBlockTime: string;
+    LastBlockTime: number;
 
     // TODO: Tx published only? Inherit?
     hash: string;
@@ -152,7 +169,7 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    getAllSubWallets(masterWalletId: string): Promise<ChainID[]> {
+    getAllSubWallets(masterWalletId: string): Promise<CoinName[]> {
         return new Promise((resolve, reject)=>{
             walletManager.getAllSubWallets([masterWalletId],
                 (ret) => { resolve(ret); },

@@ -27,9 +27,11 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.service';
 import { Util } from '../../../../model/Util';
-import { WalletManager, CoinName, CoinObjTEMP } from '../../../../services/wallet.service';
+import { WalletManager, CoinObjTEMP } from '../../../../services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Transfer } from 'src/app/model/Transfer';
+import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
 
 @Component({
     selector: 'app-coin-home',
@@ -38,14 +40,12 @@ import { Transfer } from 'src/app/model/Transfer';
 })
 export class CoinHomePage implements OnInit {
     public masterWalletInfo = '';
-    masterWalletId = '1';
+    masterWallet: MasterWallet = null;
     transferList = [];
 
-    chainId = '';
+    chainId: CoinName = null;
     pageNo = 0;
     start = 0;
-
-    textShow = '';
 
     isShowMore = false;
     MaxCount = 0;
@@ -75,20 +75,15 @@ export class CoinHomePage implements OnInit {
     async init() {
         this.walletManager.coinObj = new CoinObjTEMP();
 
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
-        this.walletManager.coinObj.walletInfo = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWalletId);
+        this.masterWallet = this.walletManager.getActiveMasterWallet();
+        this.walletManager.coinObj.walletInfo = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWallet.id);
 
         this.route.paramMap.subscribe((params) => {
-            this.chainId = params.get('name');
-            if (this.chainId === 'ELA') {
-                this.textShow = 'text-recharge';
-            } else {
-                this.textShow = 'text-withdraw';
-            }
+            this.chainId = params.get('name') as CoinName;
 
             this.initData();
 
-            if (this.walletManager.curMaster.subWallets[this.chainId].progress !== 100) {
+            if (this.walletManager.activeMasterWallet.subWallets[this.chainId].progress !== 100) {
                 this.events.subscribe(this.chainId + ':synccompleted', (coin) => {
                     this.CheckPublishTx();
                     this.checkUTXOCount();
@@ -111,8 +106,16 @@ export class CoinHomePage implements OnInit {
         this.getAllTx();
     }
 
+    chainIsELA(): boolean {
+        return this.chainId == CoinName.ELA;
+    }
+
+    chainIsDID(): boolean {
+        return this.chainId == CoinName.IDCHAIN;
+    }
+
     async getAllTx() {
-        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWalletId, this.chainId, this.start, '');
+        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.chainId, this.start, '');
         const transactions = allTransactions.Transactions;
         this.MaxCount = allTransactions.MaxCount;
         if (this.MaxCount > 0) {
@@ -142,11 +145,12 @@ export class CoinHomePage implements OnInit {
                 const timestamp = transaction.Timestamp * 1000;
                 const datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
                 const txId = transaction.TxHash;
-                let payStatusIcon = transaction.Direction;
-                let name = transaction.Direction;
+                let payStatusIcon: string = null;
+                let name = '';
                 let symbol = '';
                 const type = transaction.Type;
-                if (payStatusIcon === 'Received') {
+
+                if (transaction.Direction === TransactionDirection.RECEIVED) {
                     payStatusIcon = './assets/images/exchange-add.png';
                     symbol = '+';
 
@@ -162,7 +166,7 @@ export class CoinHomePage implements OnInit {
                         default:
                         break;
                     }
-                } else if (payStatusIcon === 'Sent') {
+                } else if (transaction.Direction === TransactionDirection.SENT) {
                     payStatusIcon = './assets/images/exchange-sub.png';
                     symbol = '-';
 
@@ -175,11 +179,11 @@ export class CoinHomePage implements OnInit {
                             name = 'ToELA';
                         }
                     }
-                } else if (payStatusIcon === 'Moved') {
+                } else if (transaction.Direction == TransactionDirection.MOVED) {
                     payStatusIcon = './assets/images/exchange-sub.png';
                     symbol = '';
 
-                    if (this.chainId === 'ELA') { // for now IDChian no vote
+                    if (this.chainId === CoinName.ELA) { // for now IDChian no vote
                         // vote transaction
                         const isVote = await this.isVoteTransaction(txId);
                         if (isVote) {
@@ -192,7 +196,7 @@ export class CoinHomePage implements OnInit {
                             name = 'DID';
                         }
                     }
-                } else if (payStatusIcon === 'Deposit') {
+                } else if (transaction.Direction == TransactionDirection.DEPOSIT) {
                     payStatusIcon = './assets/images/exchange-sub.png';
                     if (transaction.Amount > 0) {
                         symbol = '-';
@@ -200,15 +204,16 @@ export class CoinHomePage implements OnInit {
                         symbol = '';
                     }
                 }
+
                 let status = '';
                 switch (transaction.Status) {
-                    case 'Confirmed':
+                    case TransactionStatus.CONFIRMED:
                         status = 'Confirmed';
                         break;
-                    case 'Pending':
+                    case TransactionStatus.PENDING:
                         status = 'Pending';
                         break;
-                    case 'Unconfirmed':
+                    case TransactionStatus.UNCONFIRMED:
                         status = 'Unconfirmed';
                         break;
                 }
@@ -230,7 +235,7 @@ export class CoinHomePage implements OnInit {
 
     isVoteTransaction(txId: string): Promise<any> {
         return new Promise(async (resolve, reject)=>{
-            let transactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWalletId, this.chainId, 0, txId);
+            let transactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.chainId, 0, txId);
             
             const transaction = transactions['Transactions'][0];
             if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
@@ -243,40 +248,43 @@ export class CoinHomePage implements OnInit {
     }
 
     onItem(item) {
-        this.native.go('/recordinfo', { chainId: this.chainId, txId: item.txId });
+        this.native.go('/coin-tx-info', { chainId: this.chainId, txId: item.txId });
     }
 
-    onNext(type) {
+    receiveFunds() {
         this.walletManager.coinObj.transfer = new Transfer();
         this.walletManager.coinObj.transfer.chainId = this.chainId;
-        
-        switch (type) {
-            case 1:
-                this.native.go('/receive');
-                break;
-            case 2:
-                this.walletManager.coinObj.transfer.type = 'transfer';
-                this.native.go('/transfer');
-                break;
-            case 3:
-                if (this.chainId === 'ELA') {
-                    this.walletManager.coinObj.transfer.type = 'recharge';
-                    const coinList = this.walletManager.getSubWalletList();
-                    if (coinList.length === 1) {
-                        this.walletManager.coinObj.transfer.sideChainId = coinList[0].name;
-                        this.native.go('/transfer');
-                    } else {
-                        this.native.go('/coin-select');
-                    }
-                } else {
-                    this.walletManager.coinObj.transfer.type = 'withdraw';
-                    this.native.go('/transfer');
-                }
-                break;
-            default:
-                console.log('type error:', type);
-                break;
+        this.native.go('/coin-receive');
+    }
+
+    transferFunds() {
+        this.walletManager.coinObj.transfer = new Transfer();
+        this.walletManager.coinObj.transfer.chainId = this.chainId;
+        this.walletManager.coinObj.transfer.type = 'transfer';
+        this.native.go('/coin-transfer');
+    }
+
+    rechargeFunds() {
+        this.walletManager.coinObj.transfer = new Transfer();
+        this.walletManager.coinObj.transfer.chainId = this.chainId;
+        this.walletManager.coinObj.transfer.type = 'recharge';
+
+        // Filter out the current chain id as this is our transfer source. We only want to pick
+        // the destination subwallet.
+        const subWallets = this.masterWallet.subWalletsWithExcludedCoin(this.chainId);
+        if (subWallets.length === 1) {
+            this.walletManager.coinObj.transfer.sideChainId = subWallets[0].id;
+            this.native.go('/coin-transfer');
+        } else {
+            this.native.go('/coin-select');
         }
+    }
+
+    withdrawFunds() {
+        this.walletManager.coinObj.transfer = new Transfer();
+        this.walletManager.coinObj.transfer.chainId = this.chainId;
+        this.walletManager.coinObj.transfer.type = 'withdraw';
+        this.native.go('/coin-transfer');
     }
 
     clickMore() {
@@ -318,7 +326,7 @@ export class CoinHomePage implements OnInit {
 
     async checkUTXOCount() {
         if (this.walletManager.needToCheckUTXOCountForConsolidation) {
-            let UTXOsJson = await this.walletManager.spvBridge.getAllUTXOs(this.masterWalletId, this.chainId, 0, 1, '');
+            let UTXOsJson = await this.walletManager.spvBridge.getAllUTXOs(this.masterWallet.id, this.chainId, 0, 1, '');
             console.log('UTXOsJson:', UTXOsJson);
             const UTXOsCount = this.translate.instant('text-consolidate-UTXO-counts', {count: UTXOsJson.MaxCount});
             if (UTXOsJson.MaxCount >= Config.UTXO_CONSOLIDATE_PROMPT_THRESHOLD) {
@@ -333,7 +341,7 @@ export class CoinHomePage implements OnInit {
     }
 
     async createConsolidateTransaction() {
-        let txJson = await this.walletManager.spvBridge.createConsolidateTransaction(this.masterWalletId, this.chainId, '');
+        let txJson = await this.walletManager.spvBridge.createConsolidateTransaction(this.masterWallet.id, this.chainId, '');
         console.log('coin.page createConsolidateTransaction');
         let transfer = {
             chainId: this.chainId,

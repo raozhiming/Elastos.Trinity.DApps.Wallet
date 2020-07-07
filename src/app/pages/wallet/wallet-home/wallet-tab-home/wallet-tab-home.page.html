@@ -11,22 +11,20 @@
         </ion-refresher-content>
     </ion-refresher>
 
-    <div>
-        <div id="home-top-box" [routerLink]="['/walletlist']" routerDirection="forward">
+    <div *ngIf="walletManager.activeMasterWallet">
+        <div id="home-top-box" [routerLink]="['/wallet-list']" routerDirection="forward">
             <div id="wallet-bar">
-                <div id="wallet-name" class="line-limit-length"> {{Config.curMaster.name}}
-                    <span *ngIf="Config.curMaster.account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
-                    <span *ngIf="Config.curMaster.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
+                <div id="wallet-name" class="line-limit-length"> {{walletManager.activeMasterWallet.name}}
+                    <span *ngIf="walletManager.activeMasterWallet.account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
+                    <span *ngIf="walletManager.activeMasterWallet.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
                 </div>
                 <button (click)="goSetting()">{{'text-wallet-manager' | translate}}</button>
             </div>
-            <div *ngIf="Config.curMaster.totalBalance >= 0" class="valuation" [hidden]="!showOn">{{Config.curMaster.totalBalance/SELA}}</div>
+            <div class="valuation" [hidden]="!showOn">{{walletManager.activeMasterWallet.totalBalance/SELA}}</div>
             <div class="valuation" [hidden]="showOn">****</div>
-            <!-- <div id="valuation-label">预估资产(元)</div> -->
         </div>
 
         <div id="home-list-box">
-
             <ion-list lines="none">
                 <ion-list-header>
                     <div>{{'text-coin-list' | translate}}</div>
@@ -34,16 +32,18 @@
                     </div>
                 </ion-list-header>
 
-                <div *ngFor="let chainId of Config.curMaster.chainList">
-                    <ion-item [routerLink]="['/coin', chainId]" routerDirection="forward" detail="false">
-                        <img *ngIf="chainId=='ELA'" src="assets/images/ela-coin.png" />
-                        <img *ngIf="chainId!='ELA'"  src="assets/images/id-coin.png" />
-                        <ion-label id="coin-name">{{chainId}}</ion-label>
+                {{ walletManager.activeMasterWallet.subWallets.length }}
+
+                <div *ngFor="let subWallet of walletManager.activeMasterWallet.getSubWallets()">
+                    <ion-item [routerLink]="['/coin', subWallet.id]" routerDirection="forward" detail="false">
+                        <img *ngIf="subWallet.id=='ELA'" src="assets/images/ela-coin.png" />
+                        <img *ngIf="subWallet.id!='ELA'"  src="assets/images/id-coin.png" />
+                        <ion-label id="coin-name">{{subWallet.id}}</ion-label>
                         <ion-label solt="end" id="coin-value">
-                            <h2 [hidden]="!showOn" class="line-limit-length">{{Config.curMaster.subWallet[chainId].balance/SELA}}</h2>
+                            <h2 [hidden]="!showOn" class="line-limit-length">{{subWallet.balance/SELA}}</h2>
                             <h2 [hidden]="showOn">****</h2>
-                            <p>{{Config.curMaster.subWallet[chainId].lastblocktime}} </p>
-                            <p id="progress">{{Config.curMaster.subWallet[chainId].progress}}%</p>
+                            <p>{{subWallet.lastblocktime}} </p>
+                            <p id="progress">{{subWallet.progress}}%</p>
                         </ion-label>
                     </ion-item>
                 </div>

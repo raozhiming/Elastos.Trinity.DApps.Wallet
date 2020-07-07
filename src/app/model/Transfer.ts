@@ -1,3 +1,5 @@
+import { CoinName } from './MasterWallet';
+
 // TODO: Split this bloody mess into appropriate classes dedicated to each feature.
 export class Transfer {
     action: string = null;
@@ -14,7 +16,7 @@ export class Transfer {
     crDID: string = null;
     from: string = null;
     fee: number = 0;
-    chainId: string = null;
+    chainId: CoinName = null;
     votes: any; // TODO
     invalidCandidates: any; // TODO
     amount: number = 0;

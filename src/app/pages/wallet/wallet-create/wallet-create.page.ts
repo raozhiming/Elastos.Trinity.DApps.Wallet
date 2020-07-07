@@ -39,7 +39,6 @@ export class WalletCreatePage implements OnInit {
         });
     }
 
-
     onCreate() {
         if (Util.isNull(this.wallet.name)) {
             this.native.toast_trans("text-wallet-name-validator");

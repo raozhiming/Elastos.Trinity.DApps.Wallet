@@ -44,9 +44,9 @@ export class WalletEditNamePage implements OnInit {
         this.modifyName();
     }
 
-    modifyName() {
+    async modifyName() {
         this.walletManager.masterWallets[this.masterWalletId].name = this.walletname;
-        this.walletManager.saveInfos();
+        await this.walletManager.saveMasterWallets();
         this.native.pop();
     }
 }

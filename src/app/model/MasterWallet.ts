@@ -11,6 +11,11 @@ export enum CoinName {
     IDCHAIN = 'IDChain'
 }
 
+export type ExtendedWalletInfo = {
+    name: string;
+    //enabledCoins: CoinName[];
+}
+
 export class MasterWallet {
     public id: string = null;
     public name: string = null;
@@ -32,72 +37,42 @@ export class MasterWallet {
         }
     }
 
-    public async populateMasterWalletSPVInfo(isAdd = false) {
+    public async populateMasterWalletSPVInfo() {
         console.log("Retrieving SPV wallet info for wallet:", this.id);
 
         // Retrieve wallet account type
         this.account = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.id);
 
         // Populate sub wallet info for this master wallet
-        await this.populateAllSubWallets(this.id, isAdd);
+        await this.populateAllSubWallets(this.id);
     }
 
-    private async populateAllSubWallets(masterId, isAdd = false) {
-        console.log("Getting all subwallets for wallet:", masterId, isAdd);
+    private async populateAllSubWallets(masterId) {
+        console.log("Getting all subwallets for wallet ", masterId);
 
         let chainIds = await this.walletManager.spvBridge.getAllSubWallets(masterId);
 
         for (let chainId of chainIds) {
-            this.addSubWallet(masterId, chainId);
-        }
-
-        if (isAdd) {
-            this.saveInfos();
-            this.setCurMasterId(masterId);
-            this.native.setRootRouter("/tabs");
-        } else {
-            let currentMasterId = this.masterIdFromStorage;
-            // Choose the first wallet if switch Network(MainNet,TestNet).
-            if (this.masterList.indexOf(currentMasterId) === -1) {
-                currentMasterId = this.masterList[0];
-            }
-
-            if (currentMasterId === '-1') {
-                this.curMasterId = this.masterList[0];
-            }
-
-            if (masterId === currentMasterId) {
-                this.setCurMasterId(masterId);
-                this.native.setRootRouter("/tabs");
-            }
+            await this.populateSubWallet(chainId);
         }
     }
 
-    public async addSubWallet(masterId: WalletID, chainId: CoinName) {        
-        if (!this.subWallets[chainId]) {
-            this.subWallets[chainId] = new SubWallet(this, chainId);
-        } else {
-            if (this.progress && this.progress[masterId] && this.progress[masterId][chainId]) {
-                const lastblocktime = this.progress[masterId][chainId].lastblocktime;
-                if (lastblocktime) {
-                    this.subWallets[chainId].lastblocktime = lastblocktime;
-                    this.subWallets[chainId].timestamp = 0;
-                }
-            }
-        }
+    public async populateSubWallet(chainId: CoinName) {    
+        console.log("Populating subwallet with chain id "+chainId);
 
-        this.walletManager.spvBridge.registerWalletListener(masterId, chainId, (ret: SPVWalletMessage)=>{
-            this.zone.run(() => {
-                this.handleSubWalletCallback(ret);
-            });
-        });
+        this.subWallets[chainId] = new SubWallet(this, chainId);
+        await this.walletManager.saveMasterWallets();
+       
+        this.walletManager.registerSubWalletListener(this.id, chainId);
 
-        this.updateWalletBalance(chainId);
+        await this.updateWalletBalance(chainId);
+
+        this.walletManager.spvBridge.syncStart(this.id, chainId);
     }
 
     public async updateWalletBalance(chainId: string) {
         // Update wallet balance for the subwallet that has just changed
-        this.subWallets[chainId].updateWalletBalance();
+        await this.subWallets[chainId].updateWalletBalance();
 
         // Sum all subwallets balances to refresh the master wallet total balance
         let totalBalance = 0;
@@ -107,7 +82,48 @@ export class MasterWallet {
         this.totalBalance = totalBalance;
     }
 
-    public setProgress(chainId: CoinName, progress: number, lastBlockTime: string) {
+    public setProgress(chainId: CoinName, progress: number, lastBlockTime: number) {
         this.subWallets[chainId].setProgress(progress, lastBlockTime);
+    }
+
+    public startSubWalletsSync() {
+        console.log("SubWallets sync is starting");
+
+        for (let subWallet of Object.values(this.subWallets)) {
+            console.log("syncstart")
+            this.walletManager.spvBridge.syncStart(this.id, subWallet.id);
+        }
+    }
+
+    public stopSubWalletsSync() {
+        console.log("SubWallets sync is stopping");
+
+        for (let subWallet of Object.values(this.subWallets)) {
+            this.walletManager.spvBridge.syncStop(this.id, subWallet.id);
+        }
+    }
+
+    public getSubWalletBalance(chainId: CoinName): number {
+        return this.subWallets[chainId].balance;
+    }
+
+    public hasSubWallet(chainId: CoinName): boolean {
+        return chainId in this.subWallets;
+    }
+
+    /**
+     * Returns the list of all subwallets except the excluded one.
+     */
+    public subWalletsWithExcludedCoin(excludedCoinName: CoinName): SubWallet[] {
+        return Object.values(this.subWallets).filter((sw)=>{
+            return sw.id != excludedCoinName;
+        })
+    }
+
+    /**
+     * Convenient method to access subwallets as an array.
+     */
+    public getSubWallets(): SubWallet[] {
+        return Object.values(this.subWallets);
     }
 }

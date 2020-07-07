@@ -21,7 +21,7 @@
  */
 
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes, NoPreloading } from '@angular/router';
 import { LauncherPage } from './pages/launcher/launcher.page';
 import { WalletSettingsPage } from './pages/wallet/wallet-settings/wallet-settings.page';
 import { ContactCreatePage } from './pages/contacts/contact-create/contact-create.page';
@@ -51,9 +51,11 @@ import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnem
 import { MnemonicCheckPage } from './pages/wallet/mnemonic/mnemonic-check/mnemonic-check.page';
 import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
 import { ScanCodePage } from './pages/scancode/scancode.page';
-import { AppModule } from './app.module';
 import { WalletTabsRootPage } from './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.page';
 import { WalletTabSettingsPage } from './pages/wallet/wallet-home/wallet-tab-settings/wallet-tab-settings.page';
+import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
+import { WalletManager } from './services/wallet.service';
+import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
 
 const routes: Routes = [
     // Global
@@ -61,38 +63,23 @@ const routes: Routes = [
     { path: 'about', component: AboutPage },
 
     // Wallet
-    { path: '', redirectTo: "wallet-home", pathMatch: "full"},
     {
         path: 'wallet-home',
         component: WalletTabsRootPage,
         children: [
             {
-            path: 'wallet-tab-home',
-            children: [
-                {
-                path: '',
-                component: WalletTabsRootPage
-                }
-            ]
+                path: 'wallet-tab-home',
+                component: WalletTabHomePage
             },
             {
-            path: 'wallet-tab-setting',
-            children: [
-                {
-                path: '',
+                path: 'wallet-tab-settings',
                 component: WalletTabSettingsPage
-                }
-            ]
-            },
-            {
-                path: '',
-                redirectTo: '/wallet-home/wallet-tab-home',
-                pathMatch: 'full'
             }
         ]
     },
     { path: 'wallet-create', component: WalletCreatePage },
     { path: 'wallet-import', component: WalletImportPage },
+    { path: 'wallet-manager', component: WalletManagerPage },
     { path: 'mnemonic-create', component: MnemonicCreatePage },
     { path: 'wallet-create-name', component: WalletCreateNamePage },
     { path: 'scancode', component: ScanCodePage },
@@ -127,7 +114,7 @@ const routes: Routes = [
 ];
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+        RouterModule.forRoot(routes, { preloadingStrategy: NoPreloading })
     ],
     exports: [RouterModule]
 })

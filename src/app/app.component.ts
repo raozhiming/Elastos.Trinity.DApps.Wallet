@@ -64,7 +64,6 @@ export class AppComponent {
             this.setupBackKeyNavigation();
 
             this.appService.init();
-            this.walletManager.init();
         });
     }
 

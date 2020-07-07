@@ -25,7 +25,8 @@ import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
-import { WalletManager, CoinName } from '../../../services/wallet.service';
+import { WalletManager } from '../../../services/wallet.service';
+import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -35,7 +36,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./didtransaction.page.scss'],
 })
 export class DidTransactionPage implements OnInit {
-    masterWalletId = '1';
+    masterWallet: MasterWallet = null;
     transfer: any = null;
 
     balance: number; // ELA
@@ -58,24 +59,20 @@ export class DidTransactionPage implements OnInit {
           this.appService.close();
       }
 
-      appManager.setVisible("show", ()=>{}, (err)=>{});
+      appManager.setVisible("show");
     }
 
-    init() {
+    async init() {
         console.log(this.walletManager.coinObj);
         this.transfer = this.walletManager.coinObj.transfer;
         this.chainId = this.walletManager.coinObj.transfer.chainId;
         this.walletInfo = this.walletManager.coinObj.walletInfo;
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
-        if (this.chainId === CoinName.IDCHAIN) {
-            let coinList = this.walletManager.getSubWalletList();
-            if (coinList.length === 1) { // for now, just IDChain
-                this.hasOpenIDChain = true;
-                this.balance = this.walletManager.masterWallets[this.masterWalletId].subWallets[this.chainId].balance / Config.SELA;
-            } else {
-                this.hasOpenIDChain = false;
-                this.confirmOpenIDChain();
-            }
+        this.masterWallet = this.walletManager.getActiveMasterWallet();
+        
+        if (this.chainId === CoinName.IDCHAIN && !this.masterWallet.hasSubWallet(CoinName.IDCHAIN)) {
+            await this.notifyNoIDChain();
+            this.cancelOperation();
+            return;
         }
     }
 
@@ -92,18 +89,11 @@ export class DidTransactionPage implements OnInit {
         this.checkValue();
     }
 
-    confirmOpenIDChain() {
-        if (!this.hasOpenIDChain) {
-            this.popupProvider.ionicAlert('confirmTitle', 'no-open-side-chain');
-        }
-        return this.hasOpenIDChain;
+    notifyNoIDChain() {
+        return this.popupProvider.ionicAlert('confirmTitle', 'no-open-side-chain');
     }
 
     checkValue() {
-        if (!this.confirmOpenIDChain()) {
-            return;
-        }
-
         if (this.balance < 0.0002) {
             this.popupProvider.ionicAlert('confirmTitle', 'text-did-balance-not-enough');
             return;
@@ -115,7 +105,9 @@ export class DidTransactionPage implements OnInit {
     async createIDTransaction() {
         console.log("Calling createIdTransaction(): ", this.transfer.didrequest, this.transfer.memo)
         
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createIdTransaction(this.masterWalletId, this.chainId,
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createIdTransaction(
+            this.masterWallet.id, 
+            this.chainId,
             this.transfer.didrequest,
             this.transfer.memo);
             

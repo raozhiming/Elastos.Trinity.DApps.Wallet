@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { WalletID, ExtendedWalletInfo } from '../model/MasterWallet';
 
 /***
  * 封装存储操作
@@ -65,13 +66,18 @@ export class LocalStorage {
         return this.add(key, obj);
     }
 
-    public setMasterInfos(obj) {
-        let key = "infos";
-        this.storage.set(key, JSON.stringify(obj));
+    /**
+     * Additional wallet info that can't be saved in the SPV SDK, so we save it on the app side.
+     * Ex: wallet name given by the user.
+     */
+    public setExtendedMasterWalletInfo(masterId: WalletID, extendedInfo: ExtendedWalletInfo): Promise<void> {
+        let key = "extended-wallet-infos-"+masterId;
+        return this.storage.set(key, JSON.stringify(extendedInfo));
     }
 
-    public async getMasterInfos(): Promise<any> {
-        return await this.get("infos");
+    public async getExtendedMasterWalletInfos(masterId: WalletID): Promise<ExtendedWalletInfo> {
+        let key = "extended-wallet-infos-"+masterId;
+        return await this.get(key);
     }
 
     public savePublishTxList(obj) {

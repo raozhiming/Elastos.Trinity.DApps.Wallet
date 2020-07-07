@@ -4,7 +4,8 @@ import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
-import { WalletManager, CoinName } from 'src/app/services/wallet.service';
+import { WalletManager } from 'src/app/services/wallet.service';
+import { MasterWallet, CoinName } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -18,12 +19,11 @@ export class WaitForSyncPage implements OnInit {
     SELA = Config.SELA;
     showOn = true;
 
-    masterWalletId = '1';
+    masterWallet: MasterWallet = null;
     transfer: any = null;
 
     chainId: string;
     txId: string;
-    hasOpenIDChain = false;
     walletInfo = {};
 
     eventType = '';
@@ -50,11 +50,11 @@ export class WaitForSyncPage implements OnInit {
       appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
-    init() {
+    async init() {
         this.transfer = this.walletManager.coinObj.transfer;
         this.chainId = this.walletManager.coinObj.transfer.chainId;
         this.walletInfo = this.walletManager.coinObj.walletInfo;
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        this.masterWallet = this.walletManager.getActiveMasterWallet();
 
         switch (this.transfer.action) {
             case 'crmembervote':
@@ -87,7 +87,7 @@ export class WaitForSyncPage implements OnInit {
                 break;
             case 'pay':
                 this.action = 'text-transfer';
-                this.nextScreen = '/transfer';
+                this.nextScreen = '/coin-transfer';
                 break;
             default:
                 console.log('pls check the action');
@@ -95,16 +95,14 @@ export class WaitForSyncPage implements OnInit {
         }
 
         if (this.chainId === CoinName.IDCHAIN) {
-            const coinList = this.walletManager.getSubWalletList();
-            if (coinList.length === 1) { // for now, just IDChain
-                this.hasOpenIDChain = true;
-            } else {
-                this.hasOpenIDChain = false;
-                this.confirmOpenIDChain();
+            if (!this.masterWallet.hasSubWallet(CoinName.IDCHAIN)) {
+                await this.notifyNoIDChain();
+                this.cancelOperation();
+                return;
             }
         }
 
-        if (this.walletManager.curMaster.subWallets[this.chainId].progress !== 100) {
+        if (this.walletManager.activeMasterWallet.subWallets[this.chainId].progress !== 100) {
             this.eventType = this.chainId + ':synccompleted';
             this.events.subscribe(this.eventType, (coin) => {
                 console.log('WaitforsyncPage coin:', coin);
@@ -118,11 +116,8 @@ export class WaitForSyncPage implements OnInit {
         }
     }
 
-    confirmOpenIDChain() {
-        if (!this.hasOpenIDChain) {
-            this.popupProvider.ionicAlert('confirmTitle', 'no-open-side-chain');
-        }
-        return this.hasOpenIDChain;
+    notifyNoIDChain() {
+        return this.popupProvider.ionicAlert('confirmTitle', 'no-open-side-chain');
     }
 
     doAction() {

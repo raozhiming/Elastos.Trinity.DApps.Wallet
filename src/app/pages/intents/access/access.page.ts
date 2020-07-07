@@ -81,7 +81,7 @@ export class AccessPage implements OnInit {
                 break;
             case 'elaamount':
                 // for now just return the amount of ELA Chain, not include IDChain
-                value = this.walletManager.curMaster.subWallets.ELA.balance.toString();
+                value = this.walletManager.activeMasterWallet.subWallets.ELA.balance.toString();
                 break;
             default:
                 break;
@@ -119,7 +119,7 @@ export class AccessPage implements OnInit {
      */
     cancelOperation() {
         this.appService.sendIntentResponse(this.requestDapp.action, { elaaddress: null }, this.requestDapp.intentId);
-        this.native.setRootRouter('/wallet-home');
+        this.native.setRootRouter('/wallet-home/wallet-tab-home');
     }
 
     onShare() {
@@ -129,7 +129,7 @@ export class AccessPage implements OnInit {
             const selectedClaim = this.buildDeliverableList();
             this.appService.sendIntentResponse(this.requestDapp.action,
                     {walletinfo: selectedClaim}, this.requestDapp.intentId);
-            this.native.setRootRouter('/wallet-home');
+            this.native.setRootRouter('/wallet-home/wallet-tab-home');
         }
     }
 }

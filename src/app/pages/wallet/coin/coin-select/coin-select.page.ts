@@ -3,18 +3,18 @@ import { Config } from "../../../../config/Config";
 import { Native } from '../../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
+import { SubWallet } from 'src/app/model/SubWallet';
+import { CoinName } from 'src/app/model/MasterWallet';
 
 @Component({
     selector: 'app-coin-select',
     templateUrl: './coin-select.page.html',
     styleUrls: ['./coin-select.page.scss'],
 })
-// TODO: remove all useless ngOnInit()
+// TODO: remove all useless ngOnInit() in all screens
 export class CoinSelectPage implements OnInit {
+    public subWallets: SubWallet[] = [];
 
-    public isNoData: boolean = true;
-    coinList = [];
-    masterWalletInfo = {};
     constructor(public route: ActivatedRoute, public native: Native, private walletManager: WalletManager) {
         this.init();
     }
@@ -22,12 +22,9 @@ export class CoinSelectPage implements OnInit {
     ngOnInit() {
     }
 
-    init() {
-        this.masterWalletInfo = this.walletManager.coinObj.walletInfo;
-        this.coinList = this.walletManager.getSubWalletList();
-        if (this.coinList.length > 0) {
-            this.isNoData = false;
-        }
+    init() {        
+        // Note: we are willing to pick a sidechain subwallet here only.
+        this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(CoinName.ELA);
     }
 
     onItem(item) {

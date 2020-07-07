@@ -1,4 +1,4 @@
-@import "../../../functions.scss";
+@import "../../../../functions.scss";
 // #rect {
 //     position:absolute;
 //     left: 0;
@@ -18,7 +18,7 @@
     width: px2rem(660px);
     height: px2rem(324px);
 
-    background-image: url("../../../../assets/images/rectangle.png");
+    background-image: url("../../../../../assets/images/rectangle.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
 
@@ -78,7 +78,7 @@ button {
     height: 100%;
     // padding: 0px;
     // background-color: #00ff00;
-    background-image: url("../../../../assets/images/round.png");
+    background-image: url("../../../../../assets/images/round.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
 
@@ -135,8 +135,8 @@ button {
     background-size: 100%;
 }
 .home-eye-off {
-    background-image: url("../../../../assets/images/icon/icon-eye-off.svg");
+    background-image: url("../../../../../assets/images/icon/icon-eye-off.svg");
 }
 .home-eye-on {
-    background-image: url("../../../../assets/images/icon/icon-eye-on.svg");
+    background-image: url("../../../../../assets/images/icon/icon-eye-on.svg");
 }

@@ -5,6 +5,7 @@ import { LocalStorage } from '../../../../services/storage.service';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider} from '../../../../services/popup.service';
 import { WalletManager } from '../../../../services/wallet.service';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 
 @Component({
     selector: 'app-coin-list',
@@ -12,12 +13,13 @@ import { WalletManager } from '../../../../services/wallet.service';
     styleUrls: ['./coin-list.page.scss'],
 })
 export class CoinListPage implements OnInit, OnDestroy {
-    masterWalletId: string = "1";
+    masterWallet: MasterWallet = null;
     coinList = [];
     coinListCache = {};
     payPassword: string = "";
     singleAddress: boolean = false;
     currentCoin: any;
+
     constructor(public walletManager: WalletManager, public popupProvider: PopupProvider,
                 public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events) {
                     this.init();
@@ -59,48 +61,36 @@ export class CoinListPage implements OnInit, OnDestroy {
         this.events.subscribe("error:destroySubWallet", () => {
             this.currentCoin["open"] = true;
         });
-        // this.masterWalletId = Config.getCurMasterWalletId();
-        this.masterWalletId = Config.modifyId;
-        // let subWallet = Config.getSubWallet(this.masterWalletId);
-        
-        let supportedChains = await this.walletManager.spvBridge.getSupportedChains(this.masterWalletId);
+
+        this.masterWallet = this.walletManager.getMasterWallet(Config.modifyId);
+
         this.native.hideLoading();
-        let subWallet = this.walletManager.masterWallets[this.masterWalletId].chainList;
+
+        let supportedChains = await this.walletManager.spvBridge.getSupportedChains(this.masterWallet.id);
         for (let index in supportedChains) {
             let chain = supportedChains[index];
-            let isOpen = false;
-            if (chain == "ELA") {
-                isOpen = true;
-            }
-            else if (subWallet) {
-                isOpen =  subWallet.indexOf(chain) != -1;
-            }
+            let isOpen = (chain in this.masterWallet.subWallets);
+
             this.coinList.push({ name: chain, open: isOpen });
         }
     }
 
     async createSubWallet(chainId) {
         try {
-            // Sub Wallet IDChain
-            await this.walletManager.spvBridge.createSubWallet(this.masterWalletId, chainId);
-
             this.native.hideLoading();
-            this.walletManager.addSubWallet(this.masterWalletId, chainId);
-            this.walletManager.saveInfos();
 
-            this.walletManager.spvBridge.syncStart(this.masterWalletId, chainId);
+            // Create the sub Wallet (ex: IDChain)
+            await this.walletManager.createSubWallet(this.masterWallet.id, chainId);
         }
         catch (error) {
-            this.currentCoin["open"] = false;
+            this.currentCoin["open"] = false; // TODO: currentCoin type
         }
     }
 
     async destroySubWallet(chainId) {
-        await this.walletManager.spvBridge.destroySubWallet(this.masterWalletId, chainId);
-        
-        this.walletManager.removeSubWallet(this.masterWalletId, chainId);
-        this.walletManager.saveInfos();
         this.native.hideLoading();
+
+        this.walletManager.destroySubWallet(this.masterWallet.id, chainId);
     }
 
     ngOnDestroy() {

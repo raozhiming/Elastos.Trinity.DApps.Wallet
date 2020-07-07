@@ -27,9 +27,9 @@
                 <img *ngIf="chainId!='ELA'"  src="assets/images/id-coin.png" />
                 <ion-label id="coin-name">{{chainId}}</ion-label>
                 <ion-label solt="end" id="coin-value">
-                    <h2 [hidden]="!showOn" class="line-limit-length">{{Config.curMaster.subWallet[chainId].balance/SELA}}</h2>
+                    <h2 [hidden]="!showOn" class="line-limit-length">{{masterWallet.subWallets[chainId].balance/SELA}}</h2>
                     <h2 [hidden]="showOn">****</h2>
-                    <p>{{Config.curMaster.subWallet[chainId].progress}}%</p>
+                    <p>{{masterWallet.subWallets[chainId].progress}}%</p>
                 </ion-label>
             </ion-item>
         </ion-list>

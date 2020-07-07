@@ -27,7 +27,8 @@ import { AppService, ScanType } from '../../../../services/app.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
-import { WalletManager, CoinName } from '../../../../services/wallet.service';
+import { WalletManager } from '../../../../services/wallet.service';
+import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -37,7 +38,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./coin-transfer.page.scss'],
 })
 export class CoinTransferPage implements OnInit, OnDestroy {
-    masterWalletId = '1';
+    masterWallet: MasterWallet = null;
     walletType = '';
     transfer: any = null;
 
@@ -61,7 +62,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     ionViewDidEnter() {
-        appManager.setVisible("show", ()=>{}, (err)=>{});
+        appManager.setVisible("show");
     }
 
     ngOnDestroy() {
@@ -77,7 +78,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.transfer.toAddress = address;
             });
         });
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        this.masterWallet = this.walletManager.getActiveMasterWallet();
         switch (this.transfer.type) {
             case 'payment-confirm':
                 this.readonly = true;
@@ -104,7 +105,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     async getAddress(chainId: string) {
-        this.transfer.toAddress = await this.walletManager.spvBridge.createAddress(this.masterWalletId, chainId);
+        this.transfer.toAddress = await this.walletManager.spvBridge.createAddress(this.masterWallet.id, chainId);
     }
 
     rightHeader() {
@@ -138,7 +139,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             return;
         }
 
-        if (this.transfer.amount * this.SELA > this.walletManager.curMaster.subWallets[this.chainId].balance) {
+        if (this.transfer.amount * this.SELA > this.walletManager.activeMasterWallet.subWallets[this.chainId].balance) {
             this.native.toast_trans('error-amount');
             return;
         }
@@ -149,7 +150,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         }
 
         try {
-            await this.walletManager.spvBridge.isAddressValid(this.masterWalletId, this.transfer.toAddress);
+            await this.walletManager.spvBridge.isAddressValid(this.masterWallet.id, this.transfer.toAddress);
             this.transFunction();
         }
         catch (error) {
@@ -167,7 +168,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async createTransaction() {
         let toAmount = this.accMul(this.transfer.amount, Config.SELA);
 
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createTransaction(this.masterWalletId, this.chainId, '',
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createTransaction(this.masterWallet.id, this.chainId, '',
             this.transfer.toAddress,
             toAmount.toString(),
             this.transfer.memo);
@@ -178,7 +179,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async createDepositTransaction() {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
         
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createDepositTransaction(this.masterWalletId, 'ELA', '',
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createDepositTransaction(this.masterWallet.id, 'ELA', '',
             this.walletManager.coinObj.transfer.sideChainId,
             toAmount.toString(), // user input amount
             this.transfer.toAddress, // user input address
@@ -190,7 +191,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async createWithdrawTransaction() {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
 
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createWithdrawTransaction(this.masterWalletId, this.chainId, '',
+        this.transfer.rawTransaction = await this.walletManager.spvBridge.createWithdrawTransaction(this.masterWallet.id, this.chainId, '',
             toAmount.toString(),
             this.transfer.toAddress,
             this.transfer.memo);

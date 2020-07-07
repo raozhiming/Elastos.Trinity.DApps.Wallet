@@ -1,9 +1,10 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Events } from '@ionic/angular';
-import { LocalStorage } from '../../../services/Localstorage';
-import { WalletManager } from '../../../services/WalletManager';
-import { Native } from '../../../services/Native';
-import { Config } from "../../../services/Config";
+import { LocalStorage } from '../../../services/storage.service';
+import { WalletManager } from '../../../services/wallet.service';
+import { Native } from '../../../services/native.service';
+import { Config } from 'src/app/config/Config';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 
 @Component({
     selector: 'app-wallet-manager',
@@ -11,20 +12,11 @@ import { Config } from "../../../services/Config";
     styleUrls: ['./wallet-manager.page.scss'],
 })
 export class WalletManagerPage implements OnInit {
-    masterList = [];
-    masterWallet = {};
-    Config = Config;
     constructor(public events: Events, public localStorage: LocalStorage, public native: Native, private zone: NgZone, public walletManager: WalletManager) {
-        this.init();
     }
 
     ngOnInit() {
 
-    }
-
-    init() {
-        this.masterList = Config.masterManager.masterList;
-        this.masterWallet = Config.masterManager.masterWallet;
     }
 
     onNext() {
@@ -33,6 +25,10 @@ export class WalletManagerPage implements OnInit {
 
     itemSelected(id) {
         Config.modifyId = id;
-        this.native.go("/wallet-setting");
+        this.native.go("/wallet-settings");
+    }
+
+    getWalletsList(): MasterWallet[] {
+        return Object.values(this.walletManager.masterWallets);
     }
 }

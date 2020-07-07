@@ -26,6 +26,7 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
+import { CoinName } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -46,13 +47,13 @@ export class WalletTabHomePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        if (this.walletManager.getCurMasterWalletId() !== '-1') {
-            this.promptTransfer2IDChain();
-        }
+        appManager.setVisible("show");
     }
 
     ionViewDidEnter() {
-        appManager.setVisible("show", ()=>{}, (err)=>{});
+        if (this.walletManager.getCurMasterWalletId() !== '-1') {
+            this.promptTransfer2IDChain();
+        }
     }
 
     ionViewDidLeave() {
@@ -64,13 +65,13 @@ export class WalletTabHomePage implements OnInit {
 
     goSetting() {
         Config.modifyId = this.walletManager.getCurMasterWalletId();
-        this.native.go('/wallet-setting');
+        this.native.go('/wallet-settings');
         event.stopPropagation();
         return false;
     }
 
     doRefresh(event) {
-        this.walletManager.getWalletBalance(this.walletManager.getCurMasterWalletId(), "ELA");
+        this.walletManager.getActiveMasterWallet().getSubWalletBalance(CoinName.ELA);
         setTimeout(() => {
             event.target.complete();
         }, 1000);

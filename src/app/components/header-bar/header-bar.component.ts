@@ -22,10 +22,6 @@ export class HeaderBarComponent implements OnInit {
 
     ngOnInit() { }
 
-    launcher() {
-        this.appService.launcher();
-    }
-
     close() {
         this.appService.close();
     }

@@ -6,14 +6,14 @@
     <div>
         <div id="home-top-box">
             <div id="wallet-bar">
-                <div id="wallet-name" class="line-limit-length"> {{Config.curMaster.name}}
+                <div id="wallet-name" class="line-limit-length"> {{walletManager.activeMasterWallet.name}}
                     <span
-                        *ngIf="Config.curMaster.account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
+                        *ngIf="walletManager.activeMasterWallet.account['Type']==='Standard'">{{'text-standard-wallet' | translate}}</span>
                     <span
-                        *ngIf="Config.curMaster.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
+                        *ngIf="walletManager.activeMasterWallet.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
                 </div>
             </div>
-            <div class="valuation">{{Config.curMaster.totalBalance/Config.SELA}}</div>
+            <div class="valuation">{{walletManager.activeMasterWallet.totalBalance/Config.SELA}}</div>
         </div>
 
         <div id="home-list-box" *ngIf="!exportMnemonic">

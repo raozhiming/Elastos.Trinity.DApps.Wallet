@@ -45,7 +45,6 @@ export class MnemonicExportPage implements OnInit {
     }
 
     init() {
-        // this.masterWalletId = Config.getCurMasterWalletId();
         this.route.queryParams.subscribe((data) => {
             this.zone.run(() => {
                 if (!Util.isEmptyObject(data)) {
@@ -77,11 +76,11 @@ export class MnemonicExportPage implements OnInit {
     }
 
     onNext() {
-        this.native.go('/checkmnemonic', { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) });
+        this.native.go('/mnemonic-check', { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) });
     }
 
     onShare() {
-        this.native.setRootRouter('/wallet-home');
+        this.native.setRootRouter('/wallet-home/wallet-tab-home');
         this.appService.sendIntentResponse(this.requestDapp.action,
             { mnemonic: this.mnemonicStr }, this.requestDapp.intentId);
     }

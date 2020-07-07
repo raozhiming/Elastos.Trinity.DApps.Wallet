@@ -1,15 +1,19 @@
 import { MasterWallet, CoinName } from './MasterWallet';
 import { Util } from './Util';
+import { Events } from '@ionic/angular';
 
 export class SubWallet {
     public id: CoinName = null;
-    public balance: number = -1;
+    public balance: number = 0;
     public lastBlockTime: string = null;
     public timestamp: number = -1;
-    public progress: number = -1;
+    public progress: number = 0;
+
+    private events: Events;
 
     constructor(private masterWallet: MasterWallet, id: CoinName) {
         this.id = id;
+        this.events = this.masterWallet.walletManager.events;
     }
 
     public async updateWalletBalance() {
@@ -29,20 +33,15 @@ export class SubWallet {
         this.progress = progress;
         this.lastBlockTime = userReadableDateTime;
 
-        // TODO: why are we doing this in setProgress()?
-        if (!this.hasPromptTransfer2IDChain && (chainId === CoinName.IDCHAIN) && (progress === 100)) {
-            this.checkIDChainBalance();
-        }
-
         const curTimestampMs = (new Date()).getTime();
         if (curTimestampMs - this.timestamp > 5000) { // 5s
-            this.events.publish(this.id + ':syncprogress', {chainId});
+            this.events.publish(this.id + ':syncprogress', this.id);
             this.timestamp = curTimestampMs;
         }
 
         if (progress === 100) {
-            this.sendSyncCompletedNotification(chainId);
-            this.events.publish(chainId + ':synccompleted', {chainId});
+            this.masterWallet.walletManager.sendSyncCompletedNotification(this.id);
+            this.events.publish(this.id + ':synccompleted', this.id);
         }
     }
 }

@@ -74,18 +74,19 @@ type TransactionMap = {
  *
  * WalletManager.ts -> Wallet.js -> wallet.java -> WalletManager.java
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class WalletManager {
     public static LIMITGAP = 500;   // TODO: What's this?
     public static FEEPERKb = 500;   // TODO: feed for what? Rename
 
-    public curMaster: MasterWallet = null;
+    public activeMasterWallet: MasterWallet = null;
 
     public masterWallets: {
         [index: string]: MasterWallet
     } = {};
 
-    public curMasterId: string = "-1"; // TODO: why can't we get this from "masterWallet" ?
     public walletInfos: any = {}; // TODO: typings + what's this?
     public walletObjs: any = {}; // TODO: typings + what's this?
     // TODO: DELETE ME - public masterWalletList: MasterWallet[] = [];
@@ -97,7 +98,6 @@ export class WalletManager {
     };
     public name: string = ''; // TODO: name of what?
 
-    private masterIdFromStorage = '-1';
     public masterInfos: any = {};
     public masterList: any = {};
     public transactionMap: TransactionMap = {}; // when sync over, need to cleanup transactionMap
@@ -118,28 +118,12 @@ export class WalletManager {
                 public localStorage: LocalStorage,
                 private platform: Platform,
                 public popupProvider: PopupProvider) {
-    
-        // Wait for trinity plugins to be erady before doing anything.
-        this.platform.ready().then(()=>{
-            this.init();
-        });
     }
 
     async init() {
         console.log("Master manager is initializing");
 
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
-
-        await this.getCurrentMasterIdFromStorage();
-
-        let infos = await this.localStorage.getMasterInfos();
-        console.log("Got master infos", infos);
-
-        if (infos != null) {
-            this.masterInfos = infos;
-        } else {
-            console.warn("Empty Master info returned!");
-        }
 
         try {
             let idList = await this.spvBridge.getAllMasterWallets();
@@ -152,25 +136,24 @@ export class WalletManager {
                 return;
             }
 
-            if (idList.length != Object.keys(this.masterInfos).length)
-                console.error("Local storage wallet list and SPVSDK list have different sizes!");
-
             for (var i = 0; i < idList.length; i++) {
-                let id = idList[i];
-                if (this.masterInfos[id]) {
-                    this.masterWallets[id] = this.masterInfos[id];
+                let masterId = idList[i];
+
+                // Create a model instance for each master wallet returned by the SPV SDK.
+                this.masterWallets[masterId] = new MasterWallet(this, masterId);
+
+                // Try to retrieve locally storage extended info about this wallet
+                let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
+                if (extendedInfo) {
+                    console.log("Found extended wallet info for master wallet id "+masterId, extendedInfo);
+                    this.masterWallets[masterId].name = extendedInfo.name;
                 }
-                else {
-                    this.masterWallets[id] = new MasterWallet(this, id);
-                }
-                await this.masterWallets[id].populateMasterWalletSPVInfo();
+
+                await this.masterWallets[masterId].populateMasterWalletSPVInfo();
             }
         }
         catch (error) {
-            this.native.hideLoading();
-            if (error["code"] === 10002) {
-                this.handleNull();
-            }
+            console.error(error);
         }
 
         this.localStorage.get('hasPrompt').then( (val) => {
@@ -181,6 +164,10 @@ export class WalletManager {
         if (publishTxList) {
             this.transactionMap = publishTxList;
         }
+
+        console.log("Wallet manager initialization complete");
+
+        this.events.publish("walletmanager:initialized");
     }
 
     public getWalletName(id: WalletID) {
@@ -192,32 +179,20 @@ export class WalletManager {
         }
     }
 
-    public getSubWallet(id) {
-        return this.masterWallets[id].chainList || null;
-    }
-
-    public getSubWalletList() {
-        var coinList = [];
-        let mastId = this.getCurMasterWalletId();
-        let subwallet = this.getSubWallet(mastId);
-        if (subwallet != null) {
-            for (let index in subwallet) {
-                let coin = subwallet[index];
-                if (coin != 'ELA') {
-                    coinList.push({ name: coin });
-                }
-            }
-        }
-
-        return coinList;
-    }
-
     public getCurMasterWalletId() {
-        return this.curMasterId;
+        return this.activeMasterWallet.id;
     }
 
     public setCurMasterWalletId(id) {
-        this.setCurMasterId(id);
+        this.setActiveMasterWalletId(id);
+    }
+
+    public getActiveMasterWallet(): MasterWallet {
+        return this.activeMasterWallet;
+    }
+
+    public getMasterWallet(masterId: WalletID): MasterWallet {
+        return this.masterWallets[masterId];
     }
 
     public getAccountType(curMasterId) {
@@ -230,29 +205,10 @@ export class WalletManager {
     }
 
     public walletNameExists(name: string): boolean {
-        // TODO: Make sure this new post-rework implementation works as expected.
         let existingWallet = Object.values(this.masterWallets).find((wallet)=>{
             return wallet.name === name;
         });
         return existingWallet != null;
-       
-        /*let data = Config.getMappingList();
-        if (this.isEmptyObject(data)) {
-            return false;
-        }
-        var isexit = true;
-        for (var key in data) {
-            var item = data[key];
-
-            if (item["wallname"] === name) {
-                isexit = true;
-                break;
-            } else {
-                isexit = false;
-            }
-        }
-
-        return isexit;*/
     }
 
     handleNull() {
@@ -260,10 +216,14 @@ export class WalletManager {
         this.native.setRootRouter('/launcher');
     }
 
-    private async getCurrentMasterIdFromStorage(): Promise<any> {
+    public async getCurrentMasterIdFromStorage(): Promise<string> {
         let data = await this.localStorage.getCurMasterId();
+
         if (data && data["masterId"]) {
-            this.masterIdFromStorage = data["masterId"];
+            return data["masterId"];
+        }
+        else {
+            return null;
         }
     }
 
@@ -271,8 +231,12 @@ export class WalletManager {
         // Add a new wallet to our local model
         this.masterWallets[id] = new MasterWallet(id, name);
         this.masterList.push(id);
+        await this.saveMasterWallets();
 
-        await this.masterWallets[id].populateMasterWalletSPVInfo(true);
+        await this.masterWallets[id].populateMasterWalletSPVInfo();
+
+        this.setActiveMasterWalletId(id);
+        this.native.setRootRouter("/wallet-home/wallet-tab-home");
     }
 
     /**
@@ -290,81 +254,90 @@ export class WalletManager {
                 break;
             }
         }
-        if (this.curMasterId === id) {
-            this.curMasterId = '-1';
+        if (this.activeMasterWallet.id === id) {
+            this.activeMasterWallet = null;
+            // TODO: we need more cleanup than this on the active wallet here!
         }
 
         // Save this modification to our permanent local storage
-        this.saveInfos();
+        await this.saveMasterWallets();
 
         // If there is at least one remaining wallet, select it as the new active wallet in the app.
         if (this.masterList.length > 0) {
-            this.setCurMasterId(this.masterList[0]);
+            this.setActiveMasterWalletId(this.masterList[0]);
         }
         else {
             this.handleNull();
         }
     }
 
-    public saveInfos() {
-        this.localStorage.setMasterInfos(this.masterWallets);
+    public async createSubWallet(masterId: WalletID, chainId: CoinName) {
+        await this.masterWallets[masterId].populateSubWallet(chainId);
     }
 
-    private async syncStartSubWallets(masterId) {
-        // TODO: rework: use null, not "-1"
-        if (masterId == "-1") {
-            return;
-        }
-
-        for (var i = 0; i < this.masterWallets[masterId].chainList.length; i++) {
-            var chainId = this.masterWallets[masterId].chainList[i];
-            this.spvBridge.syncStart(masterId, chainId);
-        }
+    public async destroySubWallet(masterId: WalletID, chainId: CoinName) {
+        await this.spvBridge.destroySubWallet(masterId, chainId);
+        
+        this.removeSubWallet(masterId, chainId);
+        await this.saveMasterWallets();
     }
 
-    private syncStopSubWallets(masterId) {
-        if (masterId == "-1") {
-            return;
-        }
-
-        for (var i = 0; i < this.masterWallets[masterId].chainList.length; i++) {
-            var chainId = this.masterWallets[masterId].chainList[i];
-            this.spvBridge.syncStop(masterId, chainId);
-        }
-    }
-
-    public setCurMasterId(id) {
-        if (id != this.curMasterId) {
-            this.syncStopSubWallets(this.curMasterId);
-            this.localStorage.saveCurMasterId({ masterId: id }).then((data) => {
-                this.curMasterId = id;
-                this.curMaster = this.masterWallets[id];
-                this.syncStartSubWallets(id);
-                this.native.setRootRouter("/tabs");
+    /**
+     * Save master wallets list to permanent local storage.
+     */
+    public async saveMasterWallets() {
+        for (let masterWallet of Object.values(this.masterWallets)) {
+            await this.localStorage.setExtendedMasterWalletInfo(masterWallet.id, {
+                name: masterWallet.name
             });
         }
     }
 
-    public getCurMasterId() {
-        return this.curMasterId;
+    private async syncStartSubWallets(masterId: WalletID) {
+        this.masterWallets[masterId].startSubWalletsSync();
+    }
+
+    private syncStopSubWallets(masterId: WalletID) {
+        this.masterWallets[masterId].stopSubWalletsSync();
+    }
+
+    public async setActiveMasterWalletId(id) {
+        console.log("Setting active master wallet id", id);
+
+        await this.localStorage.saveCurMasterId({ masterId: id });
+
+        let activeMasterId = this.activeMasterWallet ? this.activeMasterWallet.id : null;
+        if (id != activeMasterId) {
+            if (this.activeMasterWallet)
+                this.syncStopSubWallets(activeMasterId);
+
+            this.activeMasterWallet = this.masterWallets[id];
+            this.syncStartSubWallets(id);
+            this.native.setRootRouter("/wallet-home/wallet-tab-home");
+        }
     }
 
     public removeSubWallet(masterId: string, chainId: string) {
-        this.zone.run(() => {
-            this.masterWallets[masterId].subWallets[chainId] = null;
-            for (var i = 0; i < this.masterWallets[masterId].chainList.length; i++) {
-                if (this.masterWallets[masterId].chainList[i] == chainId) {
-                    this.masterWallets[masterId].chainList.splice(i, 1);
-                    break;
-                }
-            }
-            console.log(this.masterWallets[masterId]);
+        delete this.masterWallets[masterId].subWallets[chainId];
+        console.log(this.masterWallets[masterId]);
+    }
+
+    public registerSubWalletListener(masterId: WalletID, chainId: CoinName) {
+        console.log("Register sub-wallet listener for", masterId, chainId);
+
+        this.spvBridge.registerWalletListener(masterId, chainId, (ret: SPVWalletMessage)=>{
+            console.log("Wallet event");
+            this.zone.run(() => {
+                this.handleSubWalletCallback(ret);
+            });
         });
     }
 
     public handleSubWalletCallback(result: SPVWalletMessage) {
         let masterId = result.MasterWalletID;
         let chainId = result.ChainID;
+
+        console.log("SubWallet message: ", masterId, chainId, result);
 
         switch (result.Action) {
             case "OnTransactionStatusChanged":
@@ -377,7 +350,7 @@ export class WalletManager {
                 break;
             case "OnBlockSyncProgress":
                 // console.log('OnBlockSyncProgress ', result);
-                this.masterWallets[masterId].setProgress(chainId, result.Progress, result.LastBlockTime);
+                this.setProgress(masterId, chainId, result);
                 break;
             case "OnBlockSyncStopped":
                 break;
@@ -393,6 +366,20 @@ export class WalletManager {
                 break;
             case "OnConnectStatusChanged":
                 break;
+        }
+    }
+
+    private setProgress(masterId: WalletID, chainId: CoinName, result: SPVWalletMessage) {
+        this.masterWallets[masterId].setProgress(chainId, result.Progress, result.LastBlockTime);
+
+        if (!this.hasPromptTransfer2IDChain && (chainId === CoinName.IDCHAIN)) {
+            let elaProgress = this.masterWallets[masterId].subWallets[CoinName.ELA].progress
+            let idChainProgress = this.masterWallets[masterId].subWallets[CoinName.IDCHAIN].progress
+
+            // Check if it's a right time to prompt user for ID chain transfers, but only if we are fully synced.
+            if (elaProgress == 100 && idChainProgress == 100) {
+                this.checkIDChainBalance();
+            }
         }
     }
 
@@ -448,17 +435,17 @@ export class WalletManager {
         if (this.needToPromptTransferToIDChain) { return; }
 
         // // IDChain not open, do not prompt
-        // if (Util.isNull(this.masterWallet[this.curMasterId].subWallet[Config.IDCHAIN])) {
+        // if (Util.isNull(this.masterWallet[this.curMasterId].subWallets[Config.IDCHAIN])) {
         //     return;
         // }
 
-        if (this.masterWallets[this.curMasterId].subWallets[CoinName.ELA].balance <= 1000000) {
-            console.log('ELA balance ', this.masterWallets[this.curMasterId].subWallets[CoinName.ELA].balance);
+        if (this.getActiveMasterWallet().subWallets[CoinName.ELA].balance <= 1000000) {
+            console.log('ELA balance ', this.getActiveMasterWallet().subWallets[CoinName.ELA].balance);
             return;
         }
 
-        if (this.masterWallets[this.curMasterId].subWallets[CoinName.IDCHAIN].balance > 100000) {
-            console.log('IDChain balance ', this.masterWallets[this.curMasterId].subWallets[CoinName.IDCHAIN].balance);
+        if (this.getActiveMasterWallet().subWallets[CoinName.IDCHAIN].balance > 100000) {
+            console.log('IDChain balance ', this.getActiveMasterWallet().subWallets[CoinName.IDCHAIN].balance);
             return;
         }
 
@@ -540,7 +527,7 @@ export class WalletManager {
      * Signs raw transaction and sends the signed transaction to the SPV SDK for publication.
      */
     async signAndSendTransaction(transfer) {
-        let signedTx = await this.spvBridge.signTransaction(this.curMasterId,
+        let signedTx = await this.spvBridge.signTransaction(this.activeMasterWallet.id,
                                            transfer.chainId,
                                            transfer.rawTransaction,
                                            transfer.payPassword);
@@ -549,7 +536,7 @@ export class WalletManager {
     }
 
     private async sendTransaction(transfer, signedTx: SignedTransaction) {
-        let publishedTransaction = await this.spvBridge.publishTransaction(this.curMasterId, transfer.chainId, signedTx);
+        let publishedTransaction = await this.spvBridge.publishTransaction(this.activeMasterWallet.id, transfer.chainId, signedTx);
         
         if (!Util.isEmptyObject(transfer.action)) {
             this.lockTx(publishedTransaction.TxHash);
@@ -562,7 +549,7 @@ export class WalletManager {
                 }
                 this.native.hideLoading();
                 this.native.toast_trans('send-raw-transaction');
-                this.native.setRootRouter('/wallet-home');
+                this.native.setRootRouter('/wallet-home/wallet-tab-home');
                 console.log('Sending intent response', transfer.action, {txid: txId}, transfer.intentId);
                 appManager.sendIntentResponse(transfer.action, {txid: txId}, transfer.intentId);
             }, 5000); // wait for 5s for txPublished
@@ -571,7 +558,7 @@ export class WalletManager {
 
             this.native.hideLoading();
             this.native.toast_trans('send-raw-transaction');
-            this.native.setRootRouter('/wallet-home');
+            this.native.setRootRouter('/wallet-home/wallet-tab-home');
         }
     }
 

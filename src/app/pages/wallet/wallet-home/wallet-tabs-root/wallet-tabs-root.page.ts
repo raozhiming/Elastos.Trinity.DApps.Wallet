@@ -36,6 +36,10 @@ export class WalletTabsRootPage implements OnInit {
     ngOnInit() {
     }
 
+    ionViewWillEnter() {
+        appManager.setVisible("show");
+    }
+
     changeTabs() {
         this.zone.run(() => {
             this.changeDetectorRef.markForCheck();

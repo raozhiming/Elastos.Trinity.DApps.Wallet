@@ -4,7 +4,9 @@ import { Events } from '@ionic/angular';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
-import { WalletManager, CoinName } from '../../../../services/wallet.service';
+import { WalletManager } from '../../../../services/wallet.service';
+import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
 
 @Component({
     selector: 'app-coin-tx-info',
@@ -12,7 +14,7 @@ import { WalletManager, CoinName } from '../../../../services/wallet.service';
     styleUrls: ['./coin-tx-info.page.scss'],
 })
 export class CoinTxInfoPage implements OnInit {
-    masterWalletId = '';
+    masterWallet: MasterWallet = null;
     chainId = '';
     txId = '';
     transactionRecord: any = {};
@@ -44,7 +46,7 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     init() {
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        this.masterWallet = this.walletManager.getActiveMasterWallet();
         this.route.queryParams.subscribe((data) => {
             this.txId = data["txId"];
             this.chainId = data["chainId"];
@@ -54,65 +56,65 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     async getTransactionInfo() {
-        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWalletId, this.chainId, this.start, this.txId);
+        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.chainId, this.start, this.txId);
             
-        let transactions = allTransactions['Transactions'];
+        let transactions = allTransactions.Transactions;
         let transaction = transactions[0];
-        this.inputs = this.objtoarr(transaction["Inputs"]);
-        this.outputs = this.objtoarr(transaction["Outputs"]);
-        let timestamp = transaction['Timestamp'] * 1000;
+        this.inputs = this.objtoarr(transaction.Inputs);
+        this.outputs = this.objtoarr(transaction.Outputs);
+        let timestamp = transaction.Timestamp * 1000;
         let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
         let status = '';
 
-        switch (transaction["Status"]) {
-            case 'Confirmed':
+        switch (transaction.Status) {
+            case TransactionStatus.CONFIRMED:
                 status = 'Confirmed';
                 this.unsubscribeprogressEvent();
                 break;
-            case 'Pending':
+            case TransactionStatus.PENDING:
                 status = 'Pending';
                 this.subscribeprogressEvent();
                 break;
-            case 'Unconfirmed':
+            case TransactionStatus.UNCONFIRMED:
                 status = 'Unconfirmed';
                 this.subscribeprogressEvent();
                 break;
         }
 
-        if (this.preConfirmCount === transaction["ConfirmStatus"]) {
+        if (this.preConfirmCount === transaction.ConfirmStatus) {
             //do nothing
-            console.log('getTransactionInfo do nothing ConfirmStatus:', transaction["ConfirmStatus"]);
+            console.log('getTransactionInfo do nothing ConfirmStatus:', transaction.ConfirmStatus);
             return;
         } else {
-            this.preConfirmCount = transaction["ConfirmStatus"];
+            this.preConfirmCount = transaction.ConfirmStatus;
         }
 
         let vtype = "transaction-type-13";
-        if ((transaction["Type"] >= 0) && transaction["Type"] <= 12) {
-            if (transaction["Type"] === 10) {
+        if ((transaction.Type >= 0) && transaction.Type <= 12) {
+            if (transaction.Type === 10) {
                 if (this.chainId === CoinName.IDCHAIN) {
                     vtype = "transaction-type-did";
                 } else {
                     vtype = "transaction-type-10";
                 }
             } else {
-                vtype = "transaction-type-" + transaction["Type"];
+                vtype = "transaction-type-" + transaction.Type;
             }
         }
 
-        let payStatusIcon = transaction["Direction"];
-        if (payStatusIcon === "Received") {
+        let direction = transaction.Direction;
+        if (direction === TransactionDirection.RECEIVED) {
             this.payStatusIcon = './assets/images/tx-state/icon-tx-received-outline.svg';
             this.symbol = "+";
-        } else if (payStatusIcon === "Sent") {
+        } else if (direction === TransactionDirection.SENT) {
             this.payStatusIcon = './assets/images/tx-state/icon-tx-sent.svg';
             this.symbol = "-";
-        } else if (payStatusIcon === "Moved") {
+        } else if (direction === TransactionDirection.MOVED) {
             this.payStatusIcon = './assets/images/tx-state/icon-tx-moved.svg';
             this.symbol = "";
-        } else if (payStatusIcon === "Deposit") {
+        } else if (direction === TransactionDirection.DEPOSIT) {
             this.payStatusIcon = './assets/images/tx-state/icon-tx-moved.svg';
-            if (transaction["Amount"] > 0) {
+            if (transaction.Amount > 0) {
                 this.symbol = "-";
             } else {
                 this.symbol = "";
@@ -120,20 +122,20 @@ export class CoinTxInfoPage implements OnInit {
         }
 
         //for vote transaction
-        if (!Util.isNull(transaction['OutputPayload']) && (transaction['OutputPayload'].length > 0)) {
+        if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
             vtype = "transaction-type-vote";
         }
 
         this.transactionRecord = {
             name: this.chainId,
             status: status,
-            resultAmount: Util.scientificToNumber(transaction["Amount"] / Config.SELA),
+            resultAmount: Util.scientificToNumber(transaction.Amount / Config.SELA),
             txId: this.txId,
             transactionTime: datetime,
             timestamp: timestamp,
-            payfees: Util.scientificToNumber(transaction['Fee'] / Config.SELA),
-            confirmCount: transaction["ConfirmStatus"],
-            memo: transaction["Memo"],
+            payfees: Util.scientificToNumber(transaction.Fee / Config.SELA),
+            confirmCount: transaction.ConfirmStatus,
+            memo: transaction.Memo,
             payType: vtype
         };
     }
@@ -159,7 +161,7 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     goWebSite(chainId, txId) {
-        if (chainId === 'ELA') {
+        if (chainId === CoinName.ELA) {
             this.native.openUrl(this.blockchain_url + 'tx/' + txId);
         } else {
             this.native.openUrl(this.idchain_url + 'tx/' + txId);

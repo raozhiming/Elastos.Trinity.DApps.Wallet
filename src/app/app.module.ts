@@ -48,7 +48,6 @@ import { Native } from './services/native.service';
 import { Logger } from './model/Logger';
 import { PopupProvider } from './services/popup.service';
 import { WalletManager } from './services/wallet.service';
-import { LoadingService } from './services/loading.service';
 
 import { LauncherPage } from './pages/launcher/launcher.page';
 import { WalletSettingsPage } from './pages/wallet/wallet-settings/wallet-settings.page';
@@ -85,6 +84,7 @@ import { WalletTabsRootPage } from './pages/wallet/wallet-home/wallet-tabs-root/
 import { ComponentsModule } from './components/components.module';
 
 import * as Sentry from "@sentry/browser";
+import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -133,6 +133,7 @@ export function TranslateLoaderFactory() {
 
         LauncherPage,
         WalletSettingsPage,
+        WalletManager,
         ContactsPage,
         ContactCreatePage,
         ContactListPage,
@@ -140,6 +141,7 @@ export function TranslateLoaderFactory() {
         DPoSVotePage,
         CoinTransferPage,
         DidTransactionPage,
+        WalletTabHomePage,
         WalletTabSettingsPage,
         WalletTabsRootPage,
         WalletPasswordResetPage,
@@ -197,9 +199,8 @@ export function TranslateLoaderFactory() {
         Logger,
         PopupProvider,
         WalletManager,
-        LoadingService,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        { provide: ErrorHandler, useClass: SentryErrorHandler }
+       // { provide: ErrorHandler, useClass: SentryErrorHandler }
     ],
     bootstrap: [AppComponent]
 })
