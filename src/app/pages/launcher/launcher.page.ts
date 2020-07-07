@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Native } from '../../services/native.service';
-import { WalletManager, WalletObjTEMP } from 'src/app/services/wallet.service';
+import { WalletCreationService } from 'src/app/services/walletcreation.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -11,19 +11,19 @@ declare let appManager: AppManagerPlugin.AppManager;
 })
 export class LauncherPage implements OnInit {
 
-    constructor(public native: Native, private walletManager: WalletManager) {
+    constructor(public native: Native, private walletCreationService: WalletCreationService) {
     }
 
     ngOnInit() {
     }
 
     ionViewDidEnter() {
-        appManager.setVisible("show", ()=>{}, (err)=>{});
+        appManager.setVisible("show");
     }
 
     onNext(type) {
-        this.walletManager.walletObj = new WalletObjTEMP();
-        this.walletManager.walletObj.isMulti = false;
+        this.walletCreationService.reset();
+        this.walletCreationService.isMulti = false;
 
         switch (type) {
             case 1:
@@ -33,7 +33,7 @@ export class LauncherPage implements OnInit {
                 this.native.go("/wallet-import");
                 break;
             case 3:
-                this.walletManager.walletObj.isMulti = true;
+                this.walletCreationService.isMulti = true;
                 this.native.go("/createmultiwallet");
                 break;
         }

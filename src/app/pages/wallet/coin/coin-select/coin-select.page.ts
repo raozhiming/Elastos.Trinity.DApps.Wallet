@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { SubWallet } from 'src/app/model/SubWallet';
 import { CoinName } from 'src/app/model/MasterWallet';
+import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 @Component({
     selector: 'app-coin-select',
@@ -15,7 +16,8 @@ import { CoinName } from 'src/app/model/MasterWallet';
 export class CoinSelectPage implements OnInit {
     public subWallets: SubWallet[] = [];
 
-    constructor(public route: ActivatedRoute, public native: Native, private walletManager: WalletManager) {
+    constructor(public route: ActivatedRoute, public native: Native, 
+        private walletManager: WalletManager, private coinTransferService: CoinTransferService) {
         this.init();
     }
 
@@ -28,7 +30,7 @@ export class CoinSelectPage implements OnInit {
     }
 
     onItem(item) {
-        this.walletManager.coinObj.transfer.chainId = item.name;
+        this.coinTransferService.transfer.chainId = item.name;
         this.native.go("/recharge");
     }
 

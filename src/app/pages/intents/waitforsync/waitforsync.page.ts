@@ -6,6 +6,7 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { MasterWallet, CoinName } from 'src/app/model/MasterWallet';
+import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -35,6 +36,7 @@ export class WaitForSyncPage implements OnInit {
                 public native: Native,
                 public events: Events,
                 public zone: NgZone,
+                private coinTransferService: CoinTransferService,
                 private walletManager: WalletManager,
                 public popupProvider: PopupProvider) {
         // why? if do not use zone.run, then next screen may have refresh issue: text can not show.
@@ -51,9 +53,9 @@ export class WaitForSyncPage implements OnInit {
     }
 
     async init() {
-        this.transfer = this.walletManager.coinObj.transfer;
-        this.chainId = this.walletManager.coinObj.transfer.chainId;
-        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.transfer = this.coinTransferService.transfer;
+        this.chainId = this.coinTransferService.transfer.chainId;
+        this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
 
         switch (this.transfer.action) {

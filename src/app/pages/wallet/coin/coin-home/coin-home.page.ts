@@ -27,12 +27,12 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.service';
 import { Util } from '../../../../model/Util';
-import { WalletManager, CoinObjTEMP } from '../../../../services/wallet.service';
+import { WalletManager } from '../../../../services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Transfer } from 'src/app/model/Transfer';
 import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
 import { AppService } from 'src/app/services/app.service';
+import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 @Component({
     selector: 'app-coin-home',
@@ -57,8 +57,10 @@ export class CoinHomePage implements OnInit {
     Config = Config;
     SELA = Config.SELA;
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public translate: TranslateService,
-                public native: Native, public events: Events, public popupProvider: PopupProvider, private appService: AppService) {
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager, 
+                public translate: TranslateService, private coinTransferService: CoinTransferService,
+                public native: Native, public events: Events, 
+                public popupProvider: PopupProvider, private appService: AppService) {
         this.init();
     }
 
@@ -76,10 +78,11 @@ export class CoinHomePage implements OnInit {
     }
 
     async init() {
-        this.walletManager.coinObj = new CoinObjTEMP();
+        this.coinTransferService.reset();
 
         this.masterWallet = this.walletManager.getActiveMasterWallet();
-        this.walletManager.coinObj.walletInfo = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWallet.id);
+        this.coinTransferService.reset();
+        this.coinTransferService.walletInfo = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWallet.id);
 
         this.route.paramMap.subscribe((params) => {
             this.chainId = params.get('name') as CoinName;
@@ -256,28 +259,25 @@ export class CoinHomePage implements OnInit {
     }
 
     receiveFunds() {
-        this.walletManager.coinObj.transfer = new Transfer();
-        this.walletManager.coinObj.transfer.chainId = this.chainId;
+        this.coinTransferService.transfer.chainId = this.chainId;
         this.native.go('/coin-receive');
     }
 
     transferFunds() {
-        this.walletManager.coinObj.transfer = new Transfer();
-        this.walletManager.coinObj.transfer.chainId = this.chainId;
-        this.walletManager.coinObj.transfer.type = 'transfer';
+        this.coinTransferService.transfer.chainId = this.chainId;
+        this.coinTransferService.transfer.type = 'transfer';
         this.native.go('/coin-transfer');
     }
 
     rechargeFunds() {
-        this.walletManager.coinObj.transfer = new Transfer();
-        this.walletManager.coinObj.transfer.chainId = this.chainId;
-        this.walletManager.coinObj.transfer.type = 'recharge';
+        this.coinTransferService.transfer.chainId = this.chainId;
+        this.coinTransferService.transfer.type = 'recharge';
 
         // Filter out the current chain id as this is our transfer source. We only want to pick
         // the destination subwallet.
         const subWallets = this.masterWallet.subWalletsWithExcludedCoin(this.chainId);
         if (subWallets.length === 1) {
-            this.walletManager.coinObj.transfer.sideChainId = subWallets[0].id;
+            this.coinTransferService.transfer.sideChainId = subWallets[0].id;
             this.native.go('/coin-transfer');
         } else {
             this.native.go('/coin-select');
@@ -285,9 +285,8 @@ export class CoinHomePage implements OnInit {
     }
 
     withdrawFunds() {
-        this.walletManager.coinObj.transfer = new Transfer();
-        this.walletManager.coinObj.transfer.chainId = this.chainId;
-        this.walletManager.coinObj.transfer.type = 'withdraw';
+        this.coinTransferService.transfer.chainId = this.chainId;
+        this.coinTransferService.transfer.type = 'withdraw';
         this.native.go('/coin-transfer');
     }
 

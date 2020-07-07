@@ -26,6 +26,8 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
+import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -35,16 +37,16 @@ declare let appManager: AppManagerPlugin.AppManager;
   styleUrls: ['./crmembervote.page.scss'],
 })
 export class CRmembervotePage implements OnInit {
-
-    masterWalletId = '1';
+    masterWallet: MasterWallet = null;
     chainId: string; // ELA
-    transfer: any = null;
+    transfer: Transfer = null;
     votecount = 0;
 
     balance: string; // Balance in SELA
     voteBalanceELA = 0; // ELA
 
     constructor(public walletManager: WalletManager, public appService: AppService,
+                private coinTransferService: CoinTransferService,
                 public native: Native, public zone: NgZone, public popupProvider: PopupProvider) {
         this.init();
     }
@@ -53,7 +55,7 @@ export class CRmembervotePage implements OnInit {
     }
 
     ionViewDidEnter() {
-        if (this.walletManager.coinObj.walletInfo['Type'] === 'Multi-Sign') {
+        if (this.coinTransferService.walletInfo['Type'] === 'Multi-Sign') {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
             this.appService.close();
         }
@@ -62,10 +64,9 @@ export class CRmembervotePage implements OnInit {
     }
 
     init() {
-        console.log(this.walletManager.coinObj);
-        this.transfer = this.walletManager.coinObj.transfer;
-        this.chainId = this.walletManager.coinObj.transfer.chainId;
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        this.transfer = this.coinTransferService.transfer;
+        this.chainId = this.coinTransferService.transfer.chainId;
+        this.masterWallet = this.walletManager.getActiveMasterWallet();
 
         this.parseVotes();
 
@@ -86,7 +87,7 @@ export class CRmembervotePage implements OnInit {
     }
 
     async hasPendingVoteTransaction() {
-        let info = await this.walletManager.spvBridge.getBalanceInfo(this.masterWalletId, this.chainId);
+        let info = await this.walletManager.spvBridge.getBalanceInfo(this.masterWallet.id, this.chainId);
         
         let balanceInfo = JSON.parse(info);
         // console.log('balanceInfo ', balanceInfo);
@@ -118,7 +119,7 @@ export class CRmembervotePage implements OnInit {
 
     async createVoteCRTransaction() {
         console.log('Creating vote CR transaction');
-        this.transfer.rawTransaction =  await this.walletManager.spvBridge.createVoteCRTransaction(this.masterWalletId, this.chainId,
+        this.transfer.rawTransaction =  await this.walletManager.spvBridge.createVoteCRTransaction(this.masterWallet.id, this.chainId,
                 '', this.transfer.votes, this.transfer.memo, this.transfer.invalidCandidates);
         // TODO need to check DropVotes
         this.walletManager.openPayModal(this.transfer);

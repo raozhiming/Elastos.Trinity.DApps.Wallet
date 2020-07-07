@@ -4,6 +4,7 @@ import { Config } from '../../../config/Config';
 import { Util } from '../../../model/Util';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
+import { WalletCreationService } from 'src/app/services/walletcreation.service';
 
 @Component({
     selector: 'app-wallet-create-name',
@@ -12,7 +13,7 @@ import { WalletManager } from 'src/app/services/wallet.service';
 })
 export class WalletCreateNamePage implements OnInit {
     public name: string = "";
-    constructor(public route: ActivatedRoute, public native: Native, private walletManager: WalletManager) {
+    constructor(public route: ActivatedRoute, public native: Native, private walletManager: WalletManager, private walletCreationService: WalletCreationService) {
     }
 
     ngOnInit() {
@@ -21,7 +22,7 @@ export class WalletCreateNamePage implements OnInit {
 
     import() {
         if (this.checkParms()) {
-            this.walletManager.walletObj.name = this.name;
+            this.walletCreationService.name = this.name;
             this.native.go("/addpublickey");
         }
     }

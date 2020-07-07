@@ -1,5 +1,6 @@
 export enum WalletAccountType {
-    STANDARD = "Standard"
+    STANDARD = "Standard",
+    MULTI_SIGN = "Multi-Sign"
 }
 
 export class WalletAccount {

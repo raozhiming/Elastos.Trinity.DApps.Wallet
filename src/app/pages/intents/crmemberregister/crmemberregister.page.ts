@@ -26,8 +26,9 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
-import { Transfer } from 'src/app/model/Transfer';
 import { MasterWallet, CoinName } from 'src/app/model/MasterWallet';
+import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
+import { WalletAccount, WalletAccountType } from 'src/app/model/WalletAccount';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -44,7 +45,7 @@ export class CRMemberRegisterPage implements OnInit {
 
     chainId: CoinName; // IDChain
     hasOpenIDChain = false;
-    walletInfo = {};
+    walletInfo: WalletAccount = new WalletAccount();
 
     transFunction: any;
     title = '';
@@ -55,6 +56,7 @@ export class CRMemberRegisterPage implements OnInit {
     constructor(public walletManager: WalletManager,
                 public appService: AppService,
                 public popupProvider: PopupProvider,
+                private coinTransferService: CoinTransferService,
                 public native: Native, public zone: NgZone) {
         this.init();
         // TODO: upgrade spv sdk and test
@@ -64,18 +66,18 @@ export class CRMemberRegisterPage implements OnInit {
     }
 
     ionViewDidEnter() {
-        if (this.walletInfo["Type"] === "Multi-Sign") {
+        if (this.walletInfo.Type === WalletAccountType.MULTI_SIGN) {
             // TODO: reject didtransaction if multi sign (show error popup)
             this.appService.close();
         }
 
-        appManager.setVisible("show", () => { }, (err) => { });
+        appManager.setVisible("show");
     }
 
     async init() {
-        this.transfer = this.walletManager.coinObj.transfer;
-        this.chainId = this.walletManager.coinObj.transfer.chainId;
-        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.transfer = this.coinTransferService.transfer;
+        this.chainId = this.coinTransferService.transfer.chainId;
+        this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
 
         switch (this.transfer.action) {

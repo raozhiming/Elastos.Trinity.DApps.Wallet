@@ -1,10 +1,10 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Native } from '../../../../services/native.service';
 import { Util } from "../../../../model/Util";
-import { Config } from '../../../../config/Config';
 import { ActivatedRoute } from '@angular/router';
 import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../../services/wallet.service';
+import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 
 @Component({
     selector: 'app-mnemonic-write',
@@ -12,21 +12,20 @@ import { WalletManager } from '../../../../services/wallet.service';
     styleUrls: ['./mnemonic-write.page.scss'],
 })
 export class MnemonicWritePage implements OnInit {
-    mnemonicList: Array<any> = []
+    mnemonicList: SelectableMnemonic[] = []
     selectList: Array<any> = [];
     mnemonicStr: string;
     selectComplete = false;
-    multType: any = {};
-    exatParm: any;
-    walletObj = {};
+
     constructor(public route: ActivatedRoute,
         public native: Native,
         public events: Events,
         public walletManager: WalletManager,
+        private walletCreationService: WalletCreationService,
         public zone: NgZone) {
 
-        this.mnemonicStr = this.native.clone(this.walletManager.walletObj.mnemonicStr);
-        this.mnemonicList = this.native.clone(this.walletManager.walletObj.mnemonicList);
+        this.mnemonicStr = this.native.clone(this.walletCreationService.mnemonicStr);
+        this.mnemonicList = this.native.clone(this.walletCreationService.mnemonicList);
         this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
     }
 
@@ -40,18 +39,18 @@ export class MnemonicWritePage implements OnInit {
         }
 
         if (!Util.isNull(mn) && mn == this.mnemonicStr.replace(/\s+/g, "")) {
-            if (this.walletManager.walletObj.isMulti) {
-                this.native.go("/mpublickey", this.exatParm);
+            if (this.walletCreationService.isMulti) {
+                this.native.go("/mpublickey");
             }
             else {
                 this.native.toast_trans('text-mnemonic-ok');
                 await this.native.showLoading();
                 await this.walletManager.spvBridge.createMasterWallet(
-                    this.walletManager.walletObj.masterId, 
+                    this.walletCreationService.masterId, 
                     this.mnemonicStr,
-                    this.walletManager.walletObj.mnemonicPassword, 
-                    this.walletManager.walletObj.payPassword,
-                    this.walletManager.walletObj.singleAddress);
+                    this.walletCreationService.mnemonicPassword, 
+                    this.walletCreationService.payPassword,
+                    this.walletCreationService.singleAddress);
                 await this.createSubWallet();
             }
 
@@ -61,13 +60,13 @@ export class MnemonicWritePage implements OnInit {
     }
 
     async createSubWallet() {
-        await this.walletManager.spvBridge.createSubWallet(this.walletManager.walletObj.masterId, "ELA");
+        await this.walletManager.spvBridge.createSubWallet(this.walletCreationService.masterId, "ELA");
         
-        let account = { "singleAddress": this.walletManager.walletObj.singleAddress, "Type": "Standard" };
-        this.walletManager.addMasterWallet(this.walletManager.walletObj.masterId, this.walletManager.walletObj.name/*, account*/);
+        let account = { "singleAddress": this.walletCreationService.singleAddress, "Type": "Standard" };
+        this.walletManager.addMasterWallet(this.walletCreationService.masterId, this.walletCreationService.name/*, account*/);
         
         // open IDChain for did
-        await this.walletManager.spvBridge.createSubWallet(this.walletManager.walletObj.masterId, "IDChain");
+        await this.walletManager.spvBridge.createSubWallet(this.walletCreationService.masterId, "IDChain");
     }
 
     public addButton(index: number, item: any): void {
@@ -81,8 +80,6 @@ export class MnemonicWritePage implements OnInit {
             this.shouldContinue();
         });
     }
-
-
 
     public removeButton(index: number, item: any): void {
         this.zone.run(() => {

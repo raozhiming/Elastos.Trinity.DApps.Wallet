@@ -27,6 +27,7 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
 import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -46,6 +47,7 @@ export class DidTransactionPage implements OnInit {
     walletInfo = {};
 
     constructor(public walletManager: WalletManager, public appService: AppService, public popupProvider: PopupProvider,
+                private coinTransferService: CoinTransferService,
                 public native: Native, public zone: NgZone) {
         this.init();
     }
@@ -63,10 +65,9 @@ export class DidTransactionPage implements OnInit {
     }
 
     async init() {
-        console.log(this.walletManager.coinObj);
-        this.transfer = this.walletManager.coinObj.transfer;
-        this.chainId = this.walletManager.coinObj.transfer.chainId;
-        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.transfer = this.coinTransferService.transfer;
+        this.chainId = this.coinTransferService.transfer.chainId;
+        this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
         
         if (this.chainId === CoinName.IDCHAIN && !this.masterWallet.hasSubWallet(CoinName.IDCHAIN)) {

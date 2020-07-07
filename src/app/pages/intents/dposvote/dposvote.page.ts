@@ -26,6 +26,7 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
+import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -43,6 +44,7 @@ export class DPoSVotePage implements OnInit {
     walletInfo = {};
 
     constructor(public walletManager: WalletManager, public appService: AppService,
+                private coinTransferService: CoinTransferService,
                 public native: Native, public zone: NgZone, public popupProvider: PopupProvider) {
         this.init();
     }
@@ -60,10 +62,9 @@ export class DPoSVotePage implements OnInit {
     }
 
     init() {
-        console.log(this.walletManager.coinObj);
-        this.transfer = this.walletManager.coinObj.transfer;
-        this.chainId = this.walletManager.coinObj.transfer.chainId;
-        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.transfer = this.coinTransferService.transfer;
+        this.chainId = this.coinTransferService.transfer.chainId;
+        this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
         this.fetchBalance();
 

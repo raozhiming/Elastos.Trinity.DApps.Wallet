@@ -32,26 +32,9 @@ import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublished
 import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
 import { MasterWallet, WalletID, CoinName } from '../model/MasterWallet';
 import { SubWallet } from '../model/SubWallet';
-import { Transfer } from '../model/Transfer';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let notificationManager: NotificationManagerPlugin.NotificationManager;
-
-export class WalletObjTEMP {
-    masterId: string;
-    mnemonicStr: string;
-    mnemonicList: any[];
-    mnemonicPassword: string;
-    payPassword: string;
-    singleAddress: boolean;
-    isMulti: boolean;
-    name: string;
-}
-
-export class CoinObjTEMP {
-    transfer: Transfer; // TODO: messy class that embeds too many unrelated things...
-    walletInfo: any; // TODO: type
-}
 
 class TransactionMapEntry {
     Code: number = null;
@@ -84,13 +67,7 @@ export class WalletManager {
         [index: string]: MasterWallet
     } = {};
 
-    public walletObj: WalletObjTEMP; // TODO: Rework this - what is this object? active wallet? Define a type.
-    public coinObj: CoinObjTEMP; // TODO - Type. Temporary coin context shared by screens.
-
-    public subWallet: {
-        ELA: SubWallet
-    };
-
+    // TODO: what is this map for? Can we rename it ?
     public transactionMap: TransactionMap = {}; // when sync over, need to cleanup transactionMap
 
     public hasPromptTransfer2IDChain = true;
@@ -202,6 +179,7 @@ export class WalletManager {
         this.masterWallets[id] = new MasterWallet(id, name);
         await this.saveMasterWallets();
 
+        // Get some basic information ready in our model.
         await this.masterWallets[id].populateMasterWalletSPVInfo();
 
         // Set the newly created wallet as the active one.
@@ -310,33 +288,29 @@ export class WalletManager {
         let chainId = event.ChainID;
 
         console.log("SubWallet message: ", masterId, chainId, event);
+        //console.log(event.Action, event.result);
 
         switch (event.Action) {
             case "OnTransactionStatusChanged":
-                // console.log('OnTransactionStatusChanged ', result);
                 if (this.transactionMap[event.txId]) {
                     this.transactionMap[event.txId].Status = event.status;
                 }
                 break;
-            case "OnBlockSyncStarted":
-                break;
             case "OnBlockSyncProgress":
-                // console.log('OnBlockSyncProgress ', result);
                 this.updateSyncProgress(masterId, chainId, event);
                 break;
-            case "OnBlockSyncStopped":
-                break;
             case "OnBalanceChanged":
-                // console.log('OnBalanceChanged ', result);
                 this.updateWalletBalance(masterId, chainId);
                 break;
             case "OnTxPublished":
-                // console.log('OnTxPublished ', result);
                 this.handleTransactionPublishedEvent(event);
                 break;
+
+            case "OnBlockSyncStopped":
             case "OnAssetRegistered":
-                break;
+            case "OnBlockSyncStarted":
             case "OnConnectStatusChanged":
+                // Nothing
                 break;
         }
     }

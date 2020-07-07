@@ -29,6 +29,7 @@ import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -53,7 +54,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     hideMemo = false;
     introText = ''; // to show intro text
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public appService: AppService,
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager, 
+        public appService: AppService, private coinTransferService: CoinTransferService,
                 public native: Native, public events: Events, public zone: NgZone) {
         this.init();
     }
@@ -70,9 +72,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     init() {
-        this.transfer = this.walletManager.coinObj.transfer;
-        this.chainId = this.walletManager.coinObj.transfer.chainId;
-        this.walletInfo = this.walletManager.coinObj.walletInfo;
+        this.transfer = this.coinTransferService.transfer;
+        this.chainId = this.coinTransferService.transfer.chainId;
+        this.walletInfo = this.coinTransferService.walletInfo;
         this.events.subscribe('address:update', (address) => {
             this.zone.run(() => {
                 this.transfer.toAddress = address;
@@ -180,7 +182,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
         
         this.transfer.rawTransaction = await this.walletManager.spvBridge.createDepositTransaction(this.masterWallet.id, 'ELA', '',
-            this.walletManager.coinObj.transfer.sideChainId,
+            this.coinTransferService.transfer.sideChainId,
             toAmount.toString(), // user input amount
             this.transfer.toAddress, // user input address
             this.transfer.memo);

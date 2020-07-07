@@ -6,11 +6,7 @@ import { Config } from '../../../../config/Config';
 import { Util } from '../../../../model/Util';
 import { LocalStorage } from '../../../../services/storage.service';
 import { ActivatedRoute } from '@angular/router';
-
-type SelectableMnemonic = {
-    text: string;
-    selected: boolean;
-}
+import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 
 @Component({
     selector: 'app-mnemonic-create',
@@ -27,8 +23,9 @@ export class MnemonicCreatePage implements OnInit {
     isSelect: boolean = false;
 
     constructor(public route: ActivatedRoute,
-        public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events,
-        public zone: NgZone) {
+        public walletManager: WalletManager, public native: Native, 
+        public localStorage: LocalStorage, public events: Events,
+        public zone: NgZone, private walletCreationService: WalletCreationService) {
         native.showLoading().then(() => {
             this.init();
         })
@@ -74,10 +71,10 @@ export class MnemonicCreatePage implements OnInit {
     }
 
     goMnemonicWrite() {
-        this.walletManager.walletObj.masterId = this.masterWalletId;
-        this.walletManager.walletObj.mnemonicStr = this.mnemonicStr;
-        this.walletManager.walletObj.mnemonicList = this.mnemonicList;
-        this.walletManager.walletObj.mnemonicPassword = this.mnemonicPassword;
+        this.walletCreationService.masterId = this.masterWalletId;
+        this.walletCreationService.mnemonicStr = this.mnemonicStr;
+        this.walletCreationService.mnemonicList = this.mnemonicList;
+        this.walletCreationService.mnemonicPassword = this.mnemonicPassword;
 
         this.native.go("/mnemonic-write");
     }

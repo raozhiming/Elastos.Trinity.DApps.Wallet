@@ -4,6 +4,7 @@ import { Native } from '../../../services/native.service';
 import { Config } from '../../../config/Config';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
+import { WalletCreationService } from 'src/app/services/walletcreation.service';
 
 @Component({
     selector: 'app-wallet-create',
@@ -23,8 +24,10 @@ export class WalletCreatePage implements OnInit {
     constructor(public route: ActivatedRoute, 
         public native: Native,
         private walletManager: WalletManager, 
+        private walletCreationService: WalletCreationService,
         public zone: NgZone) {
-        if (this.walletManager.walletObj.isMulti) {
+
+        if (this.walletCreationService.isMulti) {
             this.wallet.singleAddress = true;
             this.isShow = true;
         }
@@ -72,9 +75,9 @@ export class WalletCreatePage implements OnInit {
             payPassword: this.wallet.payPassword, name: this.wallet.name,
             singleAddress: this.wallet.singleAddress, mult: JSON.stringify(this.MultObj)
         };
-        this.walletManager.walletObj.payPassword = this.wallet.payPassword;
-        this.walletManager.walletObj.name = this.wallet.name;
-        this.walletManager.walletObj.singleAddress = this.wallet.singleAddress;
+        this.walletCreationService.payPassword = this.wallet.payPassword;
+        this.walletCreationService.name = this.wallet.name;
+        this.walletCreationService.singleAddress = this.wallet.singleAddress;
 
         this.native.go("/mnemonic-create", params);
     }

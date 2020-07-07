@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Config } from '../../../../config/Config';
 import { WalletManager } from '../../../../services/wallet.service';
 import { Native } from '../../../../services/native.service';
+import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 @Component({
     selector: 'app-coin-receive',
@@ -13,7 +14,8 @@ export class CoinReceivePage implements OnInit {
     masterWalletId: string = "1";
     qrcode: string = null;
     chainId: string;
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native) {
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager, 
+        public native: Native, private coinTransferService: CoinTransferService) {
     }
 
     ngOnInit() {
@@ -22,7 +24,7 @@ export class CoinReceivePage implements OnInit {
 
     init() {
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
-        this.chainId = this.walletManager.coinObj.transfer.chainId;
+        this.chainId = this.coinTransferService.transfer.chainId;
         this.createAddress();
     }
 
