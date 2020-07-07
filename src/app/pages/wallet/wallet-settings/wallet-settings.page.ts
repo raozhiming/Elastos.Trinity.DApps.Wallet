@@ -6,6 +6,7 @@ import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { Config } from "../../../config/Config";
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
     selector: 'app-wallet-settings',
@@ -24,7 +25,8 @@ export class WalletSettingsPage implements OnInit {
 
     constructor(public route: ActivatedRoute, public events: Events,
                 public localStorage: LocalStorage, public popupProvider: PopupProvider, 
-                public walletManager: WalletManager, public native: Native) {
+                public walletManager: WalletManager, public native: Native,
+                private appService: AppService) {
         this.masterWalletId = Config.modifyId;
         this.getMasterWalletBasicInfo();
     }
@@ -35,6 +37,9 @@ export class WalletSettingsPage implements OnInit {
     ionViewWillEnter() {
         // update walletName when modify name
         this.walletName = this.walletManager.masterWallets[this.masterWalletId].name;
+
+        this.appService.setBackKeyVisibility(true);
+        this.appService.setTitleBarTitle("text-wallet-manager");
     }
 
     async onDelete() {

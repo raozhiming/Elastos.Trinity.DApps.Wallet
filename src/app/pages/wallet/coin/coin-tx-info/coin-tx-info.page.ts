@@ -7,6 +7,7 @@ import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
     selector: 'app-coin-tx-info',
@@ -31,13 +32,16 @@ export class CoinTxInfoPage implements OnInit {
     preConfirmCount = '';
     hasSubscribeprogressEvent = false;
 
-    constructor(public events: Events, public route: ActivatedRoute, public walletManager: WalletManager, public native: Native) {
+    constructor(public events: Events, public route: ActivatedRoute, 
+        public walletManager: WalletManager, public native: Native,
+        private appService: AppService) {
     }
 
     ngOnInit() {
     }
 
     ionViewWillEnter() {
+        this.appService.setBackKeyVisibility(true);
         this.init();
     }
 
@@ -50,6 +54,8 @@ export class CoinTxInfoPage implements OnInit {
         this.route.queryParams.subscribe((data) => {
             this.txId = data["txId"];
             this.chainId = data["chainId"];
+
+            this.appService.setTitleBarTitle("text-record");
 
             this.getTransactionInfo();
         });

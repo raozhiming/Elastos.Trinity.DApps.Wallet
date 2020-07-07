@@ -27,6 +27,7 @@ import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { CoinName } from 'src/app/model/MasterWallet';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -40,7 +41,9 @@ export class WalletTabHomePage implements OnInit {
     Config = Config;
     SELA = Config.SELA;
 
-    constructor(public native: Native, public appService: AppService, public popupProvider: PopupProvider, private walletManager: WalletManager) {
+    constructor(public native: Native, public appService: AppService, 
+        public popupProvider: PopupProvider, private walletManager: WalletManager,
+        private translate: TranslateService) {
     }
 
     ngOnInit() {
@@ -48,9 +51,11 @@ export class WalletTabHomePage implements OnInit {
 
     ionViewWillEnter() {
         appManager.setVisible("show");
+        this.appService.setBackKeyVisibility(false);
     }
 
     ionViewDidEnter() {
+        console.log("DID ENTER")
         if (this.walletManager.getCurMasterWalletId() !== '-1') {
             this.promptTransfer2IDChain();
         }

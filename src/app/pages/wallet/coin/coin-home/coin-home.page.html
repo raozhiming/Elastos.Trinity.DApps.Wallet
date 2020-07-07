@@ -1,6 +1,3 @@
-<ion-header>
-    <header-bar title="{{chainId}}"></header-bar>
-</ion-header>
 <ion-content *ngIf="chainId">
     <!-- <nodata keyText='no-tx-record' *ngIf="isNodata"></nodata> -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="!isNodata">

@@ -5,6 +5,7 @@ import { Native } from '../../../services/native.service';
 import { WalletManager } from '../../../services/wallet.service';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -15,7 +16,6 @@ declare let appManager: AppManagerPlugin.AppManager;
 })
 export class WalletlistPage implements OnInit {
     masterWalletId: string = "1";
-    masterList = [];
     masterWallets = {};
     Config = Config;
 
@@ -35,7 +35,6 @@ export class WalletlistPage implements OnInit {
     init() {
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
         this.zone.run(() => {
-            this.masterList = this.walletManager.masterList;
             this.masterWallets = this.walletManager.masterWallets;
         })
     }
@@ -50,5 +49,9 @@ export class WalletlistPage implements OnInit {
 
     onNext() {
         this.native.go("/launcher");
+    }
+
+    getMasterWalletsList(): MasterWallet[] {
+        return Object.values(this.walletManager.masterWallets);
     }
 }

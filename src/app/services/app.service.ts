@@ -1,5 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
-import { Events } from '@ionic/angular';
+import { Events, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Native } from './native.service';
 import { Config } from '../config/Config';
@@ -7,6 +6,7 @@ import { Util } from '../model/Util';
 import { WalletManager, CoinObjTEMP } from './wallet.service';
 import { Transfer } from '../model/Transfer';
 import { CoinName } from '../model/MasterWallet';
+import { Injectable, NgZone } from '@angular/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -24,12 +24,15 @@ export class AppService {
     // private currentLang: string = null;
     private app_version = '';
 
-    constructor(private zone: NgZone, private translate: TranslateService, public events: Events, public native: Native, private walletManager: WalletManager) {
+    constructor(private zone: NgZone, private translate: TranslateService, 
+        public events: Events, public native: Native, private navCtrl: NavController,
+        private walletManager: WalletManager) {
     }
 
     init() {
         console.log("AppmanagerService init");
 
+        // Listen to raw app manager messages.
         appManager.setListener((msg)=>{
             this.onMessageReceived(msg);
         });
@@ -39,8 +42,17 @@ export class AppService {
         titleBarManager.setBackgroundColor("#000000");
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
 
+        // Listen to incoming intents.
         this.setIntentListener();
 
+        // Listen to title bar events
+        titleBarManager.addOnItemClickedListener((menuIcon)=>{
+            if (menuIcon.key == "back") {
+              this.titlebarBackButtonHandle();
+            }
+        });
+
+        // Wait until the wallet manager is ready before showing the first screen.
         this.events.subscribe("walletmanager:initialized", ()=>{
             this.showStartupScreen();
         });
@@ -82,6 +94,26 @@ export class AppService {
         appManager.setIntentListener((intent: AppManagerPlugin.ReceivedIntent)=>{
             this.onReceiveIntent(intent);
         });
+    }
+
+    public setTitleBarTitle(title: string) {
+        titleBarManager.setTitle(this.translate.instant(title));
+    }
+
+    public setBackKeyVisibility(showBackKey: boolean) {
+        if (showBackKey) {
+            titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_LEFT, {
+                key: "back",
+                iconPath: TitleBarPlugin.BuiltInIcon.BACK
+            });
+        }
+        else {
+            titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_LEFT, null);
+        }
+    }
+
+    private async titlebarBackButtonHandle() {
+        this.navCtrl.pop();
     }
 
     getLanguage() {

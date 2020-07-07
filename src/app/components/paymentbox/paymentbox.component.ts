@@ -13,7 +13,7 @@ import { WalletManager } from 'src/app/services/wallet.service';
     styleUrls: ['./paymentbox.component.scss'],
 })
 export class PaymentboxComponent implements OnInit {
-    @ViewChild('pwd') pwd: IonInput;
+    @ViewChild('pwd', { static: true }) pwd: IonInput;
 
     public SELA = Config.SELA;
     public toAddress = '';
@@ -40,7 +40,7 @@ export class PaymentboxComponent implements OnInit {
                 private walletManager: WalletManager,
                 public native: Native) {
         this.walletId = this.walletManager.getCurMasterWalletId();
-        const accountObj = this.walletManager.getAccountType(this.walletId);
+        const accountObj = this.walletManager.getMasterWallet(this.walletId).account.Type;
         if (accountObj["Type"] === "Multi-Sign" && accountObj["InnerType"] === "Readonly") {
             this.walltype = false;
         } else {

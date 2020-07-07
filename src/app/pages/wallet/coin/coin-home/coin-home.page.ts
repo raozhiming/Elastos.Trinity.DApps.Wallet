@@ -32,6 +32,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Transfer } from 'src/app/model/Transfer';
 import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
     selector: 'app-coin-home',
@@ -57,7 +58,7 @@ export class CoinHomePage implements OnInit {
     SELA = Config.SELA;
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public translate: TranslateService,
-                public native: Native, public events: Events, public popupProvider: PopupProvider) {
+                public native: Native, public events: Events, public popupProvider: PopupProvider, private appService: AppService) {
         this.init();
     }
 
@@ -65,6 +66,8 @@ export class CoinHomePage implements OnInit {
         this.events.subscribe(this.chainId + ':syncprogress', (coin) => {
             this.initData();
         });
+
+        this.appService.setBackKeyVisibility(true);
     }
 
     ionViewDidLeave() {
@@ -80,6 +83,7 @@ export class CoinHomePage implements OnInit {
 
         this.route.paramMap.subscribe((params) => {
             this.chainId = params.get('name') as CoinName;
+            this.appService.setTitleBarTitle(this.chainId);
 
             this.initData();
 

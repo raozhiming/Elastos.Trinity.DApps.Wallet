@@ -21,6 +21,7 @@
  */
 
 import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { AppService } from 'src/app/services/app.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -30,7 +31,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./wallet-tabs-root.page.scss'],
 })
 export class WalletTabsRootPage implements OnInit {
-    constructor(public zone: NgZone, public changeDetectorRef: ChangeDetectorRef) {
+    constructor(public zone: NgZone, public changeDetectorRef: ChangeDetectorRef, private appService: AppService) {
     }
 
     ngOnInit() {
@@ -38,6 +39,8 @@ export class WalletTabsRootPage implements OnInit {
 
     ionViewWillEnter() {
         appManager.setVisible("show");
+        this.appService.setTitleBarTitle("My wallet");
+        this.appService.setBackKeyVisibility(false);
     }
 
     changeTabs() {

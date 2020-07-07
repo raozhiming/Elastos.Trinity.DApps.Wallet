@@ -24,7 +24,6 @@ import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController, LoadingController, NavController } from '@ionic/angular';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { Logger } from '../model/Logger';
 
@@ -37,7 +36,6 @@ export class Native {
                 private clipboard: Clipboard,
                 public translate: TranslateService,
                 private loadingCtrl: LoadingController,
-                private inappBrowser: InAppBrowser,
                 private navCtrl: NavController,
                 private zone: NgZone,
                 private router: Router) {
@@ -90,9 +88,7 @@ export class Native {
     }
 
     public openUrl(url: string) {
-        const target = "_system";
-        const options = "location=no";
-        this.inappBrowser.create(url, target, options);
+        console.warn("openUrl(): Not implemented any more");
     }
 
     public setRootRouter(page: any,  options: any = {}) {

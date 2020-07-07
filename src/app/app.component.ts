@@ -37,7 +37,7 @@ import { PopupProvider } from './services/popup.service';
     templateUrl: 'app.component.html'
 })
 export class AppComponent {
-    @ViewChild(IonRouterOutlet) routerOutlet: IonRouterOutlet;
+    @ViewChild(IonRouterOutlet, { static: true }) routerOutlet: IonRouterOutlet;
 
     constructor(
         private platform: Platform,

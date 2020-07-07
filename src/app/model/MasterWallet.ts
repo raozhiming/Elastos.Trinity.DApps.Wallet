@@ -82,15 +82,14 @@ export class MasterWallet {
         this.totalBalance = totalBalance;
     }
 
-    public setProgress(chainId: CoinName, progress: number, lastBlockTime: number) {
-        this.subWallets[chainId].setProgress(progress, lastBlockTime);
+    public updateSyncProgress(chainId: CoinName, progress: number, lastBlockTime: number) {
+        this.subWallets[chainId].updateSyncProgress(progress, lastBlockTime);
     }
 
     public startSubWalletsSync() {
         console.log("SubWallets sync is starting");
 
         for (let subWallet of Object.values(this.subWallets)) {
-            console.log("syncstart")
             this.walletManager.spvBridge.syncStart(this.id, subWallet.id);
         }
     }

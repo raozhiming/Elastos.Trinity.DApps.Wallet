@@ -4,11 +4,11 @@
 
 <ion-content no-bounce>
     <ion-list lines="none">
-        <ion-item *ngFor="let id of masterList"  (click)="itemSelected(id)">
+        <ion-item *ngFor="let masterWallet of getMasterWalletsList()"  (click)="itemSelected(masterWallet.id)">
             <ion-label>
-                <h2>{{ masterWallet[id].name }}</h2>
-                <p *ngIf="masterWallet[id]['account']['Type']==='Standard'">{{'text-standard-wallet' | translate}}</p>
-                <p *ngIf="masterWallet[id]['account']['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</p>
+                <h2>{{ masterWallet.name }}</h2>
+                <p *ngIf="masterWallet.account.Type === 'Standard'">{{'text-standard-wallet' | translate}}</p>
+                <p *ngIf="masterWallet.account.Type === 'Multi-Sign'">{{'text-multi-wallet' | translate}}</p>
             </ion-label>
             <ion-button slot="end" fill="clear" *ngIf="id == masterWalletId">
                 <ion-icon slot="icon-only" name="checked"></ion-icon>

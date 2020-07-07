@@ -24,20 +24,19 @@ export class MnemonicExportPage implements OnInit {
     public mnemonicStr: string = "";
     public walletname: string = "";
     public account: any = {};
+
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public zone: NgZone,
                 public native: Native, public events: Events, public appService: AppService) {
         this.init();
     }
 
     ngOnInit() {
-        console.log('ngOnInit ExportmnemonicPage');
-
     }
 
     ionViewWillEnter() {
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
-        this.walletname = this.walletManager.getWalletName(this.masterWalletId);
-        this.account = this.walletManager.getAccountType(this.masterWalletId);
+        this.walletname = this.walletManager.getActiveMasterWallet().name;
+        this.account = this.walletManager.getActiveMasterWallet().account.Type;
 
         this.events.subscribe("error:update", () => {
             this.isShow = true;
@@ -58,12 +57,12 @@ export class MnemonicExportPage implements OnInit {
                     this.mnemonicPrompt = 'text-mnemonic-prompt';
                 }
                 this.masterWalletId = Config.modifyId;
-                this.walletname = this.walletManager.getWalletName(this.masterWalletId);
+                this.walletname = this.walletManager.getActiveMasterWallet().name;
             });
         });
     }
 
-    checkparms() {
+    checkParams() {
         if (Util.isNull(this.payPassword)) {
             this.native.toast_trans('text-pay-password-input');
             return;
@@ -86,7 +85,7 @@ export class MnemonicExportPage implements OnInit {
     }
 
     async onExport() {
-        if (this.checkparms()) {
+        if (this.checkParams()) {
             let ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
             
             this.mnemonicStr = ret.toString();

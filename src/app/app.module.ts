@@ -27,7 +27,6 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -85,6 +84,7 @@ import { ComponentsModule } from './components/components.module';
 
 import * as Sentry from "@sentry/browser";
 import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
+import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -133,7 +133,6 @@ export function TranslateLoaderFactory() {
 
         LauncherPage,
         WalletSettingsPage,
-        WalletManager,
         ContactsPage,
         ContactCreatePage,
         ContactListPage,
@@ -144,6 +143,7 @@ export function TranslateLoaderFactory() {
         WalletTabHomePage,
         WalletTabSettingsPage,
         WalletTabsRootPage,
+        WalletManagerPage,
         WalletPasswordResetPage,
         WalletEditNamePage,
         WalletImportPage,
@@ -173,7 +173,11 @@ export function TranslateLoaderFactory() {
     ],
     imports: [
         BrowserModule,
-        IonicModule.forRoot(),
+        IonicModule.forRoot({
+            mode: 'ios',
+            scrollAssist: false,
+            scrollPadding: false
+        }),
         AppRoutingModule,
         IonicStorageModule,
         FormsModule,
@@ -193,14 +197,13 @@ export function TranslateLoaderFactory() {
         StatusBar,
         SplashScreen,
         Clipboard,
-        InAppBrowser,
         LocalStorage,
         Native,
         Logger,
         PopupProvider,
         WalletManager,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-       // { provide: ErrorHandler, useClass: SentryErrorHandler }
+        { provide: ErrorHandler, useClass: SentryErrorHandler }
     ],
     bootstrap: [AppComponent]
 })

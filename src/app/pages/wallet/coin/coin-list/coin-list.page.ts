@@ -97,5 +97,4 @@ export class CoinListPage implements OnInit, OnDestroy {
         this.events.unsubscribe("error:update");
         this.events.unsubscribe("error:destroySubWallet");
     }
-
 }

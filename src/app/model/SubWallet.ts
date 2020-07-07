@@ -27,7 +27,7 @@ export class SubWallet {
     /*
     * Updates current SPV synchonization progress information for this coin.
     */
-    public setProgress(progress: number, lastBlockTime: number) {
+    public updateSyncProgress(progress: number, lastBlockTime: number) {
         const userReadableDateTime = Util.dateFormat(new Date(lastBlockTime * 1000), 'yyyy-MM-dd HH:mm:ss');
 
         this.progress = progress;

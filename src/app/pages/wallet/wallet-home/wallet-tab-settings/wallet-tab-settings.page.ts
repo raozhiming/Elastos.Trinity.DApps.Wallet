@@ -34,7 +34,6 @@ export class WalletTabSettingsPage implements OnInit {
     public currentLanguageName: string = "";
     public isShowDeposit: boolean = false;
     public fee: number = 0;
-    public feePerKb: number = 10000;
     public walletInfo = {};
     public password: string = "";
     public available = 0;
