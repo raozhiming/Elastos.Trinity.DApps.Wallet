@@ -26,10 +26,10 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
-import { StandardCoinName } from 'src/app/model/MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { SubWallet } from 'src/app/model/SubWallet';
+import { StandardCoinName } from 'src/app/model/Coin';
 
 declare let appManager: AppManagerPlugin.AppManager;
 

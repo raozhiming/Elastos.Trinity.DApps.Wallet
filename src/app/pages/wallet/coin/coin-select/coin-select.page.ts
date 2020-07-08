@@ -4,7 +4,7 @@ import { Native } from '../../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { SubWallet } from 'src/app/model/SubWallet';
-import { StandardCoinName } from 'src/app/model/MasterWallet';
+import { StandardCoinName } from 'src/app/model/Coin';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 @Component({

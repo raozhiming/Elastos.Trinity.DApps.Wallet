@@ -4,7 +4,7 @@ import { Native } from './native.service';
 import { Config } from '../config/Config';
 import { Util } from '../model/Util';
 import { WalletManager } from './wallet.service';
-import { StandardCoinName } from '../model/MasterWallet';
+import { StandardCoinName } from '../model/Coin';
 import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService } from './cointransfer.service';
 

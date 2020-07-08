@@ -3,7 +3,7 @@ import { Native } from '../services/native.service';
 import { Events } from '@ionic/angular';
 import { PopupProvider } from '../services/popup.service';
 import { Config } from '../config/Config';
-import { StandardCoinName } from './MasterWallet';
+import { StandardCoinName } from './Coin';
 
 declare let walletManager: WalletPlugin.WalletManager;
 

@@ -30,9 +30,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { LocalStorage } from './storage.service';
 import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult } from '../model/SPVWalletPluginBridge';
 import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
-import { MasterWallet, WalletID, StandardCoinName } from '../model/MasterWallet';
+import { MasterWallet, WalletID } from '../model/MasterWallet';
 import { SubWallet } from '../model/SubWallet';
-import { Coin } from '../model/Coin';
+import { Coin, StandardCoinName } from '../model/Coin';
 import { CoinService } from './coin.service';
 import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
 

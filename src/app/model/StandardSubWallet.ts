@@ -1,6 +1,7 @@
-import { MasterWallet, StandardCoinName } from './MasterWallet';
+import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
-import { CoinType, Coin } from './Coin';
+import { CoinType, Coin, StandardCoinName } from './Coin';
+import { Util } from './Util';
 
 export class StandardSubWallet extends SubWallet {
     constructor(masterWallet: MasterWallet, id: StandardCoinName) {
@@ -41,6 +42,39 @@ export class StandardSubWallet extends SubWallet {
         await this.masterWallet.walletManager.spvBridge.destroySubWallet(this.masterWallet.id, this.id);
 
         super.destroy();
+    }
+
+    /**
+     * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,
+     * saying that a new balance amount is available.
+     */
+    public async updateBalance() {
+        // Get the current balance from the wallet plugin.
+        let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
+
+        // Balance in SELA
+        this.balance = parseInt(balanceStr, 10);
+    }
+
+   /*
+    * Updates current SPV synchonization progress information for this coin.
+    */
+   public updateSyncProgress(progress: number, lastBlockTime: number) {
+        const userReadableDateTime = Util.dateFormat(new Date(lastBlockTime * 1000), 'yyyy-MM-dd HH:mm:ss');
+
+        this.progress = progress;
+        this.lastBlockTime = userReadableDateTime;
+
+        const curTimestampMs = (new Date()).getTime();
+        if (curTimestampMs - this.timestamp > 5000) { // 5s
+            this.masterWallet.walletManager.events.publish(this.id + ':syncprogress', this.id);
+            this.timestamp = curTimestampMs;
+        }
+
+        if (progress === 100) {
+            this.masterWallet.walletManager.sendSyncCompletedNotification(this.id);
+            this.masterWallet.walletManager.events.publish(this.id + ':synccompleted', this.id);
+        }
     }
 
     /**

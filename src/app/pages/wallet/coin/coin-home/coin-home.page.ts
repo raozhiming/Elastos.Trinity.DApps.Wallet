@@ -29,10 +29,11 @@ import { PopupProvider } from '../../../../services/popup.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
-import { StandardCoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
 import { AppService } from 'src/app/services/app.service';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
+import { StandardCoinName } from 'src/app/model/Coin';
 
 @Component({
     selector: 'app-coin-home',

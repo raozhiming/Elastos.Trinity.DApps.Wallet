@@ -3,22 +3,9 @@ import { WalletAccount, WalletAccountType } from './WalletAccount';
 import { WalletManager } from '../services/wallet.service';
 import { StandardSubWallet } from './StandardSubWallet';
 import { ERC20SubWallet } from './ERC20SubWallet';
-import { Coin, CoinID, CoinType } from './Coin';
+import { Coin, CoinID, CoinType, StandardCoinName } from './Coin';
 
 export type WalletID = string;
-
-export enum StandardCoinName {
-    ELA = 'ELA',
-    IDChain = 'IDChain',
-    ETHChain = 'ETHChain' // TODO: make sure this is the right name for the SPVSDK
-}
-
-export namespace StandardCoinName {
-    export function fromCoinID(coinID: CoinID): StandardCoinName {
-        console.log("debug fromCoinID ", coinID)
-        return StandardCoinName[coinID];
-    }
-}
 
 export class ExtendedWalletInfo {
     /** User defined wallet name */
@@ -125,10 +112,17 @@ export class MasterWallet {
         return balance;
     }
 
+    /**
+     * Requests a wallet to update its sync progress. Call this only for SPV SDK sub-wallets.
+     */
     public updateSyncProgress(chainId: StandardCoinName, progress: number, lastBlockTime: number) {
-        this.subWallets[chainId].updateSyncProgress(progress, lastBlockTime);
+        let subWallet = this.subWallets[chainId] as StandardSubWallet;
+        subWallet.updateSyncProgress(progress, lastBlockTime);
     }
 
+    /**
+     * Asks all sub-wallets manages by the SPV SDK to start their synchronization routine.
+     */
     public startSubWalletsSync() {
         console.log("SubWallets sync is starting");
 
@@ -139,6 +133,9 @@ export class MasterWallet {
         }
     }
 
+    /**
+     * Asks all sub-wallets manages by the SPV SDK to stop their synchronization routine.
+     */
     public stopSubWalletsSync() {
         console.log("SubWallets sync is stopping");
 

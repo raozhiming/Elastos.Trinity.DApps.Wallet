@@ -5,6 +5,19 @@ export enum CoinType {
     ERC20 = "ERC20" // For ERC20 tokens
 }
 
+export enum StandardCoinName {
+    ELA = 'ELA',
+    IDChain = 'IDChain',
+    ETHChain = 'ETHChain' // TODO: make sure this is the right name for the SPVSDK
+}
+
+export namespace StandardCoinName {
+    export function fromCoinID(coinID: CoinID): StandardCoinName {
+        console.log("debug fromCoinID ", coinID)
+        return StandardCoinName[coinID];
+    }
+}
+
 export class Coin {
     constructor(private type: CoinType, private id: CoinID, private name: string, private description: string, private removable: boolean) {}
 

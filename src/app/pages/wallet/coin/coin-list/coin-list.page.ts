@@ -101,7 +101,6 @@ export class CoinListPage implements OnInit, OnDestroy {
     }
 
     onSelect(item: EditableCoinInfo, open: boolean) {
-        console.log(event);
         if (!open) {
             this.popupProvider.ionicConfirm('confirmTitle', 'text-coin-close-warning').then((data) => {
                 if (data) {

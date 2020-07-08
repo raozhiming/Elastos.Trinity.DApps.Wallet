@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
+    "@elastosfoundation/trinity-dapp-sdk": "^1.0.4",
     "@elastosfoundation/trinity-types": "^1.1.79",
     "@ionic-native/clipboard": "^5.19.1",
     "@ionic-native/core": "^5.19.1",
@@ -33,8 +34,10 @@
     "@sentry/browser": "^5.11.0",
     "angularx-qrcode": "^1.6.1",
     "core-js": "^2.5.4",
+    "ethereumjs-tx": "^2.1.2",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
+    "web3": "^1.2.9",
     "zone.js": "~0.8.29"
   },
   "devDependencies": {

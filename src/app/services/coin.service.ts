@@ -22,7 +22,7 @@
 
 import { Injectable } from '@angular/core';
 import { Coin, CoinID, ERC20Coin, StandardCoin } from '../model/Coin';
-import { StandardCoinName } from '../model/MasterWallet';
+import { StandardCoinName } from '../model/Coin';
 
 @Injectable({
     providedIn: 'root'
