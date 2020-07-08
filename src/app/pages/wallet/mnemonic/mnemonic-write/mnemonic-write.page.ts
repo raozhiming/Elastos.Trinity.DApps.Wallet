@@ -45,28 +45,19 @@ export class MnemonicWritePage implements OnInit {
             else {
                 this.native.toast_trans('text-mnemonic-ok');
                 await this.native.showLoading();
-                await this.walletManager.spvBridge.createMasterWallet(
+
+                await this.walletManager.createNewMasterWallet(
                     this.walletCreationService.masterId, 
+                    this.walletCreationService.name,
                     this.mnemonicStr,
                     this.walletCreationService.mnemonicPassword, 
                     this.walletCreationService.payPassword,
                     this.walletCreationService.singleAddress);
-                await this.createSubWallet();
             }
 
         } else {
             this.native.toast_trans('text-mnemonic-prompt3');
         }
-    }
-
-    async createSubWallet() {
-        await this.walletManager.spvBridge.createSubWallet(this.walletCreationService.masterId, "ELA");
-        
-        let account = { "singleAddress": this.walletCreationService.singleAddress, "Type": "Standard" };
-        this.walletManager.addMasterWallet(this.walletCreationService.masterId, this.walletCreationService.name/*, account*/);
-        
-        // open IDChain for did
-        await this.walletManager.spvBridge.createSubWallet(this.walletCreationService.masterId, "IDChain");
     }
 
     public addButton(index: number, item: any): void {

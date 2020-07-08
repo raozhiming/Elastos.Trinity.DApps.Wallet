@@ -18,7 +18,6 @@ export enum MnemonicLanguage {
     styleUrls: ['./wallet-import.page.scss'],
 })
 export class WalletImportPage implements OnInit, OnDestroy {
-
     masterWalletId: string = "1";
     public selectedTab: string = "words";
     public showAdvOpts: boolean;
@@ -26,11 +25,11 @@ export class WalletImportPage implements OnInit, OnDestroy {
     public importFileObj: any = { payPassword: "", rePayPassword: "", backupPassWord: "", name: "" };
     public mnemonicObj: any = { mnemonic: "", payPassword: "", rePayPassword: "", phrasePassword: "", name: "", singleAddress: false };
     public walletType: string;
-    public accontObj: any = {};
+
     constructor(public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events, public popupProvider: PopupProvider, public zone: NgZone) {
         this.masterWalletId = Util.uuid(6, 16);
         this.events.subscribe("error:update", (item) => {
-            if (item["error"]) {
+            if (item && item["error"]) {
                 if (item["error"]["code"] === 20036) {
                     this.popupProvider.webKeyPrompt().then((val) => {
                         console.log("========webKeyStore" + val);
@@ -41,7 +40,6 @@ export class WalletImportPage implements OnInit, OnDestroy {
                     });
                 }
             }
-
         });
     }
     public toggleShowAdvOpts(isShow): void {
@@ -116,22 +114,6 @@ export class WalletImportPage implements OnInit, OnDestroy {
         return true;
     }
 
-    async importWalletWithKeystore() {
-        await this.walletManager.spvBridge.importWalletWithKeystore(this.masterWalletId, this.keyStoreContent, this.importFileObj.backupPassWord, this.importFileObj.payPassword);
-        await this.createSubWallet('import-text-keystroe-sucess');
-    }
-
-    // TODO: Other screens also have a createSubWallet() method. Merge them into the wallet service
-    async createSubWallet(msg) {
-        await this.walletManager.spvBridge.createSubWallet(this.masterWalletId, "ELA");
-        
-        // open IDChain for did
-        await this.walletManager.spvBridge.createSubWallet(this.masterWalletId, "IDChain");
-
-        this.native.toast_trans(msg);
-        this.saveWalletList();
-    }
-
     checkword() {
         if (Util.isNull(this.mnemonicObj.name)) {
             this.native.toast_trans("text-wallet-name-validator");
@@ -198,12 +180,6 @@ export class WalletImportPage implements OnInit, OnDestroy {
         return wordList.join(isJA ? '\u3000' : ' ');
     };
 
-    async importWalletWithMnemonic() {
-        let mnemonic = this.normalizeMnemonic(this.mnemonicObj.mnemonic);
-        await this.walletManager.spvBridge.importWalletWithMnemonic(this.masterWalletId, mnemonic, this.mnemonicObj.phrasePassword, this.mnemonicObj.payPassword, this.mnemonicObj.singleAddress);
-        await this.createSubWallet('import-text-word-sucess');
-    }
-
     getCoinListCache(createdChains) {
         let chinas = {};
         for (let index in createdChains) {
@@ -215,16 +191,32 @@ export class WalletImportPage implements OnInit, OnDestroy {
         return chinas;
     }
 
-    saveWalletList() {
+    async importWalletWithMnemonic() {
+        let walletName = this.getWalletName();
+        let mnemonic = this.normalizeMnemonic(this.mnemonicObj.mnemonic);
+
+        await this.walletManager.importMasterWalletWithMnemonic(this.masterWalletId, walletName, mnemonic, this.mnemonicObj.phrasePassword, this.mnemonicObj.payPassword, this.mnemonicObj.singleAddress);
+        this.native.toast_trans('import-text-word-sucess');
+    }
+
+    async importWalletWithKeystore() {
+        /* TODO - DISABLED FOR NOW 
+        let walletName = this.getWalletName();
+
+        await this.walletManager.spvBridge.importWalletWithKeystore(this.masterWalletId, this.keyStoreContent, this.importFileObj.backupPassWord, this.importFileObj.payPassword);
+        this.native.toast_trans('import-text-keystroe-sucess');
+        */
+    }
+
+    private getWalletName(): string {
         let name = "";
         if (this.selectedTab === "words") {
             name = this.mnemonicObj.name;
-            this.accontObj["singleAddress"] = this.mnemonicObj.singleAddress;
         } else if (this.selectedTab === "file") {
             name = this.importFileObj.name;
         }
 
-        this.walletManager.addMasterWallet(this.masterWalletId, name /* TODO, this.accontObj */);
+        return name;
     }
 
     ngOnDestroy() {
@@ -243,7 +235,6 @@ export class WalletImportPage implements OnInit, OnDestroy {
       // TODO
       return MnemonicLanguage.OTHERS
     }
-
 }
 
 

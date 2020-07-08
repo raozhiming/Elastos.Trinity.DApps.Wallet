@@ -26,7 +26,7 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
-import { MasterWallet, CoinName } from 'src/app/model/MasterWallet';
+import { MasterWallet, StandardCoinName } from 'src/app/model/MasterWallet';
 import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
 import { WalletAccount, WalletAccountType } from 'src/app/model/WalletAccount';
 
@@ -43,7 +43,7 @@ export class CRMemberRegisterPage implements OnInit {
 
     balance: number; // ELA
 
-    chainId: CoinName; // IDChain
+    chainId: StandardCoinName; // IDChain
     hasOpenIDChain = false;
     walletInfo: WalletAccount = new WalletAccount();
 
@@ -106,7 +106,7 @@ export class CRMemberRegisterPage implements OnInit {
         }
 
         // TODO: Can we really register CR member from another chain than the mainchain?
-        if (this.chainId === CoinName.IDCHAIN && !this.masterWallet.hasSubWallet(CoinName.IDCHAIN)) {
+        if (this.chainId === StandardCoinName.IDChain && !this.masterWallet.hasSubWallet(StandardCoinName.IDChain)) {
             await this.notifyNoIDChain();
             this.cancelOperation();
             return;
@@ -144,7 +144,7 @@ export class CRMemberRegisterPage implements OnInit {
     async createRegisterCRTransaction() {
         console.log('Calling createRegisterCRTransaction()');
 
-        const crPublickeys = await this.walletManager.spvBridge.getAllPublicKeys(this.masterWallet.id, CoinName.IDCHAIN, 0, 1);
+        const crPublickeys = await this.walletManager.spvBridge.getAllPublicKeys(this.masterWallet.id, StandardCoinName.IDChain, 0, 1);
         const crPublicKey = crPublickeys.PublicKeys[0];
 
         const payload = await this.walletManager.spvBridge.generateCRInfoPayload(this.masterWallet.id, this.chainId,

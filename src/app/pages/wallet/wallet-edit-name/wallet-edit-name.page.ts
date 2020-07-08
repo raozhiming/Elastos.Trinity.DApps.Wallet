@@ -6,6 +6,8 @@ import { Native } from '../../../services/native.service';
 import { LocalStorage } from '../../../services/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
+import { WalletEditionService } from 'src/app/services/walletedition.service';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 
 @Component({
     selector: 'app-wallet-edit-name',
@@ -14,11 +16,14 @@ import { WalletManager } from 'src/app/services/wallet.service';
 })
 export class WalletEditNamePage implements OnInit {
     public walletname: string = "";
-    public masterWalletId: string = "1";
+    public masterWallet: MasterWallet = null;
     
-    constructor(public route: ActivatedRoute, public native: Native, public localStorage: LocalStorage, public events: Events, private walletManager: WalletManager) {
-        this.masterWalletId = Config.modifyId
-        this.walletname = this.walletManager.masterWallets[this.masterWalletId].name;
+    constructor(public route: ActivatedRoute, public native: Native, public localStorage: LocalStorage, 
+        public events: Events, private walletManager: WalletManager,
+        private walletEditionService: WalletEditionService) {
+
+        this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
+        this.walletname = this.walletManager.masterWallets[this.masterWallet.id].name;
     }
 
     ngOnInit() {
@@ -45,8 +50,8 @@ export class WalletEditNamePage implements OnInit {
     }
 
     async modifyName() {
-        this.walletManager.masterWallets[this.masterWalletId].name = this.walletname;
-        await this.walletManager.saveMasterWallets();
+        this.walletManager.masterWallets[this.masterWallet.id].name = this.walletname;
+        await this.walletManager.saveMasterWallet(this.masterWallet);
         this.native.pop();
     }
 }

@@ -26,8 +26,9 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
-import { CoinName } from 'src/app/model/MasterWallet';
+import { StandardCoinName } from 'src/app/model/MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
+import { WalletEditionService } from 'src/app/services/walletedition.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -43,6 +44,7 @@ export class WalletTabHomePage implements OnInit {
 
     constructor(public native: Native, public appService: AppService, 
         public popupProvider: PopupProvider, private walletManager: WalletManager,
+        private walletEditionService: WalletEditionService,
         private translate: TranslateService) {
     }
 
@@ -69,14 +71,14 @@ export class WalletTabHomePage implements OnInit {
     }
 
     goSetting() {
-        Config.modifyId = this.walletManager.getCurMasterWalletId();
+        this.walletEditionService.modifiedMasterWalletId = this.walletManager.getCurMasterWalletId();
         this.native.go('/wallet-settings');
         event.stopPropagation();
         return false;
     }
 
     doRefresh(event) {
-        this.walletManager.getActiveMasterWallet().getSubWalletBalance(CoinName.ELA);
+        this.walletManager.getActiveMasterWallet().getSubWalletBalance(StandardCoinName.ELA);
         setTimeout(() => {
             event.target.complete();
         }, 1000);

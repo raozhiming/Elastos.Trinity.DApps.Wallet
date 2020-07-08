@@ -26,7 +26,7 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
-import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { StandardCoinName, MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -70,7 +70,7 @@ export class DidTransactionPage implements OnInit {
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
         
-        if (this.chainId === CoinName.IDCHAIN && !this.masterWallet.hasSubWallet(CoinName.IDCHAIN)) {
+        if (this.chainId === StandardCoinName.IDChain && !this.masterWallet.hasSubWallet(StandardCoinName.IDChain)) {
             await this.notifyNoIDChain();
             this.cancelOperation();
             return;

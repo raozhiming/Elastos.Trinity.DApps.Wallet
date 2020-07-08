@@ -21,7 +21,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { CoinName } from '../model/MasterWallet';
+import { StandardCoinName } from '../model/MasterWallet';
 import { WalletAccount } from '../model/WalletAccount';
 
 export class Transfer {
@@ -39,7 +39,7 @@ export class Transfer {
     crDID: string = null;
     from: string = null;
     fee: number = 0;
-    chainId: CoinName = null;
+    chainId: StandardCoinName = null;
     votes: any; // TODO
     invalidCandidates: any; // TODO
     amount: number = 0;

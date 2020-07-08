@@ -16,7 +16,7 @@
                 </div>
                 <button (click)="goSetting()">{{'text-wallet-manager' | translate}}</button>
             </div>
-            <div class="valuation" [hidden]="!showOn">{{walletManager.activeMasterWallet.totalBalance/SELA}}</div>
+            <div class="valuation" [hidden]="!showOn">{{walletManager.activeMasterWallet.getBalance()/SELA}}</div>
             <div class="valuation" [hidden]="showOn">****</div>
         </div>
 

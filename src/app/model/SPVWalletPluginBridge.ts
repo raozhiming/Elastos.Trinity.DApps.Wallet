@@ -3,7 +3,7 @@ import { Native } from '../services/native.service';
 import { Events } from '@ionic/angular';
 import { PopupProvider } from '../services/popup.service';
 import { Config } from '../config/Config';
-import { CoinName } from './MasterWallet';
+import { StandardCoinName } from './MasterWallet';
 
 declare let walletManager: WalletPlugin.WalletManager;
 
@@ -56,7 +56,7 @@ export type AllTransactions = {
 
 export type SPVWalletMessage = {
     MasterWalletID: string;
-    ChainID: CoinName;
+    ChainID: StandardCoinName;
     Action: string;
     txId: string;
     status: string;
@@ -169,7 +169,7 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    getAllSubWallets(masterWalletId: string): Promise<CoinName[]> {
+    getAllSubWallets(masterWalletId: string): Promise<StandardCoinName[]> {
         return new Promise((resolve, reject)=>{
             walletManager.getAllSubWallets([masterWalletId],
                 (ret) => { resolve(ret); },

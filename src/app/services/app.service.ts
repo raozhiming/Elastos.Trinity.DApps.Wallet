@@ -4,7 +4,7 @@ import { Native } from './native.service';
 import { Config } from '../config/Config';
 import { Util } from '../model/Util';
 import { WalletManager } from './wallet.service';
-import { CoinName } from '../model/MasterWallet';
+import { StandardCoinName } from '../model/MasterWallet';
 import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService } from './cointransfer.service';
 
@@ -215,7 +215,7 @@ export class AppService {
         this.coinTransferService.transfer.from = intent.from;
         this.coinTransferService.transfer.payPassword = '';
         this.coinTransferService.transfer.fee = 0;
-        this.coinTransferService.transfer.chainId = CoinName.ELA;
+        this.coinTransferService.transfer.chainId = StandardCoinName.ELA;
 
         switch (intent.action) {
             case 'crmembervote':
@@ -246,7 +246,7 @@ export class AppService {
 
             case 'crmemberretrieve':
                 console.log('CR member retrieve Transaction intent content:', intent.params);
-                this.coinTransferService.transfer.chainId = CoinName.IDCHAIN;
+                this.coinTransferService.transfer.chainId = StandardCoinName.IDChain;
                 this.coinTransferService.transfer.amount = intent.params.amount;
                 this.coinTransferService.transfer.publickey = intent.params.publickey;
                 break;
@@ -258,7 +258,7 @@ export class AppService {
                 break;
 
             case 'didtransaction':
-                this.coinTransferService.transfer.chainId = CoinName.IDCHAIN;
+                this.coinTransferService.transfer.chainId = StandardCoinName.IDChain;
                 this.coinTransferService.transfer.didrequest = intent.params.didrequest;
                 break;
 

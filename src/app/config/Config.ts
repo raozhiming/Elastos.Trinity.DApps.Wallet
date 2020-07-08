@@ -53,5 +53,4 @@ export class Config {
     //public static BLOCKCHAIN_URL: String = 'https://blockchain-regtest.elastos.org/';
 
     public static requestDapp: any; // TODO: ???
-    public static modifyId = "";    // TODO: ???
 }

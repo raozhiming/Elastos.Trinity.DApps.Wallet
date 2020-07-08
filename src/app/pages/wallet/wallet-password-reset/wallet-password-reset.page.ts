@@ -6,6 +6,7 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider} from '../../../services/popup.service';
 import { Util } from '../../../model/Util';
 import { WalletManager } from '../../../services/wallet.service';
+import { WalletEditionService } from 'src/app/services/walletedition.service';
 
 @Component({
     selector: 'app-wallet-password-reset',
@@ -26,8 +27,9 @@ export class WalletPasswordResetPage implements OnInit {
                 public walletManager: WalletManager,
                 private authService: AuthService,
                 public popupProvider: PopupProvider,
+                private walletEditionService: WalletEditionService,
                 public native: Native) {
-        this.masterWalletId = Config.modifyId;
+        this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
     }
 
     ngOnInit() {

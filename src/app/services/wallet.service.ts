@@ -30,8 +30,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { LocalStorage } from './storage.service';
 import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult } from '../model/SPVWalletPluginBridge';
 import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
-import { MasterWallet, WalletID, CoinName } from '../model/MasterWallet';
+import { MasterWallet, WalletID, StandardCoinName } from '../model/MasterWallet';
 import { SubWallet } from '../model/SubWallet';
+import { Coin } from '../model/Coin';
+import { CoinService } from './coin.service';
+import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let notificationManager: NotificationManagerPlugin.NotificationManager;
@@ -85,6 +88,7 @@ export class WalletManager {
                 public translate: TranslateService,
                 public localStorage: LocalStorage,
                 private platform: Platform,
+                private coinService: CoinService,
                 public popupProvider: PopupProvider) {
     }
 
@@ -112,10 +116,11 @@ export class WalletManager {
                 let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
                 if (extendedInfo) {
                     console.log("Found extended wallet info for master wallet id "+masterId, extendedInfo);
-                    this.masterWallets[masterId].name = extendedInfo.name;
+                    await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
                 }
-
-                await this.masterWallets[masterId].populateMasterWalletSPVInfo();
+                else {
+                    console.warn("No local storage info found for this wallet. this should normally not happen");
+                }
             }
         }
         catch (error) {
@@ -174,14 +179,59 @@ export class WalletManager {
         }
     }
 
-    public async addMasterWallet(id, name) {
+    /**
+     * Creates a new master wallet both in the SPV SDK and in our local model.
+     */
+    public async createNewMasterWallet(masterId: WalletID, walletName: string, mnemonicStr: string, mnemonicPassword: string, payPassword: string, singleAddress: boolean) {
+        console.log("Creating new master wallet");
+
+        await this.spvBridge.createMasterWallet(masterId, mnemonicStr,mnemonicPassword, payPassword, singleAddress);
+
+        let account: WalletAccount = { 
+            singleAddress: singleAddress, 
+            Type: WalletAccountType.STANDARD 
+        };
+
+        await this.addMasterWalletToLocalModel(masterId, walletName, account);
+    }
+
+    /**
+     * Creates a new master wallet both in the SPV SDK and in our local model, using a given mnemonic.
+     */
+    public async importMasterWalletWithMnemonic(masterId: WalletID, walletName: string, mnemonicStr: string, mnemonicPassword: string, payPassword: string, singleAddress: boolean) {
+        console.log("Importing new master wallet with mnemonic");
+
+        await this.spvBridge.importWalletWithMnemonic(masterId, mnemonicStr, mnemonicPassword, payPassword, singleAddress);
+
+        let account: WalletAccount = { 
+            singleAddress: singleAddress, 
+            Type: WalletAccountType.STANDARD 
+        };
+
+        await this.addMasterWalletToLocalModel(masterId, walletName, account);
+    }
+
+    private async addMasterWalletToLocalModel(id: WalletID, name: string, walletAccount: WalletAccount) {
+        console.log("Adding master wallet to local model", id, name);
+
         // Add a new wallet to our local model
-        this.masterWallets[id] = new MasterWallet(id, name);
-        await this.saveMasterWallets();
+        this.masterWallets[id] = new MasterWallet(this, id, name);
+
+        // Set some wallet account info
+        this.masterWallets[id].account = walletAccount;
 
         // Get some basic information ready in our model.
-        await this.masterWallets[id].populateMasterWalletSPVInfo();
+        await this.masterWallets[id].populateWithExtendedInfo(null);
 
+        // A master wallet must always have at least the ELA subwallet
+        await this.masterWallets[id].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
+
+        // Even if not mandatory to have, we open the main sub wallets for convenience as well.
+        await this.masterWallets[id].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
+
+        // Save state to local storage
+        await this.saveMasterWallet(this.masterWallets[id]);
+        
         // Set the newly created wallet as the active one.
         this.setActiveMasterWalletId(id);
 
@@ -196,6 +246,9 @@ export class WalletManager {
         // Destroy the wallet in the wallet plugin
         await this.spvBridge.destroyWallet(id);
 
+        // Save this modification to our permanent local storage
+        await this.localStorage.setExtendedMasterWalletInfo(this.masterWallets[id].id, null);
+
         // Destroy from our local model
         delete this.masterWallets[id];
       
@@ -203,9 +256,6 @@ export class WalletManager {
             this.activeMasterWallet = null;
             // TODO: we need more cleanup than this on the active wallet here!
         }
-
-        // Save this modification to our permanent local storage
-        await this.saveMasterWallets();
 
         // If there is at least one remaining wallet, select it as the new active wallet in the app.
         if (Object.values(this.masterWallets).length > 0) {
@@ -216,31 +266,11 @@ export class WalletManager {
         }
     }
 
-    public async createSubWallet(masterId: WalletID, chainId: CoinName) {
-        await this.masterWallets[masterId].populateSubWallet(chainId);
-    }
-
-    /**
-     * Removes a subwallet (coin - ex: ela, idchain) from the given wallet.
-     */
-    public async destroySubWallet(masterId: WalletID, chainId: CoinName) {
-        await this.spvBridge.destroySubWallet(masterId, chainId);
-        
-        // Delete the subwallet from out local model.
-        delete this.masterWallets[masterId].subWallets[chainId];
-
-        await this.saveMasterWallets();
-    }
-
     /**
      * Save master wallets list to permanent local storage.
      */
-    public async saveMasterWallets() {
-        for (let masterWallet of Object.values(this.masterWallets)) {
-            await this.localStorage.setExtendedMasterWalletInfo(masterWallet.id, {
-                name: masterWallet.name
-            });
-        }
+    public async saveMasterWallet(masterWallet: MasterWallet) {
+        await this.localStorage.setExtendedMasterWalletInfo(masterWallet.id, masterWallet.getExtendedWalletInfo());
     }
 
     private async syncStartSubWallets(masterId: WalletID) {
@@ -270,7 +300,7 @@ export class WalletManager {
     /**
      * Start listening to all events from the SPV SDK.
      */
-    public registerSubWalletListener(masterId: WalletID, chainId: CoinName) {
+    public registerSubWalletListener(masterId: WalletID, chainId: StandardCoinName) {
         console.log("Register sub-wallet listener for", masterId, chainId);
 
         this.spvBridge.registerWalletListener(masterId, chainId, (event: SPVWalletMessage)=>{
@@ -300,7 +330,7 @@ export class WalletManager {
                 this.updateSyncProgress(masterId, chainId, event);
                 break;
             case "OnBalanceChanged":
-                this.updateWalletBalance(masterId, chainId);
+                this.getMasterWallet(masterId).getSubWallet(chainId).updateBalance();
                 break;
             case "OnTxPublished":
                 this.handleTransactionPublishedEvent(event);
@@ -319,26 +349,18 @@ export class WalletManager {
      * Updates the progress value of current wallet synchronization. This progress change
      * is saved into the model and triggers events so that the UI can update itself.
      */
-    private updateSyncProgress(masterId: WalletID, chainId: CoinName, result: SPVWalletMessage) {
+    private updateSyncProgress(masterId: WalletID, chainId: StandardCoinName, result: SPVWalletMessage) {
         this.masterWallets[masterId].updateSyncProgress(chainId, result.Progress, result.LastBlockTime);
 
-        if (!this.hasPromptTransfer2IDChain && (chainId === CoinName.IDCHAIN)) {
-            let elaProgress = this.masterWallets[masterId].subWallets[CoinName.ELA].progress
-            let idChainProgress = this.masterWallets[masterId].subWallets[CoinName.IDCHAIN].progress
+        if (!this.hasPromptTransfer2IDChain && (chainId === StandardCoinName.IDChain)) {
+            let elaProgress = this.masterWallets[masterId].subWallets[StandardCoinName.ELA].progress
+            let idChainProgress = this.masterWallets[masterId].subWallets[StandardCoinName.IDChain].progress
 
             // Check if it's a right time to prompt user for ID chain transfers, but only if we are fully synced.
             if (elaProgress == 100 && idChainProgress == 100) {
                 this.checkIDChainBalance();
             }
         }
-    }
-
-    /**
-     * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,
-     * saying that a new balance amount is available.
-     */
-    private updateWalletBalance(masterId: WalletID, chainId: CoinName) {
-        this.masterWallets[masterId].updateWalletBalance(chainId);
     }
 
     private handleTransactionPublishedEvent(data: SPVWalletMessage) {
@@ -393,13 +415,13 @@ export class WalletManager {
         //     return;
         // }
 
-        if (this.getActiveMasterWallet().subWallets[CoinName.ELA].balance <= 1000000) {
-            console.log('ELA balance ', this.getActiveMasterWallet().subWallets[CoinName.ELA].balance);
+        if (this.getActiveMasterWallet().subWallets[StandardCoinName.ELA].balance <= 1000000) {
+            console.log('ELA balance ', this.getActiveMasterWallet().subWallets[StandardCoinName.ELA].balance);
             return;
         }
 
-        if (this.getActiveMasterWallet().subWallets[CoinName.IDCHAIN].balance > 100000) {
-            console.log('IDChain balance ', this.getActiveMasterWallet().subWallets[CoinName.IDCHAIN].balance);
+        if (this.getActiveMasterWallet().subWallets[StandardCoinName.IDChain].balance > 100000) {
+            console.log('IDChain balance ', this.getActiveMasterWallet().subWallets[StandardCoinName.IDChain].balance);
             return;
         }
 

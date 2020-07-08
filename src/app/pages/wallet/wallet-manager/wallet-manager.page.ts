@@ -5,6 +5,7 @@ import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { Config } from 'src/app/config/Config';
 import { MasterWallet } from 'src/app/model/MasterWallet';
+import { WalletEditionService } from 'src/app/services/walletedition.service';
 
 @Component({
     selector: 'app-wallet-manager',
@@ -12,7 +13,9 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
     styleUrls: ['./wallet-manager.page.scss'],
 })
 export class WalletManagerPage implements OnInit {
-    constructor(public events: Events, public localStorage: LocalStorage, public native: Native, private zone: NgZone, public walletManager: WalletManager) {
+    constructor(public events: Events, public localStorage: LocalStorage, public native: Native, 
+        private walletEditionService: WalletEditionService,
+        private zone: NgZone, public walletManager: WalletManager) {
     }
 
     ngOnInit() {
@@ -23,8 +26,8 @@ export class WalletManagerPage implements OnInit {
         this.native.go("/launcher");
     }
 
-    itemSelected(id) {
-        Config.modifyId = id;
+    itemSelected(masterWallet: MasterWallet) {
+        this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
         this.native.go("/wallet-settings");
     }
 

@@ -6,6 +6,14 @@ import { Native } from '../../../../services/native.service';
 import { PopupProvider} from '../../../../services/popup.service';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
+import { Coin, CoinID } from 'src/app/model/Coin';
+import { CoinService } from 'src/app/services/coin.service';
+import { WalletEditionService } from 'src/app/services/walletedition.service';
+
+type EditableCoinInfo = {
+    coin: Coin, 
+    isOpen: boolean
+}
 
 @Component({
     selector: 'app-coin-list',
@@ -14,43 +22,32 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 })
 export class CoinListPage implements OnInit, OnDestroy {
     masterWallet: MasterWallet = null;
-    coinList = [];
+    coinList: EditableCoinInfo[] = null;
     coinListCache = {};
     payPassword: string = "";
     singleAddress: boolean = false;
     currentCoin: any;
 
     constructor(public walletManager: WalletManager, public popupProvider: PopupProvider,
+                private coinService: CoinService, private walletEditionService: WalletEditionService,
                 public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events) {
-                    this.init();
+        this.init();
     }
 
     ngOnInit() {
     }
 
-    onSelect(item, open) {
-        if (!open) {
-            this.popupProvider.ionicConfirm('confirmTitle', 'text-coin-close-warning').then((data) => {
-                if (data) {
-                    this.switchCoin(item, open);
-                }
-            });
-        } else {// open
-            this.switchCoin(item, open);
-        }
-    }
-
-    async switchCoin(item, open) {
-        item.open = open;
+    async switchCoin(item: EditableCoinInfo, open: boolean) {
+        item.isOpen = open;
         this.native.info(item);
 
         this.currentCoin = item;
         await this.native.showLoading();
 
-        if (item.open) {
-            await this.createSubWallet(item.name);
+        if (item.isOpen) {
+            await this.createSubWallet(item.coin);
         } else {
-            await this.destroySubWallet(item.name);
+            await this.destroySubWallet(item.coin);
         }
     }
 
@@ -62,39 +59,50 @@ export class CoinListPage implements OnInit, OnDestroy {
             this.currentCoin["open"] = true;
         });
 
-        this.masterWallet = this.walletManager.getMasterWallet(Config.modifyId);
+        this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
 
         this.native.hideLoading();
 
-        let supportedChains = await this.walletManager.spvBridge.getSupportedChains(this.masterWallet.id);
-        for (let index in supportedChains) {
-            let chain = supportedChains[index];
-            let isOpen = (chain in this.masterWallet.subWallets);
-
-            this.coinList.push({ name: chain, open: isOpen });
+        this.coinList = [];
+        for (let availableCoin of this.coinService.getAvailableCoins()) {
+            let isOpen = (availableCoin.getID() in this.masterWallet.subWallets);
+            this.coinList.push({ coin: availableCoin, isOpen: isOpen });
         }
     }
 
-    async createSubWallet(chainId) {
+    async createSubWallet(coin: Coin) {
         try {
             this.native.hideLoading();
 
             // Create the sub Wallet (ex: IDChain)
-            await this.walletManager.createSubWallet(this.masterWallet.id, chainId);
+            await this.masterWallet.createSubWallet(coin);
         }
         catch (error) {
             this.currentCoin["open"] = false; // TODO: currentCoin type
         }
     }
 
-    async destroySubWallet(chainId) {
+    async destroySubWallet(coin: Coin) {
         this.native.hideLoading();
 
-        this.walletManager.destroySubWallet(this.masterWallet.id, chainId);
+        await this.masterWallet.destroySubWallet(coin.getID());
     }
 
     ngOnDestroy() {
         this.events.unsubscribe("error:update");
         this.events.unsubscribe("error:destroySubWallet");
+    }
+
+    onSelect(item: EditableCoinInfo, open: boolean) {
+        console.log(event);
+        if (!open) {
+            this.popupProvider.ionicConfirm('confirmTitle', 'text-coin-close-warning').then((data) => {
+                if (data) {
+                    this.switchCoin(item, open);
+                }
+            });
+        } else {// open
+            this.switchCoin(item, open);
+        }
     }
 }

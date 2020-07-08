@@ -6,6 +6,7 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
+import { WalletEditionService } from 'src/app/services/walletedition.service';
 
 @Component({
     selector: 'app-mnemonic-export',
@@ -26,6 +27,7 @@ export class MnemonicExportPage implements OnInit {
     public account: any = {};
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public zone: NgZone,
+                private walletEditionService: WalletEditionService,
                 public native: Native, public events: Events, public appService: AppService) {
         this.init();
     }
@@ -56,7 +58,7 @@ export class MnemonicExportPage implements OnInit {
                     this.title = 'text-export-mnemonic';
                     this.mnemonicPrompt = 'text-mnemonic-prompt';
                 }
-                this.masterWalletId = Config.modifyId;
+                this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
                 this.walletname = this.walletManager.getActiveMasterWallet().name;
             });
         });

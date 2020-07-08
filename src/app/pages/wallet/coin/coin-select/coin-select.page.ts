@@ -4,7 +4,7 @@ import { Native } from '../../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { SubWallet } from 'src/app/model/SubWallet';
-import { CoinName } from 'src/app/model/MasterWallet';
+import { StandardCoinName } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class CoinSelectPage implements OnInit {
 
     init() {        
         // Note: we are willing to pick a sidechain subwallet here only.
-        this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(CoinName.ELA);
+        this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(StandardCoinName.ELA);
     }
 
     onItem(item) {

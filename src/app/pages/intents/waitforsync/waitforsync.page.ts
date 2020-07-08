@@ -5,7 +5,7 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
-import { MasterWallet, CoinName } from 'src/app/model/MasterWallet';
+import { MasterWallet, StandardCoinName } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -96,8 +96,8 @@ export class WaitForSyncPage implements OnInit {
                 break;
         }
 
-        if (this.chainId === CoinName.IDCHAIN) {
-            if (!this.masterWallet.hasSubWallet(CoinName.IDCHAIN)) {
+        if (this.chainId === StandardCoinName.IDChain) {
+            if (!this.masterWallet.hasSubWallet(StandardCoinName.IDChain)) {
                 await this.notifyNoIDChain();
                 this.cancelOperation();
                 return;

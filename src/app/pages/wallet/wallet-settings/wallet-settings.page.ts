@@ -7,6 +7,7 @@ import { Native } from '../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { Config } from "../../../config/Config";
 import { AppService } from 'src/app/services/app.service';
+import { WalletEditionService } from 'src/app/services/walletedition.service';
 
 @Component({
     selector: 'app-wallet-settings',
@@ -26,8 +27,11 @@ export class WalletSettingsPage implements OnInit {
     constructor(public route: ActivatedRoute, public events: Events,
                 public localStorage: LocalStorage, public popupProvider: PopupProvider, 
                 public walletManager: WalletManager, public native: Native,
+                private walletEditionService: WalletEditionService,
                 private appService: AppService) {
-        this.masterWalletId = Config.modifyId;
+                    
+        this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
+        console.log("1",this.masterWalletId);
         this.getMasterWalletBasicInfo();
     }
 
@@ -54,6 +58,7 @@ export class WalletSettingsPage implements OnInit {
     }
 
     private async getMasterWalletBasicInfo() {
+        console.log("2",this.masterWalletId);
         let ret = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWalletId);
 
         this.masterWalletType = ret["Type"];

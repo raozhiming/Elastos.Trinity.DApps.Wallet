@@ -3,9 +3,9 @@
 </ion-header>
 <ion-content no-bounce>
     <ion-list lines="none">
-        <ion-item *ngFor="let masterWallet of getWalletsList()" detail (click)="itemSelected(id)">
+        <ion-item *ngFor="let masterWallet of getWalletsList()" detail (click)="itemSelected(masterWallet)">
             <ion-label>
-                <h2>{{ masterWallet[id].name }}</h2>
+                <h2>{{ masterWallet.name }}</h2>
                 <p *ngIf="masterWallet.account.Type==='Standard'">{{'text-standard-wallet' | translate}}</p>
                 <p *ngIf="masterWallet.account.Type==='Multi-Sign'">{{'text-multi-wallet' | translate}}</p>
             </ion-label>

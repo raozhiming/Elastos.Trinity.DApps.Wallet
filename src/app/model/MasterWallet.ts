@@ -1,88 +1,135 @@
-import { SubWallet } from './SubWallet';
+import { SubWallet, SerializedSubWallet  } from './SubWallet';
 import { WalletAccount, WalletAccountType } from './WalletAccount';
 import { SPVWalletMessage } from './SPVWalletPluginBridge';
 import { WalletManager } from '../services/wallet.service';
 import { Util } from './Util';
+import { StandardSubWallet } from './StandardSubWallet';
+import { ERC20SubWallet } from './ERC20SubWallet';
+import { Coin, CoinID, CoinType } from './Coin';
 
 export type WalletID = string;
 
-export enum CoinName {
+export enum StandardCoinName {
     ELA = 'ELA',
-    IDCHAIN = 'IDChain'
+    IDChain = 'IDChain',
+    ETHChain = 'ETHChain' // TODO: make sure this is the right name for the SPVSDK
 }
 
-export type ExtendedWalletInfo = {
+export namespace StandardCoinName {
+    export function fromCoinID(coinID: CoinID): StandardCoinName {
+        console.log("debug fromCoinID ", coinID)
+        return StandardCoinName[coinID];
+    }
+}
+
+export class ExtendedWalletInfo {
+    /** User defined wallet name */
     name: string;
-    //enabledCoins: CoinName[];
+    /** List of serialized subwallets added earlier to this master wallet */
+    subWallets: SerializedSubWallet[] = [];
+}
+
+class SubWalletBuilder {
+    /**
+     * Newly created wallet, base on a coin type.
+     */
+    static newFromCoin(masterWallet: MasterWallet, coin: Coin): Promise<SubWallet> {
+        console.log("Creating new subwallet using coin", coin);
+
+        switch (coin.getType()) {
+            case CoinType.STANDARD:
+                return StandardSubWallet.newFromCoin(masterWallet, coin);
+            case CoinType.ERC20: 
+                return ERC20SubWallet.newFromCoin(masterWallet, coin);
+            default:
+                console.warn("Unsupported coin type", coin.getType());
+                break;
+        }
+    }
+
+    /**
+     * Restored wallet from local storage info.
+     */
+    static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): SubWallet {
+        switch (serializedSubWallet.type) {
+            case CoinType.STANDARD:
+                return StandardSubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
+                break;
+            case CoinType.ERC20: 
+                return ERC20SubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
+                break;
+            default:
+                console.warn("Unsupported subwallet type", serializedSubWallet.type);
+                break;
+        }
+    }
 }
 
 export class MasterWallet {
     public id: string = null;
     public name: string = null;
-    
+
     public subWallets: {
         [k: string]: SubWallet
     } = {};
 
     public account: WalletAccount = {
-        Type: WalletAccountType.STANDARD 
+        Type: WalletAccountType.STANDARD,
+        singleAddress: false
     };
-    public totalBalance: number = -1;
 
     constructor(public walletManager: WalletManager, id: string, name?: string) {
         this.id = id;
         this.name = name || "";
-        this.subWallets = {
-            ELA: new SubWallet(this, CoinName.ELA)
-        }
     }
 
-    public async populateMasterWalletSPVInfo() {
-        console.log("Retrieving SPV wallet info for wallet:", this.id);
+    public getExtendedWalletInfo(): ExtendedWalletInfo {
+        let extendedInfo = new ExtendedWalletInfo();
+
+        extendedInfo.name = this.name;
+        for (let subWallet of Object.values(this.subWallets)) {
+            extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
+        }
+        
+        return extendedInfo;
+    }
+
+    /**
+     * Appends extended info from the local storage to this wallet model.
+     * This includes everything the SPV plugin could not save and that we saved in our local 
+     * storage instead.
+     */
+    public async populateWithExtendedInfo(extendedInfo: ExtendedWalletInfo) {
+        console.log("Populating master wallet with extended info", this.id);
 
         // Retrieve wallet account type
         this.account = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.id);
 
-        // Populate sub wallet info for this master wallet
-        await this.populateAllSubWallets(this.id);
-    }
-
-    private async populateAllSubWallets(masterId) {
-        console.log("Getting all subwallets for wallet ", masterId);
-
-        let chainIds = await this.walletManager.spvBridge.getAllSubWallets(masterId);
-
-        for (let chainId of chainIds) {
-            await this.populateSubWallet(chainId);
+        // In case of newly created wallet we don't have extended info from local storag yet,
+        // which is normal.
+        if (extendedInfo) {
+            this.name = extendedInfo.name;
+            
+            this.subWallets = {};
+            for (let serializedSubWallet of extendedInfo.subWallets) {
+                let subWallet = SubWalletBuilder.newFromSerializedSubWallet(this, serializedSubWallet);
+                if (subWallet)
+                    this.subWallets[serializedSubWallet.id] = StandardSubWallet.newFromSerializedSubWallet(this, serializedSubWallet);
+                
+            }
         }
     }
 
-    public async populateSubWallet(chainId: CoinName) {    
-        console.log("Populating subwallet with chain id "+chainId);
-
-        this.subWallets[chainId] = new SubWallet(this, chainId);
-        await this.walletManager.saveMasterWallets();
-       
-        this.walletManager.registerSubWalletListener(this.id, chainId);
-
-        await this.updateWalletBalance(chainId);
-
-        this.walletManager.spvBridge.syncStart(this.id, chainId);
-    }
-
-    public async updateWalletBalance(chainId: string) {
-        // Update wallet balance for the subwallet that has just changed
-        await this.subWallets[chainId].updateWalletBalance();
-
-        // Sum all subwallets balances to refresh the master wallet total balance
-        let totalBalance = 0;
+    public getBalance(): number {
+        // Sum all subwallets balances to get the master wallet total balance
+        let balance = 0;
         for (let subWallet of Object.values(this.subWallets)) {
-            totalBalance += subWallet.balance;
+            balance += subWallet.balance;
         }
-        this.totalBalance = totalBalance;
+        return balance;
     }
 
-    public updateSyncProgress(chainId: CoinName, progress: number, lastBlockTime: number) {
+    public updateSyncProgress(chainId: StandardCoinName, progress: number, lastBlockTime: number) {
         this.subWallets[chainId].updateSyncProgress(progress, lastBlockTime);
     }
 
@@ -90,7 +137,9 @@ export class MasterWallet {
         console.log("SubWallets sync is starting");
 
         for (let subWallet of Object.values(this.subWallets)) {
-            this.walletManager.spvBridge.syncStart(this.id, subWallet.id);
+            // Only sync SPV SDK wallets
+            if (subWallet.type == CoinType.STANDARD)
+                this.walletManager.spvBridge.syncStart(this.id, subWallet.id);
         }
     }
 
@@ -98,25 +147,50 @@ export class MasterWallet {
         console.log("SubWallets sync is stopping");
 
         for (let subWallet of Object.values(this.subWallets)) {
-            this.walletManager.spvBridge.syncStop(this.id, subWallet.id);
+            // Only sync SPV SDK wallets
+            if (subWallet.type == CoinType.STANDARD) {
+                (subWallet as StandardSubWallet).stopSyncing();
+            }
         }
     }
 
-    public getSubWalletBalance(chainId: CoinName): number {
-        return this.subWallets[chainId].balance;
+    public getSubWalletBalance(id: CoinID): number {
+        return this.subWallets[id].balance;
     }
 
-    public hasSubWallet(chainId: CoinName): boolean {
+    public hasSubWallet(chainId: StandardCoinName): boolean {
         return chainId in this.subWallets;
     }
 
     /**
      * Returns the list of all subwallets except the excluded one.
      */
-    public subWalletsWithExcludedCoin(excludedCoinName: CoinName): SubWallet[] {
+    public subWalletsWithExcludedCoin(excludedCoinName: StandardCoinName): SubWallet[] {
         return Object.values(this.subWallets).filter((sw)=>{
             return sw.id != excludedCoinName;
         })
+    }
+
+    /**
+     * Adds a new subwallet to this master wallet, based on a given coin type.
+     */
+    public async createSubWallet(coin: Coin) {
+        this.subWallets[coin.getID()] = await SubWalletBuilder.newFromCoin(this, coin);
+
+        await this.walletManager.saveMasterWallet(this);
+    }
+
+    /**
+     * Removes a subwallet (coin - ex: ela, idchain) from the given wallet.
+     */
+    public async destroySubWallet(coinId: CoinID) {
+        let subWallet = this.subWallets[coinId];
+        subWallet.destroy();
+        
+        // Delete the subwallet from out local model.
+        delete this.subWallets[coinId];
+
+        await this.walletManager.saveMasterWallet(this);
     }
 
     /**
@@ -124,5 +198,9 @@ export class MasterWallet {
      */
     public getSubWallets(): SubWallet[] {
         return Object.values(this.subWallets);
+    }
+
+    public getSubWallet(id: CoinID): SubWallet {
+        return this.subWallets[id];
     }
 }

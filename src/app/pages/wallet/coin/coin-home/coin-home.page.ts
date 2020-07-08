@@ -29,7 +29,7 @@ import { PopupProvider } from '../../../../services/popup.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
-import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { StandardCoinName, MasterWallet } from 'src/app/model/MasterWallet';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
 import { AppService } from 'src/app/services/app.service';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
@@ -44,7 +44,7 @@ export class CoinHomePage implements OnInit {
     masterWallet: MasterWallet = null;
     transferList = [];
 
-    chainId: CoinName = null;
+    chainId: StandardCoinName = null;
     pageNo = 0;
     start = 0;
 
@@ -85,7 +85,7 @@ export class CoinHomePage implements OnInit {
         this.coinTransferService.walletInfo = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWallet.id);
 
         this.route.paramMap.subscribe((params) => {
-            this.chainId = params.get('name') as CoinName;
+            this.chainId = params.get('name') as StandardCoinName;
             this.appService.setTitleBarTitle(this.chainId);
 
             this.initData();
@@ -114,11 +114,11 @@ export class CoinHomePage implements OnInit {
     }
 
     chainIsELA(): boolean {
-        return this.chainId == CoinName.ELA;
+        return this.chainId == StandardCoinName.ELA;
     }
 
     chainIsDID(): boolean {
-        return this.chainId == CoinName.IDCHAIN;
+        return this.chainId == StandardCoinName.IDChain;
     }
 
     async getAllTx() {
@@ -190,14 +190,14 @@ export class CoinHomePage implements OnInit {
                     payStatusIcon = './assets/images/exchange-sub.png';
                     symbol = '';
 
-                    if (this.chainId === CoinName.ELA) { // for now IDChian no vote
+                    if (this.chainId === StandardCoinName.ELA) { // for now IDChian no vote
                         // vote transaction
                         const isVote = await this.isVoteTransaction(txId);
                         if (isVote) {
                             payStatusIcon = './assets/images/vote.png';
                             name = 'Vote';
                         }
-                    } else if (this.chainId === CoinName.IDCHAIN) {
+                    } else if (this.chainId === StandardCoinName.IDChain) {
                         if (transaction.Type === 10) { // DID transaction
                             payStatusIcon = './assets/images/did.png';
                             name = 'DID';

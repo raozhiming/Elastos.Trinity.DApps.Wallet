@@ -22,18 +22,18 @@
 
 import { Injectable } from '@angular/core';
 
-import * as _ from 'lodash';
+export type SelectableMnemonic = {
+    text: string;
+    selected: boolean;
+}
 
-import { Config } from "../config/Config"
+@Injectable({
+    providedIn: 'root'
+})
+export class WalletEditionService {
+    // Below fields are shared by several screens while editing a master wallet.
+    // Consider this service as a singleton shared class.
+    public modifiedMasterWalletId: string = null;
 
-export class Logger {
-    constructor() {
-
-    }
-
-    public static log(message: any, type: string): void {
-        if (Config.DEBUG_LOGS_ENABLED) {
-            console.log(type, message);
-        }
-    }
+    constructor() {}
 }

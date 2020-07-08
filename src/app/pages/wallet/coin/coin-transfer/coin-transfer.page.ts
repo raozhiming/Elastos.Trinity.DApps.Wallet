@@ -28,7 +28,7 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
-import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { StandardCoinName, MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -93,7 +93,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.transfer.fee = 10000;
                 this.chainId = 'ELA';
                 this.transfer.amount = '0.1'; // for DID
-                this.getAddress(CoinName.IDCHAIN);
+                this.getAddress(StandardCoinName.IDChain);
                 this.hideMemo = true;
                 this.introText = 'text-recharge-intro';
                 break;

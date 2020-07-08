@@ -5,7 +5,7 @@ import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
-import { CoinName, MasterWallet } from 'src/app/model/MasterWallet';
+import { StandardCoinName, MasterWallet } from 'src/app/model/MasterWallet';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
 import { AppService } from 'src/app/services/app.service';
 
@@ -98,7 +98,7 @@ export class CoinTxInfoPage implements OnInit {
         let vtype = "transaction-type-13";
         if ((transaction.Type >= 0) && transaction.Type <= 12) {
             if (transaction.Type === 10) {
-                if (this.chainId === CoinName.IDCHAIN) {
+                if (this.chainId === StandardCoinName.IDChain) {
                     vtype = "transaction-type-did";
                 } else {
                     vtype = "transaction-type-10";
@@ -167,7 +167,7 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     goWebSite(chainId, txId) {
-        if (chainId === CoinName.ELA) {
+        if (chainId === StandardCoinName.ELA) {
             this.native.openUrl(this.blockchain_url + 'tx/' + txId);
         } else {
             this.native.openUrl(this.idchain_url + 'tx/' + txId);

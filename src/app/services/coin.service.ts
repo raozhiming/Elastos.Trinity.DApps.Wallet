@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Elastos Foundation
+ * Copyright (c) 2020 Elastos Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,35 @@
  */
 
 import { Injectable } from '@angular/core';
+import { Coin, CoinType, CoinID } from '../model/Coin';
+import { StandardCoinName } from '../model/MasterWallet';
 
-import * as _ from 'lodash';
-
-import { Config } from "../config/Config"
-
-export class Logger {
+@Injectable({
+    providedIn: 'root'
+})
+export class CoinService {
+    private availableCoins: Coin[] = null;
+    
     constructor() {
-
+        this.initializeCoinList();
     }
 
-    public static log(message: any, type: string): void {
-        if (Config.DEBUG_LOGS_ENABLED) {
-            console.log(type, message);
-        }
+    private initializeCoinList() {
+        this.availableCoins = [];
+
+        this.availableCoins.push(new Coin(CoinType.STANDARD, StandardCoinName.ELA, "ELA", "ELA mainchain"));
+        this.availableCoins.push(new Coin(CoinType.STANDARD, StandardCoinName.IDChain, "ELA-DID", "Elastos Identity sidechain"));
+        this.availableCoins.push(new Coin(CoinType.STANDARD, StandardCoinName.ETHChain, "ELA-ETH", "Elastos Ethereum sidechain"));
+        this.availableCoins.push(new Coin(CoinType.ERC20, "MEC", "MyERC20Coin", "Ben's ERC20 token"));
+    }
+        
+    public getAvailableCoins(): Coin[] {
+        return this.availableCoins;
+    }
+
+    public getCoinByID(id: CoinID): Coin {
+        return this.availableCoins.find((c)=>{
+            return c.getID() == id;
+        });
     }
 }
