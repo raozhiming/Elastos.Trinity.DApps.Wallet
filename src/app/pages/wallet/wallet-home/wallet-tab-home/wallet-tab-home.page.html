@@ -28,17 +28,14 @@
                     </div>
                 </ion-list-header>
 
-                {{ walletManager.activeMasterWallet.subWallets.length }}
-
                 <div *ngFor="let subWallet of walletManager.activeMasterWallet.getSubWallets()">
                     <ion-item [routerLink]="['/coin', subWallet.id]" routerDirection="forward" detail="false">
-                        <img *ngIf="subWallet.id=='ELA'" src="assets/images/ela-coin.png" />
-                        <img *ngIf="subWallet.id!='ELA'"  src="assets/images/id-coin.png" />
+                        <ion-img [src]="getSubWalletIcon(subWallet)"></ion-img>
                         <ion-label id="coin-name">{{subWallet.id}}</ion-label>
                         <ion-label solt="end" id="coin-value">
                             <h2 [hidden]="!showOn" class="line-limit-length">{{subWallet.balance/SELA}}</h2>
                             <h2 [hidden]="showOn">****</h2>
-                            <p>{{subWallet.lastblocktime}} </p>
+                            <p>{{subWallet.lastBlockTime}} </p>
                             <p id="progress">{{subWallet.progress}}%</p>
                         </ion-label>
                     </ion-item>

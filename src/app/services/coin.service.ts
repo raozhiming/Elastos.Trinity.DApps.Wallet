@@ -21,7 +21,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Coin, CoinType, CoinID } from '../model/Coin';
+import { Coin, CoinID, ERC20Coin, StandardCoin } from '../model/Coin';
 import { StandardCoinName } from '../model/MasterWallet';
 
 @Injectable({
@@ -37,10 +37,11 @@ export class CoinService {
     private initializeCoinList() {
         this.availableCoins = [];
 
-        this.availableCoins.push(new Coin(CoinType.STANDARD, StandardCoinName.ELA, "ELA", "ELA mainchain"));
-        this.availableCoins.push(new Coin(CoinType.STANDARD, StandardCoinName.IDChain, "ELA-DID", "Elastos Identity sidechain"));
-        this.availableCoins.push(new Coin(CoinType.STANDARD, StandardCoinName.ETHChain, "ELA-ETH", "Elastos Ethereum sidechain"));
-        this.availableCoins.push(new Coin(CoinType.ERC20, "MEC", "MyERC20Coin", "Ben's ERC20 token"));
+        this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "ELA mainchain"));
+        this.availableCoins.push(new StandardCoin(StandardCoinName.IDChain, "ELA-DID", "Elastos Identity sidechain"));
+        this.availableCoins.push(new StandardCoin(StandardCoinName.ETHChain, "ELA-ETH", "Elastos Ethereum sidechain"));
+        this.availableCoins.push(new ERC20Coin("MEC", "MyERC20Coin", "Ben's ERC20 token"));
+        this.availableCoins.push(new ERC20Coin("COOL", "CoolERC20Coin", "Another ERC20 token"));
     }
         
     public getAvailableCoins(): Coin[] {

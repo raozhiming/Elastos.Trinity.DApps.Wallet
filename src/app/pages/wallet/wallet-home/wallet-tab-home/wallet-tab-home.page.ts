@@ -29,6 +29,7 @@ import { WalletManager } from 'src/app/services/wallet.service';
 import { StandardCoinName } from 'src/app/model/MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
+import { SubWallet } from 'src/app/model/SubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -88,6 +89,17 @@ export class WalletTabHomePage implements OnInit {
         if (this.walletManager.needToPromptTransferToIDChain) {
             this.popupProvider.ionicAlert('text-did-balance-not-enough');
             this.walletManager.setHasPromptTransfer2IDChain();
+        }
+    }
+
+    getSubWalletIcon(subWallet: SubWallet): string {
+        switch (subWallet.id) {
+            case StandardCoinName.ELA:
+                return "assets/images/ela-coin.png";
+            case StandardCoinName.IDChain:
+                return "assets/images/id-coin.png";
+            default:
+                return "assets/images/erc20-coin.png";
         }
     }
 }

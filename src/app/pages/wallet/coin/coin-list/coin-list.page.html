@@ -1,12 +1,8 @@
-<ion-header>
-    <header-bar title="text-coin-list"></header-bar>
-</ion-header>
-
 <ion-content>
     <ion-list lines="none">
         <ion-item *ngFor="let item of coinList">
             <ion-label>{{item.coin.getName()}}</ion-label>
-            <my-toggle *ngIf="item.coin.getName()!='ELA'" [checked]="item.isOpen" [auto]='false' (onChange)="onSelect(item, $event)"></my-toggle>
+            <my-toggle *ngIf="item.coin.canBeRemoved()" [checked]="item.isOpen" [auto]='false' (onChange)="onSelect(item, $event)"></my-toggle>
         </ion-item>
     </ion-list>
 </ion-content>

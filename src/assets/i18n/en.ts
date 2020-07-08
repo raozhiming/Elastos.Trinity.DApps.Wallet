@@ -98,7 +98,7 @@ export const en = {
     'text-mnemonic-repwd': 'Repeat Mnemonic Password',
     'text-password-error': 'Wrong Password',
     'text-coin-list': 'Coin List',
-    'text-coin-close-warning': 'DID need IDChain, Do you want to close IDChain?',
+    'text-coin-close-warning': 'Current coin state will be deleted, are you sure?',
     'text-fees-pay': 'transaction fee payer',
     'text-fees-pay-sender': 'transaction fee excluded',
     'text-fees-receiver': 'transaction fee included',

@@ -13,6 +13,7 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): ERC20SubWallet {
+        console.log("Initializing ERC20 subwallet from serialized sub wallet", serializedSubWallet);
         let subWallet = new ERC20SubWallet(masterWallet, serializedSubWallet.id);
         Object.assign(subWallet, serializedSubWallet);
         return subWallet;

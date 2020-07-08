@@ -1,8 +1,6 @@
 import { SubWallet, SerializedSubWallet  } from './SubWallet';
 import { WalletAccount, WalletAccountType } from './WalletAccount';
-import { SPVWalletMessage } from './SPVWalletPluginBridge';
 import { WalletManager } from '../services/wallet.service';
-import { Util } from './Util';
 import { StandardSubWallet } from './StandardSubWallet';
 import { ERC20SubWallet } from './ERC20SubWallet';
 import { Coin, CoinID, CoinType } from './Coin';
@@ -54,10 +52,8 @@ class SubWalletBuilder {
         switch (serializedSubWallet.type) {
             case CoinType.STANDARD:
                 return StandardSubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
-                break;
             case CoinType.ERC20: 
                 return ERC20SubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
-                break;
             default:
                 console.warn("Unsupported subwallet type", serializedSubWallet.type);
                 break;
@@ -113,9 +109,9 @@ export class MasterWallet {
             this.subWallets = {};
             for (let serializedSubWallet of extendedInfo.subWallets) {
                 let subWallet = SubWalletBuilder.newFromSerializedSubWallet(this, serializedSubWallet);
-                if (subWallet)
-                    this.subWallets[serializedSubWallet.id] = StandardSubWallet.newFromSerializedSubWallet(this, serializedSubWallet);
-                
+                if (subWallet) {
+                    this.subWallets[serializedSubWallet.id] = subWallet;
+                }
             }
         }
     }
@@ -154,12 +150,12 @@ export class MasterWallet {
         }
     }
 
-    public getSubWalletBalance(id: CoinID): number {
-        return this.subWallets[id].balance;
+    public getSubWalletBalance(coinId: CoinID): number {
+        return this.subWallets[coinId].balance;
     }
 
-    public hasSubWallet(chainId: StandardCoinName): boolean {
-        return chainId in this.subWallets;
+    public hasSubWallet(coinId: CoinID): boolean {
+        return coinId in this.subWallets;
     }
 
     /**

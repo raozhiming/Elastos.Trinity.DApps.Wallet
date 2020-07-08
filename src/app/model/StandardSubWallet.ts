@@ -30,6 +30,7 @@ export class StandardSubWallet extends SubWallet {
     }
 
     public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): StandardSubWallet {
+        console.log("Initializing standard subwallet from serialized sub wallet", serializedSubWallet);
         let subWallet = new StandardSubWallet(masterWallet, serializedSubWallet.id);
         Object.assign(subWallet, serializedSubWallet);
         return subWallet;

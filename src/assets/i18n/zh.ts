@@ -99,7 +99,7 @@ export const zh = {
     'text-mnemonic-repwd': '请再次设置助记词密码',
     'text-password-error': '密码错误',
     'text-coin-list': '币种列表',
-    'text-coin-close-warning': ' 关闭此币种可能导致 DID 部分功能无法使用， 您确定需要关闭ID链?',
+    'text-coin-close-warning': 'Current coin state will be deleted, are you sure?',
     'text-fees-pay': '手续费支付方',
     'text-fees-pay-sender': '我来支付',
     'text-fees-receiver': '对方支付',

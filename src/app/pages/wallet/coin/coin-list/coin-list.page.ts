@@ -9,6 +9,7 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { Coin, CoinID } from 'src/app/model/Coin';
 import { CoinService } from 'src/app/services/coin.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
+import { AppService } from 'src/app/services/app.service';
 
 type EditableCoinInfo = {
     coin: Coin, 
@@ -30,11 +31,17 @@ export class CoinListPage implements OnInit, OnDestroy {
 
     constructor(public walletManager: WalletManager, public popupProvider: PopupProvider,
                 private coinService: CoinService, private walletEditionService: WalletEditionService,
+                private appService: AppService,
                 public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events) {
         this.init();
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        this.appService.setBackKeyVisibility(true);
+        this.appService.setTitleBarTitle("text-coin-list");
     }
 
     async switchCoin(item: EditableCoinInfo, open: boolean) {

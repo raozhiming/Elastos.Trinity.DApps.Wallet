@@ -270,7 +270,10 @@ export class WalletManager {
      * Save master wallets list to permanent local storage.
      */
     public async saveMasterWallet(masterWallet: MasterWallet) {
-        await this.localStorage.setExtendedMasterWalletInfo(masterWallet.id, masterWallet.getExtendedWalletInfo());
+        let extendedInfo = masterWallet.getExtendedWalletInfo();
+        console.log("Saving wallet extended info", masterWallet.id, extendedInfo);
+
+        await this.localStorage.setExtendedMasterWalletInfo(masterWallet.id, extendedInfo);
     }
 
     private async syncStartSubWallets(masterId: WalletID) {
@@ -406,6 +409,7 @@ export class WalletManager {
         this.localStorage.set('hasPrompt', true); // TODO: rename to something better than "hasPrompt"
     }
 
+    // TODO: make a more generic flow to not do this only for the ID chain but also for the ETH chain.
     public checkIDChainBalance() {
         if (this.hasPromptTransfer2IDChain) { return; }
         if (this.needToPromptTransferToIDChain) { return; }

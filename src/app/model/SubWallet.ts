@@ -16,7 +16,6 @@ export class SerializedSubWallet {
 }
 
 export class SubWallet {
-    public type: CoinType = null;
     public id: CoinID = null;
     public balance: number = 0;
     public lastBlockTime: string = null;
@@ -25,7 +24,7 @@ export class SubWallet {
 
     private events: Events;
 
-    constructor(protected masterWallet: MasterWallet, id: CoinID, type: CoinType) {
+    constructor(protected masterWallet: MasterWallet, id: CoinID, public type: CoinType) {
         this.id = id;
         this.events = this.masterWallet.walletManager.events;
     }
