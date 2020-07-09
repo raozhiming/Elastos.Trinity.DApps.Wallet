@@ -4,6 +4,7 @@ import { WalletManager } from '../services/wallet.service';
 import { StandardSubWallet } from './StandardSubWallet';
 import { ERC20SubWallet } from './ERC20SubWallet';
 import { Coin, CoinID, CoinType, StandardCoinName } from './Coin';
+import { CoinService } from '../services/coin.service';
 
 export type WalletID = string;
 
@@ -12,40 +13,6 @@ export class ExtendedWalletInfo {
     name: string;
     /** List of serialized subwallets added earlier to this master wallet */
     subWallets: SerializedSubWallet[] = [];
-}
-
-class SubWalletBuilder {
-    /**
-     * Newly created wallet, base on a coin type.
-     */
-    static newFromCoin(masterWallet: MasterWallet, coin: Coin): Promise<SubWallet> {
-        console.log("Creating new subwallet using coin", coin);
-
-        switch (coin.getType()) {
-            case CoinType.STANDARD:
-                return StandardSubWallet.newFromCoin(masterWallet, coin);
-            case CoinType.ERC20: 
-                return ERC20SubWallet.newFromCoin(masterWallet, coin);
-            default:
-                console.warn("Unsupported coin type", coin.getType());
-                break;
-        }
-    }
-
-    /**
-     * Restored wallet from local storage info.
-     */
-    static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): SubWallet {
-        switch (serializedSubWallet.type) {
-            case CoinType.STANDARD:
-                return StandardSubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
-            case CoinType.ERC20: 
-                return ERC20SubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
-            default:
-                console.warn("Unsupported subwallet type", serializedSubWallet.type);
-                break;
-        }
-    }
 }
 
 export class MasterWallet {
@@ -61,7 +28,7 @@ export class MasterWallet {
         singleAddress: false
     };
 
-    constructor(public walletManager: WalletManager, id: string, name?: string) {
+    constructor(public walletManager: WalletManager, public coinService: CoinService, id: string, name?: string) {
         this.id = id;
         this.name = name || "";
     }
@@ -195,5 +162,39 @@ export class MasterWallet {
 
     public getSubWallet(id: CoinID): SubWallet {
         return this.subWallets[id];
+    }
+}
+
+class SubWalletBuilder {
+    /**
+     * Newly created wallet, base on a coin type.
+     */
+    static newFromCoin(masterWallet: MasterWallet, coin: Coin): Promise<SubWallet> {
+        console.log("Creating new subwallet using coin", coin);
+
+        switch (coin.getType()) {
+            case CoinType.STANDARD:
+                return StandardSubWallet.newFromCoin(masterWallet, coin);
+            case CoinType.ERC20: 
+                return ERC20SubWallet.newFromCoin(masterWallet, coin);
+            default:
+                console.warn("Unsupported coin type", coin.getType());
+                break;
+        }
+    }
+
+    /**
+     * Restored wallet from local storage info.
+     */
+    static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): SubWallet {
+        switch (serializedSubWallet.type) {
+            case CoinType.STANDARD:
+                return StandardSubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
+            case CoinType.ERC20: 
+                return ERC20SubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
+            default:
+                console.warn("Unsupported subwallet type", serializedSubWallet.type);
+                break;
+        }
     }
 }

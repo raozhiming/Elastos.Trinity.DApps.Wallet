@@ -30,10 +30,11 @@ import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
 import { AppService } from 'src/app/services/app.service';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
-import { StandardCoinName } from 'src/app/model/Coin';
+import { StandardCoinName, Coin, CoinType } from 'src/app/model/Coin';
+import { SubWallet } from 'src/app/model/SubWallet';
+import { TransactionDirection, TransactionStatus } from 'src/app/model/Transaction';
 
 @Component({
     selector: 'app-coin-home',
@@ -43,6 +44,7 @@ import { StandardCoinName } from 'src/app/model/Coin';
 export class CoinHomePage implements OnInit {
     public masterWalletInfo = '';
     masterWallet: MasterWallet = null;
+    subWallet: SubWallet = null;
     transferList = [];
 
     chainId: StandardCoinName = null;
@@ -82,8 +84,9 @@ export class CoinHomePage implements OnInit {
         this.coinTransferService.reset();
 
         this.masterWallet = this.walletManager.getActiveMasterWallet();
+
         this.coinTransferService.reset();
-        this.coinTransferService.walletInfo = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWallet.id);
+        this.coinTransferService.walletInfo = this.native.clone(this.masterWallet.account);
 
         this.route.paramMap.subscribe((params) => {
             this.chainId = params.get('name') as StandardCoinName;
@@ -107,6 +110,8 @@ export class CoinHomePage implements OnInit {
     }
 
     initData() {
+        this.subWallet = this.masterWallet.getSubWallet(this.chainId);
+
         this.pageNo = 0;
         this.start = 0;
         this.MaxCount = 0;
@@ -123,7 +128,7 @@ export class CoinHomePage implements OnInit {
     }
 
     async getAllTx() {
-        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.chainId, this.start, '');
+        let allTransactions = await this.subWallet.getTransactions(this.start);
         const transactions = allTransactions.Transactions;
         this.MaxCount = allTransactions.MaxCount;
         if (this.MaxCount > 0) {
@@ -329,18 +334,21 @@ export class CoinHomePage implements OnInit {
     }
 
     async checkUTXOCount() {
-        if (this.walletManager.needToCheckUTXOCountForConsolidation) {
-            let UTXOsJson = await this.walletManager.spvBridge.getAllUTXOs(this.masterWallet.id, this.chainId, 0, 1, '');
-            console.log('UTXOsJson:', UTXOsJson);
-            const UTXOsCount = this.translate.instant('text-consolidate-UTXO-counts', {count: UTXOsJson.MaxCount});
-            if (UTXOsJson.MaxCount >= Config.UTXO_CONSOLIDATE_PROMPT_THRESHOLD) {
-                let ret = await this.popupProvider.ionicConfirmWithSubTitle('text-consolidate-prompt', UTXOsCount, 'text-consolidate-note')
-                if (ret) {
-                    await this.createConsolidateTransaction();
+        // CHeck UTXOs only for SPV based coins.
+        if (this.subWallet.type == CoinType.STANDARD) {
+            if (this.walletManager.needToCheckUTXOCountForConsolidation) {
+                let UTXOsJson = await this.walletManager.spvBridge.getAllUTXOs(this.masterWallet.id, this.chainId, 0, 1, '');
+                console.log('UTXOsJson:', UTXOsJson);
+                const UTXOsCount = this.translate.instant('text-consolidate-UTXO-counts', {count: UTXOsJson.MaxCount});
+                if (UTXOsJson.MaxCount >= Config.UTXO_CONSOLIDATE_PROMPT_THRESHOLD) {
+                    let ret = await this.popupProvider.ionicConfirmWithSubTitle('text-consolidate-prompt', UTXOsCount, 'text-consolidate-note')
+                    if (ret) {
+                        await this.createConsolidateTransaction();
+                    }
                 }
-            }
 
-            this.walletManager.needToCheckUTXOCountForConsolidation = false;
+                this.walletManager.needToCheckUTXOCountForConsolidation = false;
+            }
         }
     }
 

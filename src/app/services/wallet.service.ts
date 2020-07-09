@@ -110,7 +110,7 @@ export class WalletManager {
                 let masterId = idList[i];
 
                 // Create a model instance for each master wallet returned by the SPV SDK.
-                this.masterWallets[masterId] = new MasterWallet(this, masterId);
+                this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
 
                 // Try to retrieve locally storage extended info about this wallet
                 let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
@@ -215,7 +215,7 @@ export class WalletManager {
         console.log("Adding master wallet to local model", id, name);
 
         // Add a new wallet to our local model
-        this.masterWallets[id] = new MasterWallet(this, id, name);
+        this.masterWallets[id] = new MasterWallet(this, this.coinService, id, name);
 
         // Set some wallet account info
         this.masterWallets[id].account = walletAccount;

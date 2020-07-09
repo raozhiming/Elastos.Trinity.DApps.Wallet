@@ -58,7 +58,6 @@ export class WalletTabHomePage implements OnInit {
     }
 
     ionViewDidEnter() {
-        console.log("DID ENTER")
         if (this.walletManager.getCurMasterWalletId() !== '-1') {
             this.promptTransfer2IDChain();
         }

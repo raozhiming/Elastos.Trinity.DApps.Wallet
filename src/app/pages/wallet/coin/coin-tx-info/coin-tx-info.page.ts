@@ -6,9 +6,9 @@ import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { TransactionStatus, TransactionDirection } from 'src/app/model/SPVWalletPluginBridge';
 import { AppService } from 'src/app/services/app.service';
 import { StandardCoinName } from 'src/app/model/Coin';
+import { TransactionStatus, TransactionDirection } from 'src/app/model/Transaction';
 
 @Component({
     selector: 'app-coin-tx-info',

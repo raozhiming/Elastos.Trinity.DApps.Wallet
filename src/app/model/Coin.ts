@@ -49,7 +49,7 @@ export class StandardCoin extends Coin {
 }
 
 export class ERC20Coin extends Coin {
-    constructor(id: CoinID, name: string, description: string) {
+    constructor(id: CoinID, name: string, description: string, private erc20ContractAddress: string) {
         super(CoinType.ERC20, id, name, description, true);
     }
 
@@ -57,7 +57,7 @@ export class ERC20Coin extends Coin {
      * Returns the Ethereum sidechain smart contract address for this coin.
      * Used to operate this coin (balance, transfer, etc).
      */
-    getContractAccount(): string {
-        return null; // TODO
+    getContractAddress(): string {
+        return this.erc20ContractAddress;
     }
 }

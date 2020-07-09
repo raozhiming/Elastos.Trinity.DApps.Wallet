@@ -2,6 +2,7 @@ import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, Coin, StandardCoinName } from './Coin';
 import { Util } from './Util';
+import { AllTransactions } from './Transaction';
 
 export class StandardSubWallet extends SubWallet {
     constructor(masterWallet: MasterWallet, id: StandardCoinName) {
@@ -54,6 +55,11 @@ export class StandardSubWallet extends SubWallet {
 
         // Balance in SELA
         this.balance = parseInt(balanceStr, 10);
+    }
+
+    public async getTransactions(startIndex: number): Promise<AllTransactions> {
+        let allTransactions = await this.masterWallet.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.id, startIndex, '');
+        return allTransactions;
     }
 
    /*

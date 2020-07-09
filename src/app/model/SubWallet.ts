@@ -2,6 +2,7 @@ import { MasterWallet } from './MasterWallet';
 import { Util } from './Util';
 import { Events } from '@ionic/angular';
 import { CoinType, CoinID, StandardCoinName } from './Coin';
+import { AllTransactions } from './Transaction';
 
 /**
  * Subwallet representation ready to save to local storage for persistance.
@@ -46,5 +47,6 @@ export abstract class SubWallet {
     public async destroy() {
     }
 
-    public abstract updateBalance();
+    public abstract async updateBalance();
+    public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
 }

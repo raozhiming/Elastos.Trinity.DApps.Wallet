@@ -2,14 +2,22 @@ import path from 'path'
 //var fs = require('fs');
 import Web3 from 'Web3'
 //var Tx = require('ethereumjs-tx');
-import { TrinitySDK } from "@elastosfoundation/trinity-dapp-sdk"
-//import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
+//import { TrinitySDK } from "@elastosfoundation/trinity-dapp-sdk"
+import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
  
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
-import { CoinType, CoinID, Coin } from './Coin';
+import { CoinType, CoinID, Coin, ERC20Coin } from './Coin';
+import { Config } from '../config/Config';
+import { Util } from './Util';
 
 export class ERC20SubWallet extends SubWallet {
+    /** Coin related to this wallet */
+    private coin: ERC20Coin;
+    /** Web3 variables to call smart contracts */
+    private web3: Web3;
+    private erc20ABI: any;
+
     constructor(masterWallet: MasterWallet, id: CoinID) {
         super(masterWallet, id, CoinType.ERC20);
 
@@ -17,6 +25,15 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     private initialize() {
+        this.coin = this.masterWallet.coinService.getCoinByID(this.id) as ERC20Coin;
+
+        // Get Web3 and the ERC20 contract ready
+        let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
+        this.web3 = new Web3(trinityWeb3Provider);
+
+        // Standard ERC20 contract ABI
+        this.erc20ABI = require("../../assets/ethereum/StandardErc20ABI.json");
+
         this.updateBalance();
     }
 
@@ -27,6 +44,7 @@ export class ERC20SubWallet extends SubWallet {
 
     public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): ERC20SubWallet {
         console.log("Initializing ERC20 subwallet from serialized sub wallet", serializedSubWallet);
+        
         let subWallet = new ERC20SubWallet(masterWallet, serializedSubWallet.id);
         Object.assign(subWallet, serializedSubWallet);
         return subWallet;
@@ -34,37 +52,36 @@ export class ERC20SubWallet extends SubWallet {
 
     public async updateBalance() {
         console.log("Updating ERC20 token balance", this.id);
-        // TODO: call to web3 to get user's balance for this ERC20 token.
+        
+        // TMP - TODO: replace with real user account when we can get it from the SPV SDK
+        var myAddress = "0x40da0e9AD0f40A6e26eC03c49eCCec01e2B8f9d4"; // SongSJun cryptoname self account
 
-        this.tempInitialTestToUseERC20Stuff();
+        var contractAddress = this.coin.getContractAddress();
+        let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: myAddress });
+
+        let balanceEla = await erc20Contract.methods.balanceOf(myAddress).call();
+        this.balance = balanceEla * Config.SELA;
+
+        // Update the "last sync" date. Just consider this http call date as the sync date for now
+        this.timestamp = new Date().getTime();
+        this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'yyyy-MM-dd HH:mm:ss');
+        this.progress = 100;
+    }
+
+    public getTransactions(startIndex: number): Promise<any> {
+        // TODO: How to get all transactions that happened between a user account and a ERC20 contract?
+        // Do we have to make a local cache as this may be slow to check all blocks for transactions?
+        // After the SPV SDK is synced and we get all transactions, we can probably filter transfers to/from the
+        // ERC20 contract and cache it.
+        return Promise.resolve([]);
     }
 
     async tempInitialTestToUseERC20Stuff() {
-        let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
-        const web3 = new Web3(trinityWeb3Provider);
-
-        // This code was written and tested using web3 version 1.0.0-beta.26
-        console.log(`web3 version: ${web3.version}`)
-
-        // Who holds the token now?
-        var myAddress = "0x742d35cc6634c0532925a3b844bc454e4438f44e";
-
+        /*
         // Determine the nonce
         var count = await web3.eth.getTransactionCount(myAddress);
         console.log(`num transactions so far: ${count}`);
 
-        // This file is just JSON stolen from the contract page on etherscan.io under "Contract ABI"
-        var abiArray = require("../../assets/ethereum/StandardErc20ABI.json") // JSON.parse(fs.readFileSync(path.resolve(__dirname, './tt3.json'), 'utf-8'));
-
-        // This is the address of the contract which created the ERC20 token
-        var contractAddress = "0xc4032babad2b76c39abec3c4e365611de78528ed";
-        var contract = new web3.eth.Contract(abiArray, contractAddress, { from: myAddress });
-
-        // How many tokens do I have before sending?
-        var balance = await contract.methods.balanceOf(myAddress).call();
-        console.log(`Balance before send: ${balance}`);
-        
-        /*
         // Who are we trying to send this token to?
         var destAddress = "0x4f...";
 
