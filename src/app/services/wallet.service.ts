@@ -119,14 +119,15 @@ export class WalletManager {
                     console.warn("No local storage info found for this wallet. This may happen when upgrading this app from a older app version.");
                     console.warn("Now creating default values for backward compatibility");
                     
-                    extendedInfo = new ExtendedWalletInfo();
-                    extendedInfo.name = "No name";
+                    this.masterWallets[masterId].name = "No name";
 
                     // Re-add the default sub-wallets
                     this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
                     this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
 
                     this.saveMasterWallet(this.masterWallets[masterId]);
+
+                    extendedInfo = this.masterWallets[masterId].getExtendedWalletInfo();
 
                     console.log("Using rebuilt extended info", extendedInfo);
                 }
