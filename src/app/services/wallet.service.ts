@@ -38,7 +38,6 @@ import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSync
 import { AppService } from './app.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
-declare let notificationManager: NotificationManagerPlugin.NotificationManager;
 
 class TransactionMapEntry {
     Code: number = null;
@@ -76,7 +75,6 @@ export class WalletManager {
 
     public hasPromptTransfer2IDChain = true;
 
-    public hasSendSyncCompletedNotification = {ELA: false, IDChain: false};
     public needToCheckUTXOCountForConsolidation = true;
     public needToPromptTransferToIDChain = false; // Whether it's time to ask user to transfer some funds to the ID chain for better user experience or not.
 
