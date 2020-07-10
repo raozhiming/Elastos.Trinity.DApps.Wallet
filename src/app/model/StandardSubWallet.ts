@@ -39,7 +39,7 @@ export class StandardSubWallet extends SubWallet {
     }
 
     public async destroy() {
-        await this.stopSyncing();
+        this.masterWallet.walletManager.stopSubWalletSync(this.masterWallet.id, this.id as StandardCoinName);
         await this.masterWallet.walletManager.spvBridge.destroySubWallet(this.masterWallet.id, this.id);
 
         super.destroy();
@@ -81,12 +81,5 @@ export class StandardSubWallet extends SubWallet {
             this.masterWallet.walletManager.sendSyncCompletedNotification(this.id);
             this.masterWallet.walletManager.events.publish(this.id + ':synccompleted', this.id);
         }
-    }
-
-    /**
-     * Stops any on going synchronization.
-     */
-    public async stopSyncing(): Promise<void> {
-        return this.masterWallet.walletManager.spvBridge.syncStop(this.masterWallet.id, this.id);
     }
 }

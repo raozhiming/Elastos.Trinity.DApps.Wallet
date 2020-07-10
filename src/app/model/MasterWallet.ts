@@ -86,34 +86,7 @@ export class MasterWallet {
         let subWallet = this.subWallets[chainId] as StandardSubWallet;
         subWallet.updateSyncProgress(progress, lastBlockTime);
     }
-
-    /**
-     * Asks all sub-wallets manages by the SPV SDK to start their synchronization routine.
-     */
-    public startSubWalletsSync() {
-        console.log("SubWallets sync is starting");
-
-        for (let subWallet of Object.values(this.subWallets)) {
-            // Only sync SPV SDK wallets
-            if (subWallet.type == CoinType.STANDARD)
-                this.walletManager.spvBridge.syncStart(this.id, subWallet.id);
-        }
-    }
-
-    /**
-     * Asks all sub-wallets manages by the SPV SDK to stop their synchronization routine.
-     */
-    public stopSubWalletsSync() {
-        console.log("SubWallets sync is stopping");
-
-        for (let subWallet of Object.values(this.subWallets)) {
-            // Only sync SPV SDK wallets
-            if (subWallet.type == CoinType.STANDARD) {
-                (subWallet as StandardSubWallet).stopSyncing();
-            }
-        }
-    }
-
+    
     public getSubWalletBalance(coinId: CoinID): number {
         return this.subWallets[coinId].balance;
     }

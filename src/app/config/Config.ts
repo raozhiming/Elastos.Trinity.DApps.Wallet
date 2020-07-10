@@ -25,6 +25,7 @@ import { Injectable } from '@angular/core';
 // TODO: translate comments to english
 @Injectable()
 export class Config {
+    public static APP_ID = "org.elastos.trinity.dapp.wallet";
     /**后台服务*/ 
     public static SERVER:string = 'https://39.106.96.168:8446/api';
     /**后台服务*/
