@@ -336,7 +336,7 @@ export class WalletManager {
             params: messageParams
         }
 
-        appManager.sendMessage(Config.APP_ID, AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
+        appManager.sendMessage("#service:"+Config.APP_ID, AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
             // Nothing to do
         }, (err)=>{
             console.log("Failed to send start RPC message to the sync service");
@@ -366,7 +366,7 @@ export class WalletManager {
             params: messageParams
         }
 
-        appManager.sendMessage(Config.APP_ID, AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
+        appManager.sendMessage("#service:"+Config.APP_ID, AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
             // Nothing to do
         }, (err)=>{
             console.log("Failed to send stop RPC message to the sync service");
