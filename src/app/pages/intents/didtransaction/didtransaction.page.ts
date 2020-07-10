@@ -29,6 +29,7 @@ import { WalletManager } from '../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
+import { IntentService } from 'src/app/services/intent.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -48,7 +49,7 @@ export class DidTransactionPage implements OnInit {
     walletInfo = {};
 
     constructor(public walletManager: WalletManager, public appService: AppService, public popupProvider: PopupProvider,
-                private coinTransferService: CoinTransferService,
+                private coinTransferService: CoinTransferService, private intentService: IntentService,
                 public native: Native, public zone: NgZone) {
         this.init();
     }
@@ -83,7 +84,7 @@ export class DidTransactionPage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.appService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
         this.appService.close();
     }
 

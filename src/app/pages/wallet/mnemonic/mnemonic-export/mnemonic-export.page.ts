@@ -7,6 +7,7 @@ import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
+import { IntentService } from 'src/app/services/intent.service';
 
 @Component({
     selector: 'app-mnemonic-export',
@@ -27,7 +28,7 @@ export class MnemonicExportPage implements OnInit {
     public account: any = {};
 
     constructor(public route: ActivatedRoute, public walletManager: WalletManager, public zone: NgZone,
-                private walletEditionService: WalletEditionService,
+                private walletEditionService: WalletEditionService, private intentService: IntentService,
                 public native: Native, public events: Events, public appService: AppService) {
         this.init();
     }
@@ -82,7 +83,7 @@ export class MnemonicExportPage implements OnInit {
 
     onShare() {
         this.native.setRootRouter('/wallet-home/wallet-tab-home');
-        this.appService.sendIntentResponse(this.requestDapp.action,
+        this.intentService.sendIntentResponse(this.requestDapp.action,
             { mnemonic: this.mnemonicStr }, this.requestDapp.intentId);
     }
 

@@ -4,6 +4,7 @@ import { Config } from '../../../config/Config';
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
+import { IntentService } from 'src/app/services/intent.service';
 
 type ClaimRequest = {
     name: string,
@@ -30,6 +31,7 @@ export class AccessPage implements OnInit {
     requestItems: ClaimRequest[] = [];
 
     constructor(public appService: AppService,
+                private intentService: IntentService,
                 public walletManager: WalletManager,
                 public popupProvider: PopupProvider,
                 public native: Native) { }
@@ -118,7 +120,7 @@ export class AccessPage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.appService.sendIntentResponse(this.requestDapp.action, { elaaddress: null }, this.requestDapp.intentId);
+        this.intentService.sendIntentResponse(this.requestDapp.action, { elaaddress: null }, this.requestDapp.intentId);
         this.native.setRootRouter('/wallet-home/wallet-tab-home');
     }
 
@@ -127,7 +129,7 @@ export class AccessPage implements OnInit {
             this.native.go('/exportmnemonic', { fromIntent: true });
         } else {
             const selectedClaim = this.buildDeliverableList();
-            this.appService.sendIntentResponse(this.requestDapp.action,
+            this.intentService.sendIntentResponse(this.requestDapp.action,
                     {walletinfo: selectedClaim}, this.requestDapp.intentId);
             this.native.setRootRouter('/wallet-home/wallet-tab-home');
         }

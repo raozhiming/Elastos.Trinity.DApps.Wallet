@@ -15,8 +15,6 @@ export class StandardSubWallet extends SubWallet {
         this.masterWallet.walletManager.registerSubWalletListener(this.masterWallet.id, this.id as StandardCoinName);
 
         this.updateBalance();
-
-        this.masterWallet.walletManager.spvBridge.syncStart(this.masterWallet.id, this.id);
     }
 
     public static async newFromCoin(masterWallet: MasterWallet, coin: Coin): Promise<StandardSubWallet> {
@@ -78,7 +76,6 @@ export class StandardSubWallet extends SubWallet {
         }
 
         if (progress === 100) {
-            this.masterWallet.walletManager.sendSyncCompletedNotification(this.id);
             this.masterWallet.walletManager.events.publish(this.id + ':synccompleted', this.id);
         }
     }

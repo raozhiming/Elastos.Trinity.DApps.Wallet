@@ -8,6 +8,7 @@ import { WalletManager } from 'src/app/services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
+import { IntentService } from 'src/app/services/intent.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -37,6 +38,7 @@ export class WaitForSyncPage implements OnInit {
                 public native: Native,
                 public events: Events,
                 public zone: NgZone,
+                private intentService: IntentService,
                 private coinTransferService: CoinTransferService,
                 private walletManager: WalletManager,
                 public popupProvider: PopupProvider) {
@@ -128,7 +130,7 @@ export class WaitForSyncPage implements OnInit {
     }
 
     cancelOperation() {
-        this.appService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
         this.appService.close();
     }
 }

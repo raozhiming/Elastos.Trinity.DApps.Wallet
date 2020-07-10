@@ -31,6 +31,8 @@ import { Native } from './services/native.service';
 import { WalletManager } from './services/wallet.service';
 import { AppService } from './services/app.service';
 import { PopupProvider } from './services/popup.service';
+import { NavService } from './services/nav.service';
+import { IntentService } from './services/intent.service';
 
 @Component({
     selector: 'app-root',
@@ -38,6 +40,8 @@ import { PopupProvider } from './services/popup.service';
 })
 export class AppComponent {
     @ViewChild(IonRouterOutlet, { static: true }) routerOutlet: IonRouterOutlet;
+
+    public runningAsApp = false;
 
     constructor(
         private platform: Platform,
@@ -48,7 +52,9 @@ export class AppComponent {
         private native: Native,
         public zone: NgZone,
         public translate: TranslateService,
+        private navService: NavService,
         public appService: AppService,
+        private intentService: IntentService,
         public popupProvider: PopupProvider,
         public modalCtrl: ModalController
     ) {
@@ -57,13 +63,25 @@ export class AppComponent {
 
     initializeApp() {
         console.log("Initialize app");
-        this.platform.ready().then(() => {
+        this.platform.ready().then(async () => {
             console.log("Platform is ready");
             this.statusBar.styleDefault();
 
             this.setupBackKeyNavigation();
 
-            this.appService.init();
+            await this.appService.init();
+            this.runningAsApp = !this.appService.runningAsAService();
+
+            await this.intentService.init();
+
+            // Wait until the wallet manager is ready before showing the first screen.
+            this.events.subscribe("walletmanager:initialized", ()=>{
+                if (!this.appService.runningAsAService()) {
+                    this.navService.showStartupScreen();
+                }
+            });
+
+            await this.walletManager.init();
         });
     }
 

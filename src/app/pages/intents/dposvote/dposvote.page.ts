@@ -27,6 +27,7 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
+import { IntentService } from 'src/app/services/intent.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -44,7 +45,7 @@ export class DPoSVotePage implements OnInit {
     walletInfo = {};
 
     constructor(public walletManager: WalletManager, public appService: AppService,
-                private coinTransferService: CoinTransferService,
+                private coinTransferService: CoinTransferService, private intentService: IntentService,
                 public native: Native, public zone: NgZone, public popupProvider: PopupProvider) {
         this.init();
     }
@@ -96,7 +97,7 @@ export class DPoSVotePage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.appService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
         this.appService.close();
     }
 

@@ -30,6 +30,7 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
 import { WalletAccount, WalletAccountType } from 'src/app/model/WalletAccount';
 import { StandardCoinName } from 'src/app/model/Coin';
+import { IntentService } from 'src/app/services/intent.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -56,6 +57,7 @@ export class CRMemberRegisterPage implements OnInit {
 
     constructor(public walletManager: WalletManager,
                 public appService: AppService,
+                private intentService: IntentService,
                 public popupProvider: PopupProvider,
                 private coinTransferService: CoinTransferService,
                 public native: Native, public zone: NgZone) {
@@ -121,7 +123,7 @@ export class CRMemberRegisterPage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.appService.sendIntentResponse(this.transfer.action, { txid: null }, this.transfer.intentId);
+        this.intentService.sendIntentResponse(this.transfer.action, { txid: null }, this.transfer.intentId);
         this.appService.close();
     }
 

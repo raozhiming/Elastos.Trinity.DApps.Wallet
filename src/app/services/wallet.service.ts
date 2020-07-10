@@ -30,12 +30,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { LocalStorage } from './storage.service';
 import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult } from '../model/SPVWalletPluginBridge';
 import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
-import { MasterWallet, WalletID, ExtendedWalletInfo } from '../model/MasterWallet';
-import { SubWallet } from '../model/SubWallet';
-import { Coin, StandardCoinName, CoinType } from '../model/Coin';
+import { MasterWallet, WalletID } from '../model/MasterWallet';
+import { StandardCoinName, CoinType } from '../model/Coin';
 import { CoinService } from './coin.service';
 import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
-import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams } from './spvsync.service';
+import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
+import { AppService } from './app.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let notificationManager: NotificationManagerPlugin.NotificationManager;
@@ -64,7 +64,7 @@ type TransactionMap = {
 @Injectable({
     providedIn: 'root'
 })
-export class WalletManager {
+export class WalletManager {    
     public activeMasterWallet: MasterWallet = null;
 
     public masterWallets: {
@@ -82,8 +82,6 @@ export class WalletManager {
 
     public spvBridge: SPVWalletPluginBridge = null;
 
-    public startupWithServcie = false;
-
     constructor(public events: Events,
                 public native: Native,
                 public zone: NgZone,
@@ -91,18 +89,14 @@ export class WalletManager {
                 public translate: TranslateService,
                 public localStorage: LocalStorage,
                 private platform: Platform,
+                private appService: AppService,
+                private syncService: SPVSyncService,
                 private coinService: CoinService,
                 public popupProvider: PopupProvider) {
     }
 
     async init() {
         console.log("Master manager is initializing");
-
-        appManager.getStartupMode((startupInfo: AppManagerPlugin.StartupInfo) => {
-          if (startupInfo.startupMode === 'service') {
-            this.startupWithServcie = true;
-          }
-        });
 
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
 
@@ -162,6 +156,11 @@ export class WalletManager {
         console.log("Wallet manager initialization complete");
 
         this.events.publish("walletmanager:initialized");
+
+        // Start the sync service if we are in a background service
+        if (this.appService.runningAsAService()) {
+            this.syncService.init(this);
+        }
     }
 
     public getCurMasterWalletId() {
@@ -319,7 +318,9 @@ export class WalletManager {
      * Inform the background service (via RPC) that we want to start syncing a wallet.
      * If there is another wallet syncing, its on going sync will be stopped first.
      */
-    private startWalletSync(masterId: WalletID) {
+    public startWalletSync(masterId: WalletID) {
+        console.log("Requesting sync service to start syncing wallet "+masterId);
+
         let messageParams: RPCStartWalletSyncParams = {
             masterId: masterId,
             chainIds: []
@@ -336,15 +337,17 @@ export class WalletManager {
             params: messageParams
         }
 
-        appManager.sendMessage("#service:"+Config.APP_ID, AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
+        appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
             // Nothing to do
         }, (err)=>{
-            console.log("Failed to send start RPC message to the sync service");
+            console.log("Failed to send start RPC message to the sync service", err);
         });
     }
 
     // TODO: When wallet is destroyed
     private stopWalletSync(masterId: WalletID) {
+        console.log("Requesting sync service to stop syncing wallet "+masterId);
+
         // Add only standard subwallets to SPV stop sync request
         let chainIds: StandardCoinName[] = [];
         for (let subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
@@ -356,6 +359,8 @@ export class WalletManager {
     }
 
     private stopSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]) {
+        console.log("Requesting sync service to stop syncing some subwallets for wallet "+masterId);
+
         let messageParams: RPCStopWalletSyncParams = {
             masterId: masterId,
             chainIds: subWalletIds
@@ -381,7 +386,9 @@ export class WalletManager {
      * Start listening to all events from the SPV SDK.
      */
     public registerSubWalletListener(masterId: WalletID, chainId: StandardCoinName) {
-        if (this.startupWithServcie) return;
+        // For now, don't listen to wallet events while in the service.
+        if (this.appService.runningAsAService())
+            return;
 
         console.log("Register sub-wallet listener for", masterId, chainId);
 
@@ -619,23 +626,5 @@ export class WalletManager {
             this.native.toast_trans('send-raw-transaction');
             this.native.setRootRouter('/wallet-home/wallet-tab-home');
         }
-    }
-
-    /**
-     * Sends a system notification inside elastOS when the wallet completes his synchronization for the first time.
-     * This way, users know when they can start using their wallet in third party apps.
-     */
-    sendSyncCompletedNotification(chainId) {
-      if (this.hasSendSyncCompletedNotification[chainId] === false) {
-        console.log('sendSyncCompletedNotification:', chainId);
-
-        const request: NotificationManagerPlugin.NotificationRequest = {
-          key: chainId + '-syncCompleted',
-          title: chainId + ': ' + this.translate.instant('sync-completed'),
-        };
-        notificationManager.sendNotification(request);
-
-        this.hasSendSyncCompletedNotification[chainId] = true;
-      }
     }
 }

@@ -28,6 +28,7 @@ import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
 import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
+import { IntentService } from 'src/app/services/intent.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -47,6 +48,7 @@ export class CRmembervotePage implements OnInit {
 
     constructor(public walletManager: WalletManager, public appService: AppService,
                 private coinTransferService: CoinTransferService,
+                private intentService: IntentService,
                 public native: Native, public zone: NgZone, public popupProvider: PopupProvider) {
         this.init();
     }
@@ -102,7 +104,7 @@ export class CRmembervotePage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.appService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
         this.appService.close();
     }
 
