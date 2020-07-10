@@ -43,8 +43,8 @@ export class WalletTabHomePage implements OnInit {
     Config = Config;
     SELA = Config.SELA;
 
-    constructor(public native: Native, public appService: AppService, 
-        public popupProvider: PopupProvider, private walletManager: WalletManager,
+    constructor(public native: Native, public appService: AppService,
+        public popupProvider: PopupProvider, public walletManager: WalletManager,
         private walletEditionService: WalletEditionService,
         private translate: TranslateService) {
     }

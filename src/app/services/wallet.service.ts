@@ -82,6 +82,8 @@ export class WalletManager {
 
     public spvBridge: SPVWalletPluginBridge = null;
 
+    public startupWithServcie = false;
+
     constructor(public events: Events,
                 public native: Native,
                 public zone: NgZone,
@@ -95,6 +97,12 @@ export class WalletManager {
 
     async init() {
         console.log("Master manager is initializing");
+
+        appManager.getStartupMode((startupInfo: AppManagerPlugin.StartupInfo) => {
+          if (startupInfo.startupMode === 'service') {
+            this.startupWithServcie = true;
+          }
+        });
 
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
 
@@ -118,14 +126,14 @@ export class WalletManager {
                 if (!extendedInfo) {
                     console.warn("No local storage info found for this wallet. This may happen when upgrading this app from a older app version.");
                     console.warn("Now creating default values for backward compatibility");
-                    
+
                     this.masterWallets[masterId].name = "No name";
 
                     // Re-add the default sub-wallets
-                    this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
-                    this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
+                    await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
+                    await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
 
-                    this.saveMasterWallet(this.masterWallets[masterId]);
+                    await this.saveMasterWallet(this.masterWallets[masterId]);
 
                     extendedInfo = this.masterWallets[masterId].getExtendedWalletInfo();
 
@@ -134,7 +142,7 @@ export class WalletManager {
                 else {
                     console.log("Found extended wallet info for master wallet id "+masterId, extendedInfo);
                 }
-                
+
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
             }
         }
@@ -202,9 +210,9 @@ export class WalletManager {
 
         await this.spvBridge.createMasterWallet(masterId, mnemonicStr,mnemonicPassword, payPassword, singleAddress);
 
-        let account: WalletAccount = { 
-            singleAddress: singleAddress, 
-            Type: WalletAccountType.STANDARD 
+        let account: WalletAccount = {
+            singleAddress: singleAddress,
+            Type: WalletAccountType.STANDARD
         };
 
         await this.addMasterWalletToLocalModel(masterId, walletName, account);
@@ -218,9 +226,9 @@ export class WalletManager {
 
         await this.spvBridge.importWalletWithMnemonic(masterId, mnemonicStr, mnemonicPassword, payPassword, singleAddress);
 
-        let account: WalletAccount = { 
-            singleAddress: singleAddress, 
-            Type: WalletAccountType.STANDARD 
+        let account: WalletAccount = {
+            singleAddress: singleAddress,
+            Type: WalletAccountType.STANDARD
         };
 
         await this.addMasterWalletToLocalModel(masterId, walletName, account);
@@ -246,7 +254,7 @@ export class WalletManager {
 
         // Save state to local storage
         await this.saveMasterWallet(this.masterWallets[id]);
-        
+
         // Set the newly created wallet as the active one.
         this.setActiveMasterWalletId(id);
 
@@ -266,7 +274,7 @@ export class WalletManager {
 
         // Destroy from our local model
         delete this.masterWallets[id];
-      
+
         if (this.activeMasterWallet.id === id) {
             this.activeMasterWallet = null;
             // TODO: we need more cleanup than this on the active wallet here!
@@ -290,7 +298,7 @@ export class WalletManager {
 
         await this.localStorage.setExtendedMasterWalletInfo(masterWallet.id, extendedInfo);
     }
-    
+
     public async setActiveMasterWalletId(id) {
         console.log("Setting active master wallet id", id);
 
@@ -334,7 +342,7 @@ export class WalletManager {
             console.log("Failed to send start RPC message to the sync service");
         });
     }
-    
+
     // TODO: When wallet is destroyed
     private stopWalletSync(masterId: WalletID) {
         // Add only standard subwallets to SPV stop sync request
@@ -373,6 +381,8 @@ export class WalletManager {
      * Start listening to all events from the SPV SDK.
      */
     public registerSubWalletListener(masterId: WalletID, chainId: StandardCoinName) {
+        if (this.startupWithServcie) return;
+
         console.log("Register sub-wallet listener for", masterId, chainId);
 
         this.spvBridge.registerWalletListener(masterId, chainId, (event: SPVWalletMessage)=>{
@@ -458,7 +468,7 @@ export class WalletManager {
             this.transactionMap[hash].ChainID = chainId;
             this.transactionMap[hash].Code = code;
             this.transactionMap[hash].Reason = reason;
-  
+
             this.localStorage.savePublishTxList(this.transactionMap);
         }
 
@@ -586,7 +596,7 @@ export class WalletManager {
 
     private async sendTransaction(transfer, signedTx: SignedTransaction) {
         let publishedTransaction = await this.spvBridge.publishTransaction(this.activeMasterWallet.id, transfer.chainId, signedTx);
-        
+
         if (!Util.isEmptyObject(transfer.action)) {
             this.lockTx(publishedTransaction.TxHash);
 

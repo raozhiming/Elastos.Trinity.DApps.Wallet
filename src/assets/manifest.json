@@ -70,5 +70,8 @@
         {
             "action": "walletaccess"
         }
+    ],
+    "startup_service": [
+        "walletservice"
     ]
 }
