@@ -63,7 +63,7 @@ type TransactionMap = {
 @Injectable({
     providedIn: 'root'
 })
-export class WalletManager {    
+export class WalletManager {
     public activeMasterWallet: MasterWallet = null;
 
     public masterWallets: {
@@ -136,6 +136,8 @@ export class WalletManager {
                 }
 
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
+
+                this.registerSubWalletListener();
             }
         }
         catch (error) {
@@ -383,14 +385,14 @@ export class WalletManager {
     /**
      * Start listening to all events from the SPV SDK.
      */
-    public registerSubWalletListener(masterId: WalletID, chainId: StandardCoinName) {
+    public registerSubWalletListener() {
         // For now, don't listen to wallet events while in the service.
         if (this.appService.runningAsAService())
             return;
 
-        console.log("Register sub-wallet listener for", masterId, chainId);
+        console.log("Register wallet listener");
 
-        this.spvBridge.registerWalletListener(masterId, chainId, (event: SPVWalletMessage)=>{
+        this.spvBridge.registerWalletListener((event: SPVWalletMessage)=>{
             this.zone.run(() => {
                 this.handleSubWalletEvent(event);
             });

@@ -63,7 +63,7 @@ export class SPVSyncService {
     private spvBridge: SPVWalletPluginBridge;
     private walletManager: WalletManager;
 
-    constructor(private native: Native, private events: Events, private popupProvider: PopupProvider, 
+    constructor(private native: Native, private events: Events, private popupProvider: PopupProvider,
         private localStorage: LocalStorage, private translate: TranslateService) {
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
     }
@@ -75,6 +75,10 @@ export class SPVSyncService {
 
         appManager.setListener((message)=>{
             this.handleAppManagerMessage(message);
+        });
+
+        this.spvBridge.registerWalletListener((event)=>{
+            this.handleSubWalletEvent(event);
         });
 
         await this.startSyncingActiveWallet();
@@ -119,10 +123,6 @@ export class SPVSyncService {
         console.log("SubWallets sync is starting");
 
         for (let chainId of chainIds) {
-            this.spvBridge.registerWalletListener(masterId, chainId, (event)=>{
-                this.handleSubWalletEvent(event);
-            })
-
             this.spvBridge.syncStart(masterId, chainId);
         }
     }
@@ -131,8 +131,6 @@ export class SPVSyncService {
         console.log("SubWallets sync is stopping");
 
         for (let chainId of chainIds) {
-            this.spvBridge.removeWalletListener(masterId, chainId);
-
             this.spvBridge.syncStop(masterId, chainId);
         }
     }

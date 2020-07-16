@@ -45,7 +45,7 @@ export type TxPublishedResult = {
 export class SPVWalletPluginBridge {
     constructor(private native: Native, private event: Events, private popupProvider: PopupProvider) {
     }
-    
+
     public generateMnemonic(language: string): Promise<string> {
         return new Promise((resolve, reject)=>{
             walletManager.generateMnemonic([language],
@@ -314,14 +314,14 @@ export class SPVWalletPluginBridge {
     }
 
     // TODO: Types for listener data
-    registerWalletListener(masterWalletId: string, chainId: string, listener: (ret: SPVWalletMessage)=>void) {
-        walletManager.registerWalletListener([masterWalletId, chainId],
+    registerWalletListener(listener: (ret: SPVWalletMessage)=>void) {
+        walletManager.registerWalletListener([],
             (ret) => { listener(ret); },
             (err) => { this.handleError(err, null);  });
     }
 
-    removeWalletListener(masterWalletId: string, chainId: string) {
-        walletManager.removeWalletListener([masterWalletId, chainId],
+    removeWalletListener() {
+        walletManager.removeWalletListener([],
             (ret) => { },
             (err) => { this.handleError(err, null); });
     }

@@ -12,7 +12,7 @@ export class StandardSubWallet extends SubWallet {
     }
 
     private initialize() {
-        this.masterWallet.walletManager.registerSubWalletListener(this.masterWallet.id, this.id as StandardCoinName);
+        // this.masterWallet.walletManager.registerSubWalletListener();
 
         this.updateBalance();
     }
