@@ -155,6 +155,19 @@ export class WalletManager {
 
         console.log("Wallet manager initialization complete");
 
+        // Set Active Master Wallet
+        if (Object.values(this.masterWallets).length > 0) {
+          let storedMasterId = await this.getCurrentMasterIdFromStorage();
+
+          // Wrong master id or something desynchronized. use the first wallet in the list as default
+          if (!storedMasterId || !(storedMasterId in this.masterWallets)) {
+              console.warn("Invalid master ID retrieved from storage. Using the first wallet as default");
+              storedMasterId = Object.values(this.masterWallets)[0].id;
+          }
+
+          await this.setActiveMasterWalletId(storedMasterId);
+        }
+
         this.events.publish("walletmanager:initialized");
 
         // Start the sync service if we are in a background service
@@ -309,8 +322,9 @@ export class WalletManager {
                 this.syncStopSubWallets(activeMasterId);*/
 
             this.activeMasterWallet = this.masterWallets[id];
+
             this.startWalletSync(id);
-            this.native.setRootRouter("/wallet-home/wallet-tab-home");
+            // this.native.setRootRouter("/wallet-home/wallet-tab-home");
         }
     }
 

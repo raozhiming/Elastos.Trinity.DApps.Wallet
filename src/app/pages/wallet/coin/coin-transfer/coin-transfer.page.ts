@@ -55,8 +55,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     hideMemo = false;
     introText = ''; // to show intro text
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, 
-        public appService: AppService, private coinTransferService: CoinTransferService,
+    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
+                public appService: AppService, private coinTransferService: CoinTransferService,
                 public native: Native, public events: Events, public zone: NgZone) {
         this.init();
     }
@@ -111,7 +111,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.transfer.toAddress = await this.walletManager.spvBridge.createAddress(this.masterWallet.id, chainId);
     }
 
-    rightHeader() {
+    goScan() {
         this.appService.scan(ScanType.Address);
     }
 
@@ -175,19 +175,19 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.transfer.toAddress,
             toAmount.toString(),
             this.transfer.memo);
-            
+
         this.walletManager.openPayModal(this.transfer);
     }
 
     async createDepositTransaction() {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
-        
+
         this.transfer.rawTransaction = await this.walletManager.spvBridge.createDepositTransaction(this.masterWallet.id, 'ELA', '',
             this.coinTransferService.transfer.sideChainId,
             toAmount.toString(), // user input amount
             this.transfer.toAddress, // user input address
             this.transfer.memo);
-        
+
         this.walletManager.openPayModal(this.transfer);
     }
 

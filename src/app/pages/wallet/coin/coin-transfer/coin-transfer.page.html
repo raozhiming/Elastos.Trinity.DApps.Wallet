@@ -9,7 +9,7 @@
         <ion-item>
             <ion-label>{{ 'text-receiver-address' | translate}}</ion-label>
             <ion-buttons slot="end" *ngIf="transfer.type!='payment-confirm'">
-                <ion-icon name="scan" (click)="rightHeader()"></ion-icon>
+                <ion-icon name="scan" (click)="goScan()"></ion-icon>
                 <ion-icon *ngIf="transfer.type=='transfer'" name="contact" (click)="goContact()"></ion-icon>
             </ion-buttons>
         </ion-item>
@@ -41,5 +41,6 @@
     </ion-list>
 </ion-content>
 <ion-footer>
+    <!-- TODO: Add Cancel button or close icon in titlebar for pay intent? -->
     <ion-button class="confirm" (click)="goTransaction()">{{ 'text-transfer' | translate }}</ion-button>
 </ion-footer>

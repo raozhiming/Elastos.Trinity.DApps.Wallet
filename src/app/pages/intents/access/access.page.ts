@@ -6,6 +6,8 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { IntentService } from 'src/app/services/intent.service';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 type ClaimRequest = {
     name: string,
     value: string,
@@ -38,6 +40,10 @@ export class AccessPage implements OnInit {
 
     ngOnInit() {
         this.init();
+    }
+
+    ionViewDidEnter() {
+        appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     init() {

@@ -72,8 +72,6 @@ export class AppComponent {
             await this.appService.init();
             this.runningAsApp = !this.appService.runningAsAService();
 
-            await this.intentService.init();
-
             // Wait until the wallet manager is ready before showing the first screen.
             this.events.subscribe("walletmanager:initialized", ()=>{
                 if (!this.appService.runningAsAService()) {
@@ -82,6 +80,7 @@ export class AppComponent {
             });
 
             await this.walletManager.init();
+            await this.intentService.init();
         });
     }
 
