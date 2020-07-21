@@ -2,8 +2,8 @@ import path from 'path'
 //var fs = require('fs');
 import Web3 from 'Web3'
 //var Tx = require('ethereumjs-tx');
-//import { TrinitySDK } from "@elastosfoundation/trinity-dapp-sdk"
-import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
+import { TrinitySDK } from "@elastosfoundation/trinity-dapp-sdk"
+// import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
  
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
@@ -29,6 +29,7 @@ export class ERC20SubWallet extends SubWallet {
 
         // Get Web3 and the ERC20 contract ready
         let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
+        // let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
         this.web3 = new Web3(trinityWeb3Provider);
 
         // Standard ERC20 contract ABI

@@ -185,6 +185,7 @@ export class SPVSyncService {
         console.log('Sending sync completed notification for subwallet '+chainId);
 
         const request: NotificationManagerPlugin.NotificationRequest = {
+            message: '',
             key: chainId + '-syncCompleted',
             title: chainId + ': ' + this.translate.instant('sync-completed'),
         };

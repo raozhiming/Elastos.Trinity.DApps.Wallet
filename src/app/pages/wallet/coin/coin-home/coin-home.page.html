@@ -1,5 +1,4 @@
 <ion-content *ngIf="chainId">
-    <!-- <nodata keyText='no-tx-record' *ngIf="isNodata"></nodata> -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="!isNodata">
         <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles"
             refreshingText="">

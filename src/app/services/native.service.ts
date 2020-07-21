@@ -93,7 +93,7 @@ export class Native {
 
     public setRootRouter(page: any,  options: any = {}) {
         console.log("Setting root router path to:", page);
-        this.zone.run(()=>{
+        this.zone.run(() => {
             this.hideLoading();
             this.navCtrl.setDirection('root');
             this.router.navigate([page], { queryParams: options });
