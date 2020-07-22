@@ -36,6 +36,7 @@ import { CoinService } from './coin.service';
 import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
 import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
 import { AppService } from './app.service';
+import { SubWallet, SerializedSubWallet } from '../model/SubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -113,6 +114,10 @@ export class WalletManager {
                 // Create a model instance for each master wallet returned by the SPV SDK.
                 this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
 
+                // TODO call verifyPassPhrase when active wallet: for ethereum
+                // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
+                // await this.spvBridge.verifyPayPassword(masterId, '12345678');
+
                 // Try to retrieve locally storage extended info about this wallet
                 let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
                 if (!extendedInfo) {
@@ -124,6 +129,7 @@ export class WalletManager {
                     // Re-add the default sub-wallets
                     await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
                     await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
+                    await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
 
                     await this.saveMasterWallet(this.masterWallets[masterId]);
 
@@ -133,6 +139,18 @@ export class WalletManager {
                 }
                 else {
                     console.log("Found extended wallet info for master wallet id "+masterId, extendedInfo);
+
+                    // if (extendedInfo.subWallets.length < 3) {
+                    //   // open IDChain and ETHSC automatic
+                    //   let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
+                    //   if (subwallet === null) {
+                    //     // TODO
+                    //   }
+                    //   subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
+                    //   if (subwallet === null) {
+                    //     // TODO
+                    //   }
+                    // }
                 }
 
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
@@ -263,6 +281,7 @@ export class WalletManager {
 
         // Even if not mandatory to have, we open the main sub wallets for convenience as well.
         await this.masterWallets[id].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
+        await this.masterWallets[id].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
 
         // Save state to local storage
         await this.saveMasterWallet(this.masterWallets[id]);
@@ -445,6 +464,9 @@ export class WalletManager {
             case "OnConnectStatusChanged":
                 // Nothing
                 break;
+            case "OnETHSCEventHandled":
+              // Nothing to do for now
+              break;
         }
     }
 

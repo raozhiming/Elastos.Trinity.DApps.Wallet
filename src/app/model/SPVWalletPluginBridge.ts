@@ -168,12 +168,37 @@ export class SPVWalletPluginBridge {
         });
     }
 
+    verifyPassPhrase(masterWalletId: string, passphrase: string, payPassword: string): Promise<void> {
+      return new Promise((resolve, reject)=>{
+          walletManager.verifyPassPhrase([masterWalletId, passphrase, payPassword],
+              (ret) => { resolve(ret); },
+              (err) => { this.handleError(err, reject);  });
+      });
+    }
+
+    verifyPayPassword(masterWalletId: string, payPassword: string): Promise<void> {
+      return new Promise((resolve, reject)=>{
+          walletManager.verifyPayPassword([masterWalletId, payPassword],
+              (ret) => { resolve(ret); },
+              (err) => { this.handleError(err, reject);  });
+      });
+    }
+
+
     destroySubWallet(masterWalletId: string, chainId: string): Promise<any> {
         return new Promise((resolve, reject)=>{
             walletManager.destroySubWallet([masterWalletId, chainId],
                 (ret) => { resolve(ret); },
                 (err) => { this.handleError(err, reject);  });
         });
+    }
+
+    getPubKeyInfo(masterWalletId: string): Promise<void> {
+      return new Promise((resolve, reject)=>{
+          walletManager.getPubKeyInfo([masterWalletId],
+              (ret) => { resolve(ret); },
+              (err) => { this.handleError(err, reject);  });
+      });
     }
 
     isAddressValid(masterWalletId: string, address: string): Promise<boolean> {

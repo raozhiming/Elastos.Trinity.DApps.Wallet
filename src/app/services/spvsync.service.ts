@@ -101,6 +101,9 @@ export class SPVSyncService {
             case "OnBalanceChanged":
                 // Nothing to do for now
                 break;
+            case "OnETHSCEventHandled":
+                // Nothing to do for now
+                break;
         }
     }
 

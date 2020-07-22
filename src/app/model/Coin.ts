@@ -1,14 +1,14 @@
 export type CoinID = string; // ELA, IDChain, ERC1, ERC2...
 
 export enum CoinType {
-    STANDARD = "STANDARD", // For ELA, IDChain, ETHChain
+    STANDARD = "STANDARD", // For ELA, IDChain, ETHSC
     ERC20 = "ERC20" // For ERC20 tokens
 }
 
 export enum StandardCoinName {
     ELA = 'ELA',
     IDChain = 'IDChain',
-    ETHChain = 'ETHChain' // TODO: make sure this is the right name for the SPVSDK
+    ETHSC = 'ETHSC'
 }
 
 export namespace StandardCoinName {
@@ -30,9 +30,9 @@ export class Coin {
     }
 
     public getName(): string {
-        return this.name; 
+        return this.name;
     }
- 
+
     public getDescription(): string {
         return "Elastos Ethereum sidechain"
     }
@@ -53,7 +53,7 @@ export class ERC20Coin extends Coin {
         super(CoinType.ERC20, id, name, description, true);
     }
 
-    /** 
+    /**
      * Returns the Ethereum sidechain smart contract address for this coin.
      * Used to operate this coin (balance, transfer, etc).
      */

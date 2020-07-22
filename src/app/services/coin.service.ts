@@ -29,7 +29,7 @@ import { StandardCoinName } from '../model/Coin';
 })
 export class CoinService {
     private availableCoins: Coin[] = null;
-    
+
     constructor() {
         this.initializeCoinList();
     }
@@ -39,11 +39,11 @@ export class CoinService {
 
         this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "ELA mainchain"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.IDChain, "ELA-DID", "Elastos Identity sidechain"));
-        this.availableCoins.push(new StandardCoin(StandardCoinName.ETHChain, "ELA-ETH", "Elastos Ethereum sidechain"));
+        this.availableCoins.push(new StandardCoin(StandardCoinName.ETHSC, "ELA-ETH", "Elastos Ethereum sidechain"));
         this.availableCoins.push(new ERC20Coin("MEC", "MyERC20Coin", "Ben's ERC20 token", "0xc4032babad2b76c39abec3c4e365611de78528ed"));
         this.availableCoins.push(new ERC20Coin("COOL", "CoolERC20Coin", "Another ERC20 token", "0xc4032babad2b76c39abec3c4e365611de78528ed"));
     }
-        
+
     public getAvailableCoins(): Coin[] {
         return this.availableCoins;
     }
