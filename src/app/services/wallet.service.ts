@@ -37,6 +37,7 @@ import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
 import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
 import { AppService } from './app.service';
 import { SubWallet, SerializedSubWallet } from '../model/SubWallet';
+import { StandardSubWallet } from '../model/StandardSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -139,18 +140,21 @@ export class WalletManager {
                 }
                 else {
                     console.log("Found extended wallet info for master wallet id "+masterId, extendedInfo);
-
-                    // if (extendedInfo.subWallets.length < 3) {
-                    //   // open IDChain and ETHSC automatic
-                    //   let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
-                    //   if (subwallet === null) {
-                    //     // TODO
-                    //   }
-                    //   subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
-                    //   if (subwallet === null) {
-                    //     // TODO
-                    //   }
-                    // }
+                    if (extendedInfo.subWallets.length < 3) {
+                      // open IDChain and ETHSC automatic
+                      let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
+                      if (!subwallet) {
+                        console.log('Open IDChain');
+                        const subWallet = new StandardSubWallet(this.masterWallets[masterId], StandardCoinName.IDChain);
+                        extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
+                      }
+                      subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
+                      if (!subwallet) {
+                        console.log('Open ETHSC');
+                        const subWallet = new StandardSubWallet(this.masterWallets[masterId], StandardCoinName.ETHSC);
+                        extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
+                      }
+                    }
                 }
 
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
