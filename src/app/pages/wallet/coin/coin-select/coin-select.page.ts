@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Config } from "../../../../config/Config";
 import { Native } from '../../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
@@ -16,7 +15,7 @@ import { CoinTransferService } from 'src/app/services/cointransfer.service';
 export class CoinSelectPage implements OnInit {
     public subWallets: SubWallet[] = [];
 
-    constructor(public route: ActivatedRoute, public native: Native, 
+    constructor(public route: ActivatedRoute, public native: Native,
         private walletManager: WalletManager, private coinTransferService: CoinTransferService) {
         this.init();
     }
@@ -24,15 +23,13 @@ export class CoinSelectPage implements OnInit {
     ngOnInit() {
     }
 
-    init() {        
+    init() {
         // Note: we are willing to pick a sidechain subwallet here only.
         this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(StandardCoinName.ELA);
     }
 
-    onItem(item) {
-        this.coinTransferService.transfer.chainId = item.name;
-        this.native.go("/recharge");
+    onItem(wallet) {
+        this.coinTransferService.transfer.sideChainId = wallet.id;
+        this.native.go("/coin-transfer");
     }
-
 }
-

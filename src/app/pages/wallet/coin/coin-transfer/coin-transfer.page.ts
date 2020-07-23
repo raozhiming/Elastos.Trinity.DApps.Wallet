@@ -94,7 +94,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.transfer.fee = 10000;
                 this.chainId = 'ELA';
                 this.transfer.amount = '0.1'; // for DID
-                this.getAddress(StandardCoinName.IDChain);
+                this.getAddress(this.coinTransferService.transfer.sideChainId);
                 this.hideMemo = true;
                 this.introText = 'text-recharge-intro';
                 break;

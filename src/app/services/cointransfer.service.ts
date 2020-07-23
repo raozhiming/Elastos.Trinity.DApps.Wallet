@@ -27,7 +27,7 @@ import { WalletAccount } from '../model/WalletAccount';
 export class Transfer {
     action: string = null;
     intentId: Number = null;
-    memo: string = null;
+    memo: string = '';
     did: string = null;
     nickname: string = null;
     url: string = null;
@@ -59,7 +59,7 @@ export class CoinTransferService {
     // Consider this service as a singleton shared class.
     public transfer: Transfer; // TODO: messy class that embeds too many unrelated things... Split into specific transfer types.
     public walletInfo: WalletAccount;
-    
+
     constructor() {
         this.reset();
     }

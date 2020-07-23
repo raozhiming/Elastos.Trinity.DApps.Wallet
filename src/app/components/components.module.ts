@@ -21,6 +21,6 @@ import { PaymentboxComponent } from './paymentbox/paymentbox.component';
   exports: [HeaderBarComponent, MyToggleComponent, MyQrcodeComponent, PaymentboxComponent],
   providers: [
   ],
-  entryComponents: [],
+  entryComponents: [PaymentboxComponent],
 })
 export class ComponentsModule { }
