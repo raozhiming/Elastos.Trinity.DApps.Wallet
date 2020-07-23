@@ -30,6 +30,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { SubWallet } from 'src/app/model/SubWallet';
 import { StandardCoinName } from 'src/app/model/Coin';
+import { ThemeService } from 'src/app/services/theme.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -43,10 +44,15 @@ export class WalletTabHomePage implements OnInit {
     Config = Config;
     SELA = Config.SELA;
 
-    constructor(public native: Native, public appService: AppService,
-        public popupProvider: PopupProvider, public walletManager: WalletManager,
+    constructor(
+        public native: Native,
+        public appService: AppService,
+        public popupProvider: PopupProvider,
+        public walletManager: WalletManager,
         private walletEditionService: WalletEditionService,
-        private translate: TranslateService) {
+        private translate: TranslateService,
+        public theme: ThemeService
+    ) {
     }
 
     ngOnInit() {

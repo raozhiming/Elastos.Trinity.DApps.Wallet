@@ -61,9 +61,11 @@ const routes: Routes = [
     // Global
     { path: 'launcher', component: LauncherPage },
     { path: 'about', component: AboutPage },
+    { path: 'wallet-home', component: WalletTabHomePage },
+    { path: 'wallet-settings', component: WalletTabSettingsPage },
 
     // Wallet
-    {
+ /*    {
         path: 'wallet-home',
         component: WalletTabsRootPage,
         children: [
@@ -76,7 +78,7 @@ const routes: Routes = [
                 component: WalletTabSettingsPage
             }
         ]
-    },
+    }, */
     { path: 'wallet-create', component: WalletCreatePage },
     { path: 'wallet-import', component: WalletImportPage },
     { path: 'wallet-manager', component: WalletManagerPage },

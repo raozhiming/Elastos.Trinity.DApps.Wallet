@@ -35,6 +35,8 @@ import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { StandardCoinName, Coin, CoinType } from 'src/app/model/Coin';
 import { SubWallet } from 'src/app/model/SubWallet';
 import { TransactionDirection, TransactionStatus } from 'src/app/model/Transaction';
+import { ThemeService } from 'src/app/services/theme.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-coin-home',
@@ -42,6 +44,7 @@ import { TransactionDirection, TransactionStatus } from 'src/app/model/Transacti
     styleUrls: ['./coin-home.page.scss'],
 })
 export class CoinHomePage implements OnInit {
+
     public masterWalletInfo = '';
     masterWallet: MasterWallet = null;
     subWallet: SubWallet = null;
@@ -54,16 +57,23 @@ export class CoinHomePage implements OnInit {
     isShowMore = false;
     MaxCount = 0;
     isNodata = false;
+ 
     public autoFefreshInterval: any;
     public votedCount = 0;
 
     Config = Config;
     SELA = Config.SELA;
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, 
-                public translate: TranslateService, private coinTransferService: CoinTransferService,
-                public native: Native, public events: Events, 
-                public popupProvider: PopupProvider, private appService: AppService) {
+    constructor(
+        public route: ActivatedRoute,
+        public walletManager: WalletManager,
+        public translate: TranslateService,
+        private coinTransferService: CoinTransferService,
+        public native: Native,
+        public events: Events,
+        public popupProvider: PopupProvider, private appService: AppService,
+        public theme: ThemeService
+    ) {
         this.init();
     }
 
@@ -164,7 +174,8 @@ export class CoinHomePage implements OnInit {
                 const type = transaction.Type;
 
                 if (transaction.Direction === TransactionDirection.RECEIVED) {
-                    payStatusIcon = './assets/images/exchange-add.png';
+                    payStatusIcon = './assets/buttons/receive.png';
+                    name = 'Received ELA';
                     symbol = '+';
 
                     switch (type) {
@@ -180,8 +191,9 @@ export class CoinHomePage implements OnInit {
                         break;
                     }
                 } else if (transaction.Direction === TransactionDirection.SENT) {
-                    payStatusIcon = './assets/images/exchange-sub.png';
+                    payStatusIcon = './assets/buttons/send.png';
                     symbol = '-';
+                    name = 'Sent ELA';
 
                     if (type === 8) { // TransferCrossChainAsset
                         if (this.chainId === 'ELA') {
@@ -192,9 +204,10 @@ export class CoinHomePage implements OnInit {
                             name = 'ToELA';
                         }
                     }
-                } else if (transaction.Direction == TransactionDirection.MOVED) {
-                    payStatusIcon = './assets/images/exchange-sub.png';
+                } else if (transaction.Direction === TransactionDirection.MOVED) {
+                    payStatusIcon = './assets/buttons/transfer.png';
                     symbol = '';
+                    name = 'Transfered ELA';
 
                     if (this.chainId === StandardCoinName.ELA) { // for now IDChian no vote
                         // vote transaction
@@ -209,7 +222,7 @@ export class CoinHomePage implements OnInit {
                             name = 'DID';
                         }
                     }
-                } else if (transaction.Direction == TransactionDirection.DEPOSIT) {
+                } else if (transaction.Direction === TransactionDirection.DEPOSIT) {
                     payStatusIcon = './assets/images/exchange-sub.png';
                     if (transaction.Amount > 0) {
                         symbol = '-';
@@ -365,5 +378,19 @@ export class CoinHomePage implements OnInit {
             rawTransaction: txJson,
         };
         this.walletManager.openPayModal(transfer);
+    }
+
+    getWholeBalance(balance: number): number {
+        return Math.trunc(balance);
+    }
+
+    getDecimalBalance(balance: number): string {
+        let decimalBalance = balance - Math.trunc(balance);
+        decimalBalance.toFixed(5);
+        return decimalBalance.toLocaleString().slice(2);
+    }
+
+    formatDate(date: string) {
+        moment(date).format('MMMM Do YYYY, h:mm:ss a')
     }
 }

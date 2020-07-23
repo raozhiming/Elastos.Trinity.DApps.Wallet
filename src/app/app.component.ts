@@ -73,7 +73,7 @@ export class AppComponent {
             this.runningAsApp = !this.appService.runningAsAService();
 
             // Wait until the wallet manager is ready before showing the first screen.
-            this.events.subscribe("walletmanager:initialized", ()=>{
+            this.events.subscribe("walletmanager:initialized", () => {
                 if (!this.appService.runningAsAService()) {
                     this.navService.showStartupScreen();
                 }

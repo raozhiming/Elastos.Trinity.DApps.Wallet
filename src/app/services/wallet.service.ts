@@ -294,7 +294,7 @@ export class WalletManager {
         this.setActiveMasterWalletId(id);
 
         // Go to wallet's home page.
-        this.native.setRootRouter("/wallet-home/wallet-tab-home");
+        this.native.setRootRouter("/wallet-home");
     }
 
     /**
@@ -347,7 +347,7 @@ export class WalletManager {
             this.activeMasterWallet = this.masterWallets[id];
 
             this.startWalletSync(id);
-            // this.native.setRootRouter("/wallet-home/wallet-tab-home");
+            // this.native.setRootRouter("/wallet-home");
         }
     }
 
@@ -655,7 +655,7 @@ export class WalletManager {
                 }
                 this.native.hideLoading();
                 this.native.toast_trans('send-raw-transaction');
-                this.native.setRootRouter('/wallet-home/wallet-tab-home');
+                this.native.setRootRouter('/wallet-home');
                 console.log('Sending intent response', transfer.action, {txid: txId}, transfer.intentId);
                 appManager.sendIntentResponse(transfer.action, {txid: txId}, transfer.intentId);
             }, 5000); // wait for 5s for txPublished
@@ -664,7 +664,7 @@ export class WalletManager {
 
             this.native.hideLoading();
             this.native.toast_trans('send-raw-transaction');
-            this.native.setRootRouter('/wallet-home/wallet-tab-home');
+            this.native.setRootRouter('/wallet-home');
         }
     }
 }

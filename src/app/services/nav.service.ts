@@ -26,7 +26,7 @@ export class NavService {
 
                 if (this.walletManager.activeMasterWallet) {
                     // Go to wallet's home page.
-                    this.native.setRootRouter("/wallet-home/wallet-tab-home");
+                    this.native.setRootRouter("/wallet-home");
                 }
                 else {
                     this.native.setRootRouter("/launcher");

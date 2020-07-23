@@ -6,6 +6,7 @@ import { Util } from '../model/Util';
 import { StandardCoinName } from '../model/Coin';
 import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService } from './cointransfer.service';
+import { ThemeService } from './theme.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -23,9 +24,15 @@ export class AppService {
     private app_version = '';
     private startupInfo: AppManagerPlugin.StartupInfo;
 
-    constructor(private zone: NgZone, private translate: TranslateService, 
-        public events: Events, public native: Native, private navCtrl: NavController,
-        private coinTransferService: CoinTransferService) {
+    constructor(
+        private zone: NgZone,
+        private translate: TranslateService,
+        public events: Events,
+        public native: Native,
+        private navCtrl: NavController,
+        private coinTransferService: CoinTransferService,
+        private theme: ThemeService
+    ) {
     }
 
     private getStartupMode(): Promise<AppManagerPlugin.StartupInfo> {
@@ -45,6 +52,7 @@ export class AppService {
 
         // Check and save startup mode info
         this.startupInfo = await this.getStartupMode();
+        this.theme.getTheme();
 
         // Listen to raw app manager messages.
         appManager.setListener((msg)=>{
@@ -55,7 +63,7 @@ export class AppService {
 
         titleBarManager.setBackgroundColor("#000000");
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-        
+
         // Listen to title bar events
         titleBarManager.addOnItemClickedListener((menuIcon)=>{
             if (menuIcon.key == "back") {
