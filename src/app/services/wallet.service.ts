@@ -100,6 +100,11 @@ export class WalletManager {
 
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
 
+        // Start the sync service if we are in a background service
+        if (this.appService.runningAsAService()) {
+          this.syncService.init(this);
+        }
+
         try {
             let idList = await this.spvBridge.getAllMasterWallets();
 
@@ -117,7 +122,7 @@ export class WalletManager {
 
                 // TODO call verifyPassPhrase when active wallet: for ethereum
                 // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
-                // await this.spvBridge.verifyPayPassword(masterId, '12345678');
+                await this.spvBridge.verifyPayPassword(masterId, '12345678');
 
                 // Try to retrieve locally storage extended info about this wallet
                 let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
@@ -191,11 +196,6 @@ export class WalletManager {
         }
 
         this.events.publish("walletmanager:initialized");
-
-        // Start the sync service if we are in a background service
-        if (this.appService.runningAsAService()) {
-            this.syncService.init(this);
-        }
     }
 
     public getCurMasterWalletId() {
@@ -265,6 +265,10 @@ export class WalletManager {
             Type: WalletAccountType.STANDARD
         };
 
+        // TODO call verifyPassPhrase when active wallet: for ethereum
+        // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
+        await this.spvBridge.verifyPayPassword(masterId, '12345678');
+
         await this.addMasterWalletToLocalModel(masterId, walletName, account);
     }
 
@@ -286,6 +290,8 @@ export class WalletManager {
         // Even if not mandatory to have, we open the main sub wallets for convenience as well.
         await this.masterWallets[id].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
         await this.masterWallets[id].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
+
+        this.registerSubWalletListener();
 
         // Save state to local storage
         await this.saveMasterWallet(this.masterWallets[id]);
@@ -469,8 +475,8 @@ export class WalletManager {
                 // Nothing
                 break;
             case "OnETHSCEventHandled":
-              // Nothing to do for now
-              break;
+                // TODO: What needs to be done?
+                break;
         }
     }
 
