@@ -120,10 +120,6 @@ export class WalletManager {
                 // Create a model instance for each master wallet returned by the SPV SDK.
                 this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
 
-                // TODO call verifyPassPhrase when active wallet: for ethereum
-                // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
-                await this.spvBridge.verifyPayPassword(masterId, '12345678');
-
                 // Try to retrieve locally storage extended info about this wallet
                 let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
                 if (!extendedInfo) {
@@ -131,6 +127,10 @@ export class WalletManager {
                     console.warn("Now creating default values for backward compatibility");
 
                     this.masterWallets[masterId].name = "No name";
+
+                    // TODO call verifyPassPhrase when create ETHSC
+                    // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
+                    // await this.spvBridge.verifyPayPassword(masterId, '12345678');
 
                     // Re-add the default sub-wallets
                     await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
@@ -156,6 +156,10 @@ export class WalletManager {
                       subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
                       if (!subwallet) {
                         console.log('Open ETHSC');
+                        // TODO call verifyPassPhrase when create ETHSC
+                        // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
+                        // await this.spvBridge.verifyPayPassword(masterId, '12345678');
+                        // await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
                         const subWallet = new StandardSubWallet(this.masterWallets[masterId], StandardCoinName.ETHSC);
                         extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                       }
@@ -165,6 +169,20 @@ export class WalletManager {
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
 
                 this.registerSubWalletListener();
+
+                // // Get last block time from walletservice
+                // if (!this.appService.runningAsAService()) {
+                //   let rpcMessage: InAppRPCMessage = {
+                //     method: RPCMethod.GET_WALLET_SYNC_PROGRESS,
+                //     params: ''
+                //   }
+
+                //   appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
+                //     // Nothing to do
+                //   }, (err)=>{
+                //       console.log("Failed to send start RPC message to the sync service", err);
+                //   });
+                // }
             }
         }
         catch (error) {
@@ -264,10 +282,6 @@ export class WalletManager {
             singleAddress: singleAddress,
             Type: WalletAccountType.STANDARD
         };
-
-        // TODO call verifyPassPhrase when active wallet: for ethereum
-        // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
-        await this.spvBridge.verifyPayPassword(masterId, '12345678');
 
         await this.addMasterWalletToLocalModel(masterId, walletName, account);
     }
@@ -380,11 +394,15 @@ export class WalletManager {
             params: messageParams
         }
 
-        appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
+        if (this.appService.runningAsAService()) {
+          this.syncService.syncStartSubWallets(messageParams.masterId, messageParams.chainIds);
+        } else {
+          appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
             // Nothing to do
-        }, (err)=>{
-            console.log("Failed to send start RPC message to the sync service", err);
-        });
+          }, (err)=>{
+              console.log("Failed to send start RPC message to the sync service", err);
+          });
+        }
     }
 
     // TODO: When wallet is destroyed
@@ -417,7 +435,7 @@ export class WalletManager {
         appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), ()=>{
             // Nothing to do
         }, (err)=>{
-            console.log("Failed to send stop RPC message to the sync service");
+            console.log("Failed to send stop RPC message to the sync service:", err);
         });
     }
 
