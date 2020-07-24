@@ -1,4 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
+import { AppService } from '../../../services/app.service';
 import { LocalStorage } from '../../../services/storage.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
@@ -24,6 +25,7 @@ export class WalletlistPage implements OnInit {
         public native: Native,
         private zone: NgZone,
         public translate: TranslateService,
+        private appService: AppService,
         public walletManager: WalletManager) {
         this.init();
     }
@@ -37,6 +39,10 @@ export class WalletlistPage implements OnInit {
         this.zone.run(() => {
             this.masterWallets = this.walletManager.masterWallets;
         })
+    }
+
+    ionViewWillEnter() {
+        this.appService.setBackKeyVisibility(true);
     }
 
     ionViewDidEnter() {

@@ -20,7 +20,8 @@
  * SOFTWARE.
  */
 
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AppService } from '../../../../services/app.service';
 
 @Component({
     selector: 'app-wallet-tab-settings',
@@ -54,10 +55,13 @@ export class WalletTabSettingsPage implements OnInit {
         note: "v1.0",
     }];
 
-    constructor() {
+    constructor(private appService: AppService) {
     }
 
     ngOnInit() {
     }
 
+    ionViewWillEnter() {
+      this.appService.setBackKeyVisibility(true);
+    }
 }
