@@ -40,8 +40,9 @@ export type InAppRPCMessage = {
 }
 
 export enum RPCMethod {
+    GET_WALLET_SYNC_PROGRESS,
     START_WALLET_SYNC,
-    STOP_WALLET_SYNC
+    STOP_WALLET_SYNC,
 }
 
 export type RPCStartWalletSyncParams = {
@@ -122,7 +123,7 @@ export class SPVSyncService {
         }
     }
 
-    private async syncStartSubWallets(masterId: WalletID, chainIds: StandardCoinName[]) {
+    public async syncStartSubWallets(masterId: WalletID, chainIds: StandardCoinName[]) {
         console.log("SubWallets sync is starting");
 
         for (let chainId of chainIds) {
@@ -144,6 +145,14 @@ export class SPVSyncService {
 
         let rpcMessage = JSON.parse(message.message) as InAppRPCMessage;
         switch (rpcMessage.method) {
+            case RPCMethod.GET_WALLET_SYNC_PROGRESS:
+                console.log('handleAppManagerMessage: ', RPCMethod.GET_WALLET_SYNC_PROGRESS);
+                // appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(this.walletManager.masterWallets), ()=>{
+                //   // Nothing to do
+                // }, (err)=>{
+                //     console.log("Failed to send start RPC message to the sync service", err);
+                // });
+                break;
             case RPCMethod.START_WALLET_SYNC:
                 let startWalletSyncParams = rpcMessage.params as RPCStartWalletSyncParams;
                 this.syncStartSubWallets(startWalletSyncParams.masterId, startWalletSyncParams.chainIds);
@@ -158,6 +167,8 @@ export class SPVSyncService {
     }
 
     private async handleBlockSyncProgressEvent(masterId: WalletID, chainId: StandardCoinName, event: SPVWalletMessage) {
+        this.walletManager.masterWallets[masterId].updateSyncProgress(chainId, event.Progress, event.LastBlockTime);
+
         // If we are reaching 100% sync and this is the first time we reach it, we show a notification
         // to the user.
         if (event.Progress == 100) {
