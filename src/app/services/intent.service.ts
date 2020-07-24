@@ -63,6 +63,7 @@ export class IntentService {
         this.coinTransferService.transfer.fee = 0;
         this.coinTransferService.transfer.chainId = StandardCoinName.ELA;
 
+        let continueToWaitForSync = true;
         switch (intent.action) {
             case 'crmembervote':
                 console.log('CR member vote Transaction intent content:', intent.params);
@@ -113,12 +114,19 @@ export class IntentService {
                 this.coinTransferService.transfer.amount = intent.params.amount;
                 this.coinTransferService.transfer.type = 'payment-confirm';
                 break;
+
+            case 'createproposaldigest':
+                continueToWaitForSync = false;
+                this.handleCreateProposalDigestIntent(intent);
+                break;
+
             default:
                 console.log('AppService unknown intent:', intent);
                 return;
         }
 
-        this.native.go('/waitforsync');
+        if (continueToWaitForSync)
+            this.native.go('/waitforsync');
     }
 
     handleAccessIntent(intent: AppManagerPlugin.ReceivedIntent) {
@@ -136,5 +144,26 @@ export class IntentService {
         }, (err) => {
             console.error('sendIntentResponse error!', err);
         });
+    }
+
+    /**
+     * Intent that gets a CR proposal object as input and returns a HEX digest of it.
+     * Usually used to create a digest representation of a proposal before signing it and/or
+     * publishing it in a transaction.
+     */
+    private async handleCreateProposalDigestIntent(intent: AppManagerPlugin.ReceivedIntent) {
+        console.log("Handling create proposal digest silent intent");
+
+        if (intent && intent.params && intent.params.proposal) {
+            let masterWalletID = await this.walletManager.getCurrentMasterIdFromStorage();
+            let digest = await this.walletManager.spvBridge.proposalOwnerDigest(masterWalletID, StandardCoinName.ELA, intent.params.proposal);
+
+            // This is a silent intent, app will close right after calling sendIntentresponse()
+            this.sendIntentResponse("createproposaldigest", {digest: digest}, intent.intentId);
+        }
+        else {
+            // This is a silent intent, app will close right after calling sendIntentresponse()
+            this.sendIntentResponse("createproposaldigest", "Missing proposal input parameter in the intent", intent.intentId);
+        }
     }
 }

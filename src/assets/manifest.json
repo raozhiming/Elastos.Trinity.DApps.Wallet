@@ -69,6 +69,10 @@
         },
         {
             "action": "walletaccess"
+        },
+        {
+            "action": "createproposaldigest",
+            "startup_mode": "silence"
         }
     ],
     "startup_service": [
