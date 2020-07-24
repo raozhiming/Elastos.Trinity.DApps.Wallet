@@ -12,7 +12,7 @@ import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { AppService } from 'src/app/services/app.service';
 
 type EditableCoinInfo = {
-    coin: Coin, 
+    coin: Coin,
     isOpen: boolean
 }
 
@@ -22,6 +22,7 @@ type EditableCoinInfo = {
     styleUrls: ['./coin-list.page.scss'],
 })
 export class CoinListPage implements OnInit, OnDestroy {
+
     masterWallet: MasterWallet = null;
     coinList: EditableCoinInfo[] = null;
     coinListCache = {};

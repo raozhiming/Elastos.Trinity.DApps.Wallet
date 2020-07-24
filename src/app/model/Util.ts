@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import { Config } from "../config/Config";
+import * as moment from 'moment';
 
 export class Util {
 
@@ -109,7 +110,7 @@ export class Util {
      * @param sFormat 格式化后的日期字符串
      * @returns {String}
      */
-    static dateFormat(date: Date, sFormat: String = 'yyyy-MM-dd'): string {
+  /*   static dateFormat(date: Date, sFormat: String = 'yyyy-MM-dd'): string {
         let time = {
             Year: 0,
             TYear: '0',
@@ -160,6 +161,10 @@ export class Util {
             .replace(/ss/ig, time.TSecond)
             .replace(/s/ig, String(time.Second))
             .replace(/fff/ig, String(time.Millisecond))
+    } */
+
+    static dateFormat(date: Date, format) {
+        return moment(date).format(format);
     }
 
     public static checkCellphone(cellphone: string): boolean {

@@ -82,17 +82,19 @@ export class WalletManager {
 
     public spvBridge: SPVWalletPluginBridge = null;
 
-    constructor(public events: Events,
-                public native: Native,
-                public zone: NgZone,
-                public modalCtrl: ModalController,
-                public translate: TranslateService,
-                public localStorage: LocalStorage,
-                private platform: Platform,
-                private appService: AppService,
-                private syncService: SPVSyncService,
-                private coinService: CoinService,
-                public popupProvider: PopupProvider) {
+    constructor(
+        public events: Events,
+        public native: Native,
+        public zone: NgZone,
+        public modalCtrl: ModalController,
+        public translate: TranslateService,
+        public localStorage: LocalStorage,
+        private platform: Platform,
+        private appService: AppService,
+        private syncService: SPVSyncService,
+        private coinService: CoinService,
+        public popupProvider: PopupProvider
+    ) {
     }
 
     async init() {

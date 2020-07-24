@@ -34,7 +34,6 @@ ion-slides {
             }
     
             p {
-                margin: 0;
                 height: 13px;
                 font-size: 10px;
                 font-weight: 500;
@@ -183,14 +182,15 @@ ion-slides {
                 line-height: 1.29;
                 letter-spacing: 0.7px;
                 color: #161740;
+                text-align: left;
             }
       
             p {
                 font-size: 13px;
                 font-weight: 400;
-                text-align: left;
                 padding-top: 3px;
                 color: #161740;
+                text-align: left;
             }
           
             .left-col {

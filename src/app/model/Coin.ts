@@ -19,7 +19,14 @@ export namespace StandardCoinName {
 }
 
 export class Coin {
-    constructor(private type: CoinType, private id: CoinID, private name: string, private description: string, private removable: boolean) {}
+
+    constructor(
+        private type: CoinType,
+        private id: CoinID,
+        private name: string,
+        private description: string,
+        private removable: boolean
+    ) {}
 
     public getType(): CoinType {
         return this.type;
@@ -34,10 +41,10 @@ export class Coin {
     }
 
     public getDescription(): string {
-        return "Elastos Ethereum sidechain"
+        return this.description;
     }
 
-    public canBeRemoved() : boolean {
+    public canBeRemoved(): boolean {
         return this.removable;
     }
 }

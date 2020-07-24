@@ -118,6 +118,7 @@
                 align-items: center;
 
                 .btn-box {
+                    position: relative;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -125,7 +126,7 @@
                     height: 64px;
                     border-radius: 22.5px;
                     background-color: #bebebe;
-                    overflow: hidden;
+                    overflow: hidden !important;
 
                     .transfer {
                         width: 32.4px;

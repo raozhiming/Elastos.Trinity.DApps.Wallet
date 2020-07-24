@@ -11,6 +11,17 @@ import { ThemeService } from './theme.service';
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
+enum MessageType {
+    INTERNAL = 1,
+    IN_RETURN = 2,
+    IN_REFRESH = 3,
+
+    EXTERNAL = 11,
+    EX_LAUNCHER = 12,
+    EX_INSTALL = 13,
+    EX_RETURN = 14,
+}
+
 export enum ScanType {
     Address     = 1,
     Publickey   = 2,
@@ -52,24 +63,45 @@ export class AppService {
 
         // Check and save startup mode info
         this.startupInfo = await this.getStartupMode();
-        this.theme.getTheme();
 
         // Listen to raw app manager messages.
-        appManager.setListener((msg)=>{
+        appManager.setListener((msg) => {
             this.onMessageReceived(msg);
         });
 
+        this.theme.getTheme();
         this.getLanguage();
 
-        titleBarManager.setBackgroundColor("#000000");
-        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-
         // Listen to title bar events
-        titleBarManager.addOnItemClickedListener((menuIcon)=>{
-            if (menuIcon.key == "back") {
+        titleBarManager.addOnItemClickedListener((menuIcon) => {
+            if (menuIcon.key === "back") {
               this.titlebarBackButtonHandle();
             }
         });
+    }
+
+    onMessageReceived(ret) {
+        let params: any = ret.message;
+        if (typeof (params) === "string") {
+            try {
+                params = JSON.parse(params);
+            } catch (e) {
+                console.log('Params are not JSON format: ', params);
+            }
+        }
+        switch (ret.type) {
+            case MessageType.IN_REFRESH:
+                if (params.action === "currentLocaleChanged") {
+                    this.setCurLang(params.data);
+                }
+                if (params.action === 'preferenceChanged' && params.data.key === "ui.darkmode") {
+                    this.zone.run(() => {
+                        console.log('Dark Mode toggled');
+                        this.theme.setTheme(params.data.value);
+                    });
+                }
+                break;
+        }
     }
 
     public setTitleBarTitle(title: string) {
@@ -137,29 +169,9 @@ export class AppService {
             return this.app_version;
         }
     }
-    
+
     close() {
         appManager.close();
-    }
-
-    onMessageReceived(ret) {
-        // console.log("App manager message received:" + ret.message + ". type: " + ret.type + ". from: " + ret.from);
-
-        let params: any = ret.message;
-        if (typeof (params) === 'string') {
-            params = JSON.parse(params);
-        }
-        // console.log(params);
-
-        switch (ret.type) {
-            case AppManagerPlugin.MessageType.IN_REFRESH:
-                switch (params.action) {
-                    case 'currentLocaleChanged':
-                        this.setCurLang(params.data);
-                        break;
-                }
-                break;
-        }
     }
 
     scan(type: ScanType) {

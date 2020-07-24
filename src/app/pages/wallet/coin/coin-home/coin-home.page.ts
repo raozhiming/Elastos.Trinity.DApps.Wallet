@@ -38,6 +38,17 @@ import { TransactionDirection, TransactionStatus } from 'src/app/model/Transacti
 import { ThemeService } from 'src/app/services/theme.service';
 import * as moment from 'moment';
 
+type Transaction = {
+    'name': string,
+    'status': string,
+    'resultAmount': number,
+    'datetime': any,
+    'timestamp': number,
+    'txId': string,
+    'payStatusIcon': string,
+    'symbol': string
+};
+
 @Component({
     selector: 'app-coin-home',
     templateUrl: './coin-home.page.html',
@@ -46,20 +57,22 @@ import * as moment from 'moment';
 export class CoinHomePage implements OnInit {
 
     public masterWalletInfo = '';
-    masterWallet: MasterWallet = null;
-    subWallet: SubWallet = null;
-    transferList = [];
+    public masterWallet: MasterWallet = null;
+    public subWallet: SubWallet = null;
+    public chainId: StandardCoinName = null;
+    public transferList: Transaction[] = [];
 
-    chainId: StandardCoinName = null;
-    pageNo = 0;
-    start = 0;
+    private votedCount: number = 0;
+    private isShowMore: boolean = false;
+    private isNodata: boolean = false;
 
-    isShowMore = false;
-    MaxCount = 0;
-    isNodata = false;
- 
-    public autoFefreshInterval: any;
-    public votedCount = 0;
+    // Total transactions today
+    public todaysTransactions: number = 0;
+    private MaxCount: number = 0;
+    private pageNo: number = 0;
+    private start: number = 0;
+
+    private autoFefreshInterval: any;
 
     Config = Config;
     SELA = Config.SELA;
@@ -71,7 +84,8 @@ export class CoinHomePage implements OnInit {
         private coinTransferService: CoinTransferService,
         public native: Native,
         public events: Events,
-        public popupProvider: PopupProvider, private appService: AppService,
+        public popupProvider: PopupProvider,
+        private appService: AppService,
         public theme: ThemeService
     ) {
         this.init();
@@ -130,11 +144,11 @@ export class CoinHomePage implements OnInit {
     }
 
     chainIsELA(): boolean {
-        return this.chainId == StandardCoinName.ELA;
+        return this.chainId === StandardCoinName.ELA;
     }
 
     chainIsDID(): boolean {
-        return this.chainId == StandardCoinName.IDChain;
+        return this.chainId === StandardCoinName.IDChain;
     }
 
     async getAllTx() {
@@ -166,12 +180,16 @@ export class CoinHomePage implements OnInit {
             if (transactions.hasOwnProperty(key)) {
                 const transaction = transactions[key];
                 const timestamp = transaction.Timestamp * 1000;
-                const datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
+                // const datetime = Util.dateFormat(new Date(timestamp), 'MMMM Do YYYY, h:mm:ss a');
+                const datetime = moment(new Date(timestamp)).startOf('day').fromNow();
                 const txId = transaction.TxHash;
                 let payStatusIcon: string = null;
                 let name = '';
                 let symbol = '';
                 const type = transaction.Type;
+
+                // Check if transaction was made today
+                this.isNewTransaction(timestamp);
 
                 if (transaction.Direction === TransactionDirection.RECEIVED) {
                     payStatusIcon = './assets/buttons/receive.png';
@@ -180,12 +198,10 @@ export class CoinHomePage implements OnInit {
 
                     switch (type) {
                         case 6: // RechargeToSideChain
-                            payStatusIcon = './assets/images/ela-coin.png';
-                            name = 'FromELA';
+                            name = 'From Elastos Mainchain';
                             break;
                         case 7: // WithdrawFromSideChain
-                            payStatusIcon = './assets/images/id-coin.png';
-                            name = 'FromDID';
+                            name = 'From ELA ID Chain';
                             break;
                         default:
                         break;
@@ -197,11 +213,9 @@ export class CoinHomePage implements OnInit {
 
                     if (type === 8) { // TransferCrossChainAsset
                         if (this.chainId === 'ELA') {
-                            payStatusIcon = './assets/images/id-coin.png';
-                            name = 'ToDID';
+                            name = 'To Elastos ID Chain';
                         } else { // IDChain
-                            payStatusIcon = './assets/images/ela-coin.png';
-                            name = 'ToELA';
+                            name = 'To Elastos Mainchain';
                         }
                     }
                 } else if (transaction.Direction === TransactionDirection.MOVED) {
@@ -213,13 +227,11 @@ export class CoinHomePage implements OnInit {
                         // vote transaction
                         const isVote = await this.isVoteTransaction(txId);
                         if (isVote) {
-                            payStatusIcon = './assets/images/vote.png';
                             name = 'Vote';
                         }
                     } else if (this.chainId === StandardCoinName.IDChain) {
                         if (transaction.Type === 10) { // DID transaction
-                            payStatusIcon = './assets/images/did.png';
-                            name = 'DID';
+                            name = 'Identity';
                         }
                     }
                 } else if (transaction.Direction === TransactionDirection.DEPOSIT) {
@@ -260,9 +272,8 @@ export class CoinHomePage implements OnInit {
     }
 
     isVoteTransaction(txId: string): Promise<any> {
-        return new Promise(async (resolve, reject)=>{
+        return new Promise(async (resolve, reject) => {
             let transactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.chainId, 0, txId);
-            
             const transaction = transactions['Transactions'][0];
             if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
                 resolve(true);
@@ -380,6 +391,13 @@ export class CoinHomePage implements OnInit {
         this.walletManager.openPayModal(transfer);
     }
 
+    isNewTransaction(timestamp: number) {
+        let today = moment(new Date());
+        if (today.startOf('day').isSame(moment(timestamp).startOf('day'))) {
+            this.todaysTransactions++;
+        }
+    }
+
     getWholeBalance(balance: number): number {
         return Math.trunc(balance);
     }
@@ -387,10 +405,6 @@ export class CoinHomePage implements OnInit {
     getDecimalBalance(balance: number): string {
         let decimalBalance = balance - Math.trunc(balance);
         decimalBalance.toFixed(5);
-        return decimalBalance.toLocaleString().slice(2);
-    }
-
-    formatDate(date: string) {
-        moment(date).format('MMMM Do YYYY, h:mm:ss a')
+        return decimalBalance.toLocaleString().slice(2, 6);
     }
 }

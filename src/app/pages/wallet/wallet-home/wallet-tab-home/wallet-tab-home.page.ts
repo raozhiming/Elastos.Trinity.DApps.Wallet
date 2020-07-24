@@ -100,11 +100,21 @@ export class WalletTabHomePage implements OnInit {
     getSubWalletIcon(subWallet: SubWallet): string {
         switch (subWallet.id) {
             case StandardCoinName.ELA:
-                return "assets/images/ela-coin.png";
+                return "assets/coins/ela-black.svg";
             case StandardCoinName.IDChain:
-                return "assets/images/id-coin.png";
+                return "assets/coins/ela-turquoise.svg";
             default:
-                return "assets/images/erc20-coin.png";
+                return "assets/coins/eth.svg";
         }
+    }
+
+    getWholeBalance(balance: number): number {
+        return Math.trunc(balance);
+    }
+
+    getDecimalBalance(balance: number): string {
+        let decimalBalance = balance - Math.trunc(balance);
+        decimalBalance.toFixed(5);
+        return decimalBalance.toLocaleString().slice(2);
     }
 }
