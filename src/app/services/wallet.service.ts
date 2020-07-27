@@ -104,7 +104,7 @@ export class WalletManager {
 
         // Start the sync service if we are in a background service
         if (this.appService.runningAsAService()) {
-            this.syncService.init(this);
+            await this.syncService.init(this);
         } else {
             appManager.setListener((message) => {
                 this.handleAppManagerMessage(message);
@@ -112,15 +112,20 @@ export class WalletManager {
         }
 
         try {
+            console.log("Getting all master wallets from the SPV SDK");
+
             let idList = await this.spvBridge.getAllMasterWallets();
             if (idList.length === 0) {
+                console.log("No SPV wallet found, going to launcher screen");
                 this.goToLauncherScreen();
                 return;
             }
 
-            // Rebuild our local model for all wallets returned by the SVP SDK.
+            // Rebuild our local model for all wallets returned by the SPV SDK.
             for (var i = 0; i < idList.length; i++) {
                 let masterId = idList[i];
+
+                console.log("Rebuilding local model for subwallet id "+masterId);
 
                 // Create a model instance for each master wallet returned by the SPV SDK.
                 this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);

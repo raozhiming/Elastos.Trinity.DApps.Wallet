@@ -53,6 +53,11 @@ export class IntentService {
             return false;
         }
 
+        if (!this.walletManager.activeMasterWallet) {
+            this.sendIntentResponse(intent.action, "No active master wallet!", intent.intentId);
+            return false;
+        }
+
         this.coinTransferService.reset();
         this.coinTransferService.walletInfo = this.walletManager.activeMasterWallet.account;        
         this.coinTransferService.transfer.memo = intent.params.memo || '';
