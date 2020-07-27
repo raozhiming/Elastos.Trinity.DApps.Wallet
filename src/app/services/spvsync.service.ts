@@ -40,17 +40,27 @@ export type InAppRPCMessage = {
 }
 
 export enum RPCMethod {
-    GET_WALLET_SYNC_PROGRESS,
     START_WALLET_SYNC,
     STOP_WALLET_SYNC,
+    GET_WALLET_SYNC_PROGRESS,
+    SEND_WALLET_SYNC_PROGRESS,
 }
 
 export type RPCStartWalletSyncParams = {
     masterId: WalletID;
     chainIds: StandardCoinName[]
-}
+};
 
 export type RPCStopWalletSyncParams = RPCStartWalletSyncParams;
+
+export type ChainSyncProgress = {
+  progress: number;
+  lastBlockTime: number
+};
+
+export type WalletSyncProgress = {
+  [index: string]: ChainSyncProgress
+};
 
 @Injectable({
     providedIn: 'root'
@@ -64,8 +74,12 @@ export class SPVSyncService {
     private spvBridge: SPVWalletPluginBridge;
     private walletManager: WalletManager;
 
+    public walletsSyncProgress: {
+      [index: string]: WalletSyncProgress
+    } = {};
+
     constructor(private native: Native, private events: Events, private popupProvider: PopupProvider,
-        private localStorage: LocalStorage, private translate: TranslateService) {
+                private localStorage: LocalStorage, private translate: TranslateService) {
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
     }
 
@@ -146,12 +160,15 @@ export class SPVSyncService {
         let rpcMessage = JSON.parse(message.message) as InAppRPCMessage;
         switch (rpcMessage.method) {
             case RPCMethod.GET_WALLET_SYNC_PROGRESS:
-                console.log('handleAppManagerMessage: ', RPCMethod.GET_WALLET_SYNC_PROGRESS);
-                // appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(this.walletManager.masterWallets), ()=>{
-                //   // Nothing to do
-                // }, (err)=>{
-                //     console.log("Failed to send start RPC message to the sync service", err);
-                // });
+                let sendRPCMessage: InAppRPCMessage = {
+                  method: RPCMethod.SEND_WALLET_SYNC_PROGRESS,
+                  params: this.walletsSyncProgress
+                };
+                appManager.sendMessage("org.elastos.trinity.dapp.wallet", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(sendRPCMessage), ()=>{
+                  // Nothing to do
+                }, (err)=>{
+                    console.log("Failed to send start RPC message to the sync service", err);
+                });
                 break;
             case RPCMethod.START_WALLET_SYNC:
                 let startWalletSyncParams = rpcMessage.params as RPCStartWalletSyncParams;
@@ -167,7 +184,11 @@ export class SPVSyncService {
     }
 
     private async handleBlockSyncProgressEvent(masterId: WalletID, chainId: StandardCoinName, event: SPVWalletMessage) {
-        this.walletManager.masterWallets[masterId].updateSyncProgress(chainId, event.Progress, event.LastBlockTime);
+        // this.walletManager.masterWallets[masterId].updateSyncProgress(chainId, event.Progress, event.LastBlockTime);
+        if (!this.walletsSyncProgress[masterId]) {
+          this.walletsSyncProgress[masterId] = {};
+        }
+        this.walletsSyncProgress[masterId][chainId] = {progress: event.Progress, lastBlockTime: event.LastBlockTime};
 
         // If we are reaching 100% sync and this is the first time we reach it, we show a notification
         // to the user.
@@ -178,6 +199,7 @@ export class SPVSyncService {
             }
         }
     }
+
 
     /**
      * Tells if the "sync completed" notification has already been sent earlier for a given chain id or not.
@@ -206,5 +228,5 @@ export class SPVSyncService {
         notificationManager.sendNotification(request);
 
         await this.markSyncCompletedNotificationSent(chainId);
-      }
+    }
 }
