@@ -552,7 +552,7 @@ export class MasterManager {
 
         const request: NotificationManagerPlugin.NotificationRequest = {
           key: chainId + '-syncCompleted',
-          title: "Wallet synchronization complete",
+            title: this.translate.instant('wallet-synchronization-complete'),
           message: chainId + ': ' + this.translate.instant('sync-completed')
         };
         notificationManager.sendNotification(request);

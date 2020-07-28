@@ -474,6 +474,7 @@ export const zh = {
     'no-tx-record': '没有交易记录',
     'no-add-contact': '暂无联系人',
     'sync-completed': '已完成数据同步',
+    'wallet-synchronization-complete':'钱包同步完成',
 
     'suggest-amount': '金额应小于',
     'text-wallet-name-validator1': '钱包名长度超过30字',

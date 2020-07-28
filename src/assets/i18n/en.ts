@@ -476,6 +476,7 @@ export const en = {
     'no-tx-record': 'No transaction record',
     'no-add-contact': 'No Contact Added',
     'sync-completed': 'Sync Completed',
+    'wallet-synchronization-complete': 'Wallet synchronization complete',
 
     'suggest-amount': 'amount should less than',
     'text-wallet-name-validator1': 'Wallet Name with more than 30 characters',
