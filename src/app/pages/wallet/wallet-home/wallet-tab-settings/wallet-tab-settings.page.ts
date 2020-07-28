@@ -22,6 +22,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../../../services/app.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
     selector: 'app-wallet-tab-settings',
@@ -29,6 +30,7 @@ import { AppService } from '../../../../services/app.service';
     styleUrls: ['./wallet-tab-settings.page.scss'],
 })
 export class WalletTabSettingsPage implements OnInit {
+
     public masterWalletId: string = "1";
     public masterWalletType: string = "";
     public readonly: string = "";
@@ -38,24 +40,39 @@ export class WalletTabSettingsPage implements OnInit {
     public walletInfo = {};
     public password: string = "";
     public available = 0;
+    public settings = [
+        {
+            route: "/wallet-manager",
+            title: "My Wallets",
+            subtitle: "Backup wallets and access their individual settings",
+            icon: '/assets/settings/wallet.svg',
+            iconDarkmode: '/assets/settings/darkmode/wallet.svg'
+        },
+    ];
 
-    settings = [{
-        route: "/wallet-manager",
-        label: "text-wallet-manager",
-        icon: "manager",
-    }, {
-        route: "/contact-list",
-        label: "text-contacts",
-        icon: "contact",
+  /*   public settings = [
+        {
+            route: "/wallet-manager",
+            label: "text-wallet-manager",
+            icon: "manager",
+        },
+        {
+            route: "/contact-list",
+            label: "text-contacts",
+            icon: "contact",
+        },
+        {
+            route: "/about",
+            label: "about",
+            icon: "about",
+            note: "v1.0",
+        }
+    ]; */
 
-    }, {
-        route: "/about",
-        label: "about",
-        icon: "about",
-        note: "v1.0",
-    }];
-
-    constructor(private appService: AppService) {
+    constructor(
+        private appService: AppService,
+        public theme: ThemeService
+    ) {
     }
 
     ngOnInit() {
@@ -63,5 +80,6 @@ export class WalletTabSettingsPage implements OnInit {
 
     ionViewWillEnter() {
       this.appService.setBackKeyVisibility(true);
+      this.appService.setTitleBarTitle('Settings');
     }
 }

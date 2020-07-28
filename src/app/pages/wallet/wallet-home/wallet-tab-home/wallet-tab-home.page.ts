@@ -60,6 +60,7 @@ export class WalletTabHomePage implements OnInit {
 
     ionViewWillEnter() {
         appManager.setVisible("show");
+        this.appService.setTitleBarTitle('Wallet Home');
         this.appService.setBackKeyVisibility(false);
     }
 
@@ -78,7 +79,7 @@ export class WalletTabHomePage implements OnInit {
 
     goSetting() {
         this.walletEditionService.modifiedMasterWalletId = this.walletManager.getCurMasterWalletId();
-        this.native.go('/wallet-settings');
+        this.native.go('/wallets-settings');
         event.stopPropagation();
         return false;
     }

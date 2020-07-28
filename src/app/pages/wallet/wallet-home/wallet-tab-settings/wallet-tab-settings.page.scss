@@ -1,19 +1,94 @@
-@import "../../../../functions.scss";
+.container {
+    min-height: 100%;
+    background: #f8f8ff;
+    padding: 20px;
+  
+    .main-title-row {
+        margin-bottom: 15px;
+        margin-left: 5px;
+  
+        p {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: -0.33px;
+            text-align: left;
+            color: #818181;
+        }
+    }
 
-ion-list {
-    ion-item {
-        height: px2rem(104px);
-    }
-    ion-icon {
-        margin: 10px;
-        width: px2rem(32px);
-        height: px2rem(32px);
-    }
-    ion-label {
-        font-size: 18px;
-    }
-    ion-note {
-        font-size: 16px;
+    .setting-row {
+        width: 100%;
+        border-radius: 17px;
+        padding: 7.5px 5px;
+        margin-bottom: 10px;
+        box-shadow: 0 3px 15px 0 #ededf0;
+        background-color: #ffffff;
+
+        h1, p {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.9px;
+            text-align: left;
+            color: #000000;
+        }
+  
+        p {
+            padding-top: 5px;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-align: left;
+            color: #000000;
+        }
+      
+        .left-col {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+
+            img {
+                width: 22px;
+                height: 22px;
+                object-fit: contain
+            }
+        }
+      
+        .middle-col, .right-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            overflow: hidden;
+        }
+      
+        .right-col {
+            align-items: flex-end;
+            padding-right: 10px;
+        }
+    } 
+}
+
+.dark-container {
+    background: #191a2f;
+
+    .main-title-row {
+        p {
+            color: #8888b0
+        }
     }
 
+    .setting-row {
+        box-shadow: 0 3px 15px 0 #151626;
+        background-color: #2b2c49;
+
+        h1, p {
+            color: #ffffff;
+        }
+    } 
 }

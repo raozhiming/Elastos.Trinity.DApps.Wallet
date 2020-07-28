@@ -4,6 +4,7 @@ import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
     selector: 'app-wallet-manager',
@@ -11,12 +12,20 @@ import { WalletEditionService } from 'src/app/services/walletedition.service';
     styleUrls: ['./wallet-manager.page.scss'],
 })
 export class WalletManagerPage implements OnInit {
-    constructor(public events: Events, public native: Native,
-                private walletEditionService: WalletEditionService,
-                public walletManager: WalletManager) {
+
+    constructor(
+        public events: Events, public native: Native,
+        private appService: AppService,
+        private walletEditionService: WalletEditionService,
+        public walletManager: WalletManager
+    ) {
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        this.appService.setTitleBarTitle('My Wallets');
     }
 
     onNext() {

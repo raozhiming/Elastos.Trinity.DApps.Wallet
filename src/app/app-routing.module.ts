@@ -62,7 +62,7 @@ const routes: Routes = [
     { path: 'launcher', component: LauncherPage },
     { path: 'about', component: AboutPage },
     { path: 'wallet-home', component: WalletTabHomePage },
-    { path: 'wallet-settings', component: WalletTabSettingsPage },
+    { path: 'wallets-settings', component: WalletTabSettingsPage },
 
     // Wallet
  /*    {

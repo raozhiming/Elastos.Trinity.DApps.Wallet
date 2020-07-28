@@ -1,4 +1,33 @@
-<ion-header>
+<!-- <ion-content>
+    <ion-grid>
+        <ion-row class="main-title-row">
+            <ion-col size="12">
+                <h1>Wallet Overview</h1>
+            </ion-col>
+        </ion-row>
+        <ion-row class="card-row" [routerLink]="['/wallet-list']" routerDirection="forward">
+            <ion-row class="card-label-row"> 
+                <ion-row class="top-row">
+                    <ion-col size="10" class="left-col">
+                        <h1>{{ walletManager.activeMasterWallet.name }}</h1>
+                    </ion-col>
+                    <ion-col size="2" class="right-col" (click)="goSetting()">
+                        <ion-img src="assets/icons/dots.svg"></ion-img>
+                    </ion-col>
+                </ion-row>
+                <h2></h2>
+                <h3>TOTAL AMOUNT</h3>
+                <h4>{{ getWholeBalance(walletManager.activeMasterWallet.getBalance()/SELA) }}<span class="dot">.</span>
+                    <span class="decimals">{{ getDecimalBalance(walletManager.activeMasterWallet.getBalance()/SELA) }}</span>
+                    <span class="ela">  ELA</span>
+                </h4>
+            </ion-row>
+            <div class="arrow-down"></div>
+        </ion-row>
+    </ion-grid>
+</ion-content> -->
+
+<!-- <ion-header>
     <header-bar title="text-wallet-manager"></header-bar>
 </ion-header>
 <ion-content no-bounce>
@@ -16,4 +45,4 @@
 <ion-footer>
     <ion-button class="confirm" [routerLink]="['/launcher']" routerDirection="forward">
         +{{'text-add-wallet' | translate}}</ion-button>
-</ion-footer>
+</ion-footer> -->
