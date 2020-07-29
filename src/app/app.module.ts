@@ -85,6 +85,7 @@ import { ComponentsModule } from './components/components.module';
 import * as Sentry from "@sentry/browser";
 import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
 import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
+import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -137,6 +138,7 @@ export function TranslateLoaderFactory() {
         ContactCreatePage,
         ContactListPage,
         CRmembervotePage,
+        CRProposalVoteAgainstPage,
         DPoSVotePage,
         CoinTransferPage,
         DidTransactionPage,

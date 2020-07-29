@@ -41,7 +41,6 @@ export class Transfer {
     fee: number = 0;
     chainId: StandardCoinName = null;
     votes: any; // TODO
-    invalidCandidates: any; // TODO
     amount: number = 0;
     publickey: string;
     toAddress: string = 'default';

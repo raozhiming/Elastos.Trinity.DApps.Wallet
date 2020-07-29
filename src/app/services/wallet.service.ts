@@ -38,6 +38,7 @@ import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSync
 import { AppService } from './app.service';
 import { SubWallet, SerializedSubWallet } from '../model/SubWallet';
 import { StandardSubWallet } from '../model/StandardSubWallet';
+import { InvalidVoteCandidatesHelper, InvalidCandidateForVote } from '../model/InvalidVoteCandidatesHelper';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -733,5 +734,28 @@ export class WalletManager {
             this.native.toast_trans('send-raw-transaction');
             this.native.setRootRouter('/wallet-home');
         }
+    }
+
+    /**
+     * Voting requires to provide a list of invalid candidates.
+     * 
+     * Here is an example:
+     * 
+     * The vote information in the last vote transaction is
+     * 1) vote 3 dpos nodes[D1,D2,D3, 3 ELA for each] 
+     * 2) vote proposal[P1, 10 ELA for it] 
+     * 3) impeach CR member[CR-1, 8 ELA for him] 
+     * 4) vote for CR Candidate [C1:2ELA, C2:5ELA]
+     * 
+     * Now we want to vote to against a proposal P2, and deal with the data above, the result will be:
+     * 
+     * 1) check if D1~D3 are valid now. If D3 is unregistered, D3 is illegal and need to pass into invalidCandidates 
+     * 2) check if Proposal P1 is still in Notification. If not, put it into invalidCandidates too. Otherwise, you need to record this data and add it to the new vote payload 
+     * 3) check if CR member CR-1 has been impeached and he is not a CR member now. If he is not a CR member now, we should put CR-1 into invalidCandidates. 
+     * 4) check whether it is in the election period. If it's not in the election period, we need to put C1 and C2 in invalidCandidates.
+     */
+    public async computeVoteInvalidCandidates(masterWalletId: string): Promise<InvalidCandidateForVote[]> {
+        let helper = new InvalidVoteCandidatesHelper(this, masterWalletId);
+        return await helper.computeInvalidCandidates();
     }
 }

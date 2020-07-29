@@ -56,6 +56,7 @@ import { WalletTabSettingsPage } from './pages/wallet/wallet-home/wallet-tab-set
 import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
 import { WalletManager } from './services/wallet.service';
 import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
+import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
 
 const routes: Routes = [
     // Global
@@ -113,6 +114,7 @@ const routes: Routes = [
     { path: 'crmembervote', component: CRmembervotePage },
     { path: 'dposvote', component: DPoSVotePage },
     { path: 'crmemberregister', component: CRMemberRegisterPage },
+    { path: 'crproposalvoteagainst', component: CRProposalVoteAgainstPage }
 ];
 @NgModule({
     imports: [

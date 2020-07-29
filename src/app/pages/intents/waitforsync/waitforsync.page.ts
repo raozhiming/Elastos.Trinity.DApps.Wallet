@@ -94,6 +94,9 @@ export class WaitForSyncPage implements OnInit {
                 this.action = 'text-transfer';
                 this.nextScreen = '/coin-transfer';
                 break;
+            case 'crproposalvoteagainst':
+                this.action = 'Vote against proposal';
+                this.nextScreen = '/crproposalvoteagainst'
             default:
                 console.log('pls check the action');
                 break;
