@@ -73,7 +73,6 @@ export class IntentService {
             case 'crmembervote':
                 console.log('CR member vote Transaction intent content:', intent.params);
                 this.coinTransferService.transfer.votes = intent.params.votes;
-                this.coinTransferService.transfer.invalidCandidates = intent.params.invalidCandidates || '[]';
                 break;
 
             case 'crmemberregister':
@@ -120,9 +119,13 @@ export class IntentService {
                 this.coinTransferService.transfer.type = 'payment-confirm';
                 break;
 
-            case 'createproposaldigest':
+            case 'crproposalcreatedigest':
                 continueToWaitForSync = false;
                 this.handleCreateProposalDigestIntent(intent);
+                break;
+
+            case 'crproposalvoteagainst':
+                this.handleVoteAgainstProposalIntent(intent);
                 break;
 
             default:
@@ -144,10 +147,14 @@ export class IntentService {
         this.native.go('/access');
     }
 
-    sendIntentResponse(action, result, intentId) {
-        appManager.sendIntentResponse(action, result, intentId, () => {
-        }, (err) => {
-            console.error('sendIntentResponse error!', err);
+    sendIntentResponse(action, result, intentId): Promise<void> {
+        return new Promise((resolve, reject)=>{
+            appManager.sendIntentResponse(action, result, intentId, () => {
+                resolve();
+            }, (err) => {
+                console.error('sendIntentResponse error!', err);
+                reject(err);
+            });
         });
     }
 
@@ -164,11 +171,15 @@ export class IntentService {
             let digest = await this.walletManager.spvBridge.proposalOwnerDigest(masterWalletID, StandardCoinName.ELA, intent.params.proposal);
 
             // This is a silent intent, app will close right after calling sendIntentresponse()
-            this.sendIntentResponse("createproposaldigest", {digest: digest}, intent.intentId);
+            this.sendIntentResponse("crproposalcreatedigest", {digest: digest}, intent.intentId);
         }
         else {
             // This is a silent intent, app will close right after calling sendIntentresponse()
-            this.sendIntentResponse("createproposaldigest", "Missing proposal input parameter in the intent", intent.intentId);
+            this.sendIntentResponse("crproposalcreatedigest", "Missing proposal input parameter in the intent", intent.intentId);
         }
+    }
+
+    private async handleVoteAgainstProposalIntent(intent: AppManagerPlugin.ReceivedIntent) {
+        console.log("Handling vote against proposal intent");
     }
 }

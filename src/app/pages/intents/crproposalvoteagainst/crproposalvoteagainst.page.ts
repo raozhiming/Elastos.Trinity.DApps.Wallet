@@ -29,19 +29,19 @@ import { WalletManager } from '../../../services/wallet.service';
 import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { IntentService } from 'src/app/services/intent.service';
+import { WalletAccountType } from 'src/app/model/WalletAccount';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
 @Component({
-  selector: 'app-crmembervote',
-  templateUrl: './crmembervote.page.html',
-  styleUrls: ['./crmembervote.page.scss'],
+  selector: 'app-crproposalvoteagainst',
+  templateUrl: './crproposalvoteagainst.page.html',
+  styleUrls: ['./crproposalvoteagainst.page.scss'],
 })
-export class CRmembervotePage implements OnInit {
+export class CRProposalVoteAgainstPage implements OnInit {
     masterWallet: MasterWallet = null;
     chainId: string; // ELA
     transfer: Transfer = null;
-    votecount = 0;
 
     balance: string; // Balance in SELA
     voteBalanceELA = 0; // ELA
@@ -57,12 +57,12 @@ export class CRmembervotePage implements OnInit {
     }
 
     ionViewDidEnter() {
-        if (this.coinTransferService.walletInfo['Type'] === 'Multi-Sign') {
+        if (this.coinTransferService.walletInfo.Type === WalletAccountType.MULTI_SIGN) {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
             this.appService.close();
         }
 
-        appManager.setVisible("show", ()=>{}, (err)=>{});
+        appManager.setVisible("show");
     }
 
     init() {
@@ -70,22 +70,7 @@ export class CRmembervotePage implements OnInit {
         this.chainId = this.coinTransferService.transfer.chainId;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
 
-        this.parseVotes();
-
         this.hasPendingVoteTransaction();
-    }
-
-    parseVotes() {
-        this.votecount = 0;
-        let voteBalanceSela = 0;
-        for (const key of Object.keys(this.transfer.votes)) {
-            if (this.transfer.votes.hasOwnProperty(key)) {
-                voteBalanceSela += parseInt(this.transfer.votes[key], 10);
-                this.votecount++;
-            }
-        }
-        this.voteBalanceELA = voteBalanceSela / Config.SELA;
-        console.log('totalVotes:', this.voteBalanceELA);
     }
 
     async hasPendingVoteTransaction() {
@@ -103,14 +88,14 @@ export class CRmembervotePage implements OnInit {
      * Cancel the vote operation. Closes the screen and goes back to the calling application after
      * sending the intent response.
      */
-    cancelOperation() {
-        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+    async cancelOperation() {
+        await this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
         this.appService.close();
     }
 
     goTransaction() {
         if (this.checkValue()) {
-            this.createVoteCRTransaction();
+            this.createVoteCRProposalTransaction();
         }
     }
 
@@ -119,11 +104,19 @@ export class CRmembervotePage implements OnInit {
         return true;
     }
 
-    async createVoteCRTransaction() {
-        console.log('Creating vote CR transaction');
-        this.transfer.rawTransaction =  await this.walletManager.spvBridge.createVoteCRTransaction(this.masterWallet.id, this.chainId,
-                '', this.transfer.votes, this.transfer.memo, '[]');
-        // TODO need to check DropVotes
+    async createVoteCRProposalTransaction() {
+        console.log('Creating vote transaction');
+
+        let invalidCandidates = await this.walletManager.computeVoteInvalidCandidates(this.masterWallet.id);
+
+        this.transfer.rawTransaction =  await this.walletManager.spvBridge.createVoteCRCProposalTransaction(
+            this.masterWallet.id, 
+            this.chainId,
+            '', 
+            this.transfer.votes, 
+            this.transfer.memo, 
+            JSON.stringify(invalidCandidates));
+        
         this.walletManager.openPayModal(this.transfer);
     }
 }

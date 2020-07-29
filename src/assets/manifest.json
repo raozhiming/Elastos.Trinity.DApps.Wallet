@@ -71,8 +71,11 @@
             "action": "walletaccess"
         },
         {
-            "action": "createproposaldigest",
+            "action": "crproposalcreatedigest",
             "startup_mode": "silence"
+        },
+        {
+            "action": "crproposalvoteagainst"
         }
     ],
     "startup_service": [
