@@ -107,6 +107,8 @@ export class WalletTabHomePage implements OnInit {
                 return "assets/coins/ela-black.svg";
             case StandardCoinName.IDChain:
                 return "assets/coins/ela-turquoise.svg";
+            case StandardCoinName.ETHSC:
+                return "assets/coins/ela-gray.svg";
             default:
                 return "assets/coins/eth.svg";
         }

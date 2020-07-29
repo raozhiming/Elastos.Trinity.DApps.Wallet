@@ -23,6 +23,7 @@
 import { Injectable } from '@angular/core';
 import { StandardCoinName } from '../model/Coin';
 import { WalletAccount } from '../model/WalletAccount';
+import { SubWallet } from '../model/SubWallet';
 
 export class Transfer {
     action: string = null;
@@ -53,7 +54,13 @@ export class Transfer {
 @Injectable({
     providedIn: 'root'
 })
+
 export class CoinTransferService {
+
+    // By Chain ID
+    public transferFrom: string;
+    public transferTo: string;
+
     // Below fields are shared by several screens operating fund transfers between subwallets.
     // Consider this service as a singleton shared class.
     public transfer: Transfer; // TODO: messy class that embeds too many unrelated things... Split into specific transfer types.

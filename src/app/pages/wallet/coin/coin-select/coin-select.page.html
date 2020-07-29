@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
     <header-bar title="text-coin-list"></header-bar>
 </ion-header>
 
@@ -9,12 +9,43 @@
             <ion-thumbnail>
                 <img src="./assets/images/logo-maincolor.svg"/>
             </ion-thumbnail>
-            <!-- <ion-icon>
-                <img src="./assets/images/logo-maincolor.svg" width="40">
-            </ion-icon> -->
             <ion-label slot="end">
                 {{item.id}}
             </ion-label>
         </ion-item>
     </ion-list>
+</ion-content> -->
+
+<ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <ion-row class="item-row ripple ion-activatable" *ngFor="let item of subWallets" (click)="onItem(item)">
+            <ion-col size="2" class="left-col">
+                <div class="icon-container">
+                    <ion-img [src]="getSubWalletIcon(item)"></ion-img>
+                </div>
+            </ion-col>
+            <ion-col [size]="item.balance === 0 ? 8 : 5" class="middle-col">
+                <div *ngIf="item.id === 'ELA'">
+                    <h1>ELA</h1>
+                    <p>Elastos Mainchain</p>
+                </div>
+                <div *ngIf="item.id === 'IDChain'">
+                    <h1>ELA-DID</h1>
+                    <p>Elastos ID Chain</p>
+                </div>
+                <div *ngIf="item.id === 'ETHSC'">
+                    <h1>ELA-ETH</h1>
+                    <p>Elastos Ethereum Sidechain</p>
+                </div>
+            </ion-col>
+            <ion-col [size]="item.balance === 0 ? 2 : 5" class="right-col">
+                <h1>{{ item.balance/SELA }}</h1>
+                <p>{{ item.progress }}%</p>
+            </ion-col>
+     <!--        <ion-col size="1.25" class="right-col">
+                <img [src]="!theme.darkMode ? 'assets/icons/right-arrow.svg' : 'assets/icons/darkmode/right-arrow.svg'"/>
+            </ion-col> -->
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-row>
+    </ion-grid>
 </ion-content>

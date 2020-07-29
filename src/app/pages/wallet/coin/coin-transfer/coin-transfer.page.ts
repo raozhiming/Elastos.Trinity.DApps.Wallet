@@ -31,6 +31,8 @@ import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
+import { ThemeService } from 'src/app/services/theme.service';
+import { SubWallet } from 'src/app/model/SubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -40,11 +42,15 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./coin-transfer.page.scss'],
 })
 export class CoinTransferPage implements OnInit, OnDestroy {
+
     masterWallet: MasterWallet = null;
     walletType = '';
     transfer: any = null;
 
     chainId: string;
+
+    public transferFrom: SubWallet;
+    public transferTo: SubWallet;
 
     Config = Config;
     SELA = Config.SELA;
@@ -55,9 +61,16 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     hideMemo = false;
     introText = ''; // to show intro text
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
-                public appService: AppService, private coinTransferService: CoinTransferService,
-                public native: Native, public events: Events, public zone: NgZone) {
+    constructor(
+        public route: ActivatedRoute,
+        public walletManager: WalletManager,
+        public appService: AppService,
+        private coinTransferService: CoinTransferService,
+        public native: Native,
+        public events: Events,
+        public zone: NgZone,
+        public theme: ThemeService,
+    ) {
         this.init();
     }
 
@@ -74,6 +87,13 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     init() {
         this.transfer = this.coinTransferService.transfer;
+        if (this.coinTransferService.transfer.type === 'recharge') {
+            this.transferFrom = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.transferFrom);
+            this.transferTo = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.transferTo);
+            console.log('Transferring from..', this.transferFrom);
+            console.log('Transferring To..', this.transferTo);
+        }
+
         this.chainId = this.coinTransferService.transfer.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.events.subscribe('address:update', (address) => {
@@ -200,5 +220,18 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.transfer.memo);
 
         this.walletManager.openPayModal(this.transfer);
+    }
+
+    getCoinIcon(subWallet: SubWallet): string {
+        switch (subWallet.id) {
+            case StandardCoinName.ELA:
+                return "assets/coins/ela-black.svg";
+            case StandardCoinName.IDChain:
+                return "assets/coins/ela-turquoise.svg";
+            case StandardCoinName.ETHSC:
+                return "assets/coins/ela-gray.svg";
+            default:
+                return "assets/coins/eth.svg";
+        }
     }
 }

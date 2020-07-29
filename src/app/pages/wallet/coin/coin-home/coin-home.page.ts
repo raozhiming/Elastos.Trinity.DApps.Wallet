@@ -301,6 +301,7 @@ export class CoinHomePage implements OnInit {
     }
 
     rechargeFunds() {
+        this.coinTransferService.transferFrom = this.chainId;
         this.coinTransferService.transfer.chainId = this.chainId;
         this.coinTransferService.transfer.type = 'recharge';
 

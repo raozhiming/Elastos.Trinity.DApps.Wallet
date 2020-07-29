@@ -12,14 +12,13 @@
 
 <ion-content>
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
-        <ion-img *ngIf="!theme.darkMode" src="assets/coins/ela-black.svg"></ion-img>
-        <ion-img *ngIf="theme.darkMode" src="assets/coins/ela-white.svg"></ion-img>
+        <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
         <div class="qrcode-container">
             <qrcode [qrdata]="qrcode" [size]="150"></qrcode>
         </div>
         <h1>Your ELA Address</h1>
         <h2 *ngIf="qrcode" (click)="copyAddress()">
-            {{ qrcode.slice(0,25) }}<br>{{ qrcode.slice(25,50) }}
+            {{ qrcode.slice(0,20) }}<br>{{ qrcode.slice(20,50) }}
         </h2>
         <p>Tap address to copy</p>
     </ion-grid>
