@@ -63,7 +63,7 @@ export class InvalidVoteCandidatesHelper {
 
     /*
     ORIGINAL CODE FROM THE ELA WALLET:
-    
+
     public JSONArray conversUnactiveVote(String remove, String voteInfo, List<VoteListBean.DataBean.ResultBean.ProducersBean> depositList,
                                          List<CRListBean.DataBean.ResultBean.CrcandidatesinfoBean> crcList, List<ProposalSearchEntity.DataBean.ListBean> voteList, List<CtListBean.Council> councilList) {
         JSONArray otherUnActiveVote = new JSONArray();
@@ -164,7 +164,12 @@ export class InvalidVoteCandidatesHelper {
         let previousVoteInfo = await this.walletManager.spvBridge.getVoteInfo(this.masterWalletId, StandardCoinName.ELA, VoteType.CRCProposal);
         console.log("previousVoteInfo", previousVoteInfo);
 
-        // TODO
+        // TODO:
+        // - For each proposal voted earlier, found in getVoteInfo(), need to fetch the proposal details
+        // from the CR website API, using the proposalHash. 
+        // - All proposal not in the NOTIFICATION state any more should be considered invalid therefore
+        // be added to our list of invalid proposals, so the spv sdk can cleanup stuff.
+        // Now blocked, depends on SPVSDK task https://app.clickup.com/t/3tvqa9
 
         return {
             Type: VoteType.CRCProposal,
