@@ -40,7 +40,6 @@ export class MasterWallet {
         for (let subWallet of Object.values(this.subWallets)) {
             extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
         }
-        
         return extendedInfo;
     }
 

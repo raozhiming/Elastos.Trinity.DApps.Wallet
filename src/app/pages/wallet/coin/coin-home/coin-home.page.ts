@@ -74,8 +74,9 @@ export class CoinHomePage implements OnInit {
 
     private autoFefreshInterval: any;
 
-    Config = Config;
-    SELA = Config.SELA;
+    // Helpers
+    public Util = Util;
+    public SELA = Config.SELA;
 
     constructor(
         public route: ActivatedRoute,
@@ -181,7 +182,7 @@ export class CoinHomePage implements OnInit {
                 const transaction = transactions[key];
                 const timestamp = transaction.Timestamp * 1000;
                 // const datetime = Util.dateFormat(new Date(timestamp), 'MMMM Do YYYY, h:mm:ss a');
-                const datetime = moment(new Date(timestamp)).startOf('day').fromNow();
+                const datetime = moment(new Date(timestamp)).startOf('hour').fromNow();
                 const txId = transaction.TxHash;
                 let payStatusIcon: string = null;
                 let name = '';

@@ -1,0 +1,184 @@
+.container {
+  min-height: 100%;
+  background: #f8f8ff;
+  margin: 0;
+  padding: 15px 20px;
+
+  ion-row {
+      width: 100%;
+  }
+
+  .card-row {
+      position: relative;
+      border-radius: 20px;
+      padding: 25px 20px 20px;
+      margin-bottom: 48px;
+      background-image: url("/assets/cards/card-purple.svg");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;;
+
+      .card-label-row {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+
+          .top-row {
+              padding: 0;
+              margin-bottom: 7.5px;
+
+              ion-col {
+                  display: flex;
+                  align-items: flex-start;
+                  padding: 0;
+              }
+
+              .left-col {
+                  justify-content: flex-start;
+              }
+
+              .right-col {
+                  justify-content: flex-end;
+              }
+          }
+
+          h1, h2, h3, h4 {
+              margin: 0;
+              line-height: 1;
+          }
+
+          h1 {
+              font-size: 16px;
+              font-weight: 600;
+              letter-spacing: 0.32px;
+              color: #ffffff;
+          }
+
+          h2 {
+              font-size: 9px;
+              font-weight: 600;
+              letter-spacing: 0.9px;
+              color: #fdfeff;
+              margin-bottom: 20px;
+          }
+
+          h3 {
+              font-size: 10px;
+              font-weight: 400;
+              letter-spacing: 0.8px;
+              color: #ffffff;
+              margin-bottom: 4px;
+          }
+
+          h4 {
+              font-size: 42px;
+              letter-spacing: 1.05px;
+              line-height: 0.85;
+              font-weight: 500;
+              color: #ffffff;
+              margin-bottom: 15px;
+
+              .dot {
+                  font-size: 49px;
+                  letter-spacing: 1.23px;
+              }
+
+              .decimals {
+                  font-size: 31px;
+                  letter-spacing: 0.78px;
+              }
+
+              .ela {
+                  font-size: 21px;
+                  letter-spacing: 0.53px;
+              }
+          }
+      } 
+
+      .arrow-down {
+        position: absolute;
+        z-index: 0;
+        bottom: -12px;
+        left: 10%;
+        height: 30px;
+        width: 30px;
+        transform: translate(2px, -2px) rotate(-45deg);
+        -webkit-transform: translate(2px, -2px) rotate(-45deg);
+        border-right: 2px solid transparent;
+        border-top: 2px solid transparent;
+        display: inline-block;
+        -moz-transform: translate(2px, -2px) rotate(-45deg);
+        -ms-transform: translate(2px, -2px) rotate(-45deg);
+        -o-transform: translate(2px, -2px) rotate(-45deg);
+        background-color: #752fcf;
+      }
+  }
+
+  .setting-row {
+    width: 100%;
+    border-radius: 17px;
+    padding: 7.5px 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 3px 15px 0 #ededf0;
+    background-color: #ffffff;
+
+    h1, p {
+        margin: 0;
+    }
+
+    h1 {
+        font-size: 17px;
+        font-weight: 500;
+        letter-spacing: 0.9px;
+        text-align: left;
+        color: #000000;
+    }
+
+    p {
+        padding-top: 5px;
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-align: left;
+        color: #000000;
+    }
+  
+    .left-col {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+
+        img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain
+        }
+    }
+  
+    .middle-col, .right-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        overflow: hidden;
+    }
+  
+    .right-col {
+        align-items: flex-end;
+        padding-right: 10px;
+    }
+  } 
+}
+
+.dark-container  {
+  background:#191a2f;
+
+  .setting-row {
+    box-shadow: 0 3px 15px 0 #151626;
+    background-color: #2b2c49;
+
+    h1, p {
+        color: #ffffff;
+    }
+  } 
+}

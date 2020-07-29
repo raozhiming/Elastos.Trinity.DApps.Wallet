@@ -18,8 +18,8 @@
                 </h2>
                 <h3>TOTAL AMOUNT</h3>
                 <h4>
-                    {{ getWholeBalance(walletManager.activeMasterWallet.subWallets[chainId].balance/SELA) }}<span class="dot" *ngIf="walletManager.activeMasterWallet.subWallets[chainId].balance/SELA !== 0">.</span>
-                    <span class="decimals">{{ getDecimalBalance(walletManager.activeMasterWallet.subWallets[chainId].balance/SELA) }}</span>
+                    {{ Util.getWholeBalance(walletManager.activeMasterWallet.subWallets[chainId].balance/SELA) }}<span class="dot" *ngIf="walletManager.activeMasterWallet.subWallets[chainId].balance/SELA !== 0">.</span>
+                    <span class="decimals">{{ Util.getDecimalBalance(walletManager.activeMasterWallet.subWallets[chainId].balance/SELA) }}</span>
                     <span class="ela">  ELA</span>
                 </h4>
             </ion-row>
@@ -48,12 +48,12 @@
             </ion-row>
             <div class="arrow-down"></div>
         </ion-row>
-        <ion-row class="tx-title-row">
+        <ion-row class="list-title-row">
             <ion-col size="12">
-                <h1 id="transaction-label">Transactions</h1>
+                <h1>Transactions</h1>
             </ion-col>
         </ion-row>
-        <ion-row class="tx-row" *ngFor="let item of transferList; let i = index">
+        <ion-row class="item-row ripple ion-activatable" *ngFor="let item of transferList; let i = index">
             <ion-col size="2" class="left-col">
                 <div class="icon-container receive">
                     <ion-img [src]="item.payStatusIcon"></ion-img>
@@ -66,6 +66,7 @@
             <ion-col size="5" class="right-col">
                 <h1>{{ item.symbol }}{{ item.resultAmount }}</h1>
             </ion-col>
+            <ion-ripple-effect></ion-ripple-effect>
         </ion-row>
     </ion-grid> 
 

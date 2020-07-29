@@ -112,25 +112,25 @@
                     </ion-row>
                     <h2></h2>
                     <h3>TOTAL AMOUNT</h3>
-                    <h4>{{ getWholeBalance(walletManager.activeMasterWallet.getBalance()/SELA) }}<span class="dot">.</span>
-                        <span class="decimals">{{ getDecimalBalance(walletManager.activeMasterWallet.getBalance()/SELA) }}</span>
+                    <h4>{{ Util.getWholeBalance(walletManager.activeMasterWallet.getBalance()/SELA) }}<span class="dot" *ngIf="walletManager.activeMasterWallet.getBalance()/SELA !== 0">.</span>
+                        <span class="decimals">{{ Util.getDecimalBalance(walletManager.activeMasterWallet.getBalance()/SELA) }}</span>
                         <span class="ela">  ELA</span>
                     </h4>
                 </ion-row>
                 <div class="arrow-down"></div>
             </ion-row>
-            <ion-row class="tx-title-row">
+            <ion-row class="list-title-row">
                 <ion-col size="12">
                     <h1>Coin List</h1>
                 </ion-col>
             </ion-row>
-            <ion-row class="tx-row" *ngFor="let subWallet of walletManager.activeMasterWallet.getSubWallets()" [routerLink]="['/coin', subWallet.id]">
+            <ion-row class="item-row ripple ion-activatable" *ngFor="let subWallet of walletManager.activeMasterWallet.getSubWallets()" [routerLink]="['/coin', subWallet.id]">
                 <ion-col size="2" class="left-col">
                     <div class="icon-container">
                         <ion-img [src]="getSubWalletIcon(subWallet)"></ion-img>
                     </div>
                 </ion-col>
-                <ion-col size="5" class="middle-col">
+                <ion-col [size]="subWallet.balance === 0 ? 8 : 5" class="middle-col">
                     <div *ngIf="subWallet.id === 'ELA'">
                         <h1>ELA</h1>
                         <p>Elastos Mainchain</p>
@@ -144,10 +144,11 @@
                         <p>Elastos Ethereum Sidechain</p>
                     </div>
                 </ion-col>
-                <ion-col size="5" class="right-col">
+                <ion-col [size]="subWallet.balance === 0 ? 2 : 5" class="right-col">
                     <h1>{{ subWallet.balance/SELA }}</h1>
                     <p>{{ subWallet.progress }}%</p>
                 </ion-col>
+                <ion-ripple-effect></ion-ripple-effect>
             </ion-row>
         </ion-slide>
     </ion-slides>

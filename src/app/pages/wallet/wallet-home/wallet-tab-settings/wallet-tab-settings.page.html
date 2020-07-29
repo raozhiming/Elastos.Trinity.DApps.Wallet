@@ -5,7 +5,7 @@
                 <p>General</p>
             </ion-col>
         </ion-row>
-        <ion-row class="setting-row"  *ngFor="let item of settings" detail [routerLink]="[item.route]" routerDirection="forward">
+        <ion-row class="setting-row ripple ion-activatable"  *ngFor="let item of settings" detail [routerLink]="[item.route]" routerDirection="forward">
             <ion-col size="1.25" class="left-col">
                 <img [src]="!theme.darkMode ? item.icon : item.iconDarkmode"/>
             </ion-col>
@@ -16,6 +16,7 @@
             <ion-col size="1.25" class="right-col">
                 <img [src]="!theme.darkMode ? 'assets/icons/right-arrow.svg' : 'assets/icons/darkmode/right-arrow.svg'"/>
             </ion-col>
+            <ion-ripple-effect></ion-ripple-effect>
         </ion-row>
     </ion-grid>
 </ion-content>

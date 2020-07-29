@@ -22,7 +22,7 @@ export const en = {
     'launcher-warning': 'This wallet is stable but still being tested at the moment. You may avoid using large amounts of ELA for now.',
     'text-wallet-export': 'Export Wallet',
     'text-down': 'backup wallet',
-    'text-wallet-manager': 'Wallet Setting',
+    'text-wallet-manager': 'Wallet Settings',
     'coin-recent-transfer': 'Recent Transfers',
     'text-receive': 'Receive',
     'text-transfer': 'Send',

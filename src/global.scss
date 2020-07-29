@@ -57,6 +57,11 @@
   font-family: 'Montserrat' !important;
 }
 
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
 :focus {
   outline: none;
 }

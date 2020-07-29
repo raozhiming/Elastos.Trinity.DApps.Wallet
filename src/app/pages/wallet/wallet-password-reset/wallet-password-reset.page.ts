@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider} from '../../../services/popup.service';
 import { Util } from '../../../model/Util';
 import { WalletManager } from '../../../services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
     selector: 'app-wallet-password-reset',
@@ -14,21 +14,25 @@ import { WalletEditionService } from 'src/app/services/walletedition.service';
     styleUrls: ['./wallet-password-reset.page.scss'],
 })
 export class WalletPasswordResetPage implements OnInit {
-    masterWalletId = '';
-    oldPayPassword = '';
-    payPassword: string;
-    rePayPassword: string;
+
+    private masterWalletId: string = '';
+    public oldPayPassword: string = '';
+    public payPassword: string = '';
+    public rePayPassword: string = '';
 
     public useFingerprintAuthentication: boolean = false;
     public fingerprintPluginAuthenticationOnGoing: boolean = false;
     public fingerprintAuthenticationIsAvailable: boolean = false;
 
-    constructor(public route: ActivatedRoute,
-                public walletManager: WalletManager,
-                private authService: AuthService,
-                public popupProvider: PopupProvider,
-                private walletEditionService: WalletEditionService,
-                public native: Native) {
+    constructor(
+        public route: ActivatedRoute,
+        public walletManager: WalletManager,
+        private authService: AuthService,
+        public popupProvider: PopupProvider,
+        private walletEditionService: WalletEditionService,
+        public native: Native,
+        public theme: ThemeService
+    ) {
         this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
     }
 
@@ -46,7 +50,7 @@ export class WalletPasswordResetPage implements OnInit {
 
     async onSubmit() {
         if (!Util.password(this.payPassword)) {
-            this.native.toast_trans("text-pwd-validator");
+                this.native.toast_trans("text-pwd-validator");
             return;
         }
         if (this.payPassword !== this.rePayPassword) {
@@ -96,6 +100,10 @@ export class WalletPasswordResetPage implements OnInit {
     async disableFingerprintAuthentication() {
         this.useFingerprintAuthentication = false;
         await this.authService.deactivateFingerprintAuthentication(this.masterWalletId);
+    }
+
+    passwordsMatch() {
+        return this.payPassword === this.rePayPassword;
     }
 
 }

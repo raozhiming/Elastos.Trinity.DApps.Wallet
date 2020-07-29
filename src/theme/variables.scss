@@ -3,12 +3,12 @@
 
 :root {
   /** primary **/
-  --ion-color-primary: linear-gradient(to left, #646bed 99%, #6a3de6 1%);
-  --ion-color-primary-rgb: 90,98,255;
+  --ion-color-primary: linear-gradient(to bottom, #732dcf, #640fd4);
+  --ion-color-primary-rgb: 115,45,207;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255,255,255;
-  --ion-color-primary-shade: #4f56e0;
-  --ion-color-primary-tint: #6b72ff;
+  --ion-color-primary-shade: #6528b6;
+  --ion-color-primary-tint: #8142d4;
 
   /** secondary **/
   --ion-color-secondary: #0cd1e8;
@@ -87,12 +87,12 @@
  */
 
  body.dark {
-  --ion-color-primary: #428cff;
-  --ion-color-primary-rgb: 66,140,255;
+  --ion-color-primary: linear-gradient(to bottom, #732dcf, #640fd4);
+  --ion-color-primary-rgb: 115,45,207;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255,255,255;
-  --ion-color-primary-shade: #3a7be0;
-  --ion-color-primary-tint: #5598ff;
+  --ion-color-primary-shade: #6528b6;
+  --ion-color-primary-tint: #8142d4;
 
   --ion-color-secondary: #50c8ff;
   --ion-color-secondary-rgb: 80,200,255;

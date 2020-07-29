@@ -282,4 +282,14 @@ export class Util {
 
         return uuid.join('');
     }
+
+    public static getWholeBalance(balance: number): number {
+        return Math.trunc(balance);
+    }
+
+    public static getDecimalBalance(balance: number): string {
+        let decimalBalance = balance - Math.trunc(balance);
+        decimalBalance.toFixed(5);
+        return decimalBalance.toLocaleString().slice(2, 6);
+    }
 }

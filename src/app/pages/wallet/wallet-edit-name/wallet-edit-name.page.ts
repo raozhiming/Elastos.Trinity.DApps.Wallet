@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
+import { ThemeService } from 'src/app/services/theme.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
     selector: 'app-wallet-edit-name',
@@ -15,19 +17,30 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
     styleUrls: ['./wallet-edit-name.page.scss'],
 })
 export class WalletEditNamePage implements OnInit {
+
     public walletname: string = "";
     public masterWallet: MasterWallet = null;
-    
-    constructor(public route: ActivatedRoute, public native: Native, public localStorage: LocalStorage, 
-        public events: Events, private walletManager: WalletManager,
-        private walletEditionService: WalletEditionService) {
 
+    constructor(
+        public route: ActivatedRoute,
+        public native: Native,
+        public localStorage: LocalStorage,
+        public events: Events,
+        private walletManager: WalletManager,
+        private walletEditionService: WalletEditionService,
+        private appService: AppService,
+        public theme: ThemeService
+    ) {
         this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
         this.walletname = this.walletManager.masterWallets[this.masterWallet.id].name;
     }
 
     ngOnInit() {
         console.log('ngOnInit ModifywalletnamePage');
+    }
+
+    ionViewWillEnter() {
+        this.appService.setTitleBarTitle('Change Wallet Name');
     }
 
     modify() {

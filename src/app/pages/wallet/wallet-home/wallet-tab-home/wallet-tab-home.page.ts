@@ -31,6 +31,7 @@ import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { SubWallet } from 'src/app/model/SubWallet';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
+import { Util } from '../../../../model/Util';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -40,9 +41,11 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./wallet-tab-home.page.scss'],
 })
 export class WalletTabHomePage implements OnInit {
+
+    public Util = Util;
+    public SELA = Config.SELA;
+
     showOn = true;
-    Config = Config;
-    SELA = Config.SELA;
 
     constructor(
         public native: Native,

@@ -175,7 +175,7 @@
     
     }
 
-    .tx-title-row {
+    .list-title-row {
         margin-bottom: 10px;
         margin-left: 5px;
   
@@ -190,7 +190,7 @@
         }
     }
 
-    .tx-row {
+    .item-row {
         width: 100%;
         border-radius: 17px;
         padding-top: 7.5px;
@@ -291,16 +291,13 @@
         }
     }
 
-    .card-row {
-    }
-
-    .tx-title-row {
+    .list-title-row {
         h1 {
             color: #ffffff;
         }
     }
 
-    .tx-row {
+    .item-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
 
@@ -310,7 +307,7 @@
     }
 }
 
-.coin-info-top-box {
+/* .coin-info-top-box {
     text-align: center;
     margin-top: px2rem(52px);
     h2 {
@@ -383,4 +380,4 @@ ion-button {
     width: px2rem(220px);
     height: px2rem(84px);
     --background: #783aff;
-}
+} */

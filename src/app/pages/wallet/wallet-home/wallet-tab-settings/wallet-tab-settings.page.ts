@@ -23,6 +23,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../../../services/app.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { Util } from '../../../../model/Util';
 
 @Component({
     selector: 'app-wallet-tab-settings',
@@ -49,6 +50,8 @@ export class WalletTabSettingsPage implements OnInit {
             iconDarkmode: '/assets/settings/darkmode/wallet.svg'
         },
     ];
+
+    public Util = Util;
 
   /*   public settings = [
         {

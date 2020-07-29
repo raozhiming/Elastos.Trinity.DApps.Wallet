@@ -45,10 +45,13 @@ ion-slides {
     
         .card-row {
             position: relative;
-            background-color: #7e41ce;
             border-radius: 20px;
             padding: 25px 20px 20px;
             margin-bottom: 32px;
+            // background-image: url("/assets/cards/card-purple.svg");
+            background-image: url("/assets/cards/card-purple.svg");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
     
             .card-label-row {
                 display: flex;
@@ -131,7 +134,7 @@ ion-slides {
             .arrow-down {
                 position: absolute;
                 z-index: 0;
-                bottom: -15px;
+                bottom: -12px;
                 left: 10%;
                 height: 30px;
                 width: 30px;
@@ -143,12 +146,11 @@ ion-slides {
                 -moz-transform: translate(2px, -2px) rotate(-45deg);
                 -ms-transform: translate(2px, -2px) rotate(-45deg);
                 -o-transform: translate(2px, -2px) rotate(-45deg);
-                background-color: #7e41ce;
+                background-color: #752fcf;
             }
-        
         }
     
-        .tx-title-row {
+        .list-title-row {
             margin-bottom: 10px;
             margin-left: 5px;
       
@@ -163,7 +165,7 @@ ion-slides {
             }
         }
     
-        .tx-row {
+        .item-row {
             width: 100%;
             border-radius: 17px;
             padding-top: 7.5px;
@@ -244,16 +246,13 @@ ion-slides {
             }
         }
     
-        .card-row {
-        }
-    
-        .tx-title-row {
+        .list-title-row {
             h1 {
                 color: #ffffff;
             }
         }
     
-        .tx-row {
+        .item-row {
             box-shadow: 0 3px 15px 0 #151626;
             background-color: #2b2c49;
     
@@ -265,18 +264,7 @@ ion-slides {
 }
     
 
-@import "../../../../functions.scss";
-// #rect {
-//     position:absolute;
-//     left: 0;
-//     top: 0;
-//     margin-left: px2rem(45px);
-//     margin-right: px2rem(45px);
-//     margin-top: px2rem(11px);
-//     width: px2rem(660px);
-//     height: px2rem(324px);
-//     z-index: -1;
-// }
+/* @import "../../../../functions.scss";
 
 #home-top-box {
     margin-left: px2rem(45px);
@@ -406,4 +394,4 @@ button {
 }
 .home-eye-on {
     background-image: url("../../../../../assets/images/icon/icon-eye-on.svg");
-}
+} */

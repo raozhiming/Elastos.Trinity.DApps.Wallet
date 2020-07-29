@@ -1,3 +1,125 @@
-p {
-    color: #666666;
+.container {
+    min-height: 100%;
+    background: #f8f8ff;
+    margin: 0;
+    padding: 15px 20px;
+
+    ion-row {
+        width: 100%;
+    }
+  
+    .main-title-row {
+        padding: 10px 15px;
+  
+        h1 {
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 1.26;
+            letter-spacing: -0.46px;
+            text-align: center;
+            color: #000000;
+            margin: 0 0 10px 0;
+        }
+    }
+
+    .card-row {
+        border-radius: 20px;
+        padding: 25px 20px 20px;
+        margin-bottom: 7.5px;
+        // background-image: url("/assets/cards/card-purple.svg");
+        background-image: url("/assets/cards/card-purple.svg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+
+        .card-label-row {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            .top-row {
+                padding: 0;
+                margin-bottom: 7.5px;
+
+                ion-col {
+                    display: flex;
+                    align-items: flex-start;
+                    padding: 0;
+                }
+
+                .left-col {
+                    justify-content: flex-start;
+                }
+
+                .right-col {
+                    justify-content: flex-end;
+                }
+            }
+
+            h1, h2, h3, h4 {
+                margin: 0;
+                line-height: 1;
+            }
+
+            h1 {
+                font-size: 16px;
+                font-weight: 600;
+                letter-spacing: 0.32px;
+                color: #ffffff;
+            }
+
+            h2 {
+                font-size: 9px;
+                font-weight: 600;
+                letter-spacing: 0.9px;
+                color: #fdfeff;
+                margin-bottom: 20px;
+            }
+
+            h3 {
+                font-size: 10px;
+                font-weight: 400;
+                letter-spacing: 0.8px;
+                color: #ffffff;
+                margin-bottom: 4px;
+            }
+
+            h4 {
+                font-size: 42px;
+                letter-spacing: 1.05px;
+                line-height: 0.85;
+                font-weight: 500;
+                color: #ffffff;
+                margin-bottom: 15px;
+
+                .dot {
+                    font-size: 49px;
+                    letter-spacing: 1.23px;
+                }
+
+                .decimals {
+                    font-size: 31px;
+                    letter-spacing: 0.78px;
+                }
+
+                .ela {
+                    font-size: 21px;
+                    letter-spacing: 0.53px;
+                }
+            }
+        } 
+    }
+}
+
+.dark-container  {
+    background:#191a2f;
+  
+    .main-title-row {
+        h1 {
+            color: #ffffff;
+        }
+    }
+
+    .card-row {
+    }
 }
