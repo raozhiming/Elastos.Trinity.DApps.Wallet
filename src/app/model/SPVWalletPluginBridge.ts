@@ -83,6 +83,11 @@ export type CRProposalVoteInfo = VoteInfo & {
     }
 }
 
+export type AllAddresses = {
+    Addresses: string[];
+    MaxCount: number;
+}
+
 export class SPVWalletPluginBridge {
     constructor(private native: Native, private event: Events, private popupProvider: PopupProvider) {
     }
@@ -314,9 +319,9 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    getAllAddresses(masterWalletId: string, chainId: string, start: number): Promise<string[]> {
+    getAllAddresses(masterWalletId: string, chainId: string, start: number, internal: boolean): Promise<AllAddresses> {
         return new Promise(async (resolve, reject) => {
-            walletManager.getAllAddress([masterWalletId, chainId, start, 20],
+            walletManager.getAllAddress([masterWalletId, chainId, start, 20, internal],
                 (ret) => { resolve(ret); },
                 (err) => { this.handleError(err, reject);  });
         });
@@ -601,8 +606,8 @@ export class SPVWalletPluginBridge {
     getVoteInfo(masterWalletId: string, chainId: string, type: string): Promise<VoteInfo[]> {
         return new Promise(async (resolve, reject) => {
             walletManager.getVoteInfo([masterWalletId, chainId, type],
-                (ret) => { 
-                    resolve(JSON.parse(ret) as VoteInfo[]); 
+                (ret) => {
+                    resolve(JSON.parse(ret) as VoteInfo[]);
                 },
                 (err) => { this.handleError(err, reject);  });
         });

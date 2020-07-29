@@ -22,6 +22,8 @@ export abstract class SubWallet {
     public lastBlockTime: string = null;
     public timestamp: number = -1;
     public progress: number = 0;
+    public balanceByRPC: number = 0;
+    public timestampRPC: number = 0;
 
     private events: Events;
 

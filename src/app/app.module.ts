@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -176,6 +177,7 @@ export function TranslateLoaderFactory() {
     ],
     imports: [
         BrowserModule,
+        HttpClientModule,
         IonicModule.forRoot({
             mode: 'ios',
             scrollAssist: false,

@@ -34,7 +34,9 @@
         "PasswordManagerPlugin",
         "Wallet"
     ],
-    "urls": [],
+    "urls": [
+      "http://api.elastos.io/*"
+  ],
     "framework": [
         "ionic@4.12.0"
     ],

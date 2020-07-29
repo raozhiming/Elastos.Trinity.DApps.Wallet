@@ -21,25 +21,27 @@
  */
 
 import { Injectable, NgZone } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Events, ModalController, Platform } from '@ionic/angular';
-import { Config } from '../config/Config';
-import { Native } from './native.service';
-import { PopupProvider } from './popup.service';
-import { Util } from '../model/Util';
 import { TranslateService } from '@ngx-translate/core';
-import { LocalStorage } from './storage.service';
+import moment from 'moment';
+
 import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult } from '../model/SPVWalletPluginBridge';
 import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
 import { MasterWallet, WalletID } from '../model/MasterWallet';
 import { StandardCoinName, CoinType } from '../model/Coin';
-import { CoinService } from './coin.service';
+import { Util } from '../model/Util';
 import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
-import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
 import { AppService } from './app.service';
 import { SubWallet, SerializedSubWallet } from '../model/SubWallet';
 import { StandardSubWallet } from '../model/StandardSubWallet';
 import { InvalidVoteCandidatesHelper, InvalidCandidateForVote } from '../model/InvalidVoteCandidatesHelper';
-import { HttpClient } from '@angular/common/http';
+import { CoinService } from './coin.service';
+import { JsonRPCService } from './jsonrpc.service';
+import { PopupProvider } from './popup.service';
+import { Native } from './native.service';
+import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
+import { LocalStorage } from './storage.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -96,7 +98,8 @@ export class WalletManager {
         private syncService: SPVSyncService,
         private coinService: CoinService,
         public popupProvider: PopupProvider,
-        private http: HttpClient
+        private http: HttpClient,
+        public jsonRPCService: JsonRPCService
     ) {
     }
 
@@ -112,6 +115,7 @@ export class WalletManager {
             appManager.setListener((message) => {
                 this.handleAppManagerMessage(message);
             });
+            this.jsonRPCService.init();
         }
 
         try {
@@ -496,6 +500,8 @@ export class WalletManager {
                         this.updateSyncProgress(masterId, chainId, progress, lastBlockTime);
                     }
                 }
+
+                this.getAllSubwalletsBalanceByRPC();
                 break;
             default:
                 break;
@@ -740,24 +746,137 @@ export class WalletManager {
 
     /**
      * Voting requires to provide a list of invalid candidates.
-     * 
+     *
      * Here is an example:
-     * 
+     *
      * The vote information in the last vote transaction is
-     * 1) vote 3 dpos nodes[D1,D2,D3, 3 ELA for each] 
-     * 2) vote proposal[P1, 10 ELA for it] 
-     * 3) impeach CR member[CR-1, 8 ELA for him] 
+     * 1) vote 3 dpos nodes[D1,D2,D3, 3 ELA for each]
+     * 2) vote proposal[P1, 10 ELA for it]
+     * 3) impeach CR member[CR-1, 8 ELA for him]
      * 4) vote for CR Candidate [C1:2ELA, C2:5ELA]
-     * 
+     *
      * Now we want to vote to against a proposal P2, and deal with the data above, the result will be:
-     * 
-     * 1) check if D1~D3 are valid now. If D3 is unregistered, D3 is illegal and need to pass into invalidCandidates 
-     * 2) check if Proposal P1 is still in Notification. If not, put it into invalidCandidates too. Otherwise, you need to record this data and add it to the new vote payload 
-     * 3) check if CR member CR-1 has been impeached and he is not a CR member now. If he is not a CR member now, we should put CR-1 into invalidCandidates. 
+     *
+     * 1) check if D1~D3 are valid now. If D3 is unregistered, D3 is illegal and need to pass into invalidCandidates
+     * 2) check if Proposal P1 is still in Notification. If not, put it into invalidCandidates too. Otherwise, you need to record this data and add it to the new vote payload
+     * 3) check if CR member CR-1 has been impeached and he is not a CR member now. If he is not a CR member now, we should put CR-1 into invalidCandidates.
      * 4) check whether it is in the election period. If it's not in the election period, we need to put C1 and C2 in invalidCandidates.
      */
     public async computeVoteInvalidCandidates(masterWalletId: string): Promise<InvalidCandidateForVote[]> {
         let helper = new InvalidVoteCandidatesHelper(this.http, this, masterWalletId);
         return await helper.computeInvalidCandidates();
+    }
+
+    async getAllSubwalletsBalanceByRPC() {
+        let currentTimestamp = moment(new Date()).valueOf() / 1000;
+        let onedayago = moment(new Date()).add(-1, 'days').valueOf() / 1000;
+        let activeMasterId = this.activeMasterWallet ? this.activeMasterWallet.id : null;
+
+        for (let subWallet of Object.values(this.getMasterWallet(activeMasterId).subWallets)) {
+            if (subWallet.type === CoinType.STANDARD) {
+                // Get balance by RPC if the last block time is one day ago.
+                if (parseInt(subWallet.lastBlockTime, 10) < onedayago) {
+                    let balance = await this.getBalanceByRPC(activeMasterId, subWallet.id as StandardCoinName);
+                    subWallet.balanceByRPC = balance;
+                    subWallet.timestampRPC = currentTimestamp;
+                }
+            }
+        }
+    }
+
+    //
+    async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
+        if (chainID === StandardCoinName.ETHSC) {
+            console.log('getBalanceByRPC for ETHSC is not ready');
+            return;
+        }
+        console.log('TIMETEST getBalanceByRPC start');
+
+        // If the balance of 20 consecutive addresses is 0, then end the query
+        let maxBlanks = 20;
+        // In order to calculate blanks
+        let maxInternalBlanks = 0;
+        let maxExternalBlanks = 0;
+
+        let startIndex = 0;
+        let totalBalance = 0.0;
+        let totalRequestCount = 0;
+        let consecutiveBlanks = 0;
+
+        // internal address
+        while (consecutiveBlanks <= maxBlanks) {
+            const addressArray = await this.spvBridge.getAllAddresses(masterWalletID, chainID, startIndex, true);
+            startIndex += addressArray.Addresses.length;
+
+            if (addressArray.Addresses.length === 0) {
+                break;
+            }
+
+            for (const address of addressArray.Addresses) {
+                const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
+                totalBalance += balance;
+
+                if (balance < 0.00000001) {
+                    consecutiveBlanks++;
+                    if (consecutiveBlanks >= maxBlanks) {
+                        break;
+                    }
+                } else {
+                    if (maxInternalBlanks < consecutiveBlanks) maxInternalBlanks = consecutiveBlanks;
+                    consecutiveBlanks = 0;
+                }
+                totalRequestCount++;
+            }
+        }
+
+        // external address for user
+        let currentReceiveAddress = await this.spvBridge.createAddress(masterWalletID, chainID);
+        let currentReceiveAddressIndex = -1;
+        let startCheckBlanks = false;
+
+        consecutiveBlanks = 0;
+        startIndex = 0;
+        maxBlanks = 0; // query the balance until the current receive address.
+        while (consecutiveBlanks <= maxBlanks) {
+            const addressArray = await this.spvBridge.getAllAddresses(masterWalletID, chainID, startIndex, false);
+            if (addressArray.Addresses.length === 0) {
+                break;
+            }
+
+            if (currentReceiveAddressIndex === -1) {
+                currentReceiveAddressIndex = addressArray.Addresses.findIndex((address) => (address === currentReceiveAddress));
+                if (currentReceiveAddressIndex !== -1) {
+                    currentReceiveAddressIndex += startIndex;
+                    startCheckBlanks = true;
+                }
+            }
+
+            startIndex += addressArray.Addresses.length;
+            for (const address of addressArray.Addresses) {
+                const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
+                totalBalance += balance;
+
+                if (startCheckBlanks && totalRequestCount > currentReceiveAddressIndex) {
+                    if (balance < 0.00000001) {
+                        consecutiveBlanks++;
+                        if (consecutiveBlanks > maxBlanks) {
+                            break;
+                        }
+                    } else {
+                        if (maxExternalBlanks < consecutiveBlanks) maxExternalBlanks = consecutiveBlanks;
+                        consecutiveBlanks = 0;
+                    }
+                }
+                totalRequestCount++;
+            }
+        }
+
+        console.log('TIMETEST getBalanceByRPC end');
+        console.log('getBalanceByRPC totalBalance:', totalBalance,
+                ' totalRequestCount:', totalRequestCount,
+                ' maxInternalBlanks:', maxInternalBlanks,
+                ' maxExternalBlanks:', maxExternalBlanks);
+
+        return totalBalance;
     }
 }
