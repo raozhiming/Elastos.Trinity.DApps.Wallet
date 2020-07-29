@@ -86,6 +86,7 @@ import * as Sentry from "@sentry/browser";
 import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
 import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
 import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
+import { HttpClientModule } from '@angular/common/http';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -184,6 +185,7 @@ export function TranslateLoaderFactory() {
         IonicStorageModule,
         FormsModule,
         ComponentsModule,
+        HttpClientModule,
         IonicStorageModule.forRoot({
             name: '__walletdb',
             driverOrder: ['localstorage', 'indexeddb', 'sqlite', 'websql']

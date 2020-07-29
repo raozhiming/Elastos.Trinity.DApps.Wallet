@@ -39,6 +39,7 @@ import { AppService } from './app.service';
 import { SubWallet, SerializedSubWallet } from '../model/SubWallet';
 import { StandardSubWallet } from '../model/StandardSubWallet';
 import { InvalidVoteCandidatesHelper, InvalidCandidateForVote } from '../model/InvalidVoteCandidatesHelper';
+import { HttpClient } from '@angular/common/http';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -94,7 +95,8 @@ export class WalletManager {
         private appService: AppService,
         private syncService: SPVSyncService,
         private coinService: CoinService,
-        public popupProvider: PopupProvider
+        public popupProvider: PopupProvider,
+        private http: HttpClient
     ) {
     }
 
@@ -755,7 +757,7 @@ export class WalletManager {
      * 4) check whether it is in the election period. If it's not in the election period, we need to put C1 and C2 in invalidCandidates.
      */
     public async computeVoteInvalidCandidates(masterWalletId: string): Promise<InvalidCandidateForVote[]> {
-        let helper = new InvalidVoteCandidatesHelper(this, masterWalletId);
+        let helper = new InvalidVoteCandidatesHelper(this.http, this, masterWalletId);
         return await helper.computeInvalidCandidates();
     }
 }

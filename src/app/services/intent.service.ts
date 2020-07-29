@@ -181,5 +181,10 @@ export class IntentService {
 
     private async handleVoteAgainstProposalIntent(intent: AppManagerPlugin.ReceivedIntent) {
         console.log("Handling vote against proposal intent");
+
+        // Let the screen know for which proposal we want to vote against
+        this.coinTransferService.transfer.votes = [
+            intent.params.proposalHash
+        ]
     }
 }

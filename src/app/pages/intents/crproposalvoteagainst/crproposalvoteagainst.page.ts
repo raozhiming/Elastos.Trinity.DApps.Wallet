@@ -30,6 +30,8 @@ import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.ser
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { IntentService } from 'src/app/services/intent.service';
 import { WalletAccountType } from 'src/app/model/WalletAccount';
+import { StandardCoinName } from 'src/app/model/Coin';
+import { VoteType, CRProposalVoteInfo } from 'src/app/model/SPVWalletPluginBridge';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -56,13 +58,17 @@ export class CRProposalVoteAgainstPage implements OnInit {
     ngOnInit() {
     }
 
-    ionViewDidEnter() {
+    async ionViewDidEnter() {
         if (this.coinTransferService.walletInfo.Type === WalletAccountType.MULTI_SIGN) {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
             this.appService.close();
         }
 
         appManager.setVisible("show");
+
+        // TMP BPI TEST
+        let previousVoteInfo = await this.walletManager.spvBridge.getVoteInfo(this.masterWallet.id, StandardCoinName.ELA, VoteType.CRCProposal) as CRProposalVoteInfo[];
+        console.log("previousVoteInfo", previousVoteInfo);
     }
 
     init() {
@@ -70,7 +76,18 @@ export class CRProposalVoteAgainstPage implements OnInit {
         this.chainId = this.coinTransferService.transfer.chainId;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
 
+        this.fetchBalance();
+
         this.hasPendingVoteTransaction();
+    }
+
+    async fetchBalance() {
+        let balance = await this.walletManager.spvBridge.getBalance(this.masterWallet.id, this.chainId);
+
+        this.zone.run(()=>{
+            console.log("Received balance:", balance);
+            this.balance = balance;
+        });
     }
 
     async hasPendingVoteTransaction() {
@@ -104,16 +121,59 @@ export class CRProposalVoteAgainstPage implements OnInit {
         return true;
     }
 
+    elaToSELAString(elaAmount: number) {
+        let integerPart = Math.trunc(elaAmount);
+        let fracPart = elaAmount - integerPart;
+
+        let integerPartString = integerPart.toString();
+        let fracPartString = Math.trunc(fracPart*Config.SELA).toString();
+
+        return integerPartString+fracPartString;
+    }
+
+    // 15950000000 SELA will give 159.5 ELA
+    // We need to use this trick because JS is limited to 2^53 bits numbers and this could create
+    // problems with big ELA amounts.
+    getBalanceInELA(): number {
+        if (!this.balance)
+            return 0;
+
+        let strSizeOfSELA = 8;
+        let leftPart = this.balance.substr(0, this.balance.length-strSizeOfSELA);
+        let rightPart = this.balance.substr(this.balance.length-strSizeOfSELA);
+
+        let elaAmount = Number(leftPart) + Number(rightPart)/Config.SELA;
+        return elaAmount;
+    }
+
+    /**
+     * Fees needed to pay for the vote transaction. They have to be deduced from the total amount otherwise
+     * funds won't be enough to vote.
+     */
+    votingFees(): number {
+        return 0.001; // ELA
+    }
+
+    private getActualVoteAmount(): string {
+        return this.elaToSELAString(this.getBalanceInELA() - this.votingFees());
+    }
+
     async createVoteCRProposalTransaction() {
-        console.log('Creating vote transaction');
+        console.log('Creating vote transaction', this.transfer);
 
         let invalidCandidates = await this.walletManager.computeVoteInvalidCandidates(this.masterWallet.id);
+
+        // The transfer "votes" array must contain exactly ONE entry: the voted proposal
+        // TODO: don't use a votes array in a global transfer object. Use a custom object for CR proposal voting.
+        let votes = {}
+        votes[this.transfer.votes[0]] = this.getActualVoteAmount(); // Vote with everything
+        console.log("Vote:", votes);
 
         this.transfer.rawTransaction =  await this.walletManager.spvBridge.createVoteCRCProposalTransaction(
             this.masterWallet.id, 
             this.chainId,
             '', 
-            this.transfer.votes, 
+            JSON.stringify(votes),
             this.transfer.memo, 
             JSON.stringify(invalidCandidates));
         
