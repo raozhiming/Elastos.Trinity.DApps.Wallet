@@ -38,16 +38,15 @@
     .card-row {
         position: relative;
         width: 100%;
-        // opacity: 0.69;
-        // background-color: #000000;
-        background-color: #343434;
         border-radius: 20px;
         padding: 25px 20px 15px;
         margin-bottom: 32px;
- /*        background-image: url("/assets/cards/card-purple.svg");
-        background-repeat: no-repeat;
-        background-size: 100% 100%; */
 
+        // Default background
+        background-image: url("/assets/cards/subcards/card-black.svg");
+        background-repeat: no-repeat;
+        background-size: cover;
+     
         .card-label-row {
             display: flex;
             flex-direction: column;
@@ -169,10 +168,70 @@
             -moz-transform: translate(2px, -2px) rotate(-45deg);
             -ms-transform: translate(2px, -2px) rotate(-45deg);
             -o-transform: translate(2px, -2px) rotate(-45deg);
-            // background-color: #000000;
-            background-color: #343434;
+            // Default color
+            background-color: #242424
         }
-    
+    }
+
+    .black-card {
+        background-image: url("/assets/cards/subcards/card-black.svg");
+
+        .card-btn-row {
+            ion-col {
+                .btn-box {
+                    background-color:  #adadad;
+                }
+            }
+        }
+
+        .arrow-down {
+            background-color: #242424
+        }
+    }
+    .blue-card {
+        background-image: url("/assets/cards/subcards/card-lightblue.svg");
+
+        .card-btn-row {
+            ion-col {
+                .btn-box {
+                    background-color: #7defe5;
+                }
+            }
+        }
+
+        .arrow-down {
+            background-color: #28d3c5;
+        }
+    }
+    .gray-card {
+        background-image: url("/assets/cards/subcards/card-coolgray.svg");
+
+        .card-btn-row {
+            ion-col {
+                .btn-box {
+                    background-color: #d3d4de;
+                }
+            }
+        }
+
+        .arrow-down {
+            background-color: #8487a1;
+        }
+    }
+    .gray2-card {
+        background-image: url("/assets/cards/subcards/card-warmgray.svg");
+
+        .card-btn-row {
+            ion-col {
+                .btn-box {
+                    background-color:  #adadad;
+                }
+            }
+        }
+
+        .arrow-down {
+            background-color: #989797;
+        }
     }
 
     .list-title-row {

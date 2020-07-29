@@ -1,4 +1,66 @@
-@import "../../../../functions.scss";
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    min-height: 100%;
+    background: #f8f8ff;
+    margin: 0;
+    padding: 60px 30px;
+
+    ion-img {
+        width: 70px;
+        height: 70px;
+        padding: 5px;
+    }
+
+    .qrcode-container {
+        border-radius: 21px;
+        background-color: #ffffff;
+        padding: 20px;
+        margin: 25px 0 15px;
+        zoom: 1.2;
+    }
+
+    h1, h2, p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 400;
+        color: #000000;
+    }
+
+    h1 {
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        margin-bottom: 15px;
+        padding: 0 40px;
+        font-weight: 500;
+        text-align: center;
+        border-radius: 21px;
+        background-color: #ffffff;
+        padding: 20px;
+        width: 100%;
+    }
+
+    p {
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: 0.6px;
+    }
+}
+
+.dark-container {
+    background:#191a2f;
+
+    h1, p {
+        color: #ffffff;
+    }
+}
+
+/* @import "../../../../functions.scss";
 
 ion-item {
     --padding-start: 0;
@@ -6,4 +68,4 @@ ion-item {
     margin-left: px2rem(65px);
     margin-right: px2rem(65px);
     margin-top: px2rem(60px);
-}
+} */

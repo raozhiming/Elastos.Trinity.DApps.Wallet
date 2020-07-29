@@ -4,6 +4,8 @@ import { Config } from '../../../../config/Config';
 import { WalletManager } from '../../../../services/wallet.service';
 import { Native } from '../../../../services/native.service';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
     selector: 'app-coin-receive',
@@ -11,11 +13,19 @@ import { CoinTransferService } from 'src/app/services/cointransfer.service';
     styleUrls: ['./coin-receive.page.scss'],
 })
 export class CoinReceivePage implements OnInit {
+
     masterWalletId: string = "1";
     qrcode: string = null;
     chainId: string;
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, 
-        public native: Native, private coinTransferService: CoinTransferService) {
+
+    constructor(
+        public route: ActivatedRoute,
+        public walletManager: WalletManager,
+        public native: Native,
+        private coinTransferService: CoinTransferService,
+        private clipboard: Clipboard,
+        public theme: ThemeService
+    ) {
     }
 
     ngOnInit() {
@@ -28,8 +38,8 @@ export class CoinReceivePage implements OnInit {
         this.createAddress();
     }
 
-    getAddress() {
-        this.native.go("/address", { chainId: this.chainId });
+    copyAddress() {
+        this.clipboard.copy(this.qrcode);
     }
 
     async createAddress() {

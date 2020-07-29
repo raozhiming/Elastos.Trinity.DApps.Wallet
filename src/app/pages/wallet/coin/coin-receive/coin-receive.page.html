@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
     <header-bar title="text-receive"></header-bar>
 </ion-header>
 <ion-content>
@@ -8,4 +8,19 @@
             <ion-label>{{ 'text-manager-address' | translate }}</ion-label>
         </ion-item>
     </div>
+</ion-content> -->
+
+<ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <ion-img *ngIf="!theme.darkMode" src="assets/coins/ela-black.svg"></ion-img>
+        <ion-img *ngIf="theme.darkMode" src="assets/coins/ela-white.svg"></ion-img>
+        <div class="qrcode-container">
+            <qrcode [qrdata]="qrcode" [size]="150"></qrcode>
+        </div>
+        <h1>Your ELA Address</h1>
+        <h2 *ngIf="qrcode" (click)="copyAddress()">
+            {{ qrcode.slice(0,25) }}<br>{{ qrcode.slice(25,50) }}
+        </h2>
+        <p>Tap address to copy</p>
+    </ion-grid>
 </ion-content>

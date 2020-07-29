@@ -1,5 +1,4 @@
 import { MasterWallet } from './MasterWallet';
-import { Util } from './Util';
 import { Events } from '@ionic/angular';
 import { CoinType, CoinID, StandardCoinName } from './Coin';
 import { AllTransactions } from './Transaction';

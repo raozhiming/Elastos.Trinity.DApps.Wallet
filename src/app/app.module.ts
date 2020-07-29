@@ -41,6 +41,7 @@ import { IonicStorageModule } from '@ionic/storage';
 
 /**provider*/
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { QRCodeModule } from 'angularx-qrcode';
 
 import { LocalStorage } from './services/storage.service';
 import { Native } from './services/native.service';
@@ -187,6 +188,7 @@ export function TranslateLoaderFactory() {
         FormsModule,
         ComponentsModule,
         HttpClientModule,
+        QRCodeModule,
         IonicStorageModule.forRoot({
             name: '__walletdb',
             driverOrder: ['localstorage', 'indexeddb', 'sqlite', 'websql']

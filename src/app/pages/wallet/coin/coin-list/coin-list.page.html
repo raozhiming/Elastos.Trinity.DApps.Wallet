@@ -1,8 +1,60 @@
-<ion-content>
+<!-- <ion-content>
     <ion-list lines="none">
         <ion-item *ngFor="let item of coinList">
             <ion-label>{{item.coin.getName()}}</ion-label>
             <my-toggle *ngIf="item.coin.canBeRemoved()" [checked]="item.isOpen" [auto]='false' (onChange)="onSelect(item, $event)"></my-toggle>
         </ion-item>
     </ion-list>
+</ion-content> -->
+
+<ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <ion-row class="card-row">
+            <ion-row class="card-label-row"> 
+                <ion-row class="top-row">
+                    <ion-col size="12" class="left-col">
+                        <h1>{{ masterWallet.name }}</h1>
+                    </ion-col>
+                </ion-row>
+                <h2></h2>
+                <h3>TOTAL AMOUNT</h3>
+                <h4>
+                    {{ Util.getWholeBalance(masterWallet.getBalance()/SELA) }}<span class="dot" *ngIf="masterWallet.getBalance()/SELA !== 0">.</span>
+                    <span class="decimals">{{ Util.getDecimalBalance(masterWallet.getBalance()/SELA) }}</span>
+                    <span class="ela">  ELA</span>
+                </h4>
+            </ion-row>
+            <div class="arrow-down"></div>
+        </ion-row>
+        <ion-row class="list-title-row">
+            <ion-col size="12">
+                <h1>Enable/Disable Coins</h1>
+                <p>
+                    Toggle what coins you would like to display on 
+                    your wallet home screen. ELA Mainchain and
+                    Sidechains are always shown.
+                </p>
+            </ion-col>
+        </ion-row>
+        <ion-row class="item-row ripple ion-activatable" *ngFor="let item of coinList">
+            <ion-col size="2" class="left-col">
+                <div class="icon-container">
+                    <ion-img [src]="getCoinIcon(item)"></ion-img>
+                </div>
+            </ion-col>
+            <ion-col size="8" class="middle-col">
+                <h1>{{ item.coin.getName() }}</h1>
+                <p>{{ getCoinSubtitle(item) }}</p>
+            </ion-col>
+            <ion-col size="2" class="right-col">
+                <ion-toggle 
+                    *ngIf="item.coin.canBeRemoved()" 
+                    checked="item.isOpen" 
+                    (onChange)="onSelect(item, $event)"
+                >
+                </ion-toggle>
+            </ion-col>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-row>
+    </ion-grid>
 </ion-content>

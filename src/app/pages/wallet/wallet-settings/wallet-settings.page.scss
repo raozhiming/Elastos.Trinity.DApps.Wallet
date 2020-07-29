@@ -13,9 +13,9 @@
       border-radius: 20px;
       padding: 25px 20px 20px;
       margin-bottom: 48px;
-      background-image: url("/assets/cards/card-purple.svg");
+      background-image: url("/assets/cards/maincards/card-purple.svg");
       background-repeat: no-repeat;
-      background-size: 100% 100%;;
+      background-size: cover;
 
       .card-label-row {
           display: flex;
@@ -98,7 +98,7 @@
       .arrow-down {
         position: absolute;
         z-index: 0;
-        bottom: -12px;
+        bottom: -15px;
         left: 10%;
         height: 30px;
         width: 30px;

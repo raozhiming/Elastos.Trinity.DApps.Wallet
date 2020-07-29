@@ -6,10 +6,12 @@ import { Native } from '../../../../services/native.service';
 import { PopupProvider} from '../../../../services/popup.service';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { Coin, CoinID } from 'src/app/model/Coin';
+import { Coin } from 'src/app/model/Coin';
 import { CoinService } from 'src/app/services/coin.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { AppService } from 'src/app/services/app.service';
+import { ThemeService } from 'src/app/services/theme.service';
+import { Util } from 'src/app/model/Util';
 
 type EditableCoinInfo = {
     coin: Coin,
@@ -21,6 +23,7 @@ type EditableCoinInfo = {
     templateUrl: './coin-list.page.html',
     styleUrls: ['./coin-list.page.scss'],
 })
+
 export class CoinListPage implements OnInit, OnDestroy {
 
     masterWallet: MasterWallet = null;
@@ -30,10 +33,22 @@ export class CoinListPage implements OnInit, OnDestroy {
     singleAddress: boolean = false;
     currentCoin: any;
 
-    constructor(public walletManager: WalletManager, public popupProvider: PopupProvider,
-                private coinService: CoinService, private walletEditionService: WalletEditionService,
-                private appService: AppService,
-                public native: Native, public localStorage: LocalStorage, public modalCtrl: ModalController, public events: Events) {
+    // Helpers
+    public Util = Util;
+    public SELA = Config.SELA;
+
+    constructor(
+        public walletManager: WalletManager,
+        public popupProvider: PopupProvider,
+        private coinService: CoinService,
+        private walletEditionService: WalletEditionService,
+        private appService: AppService,
+        public native: Native,
+        public localStorage: LocalStorage,
+        public modalCtrl: ModalController,
+        public events: Events,
+        public theme: ThemeService
+    ) {
         this.init();
     }
 
@@ -42,7 +57,7 @@ export class CoinListPage implements OnInit, OnDestroy {
 
     ionViewWillEnter() {
         this.appService.setBackKeyVisibility(true);
-        this.appService.setTitleBarTitle("text-coin-list");
+        this.appService.setTitleBarTitle("Manage Coin List");
     }
 
     async switchCoin(item: EditableCoinInfo, open: boolean) {
@@ -76,6 +91,7 @@ export class CoinListPage implements OnInit, OnDestroy {
             let isOpen = (availableCoin.getID() in this.masterWallet.subWallets);
             this.coinList.push({ coin: availableCoin, isOpen: isOpen });
         }
+        console.log('coin list', this.coinList);
     }
 
     async createSubWallet(coin: Coin) {
@@ -84,8 +100,7 @@ export class CoinListPage implements OnInit, OnDestroy {
 
             // Create the sub Wallet (ex: IDChain)
             await this.masterWallet.createSubWallet(coin);
-        }
-        catch (error) {
+        } catch (error) {
             this.currentCoin["open"] = false; // TODO: currentCoin type
         }
     }
@@ -110,6 +125,32 @@ export class CoinListPage implements OnInit, OnDestroy {
             });
         } else {// open
             this.switchCoin(item, open);
+        }
+    }
+
+    getCoinSubtitle(item: EditableCoinInfo) {
+        switch (item.coin.getID()) {
+            case 'ELA':
+                return "Elastos Mainchain";
+            case 'IDChain':
+                return "Elastos ID Chain"
+            case 'ETHSC':
+                return "Elastos Ethereum Sidechain";
+            default:
+                return "ERC 20 Token";
+        }
+    }
+
+    getCoinIcon(item: EditableCoinInfo) {
+        switch (item.coin.getID()) {
+            case 'ELA':
+                return "assets/coins/ela-black.svg";
+            case 'IDChain':
+                return "assets/coins/ela-turquoise.svg";
+            case 'ETHSC':
+                return "assets/coins/ela-gray.svg";
+            default:
+                return "assets/coins/eth.svg";
         }
     }
 }

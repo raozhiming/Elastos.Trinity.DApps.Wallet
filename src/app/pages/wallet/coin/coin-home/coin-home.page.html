@@ -6,7 +6,13 @@
                 <p>{{ todaysTransactions }} NEW TRANSACTIONS TODAY</p>
             </ion-col>
         </ion-row>
-        <ion-row class="card-row">
+        <ion-row 
+            class="card-row" 
+            [class.black-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ELA'"
+            [class.blue-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'IDChain'"
+            [class.gray-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ETHSC'"
+            [class.gray2-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ERC20'"
+        >
             <ion-row class="card-label-row"> 
                 <h1>
                     <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'ELA'">Elastos Mainchain</span>
