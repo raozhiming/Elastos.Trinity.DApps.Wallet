@@ -51,6 +51,7 @@ export class WalletlistPage implements OnInit {
 
     itemSelected(id) {
         this.walletManager.setCurMasterWalletId(id);
+        this.native.setRootRouter('/wallet-home');
     }
 
     onNext() {
