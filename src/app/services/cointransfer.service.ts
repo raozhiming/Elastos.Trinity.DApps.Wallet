@@ -44,7 +44,7 @@ export class Transfer {
     votes: any; // TODO
     amount: number = 0;
     publickey: string;
-    toAddress: string = 'default';
+    toAddress: string = '';
     publicKeys: any;
     didrequest: string;
     type: string = 'payment-confirm';

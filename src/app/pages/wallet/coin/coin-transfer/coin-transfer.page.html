@@ -1,4 +1,4 @@
-<ion-content *ngIf="transfer.type !== 'recharge'">
+<!-- <ion-content *ngIf="transfer.type !== 'recharge'">
     <ion-list lines="none">
         <ion-item *ngIf="introText!=''">
             <p>{{ this.introText | translate}}</p>
@@ -45,10 +45,39 @@
     </ion-list>
     <ion-button class="confirm" (click)="goTransaction()">{{ 'text-transfer' | translate }}</ion-button>
 </ion-content>
+ -->
 
+ <ion-content *ngIf="transfer.type !== 'recharge'">
+    <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode">
+        <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
+        <h1>Enter Amount</h1>
+        <ion-row class="item-row">
+            <ion-col size="6" class="left-col">
+                <h2>{{ chainId }}</h2>
+            </ion-col>
+            <ion-col size="6" class="right-col">
+                <h2>{{ walletManager.activeMasterWallet.subWallets[chainId].balance/SELA }}</h2>
+            </ion-col>
+        </ion-row>
+        <h1>Send to</h1>
+        <ion-row class="item-row">
+            <ion-col size="9" class="left-col">
+                <ion-input 
+                    type="text" 
+                    placeholder="{{ 'text-receiver-address' | translate}}" 
+                    [readonly]="readonly"
+                    [(ngModel)]="transfer.toAddress">
+                </ion-input>
+            </ion-col>
+            <ion-col size="3" class="right-col">
+                <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/> 
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
 
 <ion-content *ngIf="transfer.type === 'recharge'">
-    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode">
         <ion-row class="main-title-row">
             <ion-col size="12">
                 <p>Transfer from</p>
@@ -123,10 +152,13 @@
             >
             </ion-input>
         </ion-row>
-        <ion-row class="btn-container">
-            <ion-button color="primary" (click)="goTransaction()">
-                <ion-label>{{ 'text-transfer' | translate }}</ion-label>
-            </ion-button>
-        </ion-row>
     </ion-grid>
 </ion-content>
+
+<ion-footer [class.dark-footer]="theme.darkMode">
+    <ion-row class="btn-container">
+        <ion-button color="primary" (click)="goTransaction()">
+            <ion-label>{{ 'text-transfer' | translate }}</ion-label>
+        </ion-button>
+    </ion-row>
+</ion-footer>

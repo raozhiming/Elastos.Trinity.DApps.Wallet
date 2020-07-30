@@ -8,6 +8,9 @@ import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { IntentService } from 'src/app/services/intent.service';
+import { ThemeService } from 'src/app/services/theme.service';
+
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
 @Component({
     selector: 'app-mnemonic-export',
@@ -15,6 +18,7 @@ import { IntentService } from 'src/app/services/intent.service';
     styleUrls: ['./mnemonic-export.page.scss'],
 })
 export class MnemonicExportPage implements OnInit {
+
     public title = '';
     public mnemonicPrompt = '';
     public payPassword: string = '';
@@ -27,13 +31,22 @@ export class MnemonicExportPage implements OnInit {
     public walletname: string = "";
     public account: any = {};
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public zone: NgZone,
-                private walletEditionService: WalletEditionService, private intentService: IntentService,
-                public native: Native, public events: Events, public appService: AppService) {
+    constructor(
+        public route: ActivatedRoute,
+        public walletManager: WalletManager,
+        public zone: NgZone,
+        private walletEditionService: WalletEditionService,
+        private intentService: IntentService,
+        public native: Native,
+        public events: Events,
+        public appService: AppService,
+        public theme: ThemeService
+    ) {
         this.init();
     }
 
     ngOnInit() {
+        this.appService.setTitleBarTitle('Enter Password');
     }
 
     ionViewWillEnter() {
@@ -44,6 +57,10 @@ export class MnemonicExportPage implements OnInit {
         this.events.subscribe("error:update", () => {
             this.isShow = true;
         });
+    }
+
+    ionViewWillLeave() {
+        this.theme.getTheme();
     }
 
     init() {
@@ -81,6 +98,10 @@ export class MnemonicExportPage implements OnInit {
         this.native.go('/mnemonic-check', { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) });
     }
 
+    return() {
+       this.native.go('/wallet-home');
+    }
+
     onShare() {
         this.native.setRootRouter('/wallet-home');
         this.intentService.sendIntentResponse(this.requestDapp.action,
@@ -90,6 +111,9 @@ export class MnemonicExportPage implements OnInit {
     async onExport() {
         if (this.checkParams()) {
             let ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
+            titleBarManager.setBackgroundColor('#6226af');
+            titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
+            this.appService.setTitleBarTitle('Mnemonic');
 
             this.mnemonicStr = ret.toString();
             let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);

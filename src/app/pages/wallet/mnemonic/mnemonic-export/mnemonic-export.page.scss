@@ -1,4 +1,146 @@
-.mnemonic {
+.verify-container {
+    min-height: 100%;
+    background: #f8f8ff;
+    padding: 30px 35px;
+  
+    ion-input {
+      background: #ffffff;
+      box-shadow: 0 3px 15px 0 #ededf0;
+      height: 41px;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #000000;
+      --padding-start: 12px;
+    }
+  
+    .btn-container {
+      margin-top: 25px;
+  
+      ion-button {
+        height: 41px;
+        width: 100%;
+        --border-radius: 8px;
+  
+        ion-label {
+          text-transform: none;
+          font-size: 16px;
+          font-weight: 500;
+          letter-spacing: -0.43px;
+        }
+      }
+    }
+  }
+  
+  .verify-dark-container {
+    background: #191a2f;
+  
+    ion-input {
+      background: #2b2c49;
+      box-shadow: 0 3px 15px 0 #151626;
+      color: #ffffff;
+    }
+  }
+
+
+.verified-container {
+    min-height: 100%;
+  padding: 10px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background: #6226af;
+
+  .mnemonic-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: space-between;
+
+    ion-col {
+      height: 35px;
+      background: #42117d;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .mnemonic-index {
+        position: absolute;
+        z-index: 100;
+        top: -11px;
+        left: -11px;
+        width: 22px;
+        height: 22px;
+        background: #42117d;
+        border-radius: 100%;
+        border: 2px solid #6a25c4;
+        color: #fdfeff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 9px;
+      }
+
+      ion-label {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.25;
+        letter-spacing: -0.29px;
+        color: #fdfeff;
+      }
+    }
+  }
+
+  p {
+    margin: 0;
+    padding: 20px 25px 40px;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 1.26;
+    letter-spacing: -0.46px;
+    text-align: center;
+    color: #fdfeff;
+  }
+
+  .btn-container {
+    margin-top: 75px;
+    width: 95%;
+
+    ion-button {
+      height: 41px;
+      width: 100%;
+      --border-radius: 8px;
+
+      ion-label {
+        text-transform: none;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: -0.43px;
+      }
+    }
+  }
+}
+
+.verified-dark-container {
+  h1, p {
+    color: #fdfeff;
+  }
+}
+
+@media screen and (max-height: 670px) {
+    .verified-container {
+        .mnemonic-row {
+            ion-col {
+                margin-bottom: 15px;
+            }
+        }
+    } 
+}
+
+  
+
+/* .mnemonic {
     max-height: 30rem;
     display: flex;
     justify-content: center;
@@ -85,3 +227,4 @@
     width: 30px;
     height: 40px;
 }
+ */

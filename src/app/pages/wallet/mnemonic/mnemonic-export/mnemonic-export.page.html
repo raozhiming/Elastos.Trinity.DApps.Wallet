@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
     <header-bar title={{title}} [showMinimize]="!isFromIntent" [showClose]="!isFromIntent"></header-bar>
 </ion-header>
 <ion-content>
@@ -37,4 +37,54 @@
     <ion-button class="confirm" (click)="onExport()" *ngIf="isShow">{{ 'text-export-mnemonic' | translate }}</ion-button>
     <ion-button class="confirm" (click)="onNext()" *ngIf="!isShow && !isFromIntent">{{ 'text-memory' | translate }}</ion-button>
     <ion-button class="confirm" (click)="onShare()" *ngIf="!isShow && isFromIntent">{{ 'text-allow' | translate }}</ion-button>
-</ion-footer>
+</ion-footer> -->
+
+<ion-content>
+    <ion-grid *ngIf="isShow" class="verify-container ion-no-padding ion-no-margin" [class.verify-dark-container]="theme.darkMode">
+        <ion-row>
+            <ion-input
+                type="password"
+                placeholder="{{ 'unlock-paypassword-placeholder' | translate }}"
+                [(ngModel)]="payPassword"
+            >
+            </ion-input>
+        </ion-row>
+        <ion-row *ngIf="isShow" class="btn-container">
+            <ion-button color="primary" (click)="onExport()">
+                <ion-label>{{ 'text-export-mnemonic' | translate }}</ion-label>
+            </ion-button>
+        </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="!isShow" class="ion-text-center verified-container" [class.verified-dark-container]="theme.darkMode">
+        <p>
+            These are your 12 security words 
+            (mnemonic phrase). Lose these 
+            and you will lose the wallet, so you
+            must keep them written down, in
+            order, and safe!
+        </p>
+        <ion-row class="mnemonic-row">
+            <ion-col size="3.6" *ngFor="let item of mnemonicList; let i=index">
+                <div class="mnemonic-index">{{ mnemonicList.indexOf(item) + 1 }}</div>
+                <ion-label>{{ item.text }}</ion-label>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!isShow && !isFromIntent" class="btn-container">
+            <ion-button color="secondary" (click)="return()">
+                <ion-label>Back To Settings</ion-label>
+            </ion-button>
+        </ion-row>
+    <!--     <ion-row *ngIf="!isShow && !isFromIntent" class="btn-container">
+            <ion-button color="secondary" (click)="onNext()">
+                <ion-label>{{ 'text-memory' | translate }}</ion-label>
+            </ion-button>
+        </ion-row> -->
+        <ion-row *ngIf="!isShow && isFromIntent" class="btn-container">
+            <ion-button color="secondary" (click)="onShare()">
+                <ion-label>{{ 'text-allow' | translate }}</ion-label>
+            </ion-button>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+      
