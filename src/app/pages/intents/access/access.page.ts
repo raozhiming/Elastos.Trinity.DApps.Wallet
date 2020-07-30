@@ -5,6 +5,7 @@ import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { IntentService } from 'src/app/services/intent.service';
+import { StandardCoinName } from 'src/app/model/Coin';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -25,8 +26,6 @@ export class AccessPage implements OnInit {
     requestDapp: any = null;
     masterWalletId = '1';
     exportMnemonic = false;
-    elaAddress: string = null;
-    chainId = 'ELA';
     reason = '';
     title = '';
 
@@ -85,21 +84,24 @@ export class AccessPage implements OnInit {
         let value = '';
         switch (key) {
             case 'elaaddress':
-                value = await this.createAddress();
+                value = await this.createAddress(StandardCoinName.ELA);
                 break;
             case 'elaamount':
                 // for now just return the amount of ELA Chain, not include IDChain
                 value = this.walletManager.activeMasterWallet.subWallets.ELA.balance.toString();
                 break;
+            case 'ethaddress':
+                value = await this.createAddress(StandardCoinName.ETHSC);
+                break;
             default:
+                console.log('Not support ', key);
                 break;
         }
         return value;
     }
 
-    async createAddress() {
-        this.elaAddress = await this.walletManager.spvBridge.createAddress(this.masterWalletId, this.chainId);
-        return this.elaAddress;
+    async createAddress(chainId: string) {
+        return await this.walletManager.spvBridge.createAddress(this.masterWalletId, chainId);
     }
 
     reduceArrayToDict(keyProperty: string) {
@@ -126,8 +128,8 @@ export class AccessPage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.intentService.sendIntentResponse(this.requestDapp.action, { elaaddress: null }, this.requestDapp.intentId);
-        this.native.setRootRouter('/wallet-home/wallet-tab-home');
+        this.intentService.sendIntentResponse(this.requestDapp.action, { walletinfo: null }, this.requestDapp.intentId);
+        this.native.setRootRouter('/wallet-home');
     }
 
     onShare() {
@@ -137,7 +139,7 @@ export class AccessPage implements OnInit {
             const selectedClaim = this.buildDeliverableList();
             this.intentService.sendIntentResponse(this.requestDapp.action,
                     {walletinfo: selectedClaim}, this.requestDapp.intentId);
-            this.native.setRootRouter('/wallet-home/wallet-tab-home');
+            this.native.setRootRouter('/wallet-home');
         }
     }
 }

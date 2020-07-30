@@ -82,7 +82,7 @@ export class MnemonicExportPage implements OnInit {
     }
 
     onShare() {
-        this.native.setRootRouter('/wallet-home/wallet-tab-home');
+        this.native.setRootRouter('/wallet-home');
         this.intentService.sendIntentResponse(this.requestDapp.action,
             { mnemonic: this.mnemonicStr }, this.requestDapp.intentId);
     }
@@ -90,7 +90,7 @@ export class MnemonicExportPage implements OnInit {
     async onExport() {
         if (this.checkParams()) {
             let ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
-            
+
             this.mnemonicStr = ret.toString();
             let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);
             for (var i = 0; i < mnemonicArr.length; i++) {
