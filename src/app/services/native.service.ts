@@ -53,20 +53,24 @@ export class Native {
         Logger.log(message, "Warnning");
     }
 
-    public toast(_message: string = '操作完成', duration: number = 2000): void {
+    public toast(message: string = '操作完成', duration: number = 2000): void {
         this.toastCtrl.create({
-            message: _message,
+            mode: 'ios',
+            color: 'primary',
+            position: 'bottom',
+            header: message,
             duration: 2000,
-            position: 'top'
         }).then(toast => toast.present());
     }
 
-    public toast_trans(_message: string = '', duration: number = 2000): void {
-        _message = this.translate.instant(_message);
+    public toast_trans(message: string = '', duration: number = 2000): void {
+        message = this.translate.instant(message);
         this.toastCtrl.create({
-            message: _message,
+            mode: 'ios',
+            color: 'primary',
+            position: 'bottom',
+            header: message,
             duration: 2000,
-            position: 'middle'
         }).then(toast => toast.present());
     }
 

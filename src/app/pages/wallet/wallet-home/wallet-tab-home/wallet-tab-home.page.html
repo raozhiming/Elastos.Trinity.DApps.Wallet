@@ -126,27 +126,26 @@
             </ion-row>
             <ion-row class="item-row ripple ion-activatable" *ngFor="let subWallet of walletManager.activeMasterWallet.getSubWallets()" [routerLink]="['/coin', subWallet.id]">
                 <ion-col size="2" class="left-col">
-                    <div class="icon-container">
-                        <ion-img [src]="getSubWalletIcon(subWallet)"></ion-img>
-                    </div>
+                    <ion-img [src]="getSubWalletIcon(subWallet)"></ion-img>
                 </ion-col>
-                <ion-col [size]="subWallet.balance === 0 ? 8 : 5" class="middle-col">
+                <ion-col size="5" class="middle-col">
                     <div *ngIf="subWallet.id === 'ELA'">
-                        <h1>ELA</h1>
-                        <p>Elastos Mainchain</p>
+                        <h1>Elastos</h1>
+                        <p>ELA</p>
                     </div>
                     <div *ngIf="subWallet.id === 'IDChain'">
-                        <h1>ELA-DID</h1>
-                        <p>Elastos ID Chain</p>
+                        <h1>Elastos DID</h1>
+                        <p>ELADIDSC</p>
                     </div>
                     <div *ngIf="subWallet.id === 'ETHSC'">
-                        <h1>ELA-ETH</h1>
-                        <p>Elastos Ethereum Sidechain</p>
+                        <h1>Elastos ETH</h1>
+                        <p>ELAETHSC</p>
                     </div>
                 </ion-col>
-                <ion-col [size]="subWallet.balance === 0 ? 2 : 5" class="right-col">
+                <ion-col size="5" class="right-col">
                     <h1>{{ subWallet.balance/SELA }}</h1>
-                    <p>{{ subWallet.progress }}%</p>
+                    <p *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ subWallet.progress }}% Synced</p>
+                    <p *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ subWallet.progress }}% Syncing</p>
                 </ion-col>
                 <ion-ripple-effect></ion-ripple-effect>
             </ion-row>

@@ -7,6 +7,7 @@ import { Util } from '../../../model/Util';
 import { WalletManager } from '../../../services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
     selector: 'app-wallet-password-reset',
@@ -31,12 +32,14 @@ export class WalletPasswordResetPage implements OnInit {
         public popupProvider: PopupProvider,
         private walletEditionService: WalletEditionService,
         public native: Native,
-        public theme: ThemeService
+        public theme: ThemeService,
+        private appService: AppService
     ) {
         this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
     }
 
     ngOnInit() {
+        this.appService.setTitleBarTitle('Change Wallet Password');
     }
 
     async ionViewWillEnter() {

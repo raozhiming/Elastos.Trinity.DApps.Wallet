@@ -35,7 +35,7 @@ export class CoinSelectPage implements OnInit {
     }
 
     ngOnInit() {
-        this.appService.setTitleBarTitle('Transfer To');
+        this.appService.setTitleBarTitle('Select Coin');
     }
 
     init() {

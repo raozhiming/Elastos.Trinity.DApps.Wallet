@@ -128,6 +128,19 @@ export class CoinListPage implements OnInit, OnDestroy {
         }
     }
 
+    getCoinTitle(item: EditableCoinInfo) {
+        switch (item.coin.getID()) {
+            case 'ELA':
+                return "Elastos";
+            case 'IDChain':
+                return "Elastos DID"
+            case 'ETHSC':
+                return "Elastos ETH";
+            default:
+                return "Ethereum";
+        }
+    }
+
     getCoinSubtitle(item: EditableCoinInfo) {
         switch (item.coin.getID()) {
             case 'ELA':

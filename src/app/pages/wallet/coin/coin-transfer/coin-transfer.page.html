@@ -1,7 +1,4 @@
-<!-- <ion-header>
-    <header-bar title="text-transfer"></header-bar>
-</ion-header>
-<ion-content>
+<ion-content *ngIf="transfer.type !== 'recharge'">
     <ion-list lines="none">
         <ion-item *ngIf="introText!=''">
             <p>{{ this.introText | translate}}</p>
@@ -46,14 +43,12 @@
         </ion-item>
         
     </ion-list>
-</ion-content>
-<ion-footer>
-
     <ion-button class="confirm" (click)="goTransaction()">{{ 'text-transfer' | translate }}</ion-button>
-</ion-footer> -->
+</ion-content>
 
-<ion-content>
-    <ion-grid *ngIf="transfer.type === 'recharge' "class="container" [class.dark-container]="theme.darkMode">
+
+<ion-content *ngIf="transfer.type === 'recharge'">
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-row class="main-title-row">
             <ion-col size="12">
                 <p>Transfer from</p>
@@ -63,23 +58,24 @@
             <ion-col size="2.3" class="left-col">
                 <ion-img [src]="getCoinIcon(transferFrom)"></ion-img>
             </ion-col>
-            <ion-col [size]="transferFrom.balance === 0 ? 8 : 5" class="middle-col">
+            <ion-col size="4.7" class="middle-col">
                 <div *ngIf="transferFrom.id === 'ELA'">
-                    <h1>ELA</h1>
-                    <p>Elastos Mainchain</p>
+                    <h1>Elastos</h1>
+                    <p>ELA</p>
                 </div>
                 <div *ngIf="transferFrom.id === 'IDChain'">
-                    <h1>ELA-DID</h1>
-                    <p>Elastos ID Chain</p>
+                    <h1>Elastos DID</h1>
+                    <p>ELADIDSC</p>
                 </div>
                 <div *ngIf="transferFrom.id === 'ETHSC'">
-                    <h1>ELA-ETH</h1>
-                    <p>Elastos Ethereum Sidechain</p>
+                    <h1>Elastos ETH</h1>
+                    <p>ELAETHSC</p>
                 </div>
             </ion-col>
-            <ion-col [size]="transferFrom.balance === 0 ? 1.7 : 4.7" class="right-col">
-                <h1>{{ transferFrom.balance/SELA }}</h1>
-                <p>{{ transferFrom.progress }}%</p>
+            <ion-col size="5" class="right-col">
+                <h1>{{ transferTo.balance/SELA }}</h1>
+                <p *ngIf="transferTo.progress === 100" class="synced">&#8226; {{ transferTo.progress }}% Synced</p>
+                <p *ngIf="transferTo.progress !== 100" class="syncing">&#8226; {{ transferTo.progress }}% Syncing</p>
             </ion-col>
             <div class="arrow-down"></div>
         </ion-row>
@@ -92,23 +88,24 @@
             <ion-col size="2.3" class="left-col">
                 <ion-img [src]="getCoinIcon(transferTo)"></ion-img>
             </ion-col>
-            <ion-col [size]="transferTo.balance === 0 ? 8 : 5" class="middle-col">
+            <ion-col size="4.7" class="middle-col">
                 <div *ngIf="transferTo.id === 'ELA'">
-                    <h1>ELA</h1>
-                    <p>Elastos Mainchain</p>
+                    <h1>Elastos</h1>
+                    <p>ELA</p>
                 </div>
                 <div *ngIf="transferTo.id === 'IDChain'">
-                    <h1>ELA-DID</h1>
-                    <p>Elastos ID Chain</p>
+                    <h1>Elastos DID</h1>
+                    <p>ELADIDSC</p>
                 </div>
                 <div *ngIf="transferTo.id === 'ETHSC'">
-                    <h1>ELA-ETH</h1>
-                    <p>Elastos Ethereum Sidechain</p>
+                    <h1>Elastos ETH</h1>
+                    <p>ELAETHSC</p>
                 </div>
             </ion-col>
-            <ion-col [size]="transferTo.balance === 0 ? 1.7 : 4.7" class="right-col">
+            <ion-col size="5" class="right-col">
                 <h1>{{ transferTo.balance/SELA }}</h1>
-                <p>{{ transferTo.progress }}%</p>
+                <p *ngIf="transferTo.progress === 100" class="synced">&#8226; {{ transferTo.progress }}% Synced</p>
+                <p *ngIf="transferTo.progress !== 100" class="syncing">&#8226; {{ transferTo.progress }}% Syncing</p>
             </ion-col>
             <div class="arrow-down"></div>
         </ion-row>
@@ -132,7 +129,4 @@
             </ion-button>
         </ion-row>
     </ion-grid>
-    <ion-footer>
-        
-    </ion-footer>
 </ion-content>

@@ -71,13 +71,18 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         public zone: NgZone,
         public theme: ThemeService,
     ) {
-        this.init();
     }
 
     ngOnInit() {
+        this.init();
+        this.events.subscribe('address:update', (address) => {
+            this.zone.run(() => {
+                this.transfer.toAddress = address;
+            });
+        });
     }
 
-    ionViewDidEnter() {
+    ionViewWillEnter() {
         appManager.setVisible("show");
     }
 
@@ -86,22 +91,21 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     init() {
+        this.chainId = this.coinTransferService.transfer.chainId;
+        this.walletInfo = this.coinTransferService.walletInfo;
         this.transfer = this.coinTransferService.transfer;
+        this.masterWallet = this.walletManager.getActiveMasterWallet();
+
         if (this.coinTransferService.transfer.type === 'recharge') {
+            this.appService.setTitleBarTitle('Transfer ' + this.chainId);
             this.transferFrom = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.transferFrom);
             this.transferTo = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.transferTo);
             console.log('Transferring from..', this.transferFrom);
             console.log('Transferring To..', this.transferTo);
+        } else {
+            this.appService.setTitleBarTitle('Send ' + this.chainId);
         }
 
-        this.chainId = this.coinTransferService.transfer.chainId;
-        this.walletInfo = this.coinTransferService.walletInfo;
-        this.events.subscribe('address:update', (address) => {
-            this.zone.run(() => {
-                this.transfer.toAddress = address;
-            });
-        });
-        this.masterWallet = this.walletManager.getActiveMasterWallet();
         switch (this.transfer.type) {
             case 'payment-confirm':
                 this.readonly = true;

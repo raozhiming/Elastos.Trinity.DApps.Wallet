@@ -9,8 +9,8 @@
     .item-row {
         width: 100%;
         border-radius: 17px;
-        padding: 7.5px 0;
-        margin-bottom: 10px;
+        padding: 7.5px 10px 7.5px 0;
+        margin-bottom: 7.5px;
         box-shadow: 0 3px 15px 0 #ededf0;
         background-color: #ffffff;
 
@@ -40,44 +40,10 @@
             align-items: center;
             padding-left: 10px;
 
-            .icon-container {
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            ion-img {
                 width: 40px;
                 height: 40px;
                 object-fit: contain;
-                border-radius: 100%;
-
-                ion-img {
-                    object-fit: contain;
-                }
-            }
-
-            .receive {
-                background-color: #620ad4;
-
-                ion-img {
-                    width: 27px;
-                    height: 19px;
-                }
-            }
-
-            .send {
-                background-color: #343434;
-
-                ion-img {
-                    width: 27px;
-                    height: 19px;
-                }
-            }
-            .transfer {
-                background-color: #20e3d2;
-
-                ion-img {
-                    width: 16.2px;
-                    height: 4.5px;
-                }
             }
         }
       
@@ -91,7 +57,20 @@
       
         .right-col {
             align-items: flex-end;
-            padding-right: 10px;
+
+            p {
+                font-weight: 700;
+                font-size: 9px;
+                letter-spacing: 0.9px;
+            }
+
+            .synced {
+                color: #b176ff;
+            }
+
+            .syncing {
+                color: #20e3d2;
+            }
         }
     }
 }

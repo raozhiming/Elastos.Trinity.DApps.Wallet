@@ -252,9 +252,8 @@
     .item-row {
         width: 100%;
         border-radius: 17px;
-        padding-top: 7.5px;
-        padding-bottom: 7.5px;
-        margin-bottom: 10px;
+        padding: 7.5px 10px 7.5px 0;
+        margin-bottom: 7.5px;
         box-shadow: 0 3px 15px 0 #ededf0;
         background-color: #ffffff;
 
@@ -335,7 +334,6 @@
       
         .right-col {
             align-items: flex-end;
-            padding-right: 10px;
         }
     }
 }

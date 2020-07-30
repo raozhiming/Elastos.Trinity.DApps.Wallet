@@ -60,8 +60,8 @@ export class WalletSettingsPage implements OnInit {
             route: "/coin-list",
             title: "Manage Coin List",
             subtitle: "Check which coins to display",
-            icon: '/assets/settings/gears.svg',
-            iconDarkmode: '/assets/settings/darkmode/gears.svg'
+            icon: '/assets/settings/coins.svg',
+            iconDarkmode: '/assets/settings/darkmode/coins.svg'
         },
         {
             route: null,

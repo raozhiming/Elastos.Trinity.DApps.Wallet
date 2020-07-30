@@ -34,6 +34,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from '../../../../model/Util';
 
 declare let appManager: AppManagerPlugin.AppManager;
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
 @Component({
     selector: 'app-wallet-tab-home',
@@ -47,6 +48,9 @@ export class WalletTabHomePage implements OnInit {
 
     showOn = true;
 
+    // Titlebar
+    private onItemClickedListener: any;
+
     constructor(
         public native: Native,
         public appService: AppService,
@@ -59,12 +63,19 @@ export class WalletTabHomePage implements OnInit {
     }
 
     ngOnInit() {
+        titleBarManager.addOnItemClickedListener(this.onItemClickedListener = (menuIcon: any) => {
+            this.handleItem(menuIcon.key);
+        });
     }
 
     ionViewWillEnter() {
         appManager.setVisible("show");
         this.appService.setTitleBarTitle('Wallet Home');
         this.appService.setBackKeyVisibility(false);
+        titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, {
+            key: "settings",
+            iconPath: TitleBarPlugin.BuiltInIcon.SETTINGS
+        });
     }
 
     ionViewDidEnter() {
@@ -73,7 +84,16 @@ export class WalletTabHomePage implements OnInit {
         }
     }
 
-    ionViewDidLeave() {
+    ionViewWillLeave() {
+        titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
+    }
+
+    handleItem(key: string) {
+        switch (key) {
+            case 'settings':
+                this.goSetting();
+                break;
+        }
     }
 
     onOpen() {
