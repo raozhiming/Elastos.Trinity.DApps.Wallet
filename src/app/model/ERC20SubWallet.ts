@@ -4,7 +4,7 @@ import Web3 from 'Web3'
 //var Tx = require('ethereumjs-tx');
 import { TrinitySDK } from "@elastosfoundation/trinity-dapp-sdk"
 // import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
- 
+
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, CoinID, Coin, ERC20Coin } from './Coin';
@@ -45,7 +45,7 @@ export class ERC20SubWallet extends SubWallet {
 
     public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): ERC20SubWallet {
         console.log("Initializing ERC20 subwallet from serialized sub wallet", serializedSubWallet);
-        
+
         let subWallet = new ERC20SubWallet(masterWallet, serializedSubWallet.id);
         Object.assign(subWallet, serializedSubWallet);
         return subWallet;
@@ -53,7 +53,7 @@ export class ERC20SubWallet extends SubWallet {
 
     public async updateBalance() {
         console.log("Updating ERC20 token balance", this.id);
-        
+
         // TMP - TODO: replace with real user account when we can get it from the SPV SDK
         var myAddress = "0x40da0e9AD0f40A6e26eC03c49eCCec01e2B8f9d4"; // SongSJun cryptoname self account
 
@@ -65,7 +65,7 @@ export class ERC20SubWallet extends SubWallet {
 
         // Update the "last sync" date. Just consider this http call date as the sync date for now
         this.timestamp = new Date().getTime();
-        this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'yyyy-MM-dd HH:mm:ss');
+        this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
         this.progress = 100;
     }
 

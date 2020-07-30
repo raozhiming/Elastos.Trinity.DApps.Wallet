@@ -3,6 +3,7 @@ import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, Coin, StandardCoinName } from './Coin';
 import { Util } from './Util';
 import { AllTransactions } from './Transaction';
+import * as moment from 'moment';
 
 export class StandardSubWallet extends SubWallet {
     constructor(masterWallet: MasterWallet, id: StandardCoinName) {
@@ -48,11 +49,14 @@ export class StandardSubWallet extends SubWallet {
      * saying that a new balance amount is available.
      */
     public async updateBalance() {
-        // Get the current balance from the wallet plugin.
-        let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
+        // if the balance form spvsdk is newer, then use it.
+        if (moment(this.lastBlockTime).valueOf() > this.balanceByRPC) {
+            // Get the current balance from the wallet plugin.
+            let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
 
-        // Balance in SELA
-        this.balance = parseInt(balanceStr, 10);
+            // Balance in SELA
+            this.balance = parseInt(balanceStr, 10);
+        }
     }
 
     public async getTransactions(startIndex: number): Promise<AllTransactions> {
@@ -64,8 +68,7 @@ export class StandardSubWallet extends SubWallet {
     * Updates current SPV synchonization progress information for this coin.
     */
    public updateSyncProgress(progress: number, lastBlockTime: number) {
-        const userReadableDateTime = Util.dateFormat(new Date(lastBlockTime * 1000), 'yyyy-MM-dd HH:mm:ss');
-
+        const userReadableDateTime = Util.dateFormat(new Date(lastBlockTime * 1000), 'YYYY-MM-DD HH:mm:ss');
         this.progress = progress;
         this.lastBlockTime = userReadableDateTime;
 

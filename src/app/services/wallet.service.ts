@@ -330,10 +330,13 @@ export class WalletManager {
         await this.saveMasterWallet(this.masterWallets[id]);
 
         // Set the newly created wallet as the active one.
-        this.setActiveMasterWalletId(id);
+        await this.setActiveMasterWalletId(id);
 
         // Go to wallet's home page.
         this.native.setRootRouter("/wallet-home");
+
+        // Get balance by rpc
+        this.getAllSubwalletsBalanceByRPC();
     }
 
     /**
@@ -768,17 +771,21 @@ export class WalletManager {
     }
 
     async getAllSubwalletsBalanceByRPC() {
-        let currentTimestamp = moment(new Date()).valueOf() / 1000;
-        let onedayago = moment(new Date()).add(-1, 'days').valueOf() / 1000;
+        let currentTimestamp = moment().valueOf();
+        let onedayago = moment().add(-1, 'days').valueOf();
         let activeMasterId = this.activeMasterWallet ? this.activeMasterWallet.id : null;
-
         for (let subWallet of Object.values(this.getMasterWallet(activeMasterId).subWallets)) {
             if (subWallet.type === CoinType.STANDARD) {
                 // Get balance by RPC if the last block time is one day ago.
-                if (parseInt(subWallet.lastBlockTime, 10) < onedayago) {
-                    let balance = await this.getBalanceByRPC(activeMasterId, subWallet.id as StandardCoinName);
-                    subWallet.balanceByRPC = balance;
-                    subWallet.timestampRPC = currentTimestamp;
+                if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
+                    try {
+                        let balance = await this.getBalanceByRPC(activeMasterId, subWallet.id as StandardCoinName);
+                        subWallet.balanceByRPC = balance;
+                        subWallet.balance = balance;
+                        subWallet.timestampRPC = currentTimestamp;
+                    } catch (e) {
+                        console.log('getBalanceByRPC exception:', e);
+                    }
                 }
             }
         }
@@ -788,9 +795,9 @@ export class WalletManager {
     async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
         if (chainID === StandardCoinName.ETHSC) {
             console.log('getBalanceByRPC for ETHSC is not ready');
-            return;
+            return 0.0;
         }
-        console.log('TIMETEST getBalanceByRPC start');
+        console.log('TIMETEST getBalanceByRPC start:', chainID);
 
         // If the balance of 20 consecutive addresses is 0, then end the query
         let maxBlanks = 20;
@@ -813,19 +820,24 @@ export class WalletManager {
             }
 
             for (const address of addressArray.Addresses) {
-                const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
-                totalBalance += balance;
+                try {
+                    const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
+                    totalBalance += balance;
 
-                if (balance < 0.00000001) {
-                    consecutiveBlanks++;
-                    if (consecutiveBlanks >= maxBlanks) {
-                        break;
+                    if (balance < 0.00000001) {
+                        consecutiveBlanks++;
+                        if (consecutiveBlanks >= maxBlanks) {
+                            break;
+                        }
+                    } else {
+                        if (maxInternalBlanks < consecutiveBlanks) maxInternalBlanks = consecutiveBlanks;
+                        consecutiveBlanks = 0;
                     }
-                } else {
-                    if (maxInternalBlanks < consecutiveBlanks) maxInternalBlanks = consecutiveBlanks;
-                    consecutiveBlanks = 0;
+                    totalRequestCount++;
+                } catch (e) {
+                    console.log('jsonRPCService.getBalanceByAddress exception:', e);
+                    throw e;
                 }
-                totalRequestCount++;
             }
         }
 
@@ -853,21 +865,26 @@ export class WalletManager {
 
             startIndex += addressArray.Addresses.length;
             for (const address of addressArray.Addresses) {
-                const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
-                totalBalance += balance;
+                try {
+                    const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
+                    totalBalance += balance;
 
-                if (startCheckBlanks && totalRequestCount > currentReceiveAddressIndex) {
-                    if (balance < 0.00000001) {
-                        consecutiveBlanks++;
-                        if (consecutiveBlanks > maxBlanks) {
-                            break;
+                    if (startCheckBlanks && totalRequestCount > currentReceiveAddressIndex) {
+                        if (balance < 0.00000001) {
+                            consecutiveBlanks++;
+                            if (consecutiveBlanks > maxBlanks) {
+                                break;
+                            }
+                        } else {
+                            if (maxExternalBlanks < consecutiveBlanks) maxExternalBlanks = consecutiveBlanks;
+                            consecutiveBlanks = 0;
                         }
-                    } else {
-                        if (maxExternalBlanks < consecutiveBlanks) maxExternalBlanks = consecutiveBlanks;
-                        consecutiveBlanks = 0;
                     }
+                    totalRequestCount++;
+                } catch (e) {
+                    console.log('jsonRPCService.getBalanceByAddress exception:', e);
+                    throw e;
                 }
-                totalRequestCount++;
             }
         }
 

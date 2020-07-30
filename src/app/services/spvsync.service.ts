@@ -160,6 +160,7 @@ export class SPVSyncService {
         let rpcMessage = JSON.parse(message.message) as InAppRPCMessage;
         switch (rpcMessage.method) {
             case RPCMethod.GET_WALLET_SYNC_PROGRESS:
+                // TODO: upgraged spvsdk -- Get sync progress by api when it doesn't connet to node.
                 let sendRPCMessage: InAppRPCMessage = {
                   method: RPCMethod.SEND_WALLET_SYNC_PROGRESS,
                   params: this.walletsSyncProgress

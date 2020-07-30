@@ -33,7 +33,7 @@ export class CoinTxInfoPage implements OnInit {
     preConfirmCount = '';
     hasSubscribeprogressEvent = false;
 
-    constructor(public events: Events, public route: ActivatedRoute, 
+    constructor(public events: Events, public route: ActivatedRoute,
         public walletManager: WalletManager, public native: Native,
         private appService: AppService) {
     }
@@ -64,13 +64,13 @@ export class CoinTxInfoPage implements OnInit {
 
     async getTransactionInfo() {
         let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.chainId, this.start, this.txId);
-            
+
         let transactions = allTransactions.Transactions;
         let transaction = transactions[0];
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
         let timestamp = transaction.Timestamp * 1000;
-        let datetime = Util.dateFormat(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss');
+        let datetime = Util.dateFormat(new Date(timestamp), 'YYYY-MM-DD HH:mm:ss');
         let status = '';
 
         switch (transaction.Status) {
