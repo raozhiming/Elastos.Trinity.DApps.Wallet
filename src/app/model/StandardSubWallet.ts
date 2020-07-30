@@ -50,7 +50,7 @@ export class StandardSubWallet extends SubWallet {
      */
     public async updateBalance() {
         // if the balance form spvsdk is newer, then use it.
-        if (moment(this.lastBlockTime).valueOf() > this.balanceByRPC) {
+        if (moment(this.lastBlockTime).valueOf() > this.timestampRPC) {
             // Get the current balance from the wallet plugin.
             let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
 
