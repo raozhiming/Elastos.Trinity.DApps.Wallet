@@ -793,9 +793,10 @@ export class WalletManager {
 
     //
     async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
+        // TODO
         if (chainID === StandardCoinName.ETHSC) {
             console.log('getBalanceByRPC for ETHSC is not ready');
-            return 0.0;
+            throw new Error('ETHSC rpc is not ready');
         }
         console.log('TIMETEST getBalanceByRPC start:', chainID);
 
