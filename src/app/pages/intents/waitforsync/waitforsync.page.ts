@@ -86,6 +86,10 @@ export class WaitForSyncPage implements OnInit {
                 this.action = 'text-did';
                 this.nextScreen = '/didtransaction';
                 break;
+            case 'esctransaction':
+                this.action = 'text-esc';
+                this.nextScreen = '/esctransaction';
+                break;
             case 'dposvotetransaction':
                 this.action = 'text-dposvote';
                 this.nextScreen = '/dposvote';

@@ -57,6 +57,7 @@ import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wa
 import { WalletManager } from './services/wallet.service';
 import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
 import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
+import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
 
 const routes: Routes = [
     // Global
@@ -110,6 +111,7 @@ const routes: Routes = [
     // Intents
     { path: 'access', component: AccessPage },
     { path: 'didtransaction', component: DidTransactionPage },
+    { path: 'esctransaction', component: EscTransactionPage },
     { path: 'waitforsync', component: WaitForSyncPage },
     { path: 'crmembervote', component: CRmembervotePage },
     { path: 'dposvote', component: DPoSVotePage },

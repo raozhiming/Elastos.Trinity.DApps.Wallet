@@ -64,6 +64,9 @@
             "action": "didtransaction"
         },
         {
+            "action": "esctransaction"
+        },
+        {
             "action": "dposvotetransaction"
         },
         {
