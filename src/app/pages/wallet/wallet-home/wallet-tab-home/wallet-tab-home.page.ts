@@ -69,6 +69,7 @@ export class WalletTabHomePage implements OnInit {
     }
 
     ionViewWillEnter() {
+        this.theme.getTheme();
         appManager.setVisible("show");
         this.appService.setTitleBarTitle('Wallet Home');
         this.appService.setBackKeyVisibility(false);

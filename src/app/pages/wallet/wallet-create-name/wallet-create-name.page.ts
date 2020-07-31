@@ -6,14 +6,23 @@ import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
 
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
+
 @Component({
     selector: 'app-wallet-create-name',
     templateUrl: './wallet-create-name.page.html',
     styleUrls: ['./wallet-create-name.page.scss'],
 })
 export class WalletCreateNamePage implements OnInit {
+
     public name: string = "";
-    constructor(public route: ActivatedRoute, public native: Native, private walletManager: WalletManager, private walletCreationService: WalletCreationService) {
+
+    constructor(
+        public route: ActivatedRoute,
+        public native: Native,
+        private walletManager: WalletManager,
+        private walletCreationService: WalletCreationService
+    ) {
     }
 
     ngOnInit() {

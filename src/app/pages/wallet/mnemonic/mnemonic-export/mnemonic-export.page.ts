@@ -111,7 +111,8 @@ export class MnemonicExportPage implements OnInit {
     async onExport() {
         if (this.checkParams()) {
             let ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
-            titleBarManager.setBackgroundColor('#6226af');
+             // #5919ac #732cd0
+            titleBarManager.setBackgroundColor('#6B26C6');
             titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
             this.appService.setTitleBarTitle('Mnemonic');
 
@@ -120,6 +121,7 @@ export class MnemonicExportPage implements OnInit {
             for (var i = 0; i < mnemonicArr.length; i++) {
                 this.mnemonicList.push({ "text": mnemonicArr[i], "selected": false });
             }
+
             this.isShow = false;
         }
     }

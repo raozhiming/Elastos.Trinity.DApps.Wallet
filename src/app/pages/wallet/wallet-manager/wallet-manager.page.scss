@@ -118,7 +118,18 @@
             color: #ffffff;
         }
     }
+}
 
-    .card-row {
+ion-footer {
+    background: #f8f8ff;
+    padding: 0 30px 30px 30px;
+
+    .btn-container {
+        margin-top: 25px;
+        width: 100%;
     }
+}
+
+.dark-footer {
+    background:#191a2f;
 }

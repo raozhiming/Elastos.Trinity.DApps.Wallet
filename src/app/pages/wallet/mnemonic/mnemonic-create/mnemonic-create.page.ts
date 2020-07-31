@@ -8,6 +8,8 @@ import { LocalStorage } from '../../../../services/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
+
 @Component({
     selector: 'app-mnemonic-create',
     templateUrl: './mnemonic-create.page.html',
@@ -22,16 +24,27 @@ export class MnemonicCreatePage implements OnInit {
     defaultCointype = "Ela";
     isSelect: boolean = false;
 
-    constructor(public route: ActivatedRoute,
-        public walletManager: WalletManager, public native: Native, 
-        public localStorage: LocalStorage, public events: Events,
-        public zone: NgZone, private walletCreationService: WalletCreationService) {
+    constructor(
+        public route: ActivatedRoute,
+        public walletManager: WalletManager,
+        public native: Native,
+        public localStorage: LocalStorage,
+        public events: Events,
+        public zone: NgZone,
+        private walletCreationService: WalletCreationService
+    ) {
         native.showLoading().then(() => {
             this.init();
-        })
+        });
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        titleBarManager.setBackgroundColor('#6B26C6');
+        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
+        titleBarManager.setTitle('Mnemonic');
     }
 
     async init() {

@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
     <header-bar title="launcher-create-wallet"></header-bar>
 </ion-header>
 
@@ -40,4 +40,40 @@
 
 <ion-footer>
     <ion-button class="confirm" (click)="onCreate()">{{ 'confirm' | translate }}</ion-button>
-</ion-footer>
+</ion-footer> -->
+
+<ion-grid class="ion-text-center container">
+    <p>
+        Enter a wallet name and a
+        password to protect it.
+    </p>
+    <ion-row>
+        <ion-input
+            type="text"
+            placeholder="Enter Name"
+            [(ngModel)]="wallet.name"
+        >
+        </ion-input>
+    </ion-row>
+    <ion-row>
+        <ion-input
+            type="password"
+            placeholder="Enter pay password"
+            [(ngModel)]="wallet.payPassword"
+        >
+        </ion-input>
+    </ion-row>
+    <ion-row>
+        <ion-input
+            type="password"
+            placeholder="Re-enter pay password"
+            [(ngModel)]="wallet.rePayPassword"
+        >
+        </ion-input>
+    </ion-row>
+    <ion-row class="btn-container">
+        <ion-button color="secondary" (click)="onCreate()">
+            <ion-label>{{ 'confirm' | translate }}</ion-label>
+        </ion-button>
+    </ion-row>
+</ion-grid>

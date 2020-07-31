@@ -6,30 +6,57 @@ import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../../services/wallet.service';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
+
 @Component({
     selector: 'app-mnemonic-write',
     templateUrl: './mnemonic-write.page.html',
     styleUrls: ['./mnemonic-write.page.scss'],
 })
 export class MnemonicWritePage implements OnInit {
-    mnemonicList: SelectableMnemonic[] = []
+
+    mnemonicList: SelectableMnemonic[] = [];
     selectList: Array<any> = [];
     mnemonicStr: string;
     selectComplete = false;
 
-    constructor(public route: ActivatedRoute,
+    word1 = "";
+    word2 = "";
+    word3 = "";
+    word4 = "";
+    word5 = "";
+    word6 = "";
+    word7 = "";
+    word8 = "";
+    word9 = "";
+    word10 = "";
+    word11 = "";
+    word12 = "";
+
+
+    constructor(
+        public route: ActivatedRoute,
         public native: Native,
         public events: Events,
         public walletManager: WalletManager,
         private walletCreationService: WalletCreationService,
-        public zone: NgZone) {
-
+        public zone: NgZone
+    ) {
         this.mnemonicStr = this.native.clone(this.walletCreationService.mnemonicStr);
         this.mnemonicList = this.native.clone(this.walletCreationService.mnemonicList);
         this.mnemonicList = this.mnemonicList.sort(function(){ return 0.5 - Math.random() });
     }
 
     ngOnInit() {
+        for (let i = 0; i < 12; i++) {
+            this.selectList.push(i);
+        }
+    }
+
+    ionViewWillEnter() {
+        titleBarManager.setBackgroundColor('#732cd0');
+        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
+        titleBarManager.setTitle('Import Wallet');
     }
 
     async onNext() {

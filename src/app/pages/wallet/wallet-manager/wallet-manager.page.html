@@ -55,6 +55,14 @@
     </ion-grid>
 </ion-content>
 
+<ion-footer [class.dark-footer]="theme.darkMode" lines="none">
+    <ion-row class="btn-container">
+        <ion-button [routerLink]="['/launcher']" routerDirection="forward">
+            <ion-label>{{ 'text-add-wallet' | translate }}</ion-label>
+        </ion-button>
+    </ion-row>
+</ion-footer>
+
 <!-- <ion-header>
     <header-bar title="text-wallet-manager"></header-bar>
 </ion-header>

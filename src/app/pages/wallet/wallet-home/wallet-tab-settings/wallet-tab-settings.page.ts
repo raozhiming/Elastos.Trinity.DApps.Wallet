@@ -49,6 +49,13 @@ export class WalletTabSettingsPage implements OnInit {
             icon: '/assets/settings/wallet.svg',
             iconDarkmode: '/assets/settings/darkmode/wallet.svg'
         },
+/*         {
+            route: "/launcher",
+            title: "Add Wallet",
+            subtitle: "Create or import a new wallet",
+            icon: '/assets/settings/wallet.svg',
+            iconDarkmode: '/assets/settings/darkmode/wallet.svg'
+        }, */
     ];
 
     public Util = Util;

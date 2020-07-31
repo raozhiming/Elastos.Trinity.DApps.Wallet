@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
 
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
+
 @Component({
     selector: 'app-wallet-create',
     templateUrl: './wallet-create.page.html',
@@ -21,12 +23,13 @@ export class WalletCreatePage implements OnInit {
         rePayPassword: ''
     };
 
-    constructor(public route: ActivatedRoute, 
+    constructor(
+        public route: ActivatedRoute,
         public native: Native,
-        private walletManager: WalletManager, 
+        private walletManager: WalletManager,
         private walletCreationService: WalletCreationService,
-        public zone: NgZone) {
-
+        public zone: NgZone
+    ) {
         if (this.walletCreationService.isMulti) {
             this.wallet.singleAddress = true;
             this.isShow = true;
@@ -34,6 +37,12 @@ export class WalletCreatePage implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        titleBarManager.setBackgroundColor('#732cd0');
+        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
+        titleBarManager.setTitle('Import Wallet');
     }
 
     updateSingleAddress(isShow) {

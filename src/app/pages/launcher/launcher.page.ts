@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Native } from '../../services/native.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
+import { AppService } from 'src/app/services/app.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
 @Component({
     selector: 'app-launcher',
@@ -11,14 +14,26 @@ declare let appManager: AppManagerPlugin.AppManager;
 })
 export class LauncherPage implements OnInit {
 
-    constructor(public native: Native, private walletCreationService: WalletCreationService) {
+    constructor(
+        public native: Native,
+        private walletCreationService: WalletCreationService,
+        private theme: ThemeService
+    ) {
     }
 
     ngOnInit() {
     }
 
-    ionViewDidEnter() {
+    ionViewWillEnter() {
         appManager.setVisible("show");
+        titleBarManager.setBackgroundColor('#732cd0');
+        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
+        titleBarManager.setTitle('');
+    }
+
+    ionViewWillLeave() {
+        // Revert to global theme
+        this.theme.getTheme();
     }
 
     onNext(type) {

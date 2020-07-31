@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
     <header-bar title="text-add-wallet"></header-bar>
 </ion-header>
 
@@ -13,10 +13,6 @@
                 <ion-button expand="full" (click)="onNext(2)">
                     {{'launcher-backup-import' | translate}}</ion-button>
             </div>
-            <!-- <div>
-                <ion-button expand="full" (click)="onNext(3)">
-                    {{'signature-wallet' | translate}}</ion-button>
-            </div> -->
             <div id="warn">
                 <ion-icon slot="start" name="alert"></ion-icon>
                 <ion-label expand="full" >
@@ -28,4 +24,17 @@
             </div>
         </div>
     </div>
+</ion-content> -->
+
+<ion-content>
+    <ion-grid class="container">
+        <img src="assets/onboard/wallet.svg"/>
+        <h1>Secure Wallet for<br>The Elastos ecosystem</h1>
+        <ion-row class="btn-container">
+            <ion-button color="secondary" (click)="onNext(1)">
+                <ion-label>Get Started</ion-label>
+            </ion-button>
+        </ion-row>
+        <p (click)="onNext(2)">Already got a Wallet? Import it.</p>
+    </ion-grid>
 </ion-content>

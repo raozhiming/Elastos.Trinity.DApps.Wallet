@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
     <header-bar title="text-mnemonic-check"></header-bar>
 </ion-header>
 
@@ -28,15 +28,75 @@
             </div>
         </div>
 
-
-        <!-- <div *ngIf="selectComplete" class="bottom-absolute">
-            <ion-button class="confirm" class="button-standard" (click)="onNext()">
-            {{ 'confirm' | translate }}
-          </ion-button>
-        </div> -->
     </div>
 </ion-content>
 
 <ion-footer *ngIf="selectComplete">
     <ion-button class="confirm" (click)="onNext()" full>{{ 'confirm' | translate }}</ion-button>
-</ion-footer>
+</ion-footer> -->
+
+<ion-grid class="ion-text-center container">
+    <p>
+        Please type your 12 security words 
+        (mnemonic phrase) in order to verify it.
+    </p>
+    <ion-slides>
+        <ion-slide>
+            <ion-row>
+                <ion-col size="1">
+                   <span>1</span>
+                </ion-col>
+                <ion-col class='input-col' size="10">
+                    <ion-input
+                        type="text"
+                        [(ngModel)]="word1"
+                    >
+                    </ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="1">
+                   <span>2</span>
+                </ion-col>
+                <ion-col class='input-col' size="10">
+                    <ion-input
+                        type="text"
+                        [(ngModel)]="word2"
+                    >
+                    </ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="1">
+                   <span>3</span>
+                </ion-col>
+                <ion-col class='input-col' size="10">
+                    <ion-input
+                        type="text"
+                        [(ngModel)]="word3"
+                    >
+                    </ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="1">
+                   <span>4</span>
+                </ion-col>
+                <ion-col class='input-col' size="10">
+                    <ion-input
+                        type="text"
+                        [(ngModel)]="word4"
+                    >
+                    </ion-input>
+                </ion-col>
+            </ion-row>
+        </ion-slide>
+    </ion-slides>
+   
+   
+    <ion-row class="btn-container">
+        <ion-button color="secondary" (click)="onNext()">
+            <ion-label>{{ 'confirm' | translate }}</ion-label>
+        </ion-button>
+    </ion-row>
+</ion-grid>
