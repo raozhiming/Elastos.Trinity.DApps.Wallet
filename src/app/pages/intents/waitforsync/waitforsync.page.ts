@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
@@ -42,17 +42,16 @@ export class WaitForSyncPage implements OnInit {
                 private coinTransferService: CoinTransferService,
                 private walletManager: WalletManager,
                 public popupProvider: PopupProvider) {
-        // why? if do not use zone.run, then next screen may have refresh issue: text can not show.
+    }
+
+    ngOnInit() {
         this.zone.run(() => {
             this.init();
         });
     }
 
-    ngOnInit() {
-    }
-
-    ionViewDidEnter() {
-      appManager.setVisible("show", ()=>{}, (err)=>{});
+    ionViewWillEnter() {
+        appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     async init() {
@@ -107,6 +106,7 @@ export class WaitForSyncPage implements OnInit {
                 break;
         }
 
+        // TODO: remove it, IDChain is open always?
         if (this.chainId === StandardCoinName.IDChain) {
             if (!this.masterWallet.hasSubWallet(StandardCoinName.IDChain)) {
                 await this.notifyNoIDChain();
@@ -134,7 +134,7 @@ export class WaitForSyncPage implements OnInit {
     }
 
     doAction() {
-        this.native.go(this.nextScreen);
+        this.native.setRootRouter(this.nextScreen);
     }
 
     cancelOperation() {

@@ -49,6 +49,7 @@ export class Transfer {
     didrequest: string;
     type: string = 'payment-confirm';
     sideChainId: string;
+    currency: string; // pay
 }
 
 @Injectable({

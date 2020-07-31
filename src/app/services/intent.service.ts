@@ -14,7 +14,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     providedIn: 'root'
 })
 export class IntentService {
-    constructor(private zone: NgZone, private translate: TranslateService, 
+    constructor(private zone: NgZone, private translate: TranslateService,
         public events: Events, public native: Native, private walletManager: WalletManager,
         private coinTransferService: CoinTransferService) {
     }
@@ -59,7 +59,7 @@ export class IntentService {
         }
 
         this.coinTransferService.reset();
-        this.coinTransferService.walletInfo = this.walletManager.activeMasterWallet.account;        
+        this.coinTransferService.walletInfo = this.walletManager.activeMasterWallet.account;
         this.coinTransferService.transfer.memo = intent.params.memo || '';
         this.coinTransferService.transfer.intentId = intent.intentId;
         this.coinTransferService.transfer.action = intent.action;
@@ -121,6 +121,7 @@ export class IntentService {
             case 'pay':
                 this.coinTransferService.transfer.toAddress = intent.params.receiver;
                 this.coinTransferService.transfer.amount = intent.params.amount;
+                this.coinTransferService.transfer.chainId = intent.params.currency || 'ELA';
                 this.coinTransferService.transfer.type = 'payment-confirm';
                 break;
 
