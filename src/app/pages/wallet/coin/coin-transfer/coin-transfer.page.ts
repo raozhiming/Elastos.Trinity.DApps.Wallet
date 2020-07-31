@@ -30,9 +30,12 @@ import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
-import { StandardCoinName } from 'src/app/model/Coin';
+import { StandardCoinName, StandardCoin } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { SubWallet } from 'src/app/model/SubWallet';
+import * as CryptoAddressResolvers from 'src/app/model/address-resolvers';
+import { HttpClient } from '@angular/common/http';
+import { CryptoNameAddress } from 'src/app/model/address-resolvers';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -61,6 +64,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     hideMemo = false;
     introText = ''; // to show intro text
 
+    // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
+    suggestedAddresses: CryptoAddressResolvers.Address[] = [];
+
     constructor(
         public route: ActivatedRoute,
         public walletManager: WalletManager,
@@ -69,6 +75,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         public native: Native,
         public events: Events,
         public zone: NgZone,
+        private http: HttpClient,
         public theme: ThemeService,
     ) {
     }
@@ -237,5 +244,45 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             default:
                 return "assets/coins/eth.svg";
         }
+    }
+    
+    /**
+     * Callback called whenever the "send to" address changes.
+     * At that time, we cantry to call some APIs to retrieve an address by 
+     */
+    async onSendToAddressInput(enteredText: string) {
+        this.suggestedAddresses = [];
+
+        if (!enteredText)
+            return;
+
+        // Quick and dirty way to not try to resolve a name when it's actually an address already, not name.
+        // Could be improved later.
+        if (enteredText.length > 20) 
+            return;
+    
+        // Cryptoname
+        if (enteredText.length >= 3) {
+            // For now, handle only ELA addresses for cryptoname
+            if (this.chainId != StandardCoinName.ELA)
+                return;
+
+            let cryptoNameResolver = new CryptoAddressResolvers.CryptoNameResolver(this.http);
+            let results = await cryptoNameResolver.resolve(enteredText, StandardCoinName.ELA);
+            console.log("cryptoname results", results)
+
+            this.suggestedAddresses = this.suggestedAddresses.concat(results);
+        }
+    }
+
+    /**
+     * A suggested resolved address is picked by the user. Replace user's input (ex: the user friendly name)
+     * with its real address.
+     */
+    selectSuggestedAddress(suggestedAddress: CryptoAddressResolvers.CryptoNameAddress) {
+        this.transfer.toAddress = suggestedAddress.address;
+
+        // Hide/reset suggestions
+        this.suggestedAddresses = [];
     }
 }

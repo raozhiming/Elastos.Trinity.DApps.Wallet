@@ -35,7 +35,8 @@
         "Wallet"
     ],
     "urls": [
-      "http://api.elastos.io/*"
+      "http://api.elastos.io/*",
+      "https://*.elastos.name/*"
   ],
     "framework": [
         "ionic@4.12.0"
