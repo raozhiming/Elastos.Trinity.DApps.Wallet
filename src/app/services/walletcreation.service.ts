@@ -25,6 +25,11 @@ import { Injectable } from '@angular/core';
 export type SelectableMnemonic = {
     text: string;
     selected: boolean;
+};
+
+enum NewWallet {
+    CREATE = 1,
+    IMPORT = 2,
 }
 
 @Injectable({
@@ -33,6 +38,7 @@ export type SelectableMnemonic = {
 export class WalletCreationService {
     // Below fields are shared by several screens while creating (new/import) a master wallet.
     // Consider this service as a singleton shared class.
+    public type: NewWallet;
     public masterId: string;
     public mnemonicStr: string;
     public mnemonicList: SelectableMnemonic[];
@@ -41,7 +47,7 @@ export class WalletCreationService {
     public singleAddress: boolean;
     public isMulti: boolean;
     public name: string;
-    
+
     constructor() {
         this.reset();
     }

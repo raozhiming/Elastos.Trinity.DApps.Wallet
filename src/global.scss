@@ -57,13 +57,25 @@
   font-family: 'Montserrat' !important;
 }
 
+:focus {
+  outline: none;
+}
+
 .ripple {
   position: relative;
   overflow: hidden;
 }
 
-:focus {
-  outline: none;
+.swiper-pagination {
+  position: relative;
+  padding-top: 20px;
+  color: #ffffff;
+}
+
+ion-input {
+  height: 45px;
+  border-radius: 8px;
+  font-size: 15px;
 }
 
   

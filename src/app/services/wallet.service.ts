@@ -251,6 +251,10 @@ export class WalletManager {
         return this.masterWallets[masterId];
     }
 
+    public getWalletsList(): MasterWallet[] {
+        return Object.values(this.masterWallets);
+    }
+
     public walletNameExists(name: string): boolean {
         let existingWallet = Object.values(this.masterWallets).find((wallet) => {
             return wallet.name === name;

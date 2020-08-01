@@ -16,6 +16,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./wallet-list.page.scss'],
 })
 export class WalletlistPage implements OnInit {
+    id: string;
     masterWalletId: string = "1";
     masterWallets = {};
     Config = Config;

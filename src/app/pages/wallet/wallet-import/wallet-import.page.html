@@ -1,4 +1,184 @@
-<ion-header>
+<ion-content>
+    <ion-grid class="ion-text-center container">
+        <p>
+            Type your mnemonic sequence
+            of words to import your wallet. 
+        </p>
+        <ion-slides #slider pager [options]="slideOpts">
+            <ion-slide>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>1.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word1"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>2.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word2"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>3.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word3"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>4.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word4"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+            </ion-slide>
+            <ion-slide>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>5.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word5"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>6.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word6"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>7.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word7"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>8.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word8"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+            </ion-slide>
+            <ion-slide>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>9.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word9"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>10.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word10"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>11.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word11"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="1">
+                        <span>12.</span>
+                    </ion-col>
+                    <ion-col class='input-col' size="10">
+                        <ion-input
+                            type="text"
+                            [(ngModel)]="word12"
+                            (ngModelChange)="inputChanged($event)"
+                        >
+                        </ion-input>
+                    </ion-col>
+                </ion-row>
+            </ion-slide>
+        </ion-slides> 
+    
+        <ion-row class="btn-container">
+            <ion-button color="secondary" (click)="onImport()">
+                <ion-label>{{ 'confirm' | translate }}</ion-label>
+            </ion-button>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
+<!-------------------- OLD WALLET -------------------->
+<!-- <ion-header>
     <header-bar title="launcher-backup-import"></header-bar>
 </ion-header>
 
@@ -94,4 +274,4 @@
 
 <ion-footer>
     <ion-button class="confirm" (click)="onImport()" full>{{ 'confirm' | translate }}</ion-button>
-</ion-footer>
+</ion-footer> -->

@@ -36,15 +36,24 @@ export class LauncherPage implements OnInit {
         this.theme.getTheme();
     }
 
-    onNext(type) {
+    onNext(type: number) {
+        this.walletCreationService.reset();
+        this.walletCreationService.isMulti = false;
+        this.walletCreationService.type = type;
+        this.native.go("/wallet-create");
+    }
+
+   /*  onNext(type) {
         this.walletCreationService.reset();
         this.walletCreationService.isMulti = false;
 
         switch (type) {
             case 1:
+                this.walletCreationService.type = 1;
                 this.native.go("/wallet-create");
                 break;
             case 2:
+                this.walletCreationService.type = 2;
                 this.native.go("/wallet-import");
                 break;
             case 3:
@@ -52,5 +61,5 @@ export class LauncherPage implements OnInit {
                 this.native.go("/createmultiwallet");
                 break;
         }
-    }
+    } */
 }

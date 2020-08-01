@@ -1,39 +1,19 @@
-<!-- <ion-content>
-    <ion-grid class="container">
-        <ion-row class="main-title-row">
-            <ion-col size="12">
-                <h1>Wallets will have individual settings, you can check the options of each wallet below</h1>
-            </ion-col>
-        </ion-row>
-        <ion-row class="card-row" [routerLink]="['/wallet-list']" routerDirection="forward">
-            <ion-row class="card-label-row"> 
-                <ion-row class="top-row">
-                    <ion-col size="10" class="left-col">
-                        <h1>{{ walletManager.activeMasterWallet.name }}</h1>
-                    </ion-col>
-                    <ion-col size="2" class="right-col">
-                        <ion-img src="assets/settings/gears.svg"></ion-img>
-                    </ion-col>
-                </ion-row>
-                <h2></h2>
-                <h3>TOTAL AMOUNT</h3>
-                <h4>100<span class="dot">.</span>
-                    <span class="decimals">00</span>
-                    <span class="ela">  ELA</span>
-                </h4>
-            </ion-row>
-        </ion-row>
-    </ion-grid>
-</ion-content> -->
-
 <ion-content>
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
-        <ion-row class="main-title-row">
-            <ion-col size="12">
-                <h1>Wallets will have individual settings, you can check the options of each wallet below</h1>
-            </ion-col>
-        </ion-row>
-        <ion-row class="card-row" *ngFor="let masterWallet of getWalletsList()" (click)="itemSelected(masterWallet)">
+        <p>
+            Wallets will have individual settings, you can 
+            check the options of each wallet below
+        </p>
+        <ion-row 
+            *ngFor="let masterWallet of walletManager.getWalletsList()" 
+            class="card-row" 
+            [class.card2]="getWalletIndex(masterWallet) === 1"
+            [class.card3]="getWalletIndex(masterWallet) === 2"
+            [class.card4]="getWalletIndex(masterWallet) === 3"
+            [class.card5]="getWalletIndex(masterWallet) === 4"
+            [class.card6]="getWalletIndex(masterWallet) === 5"
+            (click)="walletSelected(masterWallet)"
+        >
             <ion-row class="card-label-row"> 
                 <ion-row class="top-row">
                     <ion-col size="10" class="left-col">
@@ -52,17 +32,23 @@
                 </h4>
             </ion-row>
         </ion-row>
+        <ion-row class="btn-container">
+            <ion-button [routerLink]="['/launcher']" routerDirection="forward">
+                <ion-label>{{ 'text-add-wallet' | translate }}</ion-label>
+            </ion-button>
+        </ion-row>
     </ion-grid>
 </ion-content>
 
-<ion-footer [class.dark-footer]="theme.darkMode" lines="none">
+<!-------------------- OLD WALLET -------------------->
+<!-- <ion-footer [class.dark-footer]="theme.darkMode" lines="none">
     <ion-row class="btn-container">
         <ion-button [routerLink]="['/launcher']" routerDirection="forward">
             <ion-label>{{ 'text-add-wallet' | translate }}</ion-label>
         </ion-button>
     </ion-row>
 </ion-footer>
-
+ -->
 <!-- <ion-header>
     <header-bar title="text-wallet-manager"></header-bar>
 </ion-header>

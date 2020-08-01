@@ -40,12 +40,12 @@ export class WalletManagerPage implements OnInit {
         this.native.go("/launcher");
     }
 
-    itemSelected(masterWallet: MasterWallet) {
+    walletSelected(masterWallet: MasterWallet) {
         this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
         this.native.go("/wallet-settings");
     }
 
-    getWalletsList(): MasterWallet[] {
-        return Object.values(this.walletManager.masterWallets);
+    getWalletIndex(masterWallet: MasterWallet): number {
+       return this.walletManager.getWalletsList().indexOf(masterWallet);
     }
 }

@@ -1,4 +1,87 @@
-@import "../../../functions.scss";
+.container {
+    min-height: 100%;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-image: url('/assets/background/background.svg');
+    object-fit: cover;
+
+    p {
+        margin: 0;
+        padding: 30px 45px 40px;
+        font-size: 19px;
+        font-weight: 400;
+        line-height: 1.26;
+        letter-spacing: -0.46px;
+        text-align: center;
+        color: #fdfeff;
+    }
+
+    ion-slides {
+        margin: 0;
+        width: 100%;
+
+        ion-slide {
+            width: 100%;
+            padding: 0 30px;
+            display: flex;
+            flex-direction: column;
+
+            ion-row {
+                width: 100%;
+                background: #803fd5;
+                padding: 0px 10px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+
+                ion-col {
+                    padding: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    span {
+                        font-size: 16px;
+                        font-weight: 400;
+                        letter-spacing: -0.41px;
+                        text-align: center;
+                        color: #fdfeff;
+                    }
+
+                    ion-input {
+                        height: 45px;
+                        background: #803fd5;
+                        font-size: 16px;
+                        line-height: 1.06;
+                        letter-spacing: -0.41px;
+                        text-align: left;
+                        color: #fdfeff;
+                        --padding-start: 12px;
+                    }
+
+                    .invisible {
+                        visibility: hidden;
+                    }
+                }
+
+                .input-col {
+                    justify-content: flex-start;
+                }
+            }        
+        }
+    }
+
+    .btn-container {
+        margin-top: 210px;
+        padding-left: 30px;
+        padding-right: 30px;
+        width: 100%;
+    }
+}
+
+/* @import "../../../functions.scss";
 
 .kuangTextArea {
     text-align: center;
@@ -19,3 +102,4 @@ ion-segment-button {
     --indicator-color-checked: #FFCB0F;
     font-size: 16px;
 }
+ */

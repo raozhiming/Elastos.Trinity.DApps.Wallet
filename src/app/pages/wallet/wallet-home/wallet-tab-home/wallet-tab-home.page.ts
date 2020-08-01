@@ -32,6 +32,7 @@ import { SubWallet } from 'src/app/model/SubWallet';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from '../../../../model/Util';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -92,7 +93,7 @@ export class WalletTabHomePage implements OnInit {
     handleItem(key: string) {
         switch (key) {
             case 'settings':
-                this.goSetting();
+                this.goToGeneralSettings();
                 break;
         }
     }
@@ -101,11 +102,16 @@ export class WalletTabHomePage implements OnInit {
         this.showOn = !this.showOn;
     }
 
-    goSetting() {
+    goToGeneralSettings() {
         this.walletEditionService.modifiedMasterWalletId = this.walletManager.getCurMasterWalletId();
-        this.native.go('/wallets-settings');
+        this.native.go('/settings');
         event.stopPropagation();
         return false;
+    }
+
+    goToWalletSettings(masterWallet: MasterWallet) {
+        this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
+        this.native.go("/wallet-settings");
     }
 
     doRefresh(event) {
@@ -134,6 +140,10 @@ export class WalletTabHomePage implements OnInit {
                 return "assets/coins/eth.svg";
         }
     }
+
+    getWalletIndex(masterWallet: MasterWallet): number {
+        return this.walletManager.getWalletsList().indexOf(masterWallet);
+     }
 
     getWholeBalance(balance: number): number {
         return Math.trunc(balance);

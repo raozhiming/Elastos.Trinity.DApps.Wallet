@@ -1,3 +1,28 @@
+<ion-content>
+    <ion-grid class="ion-text-center container">
+        <p>
+            These are your 12 security words 
+            (mnemonic phrase). Lose these 
+            and you will lose the wallet, so you
+            must keep them written down, in
+            order, and safe!
+        </p>
+        <ion-row class="mnemonic-row">
+            <ion-col size="3.6" *ngFor="let item of mnemonicList; let i = index">
+                <div class="mnemonic-index">{{ mnemonicList.indexOf(item) + 1 }}</div>
+                <ion-label>{{ item.text }}</ion-label>
+            </ion-col>
+        </ion-row>
+        <ion-row class="btn-container">
+            <ion-button color="secondary" (click)="onNext()">
+                <ion-label>{{ 'text-memory' | translate }}</ion-label>
+            </ion-button>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
+
+<!-------------------- OLD WALLET -------------------->
 <!-- <ion-header>
     <header-bar title="text-mnemonic"></header-bar>
 </ion-header>
@@ -43,27 +68,3 @@
 <ion-footer>
     <ion-button class="confirm" (click)="onNext()" full>{{ 'text-memory' | translate }}</ion-button>
 </ion-footer> -->
-
-
-<ion-content>
-    <ion-grid class="ion-text-center container">
-        <p>
-            These are your 12 security words 
-            (mnemonic phrase). Lose these 
-            and you will lose the wallet, so you
-            must keep them written down, in
-            order, and safe!
-        </p>
-        <ion-row class="mnemonic-row">
-            <ion-col size="3.6" *ngFor="let item of mnemonicList; let i = index">
-                <div class="mnemonic-index">{{ mnemonicList.indexOf(item) + 1 }}</div>
-                <ion-label>{{ item.text }}</ion-label>
-            </ion-col>
-        </ion-row>
-        <ion-row class="btn-container">
-            <ion-button color="secondary" (click)="onNext()">
-                <ion-label>{{ 'text-memory' | translate }}</ion-label>
-            </ion-button>
-        </ion-row>
-    </ion-grid>
-</ion-content>

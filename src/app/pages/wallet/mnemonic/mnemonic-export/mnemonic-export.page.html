@@ -1,44 +1,3 @@
-<!-- <ion-header>
-    <header-bar title={{title}} [showMinimize]="!isFromIntent" [showClose]="!isFromIntent"></header-bar>
-</ion-header>
-<ion-content>
-    <div class="coin-info-top-box">
-        <img src="./assets/images/logo-maincolor.svg">
-        <div style="font-size: 1.6em;">{{walletname}}
-            <span *ngIf="account['Type']==='Standard'"
-                style="font-size: 1.3px">{{'text-standard-wallet' | translate}}</span>
-            <span *ngIf="account['Type']==='Multi-Sign'"
-                style="font-size: 1.3px">{{'text-multi-wallet' | translate}}</span>
-        </div>
-    </div>
-    <ion-item *ngIf="isShow" lines="none">
-        <ion-label stacked>{{'unlock-paypassword-title' | translate }}</ion-label>
-        <ion-input type="password" placeholder="{{ 'unlock-paypassword-placeholder' | translate }}"
-            [(ngModel)]="payPassword"></ion-input>
-    </ion-item>
-    <div class="mnemonic" *ngIf="!isShow">
-        <div class="slide-container">
-            <div class="slide-title">{{ mnemonicPrompt | translate}}</div>
-            <div class="slide-body">
-                <div class="phrase-container">
-                    <div class="phrase">
-                        <ion-grid>
-                            <ion-row>
-                                <ion-col size="4" *ngFor="let item of mnemonicList;let i=index">{{item.text}}</ion-col>
-                            </ion-row>
-                        </ion-grid>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</ion-content>
-<ion-footer>
-    <ion-button class="confirm" (click)="onExport()" *ngIf="isShow">{{ 'text-export-mnemonic' | translate }}</ion-button>
-    <ion-button class="confirm" (click)="onNext()" *ngIf="!isShow && !isFromIntent">{{ 'text-memory' | translate }}</ion-button>
-    <ion-button class="confirm" (click)="onShare()" *ngIf="!isShow && isFromIntent">{{ 'text-allow' | translate }}</ion-button>
-</ion-footer> -->
-
 <ion-content>
     <ion-grid *ngIf="isShow" class="verify-container ion-no-padding ion-no-margin" [class.verify-dark-container]="theme.darkMode">
         <ion-row>
@@ -87,4 +46,46 @@
         </ion-row>
     </ion-grid>
 </ion-content>
+
+<!-------------------- OLD WALLET -------------------->
+<!-- <ion-header>
+    <header-bar title={{title}} [showMinimize]="!isFromIntent" [showClose]="!isFromIntent"></header-bar>
+</ion-header>
+<ion-content>
+    <div class="coin-info-top-box">
+        <img src="./assets/images/logo-maincolor.svg">
+        <div style="font-size: 1.6em;">{{walletname}}
+            <span *ngIf="account['Type']==='Standard'"
+                style="font-size: 1.3px">{{'text-standard-wallet' | translate}}</span>
+            <span *ngIf="account['Type']==='Multi-Sign'"
+                style="font-size: 1.3px">{{'text-multi-wallet' | translate}}</span>
+        </div>
+    </div>
+    <ion-item *ngIf="isShow" lines="none">
+        <ion-label stacked>{{'unlock-paypassword-title' | translate }}</ion-label>
+        <ion-input type="password" placeholder="{{ 'unlock-paypassword-placeholder' | translate }}"
+            [(ngModel)]="payPassword"></ion-input>
+    </ion-item>
+    <div class="mnemonic" *ngIf="!isShow">
+        <div class="slide-container">
+            <div class="slide-title">{{ mnemonicPrompt | translate}}</div>
+            <div class="slide-body">
+                <div class="phrase-container">
+                    <div class="phrase">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="4" *ngFor="let item of mnemonicList;let i=index">{{item.text}}</ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>
+<ion-footer>
+    <ion-button class="confirm" (click)="onExport()" *ngIf="isShow">{{ 'text-export-mnemonic' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="onNext()" *ngIf="!isShow && !isFromIntent">{{ 'text-memory' | translate }}</ion-button>
+    <ion-button class="confirm" (click)="onShare()" *ngIf="!isShow && isFromIntent">{{ 'text-allow' | translate }}</ion-button>
+</ion-footer> -->
       
