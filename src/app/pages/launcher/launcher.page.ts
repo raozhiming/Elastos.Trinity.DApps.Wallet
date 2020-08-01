@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Native } from '../../services/native.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
-import { AppService } from 'src/app/services/app.service';
-import { ThemeService } from 'src/app/services/theme.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -17,7 +15,6 @@ export class LauncherPage implements OnInit {
     constructor(
         public native: Native,
         private walletCreationService: WalletCreationService,
-        private theme: ThemeService
     ) {
     }
 
@@ -28,12 +25,10 @@ export class LauncherPage implements OnInit {
         appManager.setVisible("show");
         titleBarManager.setBackgroundColor('#732cd0');
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-        titleBarManager.setTitle('');
+        titleBarManager.setTitle('Wallet');
     }
 
     ionViewWillLeave() {
-        // Revert to global theme
-        this.theme.getTheme();
     }
 
     onNext(type: number) {
@@ -43,6 +38,7 @@ export class LauncherPage implements OnInit {
         this.native.go("/wallet-create");
     }
 
+    /* OLD WALLET, KEPT FOR REFERENCE */
    /*  onNext(type) {
         this.walletCreationService.reset();
         this.walletCreationService.isMulti = false;

@@ -77,80 +77,127 @@
     }
 } */
 
-.container {
+ion-slides { 
     min-height: 100%;
-    padding: 10px 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
     background-image: url('/assets/background/background2.svg');
     object-fit: cover;
 
-    p {
-        margin: 0;
-        padding: 20px 25px 40px;
-        font-size: 18px;
-        font-weight: 400;
-        line-height: 1.26;
-        letter-spacing: -0.46px;
-        text-align: center;
-        color: #fdfeff;
+    ion-slide {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100%;
+        width: 100%;
+    
+        .btn-container {
+            margin-top: 75px;
+        }
     }
 
-    .mnemonic-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: space-between;
+    .message-container {
+        justify-content: center;
+        padding: 30px 25px;
+        margin-top: 75px;
 
-        ion-col {
-            height: 35px;
-            background: #42117d;
-            border-radius: 8px;
-            margin-bottom: 30px;
+        h1, p {
+            padding: 0 25px;
+        }
+    
+        h1 {
+            font-size: 38px;
+            font-weight: 500;
+            letter-spacing: -0.82px;
+            text-align: center;
+            color: #ffffff;
+        }
+    
+        p {
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: -0.46px;
+            text-align: center;
+            color: #fdfeff;
+        }
+
+
+        .btn-container {
+            width: 100%;
+        }
+    }
+    
+    .mnemonic-container {
+        min-height: 100%;
+        padding: 10px 25px;
+        justify-content: flex-start;
+       
+        p {
+            margin: 0;
+            padding: 20px 25px 40px;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.26;
+            letter-spacing: -0.46px;
+            text-align: center;
+            color: #fdfeff;
+        }
+    
+        .mnemonic-row {
             display: flex;
-            justify-content: center;
-            align-items: center;
-
-            .mnemonic-index {
-                position: absolute;
-                z-index: 100;
-                top: -11px;
-                left: -11px;
-                width: 22px;
-                height: 22px;
+            justify-content: space-between;
+            align-items: space-between;
+    
+            ion-col {
+                height: 35px;
                 background: #42117d;
-                border-radius: 100%;
-                border: 2px solid #6a25c4;
-                color: #fdfeff;
+                border-radius: 8px;
+                margin-bottom: 30px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 9px;
-            }
+    
+                .mnemonic-index {
+                    position: absolute;
+                    z-index: 100;
+                    top: -11px;
+                    left: -11px;
+                    width: 22px;
+                    height: 22px;
+                    background: #42117d;
+                    border-radius: 100%;
+                    border: 2px solid #6a25c4;
+                    color: #fdfeff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 9px;
+                }
+    
+                ion-label {
+                    font-size: 12px;
+                    font-weight: 500;
+                    line-height: 1.25;
+                    letter-spacing: -0.29px;
+                    color: #fdfeff;
+                }
+            } 
+        }
 
-            ion-label {
-                font-size: 12px;
-                font-weight: 500;
-                line-height: 1.25;
-                letter-spacing: -0.29px;
-                color: #fdfeff;
-            }
-        } 
-    }
-
-    .btn-container {
-        margin-top: 75px;
-        width: 95%;
+        .btn-container {
+            width: 95%;
+        }
     }
 }
 
+
+
 @media screen and (max-height: 670px) {
-    .container {
-        .mnemonic-row {
-            ion-col {
-                margin-bottom: 15px;
+    ion-slides {
+        .mnemonic-container {
+            .mnemonic-row {
+                ion-col {
+                    margin-bottom: 15px;
+                }
             }
         }
-    } 
+    }
 }

@@ -89,6 +89,7 @@ import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.
 import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
 import { HttpClientModule } from '@angular/common/http';
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
+import { WalletCreatedComponent } from './components/wallet-created/wallet-created.component';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -171,11 +172,13 @@ export function TranslateLoaderFactory() {
         MnemonicExportPage,
         MnemonicCheckPage,
         MnemonicWritePage,
-        MnemonicCreatePage
+        MnemonicCreatePage,
+        WalletCreatedComponent
     ],
     entryComponents: [
         LauncherPage,
-        WalletTabsRootPage
+        WalletTabsRootPage,
+        WalletCreatedComponent
     ],
     imports: [
         BrowserModule,

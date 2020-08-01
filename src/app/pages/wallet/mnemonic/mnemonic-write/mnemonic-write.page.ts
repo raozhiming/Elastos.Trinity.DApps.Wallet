@@ -2,9 +2,11 @@ import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { Native } from '../../../../services/native.service';
 import { Util } from "../../../../model/Util";
 import { ActivatedRoute } from '@angular/router';
-import { Events, IonSlides } from '@ionic/angular';
+import { Events, IonSlides, ModalController } from '@ionic/angular';
 import { WalletManager } from '../../../../services/wallet.service';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { WalletCreatedComponent } from 'src/app/components/wallet-created/wallet-created.component';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -24,11 +26,6 @@ export class MnemonicWritePage implements OnInit {
         slidesPerView: 1
     };
 
-    // Currently not in use
-    mnemonicList: SelectableMnemonic[] = [];
-    selectList: Array<any> = [];
-    selectComplete = false;
-
     public word1 = "";
     public word2 = "";
     public word3 = "";
@@ -45,19 +42,28 @@ export class MnemonicWritePage implements OnInit {
     private inputStr: string = "";
     private mnemonicStr: string;
 
+    private modal: any;
+
+    // Currently not in use
+    // mnemonicList: SelectableMnemonic[] = [];
+    // selectList: Array<any> = [];
+    // selectComplete = false;
+
     constructor(
         public route: ActivatedRoute,
         public native: Native,
         public events: Events,
         public walletManager: WalletManager,
         private walletCreationService: WalletCreationService,
-        public zone: NgZone
+        public zone: NgZone,
+        private modalCtrl: ModalController
     ) {
         this.mnemonicStr = this.native.clone(this.walletCreationService.mnemonicStr);
-        this.mnemonicList = this.native.clone(this.walletCreationService.mnemonicList);
+
+     /*    this.mnemonicList = this.native.clone(this.walletCreationService.mnemonicList);
         this.mnemonicList = this.mnemonicList.sort(() => {
             return 0.5 - Math.random();
-        });
+        }); */
     }
 
     ngOnInit() {
@@ -98,7 +104,6 @@ export class MnemonicWritePage implements OnInit {
     // For testing purposes
     inputChanged(event) {
         console.log('Input test', event);
-        console.log(this.selectList);
     }
 
     async onNext() {
@@ -117,6 +122,8 @@ export class MnemonicWritePage implements OnInit {
                             this.walletCreationService.payPassword,
                             this.walletCreationService.singleAddress
                         );
+                    
+                    this.createWalletSuccess();
                 }
 
             } else {
@@ -130,6 +137,18 @@ export class MnemonicWritePage implements OnInit {
             this.inputStr = "";
             this.native.toast('Please fill in all inputs before proceeding');
         }
+    }
+
+    async createWalletSuccess() {
+        this.modal = await this.modalCtrl.create({
+          component: WalletCreatedComponent,
+          componentProps: {
+          },
+        });
+        this.modal.onWillDismiss().then(() => {
+            this.native.go('/wallet-home');
+        });
+        this.modal.present();
     }
 
     allInputsFilled() {
@@ -196,9 +215,9 @@ export class MnemonicWritePage implements OnInit {
         return true;
     }
 
-    /******************************************************
-     * OLD CODE, NO LONGER USED BUT KEPT FOR REFERENCE
-    ******************************************************/
+    /**********************************
+     * OLD WALLET - KEPT FOR REFERENCE
+    ***********************************/
  /*    async onNext() {
         let mn = "";
         for (let i = 0; i < this.selectList.length; i++) {

@@ -34,6 +34,7 @@ export class WalletManagerPage implements OnInit {
 
     ionViewWillEnter() {
         this.appService.setTitleBarTitle('My Wallets');
+        this.theme.getTheme();
     }
 
     onNext() {

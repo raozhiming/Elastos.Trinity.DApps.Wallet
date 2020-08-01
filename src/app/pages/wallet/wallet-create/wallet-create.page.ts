@@ -15,14 +15,13 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 })
 export class WalletCreatePage implements OnInit {
 
-    MultObj: any;
-    showOptions: boolean = false;
-
-    wallet = {
+    public showOptions: boolean = false;
+    public wallet = {
         name: '',
         singleAddress: false,
         payPassword: '',
-        rePayPassword: ''
+        rePayPassword: '',
+        mnemonicPassword: ''
     };
 
     constructor(
@@ -38,13 +37,10 @@ export class WalletCreatePage implements OnInit {
     }
 
     ngOnInit() {
-        titleBarManager.setBackgroundColor('#732cd0');
-        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
     }
 
     ionViewWillEnter() {
         titleBarManager.setBackgroundColor('#732cd0');
-        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
         if (this.walletCreationService.type === 1) {
             titleBarManager.setTitle('Create Wallet');
         } else {
@@ -53,8 +49,6 @@ export class WalletCreatePage implements OnInit {
     }
 
     ionViewDidEnter() {
-        titleBarManager.setBackgroundColor('#732cd0');
-        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
     }
 
     updateSingleAddress(event) {
@@ -87,22 +81,15 @@ export class WalletCreatePage implements OnInit {
     }
 
     createWallet() {
-        // Master Wallet
-        let params = {
-            payPassword: this.wallet.payPassword,
-            name: this.wallet.name,
-            singleAddress: this.wallet.singleAddress,
-            mult: JSON.stringify(this.MultObj)
-        };
-
         this.walletCreationService.payPassword = this.wallet.payPassword;
         this.walletCreationService.name = this.wallet.name;
         this.walletCreationService.singleAddress = this.wallet.singleAddress;
+        this.walletCreationService.mnemonicPassword = this.wallet.mnemonicPassword;
 
         if (this.walletCreationService.type === 1) {
-            this.native.go("/mnemonic-create", params);
+            this.native.go("/mnemonic-create");
         } else {
-            this.native.go("/wallet-import", params);
+            this.native.go("/wallet-import");
         }
     }
 }

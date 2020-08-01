@@ -40,13 +40,14 @@ export class WalletCreationService {
     // Consider this service as a singleton shared class.
     public type: NewWallet;
     public masterId: string;
-    public mnemonicStr: string;
     public mnemonicList: SelectableMnemonic[];
-    public mnemonicPassword: string;
+    public mnemonicStr: string;
     public payPassword: string;
     public singleAddress: boolean;
     public isMulti: boolean;
     public name: string;
+
+    public mnemonicPassword: string;
 
     constructor() {
         this.reset();
@@ -56,13 +57,15 @@ export class WalletCreationService {
      * Resets all service fields to their default value to restart a new wallet creation.
      */
     public reset() {
+        this.type = null;
         this.masterId = null;
         this.mnemonicStr = null;
         this.mnemonicList = [];
-        this.mnemonicPassword = null;
         this.payPassword = null;
         this.singleAddress = null;
         this.isMulti = null;
         this.name = null;
+
+        this.mnemonicPassword = null;
     }
 }

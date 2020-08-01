@@ -29,16 +29,19 @@ import { Logger } from '../model/Logger';
 
 @Injectable()
 export class Native {
-    private mnemonicLang: string = "english";
-    private loadingIsOpen: boolean = false;
 
-    constructor(public toastCtrl: ToastController,
-                private clipboard: Clipboard,
-                public translate: TranslateService,
-                private loadingCtrl: LoadingController,
-                private navCtrl: NavController,
-                private zone: NgZone,
-                private router: Router) {
+    private mnemonicLang: string = "english";
+    private loader: any = null;
+
+    constructor(
+        public toastCtrl: ToastController,
+        private clipboard: Clipboard,
+        public translate: TranslateService,
+        private loadingCtrl: LoadingController,
+        private navCtrl: NavController,
+        private zone: NgZone,
+        private router: Router
+    ) {
     }
 
     public info(message) {
@@ -130,26 +133,21 @@ export class Native {
         return myNewObj;
     }
 
-    /**
-     * 统一调用此方法显示loading
-     * @param content 显示的内容
-     */
     public async showLoading(content: string = ''): Promise<void> {
-        if (!this.loadingIsOpen) {
-            this.loadingIsOpen = true;
-            let loading = await this.loadingCtrl.create({
-                message: content
-            });
-            await loading.present();
-        }
+        this.loader = await this.loadingCtrl.create({
+            mode: 'ios',
+            message: content
+        });
+        this.loader.onWillDismiss().then(() => {
+            this.loader = null;
+          });
+        return await this.loader.present();
     }
 
-    /**
-     * 关闭loading
-     */
     public hideLoading(): void {
-        this.loadingIsOpen && this.loadingCtrl.dismiss();
-        this.loadingIsOpen = false;
+        if (this.loader) {
+            this.loader.dismiss();
+        }
     }
 }
 

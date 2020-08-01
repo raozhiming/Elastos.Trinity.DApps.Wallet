@@ -280,10 +280,23 @@ export class WalletManager {
     /**
      * Creates a new master wallet both in the SPV SDK and in our local model.
      */
-    public async createNewMasterWallet(masterId: WalletID, walletName: string, mnemonicStr: string, mnemonicPassword: string, payPassword: string, singleAddress: boolean) {
+    public async createNewMasterWallet(
+        masterId: WalletID,
+        walletName: string,
+        mnemonicStr: string,
+        mnemonicPassword: string,
+        payPassword: string,
+        singleAddress: boolean
+    ) {
         console.log("Creating new master wallet");
 
-        await this.spvBridge.createMasterWallet(masterId, mnemonicStr, mnemonicPassword, payPassword, singleAddress);
+        await this.spvBridge.createMasterWallet(
+            masterId,
+            mnemonicStr,
+            mnemonicPassword,
+            payPassword,
+            singleAddress
+        );
 
         let account: WalletAccount = {
             singleAddress: singleAddress,
@@ -296,7 +309,14 @@ export class WalletManager {
     /**
      * Creates a new master wallet both in the SPV SDK and in our local model, using a given mnemonic.
      */
-    public async importMasterWalletWithMnemonic(masterId: WalletID, walletName: string, mnemonicStr: string, mnemonicPassword: string, payPassword: string, singleAddress: boolean) {
+    public async importMasterWalletWithMnemonic(
+        masterId: WalletID,
+        walletName: string,
+        mnemonicStr: string,
+        mnemonicPassword: string,
+        payPassword: string,
+        singleAddress: boolean
+    ) {
         console.log("Importing new master wallet with mnemonic");
 
         await this.spvBridge.importWalletWithMnemonic(masterId, mnemonicStr, mnemonicPassword, payPassword, singleAddress);
@@ -337,7 +357,7 @@ export class WalletManager {
         await this.setActiveMasterWalletId(id);
 
         // Go to wallet's home page.
-        this.native.setRootRouter("/wallet-home");
+        // this.native.setRootRouter("/wallet-home");
 
         // Get balance by rpc
         this.getAllSubwalletsBalanceByRPC();

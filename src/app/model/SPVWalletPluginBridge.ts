@@ -75,21 +75,26 @@ export type VoteInfo = {
     Amount: string, // Amount in sELA
     Timestamp: number, // Unix timestamp (secs)
     Expiry: number, // Unix timestamp (secs). Can be null.
-}
+};
 
 export type CRProposalVoteInfo = VoteInfo & {
     Votes: {
         [proposalHash: string]: string // "proposalHash": "sELAVoteAmount"
     }
-}
+};
 
 export type AllAddresses = {
     Addresses: string[];
     MaxCount: number;
-}
+};
 
 export class SPVWalletPluginBridge {
-    constructor(private native: Native, private event: Events, private popupProvider: PopupProvider) {
+
+    constructor(
+        private native: Native,
+        private event: Events,
+        private popupProvider: PopupProvider
+    ) {
     }
 
     public generateMnemonic(language: string): Promise<string> {
@@ -100,51 +105,91 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    createMasterWallet(masterWalletId: string, mnemonic: string, phrasePassword: string, payPassword: string, singleAddress: boolean): Promise<any> {
-        return new Promise((resolve, reject)=>{
-            walletManager.createMasterWallet([masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
+    createMasterWallet(
+        masterWalletId: string,
+        mnemonic: string,
+        phrasePassword: string,
+        payPassword: string,
+        singleAddress: boolean
+    ): Promise<any> {
+        return new Promise((resolve, reject) => {
+            walletManager.createMasterWallet(
+                [masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject);  });
+                (err) => { this.handleError(err, reject); });
         });
     }
 
-    createMultiSignMasterWallet(masterWalletId: string, publicKeys: string, m: number): Promise<any> {
-        return new Promise((resolve, reject)=>{
-            walletManager.createMultiSignMasterWallet([masterWalletId, publicKeys, m, Util.getTimestamp()],
+    createMultiSignMasterWallet(
+        masterWalletId: string,
+        publicKeys: string,
+        m: number
+    ): Promise<any> {
+        return new Promise((resolve, reject) => {
+            walletManager.createMultiSignMasterWallet(
+                [masterWalletId, publicKeys, m, Util.getTimestamp()],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject);  });
+                (err) => { this.handleError(err, reject); });
         });
     }
 
-    createMultiSignMasterWalletWithPrivKey(masterWalletId: string, privKey: string, payPassword: string, publicKeys: string, m: number): Promise<any> {
-        return new Promise((resolve, reject)=>{
-            walletManager.createMultiSignMasterWalletWithPrivKey([masterWalletId, privKey, payPassword, publicKeys, m, Util.getTimestamp()],
+    createMultiSignMasterWalletWithPrivKey(
+        masterWalletId: string,
+        privKey: string,
+        payPassword: string,
+        publicKeys: string,
+        m: number
+    ): Promise<any> {
+        return new Promise((resolve, reject) => {
+            walletManager.createMultiSignMasterWalletWithPrivKey(
+                [masterWalletId, privKey, payPassword, publicKeys, m, Util.getTimestamp()],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject);  });
+                (err) => { this.handleError(err, reject); });
         });
     }
 
-    createMultiSignMasterWalletWithMnemonic(masterWalletId: string, mnemonic: string, phrasePassword: string, payPassword: string, coSignersJson: string, requiredSignCount: string): Promise<any> {
-        return new Promise((resolve, reject)=>{
-            walletManager.createMultiSignMasterWalletWithMnemonic([masterWalletId, mnemonic, phrasePassword, payPassword, coSignersJson, requiredSignCount],
+    createMultiSignMasterWalletWithMnemonic(
+        masterWalletId: string,
+        mnemonic: string,
+        phrasePassword: string,
+        payPassword: string,
+        coSignersJson: string,
+        requiredSignCount: string
+    ): Promise<any> {
+        return new Promise((resolve, reject) => {
+            walletManager.createMultiSignMasterWalletWithMnemonic(
+                [masterWalletId, mnemonic, phrasePassword, payPassword, coSignersJson, requiredSignCount],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject);  });
+                (err) => { this.handleError(err, reject); });
         });
     }
 
-    importWalletWithKeystore(masterWalletId: string, keystoreContent: string, backupPassword: string, payPassword: string): Promise<any> {
-        return new Promise((resolve, reject)=>{
-            walletManager.importWalletWithKeystore([masterWalletId, keystoreContent, backupPassword, payPassword],
+    importWalletWithKeystore(
+        masterWalletId: string,
+        keystoreContent: string,
+        backupPassword: string,
+        payPassword: string
+    ): Promise<any> {
+        return new Promise((resolve, reject) => {
+            walletManager.importWalletWithKeystore(
+                [masterWalletId, keystoreContent, backupPassword, payPassword],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject);  });
+                (err) => { this.handleError(err, reject); });
         });
     }
 
-    importWalletWithMnemonic(masterWalletId: string, mnemonic: string, phrasePassword: string, payPassword, singleAddress: boolean): Promise<any> {
-        return new Promise((resolve, reject)=>{
-            walletManager.importWalletWithMnemonic([masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
+    importWalletWithMnemonic(
+        masterWalletId: string,
+        mnemonic: string,
+        phrasePassword: string,
+        payPassword,
+        singleAddress: boolean
+    ): Promise<any> {
+        return new Promise((resolve, reject) => { 
+            walletManager.importWalletWithMnemonic(
+                [masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject);  });
+                (err) => { this.handleError(err, reject); });
         });
     }
 

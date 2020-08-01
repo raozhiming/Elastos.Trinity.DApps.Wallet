@@ -105,7 +105,9 @@ export class WalletTabHomePage implements OnInit {
     goToGeneralSettings() {
         this.walletEditionService.modifiedMasterWalletId = this.walletManager.getCurMasterWalletId();
         this.native.go('/settings');
-        event.stopPropagation();
+
+        // Not sure what this does but it throws an err using it
+        // event.stopPropagation();
         return false;
     }
 
