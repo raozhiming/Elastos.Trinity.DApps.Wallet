@@ -81,6 +81,7 @@ const routes: Routes = [
             }
         ]
     }, */
+
     { path: 'wallet-create', component: WalletCreatePage },
     { path: 'wallet-import', component: WalletImportPage },
     { path: 'wallet-manager', component: WalletManagerPage },
@@ -94,6 +95,8 @@ const routes: Routes = [
     { path: 'mnemonic-export', component: MnemonicExportPage },
     { path: 'mnemonic-check', component: MnemonicCheckPage },
     { path: 'wallet-settings', component: WalletSettingsPage },
+    { path: 'wallet-color', loadChildren: './pages/wallet/wallet-color/wallet-color.module#WalletColorPageModule' },
+   // { path: 'waller-color', component: WallerColorPage },
 
     // Coin
     { path: 'coin/:name', component: CoinHomePage },
@@ -116,7 +119,7 @@ const routes: Routes = [
     { path: 'crmembervote', component: CRmembervotePage },
     { path: 'dposvote', component: DPoSVotePage },
     { path: 'crmemberregister', component: CRMemberRegisterPage },
-    { path: 'crproposalvoteagainst', component: CRProposalVoteAgainstPage }
+    { path: 'crproposalvoteagainst', component: CRProposalVoteAgainstPage },
 ];
 @NgModule({
     imports: [

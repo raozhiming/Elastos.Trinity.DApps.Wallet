@@ -49,6 +49,10 @@ import { Logger } from './model/Logger';
 import { PopupProvider } from './services/popup.service';
 import { WalletManager } from './services/wallet.service';
 
+import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
+import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
+import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
+
 import { LauncherPage } from './pages/launcher/launcher.page';
 import { WalletSettingsPage } from './pages/wallet/wallet-settings/wallet-settings.page';
 import { ContactCreatePage } from './pages/contacts/contact-create/contact-create.page';
@@ -81,15 +85,15 @@ import { ScanCodePage } from './pages/scancode/scancode.page';
 import { WalletTabSettingsPage } from './pages/wallet/wallet-home/wallet-tab-settings/wallet-tab-settings.page';
 import { WalletTabsRootPage } from './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.page';
 
+import { WalletCreatedComponent } from './components/wallet-created/wallet-created.component';
+
 import { ComponentsModule } from './components/components.module';
 
 import * as Sentry from "@sentry/browser";
-import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
-import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
-import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
+
 import { HttpClientModule } from '@angular/common/http';
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
-import { WalletCreatedComponent } from './components/wallet-created/wallet-created.component';
+
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"

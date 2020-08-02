@@ -357,7 +357,7 @@ export class WalletManager {
         await this.setActiveMasterWalletId(id);
 
         // Go to wallet's home page.
-        // this.native.setRootRouter("/wallet-home");
+        this.native.setRootRouter("/wallet-home");
 
         // Get balance by rpc
         this.getAllSubwalletsBalanceByRPC();

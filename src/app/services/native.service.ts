@@ -83,7 +83,7 @@ export class Native {
 
     public go(page: any, options: any = {}) {
         console.log("Navigating to:", page);
-        this.zone.run(()=>{
+        this.zone.run(() => {
             this.hideLoading();
             this.navCtrl.setDirection('forward');
             this.router.navigate([page], { queryParams: options });

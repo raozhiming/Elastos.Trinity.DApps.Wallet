@@ -7,11 +7,12 @@
         <ion-row 
             *ngFor="let masterWallet of walletManager.getWalletsList()" 
             class="card-row" 
-            [class.card2]="getWalletIndex(masterWallet) === 1"
-            [class.card3]="getWalletIndex(masterWallet) === 2"
-            [class.card4]="getWalletIndex(masterWallet) === 3"
-            [class.card5]="getWalletIndex(masterWallet) === 4"
-            [class.card6]="getWalletIndex(masterWallet) === 5"
+            [ngStyle]="
+            { 
+                'background-image': masterWallet.theme ? 
+                'url(' + masterWallet.theme.background + ')' : 
+                'url(/assets/cards/maincards/card-purple.svg)' 
+            }"
             (click)="walletSelected(masterWallet)"
         >
             <ion-row class="card-label-row"> 

@@ -4,7 +4,7 @@ import { LocalStorage } from '../../../services/storage.service';
 import { PopupProvider } from "../../../services/popup.service";
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Util } from 'src/app/model/Util';
 import { Config } from 'src/app/config/Config';
 import { AppService } from 'src/app/services/app.service';
@@ -45,9 +45,16 @@ export class WalletSettingsPage implements OnInit {
         {
             route: "/wallet-edit-name",
             title: "Change Name",
-            subtitle: "Organize your wallet by a custom name",
+            subtitle: "Organize your wallet with a custom name",
             icon: '/assets/settings/pen.svg',
             iconDarkmode: '/assets/settings/darkmode/pen.svg'
+        },
+        {
+            route: "/wallet-color",
+            title: "Change Color",
+            subtitle: "Organize your wallet with a custom color",
+            icon: '/assets/settings/picture.svg',
+            iconDarkmode: '/assets/settings/darkmode/picture.svg'
         },
         {
             route: "/wallet-password-reset",
@@ -74,6 +81,7 @@ export class WalletSettingsPage implements OnInit {
 
     constructor(
         public route: ActivatedRoute,
+        public router: Router,
         public events: Events,
         public localStorage: LocalStorage,
         public popupProvider: PopupProvider,
@@ -122,5 +130,6 @@ export class WalletSettingsPage implements OnInit {
 
     public goToSetting(item) {
         item.route !== null ? this.native.go(item.route) : this.onDelete();
+        // item.route !== null ? this.router.navigate([item.route]) : this.onDelete();
     }
 }

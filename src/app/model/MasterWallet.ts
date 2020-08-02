@@ -5,19 +5,29 @@ import { StandardSubWallet } from './StandardSubWallet';
 import { ERC20SubWallet } from './ERC20SubWallet';
 import { Coin, CoinID, CoinType, StandardCoinName } from './Coin';
 import { CoinService } from '../services/coin.service';
+import { ɵNgStyleImpl } from '@angular/common';
 
 export type WalletID = string;
+
+export type Theme = {
+    background: string,
+    color: string
+};
 
 export class ExtendedWalletInfo {
     /** User defined wallet name */
     name: string;
     /** List of serialized subwallets added earlier to this master wallet */
     subWallets: SerializedSubWallet[] = [];
+    /* Wallet theme */
+    theme: Theme;
 }
 
 export class MasterWallet {
+
     public id: string = null;
     public name: string = null;
+    public theme: Theme = null;
 
     public subWallets: {
         [k: string]: SubWallet
@@ -28,15 +38,27 @@ export class MasterWallet {
         singleAddress: false
     };
 
-    constructor(public walletManager: WalletManager, public coinService: CoinService, id: string, name?: string) {
+    constructor(
+        public walletManager: WalletManager,
+        public coinService: CoinService,
+        id: string,
+        name?: string,
+        theme?: Theme
+    ) {
         this.id = id;
         this.name = name || "";
+        this.theme = theme || {
+            color: '#752fcf',
+            background: '/assets/cards/maincards/card-purple.svg'
+        };
     }
 
     public getExtendedWalletInfo(): ExtendedWalletInfo {
         let extendedInfo = new ExtendedWalletInfo();
 
         extendedInfo.name = this.name;
+        extendedInfo.theme = this.theme;
+
         for (let subWallet of Object.values(this.subWallets)) {
             extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
         }
@@ -58,7 +80,8 @@ export class MasterWallet {
         // which is normal.
         if (extendedInfo) {
             this.name = extendedInfo.name;
-            
+            this.theme = extendedInfo.theme;
+
             this.subWallets = {};
             for (let serializedSubWallet of extendedInfo.subWallets) {
                 let subWallet = SubWalletBuilder.newFromSerializedSubWallet(this, serializedSubWallet);

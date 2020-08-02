@@ -88,6 +88,7 @@ export class WalletTabHomePage implements OnInit {
 
     ionViewWillLeave() {
         titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
+        console.log('WALLLETT', this.walletManager.getWalletsList());
     }
 
     handleItem(key: string) {
@@ -143,10 +144,6 @@ export class WalletTabHomePage implements OnInit {
         }
     }
 
-    getWalletIndex(masterWallet: MasterWallet): number {
-        return this.walletManager.getWalletsList().indexOf(masterWallet);
-     }
-
     getWholeBalance(balance: number): number {
         return Math.trunc(balance);
     }
@@ -155,5 +152,9 @@ export class WalletTabHomePage implements OnInit {
         let decimalBalance = balance - Math.trunc(balance);
         decimalBalance.toFixed(5);
         return decimalBalance.toLocaleString().slice(2);
+    }
+
+    getWalletIndex(masterWallet: MasterWallet): number {
+        return this.walletManager.getWalletsList().indexOf(masterWallet);
     }
 }
