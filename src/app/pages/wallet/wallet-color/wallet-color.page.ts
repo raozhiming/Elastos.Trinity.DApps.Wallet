@@ -5,6 +5,7 @@ import { MasterWallet, Theme } from 'src/app/model/MasterWallet';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { Native } from 'src/app/services/native.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-wallet-color',
@@ -52,11 +53,17 @@ export class WalletColorPage implements OnInit {
     private walletManager: WalletManager,
     private walletEditionService: WalletEditionService,
     public native: Native,
-    public ngZone: NgZone
+    public ngZone: NgZone,
+    private appService: AppService
   ) { }
 
   ngOnInit() {
     this.getTheme();
+
+  }
+
+  ionViewWillEnter() {
+    this.appService.setTitleBarTitle('Change Wallet Theme');
   }
 
   getTheme() {

@@ -120,7 +120,7 @@ export class WalletSettingsPage implements OnInit {
     }
 
     private async getMasterWalletBasicInfo() {
-        console.log("2",this.masterWalletId);
+        console.log("2", this.masterWalletId);
         let ret = await this.walletManager.spvBridge.getMasterWalletBasicInfo(this.masterWalletId);
 
         this.masterWalletType = ret["Type"];
@@ -130,6 +130,5 @@ export class WalletSettingsPage implements OnInit {
 
     public goToSetting(item) {
         item.route !== null ? this.native.go(item.route) : this.onDelete();
-        // item.route !== null ? this.router.navigate([item.route]) : this.onDelete();
     }
 }

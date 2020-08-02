@@ -114,6 +114,7 @@ export class WalletManager {
         } else {
             appManager.setListener((message) => {
                 this.handleAppManagerMessage(message);
+                this.appService.onMessageReceived(message);
             });
             this.jsonRPCService.init();
         }

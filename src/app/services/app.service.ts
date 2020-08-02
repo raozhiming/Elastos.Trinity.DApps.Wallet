@@ -1,9 +1,6 @@
 import { Events, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Native } from './native.service';
-import { Config } from '../config/Config';
-import { Util } from '../model/Util';
-import { StandardCoinName } from '../model/Coin';
 import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService } from './cointransfer.service';
 import { ThemeService } from './theme.service';
