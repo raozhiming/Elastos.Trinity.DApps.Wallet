@@ -121,7 +121,7 @@ export class IntentService {
             case 'pay':
                 this.coinTransferService.transfer.toAddress = intent.params.receiver;
                 this.coinTransferService.transfer.amount = intent.params.amount;
-                this.coinTransferService.transfer.chainId = intent.params.currency || 'ELA';
+                this.coinTransferService.transfer.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
                 this.coinTransferService.transfer.type = 'payment-confirm';
                 break;
 
@@ -192,5 +192,22 @@ export class IntentService {
         this.coinTransferService.transfer.votes = [
             intent.params.proposalHash
         ]
+    }
+
+    private getChainIDByCurrency(currency: string) {
+        let chainID = StandardCoinName.ELA;
+        switch (currency) {
+            case 'IDChain':
+            case 'ELA/ID':
+                chainID = StandardCoinName.IDChain;
+                break;
+            case 'ETHSC':
+            case 'ELA/ETHSC':
+                chainID = StandardCoinName.ETHSC;
+                break;
+            default:
+                break;
+        }
+        return chainID;
     }
 }

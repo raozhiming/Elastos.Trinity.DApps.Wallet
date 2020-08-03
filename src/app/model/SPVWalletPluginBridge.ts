@@ -42,6 +42,12 @@ export type TxPublishedResult = {
     Reason: string;
 }
 
+export type BlockInfo = {
+    Hash: string,
+    Height: number,
+    Timestamp: number,
+};
+
 export enum VoteType {
     CRC = "CRC",
     Delegate = "Delegate",
@@ -185,7 +191,7 @@ export class SPVWalletPluginBridge {
         payPassword,
         singleAddress: boolean
     ): Promise<any> {
-        return new Promise((resolve, reject) => { 
+        return new Promise((resolve, reject) => {
             walletManager.importWalletWithMnemonic(
                 [masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress],
                 (ret) => { resolve(ret); },
@@ -440,6 +446,14 @@ export class SPVWalletPluginBridge {
         walletManager.removeWalletListener([],
             (ret) => { },
             (err) => { this.handleError(err, null); });
+    }
+
+    getLastBlockInfo(masterWalletId: string, chainId: string): Promise<BlockInfo> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.getLastBlockInfo([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
     }
 
     createWithdrawTransaction(masterWalletId: string, chainId: string, fromAddress: string, amount: string

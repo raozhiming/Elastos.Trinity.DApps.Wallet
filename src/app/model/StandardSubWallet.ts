@@ -14,7 +14,7 @@ export class StandardSubWallet extends SubWallet {
 
     private initialize() {
         // this.masterWallet.walletManager.registerSubWalletListener();
-
+        this.initLastBlockInfo();
         this.updateBalance();
     }
 
@@ -42,6 +42,16 @@ export class StandardSubWallet extends SubWallet {
         await this.masterWallet.walletManager.spvBridge.destroySubWallet(this.masterWallet.id, this.id);
 
         super.destroy();
+    }
+
+    /**
+     * Get the last block info from the local data.
+     */
+    public async initLastBlockInfo() {
+        // Get the last block info from the wallet plugin.
+        const blockInfo = await this.masterWallet.walletManager.spvBridge.getLastBlockInfo(this.masterWallet.id, this.id);
+
+        if (blockInfo) this.updateSyncProgress(0, blockInfo.Timestamp);
     }
 
     /**
