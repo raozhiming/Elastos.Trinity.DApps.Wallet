@@ -116,15 +116,17 @@ export class CoinListPage implements OnInit, OnDestroy {
         this.events.unsubscribe("error:destroySubWallet");
     }
 
-    onSelect(item: EditableCoinInfo, open: boolean) {
-        if (!open) {
+    onSelect(item: EditableCoinInfo) {
+        if (!item.isOpen) {
             this.popupProvider.ionicConfirm('confirmTitle', 'text-coin-close-warning').then((data) => {
                 if (data) {
-                    this.switchCoin(item, open);
+                    this.switchCoin(item, false);
+                } else {
+                    //TODO cancel, set checked
                 }
             });
         } else {// open
-            this.switchCoin(item, open);
+            this.switchCoin(item, true);
         }
     }
 
