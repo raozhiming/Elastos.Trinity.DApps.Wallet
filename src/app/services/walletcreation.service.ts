@@ -42,7 +42,6 @@ export class WalletCreationService {
     public masterId: string;
     public mnemonicList: SelectableMnemonic[];
     public mnemonicStr: string;
-    public payPassword: string;
     public singleAddress: boolean;
     public isMulti: boolean;
     public name: string;
@@ -61,7 +60,6 @@ export class WalletCreationService {
         this.masterId = null;
         this.mnemonicStr = null;
         this.mnemonicList = [];
-        this.payPassword = null;
         this.singleAddress = null;
         this.isMulti = null;
         this.name = null;

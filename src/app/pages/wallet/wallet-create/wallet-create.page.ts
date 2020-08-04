@@ -19,8 +19,8 @@ export class WalletCreatePage implements OnInit {
     public wallet = {
         name: '',
         singleAddress: false,
-        payPassword: '',
-        rePayPassword: '',
+        //payPassword: '',
+        //rePayPassword: '',
         mnemonicPassword: ''
     };
 
@@ -69,19 +69,19 @@ export class WalletCreatePage implements OnInit {
             this.native.toast_trans("text-wallet-name-validator2");
             return;
         }
-        if (!Util.password(this.wallet.payPassword)) {
+        /*if (!Util.password(this.wallet.payPassword)) {
             this.native.toast_trans("text-pwd-validator");
             return;
         }
         if (this.wallet.payPassword !== this.wallet.rePayPassword) {
             this.native.toast_trans("text-repwd-validator");
             return;
-        }
+        }*/
         this.createWallet();
     }
 
     createWallet() {
-        this.walletCreationService.payPassword = this.wallet.payPassword;
+        //this.walletCreationService.payPassword = this.wallet.payPassword;
         this.walletCreationService.name = this.wallet.name;
         this.walletCreationService.singleAddress = this.wallet.singleAddress;
         this.walletCreationService.mnemonicPassword = this.wallet.mnemonicPassword;

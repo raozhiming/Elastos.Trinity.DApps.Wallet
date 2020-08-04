@@ -64,7 +64,6 @@ export class IntentService {
         this.coinTransferService.transfer.intentId = intent.intentId;
         this.coinTransferService.transfer.action = intent.action;
         this.coinTransferService.transfer.from = intent.from;
-        this.coinTransferService.transfer.payPassword = '';
         this.coinTransferService.transfer.fee = 0;
         this.coinTransferService.transfer.chainId = StandardCoinName.ELA;
 

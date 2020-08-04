@@ -7,6 +7,8 @@ import { Native } from '../../services/native.service';
 import { PopupProvider} from '../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
 
+declare let passwordManager: PasswordManagerPlugin.PasswordManager;
+
 @Component({
     selector: 'app-paymentbox',
     templateUrl: './paymentbox.component.html',
@@ -23,14 +25,13 @@ export class PaymentboxComponent implements OnInit {
         amount: '',
         memo: '',
         fee: 0,
-        payPassword: '',
         rate: ''
     };
 
     private walletId = '';
-    public useFingerprintAuthentication = false;
+    /*public useFingerprintAuthentication = false;
     public fingerprintPluginAuthenticationOnGoing = false;
-    public fingerprintAuthenticationIsAvailable = false;
+    public fingerprintAuthenticationIsAvailable = false;*/
 
     constructor(public route: ActivatedRoute,
                 public modalCtrl: ModalController,
@@ -60,12 +61,12 @@ export class PaymentboxComponent implements OnInit {
 
     async ionViewWillEnter() {
         this.transfer.payPassword = '';
-        this.fingerprintAuthenticationIsAvailable = await this.authService.fingerprintIsAvailable();
+        /*this.fingerprintAuthenticationIsAvailable = await this.authService.fingerprintIsAvailable();
         if (this.fingerprintAuthenticationIsAvailable) {
             this.useFingerprintAuthentication = await this.authService.fingerprintAuthenticationEnabled(this.walletId);
         } else {
             this.useFingerprintAuthentication = false;
-        }
+        }*/
     }
 
     ionViewDidEnter() {
@@ -75,19 +76,29 @@ export class PaymentboxComponent implements OnInit {
         this.modalCtrl.dismiss(null);
     }
 
-    click_button() {
+    async click_button() {
         if (!this.walltype) {
             this.modalCtrl.dismiss(this.transfer);
             return;
         }
         if (this.transfer.payPassword) {
-            this.modalCtrl.dismiss(this.transfer.payPassword);
+            // Force password prompt for payments
+            let options: PasswordManagerPlugin.GetPasswordInfoOptions = {
+                forceMasterPasswordPrompt: true
+            };
+            let password = await passwordManager.getPasswordInfo("wallet-"+this.walletManager, options);
+            if (password) {
+                this.modalCtrl.dismiss(this.transfer.payPassword);
+            }
+            else {
+                // TODO: show "wrong password" / or cancelled?
+            }
         } else {
             this.native.toast_trans('text-pay-password-input');
         }
     }
 
-    promptFingerprintActivation() {
+    /*promptFingerprintActivation() {
         this.popupProvider.ionicConfirm('confirmTitle', 'activate-fingerprint-popup-content').then(async (data) => {
             if (data) {
                 this.fingerprintPluginAuthenticationOnGoing = true;
@@ -125,5 +136,5 @@ export class PaymentboxComponent implements OnInit {
 
     canPromptFingerprint() {
         return (this.transfer.payPassword !== '') && this.fingerprintAuthenticationIsAvailable;
-    }
+    }*/
 }

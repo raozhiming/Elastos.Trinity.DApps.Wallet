@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { LocalStorage } from './storage.service';
 
 declare let fingerprintManager: FingerprintPlugin.FingerprintManager;
+declare let passwordManager: PasswordManagerPlugin.PasswordManager;
 
 @Injectable({
     providedIn: 'root'
@@ -14,10 +15,59 @@ export class AuthService {
         AuthService.instance = this;
     }
 
+    public async createAndSaveWalletPassword(walletId: string): Promise<string> {
+        let password = await passwordManager.generateRandomPassword();
+
+        // Save the did store password with a master password
+        let passwordInfo: PasswordManagerPlugin.GenericPasswordInfo = {
+            type: PasswordManagerPlugin.PasswordType.GENERIC_PASSWORD,
+            key: "wallet-"+walletId,
+            displayName: "Wallet password",
+            password: password,
+            // TODO: visible: false
+        }
+        let result = await passwordManager.setPasswordInfo(passwordInfo);
+        if (result.value) {
+            // Master password was created and wallet password could be saved
+            return password;
+        }
+        else {
+            // Cancellation, or failure
+            return null;
+        }
+    }
+
+    public async getWalletPassword(walletId: string, showMasterPromptIfDatabaseLocked: boolean = true): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let options: PasswordManagerPlugin.GetPasswordInfoOptions = {
+                    promptPasswordIfLocked: showMasterPromptIfDatabaseLocked
+                };
+
+                let passwordInfo = await passwordManager.getPasswordInfo("wallet-"+walletId, options) as PasswordManagerPlugin.GenericPasswordInfo;
+                if (!passwordInfo) {
+                    // Master password is right, but no data for the requested key...
+                    console.log("Master password was right, but no password found for the requested key")
+
+                    resolve(null);
+                }
+                else {
+                    // Master password was unlocked and found
+                    resolve(passwordInfo.password);
+                }
+            }
+            catch (e) {
+                console.error(e);
+                // TODO: better handle various kind of errors
+                reject();
+            }
+        });
+    }
+
     /**
      * Activates fingerprint authentication instead of using a password.
      */
-    async activateFingerprintAuthentication(walletID: string, password: string): Promise<boolean> {
+    /*async activateFingerprintAuthentication(walletID: string, password: string): Promise<boolean> {
         console.log('Activating fingerprint authentication for did store id ' + walletID);
 
         // Ask the fingerprint plugin to save user's password
@@ -57,5 +107,5 @@ export class AuthService {
         } catch (e) {
             return false;
         }
-    }
+    }*/
 }

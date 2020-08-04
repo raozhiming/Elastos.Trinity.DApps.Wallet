@@ -42,6 +42,7 @@ import { PopupProvider } from './popup.service';
 import { Native } from './native.service';
 import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
 import { LocalStorage } from './storage.service';
+import { AuthService } from './auth.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -97,6 +98,7 @@ export class WalletManager {
         private appService: AppService,
         private syncService: SPVSyncService,
         private coinService: CoinService,
+        private authService: AuthService,
         public popupProvider: PopupProvider,
         private http: HttpClient,
         public jsonRPCService: JsonRPCService
@@ -285,8 +287,8 @@ export class WalletManager {
         masterId: WalletID,
         walletName: string,
         mnemonicStr: string,
-        mnemonicPassword: string,
         payPassword: string,
+        mnemonicPassword: string,
         singleAddress: boolean
     ) {
         console.log("Creating new master wallet");

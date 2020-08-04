@@ -30,12 +30,6 @@ export class MnemonicCreatePage implements OnInit {
     mnemonicList: SelectableMnemonic[] = [];
     mnemonicStr: string;
 
-    /* OLD WALLET - KEPT FOR REFERENCE  */
-    // defaultCointype = "Ela";
-    // isSelect: boolean = false;
-    // mnemonicPassword: string = "";
-    // mnemonicRepassword: string = "";
-
     constructor(
         public route: ActivatedRoute,
         public walletManager: WalletManager,
@@ -84,29 +78,5 @@ export class MnemonicCreatePage implements OnInit {
     nextSlide(slide) {
         slide.slideNext();
     }
-
-    /* OLD WALLET - KEPT FOR REFERENCE  */
-    /* onNext() {
-        if (!Util.password(this.mnemonicPassword) && this.isSelect) {
-            this.native.toast_trans("text-pwd-validator");
-            return;
-        }
-
-        if (this.mnemonicPassword != this.mnemonicRepassword && this.isSelect) {
-            this.native.toast_trans("text-repwd-validator");
-            return;
-        }
-
-        if (!this.isSelect) {
-            this.mnemonicPassword = "";
-            this.mnemonicRepassword = "";
-        }
-
-        this.goMnemonicWrite();
-    }
-
-    onChangeSelect(select) {
-        this.isSelect = select;
-    } */
 }
 

@@ -35,7 +35,6 @@ export class Transfer {
     crPublicKey: string = null;
     account: string = null;
     rawTransaction: string = null;
-    payPassword: string = null;
     location: number = null;
     crDID: string = null;
     from: string = null;

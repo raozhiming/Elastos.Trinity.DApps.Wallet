@@ -1,7 +1,6 @@
 <ion-grid class="ion-text-center container">
     <p>
-        Enter a wallet name and a
-        password to protect it.
+        Please enter a wallet name.
     </p>
     <ion-row>
         <ion-input
@@ -11,7 +10,7 @@
         >
         </ion-input>
     </ion-row>
-    <ion-row>
+   <!-- <ion-row>
         <ion-input
             type="password"
             placeholder="Enter pay password"
@@ -26,7 +25,7 @@
             [(ngModel)]="wallet.rePayPassword"
         >
         </ion-input>
-    </ion-row>
+    </ion-row>-->
     <ion-row class="options-row" (click)="showOptions = !showOptions">
         <span>
             Advanced Options &nbsp; 
@@ -43,48 +42,3 @@
         </ion-button>
     </ion-row>
 </ion-grid>
-
-<!-------------------- OLD WALLET -------------------->
-<!-- <ion-header>
-    <header-bar title="launcher-create-wallet"></header-bar>
-</ion-header>
-
-<ion-content>
-    <ion-list lines="none">
-        <div id="name">
-            <ion-item>
-                <ion-label stacked>{{ 'addwallet-walletname-title' | translate }}</ion-label>
-                <ion-note slot="end">{{ 'text-wallet-name-validator' | translate }}</ion-note>
-            </ion-item>
-            <ion-item>
-                <ion-input type="text" placeholder="{{ 'addwallet-walletname-placeholder' | translate }}"
-                    [(ngModel)]="wallet.name"></ion-input>
-            </ion-item>
-        </div>
-
-        <div id="password">
-            <ion-item>
-                <ion-label stacked>{{ 'addwallet-paypassword1-title' | translate }}</ion-label>
-                <ion-note slot="end">{{ 'text-pwd-validator' | translate }}</ion-note>
-            </ion-item>
-            <ion-item>
-                <ion-input type="password" placeholder="{{ 'addwallet-paypassword1-placeholder' | translate }}"
-                    [(ngModel)]="wallet.payPassword"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-input type="password" placeholder="{{ 'addwallet-paypassword2-placeholder' | translate }}"
-                    [(ngModel)]="wallet.rePayPassword"></ion-input>
-            </ion-item>
-        </div>
-
-        <ion-item>
-            <ion-label>{{'text-signaddress' | translate }}</ion-label>
-            <my-toggle [checked]="wallet.singleAddress" (onChange)=updateSingleAddress($event)></my-toggle>
-        </ion-item>
-
-    </ion-list>
-</ion-content>
-
-<ion-footer>
-    <ion-button class="confirm" (click)="onCreate()">{{ 'confirm' | translate }}</ion-button>
-</ion-footer> -->

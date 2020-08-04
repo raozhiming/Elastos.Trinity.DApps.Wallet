@@ -114,16 +114,23 @@ export class MnemonicWritePage implements OnInit {
                 } else {
                     this.native.toast_trans('text-mnemonic-ok');
                     await this.native.showLoading();
-                    await this.walletManager.createNewMasterWallet(
-                            this.walletCreationService.masterId,
-                            this.walletCreationService.name,
-                            this.mnemonicStr,
-                            this.walletCreationService.mnemonicPassword,
-                            this.walletCreationService.payPassword,
-                            this.walletCreationService.singleAddress
-                        );
-                    
-                    this.createWalletSuccess();
+
+                    let payPassword = await this.authService.createAndSaveWalletPassword();
+                    if (payPassword) {
+                        await this.walletManager.createNewMasterWallet(
+                                this.walletCreationService.masterId,
+                                this.walletCreationService.name,
+                                this.mnemonicStr,
+                                this.walletCreationService.mnemonicPassword,
+                                this.walletCreationService.payPassword,
+                                this.walletCreationService.singleAddress
+                            );
+                        
+                        this.createWalletSuccess();
+                    }
+                    else {
+                        // Cancelled, do nothing
+                    }
                 }
 
             } else {
@@ -214,60 +221,5 @@ export class MnemonicWritePage implements OnInit {
         }
         return true;
     }
-
-    /**********************************
-     * OLD WALLET - KEPT FOR REFERENCE
-    ***********************************/
- /*    async onNext() {
-        let mn = "";
-        for (let i = 0; i < this.selectList.length; i++) {
-            mn += this.selectList[i].text;
-        }
-
-        if (!Util.isNull(mn) && mn === this.mnemonicStr.replace(/\s+/g, "")) {
-            if (this.walletCreationService.isMulti) {
-                this.native.go("/mpublickey");
-            } else {
-                this.native.toast_trans('text-mnemonic-ok');
-                await this.native.showLoading();
-
-                await this.walletManager.createNewMasterWallet(
-                    this.walletCreationService.masterId,
-                    this.walletCreationService.name,
-                    this.mnemonicStr,
-                    this.walletCreationService.mnemonicPassword,
-                    this.walletCreationService.payPassword,
-                    this.walletCreationService.singleAddress
-                );
-            }
-
-        } else {
-            this.native.toast_trans('text-mnemonic-prompt3');
-        }
-    }
-
-    public addButton(index: number, item: any): void {
-        var newWord = {
-            text: item.text,
-            prevIndex: index
-        };
-        this.zone.run(() => {
-            this.selectList.push(newWord);
-            this.mnemonicList[index].selected = true;
-            this.shouldContinue();
-        });
-    }
-
-    public removeButton(index: number, item: any): void {
-        this.zone.run(() => {
-            this.selectList.splice(index, 1);
-            this.mnemonicList[item.prevIndex].selected = false;
-            this.shouldContinue();
-        });
-    }
-
-    private shouldContinue(): void {
-        this.selectComplete = this.selectList.length === this.mnemonicList.length ? true : false;
-    } */
 }
 

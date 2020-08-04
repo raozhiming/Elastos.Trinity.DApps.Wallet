@@ -155,10 +155,9 @@ export class CRMemberRegisterPage implements OnInit {
         const digest = payload.Digest;
 
         const payPassword = await this.walletManager.getPassword(this.transfer);
-        if (payPassword === null) {// cancle by user
+        if (payPassword === null) {// cancelled by user
             return;
         }
-        this.transfer.payPassword = payPassword;
 
         payload.Signature = await this.walletManager.spvBridge.didSignDigest(this.masterWallet.id,
                 this.transfer.did, digest, payPassword);
