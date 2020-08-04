@@ -4,6 +4,7 @@ import { Util } from "../../../../model/Util";
 import { ActivatedRoute } from '@angular/router';
 import { Events, IonSlides, ModalController } from '@ionic/angular';
 import { WalletManager } from '../../../../services/wallet.service';
+import { AuthService } from '../../../../services/auth.service';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { WalletCreatedComponent } from 'src/app/components/wallet-created/wallet-created.component';
@@ -51,6 +52,7 @@ export class MnemonicWritePage implements OnInit {
 
     constructor(
         public route: ActivatedRoute,
+        public authService: AuthService,
         public native: Native,
         public events: Events,
         public walletManager: WalletManager,
@@ -115,17 +117,17 @@ export class MnemonicWritePage implements OnInit {
                     this.native.toast_trans('text-mnemonic-ok');
                     await this.native.showLoading();
 
-                    let payPassword = await this.authService.createAndSaveWalletPassword();
+                    let payPassword = await this.authService.createAndSaveWalletPassword(this.walletCreationService.masterId);
                     if (payPassword) {
                         await this.walletManager.createNewMasterWallet(
                                 this.walletCreationService.masterId,
                                 this.walletCreationService.name,
                                 this.mnemonicStr,
                                 this.walletCreationService.mnemonicPassword,
-                                this.walletCreationService.payPassword,
+                                payPassword,
                                 this.walletCreationService.singleAddress
                             );
-                        
+
                         this.createWalletSuccess();
                     }
                     else {

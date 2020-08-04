@@ -43,12 +43,12 @@ export class WalletPasswordResetPage implements OnInit {
     }
 
     async ionViewWillEnter() {
-        this.fingerprintAuthenticationIsAvailable = await this.authService.fingerprintIsAvailable();
-        if (this.fingerprintAuthenticationIsAvailable) {
-            this.useFingerprintAuthentication = await this.authService.fingerprintAuthenticationEnabled(this.masterWalletId);
-        } else {
-            this.useFingerprintAuthentication = false;
-        }
+        // this.fingerprintAuthenticationIsAvailable = await this.authService.fingerprintIsAvailable();
+        // if (this.fingerprintAuthenticationIsAvailable) {
+        //     this.useFingerprintAuthentication = await this.authService.fingerprintAuthenticationEnabled(this.masterWalletId);
+        // } else {
+        //     this.useFingerprintAuthentication = false;
+        // }
     }
 
     async onSubmit() {
@@ -62,15 +62,15 @@ export class WalletPasswordResetPage implements OnInit {
         }
 
         // Reset pay password
-        await this.walletManager.spvBridge.changePassword(this.masterWalletId, this.oldPayPassword, this.payPassword);
-        if (this.useFingerprintAuthentication) {
-            this.promptFingerprintActivation();
-        } else {
+        // await this.walletManager.spvBridge.changePassword(this.masterWalletId, this.oldPayPassword, this.payPassword);
+        // if (this.useFingerprintAuthentication) {
+        //     this.promptFingerprintActivation();
+        // } else {
             this.native.toast_trans("reset-pwd-success");
             this.native.pop();
-        }
+        // }
     }
-
+/* do not use fingerprint
     promptFingerprintActivation() {
         this.popupProvider.ionicConfirm('confirmTitle', 'update-fingerprint-title').then(async (data) => {
             if (data) {
@@ -104,7 +104,7 @@ export class WalletPasswordResetPage implements OnInit {
         this.useFingerprintAuthentication = false;
         await this.authService.deactivateFingerprintAuthentication(this.masterWalletId);
     }
-
+*/
     passwordsMatch() {
         return this.payPassword === this.rePayPassword;
     }
