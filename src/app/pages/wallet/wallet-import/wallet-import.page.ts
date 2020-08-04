@@ -31,26 +31,10 @@ export class WalletImportPage implements OnInit, OnDestroy {
         slidesPerView: 1
     };
 
-    masterWalletId: string = "1";
-    public selectedTab: string = "words";
-    public showAdvOpts: boolean;
-    public keyStoreContent: any;
-    public mnemonicObj: any = { mnemonic: "", phrasePassword: "", name: "", singleAddress: false };
     public walletType: string;
+    private masterWalletId: string = "1";
 
-    public word1 = "";
-    public word2 = "";
-    public word3 = "";
-    public word4 = "";
-    public word5 = "";
-    public word6 = "";
-    public word7 = "";
-    public word8 = "";
-    public word9 = "";
-    public word10 = "";
-    public word11 = "";
-    public word12 = "";
-
+    public inputList: Array<any> = [];
     private inputStr: string = "";
 
     constructor(
@@ -79,7 +63,14 @@ export class WalletImportPage implements OnInit, OnDestroy {
         });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        for (let i = 0; i < 12; i ++) {
+            this.inputList.push({
+                input: ''
+            });
+        }
+        console.log('Input list created', this.inputList);
+    }
 
     ngOnDestroy() {
         this.events.unsubscribe("error:update");
@@ -92,6 +83,18 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     webKeyStore(webKeyStore) {
         console.log("========webKeyStore" + webKeyStore);
+    }
+
+    allInputsFilled() {
+        let inputsFilled = true;
+        this.inputList.forEach((word) => {
+            if (word.input === '') {
+                inputsFilled = false;
+            } else {
+                this.inputStr += word.input;
+            }
+        });
+        return inputsFilled;
     }
 
     async onImport() {
@@ -108,70 +111,6 @@ export class WalletImportPage implements OnInit, OnDestroy {
         } else {
             this.inputStr = "";
         }
-    }
-
-    allInputsFilled() {
-        if (this.word1 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word1;
-        }
-        if (this.word2 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word2;
-        }
-        if (this.word3 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word3;
-        }
-        if (this.word4 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word4;
-        }
-        if (this.word5 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word5;
-        }
-        if (this.word6 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word6;
-        }
-        if (this.word7 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word7;
-        }
-        if (this.word8 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word8;
-        }
-        if (this.word9 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word9;
-        }
-        if (this.word10 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word10;
-        }
-        if (this.word11 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word11;
-        }
-        if (this.word12 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word12;
-        }
-        return true;
     }
 
     async importWalletWithMnemonic(payPassword: string) {

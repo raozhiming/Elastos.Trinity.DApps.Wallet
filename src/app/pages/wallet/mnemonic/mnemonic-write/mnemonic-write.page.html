@@ -5,102 +5,15 @@
             (mnemonic phrase) in order to verify it.
         </p>
         <ion-slides #slider pager [options]="slideOpts">
-            <!-- <ion-slide>
-                <ion-row *ngFor="let word of selectList.slice(0,4); let i = index;">
-                    <ion-col size="1">
-                        <span>{{ i + 1 }}</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            [class.invisible]="!isWord(word)"
-                            type="text"
-                            [(ngModel)]="selectList[selectList.indexOf(word)]"
-                            (ngModelChange)="inputChanged($event, selectList.indexOf(word))"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-            </ion-slide>
             <ion-slide>
-                <ion-row *ngFor="let word of selectList.slice(4,8); let i = index;">
+                <ion-row *ngFor="let word of inputList.slice(0,4); let i = index;">
                     <ion-col size="1">
-                        <span>{{ 4 + i + 1 }}</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            [class.invisible]="!isWord(word)"
-                            type="text"
-                            (ngModelChange)="inputChanged($event, selectList.indexOf(word))"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-            </ion-slide>
-            <ion-slide>
-                <ion-row *ngFor="let word of selectList.slice(8, 12); let i = index;">
-                    <ion-col size="1">
-                        <span>{{ 8 + i + 1 }}</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            [class.invisible]="!isWord(word)"
-                            type="text"
-                            [(ngModel)]="selectList[selectList.indexOf(word)]"
-                            (ngModelChange)="inputChanged($event, selectList.indexOf(word))"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-            </ion-slide> -->
-
-            <ion-slide>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>1.</span>
+                        <span>{{ i + 1 }}.</span>
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
                             type="text"
-                            [(ngModel)]="word1"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>2.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word2"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>3.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word3"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>4.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word4"
+                            [(ngModel)]="word.input"
                             (ngModelChange)="inputChanged($event)"
                         >
                         </ion-input>
@@ -108,53 +21,14 @@
                 </ion-row>
             </ion-slide>
             <ion-slide>
-                <ion-row>
+                <ion-row *ngFor="let word of inputList.slice(4,8); let i = index;">
                     <ion-col size="1">
-                        <span>5.</span>
+                        <span>{{ 4 + i + 1 }}.</span>
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
                             type="text"
-                            [(ngModel)]="word5"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>6.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word6"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>7.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word7"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>8.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word8"
+                            [(ngModel)]="word.input"
                             (ngModelChange)="inputChanged($event)"
                         >
                         </ion-input>
@@ -162,53 +36,14 @@
                 </ion-row>
             </ion-slide>
             <ion-slide>
-                <ion-row>
+                <ion-row *ngFor="let word of inputList.slice(8, 12); let i = index;">
                     <ion-col size="1">
-                        <span>9.</span>
+                        <span>{{ 8 + i + 1 }}.</span>
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
                             type="text"
-                            [(ngModel)]="word9"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>10.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word10"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>11.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word11"
-                            (ngModelChange)="inputChanged($event)"
-                        >
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="1">
-                        <span>12.</span>
-                    </ion-col>
-                    <ion-col class='input-col' size="10">
-                        <ion-input
-                            type="text"
-                            [(ngModel)]="word12"
+                            [(ngModel)]="word.input"
                             (ngModelChange)="inputChanged($event)"
                         >
                         </ion-input>
@@ -224,41 +59,3 @@
         </ion-row>
     </ion-grid>
 </ion-content>
-
-<!-------------------- OLD WALLET -------------------->
-<!-- <ion-header>
-    <header-bar title="text-mnemonic-check"></header-bar>
-</ion-header>
-
-<ion-content>
-    <div class="mnemonic-write">
-
-        <div class="slide-container">
-            <div class="bottom-phrase">
-                <div *ngIf="!selectComplete">
-                    <div class="words">
-                        <ion-button outline *ngFor="let item of mnemonicList; let i = index"
-                            (click)="addButton(i, item)" [disabled]="item.selected" style="text-transform: none">
-                            {{item.text}}
-                        </ion-button>
-                    </div>
-                </div>
-            </div>
-        
-            <div class="slide-body">
-                <div class="slide-title">{{'text-mnemonic-prompt2' | translate}}</div>
-                <div class="phrase-container">
-                    <div class="phrase">
-                        <ion-button outline *ngFor="let item of selectList; let i = index"
-                            (click)="removeButton(i,item)" style="text-transform: none">{{item.text}}</ion-button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</ion-content>
-
-<ion-footer *ngIf="selectComplete">
-    <ion-button class="confirm" (click)="onNext()" full>{{ 'confirm' | translate }}</ion-button>
-</ion-footer> -->

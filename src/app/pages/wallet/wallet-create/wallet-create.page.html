@@ -1,44 +1,46 @@
-<ion-grid class="ion-text-center container">
-    <p>
-        Please enter a wallet name.
-    </p>
-    <ion-row>
-        <ion-input
-            type="text"
-            placeholder="Enter Name"
-            [(ngModel)]="wallet.name"
-        >
-        </ion-input>
-    </ion-row>
-   <!-- <ion-row>
-        <ion-input
-            type="password"
-            placeholder="Enter pay password"
-            [(ngModel)]="wallet.payPassword"
-        >
-        </ion-input>
-    </ion-row>
-    <ion-row>
-        <ion-input
-            type="password"
-            placeholder="Re-enter pay password"
-            [(ngModel)]="wallet.rePayPassword"
-        >
-        </ion-input>
-    </ion-row>-->
-    <ion-row class="options-row" (click)="showOptions = !showOptions">
-        <span>
-            Advanced Options &nbsp; 
-            <img [class.up-arrow]="showOptions" src="assets/icons/down-arrow.svg"/>
-        </span>
-    </ion-row>
-    <ion-row *ngIf="showOptions" class="toggle-row">
-        <h1>Single Address Wallet</h1>
-        <ion-toggle [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
-    </ion-row>
-    <ion-row class="btn-container">
-        <ion-button color="secondary" (click)="onCreate()">
-            <ion-label>{{ 'confirm' | translate }}</ion-label>
-        </ion-button>
-    </ion-row>
-</ion-grid>
+<ion-content>
+    <ion-grid class="ion-text-center container">
+        <p>
+            Please enter a wallet name.
+        </p>
+        <ion-row>
+            <ion-input
+                type="text"
+                placeholder="Enter Name"
+                [(ngModel)]="wallet.name"
+            >
+            </ion-input>
+        </ion-row>
+        <!-- <ion-row>
+            <ion-input
+                type="password"
+                placeholder="Enter pay password"
+                [(ngModel)]="wallet.payPassword"
+            >
+            </ion-input>
+        </ion-row>
+        <ion-row>
+            <ion-input
+                type="password"
+                placeholder="Re-enter pay password"
+                [(ngModel)]="wallet.rePayPassword"
+            >
+            </ion-input>
+        </ion-row>-->
+        <ion-row class="options-row" (click)="showOptions = !showOptions">
+            <span>
+                Advanced Options &nbsp; 
+                <img [class.up-arrow]="showOptions" src="assets/icons/down-arrow.svg"/>
+            </span>
+        </ion-row>
+        <ion-row *ngIf="showOptions" class="toggle-row">
+            <h1>Single Address Wallet</h1>
+            <ion-toggle [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
+        </ion-row>
+        <ion-row class="btn-container">
+            <ion-button color="secondary" (click)="onCreate()">
+                <ion-label>{{ 'confirm' | translate }}</ion-label>
+            </ion-button>
+        </ion-row>
+    </ion-grid>
+</ion-content>

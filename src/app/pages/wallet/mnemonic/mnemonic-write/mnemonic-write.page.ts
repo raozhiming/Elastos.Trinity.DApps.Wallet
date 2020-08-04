@@ -27,28 +27,11 @@ export class MnemonicWritePage implements OnInit {
         slidesPerView: 1
     };
 
-    public word1 = "";
-    public word2 = "";
-    public word3 = "";
-    public word4 = "";
-    public word5 = "";
-    public word6 = "";
-    public word7 = "";
-    public word8 = "";
-    public word9 = "";
-    public word10 = "";
-    public word11 = "";
-    public word12 = "";
-
+    public inputList: Array<any> = [];
     private inputStr: string = "";
     private mnemonicStr: string;
 
     private modal: any;
-
-    // Currently not in use
-    // mnemonicList: SelectableMnemonic[] = [];
-    // selectList: Array<any> = [];
-    // selectComplete = false;
 
     constructor(
         public route: ActivatedRoute,
@@ -61,41 +44,16 @@ export class MnemonicWritePage implements OnInit {
         private modalCtrl: ModalController
     ) {
         this.mnemonicStr = this.native.clone(this.walletCreationService.mnemonicStr);
-
-     /*    this.mnemonicList = this.native.clone(this.walletCreationService.mnemonicList);
-        this.mnemonicList = this.mnemonicList.sort(() => {
-            return 0.5 - Math.random();
-        }); */
     }
 
-    ngOnInit() {
-
-    }
-
-    /*********************************************************************************
-     * Failed method to loop through each string in an array of empty strings and
-     * tie it to a certain input. A more expedient method is currently in use
-    /*********************************************************************************
     ngOnInit() {
         for (let i = 0; i < 12; i ++) {
-            this.selectList.push(i);
+            this.inputList.push({
+                input: ''
+            });
         }
-        console.log(this.selectList, 'select list');
+        console.log('Empty input list created', this.inputList);
     }
-
-    // For testing purposes
-    inputChanged(event, index: number) {
-        console.log('Input test', event);
-        console.log(this.selectList);
-    }
-
-    isWord(word): boolean {
-        if (isNaN(word)) {
-          return true;
-        } else {
-          return false;
-        }
-    } */
 
     ionViewWillEnter() {
         titleBarManager.setBackgroundColor('#732cd0');
@@ -106,6 +64,18 @@ export class MnemonicWritePage implements OnInit {
     // For testing purposes
     inputChanged(event) {
         console.log('Input test', event);
+    }
+
+    allInputsFilled() {
+        let inputsFilled = true;
+        this.inputList.forEach((word) => {
+            if (word.input === '') {
+                inputsFilled = false;
+            } else {
+                this.inputStr += word.input;
+            }
+        });
+        return inputsFilled;
     }
 
     async onNext() {
@@ -126,9 +96,9 @@ export class MnemonicWritePage implements OnInit {
                                 this.walletCreationService.mnemonicPassword,
                                 payPassword,
                                 this.walletCreationService.singleAddress
-                            );
+                        );
 
-                        this.createWalletSuccess();
+                        // this.createWalletSuccess();
                     }
                     else {
                         // Cancelled, do nothing
@@ -158,70 +128,6 @@ export class MnemonicWritePage implements OnInit {
             this.native.go('/wallet-home');
         });
         this.modal.present();
-    }
-
-    allInputsFilled() {
-        if (this.word1 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word1;
-        }
-        if (this.word2 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word2;
-        }
-        if (this.word3 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word3;
-        }
-        if (this.word4 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word4;
-        }
-        if (this.word5 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word5;
-        }
-        if (this.word6 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word6;
-        }
-        if (this.word7 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word7;
-        }
-        if (this.word8 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word8;
-        }
-        if (this.word9 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word9;
-        }
-        if (this.word10 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word10;
-        }
-        if (this.word11 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word11;
-        }
-        if (this.word12 === '') {
-            return false;
-        } else {
-            this.inputStr += this.word12;
-        }
-        return true;
     }
 }
 
