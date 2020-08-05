@@ -28,7 +28,7 @@ export class CoinTxInfoPage implements OnInit {
     private blockchain_url = Config.BLOCKCHAIN_URL;
     private idchain_url = Config.IDCHAIN_URL;
 
-    // Card Header
+    // Header display
     public type: TransactionType;
     public direction: string = '';
     public payStatusIcon: string = '';
@@ -53,9 +53,9 @@ export class CoinTxInfoPage implements OnInit {
     public outputs = [];
 
     // Tabs
-    public timeActive: boolean = false;
-    public memoActive: boolean = false;
-    public blockActive: boolean = false;
+    public timeActive: boolean = true;
+    public memoActive: boolean = true;
+    public confirmActive: boolean = false;
     public feesActive: boolean = false;
     public txActive: boolean = false;
 
@@ -89,8 +89,8 @@ export class CoinTxInfoPage implements OnInit {
     init() {
         this.masterWallet = this.walletManager.getActiveMasterWallet();
         this.route.queryParams.subscribe((data) => {
-            this.txId = data["txId"];
-            this.name = data["chainId"];
+            this.txId = data.txId;
+            this.name = data.chainId;
 
             this.appService.setTitleBarTitle("text-record");
 
@@ -100,8 +100,7 @@ export class CoinTxInfoPage implements OnInit {
 
     async getTransactionInfo() {
         let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.name, 0, this.txId);
-        let transactions = allTransactions.Transactions;
-        let transaction = transactions[0];
+        let transaction = allTransactions.Transactions[0];
         console.log('Raw tx', transaction);
 
         // Raw data
@@ -116,7 +115,7 @@ export class CoinTxInfoPage implements OnInit {
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
 
-        // Card header data
+        // Display header data
         switch (transaction.Status) {
             case TransactionStatus.CONFIRMED:
                 this.status = 'Confirmed';
@@ -132,7 +131,7 @@ export class CoinTxInfoPage implements OnInit {
                 break;
         }
 
-        // Card header data
+        // Display header data
         let direction = transaction.Direction;
         if (direction === TransactionDirection.RECEIVED) {
             this.type = 1;

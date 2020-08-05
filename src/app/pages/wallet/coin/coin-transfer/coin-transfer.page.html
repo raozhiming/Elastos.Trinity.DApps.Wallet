@@ -1,15 +1,23 @@
 <ion-content *ngIf="transfer.type !== 'recharge'">
     <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
+        <!-- Balance Container -->
         <h1>Enter Amount</h1>
         <ion-row class="item-row">
             <ion-col size="6" class="left-col">
                 <h2>{{ chainId }}</h2>
             </ion-col>
             <ion-col size="6" class="right-col">
-                <h2>{{ (walletManager.activeMasterWallet.subWallets[chainId].balance/SELA).toFixed(8) }}</h2>
+                <ion-input
+                    class="amount-input"
+                    type="text"
+                    placeholder="{{ (walletManager.activeMasterWallet.subWallets[chainId].balance/SELA).toFixed(8) }}"
+                    [(ngModel)]="transfer.amount"
+                >
+                </ion-input>
             </ion-col>
         </ion-row>
+        <!-- Address Container -->
         <h1>Send to</h1>
         <ion-row *ngIf="suggestedAddresses.length > 0">
             <ion-col size="12">
@@ -23,13 +31,28 @@
                 <ion-input
                     type="text"
                     placeholder="{{ 'text-receiver-address' | translate}}"
-                    [readonly]="readonly"
                     [(ngModel)]="transfer.toAddress"
                     (input)='onSendToAddressInput($event.target.value)'>
                 </ion-input>
             </ion-col>
             <ion-col size="2" class="right-col">
                 <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
+            </ion-col>
+        </ion-row>
+        <!-- Options Container -->
+        <h1 (click)="hideMemo = !hideMemo">
+            Advanced Options
+            <img *ngIf="!theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/down-arrow.svg"/>
+            <img *ngIf="theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/darkmode/down-arrow.svg"/>
+        </h1>
+        <ion-row *ngIf="!hideMemo" class="item-row">
+            <ion-col size="10" class="left-col">
+                <ion-input
+                    type="text"
+                    placeholder="{{ 'text-memo' | translate}}"
+                    [(ngModel)]="transfer.memo"
+                >
+                </ion-input>
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -105,9 +128,8 @@
         <ion-row class="input-row">
             <ion-input
                 type="text"
-                placeholder="{{ 'text-price' | translate}}"
+                placeholder="{{ 'text-price' | translate }}"
                 [(ngModel)]="transfer.amount"
-                [readonly]="readonly"
             >
             </ion-input>
         </ion-row>

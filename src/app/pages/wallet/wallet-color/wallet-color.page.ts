@@ -45,6 +45,10 @@ export class WalletColorPage implements OnInit {
       color: '#18cece',
       background: '/assets/cards/maincards/card-lightblue.svg'
     },
+    {
+      color: '#36d67d',
+      background: '/assets/cards/maincards/card-green.svg'
+    },
   ];
 
   constructor(

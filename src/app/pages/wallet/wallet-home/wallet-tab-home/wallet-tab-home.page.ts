@@ -44,10 +44,13 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 })
 export class WalletTabHomePage implements OnInit {
 
+    public masterWallet: MasterWallet = null;
+    public masterWallets: MasterWallet[] = [];
+    public isSingleWallet: boolean = false;
+
+    // Helpers
     public Util = Util;
     public SELA = Config.SELA;
-
-    showOn = true;
 
     // Titlebar
     private onItemClickedListener: any;
@@ -67,6 +70,14 @@ export class WalletTabHomePage implements OnInit {
         titleBarManager.addOnItemClickedListener(this.onItemClickedListener = (menuIcon: any) => {
             this.handleItem(menuIcon.key);
         });
+
+        if (this.walletManager.getWalletsList().length > 1) {
+            this.isSingleWallet = true;
+            this.masterWallet = this.walletManager.getActiveMasterWallet();
+        } else {
+            this.isSingleWallet = false;
+            this.masterWallets = this.walletManager.getWalletsList();
+        }
     }
 
     ionViewWillEnter() {
@@ -88,7 +99,6 @@ export class WalletTabHomePage implements OnInit {
 
     ionViewWillLeave() {
         titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
-        console.log('WALLLETT', this.walletManager.getWalletsList());
     }
 
     handleItem(key: string) {
@@ -97,10 +107,6 @@ export class WalletTabHomePage implements OnInit {
                 this.goToGeneralSettings();
                 break;
         }
-    }
-
-    onOpen() {
-        this.showOn = !this.showOn;
     }
 
     goToGeneralSettings() {

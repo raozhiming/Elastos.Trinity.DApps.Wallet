@@ -18,8 +18,10 @@ import { Config } from 'src/app/config/Config';
 
 export class CoinSelectPage implements OnInit {
 
+    // Available subwallets to transfer to
     public subWallets: SubWallet[] = [];
 
+    // Helpers
     public Util = Util;
     public SELA = Config.SELA;
 
@@ -39,13 +41,16 @@ export class CoinSelectPage implements OnInit {
     }
 
     init() {
-        // Note: we are willing to pick a sidechain subwallet here only.
-        this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(StandardCoinName.ELA);
+        // Filter out the subwallet being transferred from
+        this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(this.coinTransferService.transferFrom);
     }
 
     onItem(wallet: SubWallet) {
+        // For transfer display
         this.coinTransferService.transferTo = wallet.id;
+        // For creating transaction
         this.coinTransferService.transfer.sideChainId = wallet.id;
+
         this.native.go("/coin-transfer");
     }
 

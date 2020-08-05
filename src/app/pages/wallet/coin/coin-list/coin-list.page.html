@@ -63,13 +63,3 @@
         </ion-row>
     </ion-grid>
 </ion-content>
-
-<!-------------------- OLD WALLET -------------------->
-<!-- <ion-content>
-    <ion-list lines="none">
-        <ion-item *ngFor="let item of coinList">
-            <ion-label>{{item.coin.getName()}}</ion-label>
-            <my-toggle *ngIf="item.coin.canBeRemoved()" [checked]="item.isOpen" [auto]='false' (onChange)="onSelect(item, $event)"></my-toggle>
-        </ion-item>
-    </ion-list>
-</ion-content> -->

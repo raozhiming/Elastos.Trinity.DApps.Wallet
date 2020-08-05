@@ -29,13 +29,14 @@ import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { CoinTransferService } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
 import { StandardCoinName, StandardCoin } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { SubWallet } from 'src/app/model/SubWallet';
 import * as CryptoAddressResolvers from 'src/app/model/address-resolvers';
 import { HttpClient } from '@angular/common/http';
 import { CryptoNameAddress } from 'src/app/model/address-resolvers';
+import { WalletAccount } from 'src/app/model/WalletAccount';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -46,23 +47,24 @@ declare let appManager: AppManagerPlugin.AppManager;
 })
 export class CoinTransferPage implements OnInit, OnDestroy {
 
-    masterWallet: MasterWallet = null;
-    walletType = '';
-    transfer: any = null;
+    private masterWallet: MasterWallet;
+    private walletInfo: WalletAccount;
+    public transfer: Transfer;
+    public chainId: string;
 
-    chainId: string;
-
+    // Display recharge wallets
     public transferFrom: SubWallet;
     public transferTo: SubWallet;
 
-    Config = Config;
-    SELA = Config.SELA;
-    walletInfo = {};
+    // Display memo
+    public hideMemo: boolean = true;
 
-    transFunction: any;
-    readonly = false;
-    hideMemo = false;
-    introText = ''; // to show intro text
+    // Submit transaction
+    public transFunction: any;
+
+    // Helpers
+    public Config = Config;
+    public SELA = Config.SELA;
 
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     suggestedAddresses: CryptoAddressResolvers.Address[] = [];
@@ -114,40 +116,83 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         }
 
         switch (this.transfer.type) {
-            case 'payment-confirm':
-                this.readonly = true;
             case 'transfer':
                 this.transFunction = this.createTransaction;
                 break;
             case 'recharge':
                 this.transFunction = this.createDepositTransaction;
-                this.transfer.rate = 1; // TODO:: this is sidechain rate
+                this.transfer.rate = 1; // TODO: this is sidechain rate
+                this.transfer.amount = 0.1; // for DID
                 this.transfer.fee = 10000;
                 this.chainId = 'ELA';
-                this.transfer.amount = '0.1'; // for DID
                 this.getAddress(this.coinTransferService.transfer.sideChainId);
-                this.hideMemo = true;
-                this.introText = 'text-recharge-intro';
                 break;
             case 'withdraw':
                 this.transFunction = this.createWithdrawTransaction;
                 this.transfer.rate = 1; // TODO:: this is mainchain rate
                 this.getAddress('ELA');
-                this.hideMemo = true;
                 break;
         }
     }
 
     async getAddress(chainId: string) {
-        this.transfer.toAddress = await this.walletManager.spvBridge.createAddress(this.masterWallet.id, chainId);
+        this.transfer.toAddress = await this.walletManager.spvBridge.createAddress(
+            this.masterWallet.id,
+            chainId
+        );
+    }
+
+    async createTransaction() {
+        let toAmount = this.accMul(this.transfer.amount, Config.SELA);
+
+        this.transfer.rawTransaction =
+            await this.walletManager.spvBridge.createTransaction(
+                this.masterWallet.id,
+                this.chainId,
+                '',
+                this.transfer.toAddress,
+                toAmount.toString(),
+                this.transfer.memo
+            );
+
+        this.walletManager.openPayModal(this.transfer);
+    }
+
+    async createDepositTransaction() {
+        const toAmount = this.accMul(this.transfer.amount, Config.SELA);
+
+        this.transfer.rawTransaction =
+            await this.walletManager.spvBridge.createDepositTransaction(
+                this.masterWallet.id,
+                'ELA',
+                '',
+                this.coinTransferService.transfer.sideChainId,
+                toAmount.toString(), // user input amount
+                this.transfer.toAddress, // user input address
+                this.transfer.memo
+            );
+
+        this.walletManager.openPayModal(this.transfer);
+    }
+
+    async createWithdrawTransaction() {
+        const toAmount = this.accMul(this.transfer.amount, Config.SELA);
+
+        this.transfer.rawTransaction =
+            await this.walletManager.spvBridge.createWithdrawTransaction(
+                this.masterWallet.id,
+                this.chainId,
+                '',
+                toAmount.toString(),
+                this.transfer.toAddress,
+                this.transfer.memo
+            );
+
+        this.walletManager.openPayModal(this.transfer);
     }
 
     goScan() {
         this.appService.scan(ScanType.Address);
-    }
-
-    goContact() {
-        this.native.go("/contact-list", { "hideButton": true });
     }
 
     goTransaction() {
@@ -167,27 +212,25 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.native.toast_trans('correct-amount');
             return;
         }
-
         if (this.transfer.amount <= 0) {
             this.native.toast_trans('correct-amount');
             return;
         }
-
         if (this.transfer.amount * this.SELA > this.walletManager.activeMasterWallet.subWallets[this.chainId].balance) {
             this.native.toast_trans('error-amount');
             return;
         }
-
         if (this.transfer.amount.toString().indexOf('.') > -1 && this.transfer.amount.toString().split(".")[1].length > 8) {
             this.native.toast_trans('correct-amount');
             return;
         }
-
         try {
-            await this.walletManager.spvBridge.isAddressValid(this.masterWallet.id, this.transfer.toAddress);
+            await this.walletManager.spvBridge.isAddressValid(
+                this.masterWallet.id,
+                this.transfer.toAddress
+            );
             this.transFunction();
-        }
-        catch (error) {
+        } catch (error) {
             this.native.toast_trans('contact-address-digits');
         }
     }
@@ -199,56 +242,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
     }
 
-    async createTransaction() {
-        let toAmount = this.accMul(this.transfer.amount, Config.SELA);
-
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createTransaction(this.masterWallet.id, this.chainId, '',
-            this.transfer.toAddress,
-            toAmount.toString(),
-            this.transfer.memo);
-
-        this.walletManager.openPayModal(this.transfer);
-    }
-
-    async createDepositTransaction() {
-        const toAmount = this.accMul(this.transfer.amount, Config.SELA);
-
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createDepositTransaction(this.masterWallet.id, 'ELA', '',
-            this.coinTransferService.transfer.sideChainId,
-            toAmount.toString(), // user input amount
-            this.transfer.toAddress, // user input address
-            this.transfer.memo);
-
-        this.walletManager.openPayModal(this.transfer);
-    }
-
-    async createWithdrawTransaction() {
-        const toAmount = this.accMul(this.transfer.amount, Config.SELA);
-
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createWithdrawTransaction(this.masterWallet.id, this.chainId, '',
-            toAmount.toString(),
-            this.transfer.toAddress,
-            this.transfer.memo);
-
-        this.walletManager.openPayModal(this.transfer);
-    }
-
-    getCoinIcon(subWallet: SubWallet): string {
-        switch (subWallet.id) {
-            case StandardCoinName.ELA:
-                return "assets/coins/ela-black.svg";
-            case StandardCoinName.IDChain:
-                return "assets/coins/ela-turquoise.svg";
-            case StandardCoinName.ETHSC:
-                return "assets/coins/ela-gray.svg";
-            default:
-                return "assets/coins/eth.svg";
-        }
-    }
-    
     /**
      * Callback called whenever the "send to" address changes.
-     * At that time, we cantry to call some APIs to retrieve an address by 
+     * At that time, we cantry to call some APIs to retrieve an address by
      */
     async onSendToAddressInput(enteredText: string) {
         this.suggestedAddresses = [];
@@ -284,5 +280,18 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         // Hide/reset suggestions
         this.suggestedAddresses = [];
+    }
+
+    getCoinIcon(subWallet: SubWallet): string {
+        switch (subWallet.id) {
+            case StandardCoinName.ELA:
+                return "assets/coins/ela-black.svg";
+            case StandardCoinName.IDChain:
+                return "assets/coins/ela-turquoise.svg";
+            case StandardCoinName.ETHSC:
+                return "assets/coins/ela-gray.svg";
+            default:
+                return "assets/coins/eth.svg";
+        }
     }
 }

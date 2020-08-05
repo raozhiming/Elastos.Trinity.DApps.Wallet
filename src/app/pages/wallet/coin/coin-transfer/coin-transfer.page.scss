@@ -3,7 +3,6 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-
     min-height: 100%;
     background: #f8f8ff;
     margin: 0;
@@ -16,11 +15,22 @@
     }
 
     h1 {
-        margin: 20px 0 10px;
-        font-size: 14px;
+        margin: 25px 0 20px;
+        font-size: 13px;
         font-weight: 400;
         letter-spacing: 0.7px;
         color: #000000;
+
+        img {
+            position: relative;
+            top: 6.5px;
+            width: 22px;
+            height: 22px;
+        }
+
+        .rotate {
+            transform: rotate(-180deg);
+        }
     }
 
     .item-row {
@@ -33,7 +43,7 @@
         justify-content: space-between;
         align-items: center;
 
-        h2 {
+        h2, .amount-input {
             width: 100%;
             margin: 0;
             font-size: 19px;
@@ -70,6 +80,10 @@
                 height: 30px;
                 object-fit: contain;
             }
+
+            .amount-input {
+                text-align: right;
+            }
         }
     }
 }
@@ -85,7 +99,7 @@
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
 
-        h2 {
+        h2, .amount-input {
             color: #ffffff;
         }
 

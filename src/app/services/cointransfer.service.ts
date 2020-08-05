@@ -34,7 +34,7 @@ export class Transfer {
     url: string = null;
     crPublicKey: string = null;
     account: string = null;
-    rawTransaction: string = null;
+    rawTransaction: any = null;
     location: number = null;
     crDID: string = null;
     from: string = null;
@@ -49,6 +49,7 @@ export class Transfer {
     type: string = 'payment-confirm';
     sideChainId: string;
     currency: string; // pay
+    rate: number;
 }
 
 @Injectable({
@@ -57,8 +58,8 @@ export class Transfer {
 
 export class CoinTransferService {
 
-    // By Chain ID
-    public transferFrom: string;
+    // For recharging wallets, define which subwallets will send and receive
+    public transferFrom: StandardCoinName;
     public transferTo: string;
 
     // Below fields are shared by several screens operating fund transfers between subwallets.

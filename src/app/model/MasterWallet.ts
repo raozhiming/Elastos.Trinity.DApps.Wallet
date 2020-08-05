@@ -46,7 +46,7 @@ export class MasterWallet {
         theme?: Theme
     ) {
         this.id = id;
-        this.name = name || "";
+        this.name = name || 'Anonymous Wallet';
         this.theme = theme || {
             color: '#752fcf',
             background: '/assets/cards/maincards/card-purple.svg'
@@ -108,7 +108,7 @@ export class MasterWallet {
         let subWallet = this.subWallets[chainId] as StandardSubWallet;
         subWallet.updateSyncProgress(progress, lastBlockTime);
     }
-    
+
     public getSubWalletBalance(coinId: CoinID): number {
         return this.subWallets[coinId].balance;
     }
@@ -122,8 +122,8 @@ export class MasterWallet {
      */
     public subWalletsWithExcludedCoin(excludedCoinName: StandardCoinName): SubWallet[] {
         return Object.values(this.subWallets).filter((sw)=>{
-            return sw.id != excludedCoinName;
-        })
+            return sw.id !== excludedCoinName;
+        });
     }
 
     /**
@@ -141,7 +141,7 @@ export class MasterWallet {
     public async destroySubWallet(coinId: CoinID) {
         let subWallet = this.subWallets[coinId];
         subWallet.destroy();
-        
+
         // Delete the subwallet from out local model.
         delete this.subWallets[coinId];
 
@@ -185,7 +185,7 @@ class SubWalletBuilder {
         switch (serializedSubWallet.type) {
             case CoinType.STANDARD:
                 return StandardSubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
-            case CoinType.ERC20: 
+            case CoinType.ERC20:
                 return ERC20SubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
             default:
                 console.warn("Unsupported subwallet type", serializedSubWallet.type);
