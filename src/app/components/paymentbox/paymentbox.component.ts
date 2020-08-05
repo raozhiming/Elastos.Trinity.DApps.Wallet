@@ -81,20 +81,25 @@ export class PaymentboxComponent implements OnInit {
             this.modalCtrl.dismiss(this.transfer);
             return;
         }
-        if (this.transfer.payPassword) {
-            // Force password prompt for payments
-            let options: PasswordManagerPlugin.GetPasswordInfoOptions = {
-                forceMasterPasswordPrompt: true
-            };
-            let password = await passwordManager.getPasswordInfo("wallet-"+this.walletManager, options);
-            if (password) {
-                this.modalCtrl.dismiss(this.transfer.payPassword);
-            }
-            else {
-                // TODO: show "wrong password" / or cancelled?
-            }
-        } else {
-            this.native.toast_trans('text-pay-password-input');
+
+        // Force password prompt for payments
+        let options: PasswordManagerPlugin.GetPasswordInfoOptions = {
+            forceMasterPasswordPrompt: true
+        };
+        let password = await passwordManager.getPasswordInfo("wallet-"+this.walletId, options) as PasswordManagerPlugin.GenericPasswordInfo;
+        if (password) {
+            this.modalCtrl.dismiss(password.password);
+        }
+        else {
+            // TODO: show "wrong password" / or cancelled or set password?
+            // let passwordInfo: PasswordManagerPlugin.GenericPasswordInfo = {
+            //     type: PasswordManagerPlugin.PasswordType.GENERIC_PASSWORD,
+            //     key: "wallet-"+this.walletId,
+            //     displayName: "Wallet password",
+            //     password: '12345678',
+            //     // TODO: visible: false
+            // }
+            // let result = await passwordManager.setPasswordInfo(passwordInfo);
         }
     }
 
