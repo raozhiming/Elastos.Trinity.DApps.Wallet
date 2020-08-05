@@ -9,6 +9,13 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { AppService } from 'src/app/services/app.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/Transaction';
+import { ThemeService } from 'src/app/services/theme.service';
+
+enum TransactionType {
+    RECEIVE = 1,
+    SENT = 2,
+    TRANSFER = 3
+}
 
 @Component({
     selector: 'app-coin-tx-info',
@@ -16,26 +23,54 @@ import { TransactionStatus, TransactionDirection } from 'src/app/model/Transacti
     styleUrls: ['./coin-tx-info.page.scss'],
 })
 export class CoinTxInfoPage implements OnInit {
-    masterWallet: MasterWallet = null;
-    chainId = '';
-    txId = '';
-    transactionRecord: any = {};
-    start = 0;
-    payStatusIcon: string = '';
-    blockchain_url = Config.BLOCKCHAIN_URL;
-    idchain_url = Config.IDCHAIN_URL;
 
-    public symbol: any = '';
-    public inputs: any = [];
-    public outputs: any = [];
+    private masterWallet: MasterWallet = null;
+    private blockchain_url = Config.BLOCKCHAIN_URL;
+    private idchain_url = Config.IDCHAIN_URL;
 
-    //TODO: it should use callback if the spvsdk can send callback when the confirm count is 6
+    // Card Header
+    public type: TransactionType;
+    public direction: string = '';
+    public payStatusIcon: string = '';
+    public symbol: string = '';
+
+    // Params data
+    public txId: string = '';
+    public name: string = '';
+
+    // Raw tx data
+    public memo: string = '';
+    public confirmCount: any;
+    public timestamp: number;
+
+    // Modified data
+    public status: string = '';
+    public resultAmount: string = '';
+    public payFee: number;
+    public datetime: any;
+    public payType: string = '';
+    public inputs = [];
+    public outputs = [];
+
+    // Tabs
+    public timeActive: boolean = false;
+    public memoActive: boolean = false;
+    public blockActive: boolean = false;
+    public feesActive: boolean = false;
+    public txActive: boolean = false;
+
+    // TODO: it should use callback if the spvsdk can send callback when the confirm count is 6
     preConfirmCount = '';
     hasSubscribeprogressEvent = false;
 
-    constructor(public events: Events, public route: ActivatedRoute,
-        public walletManager: WalletManager, public native: Native,
-        private appService: AppService) {
+    constructor(
+        public events: Events,
+        public route: ActivatedRoute,
+        public walletManager: WalletManager,
+        public native: Native,
+        private appService: AppService,
+        public theme: ThemeService
+    ) {
     }
 
     ngOnInit() {
@@ -43,6 +78,7 @@ export class CoinTxInfoPage implements OnInit {
 
     ionViewWillEnter() {
         this.appService.setBackKeyVisibility(true);
+        this.appService.setTitleBarTitle('Transaction Details');
         this.init();
     }
 
@@ -54,7 +90,7 @@ export class CoinTxInfoPage implements OnInit {
         this.masterWallet = this.walletManager.getActiveMasterWallet();
         this.route.queryParams.subscribe((data) => {
             this.txId = data["txId"];
-            this.chainId = data["chainId"];
+            this.name = data["chainId"];
 
             this.appService.setTitleBarTitle("text-record");
 
@@ -63,93 +99,80 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     async getTransactionInfo() {
-        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.chainId, this.start, this.txId);
-
+        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.name, 0, this.txId);
         let transactions = allTransactions.Transactions;
         let transaction = transactions[0];
+        console.log('Raw tx', transaction);
+
+        // Raw data
+        this.timestamp = transaction.Timestamp * 1000;
+        this.confirmCount = transaction.ConfirmStatus;
+        this.memo = transaction.Memo;
+
+        // Modified data
+        this.datetime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
+        this.resultAmount = Util.scientificToNumber(transaction.Amount / Config.SELA);
+        this.payFee = Util.scientificToNumber(transaction.Fee / Config.SELA);
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
-        let timestamp = transaction.Timestamp * 1000;
-        let datetime = Util.dateFormat(new Date(timestamp), 'YYYY-MM-DD HH:mm:ss');
-        let status = '';
 
+        // Card header data
         switch (transaction.Status) {
             case TransactionStatus.CONFIRMED:
-                status = 'Confirmed';
+                this.status = 'Confirmed';
                 this.unsubscribeprogressEvent();
                 break;
             case TransactionStatus.PENDING:
-                status = 'Pending';
+                this.status = 'Pending';
                 this.subscribeprogressEvent();
                 break;
             case TransactionStatus.UNCONFIRMED:
-                status = 'Unconfirmed';
+                this.status = 'Unconfirmed';
                 this.subscribeprogressEvent();
                 break;
         }
 
-        if (this.preConfirmCount === transaction.ConfirmStatus) {
-            //do nothing
-            console.log('getTransactionInfo do nothing ConfirmStatus:', transaction.ConfirmStatus);
-            return;
-        } else {
-            this.preConfirmCount = transaction.ConfirmStatus;
-        }
-
-        let vtype = "transaction-type-13";
-        if ((transaction.Type >= 0) && transaction.Type <= 12) {
-            if (transaction.Type === 10) {
-                if (this.chainId === StandardCoinName.IDChain) {
-                    vtype = "transaction-type-did";
-                } else {
-                    vtype = "transaction-type-10";
-                }
-            } else {
-                vtype = "transaction-type-" + transaction.Type;
-            }
-        }
-
+        // Card header data
         let direction = transaction.Direction;
         if (direction === TransactionDirection.RECEIVED) {
-            this.payStatusIcon = './assets/images/tx-state/icon-tx-received-outline.svg';
+            this.type = 1;
+            this.direction = 'Received';
+            this.payStatusIcon = '/assets/buttons/receive.png';
             this.symbol = "+";
         } else if (direction === TransactionDirection.SENT) {
-            this.payStatusIcon = './assets/images/tx-state/icon-tx-sent.svg';
+            this.type = 2;
+            this.direction = 'Sent';
+            this.payStatusIcon = '/assets/buttons/send.png';
             this.symbol = "-";
         } else if (direction === TransactionDirection.MOVED) {
-            this.payStatusIcon = './assets/images/tx-state/icon-tx-moved.svg';
+            this.type = 3;
+            this.direction = 'Transferred';
+            this.payStatusIcon = '/assets/buttons/transfer.png';
             this.symbol = "";
-        } else if (direction === TransactionDirection.DEPOSIT) {
-            this.payStatusIcon = './assets/images/tx-state/icon-tx-moved.svg';
-            if (transaction.Amount > 0) {
-                this.symbol = "-";
+        }
+
+        this.payType = "transaction-type-13";
+        if ((transaction.Type >= 0) && transaction.Type <= 12) {
+            if (transaction.Type === 10) {
+                if (this.name === StandardCoinName.IDChain) {
+                    this.payType = "transaction-type-did";
+                } else {
+                    this.payType = "transaction-type-10";
+                }
             } else {
-                this.symbol = "";
+                this.payType = "transaction-type-" + transaction.Type;
             }
         }
 
-        //for vote transaction
+        // For vote transaction
         if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
-            vtype = "transaction-type-vote";
+            this.payType = "transaction-type-vote";
         }
-
-        this.transactionRecord = {
-            name: this.chainId,
-            status: status,
-            resultAmount: Util.scientificToNumber(transaction.Amount / Config.SELA),
-            txId: this.txId,
-            transactionTime: datetime,
-            timestamp: timestamp,
-            payfees: Util.scientificToNumber(transaction.Fee / Config.SELA),
-            confirmCount: transaction.ConfirmStatus,
-            memo: transaction.Memo,
-            payType: vtype
-        };
     }
 
     subscribeprogressEvent() {
         if (!this.hasSubscribeprogressEvent) {
-            this.events.subscribe(this.chainId + ':syncprogress', (coin) => {
+            this.events.subscribe(this.name + ':syncprogress', (coin) => {
                 this.getTransactionInfo();
             });
             this.hasSubscribeprogressEvent = true;
@@ -157,7 +180,7 @@ export class CoinTxInfoPage implements OnInit {
     }
     unsubscribeprogressEvent() {
         if (this.hasSubscribeprogressEvent) {
-            this.events.unsubscribe(this.chainId + ':syncprogress');
+            this.events.unsubscribe(this.name + ':syncprogress');
             this.hasSubscribeprogressEvent = false;
         }
     }

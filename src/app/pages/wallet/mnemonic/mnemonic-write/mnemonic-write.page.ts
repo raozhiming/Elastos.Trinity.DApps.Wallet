@@ -6,7 +6,6 @@ import { Events, IonSlides, ModalController } from '@ionic/angular';
 import { WalletManager } from '../../../../services/wallet.service';
 import { AuthService } from '../../../../services/auth.service';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { WalletCreatedComponent } from 'src/app/components/wallet-created/wallet-created.component';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;

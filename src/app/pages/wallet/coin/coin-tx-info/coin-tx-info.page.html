@@ -1,4 +1,88 @@
 <ion-content>
+    <ion-grid [class.dark-container]="theme.darkMode">
+
+        <ion-card
+            [class.received]="type === 1"
+            [class.sent]="type === 2"
+            [class.transferred]="type === 3"
+        >
+            <div class="icon-container">
+                <ion-img [src]="payStatusIcon"></ion-img>
+            </div>
+            <ion-card-title>{{ direction }} {{ name }}</ion-card-title>
+            <ion-card-subtitle>{{ symbol }}{{ resultAmount }}</ion-card-subtitle>
+            <p
+                [class.complete]="status === 'Confirmed'"
+                [class.pending]="status === 'Pending'"
+                [class.incomplete]="status === 'Incomplete'"
+            > {{ status }}
+            </p>
+        </ion-card>
+    
+        <ion-row class="section-row"  (click)="timeActive = !timeActive">
+            <ion-col size="11" class="name-col">
+                <h1>Transaction Time</h1>
+            </ion-col>
+            <ion-col size="1" class="arrow-col">
+                <img *ngIf="!theme.darkMode" [class.rotate]="timeActive" src="assets/icons/down-arrow.svg"/>
+                <img *ngIf="theme.darkMode" [class.rotate]="timeActive" src="assets/icons/darkmode/down-arrow.svg"/>
+            </ion-col>
+            <div *ngIf="timeActive" class="details-container">
+                <div class="details-row">
+                    <h2>{{ datetime }}</h2>
+                </div>
+            </div>
+        </ion-row>
+
+        <ion-row *ngIf="memo" class="section-row"  (click)="memoActive = !memoActive">
+            <ion-col size="11" class="name-col">
+                <h1>Memo</h1>
+            </ion-col>
+            <ion-col size="1" class="arrow-col">
+                <img *ngIf="!theme.darkMode" [class.rotate]="memoActive" src="assets/icons/down-arrow.svg"/>
+                <img *ngIf="theme.darkMode" [class.rotate]="memoActive" src="assets/icons/darkmode/down-arrow.svg"/>
+            </ion-col>
+            <div *ngIf="memoActive" class="details-container">
+                <div class="details-row">
+                    <h2>{{ memo }}</h2>
+                </div>
+            </div>
+        </ion-row>
+
+        <ion-row class="section-row"  (click)="feesActive = !feesActive">
+            <ion-col size="11" class="name-col">
+                <h1>Transaction Fees</h1>
+            </ion-col>
+            <ion-col size="1" class="arrow-col">
+                <img *ngIf="!theme.darkMode" [class.rotate]="feesActive" src="assets/icons/down-arrow.svg"/>
+                <img *ngIf="theme.darkMode" [class.rotate]="feesActive" src="assets/icons/darkmode/down-arrow.svg"/>
+            </ion-col>
+            <div *ngIf="feesActive" class="details-container">
+                <div class="details-row">
+                    <h2>{{ payFee }} {{ name }}</h2>
+                </div>
+            </div>
+        </ion-row>
+
+        <ion-row class="section-row"  (click)="txActive = !txActive">
+            <ion-col size="11" class="name-col">
+                <h1>Transaction ID</h1>
+            </ion-col>
+            <ion-col size="1" class="arrow-col">
+                <img *ngIf="!theme.darkMode" [class.rotate]="txActive" src="assets/icons/down-arrow.svg"/>
+                <img *ngIf="theme.darkMode" [class.rotate]="txActive" src="assets/icons/darkmode/down-arrow.svg"/>
+            </ion-col>
+            <div *ngIf="txActive" class="details-container">
+                <div class="details-row">
+                    <h2>{{ txId }}</h2>
+                </div>
+            </div>
+        </ion-row>
+
+    </ion-grid>
+</ion-content>
+
+<!-- <ion-content>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles"
             refreshingText="">
@@ -9,7 +93,7 @@
 
     <div class="recordinfo-top">
         <img src={{payStatusIcon}} />
-        <p>{{transactionRecord.status | translate}}</p>
+        <p>{{status | translate}}</p>
     </div>
 
     <ion-grid>
@@ -18,7 +102,7 @@
                 {{'transaction-price' | translate}}
             </ion-col>
             <ion-col col-8 class="text-right">
-                {{symbol}} {{transactionRecord.resultAmount}} {{transactionRecord.name}}
+                {{symbol}} {{resultAmount}} {{name}}
             </ion-col>
         </ion-row>
 
@@ -33,7 +117,7 @@
                 {{item["address"]}}
             </ion-col>
             <ion-col col col-12 class="text-right" *ngIf="i<3">
-                {{item["balance"]}}{{transactionRecord.name}}
+                {{item["balance"]}}{{name}}
             </ion-col>
 
             <ion-col col-12 *ngIf="i===3">
@@ -52,7 +136,7 @@
                 {{item["address"]}}
             </ion-col>
             <ion-col col col-12 class="text-right" *ngIf="i<3">
-                {{item["balance"]}}{{transactionRecord.name}}
+                {{item["balance"]}}{{name}}
             </ion-col>
 
             <ion-col col-12 *ngIf="i===3">
@@ -64,8 +148,8 @@
             <ion-col col-4>
                 {{'transaction-id' | translate}}
             </ion-col>
-            <ion-col col-8 (click)="goWebSite(transactionRecord.name, transactionRecord.txId)">
-                <a href="#">{{transactionRecord.txId}}</a>
+            <ion-col col-8 (click)="goWebSite(name, txId)">
+                <a href="#">{{txId}}</a>
             </ion-col>
         </ion-row>
 
@@ -73,17 +157,17 @@
             <ion-col col-4>
                 {{'transaction-time' | translate}}
             </ion-col>
-            <ion-col col-8 *ngIf="transactionRecord.timestamp!='0'" class="text-right">
-                {{transactionRecord.transactionTime}}
+            <ion-col col-8 *ngIf="timestamp!='0'" class="text-right">
+                {{transactionTime}}
             </ion-col>
         </ion-row>
 
-        <ion-row class="row" class="font-size-1" *ngIf="transactionRecord.payfees > 0">
+        <ion-row class="row" class="font-size-1" *ngIf="payfees > 0">
             <ion-col col-4>
                 {{'text-fees' | translate}}
             </ion-col>
             <ion-col col-8 class="text-right">
-                {{transactionRecord.payfees}}
+                {{payfees}}
             </ion-col>
         </ion-row>
 
@@ -93,7 +177,7 @@
                 {{'confirm-count' | translate}}
             </ion-col>
             <ion-col col-8 class="text-right">
-                {{transactionRecord.confirmCount}}
+                {{confirmCount}}
             </ion-col>
         </ion-row>
 
@@ -102,7 +186,7 @@
                 {{'transaction-type' | translate}}
             </ion-col>
             <ion-col col-8 class="text-right">
-                {{transactionRecord.payType|translate}}
+                {{payType|translate}}
             </ion-col>
         </ion-row>
 
@@ -111,8 +195,9 @@
                 {{'text-memo' | translate}}
             </ion-col>
             <ion-col col-8 class="text-right">
-                {{transactionRecord.memo}}
+                {{memo}}
             </ion-col>
         </ion-row>
     </ion-grid>
-</ion-content>
+</ion-content> -->
+

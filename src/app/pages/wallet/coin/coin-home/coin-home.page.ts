@@ -38,7 +38,14 @@ import { TransactionDirection, TransactionStatus } from 'src/app/model/Transacti
 import { ThemeService } from 'src/app/services/theme.service';
 import * as moment from 'moment';
 
+enum TransactionType {
+    RECEIVE = 1,
+    SENT = 2,
+    TRANSFER = 3
+}
+
 type Transaction = {
+    'type': TransactionType,
     'name': string,
     'status': string,
     'resultAmount': number,
@@ -184,6 +191,7 @@ export class CoinHomePage implements OnInit {
                 // const datetime = Util.dateFormat(new Date(timestamp), 'MMMM Do YYYY, h:mm:ss a');
                 const datetime = moment(new Date(timestamp)).startOf('hour').fromNow();
                 const txId = transaction.TxHash;
+                let txType: TransactionType;
                 let payStatusIcon: string = null;
                 let name = '';
                 let symbol = '';
@@ -193,6 +201,7 @@ export class CoinHomePage implements OnInit {
                 this.isNewTransaction(timestamp);
 
                 if (transaction.Direction === TransactionDirection.RECEIVED) {
+                    txType = 1;
                     payStatusIcon = './assets/buttons/receive.png';
                     name = 'Received ELA';
                     symbol = '+';
@@ -208,6 +217,7 @@ export class CoinHomePage implements OnInit {
                         break;
                     }
                 } else if (transaction.Direction === TransactionDirection.SENT) {
+                    txType = 2;
                     payStatusIcon = './assets/buttons/send.png';
                     symbol = '-';
                     name = 'Sent ELA';
@@ -220,6 +230,7 @@ export class CoinHomePage implements OnInit {
                         }
                     }
                 } else if (transaction.Direction === TransactionDirection.MOVED) {
+                    txType = 3;
                     payStatusIcon = './assets/buttons/transfer.png';
                     symbol = '';
                     name = 'Transfered ELA';
@@ -234,13 +245,6 @@ export class CoinHomePage implements OnInit {
                         if (transaction.Type === 10) { // DID transaction
                             name = 'Identity';
                         }
-                    }
-                } else if (transaction.Direction === TransactionDirection.DEPOSIT) {
-                    payStatusIcon = './assets/images/exchange-sub.png';
-                    if (transaction.Amount > 0) {
-                        symbol = '-';
-                    } else {
-                        symbol = '';
                     }
                 }
 
@@ -258,6 +262,7 @@ export class CoinHomePage implements OnInit {
                 }
 
                 const transfer = {
+                    'type': txType,
                     'name': name,
                     'status': status,
                     'resultAmount': transaction.Amount / Config.SELA,
