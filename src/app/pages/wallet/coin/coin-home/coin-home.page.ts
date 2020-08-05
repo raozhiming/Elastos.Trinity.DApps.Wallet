@@ -148,6 +148,7 @@ export class CoinHomePage implements OnInit {
         this.start = 0;
         this.MaxCount = 0;
         this.transferList = [];
+        this.todaysTransactions = 0;
         this.getAllTx();
     }
 

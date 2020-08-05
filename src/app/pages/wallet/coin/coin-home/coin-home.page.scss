@@ -5,7 +5,7 @@
     background: #f8f8ff;
     margin: 0;
     padding: 15px 20px;
-  
+
     .main-title-row {
         margin-bottom: 10px;
         margin-left: 5px;
@@ -13,7 +13,7 @@
         h1, p {
             margin: 0;
         }
-  
+
         h1 {
             font-size: 24px;
             font-weight: 500;
@@ -46,7 +46,7 @@
         background-image: url("/assets/cards/subcards/card-black.svg");
         background-repeat: no-repeat;
         background-size: cover;
-     
+
         .card-label-row {
             display: flex;
             flex-direction: column;
@@ -237,7 +237,7 @@
     .list-title-row {
         margin-bottom: 10px;
         margin-left: 5px;
-  
+
         h1 {
             margin: 0;
             font-size: 18px;
@@ -268,7 +268,7 @@
             letter-spacing: 0.7px;
             color: #161740;
         }
-  
+
         p {
             font-size: 13px;
             font-weight: 400;
@@ -276,7 +276,7 @@
             padding-top: 3px;
             color: #161740;
         }
-      
+
         .left-col {
             display: flex;
             justify-content: center;
@@ -322,7 +322,7 @@
                 }
             }
         }
-      
+
         .middle-col, .right-col {
             display: flex;
             flex-direction: column;
@@ -330,7 +330,7 @@
             align-items: flex-start;
             overflow: hidden;
         }
-      
+
         .right-col {
             align-items: flex-end;
         }
@@ -358,12 +358,20 @@
             color: #000000;
         }
     }
+
+    .more {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        color: #000000;
+    }
 }
-  
-  
+
+
 .dark-container  {
     background:#191a2f;
-  
+
     .main-title-row {
         h1 {
             color: #ffffff;
@@ -382,7 +390,7 @@
 
         h1, p {
             color: #ffffff;
-        }       
+        }
     }
 
     .empty-list {
@@ -390,7 +398,12 @@
             color: #ffffff;
         }
     }
+
+    .more {
+        color: #ffffff;
+    }
 }
+
 
 /* .coin-info-top-box {
     text-align: center;

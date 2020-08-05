@@ -32,20 +32,21 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-  
+
         h2 {
+            width: 100%;
             margin: 0;
             font-size: 19px;
             font-weight: 600;
             letter-spacing: 0.95px;
             color: #000000;
         }
-  
+
         .left-col {
             display: flex;
             justify-content: flex-start;
-            align-items: center;  
-            
+            align-items: center;
+
             ion-input {
                 background-color: #ffffff;
                 font-size: 14px;
@@ -55,7 +56,7 @@
                 color: #8888b0;
             }
         }
-      
+
         .right-col {
             display: flex;
             flex-direction: column;
@@ -83,11 +84,11 @@
     .item-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
-  
+
         h2 {
             color: #ffffff;
         }
-  
+
         .left-col {
             ion-input {
                 background-color: #2b2c49;
@@ -101,10 +102,10 @@
     min-height: 100%;
     background: #f8f8ff;
     padding: 20px;
-  
+
     .main-title-row {
         margin-left: 10px;
-  
+
         p {
             margin: 0;
             font-size: 13px;
@@ -136,7 +137,7 @@
             color: #161740;
             text-align: left;
         }
-  
+
         p {
             font-size: 13px;
             font-weight: 400;
@@ -144,7 +145,7 @@
             color: #161740;
             text-align: left;
         }
-      
+
         .left-col {
             display: flex;
             justify-content: center;
@@ -159,7 +160,7 @@
                 object-fit: contain;
             }
         }
-      
+
         .middle-col, .right-col {
             display: flex;
             flex-direction: column;
@@ -167,7 +168,7 @@
             align-items: flex-start;
             overflow: hidden;
         }
-      
+
         .right-col {
             align-items: flex-end;
 
@@ -236,7 +237,7 @@
 
         h1, p {
             color: #ffffff;
-        }       
+        }
 
         .arrow-down {
             background-color: #2b2c49;

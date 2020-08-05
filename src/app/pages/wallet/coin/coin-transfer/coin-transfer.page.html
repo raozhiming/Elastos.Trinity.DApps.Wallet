@@ -7,7 +7,7 @@
                 <h2>{{ chainId }}</h2>
             </ion-col>
             <ion-col size="6" class="right-col">
-                <h2>{{ walletManager.activeMasterWallet.subWallets[chainId].balance/SELA }}</h2>
+                <h2>{{ (walletManager.activeMasterWallet.subWallets[chainId].balance/SELA).toFixed(8) }}</h2>
             </ion-col>
         </ion-row>
         <h1>Send to</h1>
@@ -20,16 +20,16 @@
         </ion-row>
         <ion-row class="item-row">
             <ion-col size="10" class="left-col">
-                <ion-input 
-                    type="text" 
-                    placeholder="{{ 'text-receiver-address' | translate}}" 
+                <ion-input
+                    type="text"
+                    placeholder="{{ 'text-receiver-address' | translate}}"
                     [readonly]="readonly"
                     [(ngModel)]="transfer.toAddress"
                     (input)='onSendToAddressInput($event.target.value)'>
                 </ion-input>
             </ion-col>
             <ion-col size="2" class="right-col">
-                <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/> 
+                <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -103,7 +103,7 @@
             </ion-col>
         </ion-row>
         <ion-row class="input-row">
-            <ion-input 
+            <ion-input
                 type="text"
                 placeholder="{{ 'text-price' | translate}}"
                 [(ngModel)]="transfer.amount"
@@ -166,7 +166,7 @@
             <ion-input type="text" placeholder="{{ 'text-memo' | translate}}" [(ngModel)]="transfer.memo"
                 [readonly]="readonly"></ion-input>
         </ion-item>
-        
+
     </ion-list>
     <ion-button class="confirm" (click)="goTransaction()">{{ 'text-transfer' | translate }}</ion-button>
 </ion-content>

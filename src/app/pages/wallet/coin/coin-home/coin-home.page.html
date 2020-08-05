@@ -6,14 +6,14 @@
                 <p>{{ todaysTransactions }} NEW TRANSACTIONS TODAY</p>
             </ion-col>
         </ion-row>
-        <ion-row 
-            class="card-row" 
+        <ion-row
+            class="card-row"
             [class.black-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ELA'"
             [class.blue-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'IDChain'"
             [class.gray-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ETHSC'"
             [class.gray2-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ERC20'"
         >
-            <ion-row class="card-label-row"> 
+            <ion-row class="card-label-row">
                 <h1>
                     <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'ELA'">Elastos Mainchain</span>
                     <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'IDChain'">Elastos ID Chain</span>
@@ -60,13 +60,13 @@
             </ion-col>
         </ion-row>
         <div *ngIf="transferList.length > 0">
-            <ion-row 
-                class="item-row ripple ion-activatable" 
-                *ngFor="let item of transferList" 
+            <ion-row
+                class="item-row ripple ion-activatable"
+                *ngFor="let item of transferList"
                 (click)="onItem(item)"
             >
                 <ion-col size="2" class="left-col">
-                    <div 
+                    <div
                         class="icon-container"
                         [class.purple]="item.type === 1"
                         [class.black]="item.type === 2"
@@ -89,7 +89,8 @@
             <img src="assets/icons/warning.svg"/>
             <h1>No transactions</h1>
         </div>
-    </ion-grid> 
+        <div class="more" (click)="clickMore()" *ngIf="isShowMore">{{ 'click-to-load-more' | translate }}</div>
+    </ion-grid>
 </ion-content>
 
 <!-------------------- OLD WALLET -------------------->
