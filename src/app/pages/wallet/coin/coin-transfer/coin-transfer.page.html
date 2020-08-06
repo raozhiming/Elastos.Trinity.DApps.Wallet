@@ -11,7 +11,7 @@
                 <ion-input
                     class="amount-input"
                     type="text"
-                    placeholder="{{ (walletManager.activeMasterWallet.subWallets[chainId].balance/SELA).toFixed(8) }}"
+                    placeholder="{{ walletManager.activeMasterWallet.subWallets[chainId].balance/SELA }}"
                     [(ngModel)]="transfer.amount"
                 >
                 </ion-input>

@@ -37,11 +37,12 @@ export class AuthService {
         }
     }
 
-    public async getWalletPassword(walletId: string, showMasterPromptIfDatabaseLocked: boolean = true): Promise<string> {
+    public async getWalletPassword(walletId: string, showMasterPromptIfDatabaseLocked: boolean = true, forceShowMasterPrompt: boolean = false): Promise<string> {
         return new Promise(async (resolve, reject) => {
             try {
                 let options: PasswordManagerPlugin.GetPasswordInfoOptions = {
-                    promptPasswordIfLocked: showMasterPromptIfDatabaseLocked
+                    promptPasswordIfLocked: showMasterPromptIfDatabaseLocked,
+                    forceMasterPasswordPrompt: forceShowMasterPrompt
                 };
 
                 let passwordInfo = await passwordManager.getPasswordInfo("wallet-"+walletId, options) as PasswordManagerPlugin.GenericPasswordInfo;

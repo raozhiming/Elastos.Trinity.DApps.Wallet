@@ -1,13 +1,13 @@
 <ion-content>
     <ion-grid *ngIf="isShow" class="verify-container ion-no-padding ion-no-margin" [class.verify-dark-container]="theme.darkMode">
-        <ion-row>
+        <!-- <ion-row>
             <ion-input
                 type="password"
                 placeholder="{{ 'unlock-paypassword-placeholder' | translate }}"
                 [(ngModel)]="payPassword"
             >
             </ion-input>
-        </ion-row>
+        </ion-row> -->
         <ion-row *ngIf="isShow" class="btn-container">
             <ion-button color="primary" (click)="onExport()">
                 <ion-label>{{ 'text-export-mnemonic' | translate }}</ion-label>
@@ -17,8 +17,8 @@
 
     <ion-grid *ngIf="!isShow" class="ion-text-center verified-container">
         <p>
-            These are your 12 security words 
-            (mnemonic phrase). Lose these 
+            These are your 12 security words
+            (mnemonic phrase). Lose these
             and you will lose the wallet, so you
             must keep them written down, in
             order, and safe!
@@ -88,4 +88,3 @@
     <ion-button class="confirm" (click)="onNext()" *ngIf="!isShow && !isFromIntent">{{ 'text-memory' | translate }}</ion-button>
     <ion-button class="confirm" (click)="onShare()" *ngIf="!isShow && isFromIntent">{{ 'text-allow' | translate }}</ion-button>
 </ion-footer> -->
-      

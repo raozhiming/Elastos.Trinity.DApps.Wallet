@@ -56,13 +56,14 @@ export class WalletSettingsPage implements OnInit {
             icon: '/assets/settings/picture.svg',
             iconDarkmode: '/assets/settings/darkmode/picture.svg'
         },
-        {
-            route: "/wallet-password-reset",
-            title: "Change Password",
-            subtitle: "Change your wallets secure pay password",
-            icon: '/assets/settings/lock.svg',
-            iconDarkmode: '/assets/settings/darkmode/lock.svg'
-        },
+        // TODO delete wallet-password-reset
+        // {
+        //     route: "/wallet-password-reset",
+        //     title: "Change Password",
+        //     subtitle: "Change your wallets secure pay password",
+        //     icon: '/assets/settings/lock.svg',
+        //     iconDarkmode: '/assets/settings/darkmode/lock.svg'
+        // },
         {
             route: "/coin-list",
             title: "Manage Coin List",

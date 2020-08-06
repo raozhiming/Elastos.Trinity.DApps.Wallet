@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Events } from '@ionic/angular';
 import { AppService } from '../../../../services/app.service';
+import { AuthService } from '../../../../services/auth.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
@@ -40,6 +41,7 @@ export class MnemonicExportPage implements OnInit {
         public native: Native,
         public events: Events,
         public appService: AppService,
+        private authService: AuthService,
         public theme: ThemeService
     ) {
         this.init();
@@ -82,16 +84,20 @@ export class MnemonicExportPage implements OnInit {
         });
     }
 
-    checkParams() {
-        if (Util.isNull(this.payPassword)) {
-            this.native.toast_trans('text-pay-password-input');
-            return;
+    async getPassword() {
+        try {
+            this.payPassword = await this.authService.getWalletPassword(this.masterWalletId, true, true);
+            if (this.payPassword) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-        if (!Util.password(this.payPassword)) {
-            this.native.toast_trans('text-pwd-validator');
-            return;
+        catch (e) {
+            console.error('MnemonicExportPage getWalletPassword error:' + e);
+            return false;
         }
-        return true;
     }
 
     onNext() {
@@ -99,7 +105,7 @@ export class MnemonicExportPage implements OnInit {
     }
 
     return() {
-       this.native.go('/wallet-home');
+        this.native.go('/wallet-home');
     }
 
     onShare() {
@@ -109,9 +115,9 @@ export class MnemonicExportPage implements OnInit {
     }
 
     async onExport() {
-        if (this.checkParams()) {
+        if (await this.getPassword()) {
             let ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
-             // #5919ac #732cd0
+            // #5919ac #732cd0
             titleBarManager.setBackgroundColor('#6B26C6');
             titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
             this.appService.setTitleBarTitle('Mnemonic');
