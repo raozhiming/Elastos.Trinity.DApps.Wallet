@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { Component, NgZone, ViewChild } from '@angular/core';
+import { Component, NgZone, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { Events, Platform, ModalController, IonRouterOutlet } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { TranslateService } from '@ngx-translate/core';
@@ -38,9 +38,7 @@ import { IntentService } from './services/intent.service';
     templateUrl: 'app.component.html'
 })
 export class AppComponent {
-    @ViewChild(IonRouterOutlet, { static: true }) routerOutlet: IonRouterOutlet;
-
-    public runningAsApp = false;
+    @ViewChild(IonRouterOutlet, {static: true}) routerOutlet: IonRouterOutlet;
 
     constructor(
         private platform: Platform,
@@ -69,7 +67,6 @@ export class AppComponent {
             this.setupBackKeyNavigation();
 
             await this.appService.init();
-            this.runningAsApp = !this.appService.runningAsAService();
 
             // Wait until the wallet manager is ready before showing the first screen.
             this.events.subscribe("walletmanager:initialized", () => {
