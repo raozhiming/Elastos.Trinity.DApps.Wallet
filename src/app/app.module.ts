@@ -93,6 +93,7 @@ import * as Sentry from "@sentry/browser";
 
 import { HttpClientModule } from '@angular/common/http';
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
+import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component';
 
 
 Sentry.init({
@@ -177,12 +178,14 @@ export function TranslateLoaderFactory() {
         MnemonicCheckPage,
         MnemonicWritePage,
         MnemonicCreatePage,
-        WalletCreatedComponent
+        WalletCreatedComponent,
+        TxConfirmComponent
     ],
     entryComponents: [
         LauncherPage,
         WalletTabsRootPage,
-        WalletCreatedComponent
+        WalletCreatedComponent,
+        TxConfirmComponent
     ],
     imports: [
         BrowserModule,

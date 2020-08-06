@@ -43,6 +43,7 @@ import { Native } from './native.service';
 import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
 import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
+import { Transfer } from './cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -739,10 +740,12 @@ export class WalletManager {
      * Signs raw transaction and sends the signed transaction to the SPV SDK for publication.
      */
     async signAndSendTransaction(transfer) {
-        let signedTx = await this.spvBridge.signTransaction(this.activeMasterWallet.id,
+        let signedTx = await this.spvBridge.signTransaction(
+            this.activeMasterWallet.id,
             transfer.chainId,
             transfer.rawTransaction,
-            transfer.payPassword);
+            transfer.payPassword
+        );
 
         this.sendTransaction(transfer, signedTx);
     }

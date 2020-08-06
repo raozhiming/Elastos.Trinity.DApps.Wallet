@@ -50,6 +50,7 @@ export class Transfer {
     sideChainId: string;
     currency: string; // pay
     rate: number;
+    payPassword: string;
 }
 
 @Injectable({

@@ -366,8 +366,8 @@ export class CoinHomePage implements OnInit {
     }
 
     async checkUTXOCount() {
-        // CHeck UTXOs only for SPV based coins.
-        if (this.subWallet.type == CoinType.STANDARD) {
+        // Check UTXOs only for SPV based coins.
+        if (this.subWallet.type === CoinType.STANDARD) {
             if (this.walletManager.needToCheckUTXOCountForConsolidation) {
                 let UTXOsJson = await this.walletManager.spvBridge.getAllUTXOs(this.masterWallet.id, this.chainId, 0, 1, '');
                 console.log('UTXOsJson:', UTXOsJson);

@@ -1,0 +1,22 @@
+<div class="container" [class.darkContainer]="theme.darkMode">
+  <ion-img [src]="txIcon"></ion-img>
+  <h1>{{ txHeader }}</h1>
+  <h2>Confirm Transaction</h2>
+  <h3>From:</h3>
+  <h4>{{ txInfo.transferFrom }}</h4>
+  <h3>To:</h3>
+  <h4>{{ txInfo.transferTo }}</h4>
+  <h3>Amount:</h3>
+  <h4>{{ txInfo.amount }}</h4>
+  <ion-row class="btn-row">
+    <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancel()">
+      <ion-label>{{ 'cancel' | translate }}</ion-label>
+      <ion-ripple-effect></ion-ripple-effect>
+    </ion-col>
+    <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="cancel()">
+      <ion-label>{{ 'confirm' | translate }}</ion-label>
+      <ion-ripple-effect></ion-ripple-effect>
+    </ion-col>
+  </ion-row>
+</div>
+  

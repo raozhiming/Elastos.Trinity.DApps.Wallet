@@ -22,7 +22,7 @@
 
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Events } from '@ionic/angular';
+import { Events, PopoverController } from '@ionic/angular';
 import { AppService, ScanType } from '../../../../services/app.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
@@ -37,6 +37,7 @@ import * as CryptoAddressResolvers from 'src/app/model/address-resolvers';
 import { HttpClient } from '@angular/common/http';
 import { CryptoNameAddress } from 'src/app/model/address-resolvers';
 import { WalletAccount } from 'src/app/model/WalletAccount';
+import { TxConfirmComponent } from 'src/app/components/tx-confirm/tx-confirm.component';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -66,6 +67,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     public Config = Config;
     public SELA = Config.SELA;
 
+    // Popup
+    private popover: any = null;
+
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     suggestedAddresses: CryptoAddressResolvers.Address[] = [];
 
@@ -79,6 +83,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         public zone: NgZone,
         private http: HttpClient,
         public theme: ThemeService,
+        private popoverCtrl: PopoverController
     ) {
     }
 
@@ -196,7 +201,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     goTransaction() {
-        this.checkValue();
+        this.showConfirm();
+        //this.checkValue();
     }
 
     async checkValue() {
@@ -229,10 +235,35 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.masterWallet.id,
                 this.transfer.toAddress
             );
-            this.transFunction();
+            this.showConfirm();
         } catch (error) {
             this.native.toast_trans('contact-address-digits');
         }
+    }
+
+    async showConfirm() {
+        let txInfo = {
+            type: this.transfer.type,
+            transferFrom: this.transfer.chainId,
+            transferTo: this.transfer.type === 'recharge' ? this.transfer.sideChainId : this.transfer.toAddress,
+            amount: this.transfer.amount
+        };
+
+        this.popover = await this.popoverCtrl.create({
+            mode: 'ios',
+            cssClass: 'txConfirmComponent',
+            component: TxConfirmComponent,
+            componentProps: {
+                txInfo: txInfo
+            }
+        });
+        this.popover.onWillDismiss().then((params) => {
+            this.popover = null;
+            if (params && params.confirm) {
+                this.transFunction();
+            }
+        });
+        return await this.popover.present();
     }
 
     accMul(arg1, arg2) {

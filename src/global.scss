@@ -78,7 +78,6 @@ ion-input {
   font-size: 15px;
 }
 
-  
 ion-button {
     height: 45px;
     width: 100%;
@@ -91,4 +90,22 @@ ion-button {
         font-weight: 500;
         letter-spacing: -0.43px;
     }
+}
+
+.txConfirmComponent {
+  --height: 462px;
+
+  ion-backdrop {
+    background: transparent !important;
+  }
+
+  .popover-wrapper{
+    .popover-content {
+      position: relative !important;
+      margin: 0 auto !important;
+      left: auto !important;
+      top: auto !important;
+      width: 85vw !important;
+    }
+  }
 }
