@@ -42,14 +42,12 @@ export class CoinSelectPage implements OnInit {
 
     init() {
         // Filter out the subwallet being transferred from
-        this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(this.coinTransferService.transferFrom);
+        this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(this.coinTransferService.chainId);
     }
 
     onItem(wallet: SubWallet) {
-        // For transfer display
-        this.coinTransferService.transferTo = wallet.id;
-        // For creating transaction
-        this.coinTransferService.transfer.sideChainId = wallet.id;
+        // Define subwallets to transfer to and from
+        this.coinTransferService.subchainId = wallet.id;
 
         this.native.go("/coin-transfer");
     }

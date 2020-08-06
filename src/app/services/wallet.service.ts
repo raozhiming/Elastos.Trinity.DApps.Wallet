@@ -43,7 +43,7 @@ import { Native } from './native.service';
 import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
 import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
-import { Transfer } from './cointransfer.service';
+import { Transfer } from '../pages/wallet/coin/coin-transfer/coin-transfer.page';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -480,7 +480,7 @@ export class WalletManager {
         let rpcMessage: InAppRPCMessage = {
             method: RPCMethod.STOP_WALLET_SYNC,
             params: messageParams
-        }
+        };
 
         appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), () => {
             // Nothing to do
@@ -740,7 +740,7 @@ export class WalletManager {
      * Signs raw transaction and sends the signed transaction to the SPV SDK for publication.
      */
     async signAndSendTransaction(transfer) {
-        let signedTx = await this.spvBridge.signTransaction(
+        const signedTx = await this.spvBridge.signTransaction(
             this.activeMasterWallet.id,
             transfer.chainId,
             transfer.rawTransaction,
@@ -751,7 +751,12 @@ export class WalletManager {
     }
 
     private async sendTransaction(transfer, signedTx: SignedTransaction) {
-        let publishedTransaction = await this.spvBridge.publishTransaction(this.activeMasterWallet.id, transfer.chainId, signedTx);
+        const publishedTransaction =
+            await this.spvBridge.publishTransaction(
+                this.activeMasterWallet.id,
+                transfer.chainId,
+                signedTx
+            );
 
         if (!Util.isEmptyObject(transfer.action)) {
             this.lockTx(publishedTransaction.TxHash);
@@ -766,7 +771,11 @@ export class WalletManager {
                 this.native.toast_trans('send-raw-transaction');
                 this.native.setRootRouter('/wallet-home');
                 console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
-                appManager.sendIntentResponse(transfer.action, { txid: txId }, transfer.intentId);
+                appManager.sendIntentResponse(
+                    transfer.action,
+                    { txid: txId },
+                    transfer.intentId
+                );
             }, 5000); // wait for 5s for txPublished
         } else {
             console.log(publishedTransaction.TxHash);

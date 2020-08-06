@@ -29,7 +29,7 @@ import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, TransferType } from 'src/app/services/cointransfer.service';
 import { StandardCoinName, StandardCoin } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { SubWallet } from 'src/app/model/SubWallet';
@@ -38,9 +38,19 @@ import { HttpClient } from '@angular/common/http';
 import { CryptoNameAddress } from 'src/app/model/address-resolvers';
 import { WalletAccount } from 'src/app/model/WalletAccount';
 import { TxConfirmComponent } from 'src/app/components/tx-confirm/tx-confirm.component';
+import { NumberFormatStyle } from '@angular/common';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
+
+export type Transfer = {
+    masterWalletId: string,
+    chainId: string,
+    rawTransaction: any,
+    payPassword: string,
+    action: any,
+    intentId: number,
+};
 
 @Component({
     selector: 'app-coin-transfer',
@@ -51,23 +61,31 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     private masterWallet: MasterWallet;
     private walletInfo: WalletAccount;
-    public transfer: Transfer;
+
+    // Define transfer type
+    public transferType: TransferType;
     public chainId: string;
 
+    // User inputs
+    public toAddress: string;
+    public amount: number;
+    public memo: string = '';
+
     // Display recharge wallets
-    public transferFrom: SubWallet;
-    public transferTo: SubWallet;
+    public fromSubWallet: SubWallet;
+    public toSubWallet: SubWallet;
 
     // Display memo
     public hideMemo: boolean = true;
 
     // Submit transaction
-    public transFunction: any;
+    public transaction: any;
 
     // Helpers
     public Config = Config;
     public SELA = Config.SELA;
 
+    // Display confirm popup
     public showPopover = popover;
 
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
@@ -77,7 +95,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         public route: ActivatedRoute,
         public walletManager: WalletManager,
         public appService: AppService,
-        private coinTransferService: CoinTransferService,
+        public coinTransferService: CoinTransferService,
         public native: Native,
         public events: Events,
         public zone: NgZone,
@@ -91,7 +109,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.init();
         this.events.subscribe('address:update', (address) => {
             this.zone.run(() => {
-                this.transfer.toAddress = address;
+                this.toAddress = address;
             });
         });
     }
@@ -108,82 +126,95 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     init() {
-        this.chainId = this.coinTransferService.transfer.chainId;
-        this.walletInfo = this.coinTransferService.walletInfo;
-        this.transfer = this.coinTransferService.transfer;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
+        this.transferType = this.coinTransferService.transferType;
+        this.chainId = this.coinTransferService.chainId;
 
-        if (this.coinTransferService.transfer.type === 'recharge') {
+        // For Recharge Transfer
+        if (this.coinTransferService.transferType === 1) {
+
+            // Setup page display
             this.appService.setTitleBarTitle('Transfer ' + this.chainId);
-            this.transferFrom = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.transferFrom);
-            this.transferTo = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.transferTo);
-            console.log('Transferring from..', this.transferFrom);
-            console.log('Transferring To..', this.transferTo);
+            this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
+            this.toSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.subchainId);
+
+            // Setup params for recharge transaction
+            this.transaction = this.createRechargeTransaction;
+            this.getSubwalletAddress(this.coinTransferService.subchainId);
+            this.amount = 0.1;
+
+            console.log('Transferring from..', this.fromSubWallet);
+            console.log('Transferring To..', this.toSubWallet);
+            console.log('Subwallet address', this.toAddress);
+
+        // For Send Transfer
         } else {
             this.appService.setTitleBarTitle('Send ' + this.chainId);
-        }
-
-        switch (this.transfer.type) {
-            case 'transfer':
-                this.transFunction = this.createTransaction;
-                break;
-            case 'recharge':
-                this.transFunction = this.createDepositTransaction;
-                this.transfer.rate = 1; // TODO: this is sidechain rate
-                this.transfer.amount = 0.1; // for DID
-                this.transfer.fee = 10000;
-                this.chainId = 'ELA';
-                this.getAddress(this.coinTransferService.transfer.sideChainId);
-                break;
-            case 'withdraw':
-                this.transFunction = this.createWithdrawTransaction;
-                this.transfer.rate = 1; // TODO:: this is mainchain rate
-                this.getAddress('ELA');
-                break;
+            this.transaction = this.createSendTransaction;
         }
     }
 
-    async getAddress(chainId: string) {
-        this.transfer.toAddress = await this.walletManager.spvBridge.createAddress(
+    async getSubwalletAddress(chainId: string) {
+        this.toAddress = await this.walletManager.spvBridge.createAddress(
             this.masterWallet.id,
             chainId
         );
     }
 
-    async createTransaction() {
-        let toAmount = this.accMul(this.transfer.amount, Config.SELA);
+    async createSendTransaction() {
+        const toAmount = this.accMul(this.amount, Config.SELA);
 
-        this.transfer.rawTransaction =
+        const rawTx =
             await this.walletManager.spvBridge.createTransaction(
                 this.masterWallet.id,
-                this.chainId,
-                '',
-                this.transfer.toAddress,
-                toAmount.toString(),
-                this.transfer.memo
+                this.chainId, // From subwallet id
+                '', // From address, not necessary
+                this.toAddress, // User input address
+                toAmount.toString(), // User input amount
+                this.memo // User input memo
             );
 
-        this.walletManager.openPayModal(this.transfer);
+        const transfer: Transfer = {
+            masterWalletId: this.masterWallet.id,
+            chainId: this.chainId,
+            rawTransaction: rawTx,
+            payPassword: '',
+            action: null,
+            intentId: null,
+        };
+
+        console.log('Received raw transaction', rawTx);
+        this.walletManager.openPayModal(transfer);
     }
 
-    async createDepositTransaction() {
-        const toAmount = this.accMul(this.transfer.amount, Config.SELA);
+    async createRechargeTransaction() {
+        const toAmount = this.accMul(this.amount, Config.SELA);
 
-        this.transfer.rawTransaction =
+        const rawTx =
             await this.walletManager.spvBridge.createDepositTransaction(
                 this.masterWallet.id,
-                'ELA',
-                '',
-                this.coinTransferService.transfer.sideChainId,
-                toAmount.toString(), // user input amount
-                this.transfer.toAddress, // user input address
-                this.transfer.memo
+                this.chainId, // From subwallet id
+                '', // From address, not necessary
+                this.coinTransferService.subchainId, // To subwallet id
+                toAmount.toString(), // User input amount
+                this.toAddress, // Generated address
+                this.memo // Memo, not necessary
             );
 
-        this.walletManager.openPayModal(this.transfer);
+        const transfer: Transfer = {
+            masterWalletId: this.masterWallet.id,
+            chainId: this.chainId,
+            rawTransaction: rawTx,
+            payPassword: '',
+            action: null,
+            intentId: null,
+        };
+
+        console.log('Received raw transaction', rawTx);
+        this.walletManager.openPayModal(transfer);
     }
 
-    async createWithdrawTransaction() {
+/*     async createWithdrawTransaction() {
         const toAmount = this.accMul(this.transfer.amount, Config.SELA);
 
         this.transfer.rawTransaction =
@@ -197,7 +228,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             );
 
         this.walletManager.openPayModal(this.transfer);
-    }
+    } */
 
     goScan() {
         this.appService.scan(ScanType.Address);
@@ -209,34 +240,34 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     async checkValue() {
-        if (Util.isNull(this.transfer.toAddress)) {
+        if (Util.isNull(this.toAddress)) {
             this.native.toast_trans('correct-address');
             return;
         }
-        if (Util.isNull(this.transfer.amount)) {
+        if (Util.isNull(this.amount)) {
             this.native.toast_trans('amount-null');
             return;
         }
-        if (!Util.number(this.transfer.amount)) {
+        if (!Util.number(this.amount)) {
             this.native.toast_trans('correct-amount');
             return;
         }
-        if (this.transfer.amount <= 0) {
+        if (this.amount <= 0) {
             this.native.toast_trans('correct-amount');
             return;
         }
-        if (this.transfer.amount * this.SELA > this.walletManager.activeMasterWallet.subWallets[this.chainId].balance) {
+        if (this.amount * this.SELA > this.walletManager.activeMasterWallet.subWallets[this.chainId].balance) {
             this.native.toast_trans('error-amount');
             return;
         }
-        if (this.transfer.amount.toString().indexOf('.') > -1 && this.transfer.amount.toString().split(".")[1].length > 8) {
+        if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
             this.native.toast_trans('correct-amount');
             return;
         }
         try {
             await this.walletManager.spvBridge.isAddressValid(
                 this.masterWallet.id,
-                this.transfer.toAddress
+                this.toAddress
             );
             this.showConfirm();
         } catch (error) {
@@ -247,10 +278,10 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async showConfirm() {
         this.showPopover = true;
         let txInfo = {
-            type: this.transfer.type,
-            transferFrom: this.transfer.chainId,
-            transferTo: this.transfer.type === 'recharge' ? this.transfer.sideChainId : this.transfer.toAddress,
-            amount: this.transfer.amount
+            type: this.transferType === 1 ? 'Transfer' : 'Send',
+            transferFrom: this.chainId,
+            transferTo: this.transferType === 1 ? this.coinTransferService.subchainId : this.toAddress,
+            amount: this.amount
         };
 
         popover = await this.popoverCtrl.create({
@@ -266,7 +297,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             popover = null;
             console.log('Confirm tx params', params);
             if (params.data && params.data.confirm) {
-                this.transFunction();
+                this.transaction();
             }
         });
         return await popover.present();
@@ -313,7 +344,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      * with its real address.
      */
     selectSuggestedAddress(suggestedAddress: CryptoAddressResolvers.CryptoNameAddress) {
-        this.transfer.toAddress = suggestedAddress.address;
+        this.toAddress = suggestedAddress.address;
 
         // Hide/reset suggestions
         this.suggestedAddresses = [];

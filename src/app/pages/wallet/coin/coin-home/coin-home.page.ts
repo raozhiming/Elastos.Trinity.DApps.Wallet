@@ -39,9 +39,9 @@ import { ThemeService } from 'src/app/services/theme.service';
 import * as moment from 'moment';
 
 enum TransactionType {
-    RECEIVE = 1,
+    RECEIVED = 1,
     SENT = 2,
-    TRANSFER = 3
+    RECHARGED = 3
 }
 
 type Transaction = {
@@ -189,7 +189,6 @@ export class CoinHomePage implements OnInit {
             if (transactions.hasOwnProperty(key)) {
                 const transaction = transactions[key];
                 const timestamp = transaction.Timestamp * 1000;
-                // const datetime = Util.dateFormat(new Date(timestamp), 'MMMM Do YYYY, h:mm:ss a');
                 const datetime = moment(new Date(timestamp)).startOf('minutes').fromNow();
                 const txId = transaction.TxHash;
                 let txType: TransactionType;
@@ -296,32 +295,23 @@ export class CoinHomePage implements OnInit {
     }
 
     receiveFunds() {
-        this.coinTransferService.transfer.chainId = this.chainId;
+        this.coinTransferService.chainId = this.chainId;
         this.native.go('/coin-receive');
     }
 
-    transferFunds() {
-        this.coinTransferService.transfer.chainId = this.chainId;
-        this.coinTransferService.transfer.type = 'transfer';
+    sendFunds() {
+        this.coinTransferService.transferType = 2;
+        this.coinTransferService.chainId = this.chainId;
         this.native.go('/coin-transfer');
     }
 
     rechargeFunds() {
-        this.coinTransferService.transferFrom = this.chainId;
-        this.coinTransferService.transfer.chainId = this.chainId;
-        this.coinTransferService.transfer.type = 'recharge';
-
-        // Filter out the current chain id as this is our transfer source. We only want to pick
-        // the destination subwallet.
-        const subWallets = this.masterWallet.subWalletsWithExcludedCoin(this.chainId);
-        if (subWallets.length === 1) {
-            this.coinTransferService.transfer.sideChainId = subWallets[0].id;
-            this.native.go('/coin-transfer');
-        } else {
-            this.native.go('/coin-select');
-        }
+        this.coinTransferService.transferType = 1;
+        this.coinTransferService.chainId = this.chainId;
+        this.native.go('/coin-select');
     }
 
+    // Not sure what 'withdraw' is for
     withdrawFunds() {
         this.coinTransferService.transfer.chainId = this.chainId;
         this.coinTransferService.transfer.type = 'withdraw';

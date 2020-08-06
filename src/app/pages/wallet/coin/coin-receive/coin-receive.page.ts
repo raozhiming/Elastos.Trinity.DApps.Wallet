@@ -15,9 +15,9 @@ import { AppService } from 'src/app/services/app.service';
 })
 export class CoinReceivePage implements OnInit {
 
-    masterWalletId: string = "1";
-    qrcode: string = null;
-    chainId: string;
+    private masterWalletId: string = '1';
+    private chainId: string;
+    public qrcode: string = null;
 
     constructor(
         public route: ActivatedRoute,
@@ -36,7 +36,7 @@ export class CoinReceivePage implements OnInit {
 
     init() {
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
-        this.chainId = this.coinTransferService.transfer.chainId;
+        this.chainId = this.coinTransferService.chainId;
         this.appService.setTitleBarTitle('Receive ' + this.chainId);
         this.createAddress();
     }

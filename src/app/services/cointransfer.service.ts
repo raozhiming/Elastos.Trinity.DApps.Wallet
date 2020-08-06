@@ -23,7 +23,6 @@
 import { Injectable } from '@angular/core';
 import { StandardCoinName } from '../model/Coin';
 import { WalletAccount } from '../model/WalletAccount';
-import { SubWallet } from '../model/SubWallet';
 
 export class Transfer {
     action: string = null;
@@ -53,20 +52,28 @@ export class Transfer {
     payPassword: string;
 }
 
+export enum TransferType {
+    RECHARGE = 1,
+    SEND = 2
+}
+
 @Injectable({
     providedIn: 'root'
 })
 
 export class CoinTransferService {
 
-    // For recharging wallets, define which subwallets will send and receive
-    public transferFrom: StandardCoinName;
-    public transferTo: string;
-
-    // Below fields are shared by several screens operating fund transfers between subwallets.
-    // Consider this service as a singleton shared class.
-    public transfer: Transfer; // TODO: messy class that embeds too many unrelated things... Split into specific transfer types.
+    // Define transfer type
+    public transferType: TransferType;
+    // From subwallet
+    public chainId: StandardCoinName;
+    // To subwallet (only for recharging funds)
+    public subchainId: string;
+    // Unsure of what this is used for
     public walletInfo: WalletAccount;
+
+    // Deprecated for receiving, sending and recharging funds but kept incase intents use it
+    public transfer: any = null;
 
     constructor() {
         this.reset();
@@ -76,7 +83,12 @@ export class CoinTransferService {
      * Resets all service fields to their default value to restart a new transfer.
      */
     public reset() {
+        // Deprecated for receiving, sending and recharging funda
         this.transfer = new Transfer();
+
+        this.transferType = null;
+        this.chainId = null;
+        this.subchainId = null;
         this.walletInfo = new WalletAccount();
     }
 }

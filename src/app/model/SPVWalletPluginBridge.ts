@@ -386,14 +386,6 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    createTransaction(masterWalletId: string, chainId: string, fromAddress: string, toAddress: string, amount: string, memo: string): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            walletManager.createTransaction([masterWalletId, chainId, fromAddress, toAddress, amount, memo],
-                (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject);  });
-        });
-    }
-
     getAllUTXOs(masterWalletId: string, chainId: string, start: number, count: number, address: string): Promise<AllUTXOs> {
         return new Promise(async (resolve, reject) => {
             walletManager.getAllUTXOs([masterWalletId, chainId, start, count, address],
@@ -410,9 +402,20 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    signTransaction(masterWalletId: string, chainId: string, rawTransaction: string, payPassword: string): Promise<SignedTransaction> {
+    signTransaction(
+        masterWalletId: string,
+        chainId: string,
+        rawTransaction: string,
+        payPassword: string
+    ): Promise<SignedTransaction> {
         return new Promise(async (resolve, reject) => {
-            walletManager.signTransaction([masterWalletId, chainId, rawTransaction, payPassword],
+            walletManager.signTransaction(
+                [
+                    masterWalletId,
+                    chainId,
+                    rawTransaction,
+                    payPassword
+                ],
                 (ret) => { resolve(ret); },
                 (err) => { this.handleError(err, reject);  });
         });
@@ -499,12 +502,51 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    createDepositTransaction(masterWalletId: string, chainId: string, fromAddress: string, sideChainID: string, amount: string
-        , sideChainAddress: string, memo: string): Promise<string> {
+    createTransaction(
+        masterWalletId: string,
+        chainId: string,
+        fromAddress: string,
+        toAddress: string,
+        amount: string,
+        memo: string
+    ): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            walletManager.createDepositTransaction([masterWalletId, chainId, fromAddress, sideChainID, amount, sideChainAddress, memo],
+            walletManager.createTransaction(
+                [
+                    masterWalletId,
+                    chainId,
+                    fromAddress,
+                    toAddress,
+                    amount,
+                    memo
+                ],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject);  });
+                (err) => { this.handleError(err, reject); });
+        });
+    }
+
+    createDepositTransaction(
+        masterWalletId: string,
+        chainId: string,
+        fromAddress: string,
+        sideChainID: string,
+        amount: string,
+        sideChainAddress: string,
+        memo: string = ''
+    ): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createDepositTransaction(
+                [
+                    masterWalletId,
+                    chainId,
+                    fromAddress,
+                    sideChainID,
+                    amount,
+                    sideChainAddress,
+                    memo
+                ],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject); });
         });
     }
 
