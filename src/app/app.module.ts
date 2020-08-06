@@ -33,6 +33,7 @@ import { FormsModule } from '@angular/forms';
 
 import { zh } from './../assets/i18n/zh';
 import { en } from './../assets/i18n/en';
+import { fr } from './../assets/i18n/fr';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -122,6 +123,9 @@ export class CustomTranslateLoader implements TranslateLoader {
             switch (lang) {
                 case 'zh':
                     observer.next(zh);
+                    break;
+                case 'fr':
+                    observer.next(fr);
                     break;
                 case 'en':
                 default:

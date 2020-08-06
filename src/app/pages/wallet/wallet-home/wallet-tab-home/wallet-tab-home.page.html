@@ -5,8 +5,8 @@
         <ion-slide *ngFor="let masterWallet of walletManager.getWalletsList()">
             <ion-row class="main-title-row">
                 <ion-col size="12">
-                    <h1>Wallet Overview</h1>
-                    <p>YOU HAVE {{ masterWallet.getSubWallets().length }} WALLETS</p>
+                    <h1>{{ 'wallet-overview' | translate }}</h1>
+                    <p>{{ 'you-have-n-wallets' | translate: {walletsCount: walletManager.getActiveMasterWallet().getSubWallets().length} }}</p>
                 </ion-col>
             </ion-row>
             <ion-row
@@ -30,7 +30,7 @@
                         </ion-col>
                     </ion-row>
                     <h2></h2>
-                    <h3>TOTAL AMOUNT</h3>
+                    <h3>{{ 'total-amount' | translate }}</h3>
                     <h4>{{ Util.getWholeBalance(masterWallet.getBalance()/SELA) }}<span class="dot" *ngIf="masterWallet.getBalance()/SELA !== 0">.</span>
                         <span class="decimals">{{ Util.getDecimalBalance(masterWallet.getBalance()/SELA) }}</span>
                         <span class="ela">  ELA</span>
@@ -47,7 +47,7 @@
             </ion-row>
             <ion-row class="list-title-row">
                 <ion-col size="12">
-                    <h1>Coin List</h1>
+                    <h1>{{ 'coin-list' | translate }}</h1>
                 </ion-col>
             </ion-row>
             <ion-row class="item-row ripple ion-activatable" *ngFor="let subWallet of masterWallet.getSubWallets()" [routerLink]="['/coin', subWallet.id]">
@@ -74,8 +74,8 @@
                 </ion-col>
                 <ion-col size="5" class="right-col">
                     <h1>{{ subWallet.balance/SELA }}</h1>
-                    <p *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ subWallet.progress }}% Synced</p>
-                    <p *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ subWallet.progress }}% Syncing</p>
+                    <p *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</p>
+                    <p *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</p>
                 </ion-col>
                 <ion-ripple-effect></ion-ripple-effect>
             </ion-row>
@@ -85,8 +85,8 @@
     <ion-grid class="single-slide" [class.dark-slide]="theme.darkMode" *ngIf="walletManager.getWalletsList().length === 1">
         <ion-row class="main-title-row">
             <ion-col size="12">
-                <h1>Wallet Overview</h1>
-                <p>YOU HAVE {{ walletManager.getActiveMasterWallet().getSubWallets().length }} WALLETS</p>
+                <h1>{{ 'wallet-overview' | translate }}</h1>
+                <p>{{ 'you-have-n-wallets' | translate: {walletsCount: walletManager.getActiveMasterWallet().getSubWallets().length} }}</p>
             </ion-col>
         </ion-row>
         <ion-row
@@ -110,7 +110,7 @@
                     </ion-col>
                 </ion-row>
                 <h2></h2>
-                <h3>TOTAL AMOUNT</h3>
+                <h3>{{ 'total-amount' | translate }}</h3>
                 <h4>{{ Util.getWholeBalance(walletManager.getActiveMasterWallet().getBalance()/SELA) }}<span class="dot" *ngIf="walletManager.activeMasterWallet.getBalance()/SELA !== 0">.</span>
                     <span class="decimals">{{ Util.getDecimalBalance(walletManager.getActiveMasterWallet().getBalance()/SELA) }}</span>
                     <span class="ela">  ELA</span>
@@ -127,7 +127,7 @@
         </ion-row>
         <ion-row class="list-title-row">
             <ion-col size="12">
-                <h1>Coin List</h1>
+                <h1>{{ 'coin-list' | translate }}</h1>
             </ion-col>
         </ion-row>
         <ion-row 
@@ -158,8 +158,8 @@
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>{{ subWallet.balance/SELA }}</h1>
-                <p *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ subWallet.progress }}% Synced</p>
-                <p *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ subWallet.progress }}% Syncing</p>
+                <p *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</p>
+                    <p *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</p>
             </ion-col>
             <ion-ripple-effect></ion-ripple-effect>
         </ion-row>

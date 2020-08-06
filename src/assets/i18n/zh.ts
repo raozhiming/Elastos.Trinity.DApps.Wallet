@@ -1,12 +1,18 @@
 export const zh = {
+    // Home screen
+    "wallet-home-title": "Wallet Home",
+    "wallet-overview": "Wallet Overview",
+    "you-have-n-wallets": "YOU HAVE {{walletsCount}} TOKENS",
+    "synchronized": "{{progress}}% synced",
+    "sync-progress": "Synchronization {{progress}}%",
+    "total-amount": "TOTAL AMOUNT",
+    "coin-list": "Token List",
+
     //my-qrcode
     'qrcode': "的二维码",
     'copy': '复制',
     'my-qrcode': "我的二维码",
     'scanning': '扫描二维码',
-
-    // splashscreen
-    'text-loading': '正在加载数据，请耐心等待!',
 
     // wait for sync
     'text-wait-sync': '等待同步',
@@ -85,14 +91,9 @@ export const zh = {
     'Deposit': '押金',
     'Vote': '投票',
     'ToDID': 'ID链充值',
-    'FromELA': '主链充值',
-    'ToELA': '主链提现',
     'FromDID': 'ID链提现',
-    // TODO remove unused items
-    // import wallet page
-    'text-from-mnemonic': '来自助记词',
-    'text-from-keystore': '来自Keystore',
 
+    // import wallet page
     'text-mnemonic-check': '验证助记词',
     'text-mnemonic-label': '添加助记词密码',
     'text-mnemonic-pwd': '请设置助记词密码',
@@ -125,12 +126,8 @@ export const zh = {
     'contacts-address-input': '请输入ELA钱包地址',
     'contacts-remark-title': '备注',
 
-    'text-contacts-info': '联系人详情',
     'text-manager-address': '地址列表',
     'text-setting': '设置',
-    'text-about': '关于我们',
-    'text-help': '使用帮助',
-    'text-notice': '消息通知',
     'text-add': '添加',
     'text-save-modify': '保存修改',
     'text-note': '备注',
@@ -488,7 +485,6 @@ export const zh = {
 
     'super-point': '超级节点选举',
     'sign-up-for-election': '报名选举',
-    'i-want-to-vote': '我要投票',
     'sing-up': "报名参选",
     'confirmation-of-participation': '确认参选',
     'lock-details': '锁仓详情',
@@ -517,7 +513,6 @@ export const zh = {
     'please-enter-node-declaration': '请输入节点宣言',
     'lock-number': '锁仓数量',
     'remarks-bond': '备注：保证金',
-    'I-want-to-vote': '我要投票',
     'voting-rules': '投票规则',
     'voting-rules-text-1': '参与ELA超级节点投票，需锁仓ELA。投票不消耗ELA数量;',
     'voting-rules-text-2': '每次投票最多可选择 36 个超级节点，撤销或更改再次投票生效有一定的延迟。;',
@@ -575,6 +570,19 @@ export const zh = {
     'all-election': '全选',
     'please-select-voting-node': '请选择投票节点',
     'ticket': '票',
+    'Input value is incorrect': '输入的数值不对',
+    'please-node-PublicKey': '请输入节点公钥',
+    'text-id-kyc-cochain1': '需要花费',
+    'candidate-nodes-error': '最多选择36个候选人节点',
+    'please-enter-node-iPAddress': '请输入网络地址',
+    'take-back-deposit': "取回质押金",
+    'publickey-repeat': '公钥重复',
+    'use-utxo': '是否使用投票utxo',
+    'total-balance': '总额',
+    'vote-balance': '投票占用',
+    'update-info': '更新信息',
+    'node-iPAddress': '网络地址',
+
     'Afghanistan': '阿富汗',
     'Albania': '阿尔巴尼亚',
     'Algeria': '阿尔及利亚',
@@ -811,17 +819,5 @@ export const zh = {
     'Saint Vincent and the Grenadines': '圣文森特和格林纳丁斯',
     'Sao Tome and Principe': '圣多美和普林西比',
     'Saint-Martin': '圣马丁岛',
-    'The Republic of South Sudan': '南苏丹共和国',
-    'Input value is incorrect': '输入的数值不对',
-    'please-node-PublicKey': '请输入节点公钥',
-    'text-id-kyc-cochain1': '需要花费',
-    'candidate-nodes-error': '最多选择36个候选人节点',
-    'please-enter-node-iPAddress': '请输入网络地址',
-    'take-back-deposit': "取回质押金",
-    'publickey-repeat': '公钥重复',
-    'use-utxo': '是否使用投票utxo',
-    'total-balance': '总额',
-    'vote-balance': '投票占用',
-    'update-info': '更新信息',
-    'node-iPAddress': '网络地址'
+    'The Republic of South Sudan': '南苏丹共和国'
 };

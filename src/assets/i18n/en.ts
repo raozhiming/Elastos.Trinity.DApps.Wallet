@@ -1,12 +1,18 @@
 export const en = {
+    // Home screen
+    "wallet-home-title": "Wallet Home",
+    "wallet-overview": "Wallet Overview",
+    "you-have-n-wallets": "YOU HAVE {{walletsCount}} TOKENS",
+    "synchronized": "{{progress}}% synced",
+    "sync-progress": "Synchronization {{progress}}%",
+    "total-amount": "TOTAL AMOUNT",
+    "coin-list": "Token List",
+
     //my-qrcode
     'qrcode': "'s qrcode",
     'copy': 'Copy',
     'my-qrcode': "My qrcode",
     'scanning': 'Scan qrcode',
-
-    // splashscreen
-    'text-loading': 'Loading, please be patient!',
 
     // wait for sync
     'text-wait-sync': 'Wait for sync',
@@ -79,19 +85,10 @@ export const en = {
     'text-consolidate-UTXO-counts': 'Number of UTXOs: {{ count }}',
     'text-consolidate-note': 'Too many UTXOs may cause some transactions to fail, and the consolidation will not affect existing voting',
 
-
-
-
-
     'ToDID': 'Send to ID Chain',
-    'FromELA': 'From ELA Chain',
-    'ToELA': 'Send to ELA Chain',
     'FromDID': 'From ID Chain',
-    // TODO remove unused items
-    // import wallet page
-    'text-from-mnemonic': 'from Mnemonics',
-    'text-from-keystore': 'from KeyStore',
 
+    // import wallet page
     'text-mnemonic-check': 'Mnemonics Verification',
     'text-mnemonic-label': 'Add Optional Password',
     'text-mnemonic-pwd': 'Set Mnemonic Password',
@@ -124,12 +121,8 @@ export const en = {
     'contacts-address-input': 'Pls input ELA Wallet address',
     'contacts-remark-title': 'Remark',
 
-    'text-contacts-info': 'Contacts Information',
     'text-manager-address': 'Wallet Addresses',
     'text-setting': 'Settings',
-    'text-about': 'About',
-    'text-help': 'Help',
-    'text-notice': 'Notification',
     'text-add': 'Add',
     'text-save-modify': 'Save Modify',
     'text-note': 'Note',
@@ -488,10 +481,8 @@ export const en = {
     'create-multi-by-mnes': 'Use Existing Seed (Import Mnemonics) ',
     'already-signed-publickey': 'already signed publickey',
 
-
     'super-point': 'super node election',
     'sign-up-for-election': 'sing up for election',
-    'i-want-to-vote': 'i want to vote',
     'sing-up': 'sing up',
     'confirmation-of-participation': 'confirmation of participation',
     'lock-details': 'lock details',
@@ -520,7 +511,6 @@ export const en = {
     'please-enter-node-declaration': 'please enter node declaration',
     'lock-number': 'lock number',
     'remarks-bond': 'remarks:bond',
-    'I-want-to-vote': 'I want to vote',
     'voting-rules': 'voting rules',
     'voting-rules-text-1': 'To participate in ELA super node voting, we need to lock ELA. Voting does not consume ELA;',
     'voting-rules-text-2': 'Up to 36 super nodes can be selected for each vote, and there is a certain delay in voting for revocation or change. ;',
@@ -578,6 +568,19 @@ export const en = {
     'all-election': 'All',
     'please-select-voting-node': 'Please select the voting node',
     'ticket': 'Ticket',
+    'Input value is incorrect': 'Input value is incorrect',
+    'please-node-PublicKey': 'Please Node PublicKey',
+    'text-id-kyc-cochain1': 'need service fee',
+    'candidate-nodes-error': 'Choose up to 36 candidate nodes',
+    'please-enter-node-iPAddress': 'please enter node network address',
+    'take-back-deposit': 'Take back deposit',
+    'publickey-repeat': 'publicKey Repeat',
+    'use-utxo': 'Whether to use voting utxo',
+    'total-balance': 'Total Balance',
+    'vote-balance': 'Vote Balance',
+    'update-info': 'Update Info',
+    'node-iPAddress': 'Net Address',
+
     'Afghanistan': 'Afghanistan',
     'Albania': 'Albania',
     'Algeria': 'Algeria',
@@ -814,19 +817,7 @@ export const en = {
     'Saint Vincent and the Grenadines': 'Saint Vincent and the Grenadines',
     'Sao Tome and Principe': 'Sao Tome and Principe',
     'Saint-Martin': 'Saint-Martin',
-    'The Republic of South Sudan': 'The Republic of South Sudan',
-    'Input value is incorrect': 'Input value is incorrect',
-    'please-node-PublicKey': 'Please Node PublicKey',
-    'text-id-kyc-cochain1': 'need service fee',
-    'candidate-nodes-error': 'Choose up to 36 candidate nodes',
-    'please-enter-node-iPAddress': 'please enter node network address',
-    'take-back-deposit': 'Take back deposit',
-    'publickey-repeat': 'publicKey Repeat',
-    'use-utxo': 'Whether to use voting utxo',
-    'total-balance': 'Total Balance',
-    'vote-balance': 'Vote Balance',
-    'update-info': 'Update Info',
-    'node-iPAddress': 'Net Address'
+    'The Republic of South Sudan': 'The Republic of South Sudan'
 };
 
 
