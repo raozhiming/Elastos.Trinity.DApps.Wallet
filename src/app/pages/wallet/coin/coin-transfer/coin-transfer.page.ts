@@ -40,6 +40,7 @@ import { WalletAccount } from 'src/app/model/WalletAccount';
 import { TxConfirmComponent } from 'src/app/components/tx-confirm/tx-confirm.component';
 
 declare let appManager: AppManagerPlugin.AppManager;
+export let popover: any = null;
 
 @Component({
     selector: 'app-coin-transfer',
@@ -67,8 +68,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     public Config = Config;
     public SELA = Config.SELA;
 
-    // Popup
-    private popover: any = null;
+    public showPopover = popover;
 
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     suggestedAddresses: CryptoAddressResolvers.Address[] = [];
@@ -201,8 +201,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     goTransaction() {
-        this.showConfirm();
-        //this.checkValue();
+        // this.showConfirm();
+        this.checkValue();
     }
 
     async checkValue() {
@@ -242,6 +242,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     async showConfirm() {
+        this.showPopover = true;
         let txInfo = {
             type: this.transfer.type,
             transferFrom: this.transfer.chainId,
@@ -249,21 +250,23 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             amount: this.transfer.amount
         };
 
-        this.popover = await this.popoverCtrl.create({
+        popover = await this.popoverCtrl.create({
             mode: 'ios',
-            cssClass: 'txConfirmComponent',
+            cssClass: !this.theme.darkMode ? 'txConfirm' : 'txConfirmDark',
             component: TxConfirmComponent,
             componentProps: {
                 txInfo: txInfo
             }
         });
-        this.popover.onWillDismiss().then((params) => {
-            this.popover = null;
+        popover.onWillDismiss().then((params) => {
+            this.showPopover = false;
+            popover = null;
+            console.log('Confirm tx params', params);
             if (params && params.confirm) {
                 this.transFunction();
             }
         });
-        return await this.popover.present();
+        return await popover.present();
     }
 
     accMul(arg1, arg2) {

@@ -1,5 +1,5 @@
 <ion-content *ngIf="transfer.type !== 'recharge'">
-    <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode">
+    <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
         <!-- Balance Container -->
         <h1>Enter Amount</h1>
@@ -59,7 +59,7 @@
 </ion-content>
 
 <ion-content *ngIf="transfer.type === 'recharge'">
-    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode">
+    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <ion-row class="main-title-row">
             <ion-col size="12">
                 <p>Transfer from</p>
@@ -136,10 +136,11 @@
     </ion-grid>
 </ion-content>
 
-<ion-footer [class.dark-footer]="theme.darkMode">
+<ion-footer *ngIf="!showPopover" [class.dark-footer]="theme.darkMode">
     <ion-row class="btn-container">
         <ion-button color="primary" (click)="goTransaction()">
-            <ion-label>{{ 'text-transfer' | translate }}</ion-label>
+            <ion-label *ngIf="transfer.type === 'recharge'">Transfer</ion-label>
+            <ion-label *ngIf="transfer.type !== 'recharge'">Send</ion-label>
         </ion-button>
     </ion-row>
 </ion-footer>

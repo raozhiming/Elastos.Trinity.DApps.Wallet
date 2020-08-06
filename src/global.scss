@@ -61,6 +61,11 @@
   outline: none;
 }
 
+.blur {
+  filter: blur(4.8px);
+  background: #161740;
+}
+
 .ripple {
   position: relative;
   overflow: hidden;
@@ -92,8 +97,42 @@ ion-button {
     }
 }
 
-.txConfirmComponent {
-  --height: 462px;
+.txConfirm {
+  --background: #f8f8ff;
+  animation: animate;
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+
+  @keyframes animate {
+    0% { bottom: -1000px }
+    100% { bottom: 0px }
+  }
+
+  ion-backdrop {
+    background: transparent !important;
+  }
+
+  .popover-wrapper{
+    .popover-content {
+      position: relative !important;
+      margin: 0 auto !important;
+      left: auto !important;
+      top: auto !important;
+      width: 85vw !important;
+    }
+  }
+}
+
+.txConfirmDark {
+  --background: #191a2f;
+  animation: animate;
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+
+  @keyframes animate {
+    0% { bottom: -1000px }
+    100% { bottom: 0px }
+  }
 
   ion-backdrop {
     background: transparent !important;

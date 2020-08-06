@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
 import { ThemeService } from 'src/app/services/theme.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { popover } from 'src/app/pages/wallet/coin/coin-transfer/coin-transfer.page';
 
 @Component({
   selector: 'app-tx-confirm',
@@ -35,11 +35,11 @@ export class TxConfirmComponent implements OnInit {
   }
 
   cancel() {
-    this.popoverCtrl.dismiss();
+    popover.dismiss();
   }
 
   confirm() {
-    this.popoverCtrl.dismiss({
+    popover.dismiss({
       confirm: true
     });
   }
