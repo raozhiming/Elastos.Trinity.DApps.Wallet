@@ -25,7 +25,7 @@ export class TxConfirmComponent implements OnInit {
     this.txInfo = this.navParams.get('txInfo');
     console.log('Confirm tx', this.txInfo);
 
-    if (this.txInfo.type === 'recharge') {
+    if (this.txInfo.type === 1) {
       this.txHeader = 'Transfer Transaction';
       this.txIcon = './assets/tx/transfer.svg';
     } else {

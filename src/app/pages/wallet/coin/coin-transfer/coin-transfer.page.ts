@@ -235,8 +235,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     goTransaction() {
-        // this.showConfirm();
-        this.checkValue();
+        this.showConfirm();
+        // this.checkValue();
     }
 
     async checkValue() {
@@ -278,7 +278,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async showConfirm() {
         this.showPopover = true;
         let txInfo = {
-            type: this.transferType === 1 ? 'Transfer' : 'Send',
+            type: this.transferType,
             transferFrom: this.chainId,
             transferTo: this.transferType === 1 ? this.coinTransferService.subchainId : this.toAddress,
             amount: this.amount
