@@ -100,6 +100,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         appManager.setVisible("show");
     }
 
+    ionViewWillLeave() {
+    }
+
     ngOnDestroy() {
         this.events.unsubscribe('address:update');
     }
@@ -262,7 +265,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.showPopover = false;
             popover = null;
             console.log('Confirm tx params', params);
-            if (params && params.confirm) {
+            if (params.data && params.data.confirm) {
                 this.transFunction();
             }
         });
