@@ -30,7 +30,7 @@
             <ion-col size="10" class="left-col">
                 <ion-input
                     type="text"
-                    placeholder="{{ 'text-receiver-address' | translate}}"
+                    placeholder="{{ 'transfer-receiver-address' | translate}}"
                     [(ngModel)]="toAddress"
                     (input)='onSendToAddressInput($event.target.value)'>
                 </ion-input>
@@ -49,7 +49,7 @@
             <ion-col size="10" class="left-col">
                 <ion-input
                     type="text"
-                    placeholder="{{ 'text-memo' | translate}}"
+                    placeholder="{{ 'tx-info-memo' | translate}}"
                     [(ngModel)]="memo"
                 >
                 </ion-input>

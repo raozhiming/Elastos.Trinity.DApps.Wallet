@@ -10,6 +10,7 @@ import { AppService } from 'src/app/services/app.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
+import { TranslateService } from '@ngx-translate/core';
 
 enum TransactionType {
     RECEIVE = 1,
@@ -69,6 +70,7 @@ export class CoinTxInfoPage implements OnInit {
         public walletManager: WalletManager,
         public native: Native,
         private appService: AppService,
+        private translate: TranslateService,
         public theme: ThemeService
     ) {
     }
@@ -78,7 +80,6 @@ export class CoinTxInfoPage implements OnInit {
 
     ionViewWillEnter() {
         this.appService.setBackKeyVisibility(true);
-        this.appService.setTitleBarTitle('Transaction Details');
         this.init();
     }
 
@@ -92,7 +93,7 @@ export class CoinTxInfoPage implements OnInit {
             this.txId = data.txId;
             this.name = data.chainId;
 
-            this.appService.setTitleBarTitle("text-record");
+            this.appService.setTitleBarTitle(this.translate.instant("tx-info-title"));
 
             this.getTransactionInfo();
         });
@@ -118,15 +119,15 @@ export class CoinTxInfoPage implements OnInit {
         // Display header data
         switch (transaction.Status) {
             case TransactionStatus.CONFIRMED:
-                this.status = 'Confirmed';
+                this.status = this.translate.instant("coin-transaction-status-confirmed");
                 this.unsubscribeprogressEvent();
                 break;
             case TransactionStatus.PENDING:
-                this.status = 'Pending';
+                this.status = this.translate.instant("coin-transaction-status-pending");
                 this.subscribeprogressEvent();
                 break;
             case TransactionStatus.UNCONFIRMED:
-                this.status = 'Unconfirmed';
+                this.status = this.translate.instant("coin-transaction-status-unconfirmed");
                 this.subscribeprogressEvent();
                 break;
         }
@@ -135,17 +136,17 @@ export class CoinTxInfoPage implements OnInit {
         let direction = transaction.Direction;
         if (direction === TransactionDirection.RECEIVED) {
             this.type = 1;
-            this.direction = 'Received';
+            this.direction = this.translate.instant("tx-info-type-received");
             this.payStatusIcon = '/assets/buttons/receive.png';
             this.symbol = "+";
         } else if (direction === TransactionDirection.SENT) {
             this.type = 2;
-            this.direction = 'Sent';
+            this.direction = this.translate.instant("tx-info-type-sent");
             this.payStatusIcon = '/assets/buttons/send.png';
             this.symbol = "-";
         } else if (direction === TransactionDirection.MOVED) {
             this.type = 3;
-            this.direction = 'Transferred';
+            this.direction = this.translate.instant("tx-info-type-transferred");
             this.payStatusIcon = '/assets/buttons/transfer.png';
             this.symbol = "";
         }

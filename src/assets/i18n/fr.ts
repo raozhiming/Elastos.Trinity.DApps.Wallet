@@ -52,7 +52,7 @@ export const fr = {
     "coin-op-sent-ela": "ELA Envoyé",
     "coin-op-transfered-ela": "ELA Transféré",
     "coin-op-vote": "Vote",
-    "coin-op-identity": "Identité",
+    "coin-op-identity": "Publication d'identité",
     "coin-dir-from-mainchain": "Depuis ELA mainchain",
     "coin-dir-from-idchain": "Depuis la chaîne Identité",
     "coin-dir-to-mainchain": "Vers ELA mainchain",
@@ -65,14 +65,30 @@ export const fr = {
     "coin-select-title": "Selection du Jeton",
 
     // Coin transfer screen
-    "coin-transfer-send-title": "Envoi d'{{coinName}}",
+    "coin-transfer-send-title": "Envoi depuis {{coinName}}",
     "coin-transfer-transfer-title": "Transfert d'{{coinName}}",
     "transfer-from": "Transfert depuis",
     "transfer-to": "Transfert vers",
     "transfer-amount": "Montant du transfert",
+    "transfer-receiver-address": "Adresse de destination",
+
+    // Coin receive screen
+    "coin-receive-ela-address": "Votre addresse de réception",
+    "coin-receive-tap-to-copy": "Touchez l'adresse pour la copier",
 
     // Confirm transaction component
     "confirm-transaction-title": "Confirmer la Transaction",
-    "transfer-transaction-type": "Transfer d'argent",
+    "transfer-transaction-type": "Transfert d'argent",
     "send-transaction-type": "Envoi d'argent",
+
+    // Transaction details screen (coin-tx-info)
+    "tx-info-title": "Détails sur la transaction",
+    "tx-info-confirmations": "Confirmations",
+    "tx-info-transaction-time": "Date de la transaction",
+    "tx-info-memo": "Mémo",
+    "tx-info-transaction-fees": "Frais de transaction",
+    "tx-info-transaction-id": "Identifiant de transaction",
+    "tx-info-type-received": "Reçu",
+    "tx-info-type-sent": "Envoyé",
+    "tx-info-type-transferred": "Transféré",
 };

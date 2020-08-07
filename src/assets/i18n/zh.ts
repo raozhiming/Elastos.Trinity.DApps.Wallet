@@ -52,7 +52,7 @@ export const zh = {
     "coin-op-sent-ela": "Sent ELA",
     "coin-op-transfered-ela": "Transfered ELA",
     "coin-op-vote": "Vote",
-    "coin-op-identity": "Identity",
+    "coin-op-identity": "Identity publication",
     "coin-dir-from-mainchain": "From ELA mainchain",
     "coin-dir-from-idchain": "From Identity sidechain",
     "coin-dir-to-mainchain": "To ELA mainchain",
@@ -65,17 +65,33 @@ export const zh = {
     "coin-select-title": "Select Coin",
 
     // Coin transfer screen
-    "coin-transfer-send-title": "Send {{coinName}}",
+    "coin-transfer-send-title": "Send from {{coinName}}",
     "coin-transfer-transfer-title": "transfer {{coinName}}",
     "transfer-from": "Transfer from",
     "transfer-to": "Transfer to",
     "transfer-amount": "Transfer amount",
+    "transfer-receiver-address": "Receiver address",
+
+    // Coin receive screen
+    "coin-receive-ela-address": "Your ELA Address",
+    "coin-receive-tap-to-copy": "Tap address to copy",
 
     // Confirm transaction component
     "confirm-transaction-title": "Confirm Transaction",
     "transfer-transaction-type": "Transfer Transaction",
     "send-transaction-type": "Send Transaction",
-    
+
+    // Transaction details screen (coin-tx-info)
+    "tx-info-title": "Transaction Details",
+    "tx-info-confirmations": "Confirmations",
+    "tx-info-transaction-time": "Transaction time",
+    "tx-info-memo": "Memo",
+    "tx-info-transaction-fees": "Transaction fees",
+    "tx-info-transaction-id": "Transaction ID",
+    "tx-info-type-received": "Received",
+    "tx-info-type-sent": "Sent",
+    "tx-info-type-transferred": "Transferred",
+
     //my-qrcode
     'qrcode': "的二维码",
     'copy': '复制',
