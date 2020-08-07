@@ -124,7 +124,7 @@ export class WaitforsyncPage implements OnInit {
     }
 
     doAction() {
-        this.native.go(this.nextScreen);
+        this.native.setRootRouter(this.nextScreen);
     }
 
     cancelOperation() {
