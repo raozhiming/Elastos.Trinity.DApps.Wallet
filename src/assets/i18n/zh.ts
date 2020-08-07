@@ -1,11 +1,23 @@
 export const zh = {
+    // Generic actions
+    "send-to": "Send to",
+    "enter-amount": "Enter amount",
+    "total-amount": "TOTAL AMOUNT",
+    "advanced-options": "Advanced options",
+    "transfer": "Transfer",
+    "send": "Send",
+    "from": "From",
+    "to": "To",
+    "amount": "Amount",
+    "cancel": "取消",
+    "confirm": "确定",
+
     // Home screen
     "wallet-home-title": "Wallet Home",
     "wallet-overview": "Wallet Overview",
     "you-have-n-wallets": "YOU HAVE {{walletsCount}} TOKENS",
     "synchronized": "{{progress}}% synced",
     "sync-progress": "Synchronization {{progress}}%",
-    "total-amount": "TOTAL AMOUNT",
     "coin-list": "Token List",
 
     // Wallet Settings screen
@@ -20,6 +32,49 @@ export const zh = {
     "wallet-settings-backup-wallet-subtitle": "View mnemonics to export and backup",
     "wallet-settings-change-name": "Change Name",
     "wallet-settings-change-name-subtitle": "Organize your wallet with a custom name",
+    "wallet-settings-change-color": "Change Color",
+    "wallet-settings-change-color-subtitle": "Organize your wallet with a custom color",
+    "wallet-settings-manage-coin-list": "Manage Coin List",
+    "wallet-settings-manage-coin-list-subtitle": "Check which coins to display",
+    "wallet-settings-delete-wallet": "Delete Wallet",
+    "wallet-settings-delete-wallet-subtitle": "This will not delete your assets, you can always import this wallet again",
+
+    // Coin home screen
+    "coin-overview": "{{coinName}} Overview",
+    "coin-new-transactions-today": "{{ todaysTransactions }} NEW TRANSACTIONS TODAY",
+    "coin-balance": "Balance",
+    "coin-action-transfer": "TRANSFER",
+    "coin-action-send": "SEND",
+    "coin-action-receive": "RECEIVE",
+    "coin-transactions": "Transactions",
+    "coin-no-transactions": "No transactions",
+    "coin-op-received-ela": "Received ELA",
+    "coin-op-sent-ela": "Sent ELA",
+    "coin-op-transfered-ela": "Transfered ELA",
+    "coin-op-vote": "Vote",
+    "coin-op-identity": "Identity",
+    "coin-dir-from-mainchain": "From ELA mainchain",
+    "coin-dir-from-idchain": "From Identity sidechain",
+    "coin-dir-to-mainchain": "To ELA mainchain",
+    "coin-dir-to-idchain": "To Identity sidechain",
+    "coin-transaction-status-confirmed": "Confirmed",
+    "coin-transaction-status-pending": "Pending",
+    "coin-transaction-status-unconfirmed": "Unconfirmed",
+
+    // Coin select screen
+    "coin-select-title": "Select Coin",
+
+    // Coin transfer screen
+    "coin-transfer-send-title": "Send {{coinName}}",
+    "coin-transfer-transfer-title": "transfer {{coinName}}",
+    "transfer-from": "Transfer from",
+    "transfer-to": "Transfer to",
+    "transfer-amount": "Transfer amount",
+
+    // Confirm transaction component
+    "confirm-transaction-title": "Confirm Transaction",
+    "transfer-transaction-type": "Transfer Transaction",
+    "send-transaction-type": "Send Transaction",
     
     //my-qrcode
     'qrcode': "的二维码",
@@ -210,13 +265,11 @@ export const zh = {
     'text-back-home': '返回首页',
     'text-gesture-pwd': '手势密码',
     'text-language': '语言',
-    'confirm': '确定',
     'confirmTitle': '提示',
     'confirmTransaction': '交易已确认',
     'transaction-fail': '交易失败',
     'operation-fail': '错误',
     'confirmSubTitle': '确定要删除钱包吗？<br/>在删除钱包前，请确认已安全备份助记词及可选加密密码。恢复钱包需要助记词及可选加密密码。任何人无法帮助您恢复钱包',
-    'cancel': '取消',
     'copy-ok': '复制成功',
     'correct-amount': '请输入正确的金额',
     'correct-address': '请输入正确的地址',

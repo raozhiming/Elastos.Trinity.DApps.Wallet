@@ -1,11 +1,23 @@
 export const fr = {
+    // Generic actions
+    "send-to": "Envoyer à",
+    "enter-amount": "Saisie du montant",
+    "total-amount": "MONTANT TOTAL",
+    "advanced-options": "Options avancées",
+    "transfer": "Transférer",
+    "send": "Envoyer",
+    "from": "De",
+    "to": "Vers",
+    "amount": "Montant",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+
     // Home screen
     "wallet-home-title": "Accueil Portefeuille",
     "wallet-overview": "Aperçu du Portefeuille",
     "you-have-n-wallets": "VOUS AVEZ {{walletsCount}} JETONS",
     "synchronized": "Synchronisé {{progress}}%",
     "sync-progress": "Synchronisation {{progress}}%",
-    "total-amount": "MONTANT TOTAL",
     "coin-list": "Liste des jetons",
 
     // Settings screen
@@ -22,4 +34,45 @@ export const fr = {
     "wallet-settings-change-name-subtitle": "Organisez vos portefeuilles en leur donnant un nom personnalisé.",
     "wallet-settings-change-color": "Modifier la Couleur",
     "wallet-settings-change-color-subtitle": "Organisez vos portefeuilles avec des couleurs personnalisées.",
+    "wallet-settings-manage-coin-list": "Gérer la Liste des Jetons",
+    "wallet-settings-manage-coin-list-subtitle": "Sélectionnez les jetons à gérer dans votre portefeuille.",
+    "wallet-settings-delete-wallet": "Supprimer le Portefeuille",
+    "wallet-settings-delete-wallet-subtitle": "Votre argent ne sera pas supprimé. Vous pourrez réimporter votre portefeuille plus tard.",
+
+    // Coin home screen
+    "coin-overview": "Jeton {{coinName}} - Aperçu",
+    "coin-new-transactions-today": "{{ todaysTransactions }} NOUVELLE(S) TRANSACTION(S) AUJOURD'HUI",
+    "coin-balance": "Balance",
+    "coin-action-transfer": "TRANSFERER",
+    "coin-action-send": "ENVOYER",
+    "coin-action-receive": "RECEVOIR",
+    "coin-transactions": "Transactions",
+    "coin-no-transactions": "Aucune transaction",
+    "coin-op-received-ela": "ELA Reçu",
+    "coin-op-sent-ela": "ELA Envoyé",
+    "coin-op-transfered-ela": "ELA Transféré",
+    "coin-op-vote": "Vote",
+    "coin-op-identity": "Identité",
+    "coin-dir-from-mainchain": "Depuis ELA mainchain",
+    "coin-dir-from-idchain": "Depuis la chaîne Identité",
+    "coin-dir-to-mainchain": "Vers ELA mainchain",
+    "coin-dir-to-idchain": "Versla chaîne Identité",
+    "coin-transaction-status-confirmed": "Confirmé",
+    "coin-transaction-status-pending": "En attente",
+    "coin-transaction-status-unconfirmed": "Non confirmé",
+
+    // Coin select screen
+    "coin-select-title": "Selection du Jeton",
+
+    // Coin transfer screen
+    "coin-transfer-send-title": "Envoi d'{{coinName}}",
+    "coin-transfer-transfer-title": "Transfert d'{{coinName}}",
+    "transfer-from": "Transfert depuis",
+    "transfer-to": "Transfert vers",
+    "transfer-amount": "Montant du transfert",
+
+    // Confirm transaction component
+    "confirm-transaction-title": "Confirmer la Transaction",
+    "transfer-transaction-type": "Transfer d'argent",
+    "send-transaction-type": "Envoi d'argent",
 };

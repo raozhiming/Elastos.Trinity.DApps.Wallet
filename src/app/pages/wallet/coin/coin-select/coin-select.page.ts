@@ -9,6 +9,7 @@ import { AppService } from 'src/app/services/app.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from 'src/app/model/Util';
 import { Config } from 'src/app/config/Config';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-coin-select',
@@ -31,13 +32,14 @@ export class CoinSelectPage implements OnInit {
         private walletManager: WalletManager,
         private coinTransferService: CoinTransferService,
         public theme: ThemeService,
+        private translate: TranslateService,
         private appService: AppService
     ) {
         this.init();
     }
 
     ngOnInit() {
-        this.appService.setTitleBarTitle('Select Coin');
+        this.appService.setTitleBarTitle(this.translate.instant("coin-select-title"));
     }
 
     init() {

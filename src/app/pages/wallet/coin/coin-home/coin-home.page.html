@@ -2,8 +2,8 @@
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-row class="main-title-row">
             <ion-col size="12">
-                <h1>{{ walletManager.activeMasterWallet.subWallets[chainId].id }} Overview</h1>
-                <p>{{ todaysTransactions }} NEW TRANSACTIONS TODAY</p>
+                <h1>{{ 'coin-overview' | translate: {coinName: walletManager.activeMasterWallet.subWallets[chainId].id} }}</h1>
+                <p>{{ 'coin-new-transactions-today' | translate:{todaysTransactions: todaysTransactions} }}</p>
             </ion-col>
         </ion-row>
         <ion-row
@@ -18,11 +18,11 @@
                     <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'ELA'">Elastos Mainchain</span>
                     <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'IDChain'">Elastos ID Chain</span>
                     <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'ETHSC'">Ethereum Sidechain</span>
-                    Balance</h1>
+                    - {{ 'coin-balance' | translate }}</h1>
                 <h2>
-                    {{ walletManager.activeMasterWallet.subWallets[chainId].progress }}% Synced
+                    {{ 'synchronized' | translate : {progress: walletManager.activeMasterWallet.subWallets[chainId].progress} }}
                 </h2>
-                <h3>TOTAL AMOUNT</h3>
+                <h3>{{ 'total-amount' | translate }}</h3>
                 <h4>
                     {{ Util.getWholeBalance(walletManager.activeMasterWallet.subWallets[chainId].balance/SELA) }}<span class="dot" *ngIf="walletManager.activeMasterWallet.subWallets[chainId].balance/SELA !== 0">.</span>
                     <span class="decimals">{{ Util.getDecimalBalance(walletManager.activeMasterWallet.subWallets[chainId].balance/SELA) }}</span>
@@ -35,28 +35,28 @@
                         <ion-img class="transfer" src="assets/buttons/transfer.png"></ion-img>
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>
-                    <p class="btn-label">TRANSFER</p>
+                    <p class="btn-label">{{ 'coin-action-transfer' | translate }}</p>
                 </ion-col>
                 <ion-col offset="0.25" size="3" (click)="sendFunds()">
                     <div class="ion-activatable btn-box">
                         <ion-img class="send" src="assets/buttons/send.png"></ion-img>
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>
-                    <p class="btn-label">SEND</p>
+                    <p class="btn-label">{{ 'coin-action-send' | translate }}</p>
                 </ion-col>
                 <ion-col offset="0.25" size="3">
                     <div class="ion-activatable btn-box" (click)="receiveFunds()">
                         <ion-img class="receive" src="assets/buttons/receive.png"></ion-img>
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>
-                    <p class="btn-label">RECEIVE</p>
+                    <p class="btn-label">{{ 'coin-action-receive' | translate }}</p>
                 </ion-col>
             </ion-row>
             <div class="arrow-down"></div>
         </ion-row>
         <ion-row class="list-title-row">
             <ion-col size="12">
-                <h1>Transactions</h1>
+                <h1>{{ 'coin-transactions' | translate }}</h1>
             </ion-col>
         </ion-row>
         <div *ngIf="transferList.length > 0">
@@ -87,52 +87,8 @@
         </div>
         <div class="empty-list" *ngIf="transferList.length === 0">
             <img src="assets/icons/warning.svg"/>
-            <h1>No transactions</h1>
+            <h1>{{ 'coin-no-transactions' | translate }}</h1>
         </div>
         <div class="more" (click)="clickMore()" *ngIf="isShowMore">{{ 'click-to-load-more' | translate }}</div>
     </ion-grid>
 </ion-content>
-
-<!-------------------- OLD WALLET -------------------->
-<!-- <ion-content *ngIf="chainId">
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="!isNodata">
-        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="" refreshingSpinner="circles"
-            refreshingText="">
-        </ion-refresher-content>
-        <ion-refresher-content>
-        </ion-refresher-content>
-    </ion-refresher>
-
-    <div class="coin-info-top-box">
-        <h2>{{walletManager.activeMasterWallet.subWallets[chainId].balance/SELA}}</h2>
-        <p>{{walletManager.activeMasterWallet.subWallets[chainId].lastblocktime}} </p>
-        <p id="progress">{{walletManager.activeMasterWallet.subWallets[chainId].progress}}%</p>
-    </div>
-
-    <div id="nodata" *ngIf="isNodata">{{'no-tx-record' | translate }}</div>
-
-    <ion-list *ngIf="!isNodata" lines="none">
-        <div *ngFor="let item of transferList; let i = index">
-            <ion-item (click)="onItem(item)">
-                <img src={{item.payStatusIcon}} />
-                <ion-label id="coin-name">
-                    <h2 id="exchange-name">{{item.name | translate }}</h2>
-                    <p *ngIf="item.timestamp!='0'" id="datatime">{{item.datetime}}</p>
-                </ion-label>
-                <ion-label solt="end" id="coin-value">
-                    <h2 id="amount">{{item.symbol}} {{item.resultAmount}}</h2>
-                    <p *ngIf="item.status!='Confirmed'" id="status">{{item.status | translate}}</p>
-                </ion-label>
-            </ion-item>
-        </div>
-    </ion-list>
-    <div class="more" (click)="clickMore()" *ngIf="isShowMore">{{ 'click-to-load-more' | translate }}</div>
-</ion-content>
-<ion-footer>
-    <div class="coin-bottom">
-        <ion-button (click)="receiveFunds()">{{ 'text-receive' | translate }}</ion-button>
-        <ion-button (click)="rechargeFunds(3)" *ngIf="chainIsELA()">{{ 'text-recharge' | translate }}</ion-button>
-        <ion-button (click)="withdrawFunds(3)" *ngIf="!chainIsELA()">{{ 'text-withdraw' | translate }}</ion-button>
-        <ion-button (click)="transferFunds()">{{ 'text-transfer' | translate }}</ion-button>
-    </div>
-</ion-footer> -->

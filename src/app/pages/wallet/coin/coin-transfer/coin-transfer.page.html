@@ -2,7 +2,7 @@
     <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
         <!-- Balance Container -->
-        <h1>Enter Amount</h1>
+        <h1>{{ 'enter-amount' | translate }}</h1>
         <ion-row class="item-row">
             <ion-col size="6" class="left-col">
                 <h2>{{ chainId }}</h2>
@@ -18,7 +18,7 @@
             </ion-col>
         </ion-row>
         <!-- Address Container -->
-        <h1>Send to</h1>
+        <h1>{{ 'send-to' | translate }}</h1>
         <ion-row *ngIf="suggestedAddresses.length > 0">
             <ion-col size="12">
                 <p style="color:black" *ngFor="let suggestedAddress of suggestedAddresses" (click)="selectSuggestedAddress(suggestedAddress)">
@@ -41,7 +41,7 @@
         </ion-row>
         <!-- Options Container -->
         <h1 (click)="hideMemo = !hideMemo">
-            Advanced Options
+            {{ 'advanced-options' | translate }}
             <img *ngIf="!theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/down-arrow.svg"/>
             <img *ngIf="theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/darkmode/down-arrow.svg"/>
         </h1>
@@ -62,7 +62,7 @@
     <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <ion-row class="main-title-row">
             <ion-col size="12">
-                <p>Transfer from</p>
+                <p>{{ 'transfer-from' | translate }}</p>
             </ion-col>
         </ion-row>
         <ion-row class="item-row">
@@ -85,14 +85,14 @@
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>{{ fromSubWallet.balance/SELA }}</h1>
-                <p *ngIf="fromSubWallet.progress === 100" class="synced">&#8226; {{ fromSubWallet.progress }}% Synced</p>
-                <p *ngIf="fromSubWallet.progress !== 100" class="syncing">&#8226; {{ fromSubWallet.progress }}% Syncing</p>
+                <p *ngIf="fromSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: fromSubWallet.progress} }}</p>
+                <p *ngIf="fromSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: fromSubWallet.progress} }}</p>
             </ion-col>
             <div class="arrow-down"></div>
         </ion-row>
         <ion-row class="main-title-row">
             <ion-col size="12">
-                <p>Transfer to</p>
+                <p>{{ 'transfer-to' | translate }}</p>
             </ion-col>
         </ion-row>
         <ion-row class="item-row">
@@ -115,14 +115,14 @@
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>{{ toSubWallet.balance/SELA }}</h1>
-                <p *ngIf="toSubWallet.progress === 100" class="synced">&#8226; {{ toSubWallet.progress }}% Synced</p>
-                <p *ngIf="toSubWallet.progress !== 100" class="syncing">&#8226; {{ toSubWallet.progress }}% Syncing</p>
+                <p *ngIf="toSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: toSubWallet.progress} }}</p>
+                <p *ngIf="toSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: toSubWallet.progress} }}</p>
             </ion-col>
             <div class="arrow-down"></div>
         </ion-row>
         <ion-row class="main-title-row">
             <ion-col size="12">
-                <p>Transfer Amount</p>
+                <p>{{ 'transfer-amount' | translate }}</p>
             </ion-col>
         </ion-row>
         <ion-row class="input-row">
@@ -139,58 +139,8 @@
 <ion-footer *ngIf="!showPopover" [class.dark-footer]="theme.darkMode">
     <ion-row class="btn-container">
         <ion-button color="primary" (click)="goTransaction()">
-            <ion-label *ngIf="transferType === 1">Transfer</ion-label>
-            <ion-label *ngIf="transferType === 2">Send</ion-label>
+            <ion-label *ngIf="transferType === 1">{{ 'transfer' | translate}}</ion-label>
+            <ion-label *ngIf="transferType === 2">{{ 'send' | translate}}</ion-label>
         </ion-button>
     </ion-row>
 </ion-footer>
-
-<!-------------------- OLD WALLET -------------------->
-<!-- <ion-content *ngIf="transfer.type !== 'recharge'">
-    <ion-list lines="none">
-        <ion-item *ngIf="introText!=''">
-            <p>{{ this.introText | translate}}</p>
-        </ion-item>
-
-        <ion-item>
-            <ion-label>{{ 'text-receiver-address' | translate}}</ion-label>
-            <ion-buttons slot="end" *ngIf="transfer.type!='payment-confirm'">
-                <ion-icon name="scan" (click)="goScan()"></ion-icon>
-                <ion-icon *ngIf="transfer.type=='transfer'" name="contact" (click)="goContact()"></ion-icon>
-            </ion-buttons>
-        </ion-item>
-
-        <ion-item>
-            <ion-input type="text" placeholder="{{ 'text-receiver-address' | translate}}" [readonly]="readonly"
-                [(ngModel)]="transfer.toAddress"></ion-input>
-        </ion-item>
-
-        <ion-item>
-            <ion-label>{{ 'text-price' | translate}}</ion-label>
-            <ion-note slot="end" *ngIf="!transfer.rate">
-                {{'text-balance' | translate}}：{{walletManager.activeMasterWallet.subWallets[chainId].balance/SELA}}
-            </ion-note>
-            <ion-note slot="end" *ngIf="transfer.rate>0">
-                {{'text-balance' | translate}}：{{walletManager.activeMasterWallet.subWallets[chainId].balance/SELA}}({{'text-rate' | translate}}：1:{{transfer.rate}})
-            </ion-note>
-        </ion-item>
-
-        <ion-item>
-            <ion-input type="text" placeholder="{{ 'text-price' | translate}}" [(ngModel)]="transfer.amount"
-                [readonly]="readonly">
-            </ion-input>
-        </ion-item>
-
-        <ion-item *ngIf="!hideMemo">
-            <ion-label>{{ 'text-memo' | translate}}</ion-label>
-        </ion-item>
-
-        <ion-item *ngIf="!hideMemo">
-            <ion-input type="text" placeholder="{{ 'text-memo' | translate}}" [(ngModel)]="transfer.memo"
-                [readonly]="readonly"></ion-input>
-        </ion-item>
-
-    </ion-list>
-    <ion-button class="confirm" (click)="goTransaction()">{{ 'text-transfer' | translate }}</ion-button>
-</ion-content>
- -->

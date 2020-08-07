@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
 import { ThemeService } from 'src/app/services/theme.service';
 import { popover } from 'src/app/pages/wallet/coin/coin-transfer/coin-transfer.page';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tx-confirm',
@@ -18,6 +19,7 @@ export class TxConfirmComponent implements OnInit {
   constructor(
     private navParams: NavParams,
     public theme: ThemeService,
+    private translate: TranslateService,
     private popoverCtrl: PopoverController
   ) { }
 
@@ -26,10 +28,10 @@ export class TxConfirmComponent implements OnInit {
     console.log('Confirm tx', this.txInfo);
 
     if (this.txInfo.type === 1) {
-      this.txHeader = 'Transfer Transaction';
+      this.txHeader = this.translate.instant('transfer-transaction-type');
       this.txIcon = './assets/tx/transfer.svg';
     } else {
-      this.txHeader = 'Send Transaction';
+      this.txHeader = this.translate.instant('send-transaction-type');
       this.txIcon = './assets/tx/send.svg';
     }
   }

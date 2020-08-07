@@ -203,15 +203,15 @@ export class CoinHomePage implements OnInit {
                 if (transaction.Direction === TransactionDirection.RECEIVED) {
                     txType = 1;
                     payStatusIcon = './assets/buttons/receive.png';
-                    name = 'Received ELA';
+                    name = this.translate.instant('coin-op-received-ela');
                     symbol = '+';
 
                     switch (type) {
                         case 6: // RechargeToSideChain
-                            name = 'From Elastos Mainchain';
+                            name = this.translate.instant("coin-dir-from-mainchain");
                             break;
                         case 7: // WithdrawFromSideChain
-                            name = 'From ELA ID Chain';
+                            name = this.translate.instant("coin-dir-from-idchain");
                             break;
                         default:
                         break;
@@ -220,30 +220,30 @@ export class CoinHomePage implements OnInit {
                     txType = 2;
                     payStatusIcon = './assets/buttons/send.png';
                     symbol = '-';
-                    name = 'Sent ELA';
+                    name = this.translate.instant("coin-op-sent-ela");
 
                     if (type === 8) { // TransferCrossChainAsset
                         if (this.chainId === 'ELA') {
-                            name = 'To Elastos ID Chain';
+                            name = this.translate.instant("coin-dir-to-idchain");
                         } else { // IDChain
-                            name = 'To Elastos Mainchain';
+                            name = this.translate.instant("coin-dir-to-mainchain");
                         }
                     }
                 } else if (transaction.Direction === TransactionDirection.MOVED) {
                     txType = 3;
                     payStatusIcon = './assets/buttons/transfer.png';
                     symbol = '';
-                    name = 'Transfered ELA';
+                    name = this.translate.instant("coin-op-transfered-ela");
 
                     if (this.chainId === StandardCoinName.ELA) { // for now IDChian no vote
                         // vote transaction
                         const isVote = await this.isVoteTransaction(txId);
                         if (isVote) {
-                            name = 'Vote';
+                            name = this.translate.instant("coin-op-vote");
                         }
                     } else if (this.chainId === StandardCoinName.IDChain) {
                         if (transaction.Type === 10) { // DID transaction
-                            name = 'Identity';
+                            name = this.translate.instant("coin-op-identity");
                         }
                     }
                 }
@@ -251,13 +251,13 @@ export class CoinHomePage implements OnInit {
                 let status = '';
                 switch (transaction.Status) {
                     case TransactionStatus.CONFIRMED:
-                        status = 'Confirmed';
+                        status = this.translate.instant("coin-transaction-status-confirmed");
                         break;
                     case TransactionStatus.PENDING:
-                        status = 'Pending';
+                        status = this.translate.instant("coin-transaction-status-pending");
                         break;
                     case TransactionStatus.UNCONFIRMED:
-                        status = 'Unconfirmed';
+                        status = this.translate.instant("coin-transaction-status-unconfirmed");
                         break;
                 }
 

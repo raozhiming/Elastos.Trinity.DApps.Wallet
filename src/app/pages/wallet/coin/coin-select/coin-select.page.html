@@ -20,8 +20,8 @@
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>{{ subWallet.balance/SELA }}</h1>
-                <p *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ subWallet.progress }}% Synced</p>
-                <p *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ subWallet.progress }}% Syncing</p>
+                <p *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</p>
+                <p *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</p>
             </ion-col>
      <!--        <ion-col size="1.25" class="right-col">
                 <img [src]="!theme.darkMode ? 'assets/icons/right-arrow.svg' : 'assets/icons/darkmode/right-arrow.svg'"/>

@@ -67,15 +67,15 @@ export class WalletSettingsPage implements OnInit {
         // },
         {
             route: "/coin-list",
-            title: "Manage Coin List",
-            subtitle: "Check which coins to display",
+            title: this.translate.instant("wallet-settings-manage-coin-list"),
+            subtitle: this.translate.instant("wallet-settings-manage-coin-list-subtitle"),
             icon: '/assets/settings/coins.svg',
             iconDarkmode: '/assets/settings/darkmode/coins.svg'
         },
         {
             route: null,
-            title: "Delete Wallet",
-            subtitle: "This will not delete your assets, you can always import this wallet again",
+            title: this.translate.instant("wallet-settings-delete-wallet"),
+            subtitle: this.translate.instant("wallet-settings-delete-wallet-subtitle"),
             icon: '/assets/settings/trash.svg',
             iconDarkmode: '/assets/settings/darkmode/trash.svg'
         },

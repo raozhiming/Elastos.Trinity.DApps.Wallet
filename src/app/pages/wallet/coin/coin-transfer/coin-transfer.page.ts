@@ -39,6 +39,7 @@ import { CryptoNameAddress } from 'src/app/model/address-resolvers';
 import { WalletAccount } from 'src/app/model/WalletAccount';
 import { TxConfirmComponent } from 'src/app/components/tx-confirm/tx-confirm.component';
 import { NumberFormatStyle } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
@@ -101,6 +102,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         public zone: NgZone,
         private http: HttpClient,
         public theme: ThemeService,
+        private translate: TranslateService,
         private popoverCtrl: PopoverController
     ) {
     }
@@ -134,7 +136,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         if (this.coinTransferService.transferType === 1) {
 
             // Setup page display
-            this.appService.setTitleBarTitle('Transfer ' + this.chainId);
+            this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
             this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
             this.toSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.subchainId);
 
@@ -149,7 +151,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         // For Send Transfer
         } else {
-            this.appService.setTitleBarTitle('Send ' + this.chainId);
+            this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
             this.transaction = this.createSendTransaction;
         }
     }

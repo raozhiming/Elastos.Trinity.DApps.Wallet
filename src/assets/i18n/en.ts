@@ -1,11 +1,23 @@
 export const en = {
+    // Generic actions
+    "send-to": "Send to",
+    "enter-amount": "Enter amount",
+    "total-amount": "TOTAL AMOUNT",
+    "advanced-options": "Advanced options",
+    "transfer": "Transfer",
+    "send": "Send",
+    "from": "From",
+    "to": "To",
+    "amount": "Amount",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+
     // Home screen
     "wallet-home-title": "Wallet Home",
     "wallet-overview": "Wallet Overview",
     "you-have-n-wallets": "YOU HAVE {{walletsCount}} TOKENS",
     "synchronized": "{{progress}}% synced",
     "sync-progress": "Synchronization {{progress}}%",
-    "total-amount": "TOTAL AMOUNT",
     "coin-list": "Token List",
 
     // Wallet Settings screen
@@ -20,6 +32,49 @@ export const en = {
     "wallet-settings-backup-wallet-subtitle": "View mnemonics to export and backup",
     "wallet-settings-change-name": "Change Name",
     "wallet-settings-change-name-subtitle": "Organize your wallet with a custom name",
+    "wallet-settings-change-color": "Change Color",
+    "wallet-settings-change-color-subtitle": "Organize your wallet with a custom color",
+    "wallet-settings-manage-coin-list": "Manage Coin List",
+    "wallet-settings-manage-coin-list-subtitle": "Check which coins to display",
+    "wallet-settings-delete-wallet": "Delete Wallet",
+    "wallet-settings-delete-wallet-subtitle": "This will not delete your assets, you can always import this wallet again",
+
+    // Coin home screen
+    "coin-overview": "{{coinName}} Overview",
+    "coin-new-transactions-today": "{{ todaysTransactions }} NEW TRANSACTIONS TODAY",
+    "coin-balance": "Balance",
+    "coin-action-transfer": "TRANSFER",
+    "coin-action-send": "SEND",
+    "coin-action-receive": "RECEIVE",
+    "coin-transactions": "Transactions",
+    "coin-no-transactions": "No transactions",
+    "coin-op-received-ela": "Received ELA",
+    "coin-op-sent-ela": "Sent ELA",
+    "coin-op-transfered-ela": "Transfered ELA",
+    "coin-op-vote": "Vote",
+    "coin-op-identity": "Identity",
+    "coin-dir-from-mainchain": "From ELA mainchain",
+    "coin-dir-from-idchain": "From Identity sidechain",
+    "coin-dir-to-mainchain": "To ELA mainchain",
+    "coin-dir-to-idchain": "To Identity sidechain",
+    "coin-transaction-status-confirmed": "Confirmed",
+    "coin-transaction-status-pending": "Pending",
+    "coin-transaction-status-unconfirmed": "Unconfirmed",
+
+    // Coin select screen
+    "coin-select-title": "Select Coin",
+
+    // Coin transfer screen
+    "coin-transfer-send-title": "Send {{coinName}}",
+    "coin-transfer-transfer-title": "transfer {{coinName}}",
+    "transfer-from": "Transfer from",
+    "transfer-to": "Transfer to",
+    "transfer-amount": "Transfer amount",
+
+    // Confirm transaction component
+    "confirm-transaction-title": "Confirm Transaction",
+    "transfer-transaction-type": "Transfer Transaction",
+    "send-transaction-type": "Send Transaction",
 
     //my-qrcode
     'qrcode': "'s qrcode",
@@ -204,13 +259,11 @@ export const en = {
     'text-back-home': 'Back to Home Page',
     'text-gesture-pwd': 'Guesture Password',
     'text-language': 'Language',
-    'confirm': 'Confirm',
     'confirmTitle': 'confirm',
     'confirmTransaction': 'Transaction Confirmed',
     'transaction-fail': 'Transaction Failed',
     'operation-fail': 'Error',
     'confirmSubTitle': 'Are you sure you want to log out this wallet? <br/>Before logging out, confirm that you have recorded your backup phrase and optional passphrase securely.To restore your account, both the backup phrase and optional passphrase will be required.Nobody can assist in restoring your account.',
-    'cancel': 'Cancel',
     'copy-ok': 'Copied to Clipboard',
     'correct-amount': 'Wrong Amount',
     'correct-address': 'Wrong Address',
