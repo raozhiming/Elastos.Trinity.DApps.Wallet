@@ -61,20 +61,42 @@
   outline: none;
 }
 
+/** Page filter when popup is showing **/
 .blur {
   filter: blur(2.5px);
   background: #161740;
 }
 
+/** Ripple for clickable items **/
 .ripple {
   position: relative;
   overflow: hidden;
 }
 
+/** ion-slides pagination **/
 .swiper-pagination {
   position: relative;
   padding-top: 20px;
   color: #ffffff;
+}
+
+/** ion-refresher **/
+.refresh {
+  .refresher-pulling-text,
+  .refresher-refreshing-text,
+  .refresher-refreshing-icon,
+  .refresher-pulling-icon {
+    font-weight: 500;
+  }
+}
+
+/** alert controller **/
+.alert {
+  --ion-text-color: #000000;
+}
+
+ion-content {
+  --ion-background-color: #f8f8ff;
 }
 
 ion-input {

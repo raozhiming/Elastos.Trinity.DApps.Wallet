@@ -25,7 +25,7 @@ export class MnemonicExportPage implements OnInit {
     public payPassword: string = '';
     public masterWalletId: string = "1";
     public mnemonicList = [];
-    public isShow: boolean = true;
+    public hideMnemonic: boolean = true;
     public isFromIntent = false;
     public requestDapp: any = null;
     public mnemonicStr: string = "";
@@ -48,7 +48,7 @@ export class MnemonicExportPage implements OnInit {
     }
 
     ngOnInit() {
-        this.appService.setTitleBarTitle('Enter Password');
+        this.appService.setTitleBarTitle('Backup Wallet');
     }
 
     ionViewWillEnter() {
@@ -57,12 +57,13 @@ export class MnemonicExportPage implements OnInit {
         this.account = this.walletManager.getActiveMasterWallet().account.Type;
 
         this.events.subscribe("error:update", () => {
-            this.isShow = true;
+            this.hideMnemonic = true;
         });
     }
 
     ionViewWillLeave() {
         this.theme.getTheme();
+        this.events.unsubscribe('error:update');
     }
 
     init() {
@@ -89,12 +90,10 @@ export class MnemonicExportPage implements OnInit {
             this.payPassword = await this.authService.getWalletPassword(this.masterWalletId, true, true);
             if (this.payPassword) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        catch (e) {
+        } catch (e) {
             console.error('MnemonicExportPage getWalletPassword error:' + e);
             return false;
         }
@@ -110,14 +109,16 @@ export class MnemonicExportPage implements OnInit {
 
     onShare() {
         this.native.setRootRouter('/wallet-home');
-        this.intentService.sendIntentResponse(this.requestDapp.action,
-            { mnemonic: this.mnemonicStr }, this.requestDapp.intentId);
+        this.intentService.sendIntentResponse(
+            this.requestDapp.action,
+            { mnemonic: this.mnemonicStr },
+            this.requestDapp.intentId
+        );
     }
 
     async onExport() {
         if (await this.getPassword()) {
-            let ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
-            // #5919ac #732cd0
+            const ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
             titleBarManager.setBackgroundColor('#6B26C6');
             titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
             this.appService.setTitleBarTitle('Mnemonic');
@@ -128,12 +129,9 @@ export class MnemonicExportPage implements OnInit {
                 this.mnemonicList.push({ "text": mnemonicArr[i], "selected": false });
             }
 
-            this.isShow = false;
+            this.hideMnemonic = false;
+        } else {
+            this.native.toast('Password is incorrect');
         }
     }
-
-    ionViewDidLeave() {
-        this.events.unsubscribe('error:update');
-    }
-
 }

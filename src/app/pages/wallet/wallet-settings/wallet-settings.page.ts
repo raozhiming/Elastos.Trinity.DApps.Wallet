@@ -52,8 +52,8 @@ export class WalletSettingsPage implements OnInit {
         },
         {
             route: "/wallet-color",
-            title: this.translate.instant("wallet-settings-change-color"),
-            subtitle: this.translate.instant("wallet-settings-change-color-subtitle"),
+            title: this.translate.instant("wallet-settings-change-theme"),
+            subtitle: this.translate.instant("wallet-settings-change-theme-subtitle"),
             icon: '/assets/settings/picture.svg',
             iconDarkmode: '/assets/settings/darkmode/picture.svg'
         },

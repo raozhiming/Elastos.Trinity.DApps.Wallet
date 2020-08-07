@@ -1,4 +1,14 @@
 <ion-content *ngIf="chainId">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content 
+            class="refresh"
+            pullingText="Update Wallet"
+            pullingIcon="arrow-dropdown" 
+            refreshingSpinner="bubbles"
+            refreshingText="Updating Wallet..."
+        >
+        </ion-refresher-content>
+    </ion-refresher>
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-row class="main-title-row">
             <ion-col size="12">
@@ -75,11 +85,11 @@
                         <ion-img [src]="item.payStatusIcon"></ion-img>
                     </div>
                 </ion-col>
-                <ion-col size="5" class="middle-col">
+                <ion-col [size]="item.resultAmount === 0 ? 10 : 5" class="middle-col">
                     <h1>{{ item.name | translate }}</h1>
                     <p>{{ item.datetime }}</p>
                 </ion-col>
-                <ion-col size="5" class="right-col">
+                <ion-col [size]="item.resultAmount === 0 ? 2 : 5" class="right-col">
                     <h1>{{ item.symbol }}{{ item.resultAmount }}</h1>
                 </ion-col>
                 <ion-ripple-effect></ion-ripple-effect>

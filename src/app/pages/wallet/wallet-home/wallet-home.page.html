@@ -1,6 +1,16 @@
 
 
 <ion-content *ngIf="walletManager.activeMasterWallet">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content 
+            class="refresh"
+            pullingText="Update Wallet"
+            pullingIcon="arrow-dropdown" 
+            refreshingSpinner="bubbles"
+            refreshingText="Updating Wallet..."
+        >
+        </ion-refresher-content>
+    </ion-refresher>
     <ion-slides *ngIf="walletManager.getWalletsList().length > 1" [class.dark-slides]="theme.darkMode">
         <ion-slide *ngFor="let masterWallet of walletManager.getWalletsList()">
             <ion-row class="main-title-row">

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController } from '@ionic/angular';
+import { ThemeService } from './theme.service';
 
 @Injectable()
 export class PopupProvider {
   constructor(
     private alertCtrl: AlertController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private theme: ThemeService
   ) {}
 
   public ionicAlert(title: string, subTitle?: string, okText?: string): Promise<any> {
@@ -116,12 +118,17 @@ export class PopupProvider {
   };
 
   // TODO: don't use a promise, use 2 callbacks here, "confirmed" and "cancelled"
-  public ionicConfirm(title: string, message: string, okText?: string, cancelText?: string): Promise<any> {
+  public ionicConfirm(
+    title: string,
+    message: string,
+    okText?: string,
+    cancelText?: string
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
       this.alertCtrl.create({
         header: this.translate.instant(title),
         message  : this.translate.instant(message),
-        cssClass: 'my-custom-alert',
+        cssClass: 'alert',
         buttons: [
           {
             text: cancelText ? cancelText : this.translate.instant('cancel'),
@@ -140,7 +147,7 @@ export class PopupProvider {
         ]
       }).then(confirm => confirm.present());
     });
-  };
+  }
 
   // TODO: don't use a promise, use 2 callbacks here, "confirmed" and "cancelled"
   public ionicConfirmWithSubTitle(title: string, subTitle: string, message: string): Promise<any> {
