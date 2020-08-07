@@ -8,6 +8,19 @@ export const zh = {
     "total-amount": "TOTAL AMOUNT",
     "coin-list": "Token List",
 
+    // Wallet Settings screen
+    "settings-title": "设置",
+    "settings-general": "General",
+    "settings-my-wallets": "My Wallets",
+    "settings-my-wallets-subtitle": "Backup wallets and access their individual settings",
+
+    // Wallet settings screen
+    "wallet-settings-title": "Wallet Settings",
+    "wallet-settings-backup-wallet": "Backup Wallet",
+    "wallet-settings-backup-wallet-subtitle": "View mnemonics to export and backup",
+    "wallet-settings-change-name": "Change Name",
+    "wallet-settings-change-name-subtitle": "Organize your wallet with a custom name",
+    
     //my-qrcode
     'qrcode': "的二维码",
     'copy': '复制',
@@ -20,7 +33,6 @@ export const zh = {
     'text-wait-info-2': '同步完成后将自动进入下一页',
 
     'tab-home': '首页',
-    'tab-setting': '设置',
     'wallet': '钱包',
     'launcher-create-wallet': '创建钱包',
     'launcher-backup-import': '导入钱包',
@@ -28,7 +40,6 @@ export const zh = {
     'launcher-warning': '这个钱包是稳定的，但目前仍在测试中。建议您避免使用大额的ELA。',
     'text-wallet-export': '导出钱包',
     'text-down': '导出钱包',
-    'text-wallet-manager': '钱包管理',
     'coin-recent-transfer': '最近转账记录',
     'text-receive': '接收',
     'text-transfer': '转账',

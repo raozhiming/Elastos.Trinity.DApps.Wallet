@@ -16,7 +16,7 @@
                     </ion-col>
                 </ion-row>
                 <h2></h2>
-                <h3>TOTAL AMOUNT</h3>
+                <h3>{{ 'total-amount' | translate }}</h3>
                 <h4>
                     {{ Util.getWholeBalance(masterWallet.getBalance()/SELA) }}<span class="dot" *ngIf="masterWallet.getBalance()/SELA !== 0">.</span>
                     <span class="decimals">{{ Util.getDecimalBalance(masterWallet.getBalance()/SELA) }}</span>
@@ -43,34 +43,3 @@
         </ion-row>
     </ion-grid>
 </ion-content>
-
-<!-------------------- OLD WALLET -------------------->
-<!-- <ion-content no-bounce>
-    <ion-list lines="none">
-        <ion-item detail [routerLink]="['/wallet-edit-name']" routerDirection="forward">
-            <ion-label>{{'wallet-name' | translate}}</ion-label>
-            <ion-note slot="end">
-                {{ walletName }}
-            </ion-note>
-        </ion-item>
-
-        <ion-item *ngIf="readonly!='Readonly'&&readonly!='simple'" detail [routerLink]="['/mnemonic-export']"
-            routerDirection="forward">
-            <ion-label>{{'text-export-mnemonic' | translate }}</ion-label>
-        </ion-item>
-
-        <ion-item *ngIf="readonly!='Readonly'" detail [routerLink]="['/wallet-password-reset']"
-            routerDirection="forward">
-            <ion-label>{{'wallet-password-reset' | translate}}</ion-label>
-        </ion-item>
-
-        <ion-item detail [routerLink]="['/coin-list']" routerDirection="forward">
-            <ion-label>{{'text-coin-list' | translate }}</ion-label>
-        </ion-item>
-
-    </ion-list>
-</ion-content>
-
-<ion-footer>
-    <ion-button class="delete" (click)="onDelete()">{{'wallet-delete' | translate}}</ion-button>
-</ion-footer> -->

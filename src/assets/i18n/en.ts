@@ -8,6 +8,19 @@ export const en = {
     "total-amount": "TOTAL AMOUNT",
     "coin-list": "Token List",
 
+    // Wallet Settings screen
+    'settings-title': 'Settings',
+    "settings-general": "General",
+    "settings-my-wallets": "My Wallets",
+    "settings-my-wallets-subtitle": "Backup wallets and access their individual settings",
+
+    // Wallet settings screen
+    "wallet-settings-title": "Wallet Settings",
+    "wallet-settings-backup-wallet": "Backup Wallet",
+    "wallet-settings-backup-wallet-subtitle": "View mnemonics to export and backup",
+    "wallet-settings-change-name": "Change Name",
+    "wallet-settings-change-name-subtitle": "Organize your wallet with a custom name",
+
     //my-qrcode
     'qrcode': "'s qrcode",
     'copy': 'Copy',
@@ -20,7 +33,6 @@ export const en = {
     'text-wait-info-2': 'After the synchronization is completed, it will automatically go to the next page',
 
     'tab-home': 'Home',
-    'tab-setting': 'Settings',
     'wallet': 'Wallet',
     'launcher-create-wallet': 'Create Wallet',
     'launcher-backup-import': 'Import Wallet',
@@ -28,7 +40,6 @@ export const en = {
     'launcher-warning': 'This wallet is stable but still being tested at the moment. You may avoid using large amounts of ELA for now.',
     'text-wallet-export': 'Export Wallet',
     'text-down': 'backup wallet',
-    'text-wallet-manager': 'Wallet Settings',
     'coin-recent-transfer': 'Recent Transfers',
     'text-receive': 'Receive',
     'text-transfer': 'Send',

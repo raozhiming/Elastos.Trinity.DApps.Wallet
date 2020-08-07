@@ -11,6 +11,7 @@ import { AppService } from 'src/app/services/app.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-wallet-settings',
@@ -37,22 +38,22 @@ export class WalletSettingsPage implements OnInit {
     public settings = [
         {
             route: "/mnemonic-export",
-            title: "Backup Wallet",
-            subtitle: "View mnemonics to export and backup",
+            title: this.translate.instant("wallet-settings-backup-wallet"),
+            subtitle: this.translate.instant("wallet-settings-backup-wallet-subtitle"),
             icon: '/assets/settings/key.svg',
             iconDarkmode: '/assets/settings/darkmode/key.svg'
         },
         {
             route: "/wallet-edit-name",
-            title: "Change Name",
-            subtitle: "Organize your wallet with a custom name",
+            title: this.translate.instant("wallet-settings-change-name"),
+            subtitle: this.translate.instant("wallet-settings-change-name-subtitle"),
             icon: '/assets/settings/pen.svg',
             iconDarkmode: '/assets/settings/darkmode/pen.svg'
         },
         {
             route: "/wallet-color",
-            title: "Change Color",
-            subtitle: "Organize your wallet with a custom color",
+            title: this.translate.instant("wallet-settings-change-color"),
+            subtitle: this.translate.instant("wallet-settings-change-color-subtitle"),
             icon: '/assets/settings/picture.svg',
             iconDarkmode: '/assets/settings/darkmode/picture.svg'
         },
@@ -88,6 +89,7 @@ export class WalletSettingsPage implements OnInit {
         public popupProvider: PopupProvider,
         public walletManager: WalletManager,
         public native: Native,
+        private translate: TranslateService,
         private walletEditionService: WalletEditionService,
         private appService: AppService,
         public theme: ThemeService
@@ -106,7 +108,7 @@ export class WalletSettingsPage implements OnInit {
         this.walletName = this.walletManager.masterWallets[this.masterWalletId].name;
 
         this.appService.setBackKeyVisibility(true);
-        this.appService.setTitleBarTitle("text-wallet-manager");
+        this.appService.setTitleBarTitle("wallet-settings-title");
     }
 
     async onDelete() {

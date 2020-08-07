@@ -21,16 +21,17 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '../../../../services/app.service';
+import { AppService } from '../../services/app.service';
 import { ThemeService } from 'src/app/services/theme.service';
-import { Util } from '../../../../model/Util';
+import { Util } from '../../model/Util';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-wallet-tab-settings',
-    templateUrl: './wallet-tab-settings.page.html',
-    styleUrls: ['./wallet-tab-settings.page.scss'],
+    selector: 'app-settings',
+    templateUrl: './settings.page.html',
+    styleUrls: ['./settings.page.scss'],
 })
-export class WalletTabSettingsPage implements OnInit {
+export class SettingsPage implements OnInit {
 
     public masterWalletId: string = "1";
     public masterWalletType: string = "";
@@ -44,8 +45,8 @@ export class WalletTabSettingsPage implements OnInit {
     public settings = [
         {
             route: "/wallet-manager",
-            title: "My Wallets",
-            subtitle: "Backup wallets and access their individual settings",
+            title: this.translate.instant("settings-my-wallets"),
+            subtitle: this.translate.instant("settings-my-wallets-subtitle"),
             icon: '/assets/settings/wallet.svg',
             iconDarkmode: '/assets/settings/darkmode/wallet.svg'
         },
@@ -81,7 +82,8 @@ export class WalletTabSettingsPage implements OnInit {
 
     constructor(
         private appService: AppService,
-        public theme: ThemeService
+        public theme: ThemeService,
+        private translate: TranslateService
     ) {
     }
 
@@ -90,6 +92,6 @@ export class WalletTabSettingsPage implements OnInit {
 
     ionViewWillEnter() {
       this.appService.setBackKeyVisibility(true);
-      this.appService.setTitleBarTitle('Settings');
+      this.appService.setTitleBarTitle(this.translate.instant("settings-title"));
     }
 }

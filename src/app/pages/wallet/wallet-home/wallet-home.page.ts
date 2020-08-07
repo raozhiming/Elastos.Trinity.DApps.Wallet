@@ -21,29 +21,28 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '../../../../services/app.service';
-import { Config } from '../../../../config/Config';
-import { Native } from '../../../../services/native.service';
-import { PopupProvider } from '../../../../services/popup.service';
+import { AppService } from '../../../services/app.service';
+import { Config } from '../../../config/Config';
+import { Native } from '../../../services/native.service';
+import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { SubWallet } from 'src/app/model/SubWallet';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
-import { Util } from '../../../../model/Util';
+import { Util } from '../../../model/Util';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
 @Component({
-    selector: 'app-wallet-tab-home',
-    templateUrl: './wallet-tab-home.page.html',
-    styleUrls: ['./wallet-tab-home.page.scss'],
+    selector: 'app-wallet-home',
+    templateUrl: './wallet-home.page.html',
+    styleUrls: ['./wallet-home.page.scss'],
 })
-export class WalletTabHomePage implements OnInit {
-
+export class WalletHomePage implements OnInit {
     public masterWallet: MasterWallet = null;
     public masterWallets: MasterWallet[] = [];
     public isSingleWallet: boolean = false;

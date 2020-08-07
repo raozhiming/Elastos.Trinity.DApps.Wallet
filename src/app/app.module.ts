@@ -50,7 +50,7 @@ import { Logger } from './model/Logger';
 import { PopupProvider } from './services/popup.service';
 import { WalletManager } from './services/wallet.service';
 
-import { WalletTabHomePage } from './pages/wallet/wallet-home/wallet-tab-home/wallet-tab-home.page';
+import { WalletHomePage } from './pages/wallet/wallet-home/wallet-home.page';
 import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
 import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
 
@@ -83,8 +83,7 @@ import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnem
 import { MnemonicCheckPage } from './pages/wallet/mnemonic/mnemonic-check/mnemonic-check.page';
 import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
 import { ScanCodePage } from './pages/scancode/scancode.page';
-import { WalletTabSettingsPage } from './pages/wallet/wallet-home/wallet-tab-settings/wallet-tab-settings.page';
-import { WalletTabsRootPage } from './pages/wallet/wallet-home/wallet-tabs-root/wallet-tabs-root.page';
+import { SettingsPage } from './pages/settings/settings.page';
 
 import { WalletCreatedComponent } from './components/wallet-created/wallet-created.component';
 
@@ -156,9 +155,8 @@ export function TranslateLoaderFactory() {
         CoinTransferPage,
         DidTransactionPage,
         EscTransactionPage,
-        WalletTabHomePage,
-        WalletTabSettingsPage,
-        WalletTabsRootPage,
+        WalletHomePage,
+        SettingsPage,
         WalletManagerPage,
         WalletPasswordResetPage,
         WalletEditNamePage,
@@ -187,7 +185,6 @@ export function TranslateLoaderFactory() {
     ],
     entryComponents: [
         LauncherPage,
-        WalletTabsRootPage,
         WalletCreatedComponent,
         TxConfirmComponent
     ],
