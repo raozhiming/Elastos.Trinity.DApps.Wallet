@@ -58,28 +58,12 @@ import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
 
 const routes: Routes = [
+
     // Global
     { path: 'launcher', component: LauncherPage },
     { path: 'about', component: AboutPage },
     { path: 'settings', component: SettingsPage },
     { path: 'wallet-home', component: WalletHomePage },
-
-    // Wallet
- /*    {
-        path: 'wallet-home',
-        component: WalletTabsRootPage,
-        children: [
-            {
-                path: 'wallet-tab-home',
-                component: WalletTabHomePage
-            },
-            {
-                path: 'wallet-tab-settings',
-                component: WalletTabSettingsPage
-            }
-        ]
-    }, */
-
     { path: 'wallet-create', component: WalletCreatePage },
     { path: 'wallet-import', component: WalletImportPage },
     { path: 'wallet-manager', component: WalletManagerPage },
@@ -93,8 +77,10 @@ const routes: Routes = [
     { path: 'mnemonic-export', component: MnemonicExportPage },
     { path: 'mnemonic-check', component: MnemonicCheckPage },
     { path: 'wallet-settings', component: WalletSettingsPage },
+
+    // Settings
     { path: 'wallet-color', loadChildren: './pages/wallet/wallet-color/wallet-color.module#WalletColorPageModule' },
-   // { path: 'waller-color', component: WallerColorPage },
+    { path: 'currency-select', loadChildren: './pages/settings/currency-select/currency-select.module#CurrencySelectPageModule' },
 
     // Coin
     { path: 'coin/:name', component: CoinHomePage },
@@ -118,6 +104,7 @@ const routes: Routes = [
     { path: 'dposvote', component: DPoSVotePage },
     { path: 'crmemberregister', component: CRMemberRegisterPage },
     { path: 'crproposalvoteagainst', component: CRProposalVoteAgainstPage },
+
 ];
 @NgModule({
     imports: [

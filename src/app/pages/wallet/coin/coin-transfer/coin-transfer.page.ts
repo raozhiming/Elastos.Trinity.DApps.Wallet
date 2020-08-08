@@ -40,6 +40,7 @@ import { WalletAccount } from 'src/app/model/WalletAccount';
 import { TxConfirmComponent } from 'src/app/components/tx-confirm/tx-confirm.component';
 import { NumberFormatStyle } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
@@ -69,7 +70,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // User inputs
     public toAddress: string;
-    public amount: number;
+    public amount: number = 0;
     public memo: string = '';
 
     // Display recharge wallets
@@ -103,7 +104,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         private http: HttpClient,
         public theme: ThemeService,
         private translate: TranslateService,
-        private popoverCtrl: PopoverController
+        private popoverCtrl: PopoverController,
+        public currencyService: CurrencyService
     ) {
     }
 
@@ -131,6 +133,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.masterWallet = this.walletManager.getActiveMasterWallet();
         this.transferType = this.coinTransferService.transferType;
         this.chainId = this.coinTransferService.chainId;
+
+        console.log('Balance', this.walletManager.activeMasterWallet.subWallets[this.chainId].balance / this.SELA);
 
         // For Recharge Transfer
         if (this.coinTransferService.transferType === 1) {

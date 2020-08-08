@@ -36,7 +36,8 @@
     ],
     "urls": [
       "http://api.elastos.io/*",
-      "https://*.elastos.name/*"
+      "https://*.elastos.name/*",
+      "https://api-price.elaphant.app/"
   ],
     "framework": [
         "ionic@4.12.0"

@@ -6,15 +6,17 @@
         <ion-row class="item-row">
             <ion-col size="6" class="left-col">
                 <h2>{{ chainId }}</h2>
+                <p>{{ currencyService.selectedCurrency.symbol }}</p>
             </ion-col>
             <ion-col size="6" class="right-col">
                 <ion-input
                     class="amount-input"
-                    type="text"
-                    placeholder="{{ walletManager.activeMasterWallet.subWallets[chainId].balance/SELA }}"
+                    type="number"
+                    placeholder="0"
                     [(ngModel)]="amount"
                 >
                 </ion-input>
+                <p>{{ currencyService.getCurrencyBalance(amount)}}</p>
             </ion-col>
         </ion-row>
         <!-- Address Container -->
@@ -85,8 +87,12 @@
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>{{ fromSubWallet.balance/SELA }}</h1>
-                <p *ngIf="fromSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: fromSubWallet.progress} }}</p>
-                <p *ngIf="fromSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: fromSubWallet.progress} }}</p>
+                <p>
+                    {{ currencyService.getCurrencyBalance(fromSubWallet.balance/SELA) }} 
+                    {{ currencyService.selectedCurrency.symbol }}
+                </p>
+               <!--  <p *ngIf="fromSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: fromSubWallet.progress} }}</p>
+                <p *ngIf="fromSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: fromSubWallet.progress} }}</p> -->
             </ion-col>
             <div class="arrow-down"></div>
         </ion-row>
@@ -115,8 +121,12 @@
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>{{ toSubWallet.balance/SELA }}</h1>
-                <p *ngIf="toSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: toSubWallet.progress} }}</p>
-                <p *ngIf="toSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: toSubWallet.progress} }}</p>
+                <p>
+                    {{ currencyService.getCurrencyBalance(toSubWallet.balance/SELA) }} 
+                    {{ currencyService.selectedCurrency.symbol }}
+                </p>
+<!--                 <p *ngIf="toSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: toSubWallet.progress} }}</p>
+                <p *ngIf="toSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: toSubWallet.progress} }}</p> -->
             </ion-col>
             <div class="arrow-down"></div>
         </ion-row>
@@ -136,7 +146,7 @@
     </ion-grid>
 </ion-content>
 
-<ion-footer *ngIf="!showPopover" [class.dark-footer]="theme.darkMode">
+<ion-footer *ngIf="!showPopover">
     <ion-row class="btn-container">
         <ion-button color="primary" (click)="goTransaction()">
             <ion-label *ngIf="transferType === 1">{{ 'transfer' | translate}}</ion-label>

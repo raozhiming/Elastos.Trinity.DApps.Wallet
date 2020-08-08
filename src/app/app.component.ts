@@ -32,6 +32,7 @@ import { AppService } from './services/app.service';
 import { PopupProvider } from './services/popup.service';
 import { NavService } from './services/nav.service';
 import { IntentService } from './services/intent.service';
+import { CurrencyService } from './services/currency.service';
 
 @Component({
     selector: 'app-root',
@@ -52,6 +53,7 @@ export class AppComponent {
         private navService: NavService,
         public appService: AppService,
         private intentService: IntentService,
+        private currencyService: CurrencyService,
         public popupProvider: PopupProvider,
         public modalCtrl: ModalController
     ) {
@@ -76,6 +78,7 @@ export class AppComponent {
             });
 
             await this.walletManager.init();
+            await this.currencyService.init();
             await this.intentService.init();
         });
     }

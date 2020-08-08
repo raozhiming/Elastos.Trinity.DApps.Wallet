@@ -10,6 +10,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from 'src/app/model/Util';
 import { Config } from 'src/app/config/Config';
 import { TranslateService } from '@ngx-translate/core';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 @Component({
     selector: 'app-coin-select',
@@ -33,7 +34,8 @@ export class CoinSelectPage implements OnInit {
         private coinTransferService: CoinTransferService,
         public theme: ThemeService,
         private translate: TranslateService,
-        private appService: AppService
+        private appService: AppService,
+        public currencyService: CurrencyService
     ) {
         this.init();
     }

@@ -28,6 +28,7 @@ export class LocalStorage {
     }
 
     public async get(key: string): Promise<any> {
+        console.log('Fetching for ' + key + ' in local storage');
         let val = await this.storage.get(key);
         if (typeof(val) === "string") {
             val = JSON.parse(val);
@@ -87,6 +88,19 @@ export class LocalStorage {
 
     public async getPublishTxList(): Promise<any> {
         return await this.get("publishTx");
+    }
+
+    public setCurrency(value: any) {
+        return this.storage.set("currency", JSON.stringify(value)).then((data) => {
+          console.log('Currency stored', data);
+        });
+    }
+
+    public getCurrency(): Promise<any> {
+        return this.storage.get("currency").then((data) => {
+          console.log('Found currency stored', data);
+          return JSON.parse(data);
+        });
     }
 }
 

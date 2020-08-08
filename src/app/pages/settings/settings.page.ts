@@ -50,6 +50,13 @@ export class SettingsPage implements OnInit {
             icon: '/assets/settings/wallet.svg',
             iconDarkmode: '/assets/settings/darkmode/wallet.svg'
         },
+        {
+            route: "/currency-select",
+            title: 'Currency',
+            subtitle: 'Select the default currency',
+            icon: '/assets/settings/dollar.svg',
+            iconDarkmode: '/assets/settings/darkmode/dollar.svg'
+        },
   /*       {
             route: "/launcher",
             title: "Add Wallet",
@@ -60,25 +67,6 @@ export class SettingsPage implements OnInit {
     ];
 
     public Util = Util;
-
-  /*   public settings = [
-        {
-            route: "/wallet-manager",
-            label: "text-wallet-manager",
-            icon: "manager",
-        },
-        {
-            route: "/contact-list",
-            label: "text-contacts",
-            icon: "contact",
-        },
-        {
-            route: "/about",
-            label: "about",
-            icon: "about",
-            note: "v1.0",
-        }
-    ]; */
 
     constructor(
         private appService: AppService,

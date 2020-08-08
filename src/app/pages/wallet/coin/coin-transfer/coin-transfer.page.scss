@@ -4,7 +4,6 @@
     justify-content: flex-start;
     align-items: center;
     min-height: 100%;
-    background: #f8f8ff;
     margin: 0;
     padding: 30px;
 
@@ -19,7 +18,6 @@
         font-size: 13px;
         font-weight: 400;
         letter-spacing: 0.7px;
-        color: #000000;
 
         img {
             position: relative;
@@ -49,13 +47,30 @@
             font-size: 19px;
             font-weight: 600;
             letter-spacing: 0.95px;
-            color: #000000;
+        }
+        
+        p {
+            margin: 0;
+            padding-top: 4px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #8888b0;
         }
 
         .left-col {
             display: flex;
-            justify-content: flex-start;
-            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            overflow: hidden;
+
+            h2 {
+                padding-bottom: 4px;
+            }
+
+            p {
+                text-align: left;
+            }
 
             ion-input {
                 background-color: #ffffff;
@@ -71,35 +86,35 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
             align-items: flex-end;
             overflow: hidden;
 
             img {
-                width: 30px;
-                height: 30px;
+                width: 32px;
+                height: 32px;
                 object-fit: contain;
             }
 
-            .amount-input {
+            .amount-input, p {
                 text-align: right;
+            }
+
+            .amount-input {
+                --padding-end: 0;
+                --padding-top: 0;  
+               --padding-bottom: 4px;
+                font-weight: 700;
             }
         }
     }
 }
 
 .send-dark-container {
-    background:#191a2f;
-
-    h1 {
-        color: #ffffff;
-    }
-
     .item-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
 
-        h2, .amount-input {
+        .amount-input {
             color: #ffffff;
         }
 
@@ -114,7 +129,6 @@
 
 .recharge-container {
     min-height: 100%;
-    background: #f8f8ff;
     padding: 20px;
 
     .main-title-row {
@@ -126,7 +140,6 @@
             font-weight: 400;
             letter-spacing: 0.7px;
             text-align: left;
-            color: #000000;
         }
     }
 
@@ -138,27 +151,6 @@
         margin-bottom: 32px;
         box-shadow: 0 3px 15px 0 #ededf0;
         background-color: #ffffff;
-
-        h1, p {
-            margin: 0;
-        }
-
-        h1 {
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 1.29;
-            letter-spacing: 0.7px;
-            color: #161740;
-            text-align: left;
-        }
-
-        p {
-            font-size: 13px;
-            font-weight: 400;
-            padding-top: 6px;
-            color: #161740;
-            text-align: left;
-        }
 
         .left-col {
             display: flex;
@@ -181,12 +173,41 @@
             justify-content: center;
             align-items: flex-start;
             overflow: hidden;
+
+            h1, p {
+                margin: 0;
+            }
+    
+            h1 {
+                font-size: 17px;
+                font-weight: 600;
+                line-height: 1.29;
+                letter-spacing: 0.7px;
+                text-align: left;
+            }
+    
+            p {
+                font-size: 13px;
+                font-weight: 400;
+                padding-top: 6px;
+                text-align: left;
+            }
         }
 
         .right-col {
             align-items: flex-end;
 
+            h1 {
+                font-weight: 700;
+                text-align: right;
+            }
+
             p {
+                color: #8888b0;
+                text-align: right;
+            }
+
+          /*   p {
                 font-weight: 700;
                 font-size: 9px;
                 letter-spacing: 0.9px;
@@ -198,7 +219,7 @@
 
             .syncing {
                 color: #20e3d2;
-            }
+            } */
         }
 
         .arrow-down {
@@ -227,31 +248,19 @@
             background-color: #ffffff;
             color: #000000;
             height: 50px;
-            border-radius: 20px;
-            font-size: 13px;
+            border-radius: 16px;
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: 0.95px;
             --padding-start: 16px;
         }
     }
 }
 
 .recharge-dark-container {
-    background:#191a2f;
-
-
-    .main-title-row {
-        p {
-            color: #ffffff;
-        }
-    }
-
-
     .item-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
-
-        h1, p {
-            color: #ffffff;
-        }
 
         .arrow-down {
             background-color: #2b2c49;
@@ -268,41 +277,10 @@
 }
 
 ion-footer {
-    background: #f8f8ff;
+    background: transparent;
     padding: 30px;
 
     .btn-container {
         width: 100%;
     }
 }
-
-.dark-footer {
-    background:#191a2f;
-}
-
-/* @import "../../../../functions.scss";
-
-.text-right {
-    text-align: right;
-}
-.bottom-border {
-    border-bottom: 1px solid #dddddd;
-}
-.top-border {
-    border-top: 1px solid #dddddd;
-}
-.font-size-1 {
-    font-size: 16px;
-}
-
-ion-note {
-    font-size: 12px;
-}
-
-ion-icon {
-    margin-left: px2rem(20px);
-    width: px2rem(32px);
-    height: px2rem(32px);
-}
-
- */

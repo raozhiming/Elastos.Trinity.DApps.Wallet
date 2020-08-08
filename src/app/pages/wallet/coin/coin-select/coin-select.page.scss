@@ -59,6 +59,11 @@
             align-items: flex-end;
 
             p {
+                text-align: right;
+                color: #8888b0;
+            }
+
+        /*     p {
                 font-weight: 700;
                 font-size: 9px;
                 letter-spacing: 0.9px;
@@ -70,7 +75,7 @@
 
             .syncing {
                 color: #20e3d2;
-            }
+            } */
         }
     }
 }
