@@ -33,6 +33,7 @@ import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from '../../../model/Util';
 import { MasterWallet } from 'src/app/model/MasterWallet';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -61,6 +62,7 @@ export class WalletHomePage implements OnInit {
         public walletManager: WalletManager,
         private walletEditionService: WalletEditionService,
         private translate: TranslateService,
+        public currencyService: CurrencyService,
         public theme: ThemeService
     ) {
     }

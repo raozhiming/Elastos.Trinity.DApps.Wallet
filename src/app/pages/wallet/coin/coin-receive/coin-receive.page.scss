@@ -3,9 +3,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-
     min-height: 100%;
-    background: #f8f8ff;
     margin: 0;
     padding: 30px 20px;
 
@@ -26,7 +24,6 @@
     h1, h2, p {
         margin: 0;
         font-weight: 400;
-        color: #000000;
     }
 
     h1 {
@@ -56,10 +53,6 @@
 
 .dark-container {
     background:#191a2f;
-
-    h1, h2,  p {
-        color: #ffffff;
-    }
 
     h2 {
         box-shadow: 0 3px 15px 0 #151626;

@@ -15,9 +15,6 @@ type Currency = {
 export class CurrencyService {
 
   public elaStats: any;
-  public elaUSD = 0;
-  public elaCNY = 0;
-  public elaBTC = 0;
   private proxyurl = "https://cors-anywhere.herokuapp.com/";
 
   public selectedCurrency: Currency;
@@ -53,17 +50,17 @@ export class CurrencyService {
   }
 
   getSavedCurrency() {
-    this.storage.getCurrency().then((symbol) => {
-      console.log('Got currency!!!!!!!', symbol);
-      if (symbol) {
-        this.selectedCurrency = this.currencies.find((currency) => currency.symbol === symbol);
-        console.log('Currency saved', this.selectedCurrency);
-      } else {
-        this.selectedCurrency = this.currencies.find((currency) => currency.symbol === 'USD');
-        console.log('No currency saved, using default USD', this.selectedCurrency);
-      }
-
-      return this.selectedCurrency;
+    return new Promise((resolve, reject) => {
+      this.storage.getCurrency().then((symbol) => {
+        if (symbol) {
+          this.selectedCurrency = this.currencies.find((currency) => currency.symbol === symbol);
+          console.log('Currency saved', this.selectedCurrency);
+        } else {
+          this.selectedCurrency = this.currencies.find((currency) => currency.symbol === 'USD');
+          console.log('No currency saved, using default USD', this.selectedCurrency);
+        }
+        resolve();
+      });
     });
   }
 
@@ -72,13 +69,7 @@ export class CurrencyService {
       console.log('Got CMC response', res);
       this.elaStats = res.find((coin) => coin.symbol === 'ELA');
       if (this.elaStats) {
-        this.elaUSD = parseFloat(this.elaStats.price_usd);
-        this.elaCNY = parseFloat(this.elaStats.price_cny);
-        this.elaBTC = parseFloat(this.elaStats.price_btc);
-        console.log('ELA USD PRICE', this.elaUSD);
-        console.log('ELA CNY PRICE', this.elaCNY);
-        console.log('ELA BTC PRICE', this.elaBTC);
-
+        console.log('CMC ELA stats', this.elaStats);
         this.addPriceToCurrency();
       }
     }, (err) => {
@@ -98,12 +89,13 @@ export class CurrencyService {
         currency.price = parseFloat(this.elaStats.price_btc);
       }
     });
+    console.log('Currency ELA prices updated', this.currencies);
   }
 
   getCurrencyBalance(cryptoBalance: number): string {
     const currencyBalance = this.selectedCurrency.price * cryptoBalance;
-    if (this.selectedCurrency.symbol === 'BTC') {
-      return currencyBalance.toFixed(10);
+    if (this.selectedCurrency.symbol === 'BTC' && cryptoBalance !== 0) {
+      return currencyBalance.toFixed(8);
     } else {
       return currencyBalance.toFixed(2);
     }

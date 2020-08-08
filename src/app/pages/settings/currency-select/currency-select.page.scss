@@ -1,21 +1,20 @@
 .container {
   min-height: 100%;
-  background: #f8f8ff;
   padding: 20px;
 
   .main-title-row {
-      margin-bottom: 10px;
-      margin-left: 5px;
+    margin-bottom: 10px;
+    margin-left: 5px;
 
-      p {
-          margin: 0;
-          font-size: 13px;
-          font-weight: 500;
-          line-height: 1;
-          letter-spacing: -0.33px;
-          text-align: left;
-          color: #818181;
-      }
+    p {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.33px;
+      text-align: left;
+      color: #818181;
+    }
   }
 
   .item-row {
@@ -27,38 +26,34 @@
     background-color: #ffffff;
 
     h1, p {
-        margin: 0;
+      margin: 0;
     }
 
     h1 {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 1.29;
-        letter-spacing: 0.7px;
-        color: #161740;
-        text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.7px;
+      text-align: left;
     }
 
     p {
-        font-size: 13px;
-        font-weight: 400;
-        padding-top: 3px;
-        color: #161740;
-        text-align: left;
+      font-size: 13px;
+      font-weight: 400;
+      padding-top: 3px;
+      text-align: left;
     }
     
     .left-col {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-left: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-left: 10px;
 
-        ion-img {
-            object-fit: contain;
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-        }
+      ion-img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
     }
     
     .middle-col, .right-col {
@@ -81,20 +76,14 @@
 }
 
 .dark-container {
-  background: #191a2f;
-
   .main-title-row {
-      p {
-          color: #8888b0
-      }
+    p {
+      color: #8888b0
+    }
   }
 
   .item-row {
     box-shadow: 0 3px 15px 0 #151626;
-    background-color: #2b2c49;
-
-    h1, p {
-        color: #ffffff;
-    }       
+    background-color: #2b2c49;      
   }
 }

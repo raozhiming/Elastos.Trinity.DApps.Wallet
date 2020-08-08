@@ -1,6 +1,5 @@
 .container {
     min-height: 100%;
-    background: #f8f8ff;
     padding: 20px;
   
     .main-title-row {
@@ -35,7 +34,6 @@
             font-weight: 500;
             letter-spacing: 0.9px;
             text-align: left;
-            color: #000000;
         }
   
         p {
@@ -44,7 +42,6 @@
             font-weight: 500;
             letter-spacing: 2px;
             text-align: left;
-            color: #000000;
         }
       
         .left-col {
@@ -75,8 +72,6 @@
 }
 
 .dark-container {
-    background: #191a2f;
-
     .main-title-row {
         p {
             color: #8888b0
@@ -86,9 +81,5 @@
     .setting-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
-
-        h1, p {
-            color: #ffffff;
-        }
     } 
 }

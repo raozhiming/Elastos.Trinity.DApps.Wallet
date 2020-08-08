@@ -1,6 +1,5 @@
 .container {
     min-height: 100%;
-    background: #f8f8ff;
     margin: 0;
     padding: 15px 20px;
 
@@ -16,7 +15,6 @@
         line-height: 1.26;
         letter-spacing: -0.46px;
         text-align: center;
-        color: #000000;
     }
 
     .card-row {
@@ -112,11 +110,6 @@
 }
 
 .dark-container  {
-    background:#191a2f;
-
-    p {
-        color: #ffffff;
-    }
 }
 
 ion-footer {

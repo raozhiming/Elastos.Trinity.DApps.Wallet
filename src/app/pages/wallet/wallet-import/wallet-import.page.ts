@@ -109,12 +109,14 @@ export class WalletImportPage implements OnInit, OnDestroy {
                 // Cancelled, do nothing
             }
         } else {
+            this.native.toast('Please fill in all inputs');
             this.inputStr = "";
         }
     }
 
     async importWalletWithMnemonic(payPassword: string) {
         this.inputStr = this.inputStr.replace(/\s+/g, "");
+        console.log('Importing input string', this.inputStr);
         await this.walletManager.importMasterWalletWithMnemonic(
             this.masterWalletId,
             this.walletCreateService.name,

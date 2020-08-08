@@ -2,7 +2,6 @@
 
 .container {
     min-height: 100%;
-    background: #f8f8ff;
     margin: 0;
     padding: 15px 20px;
 
@@ -13,57 +12,47 @@
         margin-bottom: 7.5px;
         box-shadow: 0 3px 15px 0 #ededf0;
         background-color: #ffffff;
-
-        h1, p {
-            margin: 0;
-        }
-
-        h1 {
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 1.29;
-            letter-spacing: 0.7px;
-            color: #161740;
-        }
-  
-        p {
-            font-size: 13px;
-            font-weight: 400;
-            text-align: left;
-            padding-top: 3px;
-            color: #161740;
-        }
-      
+        
         .left-col {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             padding-left: 10px;
 
             ion-img {
+                object-fit: contain;
                 width: 40px;
                 height: 40px;
                 object-fit: contain;
             }
         }
-      
+        
         .middle-col, .right-col {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
             overflow: hidden;
-        }
-      
-        .right-col {
-            align-items: flex-end;
 
+            h1, p {
+                margin: 0;
+            }
+    
+            h1 {
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: 0.7px;
+                text-align: left;
+            }
+        
             p {
-                text-align: right;
-                color: #8888b0;
+                font-size: 13px;
+                font-weight: 400;
+                padding: 3px 0 3.5px;
+                text-align: left;
             }
 
-        /*     p {
+            span {
                 font-weight: 700;
                 font-size: 9px;
                 letter-spacing: 0.9px;
@@ -75,35 +64,23 @@
 
             .syncing {
                 color: #20e3d2;
-            } */
+            }
+        }
+        
+        .right-col {
+            justify-content: flex-start;
+            align-items: flex-end;
+
+            p {
+                color: #8888b0;
+            }
         }
     }
 }
   
 .dark-container  {
-    background:#191a2f;
-
     .item-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
-
-        h1, p {
-            color: #ffffff;
-        }       
     }
 }
-
-/* 
-#nodata {
-    text-align: center;
-    margin-top: px2rem(418px);
-}
-
-ion-thumbnail {
-    width: px2rem(40px);
-    height: px2rem(40px);
-}
-
-ion-label {
-    text-align: right;
-} */

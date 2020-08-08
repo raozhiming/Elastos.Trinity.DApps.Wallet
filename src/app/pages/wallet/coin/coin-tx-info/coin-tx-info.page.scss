@@ -1,6 +1,5 @@
 ion-grid {
     padding: 20px;
-    background: #f8f8ff;
     min-height: 100%;
   
     ion-card {
@@ -112,7 +111,6 @@ ion-grid {
                 font-size: 13px;
                 font-weight: 600;
                 line-height: 1.46;
-                color: #161740;
             }
         }
   
@@ -139,7 +137,6 @@ ion-grid {
 
                 h2, p {
                     margin: 12.5px 0;
-                    color: #161740;
                     font-size: 13px;
                     font-weight: 500;
                 }
@@ -154,8 +151,6 @@ ion-grid {
 }
   
 .dark-container {
-    background:#191a2f;
-
     ion-card {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2e2f4e;
@@ -168,12 +163,6 @@ ion-grid {
     .section-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2e2f4e;
-  
-        .name-col {
-            h1 {
-                color: #ffffff;
-            }
-        }
   
         .details-container {
             .details-row {

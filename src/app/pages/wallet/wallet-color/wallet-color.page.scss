@@ -1,11 +1,6 @@
 ion-grid {
   min-height: 100%;
-  background: #f8f8ff;
   padding: 30px 25px;
-
-  p{
-    color: black;
-  }
 
   ion-row {
     width: 100%;
@@ -47,8 +42,4 @@ ion-grid {
       width: 95%;
     }
   }
-}
-
-.dark-container {
-  background: #191a2f;
 }

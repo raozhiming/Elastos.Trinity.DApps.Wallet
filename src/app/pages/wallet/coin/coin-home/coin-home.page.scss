@@ -1,8 +1,5 @@
-@import "../../../../functions.scss";
-
 .container {
     min-height: 100%;
-    background: #f8f8ff;
     margin: 0;
     padding: 15px 20px;
 
@@ -20,7 +17,6 @@
             letter-spacing: -0.6px;
             line-height: 0.8;
             text-align: left;
-            color: #000000;
             margin-bottom: 10px;
         }
 
@@ -245,7 +241,6 @@
             line-height: 0.8;
             letter-spacing: -0.45px;
             text-align: left;
-            color: #000000;
         }
     }
 
@@ -264,9 +259,7 @@
         h1 {
             font-size: 14px;
             font-weight: 600;
-            line-height: 1.29;
             letter-spacing: 0.7px;
-            color: #161740;
         }
 
         p {
@@ -274,7 +267,6 @@
             font-weight: 400;
             text-align: left;
             padding-top: 3px;
-            color: #161740;
         }
 
         .left-col {
@@ -355,7 +347,6 @@
             line-height: 1.21;
             letter-spacing: -0.56px;
             text-align: center;
-            color: #000000;
         }
     }
 
@@ -365,118 +356,13 @@
         font-weight: 400;
         letter-spacing: 0.7px;
         text-align: center;
-        color: #000000;
     }
 }
 
 
 .dark-container  {
-    background:#191a2f;
-
-    .main-title-row {
-        h1 {
-            color: #ffffff;
-        }
-    }
-
-    .list-title-row {
-        h1 {
-            color: #ffffff;
-        }
-    }
-
     .item-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
-
-        h1, p {
-            color: #ffffff;
-        }
-    }
-
-    .empty-list {
-        h1 {
-            color: #ffffff;
-        }
-    }
-
-    .more {
-        color: #ffffff;
     }
 }
-
-
-/* .coin-info-top-box {
-    text-align: center;
-    margin-top: px2rem(52px);
-    h2 {
-        font-size: 32px;
-    }
-    p {
-        font-size: 16px;
-        color: #FFCB0F;
-        display:inline;
-    }
-    #progress {
-        font-weight: bold;
-    }
-}
-
-#nodata {
-    text-align: center;
-    margin-top: px2rem(318px);
-}
-
-ion-item {
-    margin-left: px2rem(45px);
-    margin-right: px2rem(45px);
-}
-
-#coin-name {
-    margin-left: px2rem(20px);
-}
-
-#coin-value {
-    text-align: right;
-}
-
-img {
-    width: px2rem(72px);
-    height: px2rem(72px);
-}
-
-#exchange-name {
-    font-size: 16px;
-}
-
-#datatime {
-    font-size: 12px;
-    color: #666;
-}
-
-#amount {
-    font-size: 20px;
-}
-
-#status {
-    font-size: 14px;
-    color: #FFCB0F;
-}
-
-.coin-bottom {
-    text-align: center;
-}
-
-.more {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: px2rem(30px);
-}
-
-ion-button {
-    margin-left: px2rem(6.5px);
-    margin-right: px2rem(6.5px);
-    width: px2rem(220px);
-    height: px2rem(84px);
-    --background: #783aff;
-} */
