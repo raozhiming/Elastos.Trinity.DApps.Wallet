@@ -252,23 +252,6 @@
         box-shadow: 0 3px 15px 0 #ededf0;
         background-color: #ffffff;
 
-        h1, p {
-            margin: 0;
-        }
-
-        h1 {
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.7px;
-        }
-
-        p {
-            font-size: 13px;
-            font-weight: 400;
-            text-align: left;
-            padding-top: 3px;
-        }
-
         .left-col {
             display: flex;
             justify-content: center;
@@ -321,10 +304,32 @@
             justify-content: center;
             align-items: flex-start;
             overflow: hidden;
+
+            h1, p {
+                margin: 0;
+            }
+    
+            h1 {
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: 0.7px;
+            }
+    
+            p {
+                font-size: 13px;
+                font-weight: 400;
+                text-align: left;
+                padding-top: 3px;
+            }
         }
 
         .right-col {
             align-items: flex-end;
+
+            p {
+                text-align: right;
+                color: #8888b0;
+            }
         }
     }
 

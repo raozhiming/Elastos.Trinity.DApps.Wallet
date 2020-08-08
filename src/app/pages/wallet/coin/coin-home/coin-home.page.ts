@@ -37,6 +37,7 @@ import { SubWallet } from 'src/app/model/SubWallet';
 import { TransactionDirection, TransactionStatus } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import * as moment from 'moment';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 enum TransactionType {
     RECEIVED = 1,
@@ -94,7 +95,8 @@ export class CoinHomePage implements OnInit {
         public events: Events,
         public popupProvider: PopupProvider,
         private appService: AppService,
-        public theme: ThemeService
+        public theme: ThemeService,
+        public currencyService: CurrencyService
     ) {
         this.init();
     }

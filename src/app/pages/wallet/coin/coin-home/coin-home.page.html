@@ -91,6 +91,10 @@
                 </ion-col>
                 <ion-col [size]="item.resultAmount === 0 ? 2 : 5" class="right-col">
                     <h1>{{ item.symbol }}{{ item.resultAmount }}</h1>
+                    <p>
+                        {{ currencyService.getCurrencyBalance(item.resultAmount) }} 
+                        {{ currencyService.selectedCurrency.symbol }}
+                    </p>
                 </ion-col>
                 <ion-ripple-effect></ion-ripple-effect>
             </ion-row>
@@ -99,6 +103,69 @@
             <img src="assets/icons/warning.svg"/>
             <h1>{{ 'coin-no-transactions' | translate }}</h1>
         </div>
-        <div class="more" (click)="clickMore()" *ngIf="isShowMore">{{ 'click-to-load-more' | translate }}</div>
+        <div class="more" (click)="clickMore()" *ngIf="isShowMore">
+            {{ 'click-to-load-more' | translate }}
+        </div>
+
+            <!-- <ion-row class="item-row ripple ion-activatable">
+                <ion-col size="2" class="left-col">
+                    <div class="icon-container purple">
+                        <ion-img src="./assets/buttons/receive.png"></ion-img>
+                    </div>
+                </ion-col>
+                <ion-col size="5" class="middle-col">
+                    <h1>Received ELA</h1>
+                    <p>3 days ago</p>
+                </ion-col>
+                <ion-col [size]="5" class="right-col">
+                    <h1>+6</h1>
+                    <p>
+                        {{ currencyService.getCurrencyBalance(6) }} 
+                        {{ currencyService.selectedCurrency.symbol }}
+                    </p>
+                </ion-col>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-row>
+            <ion-row class="item-row ripple ion-activatable">
+                <ion-col size="2" class="left-col">
+                    <div class="icon-container black">
+                        <ion-img src="./assets/buttons/send.png"></ion-img>
+                    </div>
+                </ion-col>
+                <ion-col size="5" class="middle-col">
+                    <h1>Sent ELA</h1>
+                    <p>5 days ago</p>
+                </ion-col>
+                <ion-col [size]="5" class="right-col">
+                    <h1>-100</h1>
+                    <p>
+                        {{ currencyService.getCurrencyBalance(100) }} 
+                        {{ currencyService.selectedCurrency.symbol }}
+                    </p>
+                </ion-col>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-row>
+            <ion-row class="item-row ripple ion-activatable">
+                <ion-col size="2" class="left-col">
+                    <div class="icon-container orange">
+                        <ion-img src="./assets/buttons/transfer.png"></ion-img>
+                    </div>
+                </ion-col>
+                <ion-col size="5" class="middle-col">
+                    <h1>Transferred ELA</h1>
+                    <p>9 days ago</p>
+                </ion-col>
+                <ion-col [size]="5" class="right-col">
+                    <h1>21</h1>
+                    <p>
+                        {{ currencyService.getCurrencyBalance(21) }} 
+                        {{ currencyService.selectedCurrency.symbol }}
+                    </p>
+                </ion-col>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-row>
+            <div class="more" (click)="clickMore()">
+                {{ 'click-to-load-more' | translate }}
+            </div>  -->
     </ion-grid>
 </ion-content>
