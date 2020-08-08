@@ -6,12 +6,13 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { StandardCoinName } from 'src/app/model/Coin';
+import { ThemeService } from 'src/app/services/theme.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
 type ClaimRequest = {
     name: string,
-    value: string,
+    value: any,
     reason: string // Additional usage info string provided by the caller
 };
 
@@ -21,28 +22,30 @@ type ClaimRequest = {
     styleUrls: ['./access.page.scss'],
 })
 export class AccessPage implements OnInit {
-    Config = Config;
 
-    requestDapp: any = null;
-    masterWalletId = '1';
-    exportMnemonic = false;
-    reason = '';
-    title = '';
+    public Config = Config;
+    public requestDapp: any = null;
+    public masterWalletId = '1';
+    public exportMnemonic = false;
+    public reason = '';
+    public title = '';
+    public requestItems: ClaimRequest[] = [];
 
-    requestItems: ClaimRequest[] = [];
-
-    constructor(public appService: AppService,
-                private intentService: IntentService,
-                public walletManager: WalletManager,
-                public popupProvider: PopupProvider,
-                public native: Native) { }
+    constructor(
+        public appService: AppService,
+        private intentService: IntentService,
+        public walletManager: WalletManager,
+        public popupProvider: PopupProvider,
+        public native: Native,
+        public theme: ThemeService
+    ) { }
 
     ngOnInit() {
         this.init();
     }
 
     ionViewDidEnter() {
-        appManager.setVisible("show", ()=>{}, (err)=>{});
+        appManager.setVisible("show", () => {}, (err) => {});
     }
 
     init() {
@@ -50,10 +53,10 @@ export class AccessPage implements OnInit {
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
         if (this.requestDapp.action === 'walletaccess') {
             this.organizeRequestedFields();
-            this.title = 'access-walletinfo';
+            this.title = 'Wallet Access from:';
         } else {
             this.exportMnemonic = true;
-            this.title = 'access-mnemonic';
+            this.title = 'Access Mnemonic from:';
         }
     }
 

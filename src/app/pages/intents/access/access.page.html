@@ -1,4 +1,103 @@
-<ion-header>
+<!-- <ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <ion-card>
+            <ion-img class="wallet" src="assets/intents/wallet.svg"></ion-img>
+            <ion-card-title>Wallet Access From:</ion-card-title>
+            <ion-card-subtitle>elastos.trinity.demo</ion-card-subtitle>
+        </ion-card>
+        <div class="msg-container">
+            <p>This is a request for information from your wallet.</p>
+            <p class="second-msg">Data Access</p>
+        </div>
+    
+        <ion-row class="data-row">
+            <p>ELA Mainchain Address:</p>
+            <h5>TkdlfghiuerjrthHHdgIDIidhihofodi</h5>
+        </ion-row>
+        <ion-row class="data-row">
+            <p>ELA Mainchain Address:</p>
+            <h5>TkdlfghiuerjrthHHdgIDIidhihofodi</h5>
+        </ion-row>
+        <ion-row class="data-row">
+            <p>ELA Mainchain Address:</p>
+            <h5>TkdlfghiuerjrthHHdgIDIidhihofodi</h5>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <ion-card>
+            <ion-img class="warning" src="assets/intents/warning.svg"></ion-img>
+            <ion-card-title>Access Mnemonic from:</ion-card-title>
+            <ion-card-subtitle>elastos.trinity.demo</ion-card-subtitle>
+        </ion-card>
+        <div class="msg-container">
+            <p>{{ 'text-share-mnemonic-warning' | translate }}</p>
+        </div>
+    </ion-grid>
+</ion-content>
+<ion-footer [class.dark-footer]="theme.darkMode">
+    <ion-row class="btn-row">
+        <ion-col class="btn cancel ion-activatable ripple" size="5.6">
+            <ion-label>{{ 'cancel' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-col>
+        <ion-col class="btn confirm ion-activatable ripple" size="5.6">
+            <ion-label>{{ 'confirm' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-col>
+    </ion-row>
+</ion-footer> -->
+
+
+<ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+
+        <ion-card>
+            <ion-img *ngIf="exportMnemonic" class="warning" src="assets/intents/warning.svg"></ion-img>
+            <ion-img *ngIf="!exportMnemonic" class="wallet" src="assets/intents/wallet.svg"></ion-img>
+            <ion-card-title>{{ title }}</ion-card-title>
+            <ion-card-subtitle *ngIf="requestDapp">{{ requestDapp.appPackageId }}</ion-card-subtitle>
+        </ion-card>
+
+        <div *ngIf="!exportMnemonic">
+            <div class="msg-container">
+                <p *ngIf="!requestDapp.reason">This is a request for information from your wallet.</p>
+                <p *ngIf="requestDapp.reason">Reason: {{ requestDapp.reason }}</p>
+                <p class="second-msg">Data Access</p>
+            </div>
+            <ion-row class="data-row" *ngFor="let item of requestItems">
+                <p>{{ item.name | translate }}</p>
+                <h5 *ngIf="item.name === 'elaamount'">{{ item.value/Config.SELA }}</h5>
+                <h5 *ngIf="item.name !== 'elaamount'">{{ item.value }}</h5>
+            </ion-row>
+        </div>
+    
+        <div *ngIf="exportMnemonic">
+            <div class="msg-container">
+                <p *ngIf="!requestDapp.reason">{{ 'text-share-mnemonic-warning' | translate }}</p>
+                <p *ngIf="requestDapp.reason">Reason: {{ requestDapp.reason }}</p>
+            </div>
+        </div>
+
+    </ion-grid>
+</ion-content>
+
+<ion-footer [class.dark-footer]="theme.darkMode">
+    <ion-row class="btn-row">
+        <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelOperation()">
+            <ion-label>{{ 'cancel' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-col>
+        <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="onShare()">
+            <ion-label>{{ 'confirm' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-col>
+    </ion-row>
+</ion-footer>
+              
+
+<!-- <ion-header>
     <header-bar title={{title}} [showBack]="false" [showMinimize]="false" [showClose]="false"></header-bar>
 </ion-header>
 
@@ -60,4 +159,4 @@
         (click)="cancelOperation()">{{ 'cancel' | translate }}</ion-button>
     <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="primary" size="large"
         (click)="onShare()">{{ 'text-allow' | translate }}</ion-button>
-</ion-footer>
+</ion-footer> -->
