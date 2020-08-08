@@ -95,6 +95,44 @@
     }
 }
 
+.dark-container {
+    background: #191a2f;
+
+    ion-card {
+        margin: 0;
+        background: #2e2f4e;
+        box-shadow: 0 3px 15px 0 #151626;
+
+        ion-card-title {
+            color: #ffffff;
+        }
+
+        ion-card-subtitle {
+        color: #cfd1f7;
+        }
+    }
+
+    .msg-container {
+        p {
+            color: #ffffff;
+        }
+    }
+
+    .data-row {
+        background: #2e2f4e;
+        box-shadow: 0 3px 15px 0 #151626;
+
+        p {
+            color: #ffffff;
+        }
+
+        h5 {
+            color: #cfd1f7;
+        }
+    }
+}
+  
+
 ion-footer {
     padding: 10px 10px 40px;
 
@@ -153,59 +191,7 @@ ion-footer {
         }
     }
 }
-  
-.dark-container {
-    background: #191a2f;
 
-    ion-card {
-        margin: 0;
-        background: #2e2f4e;
-        box-shadow: 0 3px 15px 0 #151626;
-
-        ion-card-title {
-            color: #ffffff;
-        }
-
-        ion-card-subtitle {
-        color: #cfd1f7;
-        }
-    }
-
-    .msg-container {
-        p {
-            color: #ffffff;
-        }
-    }
-
-    .data-row {
-        background: #2e2f4e;
-        box-shadow: 0 3px 15px 0 #151626;
-
-        p {
-            color: #ffffff;
-        }
-
-        h5 {
-            color: #cfd1f7;
-        }
-    }
-
-    .btn-row {
-        .cancel {
-            box-shadow: 0 3px 6px 0 #151626;
-            background-color: #202039;
-
-            ion-label {
-                color: #ffffff;
-            }
-        }
-
-        .confirm {
-            box-shadow: 0 3px 15px 0 #151626;
-        }
-    }
-}
-  
 
 /* @import "../../../functions.scss";
 
