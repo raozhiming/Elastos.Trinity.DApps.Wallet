@@ -1,3 +1,89 @@
+<ion-content *ngIf="transferType === 1">
+    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="showPopover">
+        <ion-row class="main-title-row">
+            <ion-col size="12">
+                <p>{{ 'transfer-from' | translate }}</p>
+            </ion-col>
+        </ion-row>
+        <ion-row class="item-row">
+            <ion-col size="2.3" class="left-col">
+                <ion-img [src]="getCoinIcon(fromSubWallet)"></ion-img>
+            </ion-col>
+            <ion-col size="4.7" class="middle-col">
+                <div *ngIf="fromSubWallet.id === 'ELA'">
+                    <h1>Elastos</h1>
+                    <p>ELA</p>
+                </div>
+                <div *ngIf="fromSubWallet.id === 'IDChain'">
+                    <h1>Elastos DID</h1>
+                    <p>ELADIDSC</p>
+                </div>
+                <div *ngIf="fromSubWallet.id === 'ETHSC'">
+                    <h1>Elastos ETH</h1>
+                    <p>ELAETHSC</p>
+                </div>
+            </ion-col>
+            <ion-col size="5" class="right-col">
+                <h1>{{ fromSubWallet.balance/SELA }}</h1>
+                <p>
+                    {{ currencyService.getCurrencyBalance(fromSubWallet.balance/SELA) }} 
+                    {{ currencyService.selectedCurrency.symbol }}
+                </p>
+                <!--  <p *ngIf="fromSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: fromSubWallet.progress} }}</p>
+                <p *ngIf="fromSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: fromSubWallet.progress} }}</p> -->
+            </ion-col>
+            <div class="arrow-down"></div>
+        </ion-row>
+        <ion-row class="main-title-row">
+            <ion-col size="12">
+                <p>{{ 'transfer-to' | translate }}</p>
+            </ion-col>
+        </ion-row>
+        <ion-row class="item-row">
+            <ion-col size="2.3" class="left-col">
+                <ion-img [src]="getCoinIcon(toSubWallet)"></ion-img>
+            </ion-col>
+            <ion-col size="4.7" class="middle-col">
+                <div *ngIf="toSubWallet.id === 'ELA'">
+                    <h1>Elastos</h1>
+                    <p>ELA</p>
+                </div>
+                <div *ngIf="toSubWallet.id === 'IDChain'">
+                    <h1>Elastos DID</h1>
+                    <p>ELADIDSC</p>
+                </div>
+                <div *ngIf="toSubWallet.id === 'ETHSC'">
+                    <h1>Elastos ETH</h1>
+                    <p>ELAETHSC</p>
+                </div>
+            </ion-col>
+            <ion-col size="5" class="right-col">
+                <h1>{{ toSubWallet.balance/SELA }}</h1>
+                <p>
+                    {{ currencyService.getCurrencyBalance(toSubWallet.balance/SELA) }} 
+                    {{ currencyService.selectedCurrency.symbol }}
+                </p>
+<!--                 <p *ngIf="toSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: toSubWallet.progress} }}</p>
+                <p *ngIf="toSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: toSubWallet.progress} }}</p> -->
+            </ion-col>
+            <div class="arrow-down"></div>
+        </ion-row>
+        <ion-row class="main-title-row">
+            <ion-col size="12">
+                <p>{{ 'transfer-amount' | translate }}</p>
+            </ion-col>
+        </ion-row>
+        <ion-row class="input-row">
+            <ion-input
+                type="text"
+                placeholder="{{ 'text-price' | translate }}"
+                [(ngModel)]="amount"
+            >
+            </ion-input>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
 <ion-content *ngIf="transferType === 2">
     <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
@@ -60,97 +146,50 @@
     </ion-grid>
 </ion-content>
 
-<ion-content *ngIf="transferType === 1">
-    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="showPopover">
-        <ion-row class="main-title-row">
-            <ion-col size="12">
-                <p>{{ 'transfer-from' | translate }}</p>
-            </ion-col>
-        </ion-row>
-        <ion-row class="item-row">
-            <ion-col size="2.3" class="left-col">
-                <ion-img [src]="getCoinIcon(fromSubWallet)"></ion-img>
-            </ion-col>
-            <ion-col size="4.7" class="middle-col">
-                <div *ngIf="fromSubWallet.id === 'ELA'">
-                    <h1>Elastos</h1>
-                    <p>ELA</p>
-                </div>
-                <div *ngIf="fromSubWallet.id === 'IDChain'">
-                    <h1>Elastos DID</h1>
-                    <p>ELADIDSC</p>
-                </div>
-                <div *ngIf="fromSubWallet.id === 'ETHSC'">
-                    <h1>Elastos ETH</h1>
-                    <p>ELAETHSC</p>
-                </div>
-            </ion-col>
-            <ion-col size="5" class="right-col">
-                <h1>{{ fromSubWallet.balance/SELA }}</h1>
-                <p>
-                    {{ currencyService.getCurrencyBalance(fromSubWallet.balance/SELA) }} 
-                    {{ currencyService.selectedCurrency.symbol }}
-                </p>
-               <!--  <p *ngIf="fromSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: fromSubWallet.progress} }}</p>
-                <p *ngIf="fromSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: fromSubWallet.progress} }}</p> -->
-            </ion-col>
-            <div class="arrow-down"></div>
-        </ion-row>
-        <ion-row class="main-title-row">
-            <ion-col size="12">
-                <p>{{ 'transfer-to' | translate }}</p>
-            </ion-col>
-        </ion-row>
-        <ion-row class="item-row">
-            <ion-col size="2.3" class="left-col">
-                <ion-img [src]="getCoinIcon(toSubWallet)"></ion-img>
-            </ion-col>
-            <ion-col size="4.7" class="middle-col">
-                <div *ngIf="toSubWallet.id === 'ELA'">
-                    <h1>Elastos</h1>
-                    <p>ELA</p>
-                </div>
-                <div *ngIf="toSubWallet.id === 'IDChain'">
-                    <h1>Elastos DID</h1>
-                    <p>ELADIDSC</p>
-                </div>
-                <div *ngIf="toSubWallet.id === 'ETHSC'">
-                    <h1>Elastos ETH</h1>
-                    <p>ELAETHSC</p>
-                </div>
-            </ion-col>
-            <ion-col size="5" class="right-col">
-                <h1>{{ toSubWallet.balance/SELA }}</h1>
-                <p>
-                    {{ currencyService.getCurrencyBalance(toSubWallet.balance/SELA) }} 
-                    {{ currencyService.selectedCurrency.symbol }}
-                </p>
-<!--                 <p *ngIf="toSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: toSubWallet.progress} }}</p>
-                <p *ngIf="toSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: toSubWallet.progress} }}</p> -->
-            </ion-col>
-            <div class="arrow-down"></div>
-        </ion-row>
-        <ion-row class="main-title-row">
-            <ion-col size="12">
-                <p>{{ 'transfer-amount' | translate }}</p>
-            </ion-col>
-        </ion-row>
-        <ion-row class="input-row">
-            <ion-input
-                type="text"
-                placeholder="{{ 'text-price' | translate }}"
-                [(ngModel)]="amount"
-            >
-            </ion-input>
-        </ion-row>
-    </ion-grid>
+<ion-content *ngIf="transferType === 3">
+    <div class="pay-container" [class.dark-pay-container]="theme.darkMode">
+        <ion-img src="./assets/tx/send.svg"></ion-img>
+        <h1>Send ELA</h1>
+        <h2>{{ 'confirm-transaction-title' | translate }}</h2>
+        <h3>{{ 'from' | translate }}:</h3>
+        <h4>{{ chainId }}</h4>
+        <h3>{{ 'to' | translate }}:</h3>
+        <h4>{{ toAddress }}</h4>
+        <h3>{{ 'amount' | translate}}:</h3>
+        <h4>{{ amount }}</h4>
+        <div *ngIf="memo">
+            <h3>Memo:</h3>
+            <h4>{{ memo }}</h4>
+        </div>
+    </div>
 </ion-content>
-
-<ion-footer *ngIf="!showPopover">
+    
+<ion-footer
+    *ngIf="!showPopover && transferType !== 3"
+    class="footer" 
+    [class.dark-footer]="theme.darkMode"
+>
     <ion-row class="btn-container">
         <ion-button color="primary" (click)="goTransaction()">
             <ion-label *ngIf="transferType === 1">{{ 'transfer' | translate}}</ion-label>
             <ion-label *ngIf="transferType === 2">{{ 'send' | translate}}</ion-label>
         </ion-button>
+    </ion-row>
+</ion-footer>
+
+<ion-footer 
+    *ngIf="transferType === 3"
+    class="pay-footer" 
+    [class.dark-pay-footer]="theme.darkMode"
+>
+    <ion-row class="btn-row">
+        <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelPayment()">
+            <ion-label>{{ 'cancel' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-col>
+        <ion-col class="btn confirm ion-activatable ripple" size="5.6">
+            <ion-label>{{ 'confirm' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-col>
     </ion-row>
 </ion-footer>

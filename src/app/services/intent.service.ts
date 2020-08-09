@@ -14,9 +14,14 @@ declare let appManager: AppManagerPlugin.AppManager;
     providedIn: 'root'
 })
 export class IntentService {
-    constructor(private zone: NgZone, private translate: TranslateService,
-        public events: Events, public native: Native, private walletManager: WalletManager,
-        private coinTransferService: CoinTransferService) {
+
+    constructor(
+        private zone: NgZone,
+        public events: Events,
+        public native: Native,
+        private walletManager: WalletManager,
+        private coinTransferService: CoinTransferService
+    ) {
     }
 
     public async init() {
@@ -27,13 +32,17 @@ export class IntentService {
     }
 
     setIntentListener() {
-        appManager.setIntentListener((intent: AppManagerPlugin.ReceivedIntent)=>{
+        appManager.setIntentListener((intent: AppManagerPlugin.ReceivedIntent) => {
             this.onReceiveIntent(intent);
         });
     }
 
     onReceiveIntent(intent: AppManagerPlugin.ReceivedIntent) {
-        console.log("Intent message receive:", intent.action, ". params: ", intent.params, ". from: ", intent.from);
+        console.log(
+            "Intent message receive:", intent.action,
+            ". params: ", intent.params,
+            ". from: ", intent.from
+        );
 
         switch (intent.action) {
             case 'elawalletmnemonicaccess':
@@ -59,6 +68,8 @@ export class IntentService {
         }
 
         this.coinTransferService.reset();
+
+        // Deprecated for pay intent
         this.coinTransferService.walletInfo = this.walletManager.activeMasterWallet.account;
         this.coinTransferService.transfer.memo = intent.params.memo || '';
         this.coinTransferService.transfer.intentId = intent.intentId;
@@ -66,6 +77,13 @@ export class IntentService {
         this.coinTransferService.transfer.from = intent.from;
         this.coinTransferService.transfer.fee = 0;
         this.coinTransferService.transfer.chainId = StandardCoinName.ELA;
+
+        // Pay intent
+        this.coinTransferService.intentTransfer = {
+            action: intent.action,
+            intentId: intent.intentId,
+            from: intent.from,
+        };
 
         let continueToWaitForSync = true;
         switch (intent.action) {
@@ -118,10 +136,19 @@ export class IntentService {
                 break;
 
             case 'pay':
-                this.coinTransferService.transfer.toAddress = intent.params.receiver;
+          /*       this.coinTransferService.transfer.toAddress = intent.params.receiver;
                 this.coinTransferService.transfer.amount = intent.params.amount;
                 this.coinTransferService.transfer.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
-                this.coinTransferService.transfer.type = 'payment-confirm';
+                this.coinTransferService.transfer.type = 'payment-confirm'; */
+
+                this.coinTransferService.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
+                this.coinTransferService.transferType = 3;
+                const transfer = {
+                    toAddress: intent.params.receiver,
+                    amount: intent.params.amount,
+                    memo: intent.params.memo || ''
+                };
+                this.events.publish('intent:pay', transfer);
                 break;
 
             case 'crproposalcreatedigest':
@@ -190,7 +217,7 @@ export class IntentService {
         // Let the screen know for which proposal we want to vote against
         this.coinTransferService.transfer.votes = [
             intent.params.proposalHash
-        ]
+        ];
     }
 
     private getChainIDByCurrency(currency: string) {

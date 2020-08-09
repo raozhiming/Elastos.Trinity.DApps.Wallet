@@ -41,6 +41,7 @@ import { TxConfirmComponent } from 'src/app/components/tx-confirm/tx-confirm.com
 import { NumberFormatStyle } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
+import { IntentService } from 'src/app/services/intent.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
@@ -51,7 +52,7 @@ export type Transfer = {
     rawTransaction: any,
     payPassword: string,
     action: any,
-    intentId: number,
+    intentId: Number,
 };
 
 @Component({
@@ -105,7 +106,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         public theme: ThemeService,
         private translate: TranslateService,
         private popoverCtrl: PopoverController,
-        public currencyService: CurrencyService
+        public currencyService: CurrencyService,
+        private intentService: IntentService
     ) {
     }
 
@@ -114,6 +116,13 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.events.subscribe('address:update', (address) => {
             this.zone.run(() => {
                 this.toAddress = address;
+            });
+        });
+        this.events.subscribe('intent:pay', (params) => {
+            this.zone.run(() => {
+                this.toAddress = params.address;
+                this.amount = params.amount;
+                this.memo = params.memo;
             });
         });
     }
@@ -136,7 +145,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         console.log('Balance', this.walletManager.activeMasterWallet.subWallets[this.chainId].balance / this.SELA);
 
-        // For Recharge Transfer
+   /*      // For Recharge Transfer
         if (this.coinTransferService.transferType === 1) {
 
             // Setup page display
@@ -157,6 +166,35 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         } else {
             this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
             this.transaction = this.createSendTransaction;
+        } */
+
+        switch (this.transferType) {
+            // For Recharge Transfer
+            case 1:
+                // Setup page display
+                this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
+                this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
+                this.toSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.subchainId);
+
+                // Setup params for recharge transaction
+                this.transaction = this.createRechargeTransaction;
+                this.getSubwalletAddress(this.coinTransferService.subchainId);
+                this.amount = 0.1;
+
+                console.log('Transferring from..', this.fromSubWallet);
+                console.log('Transferring To..', this.toSubWallet);
+                console.log('Subwallet address', this.toAddress);
+                break;
+            // For Send Transfer
+            case 2:
+                this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
+                this.transaction = this.createSendTransaction;
+                break;
+            // For Pay Intent
+            case 3:
+                this.appService.setTitleBarTitle('Payment');
+                this.transaction = this.createSendTransaction;
+                break;
         }
     }
 
@@ -185,8 +223,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             chainId: this.chainId,
             rawTransaction: rawTx,
             payPassword: '',
-            action: null,
-            intentId: null,
+            action: this.transferType === 3 ? this.coinTransferService.intentTransfer.action : null ,
+            intentId: this.transferType === 3 ? this.coinTransferService.intentTransfer.intentId : null ,
         };
 
         console.log('Received raw transaction', rawTx);
@@ -275,7 +313,12 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.masterWallet.id,
                 this.toAddress
             );
-            this.showConfirm();
+
+            if (this.transferType === 3) {
+                this.transaction();
+            } else {
+                this.showConfirm();
+            }
         } catch (error) {
             this.native.toast_trans('contact-address-digits');
         }
@@ -307,6 +350,16 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             }
         });
         return await popover.present();
+    }
+
+    // Pay intent
+    cancelPayment() {
+        this.intentService.sendIntentResponse(
+            this.coinTransferService.intentTransfer.action,
+            { txid: null },
+            this.coinTransferService.intentTransfer.intentId
+        );
+        this.appService.close();
     }
 
     accMul(arg1, arg2) {

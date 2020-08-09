@@ -20,7 +20,6 @@ export class TxConfirmComponent implements OnInit {
     private navParams: NavParams,
     public theme: ThemeService,
     private translate: TranslateService,
-    private popoverCtrl: PopoverController
   ) { }
 
   ngOnInit() {

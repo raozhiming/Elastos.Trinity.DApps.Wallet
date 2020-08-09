@@ -30,6 +30,7 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -39,6 +40,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./didtransaction.page.scss'],
 })
 export class DidTransactionPage implements OnInit {
+
     masterWallet: MasterWallet = null;
     transfer: any = null;
 
@@ -48,9 +50,16 @@ export class DidTransactionPage implements OnInit {
     hasOpenIDChain = false;
     walletInfo = {};
 
-    constructor(public walletManager: WalletManager, public appService: AppService, public popupProvider: PopupProvider,
-                private coinTransferService: CoinTransferService, private intentService: IntentService,
-                public native: Native, public zone: NgZone) {
+    constructor(
+        public walletManager: WalletManager,
+        public appService: AppService,
+        public popupProvider: PopupProvider,
+        private coinTransferService: CoinTransferService,
+        private intentService: IntentService,
+        public native: Native,
+        public zone: NgZone,
+        public theme: ThemeService
+    ) {
         this.init();
     }
 
@@ -71,7 +80,7 @@ export class DidTransactionPage implements OnInit {
         this.chainId = this.coinTransferService.transfer.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
-        
+
         if (this.chainId === StandardCoinName.IDChain && !this.masterWallet.hasSubWallet(StandardCoinName.IDChain)) {
             await this.notifyNoIDChain();
             this.cancelOperation();

@@ -34,14 +34,16 @@ export class WaitForSyncPage implements OnInit {
     nextScreen = '';
 
 
-    constructor(public appService: AppService,
-                public native: Native,
-                public events: Events,
-                public zone: NgZone,
-                private intentService: IntentService,
-                private coinTransferService: CoinTransferService,
-                private walletManager: WalletManager,
-                public popupProvider: PopupProvider) {
+    constructor(
+        public appService: AppService,
+        public native: Native,
+        public events: Events,
+        public zone: NgZone,
+        private intentService: IntentService,
+        private coinTransferService: CoinTransferService,
+        private walletManager: WalletManager,
+        public popupProvider: PopupProvider
+    ) {
     }
 
     ngOnInit() {
@@ -99,7 +101,7 @@ export class WaitForSyncPage implements OnInit {
                 break;
             case 'crproposalvoteagainst':
                 this.action = 'Vote against proposal';
-                this.nextScreen = '/crproposalvoteagainst'
+                this.nextScreen = '/crproposalvoteagainst';
                 break;
             default:
                 console.log('pls check the action');

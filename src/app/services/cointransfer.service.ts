@@ -52,9 +52,16 @@ export class Transfer {
     payPassword: string;
 }
 
+export class IntentTransfer {
+    action: string = null;
+    intentId: Number = null;
+    from: string = null;
+}
+
 export enum TransferType {
     RECHARGE = 1,
-    SEND = 2
+    SEND = 2,
+    PAY = 3
 }
 
 @Injectable({
@@ -71,6 +78,9 @@ export class CoinTransferService {
     public subchainId: string;
     // Unsure of what this is used for
     public walletInfo: WalletAccount;
+    // Intent params for intent transfers
+    public intentTransfer: IntentTransfer;
+
 
     // Deprecated for receiving, sending and recharging funds but kept incase intents use it
     public transfer: any = null;
@@ -89,6 +99,7 @@ export class CoinTransferService {
         this.transferType = null;
         this.chainId = null;
         this.subchainId = null;
+        this.intentTransfer = null;
         this.walletInfo = new WalletAccount();
     }
 }

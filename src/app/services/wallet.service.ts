@@ -129,7 +129,7 @@ export class WalletManager {
             if (idList.length === 0) {
                 console.log("No SPV wallet found, going to launcher screen");
                 this.goToLauncherScreen();
-                // this.native.setRootRouter("/access");
+                // this.native.setRootRouter("/didtransaction");
                 return;
             }
 
