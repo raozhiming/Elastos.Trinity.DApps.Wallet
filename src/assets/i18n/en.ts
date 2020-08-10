@@ -73,6 +73,7 @@ export const en = {
     "transfer-receiver-address": "Receiver address",
 
     // Coin receive screen
+    "coin-receive-title": "Receive {{coinName}}",
     "coin-receive-ela-address": "Your ELA Address",
     "coin-receive-tap-to-copy": "Tap address to copy",
 

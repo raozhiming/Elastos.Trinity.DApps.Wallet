@@ -54,8 +54,8 @@ export class AppComponent {
         public appService: AppService,
         private intentService: IntentService,
         private currencyService: CurrencyService,
-        public popupProvider: PopupProvider,
-        public modalCtrl: ModalController
+        //public popupProvider: PopupProvider,
+        //public modalCtrl: ModalController
     ) {
         this.initializeApp();
     }

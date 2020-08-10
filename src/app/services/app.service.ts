@@ -4,7 +4,6 @@ import { Native } from './native.service';
 import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService } from './cointransfer.service';
 import { ThemeService } from './theme.service';
-import { popover } from '../pages/wallet/coin/coin-transfer/coin-transfer.page';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -72,9 +71,9 @@ export class AppService {
 
         // Listen to title bar events
         titleBarManager.addOnItemClickedListener((menuIcon) => {
-            if (popover) {
+            /*if (popover) {
                 popover.dismiss();
-            }
+            }*/
             if (menuIcon.key === "back") {
               this.titlebarBackButtonHandle();
             }
