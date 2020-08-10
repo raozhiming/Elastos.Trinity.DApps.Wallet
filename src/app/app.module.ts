@@ -76,7 +76,6 @@ import { WalletCreatePage } from './pages/wallet/wallet-create/wallet-create.pag
 import { WalletImportPage } from './pages/wallet/wallet-import/wallet-import.page';
 import { WalletCreateNamePage } from './pages/wallet/wallet-create-name/wallet-create-name.page';
 import { MnemonicWritePage } from './pages/wallet/mnemonic/mnemonic-write/mnemonic-write.page';
-import { WalletlistPage } from './pages/wallet/wallet-list/wallet-list.page';
 import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wallet-password-reset.page';
 import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
 import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
@@ -94,6 +93,8 @@ import * as Sentry from "@sentry/browser";
 import { HttpClientModule } from '@angular/common/http';
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
 import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component';
+import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
+import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 
 
 Sentry.init({
@@ -175,13 +176,14 @@ export function TranslateLoaderFactory() {
         ScanCodePage,
         WaitForSyncPage,
         MnemonicWritePage,
-        WalletlistPage,
         MnemonicExportPage,
         MnemonicCheckPage,
         MnemonicWritePage,
         MnemonicCreatePage,
         WalletCreatedComponent,
-        TxConfirmComponent
+        TxConfirmComponent,
+        CurrencySelectPage,
+        WalletColorPage
     ],
     entryComponents: [
         LauncherPage,

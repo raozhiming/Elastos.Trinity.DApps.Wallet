@@ -16,7 +16,7 @@
                     </ion-col>
                 </ion-row>
                 <h2></h2>
-                <h3>TOTAL AMOUNT</h3>
+                <h3>{{ 'total-amount' | translate }}</h3>
                 <h4>
                     {{ Util.getWholeBalance(masterWallet.getBalance()/SELA) }}<span class="dot" *ngIf="masterWallet.getBalance()/SELA !== 0">.</span>
                     <span class="decimals">{{ Util.getDecimalBalance(masterWallet.getBalance()/SELA) }}</span>
@@ -34,11 +34,9 @@
         </ion-row>
         <ion-row class="list-title-row">
             <ion-col size="12">
-                <h1>Enable/Disable Coins</h1>
+                <h1>{{ 'coin-list-enable-disable-coins' | translate }}</h1>
                 <p>
-                    Toggle what coins you would like to display on
-                    your wallet home screen. ELA Mainchain and
-                    Sidechains are always shown.
+                    {{ 'coin-list-enable-disable-coins-intro' | translate }}
                 </p>
             </ion-col>
         </ion-row>

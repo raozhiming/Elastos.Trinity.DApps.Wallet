@@ -12,6 +12,7 @@ import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { AppService } from 'src/app/services/app.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from 'src/app/model/Util';
+import { TranslateService } from '@ngx-translate/core';
 
 type EditableCoinInfo = {
     coin: Coin,
@@ -47,6 +48,7 @@ export class CoinListPage implements OnInit, OnDestroy {
         public localStorage: LocalStorage,
         public modalCtrl: ModalController,
         public events: Events,
+        private translate: TranslateService,
         public theme: ThemeService
     ) {
         this.init();
@@ -57,7 +59,7 @@ export class CoinListPage implements OnInit, OnDestroy {
 
     ionViewWillEnter() {
         this.appService.setBackKeyVisibility(true);
-        this.appService.setTitleBarTitle("Manage Coin List");
+        this.appService.setTitleBarTitle(this.translate.instant("coin-list-title"));
     }
 
     async switchCoin(item: EditableCoinInfo, open: boolean) {

@@ -11,6 +11,7 @@ export const fr = {
     "amount": "Montant",
     "cancel": "Annuler",
     "confirm": "Confirmer",
+    'click-to-load-more': "Toucher pour voir davantage",
 
     // Home screen
     "wallet-home-title": "Accueil Portefeuille",
@@ -25,6 +26,11 @@ export const fr = {
     "settings-general": "Général",
     "settings-my-wallets": "Mes portefeuilles",
     "settings-my-wallets-subtitle": "Sauvegardez vos portefeuilles et accédez à leurs paramètres",
+    "settings-currency": "Devise",
+    "settings-currency-subtitle": "Selectionnez la devise à afficher",
+
+    // Currencies screen
+    "available-currencies": "Devises affichables",
 
     // Wallet settings screen
     "wallet-settings-title": "Paramètres Portefeuille",
@@ -32,7 +38,7 @@ export const fr = {
     "wallet-settings-backup-wallet-subtitle": "Visualisez votre mnémonique pour le sauvegarder en lieu sûr.",
     "wallet-settings-change-name": "Renommer",
     "wallet-settings-change-name-subtitle": "Organisez vos portefeuilles en leur donnant un nom personnalisé.",
-    "wallet-settings-change-theme": "Modifier la Couleur",
+    "wallet-settings-change-theme": "Modifier le thème",
     "wallet-settings-change-theme-subtitle": "Organisez vos portefeuilles avec des couleurs personnalisées.",
     "wallet-settings-manage-coin-list": "Gérer la Liste des Jetons",
     "wallet-settings-manage-coin-list-subtitle": "Sélectionnez les jetons à gérer dans votre portefeuille.",
@@ -73,8 +79,10 @@ export const fr = {
     "transfer-receiver-address": "Adresse de destination",
 
     // Coin receive screen
-    "coin-receive-ela-address": "Votre addresse de réception",
+    "coin-receive-title": "Réception de {{coinName}}",
+    "coin-receive-ela-address": "Votre adresse de réception",
     "coin-receive-tap-to-copy": "Touchez l'adresse pour la copier",
+    "coin-address-copied": "Adresse de votre portefeuille {{coinName}} copiée!",
 
     // Confirm transaction component
     "confirm-transaction-title": "Confirmer la Transaction",
@@ -91,4 +99,24 @@ export const fr = {
     "tx-info-type-received": "Reçu",
     "tx-info-type-sent": "Envoyé",
     "tx-info-type-transferred": "Transféré",
+
+    // Wallet edit name screen
+    "wallet-edit-name-title": "Modification du nom",
+    "wallet-edit-name-new-name": "Nouveau nom pour ce portefeuille",
+
+    // Change theme screen
+    "change-wallet-theme-title": "Changement du thème",
+
+    // Coin list screen
+    "coin-list-title": "Gestion des Jetons",
+    "coin-list-enable-disable-coins": "Activer/Désactiver des Jetons",
+    "coin-list-enable-disable-coins-intro": "Sélectionnez les jetons que vous souhaitez afficher dans le portefeuille actuel. Le jeton principal ELA et les chaînes principales Elastos sont toujours actives.",
+
+    // Delete wallet popup
+    "delete-wallet-confirm-title": "Confirmer la suppression?",
+    "delete-wallet-confirm-subtitle": "Votre portefeuille sera supprimé de cet appareil. Vous pourrez le réimporter plus tard mais veillez à enregistrer votre mnémonique avant la suppression.",
+
+    // Wallet manager screen
+    "wallet-manager-intro": "Les portefeuilles ont leurs propres paramètres. Vous pouvez configurer ces paramètres ci-dessous.",
+    "wallet-manager-add-wallet": "Ajouter un portefeuille",
 };

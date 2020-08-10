@@ -52,8 +52,8 @@ export class SettingsPage implements OnInit {
         },
         {
             route: "/currency-select",
-            title: 'Currency',
-            subtitle: 'Select the default currency',
+            title: this.translate.instant("settings-currency"),
+            subtitle: this.translate.instant("settings-currency-subtitle"),
             icon: '/assets/settings/dollar.svg',
             iconDarkmode: '/assets/settings/darkmode/dollar.svg'
         },

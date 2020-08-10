@@ -10,6 +10,7 @@ import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AppService } from 'src/app/services/app.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-wallet-edit-name',
@@ -29,6 +30,7 @@ export class WalletEditNamePage implements OnInit {
         private walletManager: WalletManager,
         private walletEditionService: WalletEditionService,
         private appService: AppService,
+        private translate: TranslateService,
         public theme: ThemeService
     ) {
         this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
@@ -40,7 +42,7 @@ export class WalletEditNamePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.appService.setTitleBarTitle('Change Wallet Name');
+        this.appService.setTitleBarTitle(this.translate.instant("wallet-edit-name-title"));
     }
 
     modify() {

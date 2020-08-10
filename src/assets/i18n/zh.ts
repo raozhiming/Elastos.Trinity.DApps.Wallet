@@ -11,6 +11,7 @@ export const zh = {
     "amount": "Amount",
     "cancel": "取消",
     "confirm": "确定",
+    'click-to-load-more': "点击加载更多",
 
     // Home screen
     "wallet-home-title": "Wallet Home",
@@ -20,11 +21,16 @@ export const zh = {
     "sync-progress": "Synchronization {{progress}}%",
     "coin-list": "Token List",
 
-    // Wallet Settings screen
+    // Settings screen
     "settings-title": "设置",
     "settings-general": "General",
     "settings-my-wallets": "My Wallets",
     "settings-my-wallets-subtitle": "Backup wallets and access their individual settings",
+    "settings-currency": "Currency",
+    "settings-currency-subtitle": "Select the default currency",
+
+    // Currencies screen
+    "available-currencies": "Available Currencies",
 
     // Wallet settings screen
     "wallet-settings-title": "Wallet Settings",
@@ -73,8 +79,10 @@ export const zh = {
     "transfer-receiver-address": "Receiver address",
 
     // Coin receive screen
+    "coin-receive-title": "Receive {{coinName}}",
     "coin-receive-ela-address": "Your ELA Address",
     "coin-receive-tap-to-copy": "Tap address to copy",
+    "coin-address-copied": "{{coinName}} address copied!",
 
     // Confirm transaction component
     "confirm-transaction-title": "Confirm Transaction",
@@ -91,6 +99,26 @@ export const zh = {
     "tx-info-type-received": "Received",
     "tx-info-type-sent": "Sent",
     "tx-info-type-transferred": "Transferred",
+
+    // Wallet edit name screen
+    "wallet-edit-name-title": "Change Wallet Name",
+    "wallet-edit-name-new-name": "Enter new name",
+
+    // Change theme screen
+    "change-wallet-theme-title": "Change Wallet Theme",
+
+    // Coin list screen
+    "coin-list-title": "Manage Coin List",
+    "coin-list-enable-disable-coins": "Enable/Disable Coins",
+    "coin-list-enable-disable-coins-intro": "Toggle what coins you would like to display on your wallet home screen. ELA Mainchain and Sidechains are always shown.",
+
+    // Delete wallet popup
+    "delete-wallet-confirm-title": "Confirm deletion?",
+    "delete-wallet-confirm-subtitle": "Your wallet will be deleted from this device. You can re-import it later but make sure to backup your mnemonic first.",
+
+    // Wallet manager screen
+    "wallet-manager-intro": "Wallets will have individual settings, you can check the options of each wallet below",
+    "wallet-manager-add-wallet": "添加钱包",
 
     //my-qrcode
     'qrcode': "的二维码",
@@ -440,8 +468,6 @@ export const zh = {
     'text-ela-per-message': '正在同步中，同步完成再用',
     'text-sycn-message': '同步状态',
     'text-language-message': "语言",
-    'text-wallet-list': "钱包列表",
-    'text-add-wallet': "添加钱包",
     'signature-wallet': "创建多签钱包",
     'text-next-step': "下一步",
     'text-select-type': "选择类型",
@@ -462,7 +488,6 @@ export const zh = {
     'text-multi-title2': "签名数量",
     'text-multi-error': "签名数不能大于拥有者数量",
     'text-delete-contact-confirm': "确定要删除吗？",
-    'click-to-load-more': "点击加载更多",
     //error alert
     'Error-10000': 'Action参数Json格式错误',
     'Error-10001': 'Action参数错误',

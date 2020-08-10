@@ -7,6 +7,7 @@ import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AppService } from 'src/app/services/app.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-coin-receive',
@@ -26,6 +27,7 @@ export class CoinReceivePage implements OnInit {
         private coinTransferService: CoinTransferService,
         private clipboard: Clipboard,
         public theme: ThemeService,
+        private translate: TranslateService,
         private appService: AppService
     ) {
     }
@@ -43,7 +45,7 @@ export class CoinReceivePage implements OnInit {
 
     copyAddress() {
         this.native.copyClipboard(this.qrcode);
-        this.native.toast(this.chainId + ' address copied!');
+        this.native.toast(this.translate.instant("coin-address-copied", { coinName: this.chainId}));
     }
 
     async createAddress() {

@@ -11,6 +11,7 @@ export const en = {
     "amount": "Amount",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    'click-to-load-more': "click to load more",
 
     // Home screen
     "wallet-home-title": "Wallet Home",
@@ -25,6 +26,11 @@ export const en = {
     "settings-general": "General",
     "settings-my-wallets": "My Wallets",
     "settings-my-wallets-subtitle": "Backup wallets and access their individual settings",
+    "settings-currency": "Currency",
+    "settings-currency-subtitle": "Select the default currency",
+
+    // Currencies screen
+    "available-currencies": "Available Currencies",
 
     // Wallet settings screen
     "wallet-settings-title": "Wallet Settings",
@@ -76,6 +82,7 @@ export const en = {
     "coin-receive-title": "Receive {{coinName}}",
     "coin-receive-ela-address": "Your ELA Address",
     "coin-receive-tap-to-copy": "Tap address to copy",
+    "coin-address-copied": "{{coinName}} address copied!",
 
     // Confirm transaction component
     "confirm-transaction-title": "Confirm Transaction",
@@ -92,6 +99,26 @@ export const en = {
     "tx-info-type-received": "Received",
     "tx-info-type-sent": "Sent",
     "tx-info-type-transferred": "Transferred",
+
+    // Wallet edit name screen
+    "wallet-edit-name-title": "Change Wallet Name",
+    "wallet-edit-name-new-name": "Enter new name",
+
+    // Change theme screen
+    "change-wallet-theme-title": "Change Wallet Theme",
+
+    // Coin list screen
+    "coin-list-title": "Manage Coin List",
+    "coin-list-enable-disable-coins": "Enable/Disable Coins",
+    "coin-list-enable-disable-coins-intro": "Toggle what coins you would like to display on your wallet home screen. ELA Mainchain and Sidechains are always shown.",
+
+    // Delete wallet popup
+    "delete-wallet-confirm-title": "Confirm deletion?",
+    "delete-wallet-confirm-subtitle": "Your wallet will be deleted from this device. You can re-import it later but make sure to backup your mnemonic first.",
+
+    // Wallet manager screen
+    "wallet-manager-intro": "Wallets will have individual settings, you can check the options of each wallet below",
+    "wallet-manager-add-wallet": "Add Wallet",
 
     //my-qrcode
     'qrcode': "'s qrcode",
@@ -436,8 +463,6 @@ export const en = {
     'text-sycn-message': 'Sync Status',
     'text-language-message': "Language",
 
-    'text-wallet-list': "Wallet List",
-    'text-add-wallet': "Add Wallet",
     'signature-wallet': "Create Multi-sign wallet",
     'text-next-step': "Next Step",
     'text-select-type': "Select Type",
@@ -461,7 +486,6 @@ export const en = {
     'text-multi-title2': "Required number of signatures",
     'text-multi-error': "Number of signatures should less than number of public-keys",
     'text-delete-contact-confirm': "Delete this contact ?",
-    'click-to-load-more': "click to load more",
     //error alert
     'Error-10000': 'Json parse error of action parameters',
     'Error-10001': 'Parameters error of action',

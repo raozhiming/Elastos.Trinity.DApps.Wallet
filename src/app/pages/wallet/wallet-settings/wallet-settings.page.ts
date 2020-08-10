@@ -112,7 +112,7 @@ export class WalletSettingsPage implements OnInit {
     }
 
     async onDelete() {
-        let data = await this.popupProvider.ionicConfirm('confirmTitle', 'confirmSubTitle');
+        let data = await this.popupProvider.ionicConfirm('delete-wallet-confirm-title', 'delete-wallet-confirm-subtitle');
         if (data) {
             await this.destroyWallet(this.masterWalletId);
         }

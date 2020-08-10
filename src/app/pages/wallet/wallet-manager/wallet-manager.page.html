@@ -1,8 +1,7 @@
 <ion-content>
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <p>
-            Wallets will have individual settings, you can 
-            check the options of each wallet below
+            {{ 'wallet-manager-intro' | translate }}
         </p>
         <ion-row 
             *ngFor="let masterWallet of walletManager.getWalletsList()" 
@@ -25,7 +24,7 @@
                     </ion-col>
                 </ion-row>
                 <h2></h2>
-                <h3>TOTAL AMOUNT</h3>
+                <h3>{{ 'total-amount' | translate }}</h3>
                 <h4>
                     {{ Util.getWholeBalance(masterWallet.getBalance()/SELA) }}<span class="dot" *ngIf="masterWallet.getBalance()/SELA !== 0">.</span>
                     <span class="decimals">{{ Util.getDecimalBalance(masterWallet.getBalance()/SELA) }}</span>
@@ -35,7 +34,7 @@
         </ion-row>
         <ion-row class="btn-container">
             <ion-button [routerLink]="['/launcher']" routerDirection="forward">
-                <ion-label>{{ 'text-add-wallet' | translate }}</ion-label>
+                <ion-label>{{ 'wallet-manager-add-wallet' | translate }}</ion-label>
             </ion-button>
         </ion-row>
     </ion-grid>

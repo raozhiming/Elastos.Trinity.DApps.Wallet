@@ -44,7 +44,6 @@ import { WalletCreatePage } from './pages/wallet/wallet-create/wallet-create.pag
 import { WalletImportPage } from './pages/wallet/wallet-import/wallet-import.page';
 import { WalletCreateNamePage } from './pages/wallet/wallet-create-name/wallet-create-name.page';
 import { MnemonicWritePage } from './pages/wallet/mnemonic/mnemonic-write/mnemonic-write.page';
-import { WalletlistPage } from './pages/wallet/wallet-list/wallet-list.page';
 import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wallet-password-reset.page';
 import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
 import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
@@ -56,6 +55,8 @@ import { WalletHomePage } from './pages/wallet/wallet-home/wallet-home.page';
 import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
 import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
+import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
+import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 
 const routes: Routes = [
 
@@ -71,7 +72,6 @@ const routes: Routes = [
     { path: 'wallet-create-name', component: WalletCreateNamePage },
     { path: 'scancode', component: ScanCodePage },
     { path: 'mnemonic-write', component: MnemonicWritePage },
-    { path: 'wallet-list', component: WalletlistPage },
     { path: 'wallet-password-reset', component: WalletPasswordResetPage },
     { path: 'wallet-edit-name', component: WalletEditNamePage },
     { path: 'mnemonic-export', component: MnemonicExportPage },
@@ -79,8 +79,8 @@ const routes: Routes = [
     { path: 'wallet-settings', component: WalletSettingsPage },
 
     // Settings
-    { path: 'wallet-color', loadChildren: './pages/wallet/wallet-color/wallet-color.module#WalletColorPageModule' },
-    { path: 'currency-select', loadChildren: './pages/settings/currency-select/currency-select.module#CurrencySelectPageModule' },
+    { path: 'wallet-color', component: WalletColorPage },
+    { path: 'currency-select', component: CurrencySelectPage },
 
     // Coin
     { path: 'coin/:name', component: CoinHomePage },
