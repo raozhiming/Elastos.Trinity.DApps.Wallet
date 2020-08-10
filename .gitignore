@@ -5,3 +5,5 @@ www
 .vscode/
 package-lock.json
 typings/
+
+*.local.txt

@@ -12,6 +12,7 @@ export const zh = {
     "cancel": "取消",
     "confirm": "确定",
     'click-to-load-more': "点击加载更多",
+    'transaction-fail': '交易失败',
 
     // Home screen
     "wallet-home-title": "Wallet Home",
@@ -311,7 +312,6 @@ export const zh = {
     'text-language': '语言',
     'confirmTitle': '提示',
     'confirmTransaction': '交易已确认',
-    'transaction-fail': '交易失败',
     'operation-fail': '错误',
     'confirmSubTitle': '确定要删除钱包吗？<br/>在删除钱包前，请确认已安全备份助记词及可选加密密码。恢复钱包需要助记词及可选加密密码。任何人无法帮助您恢复钱包',
     'copy-ok': '复制成功',
@@ -488,7 +488,8 @@ export const zh = {
     'text-multi-title2': "签名数量",
     'text-multi-error': "签名数不能大于拥有者数量",
     'text-delete-contact-confirm': "确定要删除吗？",
-    //error alert
+    
+    // Error codes
     'Error-10000': 'Action参数Json格式错误',
     'Error-10001': 'Action参数错误',
     'Error-10002': '无效主钱包',

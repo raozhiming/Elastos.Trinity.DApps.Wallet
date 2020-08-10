@@ -78,7 +78,6 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     // For testing purposes
     inputChanged(event) {
-        console.log('Input test', event);
     }
 
     webKeyStore(webKeyStore) {
@@ -87,11 +86,12 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     allInputsFilled() {
         let inputsFilled = true;
+
         this.inputList.forEach((word) => {
             if (word.input === '') {
                 inputsFilled = false;
             } else {
-                this.inputStr += word.input;
+                this.inputStr += word.input.replace(/\s+/g, "") + " "; // Append trimmed word plus a space between each word
             }
         });
         return inputsFilled;
@@ -115,8 +115,8 @@ export class WalletImportPage implements OnInit, OnDestroy {
     }
 
     async importWalletWithMnemonic(payPassword: string) {
-        this.inputStr = this.inputStr.replace(/\s+/g, "");
-        console.log('Importing input string', this.inputStr);
+        // Trim leading and trailing spaces for each word
+        console.log('Importing with mnemonic');
         await this.walletManager.importMasterWalletWithMnemonic(
             this.masterWalletId,
             this.walletCreateService.name,

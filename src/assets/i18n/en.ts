@@ -12,7 +12,8 @@ export const en = {
     "cancel": "Cancel",
     "confirm": "Confirm",
     'click-to-load-more': "click to load more",
-
+    'transaction-fail': 'Transaction Failed',
+    
     // Home screen
     "wallet-home-title": "Wallet Home",
     "wallet-overview": "Wallet Overview",
@@ -305,7 +306,6 @@ export const en = {
     'text-language': 'Language',
     'confirmTitle': 'confirm',
     'confirmTransaction': 'Transaction Confirmed',
-    'transaction-fail': 'Transaction Failed',
     'operation-fail': 'Error',
     'confirmSubTitle': 'Are you sure you want to log out this wallet? <br/>Before logging out, confirm that you have recorded your backup phrase and optional passphrase securely.To restore your account, both the backup phrase and optional passphrase will be required.Nobody can assist in restoring your account.',
     'copy-ok': 'Copied to Clipboard',
@@ -486,7 +486,8 @@ export const en = {
     'text-multi-title2': "Required number of signatures",
     'text-multi-error': "Number of signatures should less than number of public-keys",
     'text-delete-contact-confirm': "Delete this contact ?",
-    //error alert
+    
+    // Error codes
     'Error-10000': 'Json parse error of action parameters',
     'Error-10001': 'Parameters error of action',
     'Error-10002': 'Invalid master wallet',
@@ -563,6 +564,7 @@ export const en = {
     'Error-20060': 'Too much inputs',
     'Error-20061': 'Last vote is being confirmed',
     'Error-29999': 'Other error',
+
     'modify-wallet-name': 'Edit Wallet Name',
     'load-more': 'Load More',
     'load-finish': 'Load Finish',
