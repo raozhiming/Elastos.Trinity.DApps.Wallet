@@ -95,6 +95,7 @@ import { EscTransactionPage } from './pages/intents/esctransaction/esctransactio
 import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component';
 import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
+import { PaymentboxComponent } from './components/paymentbox/paymentbox.component';
 
 
 Sentry.init({
@@ -183,12 +184,12 @@ export function TranslateLoaderFactory() {
         WalletCreatedComponent,
         TxConfirmComponent,
         CurrencySelectPage,
-        WalletColorPage
+        WalletColorPage,
     ],
     entryComponents: [
         LauncherPage,
         WalletCreatedComponent,
-        TxConfirmComponent
+        TxConfirmComponent,
     ],
     imports: [
         BrowserModule,

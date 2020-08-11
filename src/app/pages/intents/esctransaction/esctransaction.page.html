@@ -1,7 +1,7 @@
-<ion-content>
+<!-- <ion-content>
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-card>
-            <ion-img [src]="!theme.darkMode ? 'assets/intents/dpos.svg' : 'assets/intents/darkmode/dpos.svg'"></ion-img>
+            <ion-img [src]="!theme.darkMode ? 'assets/intents/smartcontracts.svg' : 'assets/intents/darkmode/smartcontracts.svg'"></ion-img>
             <ion-card-title>Smart Contract</ion-card-title>
             <ion-card-subtitle>
                 You are going to sign and run a 
@@ -10,9 +10,36 @@
         </ion-card>
         <div class="msg-container">
             <p>You are using:</p>
-            <h1 id="voteCount">5 ELA</h1>
+            <h1 id="count">5 <span>ELA</span></h1>
             <p id="with">With:</p>
-            <h1>100 ELA <span>ELA</span></h1>
+            <h1>100 <span>ELA</span></h1>
+        </div>
+        <ion-row class="btn-row">
+            <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelOperation()">
+                <ion-label>{{ 'cancel' | translate}}</ion-label>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-col>
+            <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="goTransaction()">
+                <ion-label>{{ 'confirm' | translate}}</ion-label>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content> -->
+
+<ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <ion-card>
+            <ion-img [src]="!theme.darkMode ? 'assets/intents/smartcontracts.svg' : 'assets/intents/darkmode/smartcontracts.svg'"></ion-img>
+            <ion-card-title>Smart Contract</ion-card-title>
+            <ion-card-subtitle>
+                You are going to sign and run a 
+                smart contract on the Ethereum Sidechain.
+            </ion-card-subtitle>
+        </ion-card>
+        <div class="msg-container">
+            <p>You are using:</p>
+            <h1 id="count">{{ balance }} <span>ELA</span></h1>
         </div>
         <ion-row class="btn-row">
             <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelOperation()">

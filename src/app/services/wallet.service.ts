@@ -27,7 +27,6 @@ import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 
 import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult } from '../model/SPVWalletPluginBridge';
-import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
 import { MasterWallet, WalletID } from '../model/MasterWallet';
 import { StandardCoinName, CoinType } from '../model/Coin';
 import { Util } from '../model/Util';
@@ -44,6 +43,7 @@ import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSync
 import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
 import { Transfer } from '../pages/wallet/coin/coin-transfer/coin-transfer.page';
+import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -95,7 +95,6 @@ export class WalletManager {
         public modalCtrl: ModalController,
         public translate: TranslateService,
         public localStorage: LocalStorage,
-        private platform: Platform,
         private appService: AppService,
         private syncService: SPVSyncService,
         private coinService: CoinService,
@@ -126,12 +125,13 @@ export class WalletManager {
             console.log("Getting all master wallets from the SPV SDK");
 
             let idList = await this.spvBridge.getAllMasterWallets();
-            if (idList.length > 0) {
+            if (idList.length === 0) {
                 console.log("No SPV wallet found, going to launcher screen");
                 this.goToLauncherScreen();
                 // this.native.setRootRouter("/dposvote");
                 // this.native.setRootRouter("/didtransaction");
-                this.native.setRootRouter("/esctransaction");
+                // this.native.setRootRouter("/esctransaction");
+                // this.native.setRootRouter("/waitforsync");
                 return;
             }
 
@@ -445,7 +445,7 @@ export class WalletManager {
         let rpcMessage: InAppRPCMessage = {
             method: RPCMethod.START_WALLET_SYNC,
             params: messageParams
-        }
+        };
 
         if (this.appService.runningAsAService()) {
             this.syncService.syncStartSubWallets(messageParams.masterId, messageParams.chainIds);
@@ -465,7 +465,7 @@ export class WalletManager {
         // Add only standard subwallets to SPV stop sync request
         let chainIds: StandardCoinName[] = [];
         for (let subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
-            if (subWallet.type == CoinType.STANDARD)
+            if (subWallet.type == CoinType.STANDARD) 
                 chainIds.push(subWallet.id as StandardCoinName);
         }
 

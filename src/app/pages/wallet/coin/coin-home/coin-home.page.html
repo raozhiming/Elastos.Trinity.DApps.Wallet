@@ -16,13 +16,7 @@
                 <p>{{ 'coin-new-transactions-today' | translate:{todaysTransactions: todaysTransactions} }}</p>
             </ion-col>
         </ion-row>
-        <ion-row
-            class="card-row"
-            [class.black-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ELA'"
-            [class.blue-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'IDChain'"
-            [class.gray-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ETHSC'"
-            [class.gray2-card]="walletManager.activeMasterWallet.subWallets[chainId].id === 'ERC20'"
-        >
+        <ion-row [class]="getSubwalletClass()">
             <ion-row class="card-label-row">
                 <h1>
                     <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'ELA'">Elastos Mainchain</span>
@@ -85,11 +79,11 @@
                         <ion-img [src]="item.payStatusIcon"></ion-img>
                     </div>
                 </ion-col>
-                <ion-col [size]="item.resultAmount === 0 ? 10 : 5" class="middle-col">
+                <ion-col [size]="item.resultAmount === 0 ? 6 : 5" class="middle-col">
                     <h1>{{ item.name | translate }}</h1>
                     <p>{{ item.datetime }}</p>
                 </ion-col>
-                <ion-col [size]="item.resultAmount === 0 ? 2 : 5" class="right-col">
+                <ion-col [size]="item.resultAmount == 0 ? 4 : 5" class="right-col">
                     <h1>{{ item.symbol }}{{ item.resultAmount }}</h1>
                     <p>
                         {{ currencyService.getCurrencyBalance(item.resultAmount) }} 

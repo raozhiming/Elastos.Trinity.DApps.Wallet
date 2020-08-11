@@ -9,6 +9,8 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
+import { ThemeService } from 'src/app/services/theme.service';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -42,7 +44,9 @@ export class WaitForSyncPage implements OnInit {
         private intentService: IntentService,
         private coinTransferService: CoinTransferService,
         private walletManager: WalletManager,
-        public popupProvider: PopupProvider
+        public popupProvider: PopupProvider,
+        public theme: ThemeService,
+        public currencyService: CurrencyService
     ) {
     }
 
@@ -53,7 +57,8 @@ export class WaitForSyncPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        appManager.setVisible("show", ()=>{}, (err)=>{});
+        this.appService.setTitleBarTitle('Syncing');
+        appManager.setVisible("show", () => {}, (err) => {});
     }
 
     async init() {
@@ -142,5 +147,26 @@ export class WaitForSyncPage implements OnInit {
     cancelOperation() {
         this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
         this.appService.close();
+    }
+
+    getLoadingDots(): string {
+        let dots = '';
+        setInterval(() => {
+            dots += '.';
+        }, 100);
+        return dots;
+    }
+
+    getSubWalletIcon(): string {
+        switch (this.chainId) {
+            case 'ELA':
+                return "assets/coins/ela-black.svg";
+            case 'IDChain':
+                return "assets/coins/ela-turquoise.svg";
+            case 'ETHSC':
+                return "assets/coins/ela-gray.svg";
+            default:
+                return "assets/coins/eth.svg";
+        }
     }
 }

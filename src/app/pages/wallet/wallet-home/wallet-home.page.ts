@@ -126,6 +126,7 @@ export class WalletHomePage implements OnInit {
 
     doRefresh(event) {
         this.walletManager.getActiveMasterWallet().getSubWalletBalance(StandardCoinName.ELA);
+        this.currencyService.fetch();
         setTimeout(() => {
             event.target.complete();
         }, 1000);

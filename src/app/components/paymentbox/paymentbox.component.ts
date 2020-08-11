@@ -33,13 +33,15 @@ export class PaymentboxComponent implements OnInit {
     public fingerprintPluginAuthenticationOnGoing = false;
     public fingerprintAuthenticationIsAvailable = false;*/
 
-    constructor(public route: ActivatedRoute,
-                public modalCtrl: ModalController,
-                public navParams: NavParams,
-                private authService: AuthService,
-                public popupProvider: PopupProvider,
-                private walletManager: WalletManager,
-                public native: Native) {
+    constructor(
+        public route: ActivatedRoute,
+        public modalCtrl: ModalController,
+        public navParams: NavParams,
+        private authService: AuthService,
+        public popupProvider: PopupProvider,
+        private walletManager: WalletManager,
+        public native: Native
+    ) {
         this.walletId = this.walletManager.getCurMasterWalletId();
         const accountObj = this.walletManager.getMasterWallet(this.walletId).account.Type;
         if (accountObj["Type"] === "Multi-Sign" && accountObj["InnerType"] === "Readonly") {

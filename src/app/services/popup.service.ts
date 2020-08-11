@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { ThemeService } from './theme.service';
+import { Native } from './native.service';
+import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
 
 @Injectable()
 export class PopupProvider {
   constructor(
     private alertCtrl: AlertController,
     private translate: TranslateService,
-    private theme: ThemeService
+    private theme: ThemeService,
+    private modalCtrl: ModalController,
+    private native: Native
   ) {}
 
   public ionicAlert(title: string, subTitle?: string, okText?: string): Promise<any> {

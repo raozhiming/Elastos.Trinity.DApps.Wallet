@@ -20,11 +20,11 @@
         overflow: visible;
 
         ion-img {
-            width: 105px;
-            height: 105px;
+            width: 116px;
+            height: 95px;
             position: absolute;
             z-index: 10;
-            top: -52.5px;
+            top: -47.5px;
             object-fit: contain;
         }
 
@@ -67,15 +67,15 @@
             line-height: 1.21;
             letter-spacing: 0.83px;
             text-align: center;
-
-            span {
-                font-size: 22px;
-                font-weight: 600;
-                letter-spacing: 0.55px;
-            }
         }
 
-        #voteCount {
+        span {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.55px;
+        }
+
+        #count {
             margin: 15px 0 25px;
         }
 
@@ -85,7 +85,8 @@
     }
 
     .btn-row {
-        margin-top: 45%;
+        // margin-top: 45%;
+        margin-top: 65%;
         width: 100%;
         display: flex;
         justify-content: space-around;

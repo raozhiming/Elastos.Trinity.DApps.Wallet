@@ -59,10 +59,15 @@ export class EscTransactionPage implements OnInit {
         public zone: NgZone,
         public theme: ThemeService
     ) {
-        // this.init();
+        this.init();
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        this.appService.setTitleBarTitle('ETH Transaction');
+        appManager.setVisible("show");
     }
 
     ionViewDidEnter() {
@@ -70,8 +75,6 @@ export class EscTransactionPage implements OnInit {
           // TODO: reject esctransaction if multi sign (show error popup)
           this.appService.close();
       }
-
-      appManager.setVisible("show");
     }
 
     async init() {
@@ -79,7 +82,7 @@ export class EscTransactionPage implements OnInit {
         this.chainId = this.coinTransferService.transfer.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
-        
+
         if (this.chainId === StandardCoinName.ETHSC && !this.masterWallet.hasSubWallet(StandardCoinName.ETHSC)) {
             await this.notifyNoETHSCChain();
             this.cancelOperation();

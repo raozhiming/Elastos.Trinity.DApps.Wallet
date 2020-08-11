@@ -333,6 +333,7 @@ export class CoinHomePage implements OnInit {
 
     doRefresh(event) {
         this.initData();
+        this.currencyService.fetch();
         setTimeout(() => {
             event.target.complete();
         }, 1000);
@@ -395,6 +396,19 @@ export class CoinHomePage implements OnInit {
         let today = moment(new Date());
         if (today.startOf('day').isSame(moment(timestamp).startOf('day'))) {
             this.todaysTransactions++;
+        }
+    }
+
+    getSubwalletClass() {
+        switch (this.walletManager.activeMasterWallet.subWallets[this.chainId].id) {
+            case 'ELA':
+                return 'black-card card-row';
+            case 'IDChain':
+                return 'blue-card card-row';
+            case 'ETHSC':
+                return 'gray-card card-row';
+            case 'ERC20':
+                return 'gray2-card card-row';
         }
     }
 
