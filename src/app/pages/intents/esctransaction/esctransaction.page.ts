@@ -30,6 +30,7 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -48,10 +49,17 @@ export class EscTransactionPage implements OnInit {
     hasOpenETHSCChain = false;
     walletInfo = {};
 
-    constructor(public walletManager: WalletManager, public appService: AppService, public popupProvider: PopupProvider,
-                private coinTransferService: CoinTransferService, private intentService: IntentService,
-                public native: Native, public zone: NgZone) {
-        this.init();
+    constructor(
+        public walletManager: WalletManager,
+        public appService: AppService,
+        public popupProvider: PopupProvider,
+        private coinTransferService: CoinTransferService,
+        private intentService: IntentService,
+        public native: Native,
+        public zone: NgZone,
+        public theme: ThemeService
+    ) {
+        // this.init();
     }
 
     ngOnInit() {

@@ -126,10 +126,12 @@ export class WalletManager {
             console.log("Getting all master wallets from the SPV SDK");
 
             let idList = await this.spvBridge.getAllMasterWallets();
-            if (idList.length === 0) {
+            if (idList.length > 0) {
                 console.log("No SPV wallet found, going to launcher screen");
                 this.goToLauncherScreen();
+                // this.native.setRootRouter("/dposvote");
                 // this.native.setRootRouter("/didtransaction");
+                this.native.setRootRouter("/esctransaction");
                 return;
             }
 

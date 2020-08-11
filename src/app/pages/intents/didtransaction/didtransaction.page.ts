@@ -66,13 +66,16 @@ export class DidTransactionPage implements OnInit {
     ngOnInit() {
     }
 
+    ionViewWillEnter() {
+        this.appService.setTitleBarTitle('Publish Identity');
+        appManager.setVisible("show");
+    }
+
     ionViewDidEnter() {
       if (this.walletInfo["Type"] === "Multi-Sign") {
           // TODO: reject didtransaction if multi sign (show error popup)
           this.appService.close();
       }
-
-      appManager.setVisible("show");
     }
 
     async init() {

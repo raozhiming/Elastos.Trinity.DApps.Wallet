@@ -1,4 +1,56 @@
-<ion-header>
+<!-- <ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <ion-card>
+            <ion-img [src]="!theme.darkMode ? 'assets/intents/dpos.svg' : 'assets/intents/darkmode/dpos.svg'"></ion-img>
+            <ion-card-title>You are Voting!</ion-card-title>
+            <ion-card-subtitle>This will cost a minor transaction fee</ion-card-subtitle>
+        </ion-card>
+        <div class="msg-container">
+            <p>You are voting for:</p>
+            <h1 id="voteCount">36/36</h1>
+            <p id="with">With:</p>
+            <h1>51.12 <span>ELA</span></h1>
+        </div>
+        <ion-row class="btn-row">
+            <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelOperation()">
+                <ion-label>{{ 'cancel' | translate}}</ion-label>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-col>
+            <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="goTransaction()">
+                <ion-label>{{ 'confirm' | translate}}</ion-label>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content> -->
+
+<ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <ion-card>
+            <ion-img [src]="!theme.darkMode ? 'assets/intents/dpos.svg' : 'assets/intents/darkmode/dpos.svg'"></ion-img>
+            <ion-card-title>You are Voting!</ion-card-title>
+            <ion-card-subtitle>This will cost a minor transaction fee</ion-card-subtitle>
+        </ion-card>
+        <div class="msg-container">
+            <p>You are voting for:</p>
+            <h1 id="voteCount">{{ transfer.publicKeys.length }}/36</h1>
+            <p id="with">With:</p>
+            <h1>{{ getBalanceInELA() | number:'1.0-3' }}<span>ELA</span></h1>
+        </div>
+        <ion-row class="btn-row">
+            <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelOperation()">
+                <ion-label>{{ 'cancel' | translate}}</ion-label>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-col>
+            <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="goTransaction()">
+                <ion-label>{{ 'confirm' | translate}}</ion-label>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
+<!-- <ion-header>
     <header-bar title="{{'text-dposvote' | translate }}" [showBack]="false" [showMinimize]="false" [showClose]="false"></header-bar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -30,4 +82,4 @@
 <ion-footer>
     <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="medium" size="large" (click)="cancelOperation()">{{ 'cancel' | translate }}</ion-button>
     <ion-button class="ion-no-margin" style="width:50%" fill="clear" color="primary" size="large" (click)="goTransaction()">{{ 'text-vote' | translate }}</ion-button>
-</ion-footer>
+</ion-footer> -->

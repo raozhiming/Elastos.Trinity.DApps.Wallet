@@ -28,6 +28,7 @@ import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { IntentService } from 'src/app/services/intent.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -44,13 +45,25 @@ export class DPoSVotePage implements OnInit {
     chainId: string;
     walletInfo = {};
 
-    constructor(public walletManager: WalletManager, public appService: AppService,
-                private coinTransferService: CoinTransferService, private intentService: IntentService,
-                public native: Native, public zone: NgZone, public popupProvider: PopupProvider) {
+    constructor(
+        public walletManager: WalletManager,
+        public appService: AppService,
+        private coinTransferService: CoinTransferService,
+        private intentService: IntentService,
+        public native: Native,
+        public zone: NgZone,
+        public popupProvider: PopupProvider,
+        public theme: ThemeService
+    ) {
         this.init();
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        this.appService.setTitleBarTitle('Vote for Supernodes');
+        appManager.setVisible("show", () => {}, (err) => {});
     }
 
     ionViewDidEnter() {
@@ -58,8 +71,6 @@ export class DPoSVotePage implements OnInit {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
             this.appService.close();
         }
-
-        appManager.setVisible("show", ()=>{}, (err)=>{});
     }
 
     init() {
