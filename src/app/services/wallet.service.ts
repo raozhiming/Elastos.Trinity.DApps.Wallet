@@ -101,7 +101,7 @@ export class WalletManager {
         private authService: AuthService,
         public popupProvider: PopupProvider,
         private http: HttpClient,
-        public jsonRPCService: JsonRPCService
+        public jsonRPCService: JsonRPCService,
     ) {
     }
 
@@ -151,6 +151,9 @@ export class WalletManager {
                     console.warn("Now creating default values for backward compatibility");
 
                     this.masterWallets[masterId].name = "No name";
+
+                    // TODO:Ask user to set paypassword
+                    // verifyPayPassword and save to pm
 
                     // TODO call verifyPassPhrase when create ETHSC
                     // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
@@ -291,8 +294,8 @@ export class WalletManager {
         masterId: WalletID,
         walletName: string,
         mnemonicStr: string,
-        payPassword: string,
         mnemonicPassword: string,
+        payPassword: string,
         singleAddress: boolean
     ) {
         console.log("Creating new master wallet");
@@ -849,7 +852,7 @@ export class WalletManager {
         let maxExternalBlanks = 0;
 
         let startIndex = 0;
-        let totalBalance = 0.0;
+        let totalBalance = 0;
         let totalRequestCount = 0;
         let consecutiveBlanks = 0;
 
@@ -867,7 +870,7 @@ export class WalletManager {
                     const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
                     totalBalance += balance;
 
-                    if (balance < 0.00000001) {
+                    if (balance <= 0) {
                         consecutiveBlanks++;
                         if (consecutiveBlanks >= maxBlanks) {
                             break;
@@ -913,7 +916,7 @@ export class WalletManager {
                     totalBalance += balance;
 
                     if (startCheckBlanks && totalRequestCount > currentReceiveAddressIndex) {
-                        if (balance < 0.00000001) {
+                        if (balance <= 0) {
                             consecutiveBlanks++;
                             if (consecutiveBlanks > maxBlanks) {
                                 break;
@@ -939,4 +942,15 @@ export class WalletManager {
 
         return totalBalance;
     }
+
+    // sendIntentResponse(action, result, intentId): Promise<void> {
+    //     return new Promise((resolve, reject)=>{
+    //         appManager.sendIntentResponse(action, result, intentId, () => {
+    //             resolve();
+    //         }, (err) => {
+    //             console.error('sendIntentResponse error!', err);
+    //             reject(err);
+    //         });
+    //     });
+    // }
 }

@@ -110,7 +110,7 @@ export class CoinTxInfoPage implements OnInit {
         this.memo = transaction.Memo;
 
         // Modified data
-        this.datetime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
+        this.datetime = this.timestamp === 0 ? 'Pending' : Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
         this.resultAmount = Util.scientificToNumber(transaction.Amount / Config.SELA);
         this.payFee = Util.scientificToNumber(transaction.Fee / Config.SELA);
         this.inputs = this.objtoarr(transaction.Inputs);
