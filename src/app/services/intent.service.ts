@@ -5,7 +5,7 @@ import { Config } from '../config/Config';
 import { Util } from '../model/Util';
 import { StandardCoinName } from '../model/Coin';
 import { Injectable, NgZone } from '@angular/core';
-import { CoinTransferService } from './cointransfer.service';
+import { CoinTransferService, TransferType } from './cointransfer.service';
 import { WalletManager } from './wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -114,7 +114,7 @@ export class IntentService {
 
             case 'crmemberretrieve':
                 console.log('CR member retrieve Transaction intent content:', intent.params);
-                this.coinTransferService.transfer.chainId = StandardCoinName.IDChain;
+                this.coinTransferService.chainId = StandardCoinName.IDChain;
                 this.coinTransferService.transfer.amount = intent.params.amount;
                 this.coinTransferService.transfer.publickey = intent.params.publickey;
                 break;
@@ -130,7 +130,7 @@ export class IntentService {
                 break;
 
             case 'esctransaction':
-                this.coinTransferService.transfer.chainId = StandardCoinName.ETHSC;
+                this.coinTransferService.chainId = StandardCoinName.ETHSC;
                 this.coinTransferService.transfer.didrequest = intent.params.ethrequest;
                 break;
 
@@ -141,7 +141,7 @@ export class IntentService {
                 this.coinTransferService.transfer.type = 'payment-confirm'; */
 
                 this.coinTransferService.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
-                this.coinTransferService.transferType = 3;
+                this.coinTransferService.transferType = TransferType.PAY;
                 const transfer = {
                     toAddress: intent.params.receiver,
                     amount: intent.params.amount,

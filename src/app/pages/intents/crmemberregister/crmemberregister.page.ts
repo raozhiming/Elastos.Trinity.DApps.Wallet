@@ -79,7 +79,7 @@ export class CRMemberRegisterPage implements OnInit {
 
     async init() {
         this.transfer = this.coinTransferService.transfer;
-        this.chainId = this.coinTransferService.transfer.chainId;
+        this.chainId = this.coinTransferService.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
 

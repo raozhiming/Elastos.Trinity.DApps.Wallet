@@ -38,14 +38,14 @@ export class Transfer {
     crDID: string = null;
     from: string = null;
     fee: number = 0;
-    chainId: StandardCoinName = null;
+    //chainId: StandardCoinName = null;
     votes: any; // TODO
     amount: number;
     publickey: string;
     toAddress: string = '';
     publicKeys: any;
     didrequest: string;
-    type: string = 'payment-confirm';
+   // type: string = 'payment-confirm';
     sideChainId: string;
     currency: string; // pay
     rate: number;
@@ -58,10 +58,12 @@ export class IntentTransfer {
     from: string = null;
 }
 
+// TODO: What's the difference between SEND and PAY ...?
 export enum TransferType {
     RECHARGE = 1,
     SEND = 2,
-    PAY = 3
+    PAY = 3,
+    WITHDRAW = 4
 }
 
 @Injectable({
@@ -97,7 +99,7 @@ export class CoinTransferService {
     public didrequest: any;
 
     // In the process of deprecating
-    public transfer: any = null;
+    public transfer: Transfer = null;
 
     constructor() {
         this.reset();

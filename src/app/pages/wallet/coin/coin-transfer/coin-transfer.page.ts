@@ -71,7 +71,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // User inputs
     public toAddress: string;
-    public amount: number = 0;
+    public amount: number;
     public memo: string = '';
 
     // Display recharge wallets
@@ -179,7 +179,11 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 // Setup params for recharge transaction
                 this.transaction = this.createRechargeTransaction;
                 this.getSubwalletAddress(this.coinTransferService.subchainId);
-                this.amount = 0.1;
+
+                // AUto suggest a transfer amount of 0.1 ELA (enough) to the ID chain. Otherwise, let user define his own amount.
+                if (this.toSubWallet.id == StandardCoinName.IDChain) {
+                    this.amount = 0.1;
+                }
 
                 console.log('Transferring from..', this.fromSubWallet);
                 console.log('Transferring To..', this.toSubWallet);
@@ -314,7 +318,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress
             );
 
-            if (this.transferType === 3) {
+            if (this.transferType === TransferType.PAY) {
                 this.transaction();
             } else {
                 this.showConfirm();

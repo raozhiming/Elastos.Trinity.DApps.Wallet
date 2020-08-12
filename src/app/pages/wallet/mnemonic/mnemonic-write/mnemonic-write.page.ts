@@ -62,7 +62,6 @@ export class MnemonicWritePage implements OnInit {
 
     // For testing purposes
     inputChanged(event) {
-        console.log('Input test', event);
     }
 
     allInputsFilled() {

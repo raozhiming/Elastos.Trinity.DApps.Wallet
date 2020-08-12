@@ -67,7 +67,7 @@ export class CRmembervotePage implements OnInit {
 
     init() {
         this.transfer = this.coinTransferService.transfer;
-        this.chainId = this.coinTransferService.transfer.chainId;
+        this.chainId = this.coinTransferService.chainId;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
 
         this.parseVotes();

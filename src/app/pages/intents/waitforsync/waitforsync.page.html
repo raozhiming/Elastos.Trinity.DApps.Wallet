@@ -36,16 +36,15 @@
 </ion-content> -->
 
 <ion-content>
-    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+    <ion-grid class="container" [class.dark-container]="theme.darkMode" *ngIf="masterWallet && masterWallet.subWallets[chainId]">
         <ion-card>
             <ion-img [src]="!theme.darkMode ? 'assets/intents/syncing.svg' : 'assets/intents/darkmode/syncing.svg'"></ion-img>
             <ion-card-title>Loading...</ion-card-title>
             <ion-card-subtitle>
-                Operation can only be performed after data
-                has synced from the Mainchain.
+                Operation can only be performed after data has synced from chain.
             </ion-card-subtitle>
         </ion-card>
-        <ion-row class="item-row ripple ion-activatable">
+        <ion-row class="item-row">
             <ion-col size="2" class="left-col">
                 <ion-img [src]="getSubWalletIcon()"></ion-img>
             </ion-col>

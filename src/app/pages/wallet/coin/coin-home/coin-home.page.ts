@@ -31,7 +31,7 @@ import { WalletManager } from '../../../../services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { AppService } from 'src/app/services/app.service';
-import { CoinTransferService } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, TransferType } from 'src/app/services/cointransfer.service';
 import { StandardCoinName, Coin, CoinType } from 'src/app/model/Coin';
 import { SubWallet } from 'src/app/model/SubWallet';
 import { TransactionDirection, TransactionStatus } from 'src/app/model/Transaction';
@@ -302,21 +302,21 @@ export class CoinHomePage implements OnInit {
     }
 
     sendFunds() {
-        this.coinTransferService.transferType = 2;
+        this.coinTransferService.transferType = TransferType.SEND;
         this.coinTransferService.chainId = this.chainId;
         this.native.go('/coin-transfer');
     }
 
     rechargeFunds() {
-        this.coinTransferService.transferType = 1;
+        this.coinTransferService.transferType = TransferType.RECHARGE;
         this.coinTransferService.chainId = this.chainId;
         this.native.go('/coin-select');
     }
 
     // Not sure what 'withdraw' is for
     withdrawFunds() {
-        this.coinTransferService.transfer.chainId = this.chainId;
-        this.coinTransferService.transfer.type = 'withdraw';
+        this.coinTransferService.chainId = this.chainId;
+        this.coinTransferService.transferType = TransferType.WITHDRAW;
         this.native.go('/coin-transfer');
     }
 

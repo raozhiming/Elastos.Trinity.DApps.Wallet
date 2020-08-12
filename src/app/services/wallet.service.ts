@@ -147,28 +147,9 @@ export class WalletManager {
                 // Try to retrieve locally storage extended info about this wallet
                 let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
                 if (!extendedInfo) {
-                    console.warn("No local storage info found for this wallet. This may happen when upgrading this app from a older app version.");
-                    console.warn("Now creating default values for backward compatibility");
-
-                    this.masterWallets[masterId].name = "No name";
-
-                    // TODO:Ask user to set paypassword
-                    // verifyPayPassword and save to pm
-
-                    // TODO call verifyPassPhrase when create ETHSC
-                    // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
-                    // await this.spvBridge.verifyPayPassword(masterId, '12345678');
-
-                    // Re-add the default sub-wallets
-                    await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
-                    await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
-                    await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
-
-                    await this.saveMasterWallet(this.masterWallets[masterId]);
-
-                    extendedInfo = this.masterWallets[masterId].getExtendedWalletInfo();
-
-                    console.log("Using rebuilt extended info", extendedInfo);
+                    // No backward compatibility support: old wallets are just deleted.
+                    await this.spvBridge.destroyWallet(masterId);
+                    continue; // Break the for loop for this wallet.
                 }
                 else {
                     console.log("Found extended wallet info for master wallet id " + masterId, extendedInfo);

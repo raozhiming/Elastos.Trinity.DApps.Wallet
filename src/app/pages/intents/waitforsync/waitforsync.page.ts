@@ -64,9 +64,11 @@ export class WaitForSyncPage implements OnInit {
 
     async init() {
         this.transfer = this.coinTransferService.transfer;
-        this.chainId = this.coinTransferService.transfer.chainId;
+        this.chainId = this.coinTransferService.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
+
+        console.log("Wait for sync - Master wallet:", this.masterWallet, "Chain ID:", this.chainId);
 
         switch (this.transfer.action) {
             case 'crmembervote':
@@ -110,7 +112,7 @@ export class WaitForSyncPage implements OnInit {
                 this.nextScreen = '/crproposalvoteagainst';
                 break;
             default:
-                console.log('pls check the action');
+                console.log('pls check the action - '+this.transfer.action+' is not supported.');
                 break;
         }
 
