@@ -15,7 +15,7 @@ export class NavService {
     public showStartupScreen() {
         console.log("Computing and showing startup screen");
 
-        appManager.hasPendingIntent(async (hasPendingIntent)=>{
+        appManager.hasPendingIntent(async (hasPendingIntent) => {
             if (hasPendingIntent) {
                 // There is a pending intent: directly show the intent screen
                 console.log("There is a pending intent");

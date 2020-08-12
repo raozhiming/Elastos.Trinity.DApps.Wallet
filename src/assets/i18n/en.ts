@@ -11,9 +11,9 @@ export const en = {
     "amount": "Amount",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    'click-to-load-more': "click to load more",
+    'click-to-load-more': "Click to load more",
     'transaction-fail': 'Transaction Failed',
-    
+
     // Home screen
     "wallet-home-title": "Wallet Home",
     "wallet-overview": "Wallet Overview",

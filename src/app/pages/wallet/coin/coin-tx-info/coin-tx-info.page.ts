@@ -220,5 +220,16 @@ export class CoinTxInfoPage implements OnInit {
         }
         return arr;
     }
+
+    getTransferClass() {
+        switch (this.type) {
+            case 1:
+                return 'received';
+            case 2:
+                return 'sent';
+            case 3:
+                return 'transferred';
+        }
+    }
 }
 

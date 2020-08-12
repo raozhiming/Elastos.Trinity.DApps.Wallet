@@ -58,25 +58,11 @@
             </ion-row>
             <ion-row class="item-row ripple ion-activatable" *ngFor="let subWallet of masterWallet.getSubWallets()" [routerLink]="['/coin', subWallet.id]">
                 <ion-col size="2" class="left-col">
-                    <ion-img [src]="getSubWalletIcon(subWallet)"></ion-img>
+                    <ion-img [src]="uiService.getSubWalletIcon(subWallet)"></ion-img>
                 </ion-col>
                 <ion-col size="5" class="middle-col">
-                    <div *ngIf="subWallet.id === 'ELA'">
-                        <h1>Elastos</h1>
-                        <p>ELA</p>
-                    </div>
-                    <div *ngIf="subWallet.id === 'IDChain'">
-                        <h1>Elastos DID</h1>
-                        <p>ELADIDSC</p>
-                    </div>
-                    <div *ngIf="subWallet.id === 'ETHSC'">
-                        <h1>Elastos ETH</h1>
-                        <p>ELAETHSC</p>
-                    </div>
-                    <div *ngIf="subWallet.type === 'ERC20'">
-                        <h1>{{ subWallet.id }}</h1>
-                        <p>ERC20 Token</p>
-                    </div>
+                    <h1>{{ uiService.getSubwalletTitle(subWallet) }}</h1>
+                    <p>{{ uiService.getSubwalletSubtitle(subWallet) }}</p>
                     <span *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</span>
                     <span *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</span>
                 </ion-col>
@@ -144,25 +130,11 @@
             [routerLink]="['/coin', subWallet.id]"
         >
             <ion-col size="2" class="left-col">
-                <ion-img [src]="getSubWalletIcon(subWallet)"></ion-img>
+                <ion-img [src]="uiService.getSubWalletIcon(subWallet)"></ion-img>
             </ion-col>
             <ion-col size="5" class="middle-col">
-                <div *ngIf="subWallet.id === 'ELA'">
-                    <h1>Elastos</h1>
-                    <p>ELA</p>
-                </div>
-                <div *ngIf="subWallet.id === 'IDChain'">
-                    <h1>Elastos DID</h1>
-                    <p>ELADIDSC</p>
-                </div>
-                <div *ngIf="subWallet.id === 'ETHSC'">
-                    <h1>Elastos ETH</h1>
-                    <p>ELAETHSC</p>
-                </div>
-                <div *ngIf="subWallet.type === 'ERC20'">
-                    <h1>{{ subWallet.id }}</h1>
-                    <p>ERC20 Token</p>
-                </div>
+                <h1>{{ uiService.getSubwalletTitle(subWallet) }}</h1>
+                <p>{{ uiService.getSubwalletSubtitle(subWallet) }}</p>
                 <span *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</span>
                 <span *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</span>
             </ion-col>

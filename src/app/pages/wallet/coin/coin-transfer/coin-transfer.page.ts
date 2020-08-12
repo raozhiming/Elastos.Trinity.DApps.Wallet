@@ -42,6 +42,7 @@ import { NumberFormatStyle } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { IntentService } from 'src/app/services/intent.service';
+import { UiService } from 'src/app/services/ui.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
@@ -107,7 +108,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         private translate: TranslateService,
         private popoverCtrl: PopoverController,
         public currencyService: CurrencyService,
-        private intentService: IntentService
+        private intentService: IntentService,
+        public uiService: UiService
     ) {
     }
 
@@ -145,29 +147,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         console.log('Balance', this.walletManager.activeMasterWallet.subWallets[this.chainId].balance / this.SELA);
 
-   /*      // For Recharge Transfer
-        if (this.coinTransferService.transferType === 1) {
-
-            // Setup page display
-            this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
-            this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
-            this.toSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.subchainId);
-
-            // Setup params for recharge transaction
-            this.transaction = this.createRechargeTransaction;
-            this.getSubwalletAddress(this.coinTransferService.subchainId);
-            this.amount = 0.1;
-
-            console.log('Transferring from..', this.fromSubWallet);
-            console.log('Transferring To..', this.toSubWallet);
-            console.log('Subwallet address', this.toAddress);
-
-        // For Send Transfer
-        } else {
-            this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
-            this.transaction = this.createSendTransaction;
-        } */
-
         switch (this.transferType) {
             // For Recharge Transfer
             case 1:
@@ -181,7 +160,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.getSubwalletAddress(this.coinTransferService.subchainId);
 
                 // AUto suggest a transfer amount of 0.1 ELA (enough) to the ID chain. Otherwise, let user define his own amount.
-                if (this.toSubWallet.id == StandardCoinName.IDChain) {
+                if (this.toSubWallet.id === StandardCoinName.IDChain) {
                     this.amount = 0.1;
                 }
 
@@ -411,18 +390,5 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         // Hide/reset suggestions
         this.suggestedAddresses = [];
-    }
-
-    getCoinIcon(subWallet: SubWallet): string {
-        switch (subWallet.id) {
-            case StandardCoinName.ELA:
-                return "assets/coins/ela-black.svg";
-            case StandardCoinName.IDChain:
-                return "assets/coins/ela-turquoise.svg";
-            case StandardCoinName.ETHSC:
-                return "assets/coins/ela-gray.svg";
-            default:
-                return "assets/coins/eth.svg";
-        }
     }
 }

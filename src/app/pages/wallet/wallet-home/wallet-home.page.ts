@@ -34,6 +34,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from '../../../model/Util';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CurrencyService } from 'src/app/services/currency.service';
+import { UiService } from 'src/app/services/ui.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -44,6 +45,7 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
     styleUrls: ['./wallet-home.page.scss'],
 })
 export class WalletHomePage implements OnInit {
+
     public masterWallet: MasterWallet = null;
     public masterWallets: MasterWallet[] = [];
     public isSingleWallet: boolean = false;
@@ -63,7 +65,8 @@ export class WalletHomePage implements OnInit {
         private walletEditionService: WalletEditionService,
         private translate: TranslateService,
         public currencyService: CurrencyService,
-        public theme: ThemeService
+        public theme: ThemeService,
+        public uiService: UiService
     ) {
     }
 
@@ -137,29 +140,6 @@ export class WalletHomePage implements OnInit {
             this.popupProvider.ionicAlert('text-did-balance-not-enough');
             this.walletManager.setHasPromptTransfer2IDChain();
         }
-    }
-
-    getSubWalletIcon(subWallet: SubWallet): string {
-        switch (subWallet.id) {
-            case StandardCoinName.ELA:
-                return "assets/coins/ela-black.svg";
-            case StandardCoinName.IDChain:
-                return "assets/coins/ela-turquoise.svg";
-            case StandardCoinName.ETHSC:
-                return "assets/coins/ela-gray.svg";
-            default:
-                return "assets/coins/eth.svg";
-        }
-    }
-
-    getWholeBalance(balance: number): number {
-        return Math.trunc(balance);
-    }
-
-    getDecimalBalance(balance: number): string {
-        let decimalBalance = balance - Math.trunc(balance);
-        decimalBalance.toFixed(5);
-        return decimalBalance.toLocaleString().slice(2);
     }
 
     getWalletIndex(masterWallet: MasterWallet): number {

@@ -58,11 +58,10 @@ export class IntentTransfer {
     from: string = null;
 }
 
-// TODO: What's the difference between SEND and PAY ...?
 export enum TransferType {
-    RECHARGE = 1,
-    SEND = 2,
-    PAY = 3,
+    RECHARGE = 1, // Tranfer between subwallets
+    SEND = 2, // Sending
+    PAY = 3, // Pay intent
     WITHDRAW = 4
 }
 

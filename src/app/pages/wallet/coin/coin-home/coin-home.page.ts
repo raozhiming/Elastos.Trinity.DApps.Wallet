@@ -412,13 +412,14 @@ export class CoinHomePage implements OnInit {
         }
     }
 
-    getWholeBalance(balance: number): number {
-        return Math.trunc(balance);
-    }
-
-    getDecimalBalance(balance: number): string {
-        let decimalBalance = balance - Math.trunc(balance);
-        decimalBalance.toFixed(5);
-        return decimalBalance.toLocaleString().slice(2, 6);
+    getSubwalletTitle() {
+        switch (this.walletManager.activeMasterWallet.subWallets[this.chainId].id) {
+            case 'ELA':
+                return 'Elastos Mainchain';
+            case 'IDChain':
+                return 'Elastos ID Chain';
+            case 'ETHSC':
+                return 'Ethereum Sidechain';
+        }
     }
 }

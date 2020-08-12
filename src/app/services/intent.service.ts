@@ -131,15 +131,10 @@ export class IntentService {
 
             case 'esctransaction':
                 this.coinTransferService.chainId = StandardCoinName.ETHSC;
-                this.coinTransferService.transfer.didrequest = intent.params.ethrequest;
+                this.coinTransferService.didrequest = intent.params.didrequest;
                 break;
 
             case 'pay':
-          /*       this.coinTransferService.transfer.toAddress = intent.params.receiver;
-                this.coinTransferService.transfer.amount = intent.params.amount;
-                this.coinTransferService.transfer.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
-                this.coinTransferService.transfer.type = 'payment-confirm'; */
-
                 this.coinTransferService.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
                 this.coinTransferService.transferType = TransferType.PAY;
                 const transfer = {
@@ -164,8 +159,9 @@ export class IntentService {
                 return;
         }
 
-        if (continueToWaitForSync)
+        if (continueToWaitForSync) {
             this.native.go('/waitforsync');
+        }
     }
 
     handleAccessIntent(intent: AppManagerPlugin.ReceivedIntent) {

@@ -7,21 +7,11 @@
         </ion-row>
         <ion-row class="item-row">
             <ion-col size="2.3" class="left-col">
-                <ion-img [src]="getCoinIcon(fromSubWallet)"></ion-img>
+                <ion-img [src]="uiService.getSubWalletIcon(fromSubWallet)"></ion-img>
             </ion-col>
             <ion-col size="4.7" class="middle-col">
-                <div *ngIf="fromSubWallet.id === 'ELA'">
-                    <h1>Elastos</h1>
-                    <p>ELA</p>
-                </div>
-                <div *ngIf="fromSubWallet.id === 'IDChain'">
-                    <h1>Elastos DID</h1>
-                    <p>ELADIDSC</p>
-                </div>
-                <div *ngIf="fromSubWallet.id === 'ETHSC'">
-                    <h1>Elastos ETH</h1>
-                    <p>ELAETHSC</p>
-                </div>
+                <h1>{{ uiService.getSubwalletTitle(fromSubWallet) }}</h1>
+                <p>{{ uiService.getSubwalletSubtitle(fromSubWallet) }}</p>
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>{{ fromSubWallet.balance/SELA }}</h1>
@@ -41,21 +31,11 @@
         </ion-row>
         <ion-row class="item-row">
             <ion-col size="2.3" class="left-col">
-                <ion-img [src]="getCoinIcon(toSubWallet)"></ion-img>
+                <ion-img [src]="uiService.getSubWalletIcon(toSubWallet)"></ion-img>
             </ion-col>
             <ion-col size="4.7" class="middle-col">
-                <div *ngIf="toSubWallet.id === 'ELA'">
-                    <h1>Elastos</h1>
-                    <p>ELA</p>
-                </div>
-                <div *ngIf="toSubWallet.id === 'IDChain'">
-                    <h1>Elastos DID</h1>
-                    <p>ELADIDSC</p>
-                </div>
-                <div *ngIf="toSubWallet.id === 'ETHSC'">
-                    <h1>Elastos ETH</h1>
-                    <p>ELAETHSC</p>
-                </div>
+                <h1>{{ uiService.getSubwalletTitle(toSubWallet) }}</h1>
+                <p>{{ uiService.getSubwalletSubtitle(toSubWallet) }}</p>
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>{{ toSubWallet.balance/SELA }}</h1>
@@ -63,8 +43,6 @@
                     {{ currencyService.getCurrencyBalance(toSubWallet.balance/SELA) }} 
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
-<!--                 <p *ngIf="toSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: toSubWallet.progress} }}</p>
-                <p *ngIf="toSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: toSubWallet.progress} }}</p> -->
             </ion-col>
             <div class="arrow-down"></div>
         </ion-row>

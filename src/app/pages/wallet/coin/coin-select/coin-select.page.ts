@@ -11,6 +11,7 @@ import { Util } from 'src/app/model/Util';
 import { Config } from 'src/app/config/Config';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
     selector: 'app-coin-select',
@@ -35,12 +36,16 @@ export class CoinSelectPage implements OnInit {
         public theme: ThemeService,
         private translate: TranslateService,
         private appService: AppService,
-        public currencyService: CurrencyService
+        public currencyService: CurrencyService,
+        public uiService: UiService
     ) {
         this.init();
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
         this.appService.setTitleBarTitle(this.translate.instant("coin-select-title"));
     }
 
@@ -54,18 +59,5 @@ export class CoinSelectPage implements OnInit {
         this.coinTransferService.subchainId = wallet.id;
 
         this.native.go("/coin-transfer");
-    }
-
-    getSubWalletIcon(subWallet: SubWallet): string {
-        switch (subWallet.id) {
-            case StandardCoinName.ELA:
-                return "assets/coins/ela-black.svg";
-            case StandardCoinName.IDChain:
-                return "assets/coins/ela-turquoise.svg";
-            case StandardCoinName.ETHSC:
-                return "assets/coins/ela-gray.svg";
-            default:
-                return "assets/coins/eth.svg";
-        }
     }
 }

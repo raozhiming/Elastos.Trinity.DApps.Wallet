@@ -19,10 +19,8 @@
         <ion-row [class]="getSubwalletClass()">
             <ion-row class="card-label-row">
                 <h1>
-                    <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'ELA'">Elastos Mainchain</span>
-                    <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'IDChain'">Elastos ID Chain</span>
-                    <span *ngIf="walletManager.activeMasterWallet.subWallets[chainId].id === 'ETHSC'">Ethereum Sidechain</span>
-                    - {{ 'coin-balance' | translate }}</h1>
+                    <span>{{ getSubwalletTitle() }}</span>
+                    {{ 'coin-balance' | translate }}</h1>
                 <h2>
                     {{ 'synchronized' | translate : {progress: walletManager.activeMasterWallet.subWallets[chainId].progress} }}
                 </h2>
