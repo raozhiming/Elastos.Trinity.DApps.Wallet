@@ -20,6 +20,7 @@ declare let appManager: AppManagerPlugin.AppManager;
   styleUrls: ['./waitforsync.page.scss'],
 })
 export class WaitForSyncPage implements OnInit {
+
     Config = Config;
     SELA = Config.SELA;
     showOn = true;

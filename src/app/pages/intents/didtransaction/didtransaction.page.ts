@@ -22,15 +22,15 @@
 
 import { Component, OnInit, NgZone } from '@angular/core';
 import { AppService } from '../../../services/app.service';
-import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { CoinTransferService } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, IntentTransfer } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { Transfer } from '../../wallet/coin/coin-transfer/coin-transfer.page';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -41,14 +41,11 @@ declare let appManager: AppManagerPlugin.AppManager;
 })
 export class DidTransactionPage implements OnInit {
 
-    masterWallet: MasterWallet = null;
-    transfer: any = null;
-
-    balance: number; // ELA
-
-    chainId: string; // IDChain
-    hasOpenIDChain = false;
-    walletInfo = {};
+    private masterWallet: MasterWallet;
+    private intentTransfer: IntentTransfer;
+    private balance: number; // ELA
+    private chainId: string; // IDChain
+    private walletInfo = {};
 
     constructor(
         public walletManager: WalletManager,
@@ -79,8 +76,8 @@ export class DidTransactionPage implements OnInit {
     }
 
     async init() {
-        this.transfer = this.coinTransferService.transfer;
-        this.chainId = this.coinTransferService.transfer.chainId;
+        this.chainId = this.coinTransferService.chainId;
+        this.intentTransfer = this.coinTransferService.intentTransfer;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getActiveMasterWallet();
 
@@ -96,7 +93,12 @@ export class DidTransactionPage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+        this.intentService.sendIntentResponse(
+            this.intentTransfer.action,
+            { txid: null },
+            this.intentTransfer.intentId
+        );
+
         this.appService.close();
     }
 
@@ -118,17 +120,28 @@ export class DidTransactionPage implements OnInit {
     }
 
     async createIDTransaction() {
-        console.log("Calling createIdTransaction(): ", this.transfer.didrequest, this.transfer.memo)
-        
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createIdTransaction(
-            this.masterWallet.id, 
-            this.chainId,
-            this.transfer.didrequest,
-            this.transfer.memo);
-            
-        console.log("Created raw DID transaction:", this.transfer.rawTransaction);
-        
-        this.walletManager.openPayModal(this.transfer);
+        console.log('Calling createIdTransaction(): ', this.coinTransferService.didrequest);
+
+        const rawTx =
+            await this.walletManager.spvBridge.createIdTransaction(
+                this.masterWallet.id,
+                this.chainId,
+                this.coinTransferService.didrequest,
+                '' // Memo not necessary
+            );
+
+        console.log('Created raw DID transaction:', rawTx);
+
+        const transfer: Transfer = {
+            masterWalletId: this.masterWallet.id,
+            chainId: this.chainId,
+            rawTransaction: rawTx,
+            payPassword: '',
+            action: this.intentTransfer.action,
+            intentId: this.intentTransfer.intentId,
+        };
+
+        this.walletManager.openPayModal(transfer);
     }
 }
 

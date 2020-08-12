@@ -70,19 +70,33 @@ export enum TransferType {
 
 export class CoinTransferService {
 
+    /******************
+     * Dynamic Values *
+     ******************/
+
     // Define transfer type
     public transferType: TransferType;
     // From subwallet
     public chainId: StandardCoinName;
     // To subwallet (only for recharging funds)
     public subchainId: string;
-    // Unsure of what this is used for
     public walletInfo: WalletAccount;
-    // Intent params for intent transfers
+
+
+    /******************
+    * Intent Values *
+    ******************/
+
+    // Intent params
     public intentTransfer: IntentTransfer;
+    // intent: dposvotetransaction
+    public publickeys: any;
+    // intent: crmembervote
+    public crcvotes: any;
+    // intent: didtransaction
+    public didrequest: any;
 
-
-    // Deprecated for receiving, sending and recharging funds but kept incase intents use it
+    // In the process of deprecating
     public transfer: any = null;
 
     constructor() {
@@ -93,7 +107,6 @@ export class CoinTransferService {
      * Resets all service fields to their default value to restart a new transfer.
      */
     public reset() {
-        // Deprecated for receiving, sending and recharging funda
         this.transfer = new Transfer();
 
         this.transferType = null;
@@ -101,5 +114,8 @@ export class CoinTransferService {
         this.subchainId = null;
         this.intentTransfer = null;
         this.walletInfo = new WalletAccount();
+        this.publickeys = null;
+        this.crcvotes = null;
+        this.didrequest = null;
     }
 }

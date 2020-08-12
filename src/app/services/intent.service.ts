@@ -70,15 +70,15 @@ export class IntentService {
         this.coinTransferService.reset();
 
         // Deprecated for pay intent
-        this.coinTransferService.walletInfo = this.walletManager.activeMasterWallet.account;
-        this.coinTransferService.transfer.memo = intent.params.memo || '';
-        this.coinTransferService.transfer.intentId = intent.intentId;
-        this.coinTransferService.transfer.action = intent.action;
-        this.coinTransferService.transfer.from = intent.from;
-        this.coinTransferService.transfer.fee = 0;
-        this.coinTransferService.transfer.chainId = StandardCoinName.ELA;
+        // this.coinTransferService.transfer.memo = intent.params.memo || '';
+        // this.coinTransferService.transfer.intentId = intent.intentId;
+        // this.coinTransferService.transfer.action = intent.action;
+        // this.coinTransferService.transfer.from = intent.from;
+        // this.coinTransferService.transfer.fee = 0;
+        // this.coinTransferService.transfer.chainId = StandardCoinName.ELA;
 
-        // Pay intent
+        this.coinTransferService.walletInfo = this.walletManager.activeMasterWallet.account;
+        this.coinTransferService.chainId = StandardCoinName.ELA;
         this.coinTransferService.intentTransfer = {
             action: intent.action,
             intentId: intent.intentId,
@@ -121,13 +121,12 @@ export class IntentService {
 
             case 'dposvotetransaction':
                 console.log('DPOS Transaction intent content:', intent.params);
-                this.coinTransferService.transfer.toAddress = 'default';
-                this.coinTransferService.transfer.publicKeys = intent.params.publickeys;
+                this.coinTransferService.publickeys = intent.params.publickeys;
                 break;
 
             case 'didtransaction':
-                this.coinTransferService.transfer.chainId = StandardCoinName.IDChain;
-                this.coinTransferService.transfer.didrequest = intent.params.didrequest;
+                this.coinTransferService.chainId = StandardCoinName.IDChain;
+                this.coinTransferService.didrequest = intent.params.didrequest;
                 break;
 
             case 'esctransaction':

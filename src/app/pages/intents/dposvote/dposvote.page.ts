@@ -26,9 +26,11 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
-import { CoinTransferService } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, IntentTransfer } from 'src/app/services/cointransfer.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { MasterWallet } from 'src/app/model/MasterWallet';
+import { Transfer } from '../../wallet/coin/coin-transfer/coin-transfer.page';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -38,17 +40,17 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./dposvote.page.scss'],
 })
 export class DPoSVotePage implements OnInit {
-    masterWalletId = '1';
-    transfer: any = null;
 
-    balance: string; // Balance in SELA
-    chainId: string;
-    walletInfo = {};
+    private masterWalletId: string;
+    public balance: string; // Balance in SELA
+    public chainId: string;
+    private walletInfo = {};
+    public intentTransfer: IntentTransfer;
 
     constructor(
         public walletManager: WalletManager,
         public appService: AppService,
-        private coinTransferService: CoinTransferService,
+        public coinTransferService: CoinTransferService,
         private intentService: IntentService,
         public native: Native,
         public zone: NgZone,
@@ -74,8 +76,8 @@ export class DPoSVotePage implements OnInit {
     }
 
     init() {
-        this.transfer = this.coinTransferService.transfer;
-        this.chainId = this.coinTransferService.transfer.chainId;
+        this.chainId = this.coinTransferService.chainId;
+        this.intentTransfer = this.coinTransferService.intentTransfer;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
         this.fetchBalance();
@@ -84,18 +86,17 @@ export class DPoSVotePage implements OnInit {
     }
 
     async fetchBalance() {
-        let balance = await this.walletManager.spvBridge.getBalance(this.masterWalletId, this.chainId);
-
-        this.zone.run(()=>{
+        const balance = await this.walletManager.spvBridge.getBalance(this.masterWalletId, this.chainId);
+        this.zone.run(() => {
             console.log("Received balance:", balance);
             this.balance = balance;
         });
     }
 
     async hasPendingVoteTransaction() {
-        let jsonInfo = await this.walletManager.spvBridge.getBalanceInfo(this.masterWalletId, this.chainId);
-        
-        let balanceInfo = JSON.parse(jsonInfo);
+        const jsonInfo = await this.walletManager.spvBridge.getBalanceInfo(this.masterWalletId, this.chainId);
+        const balanceInfo = JSON.parse(jsonInfo);
+
         // TODO: replace line below with a real BalanceInfo type (to be descypted manually, doesn't exist)
         if (balanceInfo[0]['Summary']['SpendingBalance'] !== '0') {
             await this.popupProvider.ionicAlert('confirmTitle', 'test-vote-pending');
@@ -108,7 +109,11 @@ export class DPoSVotePage implements OnInit {
      * sending the intent response.
      */
     cancelOperation() {
-        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+        this.intentService.sendIntentResponse(
+            this.intentTransfer.action,
+            { txid: null },
+            this.intentTransfer.intentId
+        );
         this.appService.close();
     }
 
@@ -117,42 +122,41 @@ export class DPoSVotePage implements OnInit {
     }
 
     async checkValue() {
-        if (this.getBalanceInELA() == 0) {
+        if (this.getBalanceInELA() === 0) {
             this.native.toast_trans('amount-null');
             return;
         }
 
         try {
-            await this.walletManager.spvBridge.isAddressValid(this.masterWalletId, this.transfer.toAddress);
+            await this.walletManager.spvBridge.isAddressValid(this.masterWalletId, 'default');
             this.createVoteProducerTransaction();
-        }
-        catch (error) {
-            this.native.toast_trans("contact-address-digits");
+        } catch (error) {
+            this.native.toast_trans('contact-address-digits');
         }
     }
 
     elaToSELAString(elaAmount: number) {
-        let integerPart = Math.trunc(elaAmount);
-        let fracPart = elaAmount - integerPart;
+        const integerPart = Math.trunc(elaAmount);
+        const fracPart = elaAmount - integerPart;
+        const integerPartString = integerPart.toString();
+        const fracPartString = Math.trunc(fracPart * Config.SELA).toString();
 
-        let integerPartString = integerPart.toString();
-        let fracPartString = Math.trunc(fracPart*Config.SELA).toString();
-
-        return integerPartString+fracPartString;
+        return integerPartString + fracPartString;
     }
 
     // 15950000000 SELA will give 159.5 ELA
     // We need to use this trick because JS is limited to 2^53 bits numbers and this could create
     // problems with big ELA amounts.
     getBalanceInELA(): number {
-        if (!this.balance)
+        if (!this.balance) {
             return 0;
+        }
 
-        let strSizeOfSELA = 8;
-        let leftPart = this.balance.substr(0, this.balance.length-strSizeOfSELA);
-        let rightPart = this.balance.substr(this.balance.length-strSizeOfSELA);
+        const strSizeOfSELA = 8;
+        const leftPart = this.balance.substr(0, this.balance.length - strSizeOfSELA);
+        const rightPart = this.balance.substr(this.balance.length - strSizeOfSELA);
+        const elaAmount = Number(leftPart) + Number(rightPart) / Config.SELA;
 
-        let elaAmount = Number(leftPart) + Number(rightPart)/Config.SELA;
         return elaAmount;
     }
 
@@ -165,18 +169,28 @@ export class DPoSVotePage implements OnInit {
     }
 
     async createVoteProducerTransaction() {
-        let stakeAmount = this.elaToSELAString(this.getBalanceInELA() - this.votingFees());
-        console.log("Creating vote transaction with amount", stakeAmount);
+        const stakeAmount = this.elaToSELAString(this.getBalanceInELA() - this.votingFees());
+        console.log('Creating vote transaction with amount', stakeAmount);
 
-        this.transfer.toAddress = "";
+        const rawTx =
+            await this.walletManager.spvBridge.createVoteProducerTransaction(
+                this.masterWalletId, this.chainId,
+                '', // To address, not necessary
+                stakeAmount,
+                JSON.stringify(this.coinTransferService.publickeys),
+                '', // Memo, not necessary
+            );
 
-        this.transfer.rawTransaction = await this.walletManager.spvBridge.createVoteProducerTransaction(this.masterWalletId, this.chainId,
-            this.transfer.toAddress,
-            stakeAmount,
-            JSON.stringify(this.transfer.publicKeys),
-            this.transfer.memo);
-        
-        this.walletManager.openPayModal(this.transfer);
+        const transfer: Transfer = {
+            masterWalletId: this.masterWalletId,
+            chainId: this.chainId,
+            rawTransaction: rawTx,
+            payPassword: '',
+            action: this.intentTransfer.action,
+            intentId: this.intentTransfer.intentId,
+        };
+
+        this.walletManager.openPayModal(transfer);
     }
 }
 

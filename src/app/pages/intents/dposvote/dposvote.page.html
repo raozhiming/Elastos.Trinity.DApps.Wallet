@@ -29,11 +29,11 @@
         <ion-card>
             <ion-img [src]="!theme.darkMode ? 'assets/intents/dpos.svg' : 'assets/intents/darkmode/dpos.svg'"></ion-img>
             <ion-card-title>You are Voting!</ion-card-title>
-            <ion-card-subtitle>This will cost a minor transaction fee</ion-card-subtitle>
+            <ion-card-subtitle>0.001 transfaction fee will be charged</ion-card-subtitle>
         </ion-card>
         <div class="msg-container">
             <p>You are voting for:</p>
-            <h1 id="count">{{ transfer.publicKeys.length }}/36</h1>
+            <h1 id="count">{{ coinTransferService.publickeys.length }}/36</h1>
             <p id="with">With:</p>
             <h1>{{ getBalanceInELA() | number:'1.0-3' }}<span>ELA</span></h1>
         </div>
