@@ -11,6 +11,7 @@ import { StandardCoinName } from 'src/app/model/Coin';
 import { TransactionStatus, TransactionDirection } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ThrowStmt } from '@angular/compiler';
 
 enum TransactionType {
     RECEIVE = 1,
@@ -219,6 +220,14 @@ export class CoinTxInfoPage implements OnInit {
             }
         }
         return arr;
+    }
+
+    getDisplayableName(): string {
+        if (this.name === 'IDChain') {
+            return 'ELA';
+        } else {
+            return this.name;
+        }
     }
 
     getTransferClass() {

@@ -9,7 +9,7 @@
             <div class="icon-container">
                 <ion-img [src]="payStatusIcon"></ion-img>
             </div>
-            <ion-card-title>{{ direction }} {{ name }}</ion-card-title>
+            <ion-card-title>{{ direction }} {{ getDisplayableName() }}</ion-card-title>
             <ion-card-subtitle>{{ symbol }}{{ resultAmount }}</ion-card-subtitle>
             <p
                 [class.complete]="status === 'Confirmed'"
