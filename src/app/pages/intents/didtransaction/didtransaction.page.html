@@ -2,14 +2,12 @@
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-card>
             <ion-img [src]="!theme.darkMode ? 'assets/intents/did.svg' : 'assets/intents/darkmode/did.svg'"></ion-img>
-            <ion-card-title>Publish Identity</ion-card-title>
-            <ion-card-subtitle>This will cost a minor transaction fee</ion-card-subtitle>
+            <ion-card-title>{{ 'didtransaction-publish-identity' | translate }}</ion-card-title>
+            <ion-card-subtitle>{{ 'didtransaction-transaction-fee' | translate }}</ion-card-subtitle>
         </ion-card>
         <div class="msg-container">
             <p>
-                You are publishing your latest
-                identity changes to the
-                public DID Sidechain.
+                {{ 'didtransaction-intro' | translate }}
             </p>
         </div>
         <ion-row class="btn-row">

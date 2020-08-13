@@ -7,6 +7,7 @@ import { PopupProvider } from '../../../services/popup.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -37,6 +38,7 @@ export class AccessPage implements OnInit {
         public walletManager: WalletManager,
         public popupProvider: PopupProvider,
         public native: Native,
+        private translate: TranslateService,
         public theme: ThemeService
     ) { }
 
@@ -53,10 +55,10 @@ export class AccessPage implements OnInit {
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
         if (this.requestDapp.action === 'walletaccess') {
             this.organizeRequestedFields();
-            this.title = 'Wallet Access from:';
+            this.title = this.translate.instant("access-title-wallet-access-from");
         } else {
             this.exportMnemonic = true;
-            this.title = 'Access Mnemonic from:';
+            this.title = this.translate.instant("access-title-access-mnemonic-from");;
         }
     }
 

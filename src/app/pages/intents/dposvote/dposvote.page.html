@@ -28,13 +28,13 @@
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-card>
             <ion-img [src]="!theme.darkMode ? 'assets/intents/dpos.svg' : 'assets/intents/darkmode/dpos.svg'"></ion-img>
-            <ion-card-title>You are Voting!</ion-card-title>
-            <ion-card-subtitle>0.001 transfaction fee will be charged</ion-card-subtitle>
+            <ion-card-title>{{ 'dposvote-you-are-voting' | translate }}</ion-card-title>
+            <ion-card-subtitle>{{ 'dposvote-transaction-fees' | translate }}</ion-card-subtitle>
         </ion-card>
         <div class="msg-container">
-            <p>You are voting for:</p>
+            <p>{{ 'dposvote-voting-for' | translate }}</p>
             <h1 id="count">{{ coinTransferService.publickeys.length }}/36</h1>
-            <p id="with">With:</p>
+            <p id="with">{{ 'dpostvote-with' | translate }}</p>
             <h1>{{ getBalanceInELA() | number:'1.0-3' }}<span>ELA</span></h1>
         </div>
         <ion-row class="btn-row">

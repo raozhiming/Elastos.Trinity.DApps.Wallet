@@ -31,6 +31,7 @@ import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Transfer } from '../../wallet/coin/coin-transfer/coin-transfer.page';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -55,6 +56,7 @@ export class DidTransactionPage implements OnInit {
         private intentService: IntentService,
         public native: Native,
         public zone: NgZone,
+        private translate: TranslateService,
         public theme: ThemeService
     ) {
         this.init();
@@ -64,7 +66,7 @@ export class DidTransactionPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.appService.setTitleBarTitle('Publish Identity');
+        this.appService.setTitleBarTitle(this.translate.instant("didtransaction-title"));
         appManager.setVisible("show");
     }
 

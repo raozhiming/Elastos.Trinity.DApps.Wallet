@@ -121,6 +121,29 @@ export const fr = {
     "wallet-manager-intro": "Les portefeuilles ont leurs propres paramètres. Vous pouvez configurer ces paramètres ci-dessous.",
     "wallet-manager-add-wallet": "Ajouter un portefeuille",
 
+    // Access intent screen
+    "access-title-wallet-access-from": "Demande d'informations:",
+    "access-title-access-mnemonic-from": "Accès au Mnémonique (!):",
+    "access-request-for-info": "Ceci est une demande d'accès aux informations de votre portefeuille.",
+    "access-reason": "Raison",
+    "access-data-access": "Accès aux données",
+
+    // DID transaction intent screen
+    "didtransaction-title": "Publication d'identité",
+    "didtransaction-publish-identity": "Publication d'identité",
+    "didtransaction-transaction-fee": "Des frais de transaction mineurs s'appliquent",
+    "didtransaction-intro": "Vous vous apprêtez à publier votre identité sur la châine publique.",
+
+    // DPos voting intent screen
+    "dposvote-you-are-voting": "Vous votez!",
+    "dposvote-transaction-fees": "Des frais de transaction de 0.001 ELA seront prélevés",
+    "dposvote-voting-for": "Vous allez voter pour:",
+    "dpostvote-with": "Avec:",
+
+    // Wait for sync
+    "waitforsync-loading": "En attente...",
+    "waitforsync-intro": "Cette opération pourra continuer une fois toutes vos données synchronisées depuis la châine publique.",
+
     // Error codes
     'Error-10000': 'Json parse error of action parameters',
     'Error-10001': 'Parameters error of action',

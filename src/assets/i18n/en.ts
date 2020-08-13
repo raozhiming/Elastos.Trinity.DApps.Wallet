@@ -121,16 +121,34 @@ export const en = {
     "wallet-manager-intro": "Wallets will have individual settings, you can check the options of each wallet below",
     "wallet-manager-add-wallet": "Add Wallet",
 
+    // Access intent screen
+    "access-title-wallet-access-from": "Wallet Access from:",
+    "access-title-access-mnemonic-from": "Access Mnemonic from:",
+    "access-request-for-info": "This is a request for information from your wallet.",
+    "access-reason": "Reason",
+    "access-data-access": "Data Access",
+
+    // DID transaction intent screen
+    "didtransaction-title": "Publish Identity",
+    "didtransaction-publish-identity": "Publish Identity",
+    "didtransaction-transaction-fee": "This will cost a minor transaction fee",
+    "didtransaction-intro": "You are publishing your latest identity changes to the public DID Sidechain.",
+
+    // DPos voting intent screen
+    "dposvote-you-are-voting": "You are Voting!",
+    "dposvote-transaction-fees": "0.001 transfaction fee will be charged",
+    "dposvote-voting-for": "You are voting for:",
+    "dpostvote-with": "With:",
+
+    // Wait for sync
+    "waitforsync-loading": "Loading...",
+    "waitforsync-intro": "Operation can only be performed after data has synced from chain.",
+
     //my-qrcode
     'qrcode': "'s qrcode",
     'copy': 'Copy',
     'my-qrcode': "My qrcode",
     'scanning': 'Scan qrcode',
-
-    // wait for sync
-    'text-wait-sync': 'Wait for sync',
-    'text-wait-info': 'The operation can only be performed after the data synchronization with the chain is completed, please be patient!',
-    'text-wait-info-2': 'After the synchronization is completed, it will automatically go to the next page',
 
     'tab-home': 'Home',
     'wallet': 'Wallet',

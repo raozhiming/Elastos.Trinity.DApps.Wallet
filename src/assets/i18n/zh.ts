@@ -121,16 +121,34 @@ export const zh = {
     "wallet-manager-intro": "Wallets will have individual settings, you can check the options of each wallet below",
     "wallet-manager-add-wallet": "添加钱包",
 
+    // Access intent screen
+    "access-title-wallet-access-from": "Wallet Access from:",
+    "access-title-access-mnemonic-from": "Access Mnemonic from:",
+    "access-request-for-info": "This is a request for information from your wallet.",
+    "access-reason": "Reason",
+    "access-data-access": "Data Access",
+
+    // DID transaction intent screen
+    "didtransaction-title": "Publish Identity",
+    "didtransaction-publish-identity": "Publish Identity",
+    "didtransaction-transaction-fee": "This will cost a minor transaction fee",
+    "didtransaction-intro": "You are publishing your latest identity changes to the public DID Sidechain.",
+
+    // DPos voting intent screen
+    "dposvote-you-are-voting": "You are Voting!",
+    "dposvote-transaction-fees": "0.001 transfaction fee will be charged",
+    "dposvote-voting-for": "You are voting for:",
+    "dpostvote-with": "With:",
+
+    // Wait for sync
+    "waitforsync-loading": "Loading...",
+    "waitforsync-intro": "Operation can only be performed after data has synced from chain.",
+
     //my-qrcode
     'qrcode': "的二维码",
     'copy': '复制',
     'my-qrcode': "我的二维码",
     'scanning': '扫描二维码',
-
-    // wait for sync
-    'text-wait-sync': '等待同步',
-    'text-wait-info': '与链的数据同步完成后才能执行相关操作，请耐心等待！',
-    'text-wait-info-2': '同步完成后将自动进入下一页',
 
     'tab-home': '首页',
     'wallet': '钱包',
