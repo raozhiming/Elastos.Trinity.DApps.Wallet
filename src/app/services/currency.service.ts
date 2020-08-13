@@ -94,7 +94,9 @@ export class CurrencyService {
 
   getCurrencyBalance(cryptoBalance: number): string {
     const currencyBalance = this.selectedCurrency.price * cryptoBalance;
-    if (this.selectedCurrency.symbol === 'BTC' && cryptoBalance !== 0) {
+    if (!cryptoBalance) {
+      return String(0);
+    } else if (this.selectedCurrency.symbol === 'BTC' && cryptoBalance !== 0) {
       return currencyBalance.toFixed(8);
     } else {
       return currencyBalance.toFixed(2);

@@ -2,11 +2,12 @@ import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { Native } from '../../../../services/native.service';
 import { Util } from "../../../../model/Util";
 import { ActivatedRoute } from '@angular/router';
-import { Events, IonSlides, ModalController } from '@ionic/angular';
+import { Events, IonSlides, ModalController, IonInput } from '@ionic/angular';
 import { WalletManager } from '../../../../services/wallet.service';
 import { AuthService } from '../../../../services/auth.service';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 import { WalletCreatedComponent } from 'src/app/components/wallet-created/wallet-created.component';
+import { AppService } from 'src/app/services/app.service';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -18,6 +19,7 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 export class MnemonicWritePage implements OnInit {
 
     @ViewChild('slider', {static: false}) slider: IonSlides;
+    @ViewChild('input', {static: false}) input: IonInput;
 
     slideOpts = {
         initialSlide: 0,
@@ -40,7 +42,8 @@ export class MnemonicWritePage implements OnInit {
         public walletManager: WalletManager,
         private walletCreationService: WalletCreationService,
         public zone: NgZone,
-        private modalCtrl: ModalController
+        private modalCtrl: ModalController,
+        private appService: AppService
     ) {
         this.mnemonicStr = this.native.clone(this.walletCreationService.mnemonicStr);
     }
@@ -55,9 +58,20 @@ export class MnemonicWritePage implements OnInit {
     }
 
     ionViewWillEnter() {
+        this.appService.setBackKeyVisibility(true);
         titleBarManager.setBackgroundColor('#732cd0');
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
         titleBarManager.setTitle('Mnemonic Verify');
+    }
+
+    ionViewDidEnter() {
+   /*      setTimeout(() => {
+            this.input.setFocus();
+        }, 200); */
+    }
+
+    up() {
+        console.log('up');
     }
 
     // For testing purposes

@@ -5,6 +5,7 @@ import { Config } from '../../../config/Config';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
+import { AppService } from 'src/app/services/app.service';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -29,7 +30,8 @@ export class WalletCreatePage implements OnInit {
         public native: Native,
         private walletManager: WalletManager,
         public walletCreationService: WalletCreationService,
-        public zone: NgZone
+        public zone: NgZone,
+        private appService: AppService
     ) {
         if (this.walletCreationService.isMulti) {
             this.wallet.singleAddress = true;
@@ -41,6 +43,7 @@ export class WalletCreatePage implements OnInit {
 
     ionViewWillEnter() {
         titleBarManager.setBackgroundColor('#732cd0');
+        this.appService.setBackKeyVisibility(true);
         if (this.walletCreationService.type === 1) {
             titleBarManager.setTitle('Create Wallet');
         } else {

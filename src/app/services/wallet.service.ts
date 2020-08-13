@@ -58,7 +58,7 @@ class TransactionMapEntry {
 
 type TransactionMap = {
     [k: string]: TransactionMapEntry;
-}
+};
 
 // TODO: Replace all the Promise<any> with real data structures
 // TODO: Use real types everywhere, no "any" any more.
@@ -123,8 +123,8 @@ export class WalletManager {
 
         try {
             console.log("Getting all master wallets from the SPV SDK");
+            const idList = await this.spvBridge.getAllMasterWallets();
 
-            let idList = await this.spvBridge.getAllMasterWallets();
             if (idList.length === 0) {
                 console.log("No SPV wallet found, going to launcher screen");
                 this.goToLauncherScreen();
@@ -150,8 +150,7 @@ export class WalletManager {
                     // No backward compatibility support: old wallets are just deleted.
                     await this.spvBridge.destroyWallet(masterId);
                     continue; // Break the for loop for this wallet.
-                }
-                else {
+                } else {
                     console.log("Found extended wallet info for master wallet id " + masterId, extendedInfo);
                     if (extendedInfo.subWallets.length < 3) {
                         // open IDChain and ETHSC automatic

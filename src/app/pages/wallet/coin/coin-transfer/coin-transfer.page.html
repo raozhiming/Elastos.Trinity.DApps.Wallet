@@ -84,7 +84,8 @@
             </ion-col>
         </ion-row>
         <!-- Address Container -->
-        <h1>{{ 'send-to' | translate }}</h1>
+        <p [class.invisible]="!amount">Balance Remaining {{ walletManager.activeMasterWallet.subWallets[chainId].balance/SELA - amount }}</p>
+        <h1 class="send">{{ 'send-to' | translate }}</h1>
         <ion-row *ngIf="suggestedAddresses.length > 0">
             <ion-col size="12">
                 <p style="color:black" *ngFor="let suggestedAddress of suggestedAddresses" (click)="selectSuggestedAddress(suggestedAddress)">

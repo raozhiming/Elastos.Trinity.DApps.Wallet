@@ -13,6 +13,7 @@
                     <ion-col class='input-col' size="10">
                         <ion-input
                             type="text"
+                            (keyup)="up()"
                             [(ngModel)]="word.input"
                             (ngModelChange)="inputChanged($event)"
                         >
@@ -28,6 +29,7 @@
                     <ion-col class='input-col' size="10">
                         <ion-input
                             type="text"
+                            #input
                             [(ngModel)]="word.input"
                             (ngModelChange)="inputChanged($event)"
                         >
@@ -43,6 +45,7 @@
                     <ion-col class='input-col' size="10">
                         <ion-input
                             type="text"
+                            #input
                             [(ngModel)]="word.input"
                             (ngModelChange)="inputChanged($event)"
                         >

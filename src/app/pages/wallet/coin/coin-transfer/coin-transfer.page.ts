@@ -159,7 +159,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.transaction = this.createRechargeTransaction;
                 this.getSubwalletAddress(this.coinTransferService.subchainId);
 
-                // AUto suggest a transfer amount of 0.1 ELA (enough) to the ID chain. Otherwise, let user define his own amount.
+                // Auto suggest a transfer amount of 0.1 ELA (enough) to the ID chain. Otherwise, let user define his own amount.
                 if (this.toSubWallet.id === StandardCoinName.IDChain) {
                     this.amount = 0.1;
                 }
@@ -375,7 +375,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
             let cryptoNameResolver = new CryptoAddressResolvers.CryptoNameResolver(this.http);
             let results = await cryptoNameResolver.resolve(enteredText, StandardCoinName.ELA);
-            console.log("cryptoname results", results)
+            console.log("cryptoname results", results);
 
             this.suggestedAddresses = this.suggestedAddresses.concat(results);
         }
