@@ -107,13 +107,13 @@ export class MnemonicExportPage implements OnInit {
         this.native.go('/wallet-home');
     }
 
-    onShare() {
-        this.native.setRootRouter('/wallet-home');
-        this.intentService.sendIntentResponse(
+    async onShare() {
+        await this.intentService.sendIntentResponse(
             this.requestDapp.action,
             { mnemonic: this.mnemonicStr },
             this.requestDapp.intentId
         );
+        this.appService.close();
     }
 
     async onExport() {

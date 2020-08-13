@@ -2,7 +2,7 @@ export const zh = {
     // Generic actions
     "send-to": "Send to",
     "enter-amount": "Enter amount",
-    "total-amount": "TOTAL AMOUNT",
+    "total-amount": "总额",
     "advanced-options": "Advanced options",
     "transfer": "Transfer",
     "send": "Send",
@@ -15,27 +15,27 @@ export const zh = {
     'transaction-fail': '交易失败',
 
     // Home screen
-    "wallet-home-title": "Wallet Home",
-    "wallet-overview": "Wallet Overview",
-    "you-have-n-wallets": "YOU HAVE {{walletsCount}} TOKENS",
-    "synchronized": "{{progress}}% synced",
-    "sync-progress": "Synchronization {{progress}}%",
-    "coin-list": "Token List",
+    "wallet-home-title": "钱包主页",
+    "wallet-overview": "钱包概述",
+    "you-have-n-wallets": "您有 {{walletsCount}} 个币种",
+    "synchronized": "{{progress}}% 完成",
+    "sync-progress": "同步中 {{progress}}%",
+    "coin-list": "币列表",
 
     // Settings screen
     "settings-title": "设置",
-    "settings-general": "General",
-    "settings-my-wallets": "My Wallets",
+    "settings-general": "通用",
+    "settings-my-wallets": "我的钱包",
     "settings-my-wallets-subtitle": "Backup wallets and access their individual settings",
-    "settings-currency": "Currency",
-    "settings-currency-subtitle": "Select the default currency",
+    "settings-currency": "货币",
+    "settings-currency-subtitle": "选择默认的货币",
 
     // Currencies screen
-    "available-currencies": "Available Currencies",
+    "available-currencies": "支持的货币",
 
     // Wallet settings screen
-    "wallet-settings-title": "Wallet Settings",
-    "wallet-settings-backup-wallet": "Backup Wallet",
+    "wallet-settings-title": "钱包设置",
+    "wallet-settings-backup-wallet": "备份钱包",
     "wallet-settings-backup-wallet-subtitle": "View mnemonics to export and backup",
     "wallet-settings-change-name": "Change Name",
     "wallet-settings-change-name-subtitle": "Organize your wallet with a custom name",
@@ -211,7 +211,7 @@ export const zh = {
     'text-mnemonic-repwd': '请再次设置助记词密码',
     'text-password-error': '密码错误',
     'text-coin-list': '币种列表',
-    'text-coin-close-warning': 'Current coin state will be deleted, are you sure?',
+    'text-coin-close-warning': '将要删除当前币种， 是否继续?',
     'text-fees-pay': '手续费支付方',
     'text-fees-pay-sender': '我来支付',
     'text-fees-receiver': '对方支付',
@@ -488,7 +488,7 @@ export const zh = {
     'text-multi-title2': "签名数量",
     'text-multi-error': "签名数不能大于拥有者数量",
     'text-delete-contact-confirm': "确定要删除吗？",
-    
+
     // Error codes
     'Error-10000': 'Action参数Json格式错误',
     'Error-10001': 'Action参数错误',

@@ -130,19 +130,19 @@ export class AccessPage implements OnInit {
      * Cancel the vote operation. Closes the screen and goes back to the calling application after
      * sending the intent response.
      */
-    cancelOperation() {
-        this.intentService.sendIntentResponse(this.requestDapp.action, { walletinfo: null }, this.requestDapp.intentId);
-        this.native.setRootRouter('/wallet-home');
+    async cancelOperation() {
+        await this.intentService.sendIntentResponse(this.requestDapp.action, { walletinfo: null }, this.requestDapp.intentId);
+        this.appService.close();
     }
 
-    onShare() {
+    async onShare() {
         if (this.exportMnemonic) {
-            this.native.go('/exportmnemonic', { fromIntent: true });
+            this.native.go('/mnemonic-export', { fromIntent: true });
         } else {
             const selectedClaim = this.buildDeliverableList();
-            this.intentService.sendIntentResponse(this.requestDapp.action,
+            await this.intentService.sendIntentResponse(this.requestDapp.action,
                     {walletinfo: selectedClaim}, this.requestDapp.intentId);
-            this.native.setRootRouter('/wallet-home');
+            this.appService.close();
         }
     }
 }

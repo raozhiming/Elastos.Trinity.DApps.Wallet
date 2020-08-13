@@ -6,7 +6,7 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { CoinTransferService } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, IntentTransfer } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
@@ -26,9 +26,10 @@ export class WaitForSyncPage implements OnInit {
     showOn = true;
 
     masterWallet: MasterWallet = null;
+    intentTransfer: IntentTransfer = null;
     transfer: any = null;
 
-    chainId: string;
+    chainId: StandardCoinName;
     txId: string;
     walletInfo = {};
 
@@ -63,6 +64,7 @@ export class WaitForSyncPage implements OnInit {
     }
 
     async init() {
+        this.intentTransfer = this.coinTransferService.intentTransfer;
         this.transfer = this.coinTransferService.transfer;
         this.chainId = this.coinTransferService.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
@@ -70,7 +72,7 @@ export class WaitForSyncPage implements OnInit {
 
         console.log("Wait for sync - Master wallet:", this.masterWallet, "Chain ID:", this.chainId);
 
-        switch (this.transfer.action) {
+        switch (this.intentTransfer.action) {
             case 'crmembervote':
                 this.action = 'text-vote-crcouncil';
                 this.nextScreen = '/crmembervote';
@@ -147,8 +149,8 @@ export class WaitForSyncPage implements OnInit {
         this.native.setRootRouter(this.nextScreen);
     }
 
-    cancelOperation() {
-        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+    async cancelOperation() {
+        await this.intentService.sendIntentResponse(this.intentTransfer.action, {txid: null}, this.intentTransfer.intentId);
         this.appService.close();
     }
 

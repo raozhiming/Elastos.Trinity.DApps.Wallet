@@ -448,7 +448,7 @@ export class WalletManager {
         // Add only standard subwallets to SPV stop sync request
         let chainIds: StandardCoinName[] = [];
         for (let subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
-            if (subWallet.type == CoinType.STANDARD) 
+            if (subWallet.type == CoinType.STANDARD)
                 chainIds.push(subWallet.id as StandardCoinName);
         }
 
@@ -747,7 +747,7 @@ export class WalletManager {
         if (!Util.isEmptyObject(transfer.action)) {
             this.lockTx(publishedTransaction.TxHash);
 
-            setTimeout(() => {
+            setTimeout(async () => {
                 let txId = publishedTransaction.TxHash;
                 const code = this.getTxCode(txId);
                 if (code !== 0) {
@@ -755,13 +755,12 @@ export class WalletManager {
                 }
                 this.native.hideLoading();
                 this.native.toast_trans('send-raw-transaction');
-                this.native.setRootRouter('/wallet-home');
                 console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
-                appManager.sendIntentResponse(
-                    transfer.action,
+                await this.sendIntentResponse(transfer.action,
                     { txid: txId },
-                    transfer.intentId
-                );
+                    transfer.intentId);
+                // this.native.setRootRouter('/wallet-home');
+                appManager.close();
             }, 5000); // wait for 5s for txPublished
         } else {
             console.log(publishedTransaction.TxHash);
@@ -923,14 +922,14 @@ export class WalletManager {
         return totalBalance;
     }
 
-    // sendIntentResponse(action, result, intentId): Promise<void> {
-    //     return new Promise((resolve, reject)=>{
-    //         appManager.sendIntentResponse(action, result, intentId, () => {
-    //             resolve();
-    //         }, (err) => {
-    //             console.error('sendIntentResponse error!', err);
-    //             reject(err);
-    //         });
-    //     });
-    // }
+    sendIntentResponse(action, result, intentId): Promise<void> {
+        return new Promise((resolve, reject)=>{
+            appManager.sendIntentResponse(action, result, intentId, () => {
+                resolve();
+            }, (err) => {
+                console.error('sendIntentResponse error!', err);
+                reject(err);
+            });
+        });
+    }
 }

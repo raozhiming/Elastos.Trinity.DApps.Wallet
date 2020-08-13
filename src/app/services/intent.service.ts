@@ -142,6 +142,9 @@ export class IntentService {
                     amount: intent.params.amount,
                     memo: intent.params.memo || ''
                 };
+                this.coinTransferService.transfer.toAddress = transfer.toAddress;
+                this.coinTransferService.transfer.amount = transfer.amount;
+                this.coinTransferService.transfer.memo = transfer.memo;
                 this.events.publish('intent:pay', transfer);
                 break;
 

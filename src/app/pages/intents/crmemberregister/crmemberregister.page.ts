@@ -122,8 +122,8 @@ export class CRMemberRegisterPage implements OnInit {
      * Cancel the vote operation. Closes the screen and goes back to the calling application after
      * sending the intent response.
      */
-    cancelOperation() {
-        this.intentService.sendIntentResponse(this.transfer.action, { txid: null }, this.transfer.intentId);
+    async cancelOperation() {
+        await this.intentService.sendIntentResponse(this.transfer.action, { txid: null }, this.transfer.intentId);
         this.appService.close();
     }
 
@@ -161,7 +161,7 @@ export class CRMemberRegisterPage implements OnInit {
 
         payload.Signature = await this.walletManager.spvBridge.didSignDigest(this.masterWallet.id,
                 this.transfer.did, digest, payPassword);
-        
+
         this.transfer.rawTransaction  = await this.walletManager.spvBridge.createRegisterCRTransaction(this.masterWallet.id, this.chainId,
                 '', payload, this.depositAmount, this.transfer.memo);
         this.walletManager.openPayModal(this.transfer);

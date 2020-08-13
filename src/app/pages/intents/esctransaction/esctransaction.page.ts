@@ -93,8 +93,8 @@ export class EscTransactionPage implements OnInit {
      * Cancel the vote operation. Closes the screen and goes back to the calling application after
      * sending the intent response.
      */
-    cancelOperation() {
-        this.intentService.sendIntentResponse(
+    async cancelOperation() {
+        await this.intentService.sendIntentResponse(
             this.intentTransfer.action,
             { txid: null },
             this.intentTransfer.intentId

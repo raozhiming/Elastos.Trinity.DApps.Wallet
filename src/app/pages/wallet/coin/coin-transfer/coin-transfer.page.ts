@@ -149,7 +149,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         switch (this.transferType) {
             // For Recharge Transfer
-            case 1:
+            case TransferType.RECHARGE:
                 // Setup page display
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
                 this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
@@ -169,12 +169,15 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 console.log('Subwallet address', this.toAddress);
                 break;
             // For Send Transfer
-            case 2:
+            case TransferType.SEND:
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
                 this.transaction = this.createSendTransaction;
                 break;
             // For Pay Intent
-            case 3:
+            case TransferType.PAY:
+                this.toAddress = this.coinTransferService.transfer.toAddress;
+                this.amount = this.coinTransferService.transfer.amount;
+                this.memo = this.coinTransferService.transfer.memo;
                 this.appService.setTitleBarTitle('Payment');
                 this.transaction = this.createSendTransaction;
                 break;
@@ -336,8 +339,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     // Pay intent
-    cancelPayment() {
-        this.intentService.sendIntentResponse(
+    async cancelPayment() {
+        await this.intentService.sendIntentResponse(
             this.coinTransferService.intentTransfer.action,
             { txid: null },
             this.coinTransferService.intentTransfer.intentId
@@ -364,9 +367,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         // Quick and dirty way to not try to resolve a name when it's actually an address already, not name.
         // Could be improved later.
-        if (enteredText.length > 20) 
+        if (enteredText.length > 20)
             return;
-    
+
         // Cryptoname
         if (enteredText.length >= 3) {
             // For now, handle only ELA addresses for cryptoname

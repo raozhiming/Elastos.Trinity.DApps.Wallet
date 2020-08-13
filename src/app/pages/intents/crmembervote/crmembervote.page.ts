@@ -90,7 +90,7 @@ export class CRmembervotePage implements OnInit {
 
     async hasPendingVoteTransaction() {
         let info = await this.walletManager.spvBridge.getBalanceInfo(this.masterWallet.id, this.chainId);
-        
+
         let balanceInfo = JSON.parse(info);
         // console.log('balanceInfo ', balanceInfo);
         if (balanceInfo[0]['Summary']['SpendingBalance'] !== '0') {
@@ -103,8 +103,8 @@ export class CRmembervotePage implements OnInit {
      * Cancel the vote operation. Closes the screen and goes back to the calling application after
      * sending the intent response.
      */
-    cancelOperation() {
-        this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+    async cancelOperation() {
+        await this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
         this.appService.close();
     }
 
