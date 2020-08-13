@@ -82,6 +82,8 @@ export class StandardSubWallet extends SubWallet {
         this.progress = progress;
         this.lastBlockTime = userReadableDateTime;
 
+        console.log("Standard subwallet "+this.id+" got update sync progress request. Progress = "+progress);
+
         const curTimestampMs = (new Date()).getTime();
         if (curTimestampMs - this.timestamp > 5000) { // 5s
             this.masterWallet.walletManager.events.publish(this.id + ':syncprogress', this.id);
