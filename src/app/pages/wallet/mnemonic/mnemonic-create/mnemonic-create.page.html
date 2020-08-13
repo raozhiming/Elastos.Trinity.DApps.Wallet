@@ -2,28 +2,20 @@
     <ion-slides #slide [options]="slideOpts">
         <ion-slide class="message-container">
             <h1>
-                Keep It secret, <br>
-                Keep it safe!
+                {{ 'mnemonic-warning1' | translate }} <br>{{ 'mnemonic-warning2' | translate }}
             </h1>
             <p>
-                Never share your mnemonic
-                phrase with anyone and always
-                keep it safe! Make sure no one
-                is watching you and click below.
+                {{ 'mnemonic-warning3' | translate }}
             </p>
             <ion-row class="btn-container">
                 <ion-button color="secondary" (click)="nextSlide(slide)">
-                    <ion-label>View Mnemonic</ion-label>
+                    <ion-label> {{ 'view-mnemonic' | translate }}</ion-label>
                 </ion-button>
             </ion-row>
         </ion-slide>
         <ion-slide class="ion-text-center mnemonic-container">
             <p>
-                These are your 12 security words 
-                (mnemonic phrase). Lose these 
-                and you will lose the wallet, so you
-                must keep them written down, in
-                order, and safe!
+                {{ 'your-mnemonic-prompt1' | translate }}<b>{{ 'your-mnemonic-prompt2' | translate }}</b>{{ 'your-mnemonic-prompt3' | translate }}<br><br>
             </p>
             <ion-row class="mnemonic-row">
                 <ion-col size="3.6" *ngFor="let item of mnemonicList; let i = index">
@@ -38,5 +30,5 @@
             </ion-row>
         </ion-slide>
     </ion-slides>
-    
+
 </ion-content>

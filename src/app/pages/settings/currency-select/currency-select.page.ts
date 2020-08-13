@@ -23,7 +23,7 @@ export class CurrencySelectPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.appService.setTitleBarTitle('Select Currency');
+    this.appService.setTitleBarTitle(this.translate.instant('select-currency-title'));
   }
 
 }

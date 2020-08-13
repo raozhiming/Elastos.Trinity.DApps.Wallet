@@ -1,8 +1,7 @@
 <ion-content>
     <ion-grid class="ion-text-center container">
         <p>
-            Please type your 12 security words 
-            (mnemonic phrase) in order to verify it.
+            {{ 'type-menmonic-verify' | translate }}
         </p>
         <ion-slides #slider pager [options]="slideOpts">
             <ion-slide>
@@ -53,8 +52,8 @@
                     </ion-col>
                 </ion-row>
             </ion-slide>
-        </ion-slides> 
-    
+        </ion-slides>
+
         <ion-row class="btn-container">
             <ion-button color="secondary" (click)="onNext()">
                 <ion-label>{{ 'confirm' | translate }}</ion-label>

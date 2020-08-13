@@ -31,7 +31,11 @@ export const en = {
     "settings-currency-subtitle": "Select the default currency",
 
     // Currencies screen
+    "select-currency-title": "Select Currency",
     "available-currencies": "Available Currencies",
+    "united-states-dollar": "United States Dollar",
+    "chinese-yuan": "Chinese Yuan",
+    "bitcoin": "Bitcoin",
 
     // Wallet settings screen
     "wallet-settings-title": "Wallet Settings",
@@ -112,6 +116,10 @@ export const en = {
     "coin-list-title": "Manage Coin List",
     "coin-list-enable-disable-coins": "Enable/Disable Coins",
     "coin-list-enable-disable-coins-intro": "Toggle what coins you would like to display on your wallet home screen. ELA Mainchain and Sidechains are always shown.",
+    "ela-mainchain": "Elastos MainChain",
+    "ela-idchain": "Elastos ID SideChain",
+    "ela-ethchain": "Elastos ETH SideChain",
+    "erc-20-token": " ERC 20 Token",
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirm deletion?",
@@ -127,6 +135,14 @@ export const en = {
     "access-request-for-info": "This is a request for information from your wallet.",
     "access-reason": "Reason",
     "access-data-access": "Data Access",
+    'access-mnemonic': 'Request Mnemonic',
+    'elaaddress': 'Wallet Address',
+    'elaamount': 'ELA Balance',
+    'requester': 'Request from',
+    'text-allow': 'Allow',
+    'text-warning': 'Warning',
+    'text-share-mnemonic-warning': 'Mnemonic is the only proof of blockchain assets. Please confirm that there is no risk of leakage before sharing!',
+
 
     // DID transaction intent screen
     "didtransaction-title": "Publish Identity",
@@ -150,10 +166,31 @@ export const en = {
     'my-qrcode': "My qrcode",
     'scanning': 'Scan qrcode',
 
-    'tab-home': 'Home',
+    // Mnemonic
+    'mnemonic': 'Mnemonic',
+    'your-mnemonic-prompt1': 'These are your 12 security words (mnemonic). Lose these and you will lose the wallet, so you must keep them written down ',
+    'your-mnemonic-prompt2': 'in order',
+    'your-mnemonic-prompt3': ', and safe!',
+    'back-to-setting': 'Back to Settings',
+    'view-mnemonic': "View Mnemonic",
+    'mnemonic-warning1': 'Keep It secret,',
+    'mnemonic-warning2': 'Keep it safe!',
+    'mnemonic-warning3': 'Never share your mnemonic phrase with anyone and always keep it safe! Make sure no one is watching you and click below.',
+    'type-menmonic-verify': 'Please type your 12 security words (mnemonic phrase) in order to verify it.',
+    'type-menmonic-import': 'Type your mnemonic sequence of words to import your wallet. ',
+
+    // Launcher screen
     'wallet': 'Wallet',
+    'wallet-prompt1': 'Secure Wallet for',
+    'wallet-prompt2': 'The Elastos ecosystem',
+    'get-started': 'Get Started',
+    'import-wallet': 'Already got a Wallet? Import it.',
+
     'launcher-create-wallet': 'Create Wallet',
+    'enter-wallet-name': 'Please enter a wallet name',
+    'signaddress-wallet': 'Single Address Wallet',
     'launcher-backup-import': 'Import Wallet',
+
     'launcher-warning-title': 'IMPORTANT NOTE',
     'launcher-warning': 'This wallet is stable but still being tested at the moment. You may avoid using large amounts of ELA for now.',
     'text-wallet-export': 'Export Wallet',
@@ -170,7 +207,6 @@ export const en = {
     'text-memory': 'I have written it down',
     'text-memo': 'Memo',
     'text-information': 's_info',
-    'text-mnemonic': 'Mnemonic',
     'text-mnemonic-prompt': 'Please carefully write down this phrase',
     'text-mnemonic-prompt2': 'Please tap each word in the correct order',
     'text-mnemonic-ok': 'Mnemonics Verified',
@@ -296,15 +332,7 @@ export const en = {
     'text-wallet-repwd': 'Repeat SecretKey Password',
     'text-signaddress': 'Single Address Wallet',
     'text-pwd-repeat': 'Repeat Password',
-    // access page
-    'access-walletinfo': 'Request Wallet Info',
-    'access-mnemonic': 'Request Mnemonic',
-    'elaaddress': 'Wallet Address',
-    'elaamount': 'ELA Balance',
-    'requester': 'Request from',
-    'text-allow': 'Allow',
-    'text-warning': 'Warning',
-    'text-share-mnemonic-warning': 'Mnemonic is the only proof of blockchain assets. Please confirm that there is no risk of leakage before sharing!',
+
     // reset password
     'paypassword-reset': 'Reset pay password',
     'text-old-pay-password': 'Input Original Pay Password',
@@ -504,7 +532,7 @@ export const en = {
     'text-multi-title2': "Required number of signatures",
     'text-multi-error': "Number of signatures should less than number of public-keys",
     'text-delete-contact-confirm': "Delete this contact ?",
-    
+
     // Error codes
     'Error-10000': 'Json parse error of action parameters',
     'Error-10001': 'Parameters error of action',

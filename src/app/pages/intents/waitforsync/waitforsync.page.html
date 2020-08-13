@@ -15,7 +15,7 @@
             <ion-col size="5" class="middle-col">
                 <h1>Elastos</h1>
                 <p>ELA</p>
-                <span class="synced">&#8226; Synchronized 100%</span>  
+                <span class="synced">&#8226; Synchronized 100%</span>
             </ion-col>
             <ion-col size="5" class="right-col">
                 <h1>100</h1>
@@ -55,11 +55,11 @@
                 </div>
                 <div *ngIf="chainId === 'IDChain'">
                     <h1>Elastos DID</h1>
-                    <p>ELADIDSC</p>
+                    <p>ELA/ID</p>
                 </div>
                 <div *ngIf="chainId === 'ETHSC'">
                     <h1>Elastos ETH</h1>
-                    <p>ELAETHSC</p>
+                    <p>ELA/ETHSC</p>
                 </div>
                 <div *ngIf="chainId === 'ERC20'">
                     <h1>{{ chainId }}</h1>
@@ -71,7 +71,7 @@
             <ion-col size="5" class="right-col">
                 <h1>{{ masterWallet.subWallets[chainId].balance/SELA }}</h1>
                 <p>
-                    {{ currencyService.getCurrencyBalance(masterWallet.subWallets[chainId].balance/SELA) }} 
+                    {{ currencyService.getCurrencyBalance(masterWallet.subWallets[chainId].balance/SELA) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>

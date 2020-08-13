@@ -31,7 +31,11 @@ export const fr = {
     "settings-currency-subtitle": "Selectionnez la devise à afficher",
 
     // Currencies screen
+    "select-currency-title": "Select Currency",
     "available-currencies": "Devises affichables",
+    "united-states-dollar": "United States Dollar",
+    "chinese-yuan": "Chinese Yuan",
+    "bitcoin": "Bitcoin",
 
     // Wallet settings screen
     "wallet-settings-title": "Paramètres Portefeuille",
@@ -112,6 +116,11 @@ export const fr = {
     "coin-list-title": "Gestion des Jetons",
     "coin-list-enable-disable-coins": "Activer/Désactiver des Jetons",
     "coin-list-enable-disable-coins-intro": "Sélectionnez les jetons que vous souhaitez afficher dans le portefeuille actuel. Le jeton principal ELA et les chaînes principales Elastos sont toujours actives.",
+    "ela-mainchain": "Elastos MainChain",
+    "ela-idchain": "Elastos ID SideChain",
+    "ela-ethchain": "Elastos ETH SideChain",
+    "erc-20-token": " ERC 20 Token",
+
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirmer la suppression?",
@@ -127,6 +136,13 @@ export const fr = {
     "access-request-for-info": "Ceci est une demande d'accès aux informations de votre portefeuille.",
     "access-reason": "Raison",
     "access-data-access": "Accès aux données",
+    'access-mnemonic': 'Request Mnemonic',
+    'elaaddress': 'Wallet Address',
+    'elaamount': 'ELA Balance',
+    'requester': 'Request from',
+    'text-allow': 'Allow',
+    'text-warning': 'Warning',
+    'text-share-mnemonic-warning': 'Mnemonic is the only proof of blockchain assets. Please confirm that there is no risk of leakage before sharing!',
 
     // DID transaction intent screen
     "didtransaction-title": "Publication d'identité",
@@ -143,6 +159,31 @@ export const fr = {
     // Wait for sync
     "waitforsync-loading": "En attente...",
     "waitforsync-intro": "Cette opération pourra continuer une fois toutes vos données synchronisées depuis la châine publique.",
+
+    // Mnemonic
+    'mnemonic': 'Mnémonique',
+    'your-mnemonic-prompt1': 'Voici vos 12 mots secrets (mnémonique). Si vous les perdez, vous perdez votre portefeuille, alors notez-les quelque part ',
+    'your-mnemonic-prompt2': 'dans le bon ordre',
+    'your-mnemonic-prompt3': ', et en sécurité!',
+    'back-to-setting': 'Back to Settings',
+    'view-mnemonic': "View Mnemonic",
+    'mnemonic-warning1': 'Keep It secret,',
+    'mnemonic-warning2': 'Keep it safe!',
+    'mnemonic-warning3': 'Never share your mnemonic phrase with anyone and always keep it safe! Make sure no one is watching you and click below.',
+    'type-menmonic-verify': 'Please type your 12 security words (mnemonic phrase) in order to verify it.',
+    'type-menmonic-import': 'Type your mnemonic sequence of words to import your wallet. ',
+
+    // Launcher screen
+    'wallet': 'Wallet',
+    'wallet-prompt1': 'Secure Wallet for',
+    'wallet-prompt2': 'The Elastos ecosystem',
+    'get-started': 'Get Started',
+    'import-wallet': 'Already got a Wallet? Import it.',
+
+    'launcher-create-wallet': 'Create Wallet',
+    'enter-wallet-name': 'Please enter a wallet name',
+    'signaddress-wallet': 'Single Address Wallet',
+    'launcher-backup-import': 'Import Wallet',
 
     // Error codes
     'Error-10000': 'Json parse error of action parameters',

@@ -8,6 +8,7 @@ import { AppService } from 'src/app/services/app.service';
 import { Util } from 'src/app/model/Util';
 import { Config } from 'src/app/config/Config';
 import { ThemeService } from 'src/app/services/theme.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-wallet-manager',
@@ -25,7 +26,8 @@ export class WalletManagerPage implements OnInit {
         private appService: AppService,
         public theme: ThemeService,
         private walletEditionService: WalletEditionService,
-        public walletManager: WalletManager
+        public walletManager: WalletManager,
+        private translate: TranslateService
     ) {
     }
 
@@ -33,7 +35,7 @@ export class WalletManagerPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.appService.setTitleBarTitle('My Wallets');
+        this.appService.setTitleBarTitle(this.translate.instant('settings-my-wallets'));
         this.theme.getTheme();
     }
 

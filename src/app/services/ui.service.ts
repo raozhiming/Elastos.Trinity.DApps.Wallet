@@ -40,9 +40,9 @@ export class UiService {
         case 'ELA':
             return subwallet.id;
         case 'IDChain':
-            return 'ELADIDSC';
+            return 'ELA/ID';
         case 'ETHSC':
-            return 'ELAETHSC';
+            return 'ELA/ETHSC';
         case 'ERC20':
             return 'ERC20 Token';
     }

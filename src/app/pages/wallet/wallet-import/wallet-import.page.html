@@ -1,8 +1,7 @@
 <ion-content>
     <ion-grid class="ion-text-center container">
         <p>
-            Type your mnemonic sequence
-            of words to import your wallet. 
+            {{ 'type-menmonic-import' | translate }}
         </p>
         <ion-slides #slider pager [options]="slideOpts">
             <ion-slide>
@@ -50,8 +49,8 @@
                     </ion-col>
                 </ion-row>
             </ion-slide>
-        </ion-slides> 
-    
+        </ion-slides>
+
         <ion-row class="btn-container">
             <ion-button color="secondary" (click)="onImport()">
                 <ion-label>{{ 'confirm' | translate }}</ion-label>

@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
 import { AppService } from 'src/app/services/app.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -20,8 +21,8 @@ export class WalletCreatePage implements OnInit {
     public wallet = {
         name: '',
         singleAddress: false,
-        //payPassword: '',
-        //rePayPassword: '',
+        // payPassword: '',
+        // rePayPassword: '',
         mnemonicPassword: ''
     };
 
@@ -31,7 +32,8 @@ export class WalletCreatePage implements OnInit {
         private walletManager: WalletManager,
         public walletCreationService: WalletCreationService,
         public zone: NgZone,
-        private appService: AppService
+        private appService: AppService,
+        public translate: TranslateService,
     ) {
         if (this.walletCreationService.isMulti) {
             this.wallet.singleAddress = true;
@@ -45,9 +47,9 @@ export class WalletCreatePage implements OnInit {
         titleBarManager.setBackgroundColor('#732cd0');
         this.appService.setBackKeyVisibility(true);
         if (this.walletCreationService.type === 1) {
-            titleBarManager.setTitle('Create Wallet');
+            titleBarManager.setTitle(this.translate.instant('launcher-create-wallet'));
         } else {
-            titleBarManager.setTitle('Import Wallet');
+            titleBarManager.setTitle(this.translate.instant('launcher-backup-import'));
         }
     }
 

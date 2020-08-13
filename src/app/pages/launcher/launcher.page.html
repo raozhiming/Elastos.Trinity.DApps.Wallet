@@ -29,12 +29,12 @@
 <ion-content>
     <ion-grid class="container">
         <img src="assets/onboard/wallet.svg"/>
-        <h1>Secure Wallet for<br>The Elastos ecosystem</h1>
+        <h1>{{ 'wallet-prompt1' | translate }}<br>{{ 'wallet-prompt2' | translate }}</h1>
         <ion-row class="btn-container">
             <ion-button color="secondary" (click)="onNext(1)">
-                <ion-label>Get Started</ion-label>
+                <ion-label>{{ 'get-started' | translate }}</ion-label>
             </ion-button>
         </ion-row>
-        <p (click)="onNext(2)">Already got a Wallet? Import it.</p>
+        <p (click)="onNext(2)">{{ 'import-wallet' | translate }}</p>
     </ion-grid>
 </ion-content>

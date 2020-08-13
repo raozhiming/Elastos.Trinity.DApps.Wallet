@@ -1,7 +1,7 @@
 <ion-content>
     <ion-grid class="ion-text-center container">
         <p>
-            Please enter a wallet name.
+            {{ 'enter-wallet-name' | translate }}
         </p>
         <ion-row>
             <ion-input
@@ -29,12 +29,12 @@
         </ion-row>-->
         <ion-row class="options-row" (click)="showOptions = !showOptions">
             <span>
-                Advanced Options &nbsp; 
+                {{ 'advanced-options' | translate }} &nbsp;
                 <img [class.rotate]="showOptions" src="assets/icons/darkmode/down-arrow.svg"/>
             </span>
         </ion-row>
         <ion-row *ngIf="showOptions" class="toggle-row">
-            <h1>Single Address Wallet</h1>
+            <h1>{{ 'signaddress-wallet' | translate }}</h1>
             <ion-toggle [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
         </ion-row>
         <ion-row class="btn-container">

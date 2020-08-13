@@ -8,6 +8,7 @@ import { LocalStorage } from '../../../../services/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 import { AppService } from 'src/app/services/app.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -39,7 +40,8 @@ export class MnemonicCreatePage implements OnInit {
         public events: Events,
         public zone: NgZone,
         private walletCreationService: WalletCreationService,
-        private appService: AppService
+        private appService: AppService,
+        private translate: TranslateService
     ) {
         native.showLoading().then(() => {
             this.init();
@@ -53,7 +55,7 @@ export class MnemonicCreatePage implements OnInit {
         this.appService.setBackKeyVisibility(true);
         titleBarManager.setBackgroundColor('#6B26C6');
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-        titleBarManager.setTitle('Mnemonic');
+        titleBarManager.setTitle(this.translate.instant('mnemonic'));
     }
 
     async init() {

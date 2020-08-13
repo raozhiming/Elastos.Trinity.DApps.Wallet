@@ -8,6 +8,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 import { WalletCreatedComponent } from 'src/app/components/wallet-created/wallet-created.component';
 import { AppService } from 'src/app/services/app.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -43,7 +44,8 @@ export class MnemonicWritePage implements OnInit {
         private walletCreationService: WalletCreationService,
         public zone: NgZone,
         private modalCtrl: ModalController,
-        private appService: AppService
+        private appService: AppService,
+        private translate: TranslateService
     ) {
         this.mnemonicStr = this.native.clone(this.walletCreationService.mnemonicStr);
     }
@@ -61,7 +63,7 @@ export class MnemonicWritePage implements OnInit {
         this.appService.setBackKeyVisibility(true);
         titleBarManager.setBackgroundColor('#732cd0');
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-        titleBarManager.setTitle('Mnemonic Verify');
+        titleBarManager.setTitle(this.translate.instant('text-mnemonic-check'));
     }
 
     ionViewDidEnter() {

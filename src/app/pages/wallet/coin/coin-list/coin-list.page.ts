@@ -148,13 +148,13 @@ export class CoinListPage implements OnInit, OnDestroy {
     getCoinSubtitle(item: EditableCoinInfo) {
         switch (item.coin.getID()) {
             case 'ELA':
-                return "Elastos Mainchain";
+                return this.translate.instant("ela-mainchain");
             case 'IDChain':
-                return "Elastos ID Chain"
+                return this.translate.instant("ela-idchain");
             case 'ETHSC':
-                return "Elastos Ethereum Sidechain";
+                return this.translate.instant("ela-ethchain");
             default:
-                return "ERC 20 Token";
+                return this.translate.instant("erc-20-token");
         }
     }
 

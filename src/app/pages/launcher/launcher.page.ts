@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Native } from '../../services/native.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -15,6 +16,7 @@ export class LauncherPage implements OnInit {
     constructor(
         public native: Native,
         private walletCreationService: WalletCreationService,
+        public translate: TranslateService,
     ) {
     }
 
@@ -25,7 +27,7 @@ export class LauncherPage implements OnInit {
         appManager.setVisible("show");
         titleBarManager.setBackgroundColor('#732cd0');
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-        titleBarManager.setTitle('Wallet');
+        titleBarManager.setTitle(this.translate.instant('wallet'));
     }
 
     ionViewWillLeave() {

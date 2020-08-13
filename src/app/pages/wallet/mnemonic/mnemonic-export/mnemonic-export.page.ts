@@ -10,6 +10,7 @@ import { WalletManager } from '../../../../services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -42,13 +43,14 @@ export class MnemonicExportPage implements OnInit {
         public events: Events,
         public appService: AppService,
         private authService: AuthService,
-        public theme: ThemeService
+        public theme: ThemeService,
+        private translate: TranslateService
     ) {
         this.init();
     }
 
     ngOnInit() {
-        this.appService.setTitleBarTitle('Backup Wallet');
+        this.appService.setTitleBarTitle(this.translate.instant('wallet-settings-backup-wallet'));
     }
 
     ionViewWillEnter() {
@@ -121,7 +123,7 @@ export class MnemonicExportPage implements OnInit {
             const ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
             titleBarManager.setBackgroundColor('#6B26C6');
             titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-            this.appService.setTitleBarTitle('Mnemonic');
+            this.appService.setTitleBarTitle(this.translate.instant('mnemonic'));
 
             this.mnemonicStr = ret.toString();
             let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);

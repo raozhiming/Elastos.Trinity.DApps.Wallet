@@ -9,7 +9,7 @@
             <p>This is a request for information from your wallet.</p>
             <p class="second-msg">Data Access</p>
         </div>
-    
+
         <ion-row class="data-row">
             <p>ELA Mainchain Address:</p>
             <h5>TkdlfghiuerjrthHHdgIDIidhihofodi</h5>
@@ -56,8 +56,8 @@
         <ion-card>
             <ion-img *ngIf="exportMnemonic" class="warning" src="assets/intents/warning.svg"></ion-img>
             <ion-img *ngIf="!exportMnemonic" class="wallet" src="assets/intents/wallet.svg"></ion-img>
-            <ion-card-title>{{ title }}</ion-card-title>
-            <ion-card-subtitle *ngIf="requestDapp">{{ requestDapp.appPackageId }}</ion-card-subtitle>
+            <ion-card-title>{{ title | translate }}</ion-card-title>
+            <ion-card-subtitle *ngIf="requestDapp">{{ requestDapp.name }}</ion-card-subtitle>
         </ion-card>
 
         <div *ngIf="!exportMnemonic">
@@ -72,7 +72,7 @@
                 <h5 *ngIf="item.name !== 'elaamount'">{{ item.value }}</h5>
             </ion-row>
         </div>
-    
+
         <div *ngIf="exportMnemonic">
             <div class="msg-container">
                 <p *ngIf="!requestDapp.reason">{{ 'text-share-mnemonic-warning' | translate }}</p>
@@ -95,7 +95,7 @@
         </ion-col>
     </ion-row>
 </ion-footer>
-              
+
 
 <!-- <ion-header>
     <header-bar title={{title}} [showBack]="false" [showMinimize]="false" [showClose]="false"></header-bar>
