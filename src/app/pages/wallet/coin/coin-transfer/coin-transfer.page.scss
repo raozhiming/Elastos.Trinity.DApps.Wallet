@@ -1,150 +1,3 @@
-/********************** Send Container **********************/
-.send-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    min-height: 100%;
-    margin: 0;
-    padding: 30px;
-
-    img {
-        width: 75px;
-        height: 75px;
-        padding: 5px;
-    }
-
-    h1 {
-        margin: 25px 0 20px;
-        font-size: 13px;
-        font-weight: 400;
-        letter-spacing: 0.7px;
-
-        img {
-            position: relative;
-            top: 6.5px;
-            width: 22px;
-            height: 22px;
-        }
-
-        .rotate {
-            transform: rotate(-180deg);
-        }
-    }
-
-    p {
-        width: 100%;
-        margin: 7.5px 10px 0 0;
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.7px;
-        text-align: right;
-    }
-
-    .invisible {
-        visibility: hidden;
-    }
-
-    .send {
-        margin-top: 17.5px;
-    }
-
-    .item-row {
-        width: 100%;
-        border-radius: 16px;
-        padding: 10px 10px 10px 15px;
-        box-shadow: 0 3px 15px 0 #ededf0;
-        background-color: #ffffff;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        h2, .amount-input {
-            width: 100%;
-            margin: 0;
-            font-size: 19px;
-            font-weight: 600;
-            letter-spacing: 0.95px;
-        }
-
-        p {
-            margin: 0;
-            padding-top: 4px;
-            font-size: 12px;
-            font-weight: 400;
-            color: #8888b0;
-        }
-
-        .left-col {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            overflow: hidden;
-
-            h2 {
-                padding-bottom: 4px;
-            }
-
-            p {
-                text-align: left;
-            }
-
-            ion-input {
-                background-color: #ffffff;
-                font-size: 14px;
-                font-weight: 400;
-                letter-spacing: -0.34px;
-                text-align: left;
-                color: #8888b0;
-            }
-        }
-
-        .right-col {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-end;
-            overflow: hidden;
-
-            img {
-                width: 32px;
-                height: 32px;
-                object-fit: contain;
-            }
-
-            .amount-input, p {
-                text-align: right;
-            }
-
-            .amount-input {
-                --padding-end: 0;
-                --padding-top: 0;
-               --padding-bottom: 4px;
-                font-weight: 700;
-            }
-        }
-    }
-}
-
-/********************** Send Dark Container **********************/
-.send-dark-container {
-    .item-row {
-        box-shadow: 0 3px 15px 0 #151626;
-        background-color: #2b2c49;
-
-        .amount-input {
-            color: #ffffff;
-        }
-
-        .left-col {
-            ion-input {
-                background-color: #2b2c49;
-            }
-        }
-    }
-}
-
 /********************** Recharge Container **********************/
 .recharge-container {
     min-height: 100%;
@@ -274,6 +127,15 @@
             --padding-start: 16px;
         }
     }
+
+    .btn-container {
+        position: fixed;
+        bottom: 25px;
+        z-index: 100;
+        left: 2.5%;
+        right: 2.5%;
+        width: 95%;
+    }
 }
 
 /********************** Recharge Dark Container **********************/
@@ -292,6 +154,164 @@
         ion-input {
             background-color: #2b2c49;
             color: #ffffff;
+        }
+    }
+}
+
+/********************** Send Container **********************/
+.send-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100%;
+    margin: 0;
+    padding: 30px;
+
+    img {
+        width: 75px;
+        height: 75px;
+        padding: 5px;
+    }
+
+    h1 {
+        margin: 25px 0 20px;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0.7px;
+
+        img {
+            position: relative;
+            top: 6.5px;
+            width: 22px;
+            height: 22px;
+        }
+
+        .rotate {
+            transform: rotate(-180deg);
+        }
+    }
+
+    p {
+        width: 100%;
+        margin: 7.5px 10px 0 0;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.7px;
+        text-align: right;
+    }
+
+    .invisible {
+        visibility: hidden;
+    }
+
+    .send {
+        margin-top: 17.5px;
+    }
+
+    .item-row {
+        width: 100%;
+        border-radius: 16px;
+        padding: 10px 10px 10px 15px;
+        box-shadow: 0 3px 15px 0 #ededf0;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2, .amount-input {
+            width: 100%;
+            margin: 0;
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: 0.95px;
+        }
+
+        p {
+            margin: 0;
+            padding-top: 4px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #8888b0;
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            overflow: hidden;
+
+            h2 {
+                padding-bottom: 4px;
+            }
+
+            p {
+                text-align: left;
+            }
+
+            ion-input {
+                background-color: #ffffff;
+                font-size: 14px;
+                font-weight: 400;
+                letter-spacing: -0.34px;
+                text-align: left;
+                color: #8888b0;
+            }
+        }
+
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+
+            img {
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+            }
+
+            .amount-input, p {
+                text-align: right;
+            }
+
+            .amount-input {
+                --padding-end: 0;
+                --padding-top: 0;
+               --padding-bottom: 4px;
+                font-weight: 700;
+            }
+        }
+    }
+
+    .memo-row {
+        // margin-bottom: 50px;
+    }
+
+    .btn-container {
+        position: fixed;
+        bottom: 25px;
+        z-index: 100;
+        width: 95%;
+    }
+}
+
+/********************** Send Dark Container **********************/
+.send-dark-container {
+    .item-row {
+        box-shadow: 0 3px 15px 0 #151626;
+        background-color: #2b2c49;
+
+        .amount-input {
+            color: #ffffff;
+        }
+
+        .left-col {
+            ion-input {
+                background-color: #2b2c49;
+            }
         }
     }
 }
@@ -338,11 +358,11 @@
 
     h3, h4 {
       text-align: left;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     h1 {
-      padding-top: 5px;
+      padding-top: 10px;
       padding-bottom: 5px;
       font-size: 11px;
       font-weight: 600;
@@ -351,7 +371,7 @@
     h2 {
       padding-top: 20px;
       padding-bottom: 20px;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
     }
 

@@ -19,8 +19,6 @@
                     {{ currencyService.getCurrencyBalance(fromSubWallet.balance/SELA) }} 
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
-                <!--  <p *ngIf="fromSubWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: fromSubWallet.progress} }}</p>
-                <p *ngIf="fromSubWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: fromSubWallet.progress} }}</p> -->
             </ion-col>
             <div class="arrow-down"></div>
         </ion-row>
@@ -59,13 +57,18 @@
             >
             </ion-input>
         </ion-row>
+     <!--    <ion-row class="btn-container">
+            <ion-button color="primary" (click)="goTransaction()">
+                <ion-label>{{ 'transfer' | translate}}</ion-label>
+            </ion-button>
+        </ion-row> -->
     </ion-grid>
 </ion-content>
 
 <ion-content *ngIf="transferType === 2">
     <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
-        <!-- Balance Container -->
+
         <h1>{{ 'enter-amount' | translate }}</h1>
         <ion-row class="item-row">
             <ion-col size="6" class="left-col">
@@ -83,7 +86,7 @@
                 <p>{{ currencyService.getCurrencyBalance(amount)}}</p>
             </ion-col>
         </ion-row>
-        <!-- Address Container -->
+
         <p [class.invisible]="!amount">Balance Remaining {{ walletManager.activeMasterWallet.subWallets[chainId].balance/SELA - amount }}</p>
         <h1 class="send">{{ 'send-to' | translate }}</h1>
         <ion-row *ngIf="suggestedAddresses.length > 0">
@@ -106,13 +109,13 @@
                 <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
             </ion-col>
         </ion-row>
-        <!-- Options Container -->
+     
         <h1 (click)="hideMemo = !hideMemo">
             {{ 'advanced-options' | translate }}
             <img *ngIf="!theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/down-arrow.svg"/>
             <img *ngIf="theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/darkmode/down-arrow.svg"/>
         </h1>
-        <ion-row *ngIf="!hideMemo" class="item-row">
+        <ion-row *ngIf="!hideMemo" class="item-row memo-row">
             <ion-col size="10" class="left-col">
                 <ion-input
                     type="text"
@@ -122,8 +125,26 @@
                 </ion-input>
             </ion-col>
         </ion-row>
+
+   <!--      <ion-row class="btn-container">
+            <ion-button color="primary" (click)="goTransaction()">
+                <ion-label>{{ 'send' | translate}}</ion-label>
+            </ion-button>
+        </ion-row> -->
     </ion-grid>
 </ion-content>
+<ion-footer
+    *ngIf="!showPopover && transferType !== 3"
+    class="footer" 
+    [class.dark-footer]="theme.darkMode"
+>
+    <ion-row class="btn-container">
+        <ion-button color="primary" (click)="goTransaction()">
+            <ion-label *ngIf="transferType === 1">{{ 'transfer' | translate}}</ion-label>
+            <ion-label *ngIf="transferType === 2">{{ 'send' | translate}}</ion-label>
+        </ion-button>
+    </ion-row>
+</ion-footer>
 
 <ion-content *ngIf="transferType === 3">
     <div class="pay-container" [class.dark-pay-container]="theme.darkMode">
@@ -142,20 +163,6 @@
         </div>
     </div>
 </ion-content>
-    
-<ion-footer
-    *ngIf="!showPopover && transferType !== 3"
-    class="footer" 
-    [class.dark-footer]="theme.darkMode"
->
-    <ion-row class="btn-container">
-        <ion-button color="primary" (click)="goTransaction()">
-            <ion-label *ngIf="transferType === 1">{{ 'transfer' | translate}}</ion-label>
-            <ion-label *ngIf="transferType === 2">{{ 'send' | translate}}</ion-label>
-        </ion-button>
-    </ion-row>
-</ion-footer>
-
 <ion-footer 
     *ngIf="transferType === 3"
     class="pay-footer" 
@@ -172,3 +179,39 @@
         </ion-col>
     </ion-row>
 </ion-footer>
+
+<!-- 
+transferType.PAY Draft
+
+<ion-content>
+    <div class="pay-container" [class.dark-pay-container]="theme.darkMode">
+        <ion-img src="./assets/tx/send.svg"></ion-img>
+        <h1>Send ELA</h1>
+        <h2>{{ 'confirm-transaction-title' | translate }}</h2>
+        <h3>{{ 'from' | translate }}:</h3>
+        <h4>EKA</h4>
+        <h3>{{ 'to' | translate }}:</h3>
+        <h4>efsewtwsed3edw3r3</h4>
+        <h3>{{ 'amount' | translate}}:</h3>
+        <h4>100</h4>
+        <div>
+            <h3>Memo:</h3>
+            <h4>Hello!</h4>
+        </div>
+    </div>
+</ion-content>
+<ion-footer 
+    class="pay-footer" 
+    [class.dark-pay-footer]="theme.darkMode"
+>
+    <ion-row class="btn-row">
+        <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelPayment()">
+            <ion-label>{{ 'cancel' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-col>
+        <ion-col class="btn confirm ion-activatable ripple" size="5.6">
+            <ion-label>{{ 'confirm' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-col>
+    </ion-row>
+</ion-footer> -->
