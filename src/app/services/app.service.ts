@@ -4,6 +4,7 @@ import { Native } from './native.service';
 import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService } from './cointransfer.service';
 import { ThemeService } from './theme.service';
+import * as moment from 'moment';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -137,6 +138,11 @@ export class AppService {
     setCurLang(lang: string) {
         this.zone.run(()=> {
             this.translate.use(lang);
+            if (lang === 'zh') {
+                moment.locale('zh-cn');
+            } else {
+                moment.locale(lang);
+            }
         });
         if (lang === 'en') {
             this.native.setMnemonicLang('english');
