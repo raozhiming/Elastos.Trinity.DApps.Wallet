@@ -141,17 +141,19 @@ export class WalletManager {
 
                 console.log("Rebuilding local model for subwallet id "+masterId);
 
-                // Create a model instance for each master wallet returned by the SPV SDK.
-                this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
-
                 // Try to retrieve locally storage extended info about this wallet
                 let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
                 if (!extendedInfo) {
-                    // No backward compatibility support: old wallets are just deleted.
-                    await this.spvBridge.destroyWallet(masterId);
+                    // No backward compatibility support: old wallets are just skipped.
+                    // Could also be because of a switch between debug and nodebug modes in the CLI:
+                        // -> the spvsdk shares the same wallets list, but extended info are not shared (different webview storages)
                     continue; // Break the for loop for this wallet.
                 } else {
                     console.log("Found extended wallet info for master wallet id " + masterId, extendedInfo);
+
+                    // Create a model instance for each master wallet returned by the SPV SDK.
+                    this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
+
                     if (extendedInfo.subWallets.length < 3) {
                         // open IDChain and ETHSC automatic
                         let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
