@@ -45,8 +45,21 @@ export class CurrencyService {
   ) { }
 
   async init() {
+    await this.getSavedPrices();
     await this.getSavedCurrency();
     this.fetch();
+  }
+
+  getSavedPrices() {
+    return new Promise((resolve, reject) => {
+      this.currencies.forEach((currency) => {
+        this.storage.getPrice(currency.symbol).then((price) => {
+          console.log('Saved ela price', currency.symbol, price);
+          price ? currency.price = price : currency.price = 0;
+        });
+      });
+      resolve();
+    });
   }
 
   getSavedCurrency() {
@@ -80,12 +93,15 @@ export class CurrencyService {
   async addPriceToCurrency() {
     this.currencies.map((currency) => {
       if (currency.symbol === 'USD') {
+        this.storage.setPrice(currency.symbol, this.elaStats.price_usd);
         currency.price = parseFloat(this.elaStats.price_usd);
       }
       if (currency.symbol === 'CNY') {
+        this.storage.setPrice(currency.symbol, this.elaStats.price_cny);
         currency.price = parseFloat(this.elaStats.price_cny);
       }
       if (currency.symbol === 'BTC') {
+        this.storage.setPrice(currency.symbol, this.elaStats.price_btc);
         currency.price = parseFloat(this.elaStats.price_btc);
       }
     });

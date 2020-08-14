@@ -90,15 +90,28 @@ export class LocalStorage {
         return await this.get("publishTx");
     }
 
-    public setCurrency(value: any) {
+    public setCurrency(value: string) {
         return this.storage.set("currency", JSON.stringify(value)).then((data) => {
           console.log('Currency stored', data);
         });
     }
 
-    public getCurrency(): Promise<any> {
+    public getCurrency(): Promise<string> {
         return this.storage.get("currency").then((data) => {
           console.log('Found currency stored', data);
+          return JSON.parse(data);
+        });
+    }
+
+    public setPrice(symbol: string, price: number) {
+        return this.storage.set(symbol, JSON.stringify(price)).then((data) => {
+          console.log('Ela price stored', data);
+        });
+    }
+
+    public getPrice(symbol: string): Promise<number> {
+        return this.storage.get(symbol).then((data) => {
+          console.log('Found Ela price stored', data);
           return JSON.parse(data);
         });
     }

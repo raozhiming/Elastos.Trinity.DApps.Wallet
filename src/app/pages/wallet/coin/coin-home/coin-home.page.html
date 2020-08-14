@@ -78,11 +78,11 @@
                         <ion-img [src]="item.payStatusIcon"></ion-img>
                     </div>
                 </ion-col>
-                <ion-col [size]="item.resultAmount === 0 ? 6 : 5" class="middle-col">
+                <ion-col [size]="item.resultAmount === 0 ? 7 : 5" class="middle-col">
                     <h1>{{ item.name | translate }}</h1>
                     <p>{{ item.datetime }}</p>
                 </ion-col>
-                <ion-col [size]="item.resultAmount == 0 ? 4 : 5" class="right-col">
+                <ion-col [size]="item.resultAmount === 0 ? 3 : 5" class="right-col">
                     <h1>{{ item.symbol }}{{ item.resultAmount }}</h1>
                     <p>
                         {{ currencyService.getCurrencyBalance(item.resultAmount) }} 

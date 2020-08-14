@@ -415,13 +415,11 @@ export class CoinHomePage implements OnInit {
             case 'ETHSC':
                 return 'gray-card card-row';
         }
-
         if (this.walletManager.activeMasterWallet.subWallets[this.chainId] instanceof ERC20SubWallet) {
             return 'gray2-card card-row';
         }
-        
-        // Default: nothing? TODO
-        return '';
+
+        return 'black-card card-row';
     }
 
     getSubwalletTitle() {

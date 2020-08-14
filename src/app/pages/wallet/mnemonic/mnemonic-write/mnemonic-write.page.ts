@@ -72,12 +72,14 @@ export class MnemonicWritePage implements OnInit {
         }, 200); */
     }
 
-    up() {
-        console.log('up');
-    }
-
-    // For testing purposes
-    inputChanged(event) {
+    goToNextInput(event, nextInput) {
+        console.log('Input key code', event);
+        if (nextInput) {
+            nextInput === 'input5' || nextInput === 'input9' ? this.slider.slideNext() : () => {};
+            nextInput.setFocus();
+        } else {
+            this.onNext();
+        }
     }
 
     allInputsFilled() {
@@ -101,7 +103,7 @@ export class MnemonicWritePage implements OnInit {
                     this.native.toast_trans('text-mnemonic-ok');
                     await this.native.showLoading();
 
-                    let payPassword = await this.authService.createAndSaveWalletPassword(this.walletCreationService.masterId);
+                    const payPassword = await this.authService.createAndSaveWalletPassword(this.walletCreationService.masterId);
                     if (payPassword) {
                         await this.walletManager.createNewMasterWallet(
                                 this.walletCreationService.masterId,
@@ -113,15 +115,14 @@ export class MnemonicWritePage implements OnInit {
                         );
 
                         // this.createWalletSuccess();
-                    }
-                    else {
+                    } else {
                         // Cancelled, do nothing
                     }
                 }
 
             } else {
-                console.log('Inputstr - ', this.inputStr);
-                console.log('Mnemonic str - ', this.mnemonicStr);
+                console.log('Input string ', this.inputStr);
+                // console.log('Mnemonic str - ', this.mnemonicStr);
                 this.inputStr = "";
                 this.native.toast_trans('text-mnemonic-prompt3');
             }

@@ -78,8 +78,14 @@ export class WalletImportPage implements OnInit, OnDestroy {
         this.events.unsubscribe("error:update");
     }
 
-    // For testing purposes
-    inputChanged(event) {
+    goToNextInput(event, nextInput) {
+        console.log('Input key code', event);
+        if (nextInput) {
+            nextInput === 'input5' || nextInput === 'input9' ? this.slider.slideNext() : () => {};
+            nextInput.setFocus();
+        } else {
+            this.onImport();
+        }
     }
 
     webKeyStore(webKeyStore) {
@@ -101,13 +107,13 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     async onImport() {
         if (this.allInputsFilled()) {
+            console.log('Input string is valid', this.inputStr);
             await this.native.showLoading();
 
-            let payPassword = await this.authService.createAndSaveWalletPassword(this.masterWalletId);
+            const payPassword = await this.authService.createAndSaveWalletPassword(this.masterWalletId);
             if (payPassword) {
                 await this.importWalletWithMnemonic(payPassword);
-            }
-            else {
+            } else {
                 // Cancelled, do nothing
             }
         } else {
