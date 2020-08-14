@@ -401,6 +401,11 @@ export class CoinHomePage implements OnInit {
         }
     }
 
+    /** Returns the currency to be displayed for this coin. */
+    getCoinBalanceCurrency() {
+        return this.walletManager.activeMasterWallet.subWallets[this.chainId].getDisplayTokenName();
+    }
+
     getSubwalletClass() {
         switch (this.walletManager.activeMasterWallet.subWallets[this.chainId].id) {
             case 'ELA':

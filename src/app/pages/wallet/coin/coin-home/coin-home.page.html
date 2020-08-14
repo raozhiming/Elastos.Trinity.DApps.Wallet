@@ -28,7 +28,7 @@
                 <h4>
                     {{ Util.getWholeBalance(walletManager.activeMasterWallet.subWallets[chainId].balance/SELA) }}<span class="dot" *ngIf="walletManager.activeMasterWallet.subWallets[chainId].balance/SELA !== 0">.</span>
                     <span class="decimals">{{ Util.getDecimalBalance(walletManager.activeMasterWallet.subWallets[chainId].balance/SELA) }}</span>
-                    <span class="ela">  ELA</span>
+                    <span class="ela"> {{ getCoinBalanceCurrency() }}</span>
                 </h4>
             </ion-row>
             <ion-row class="card-btn-row">
