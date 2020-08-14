@@ -38,6 +38,7 @@ import { TransactionDirection, TransactionStatus } from 'src/app/model/Transacti
 import { ThemeService } from 'src/app/services/theme.service';
 import * as moment from 'moment';
 import { CurrencyService } from 'src/app/services/currency.service';
+import { ERC20SubWallet } from 'src/app/model/ERC20SubWallet';
 
 enum TransactionType {
     RECEIVED = 1,
@@ -407,19 +408,17 @@ export class CoinHomePage implements OnInit {
                 return 'blue-card card-row';
             case 'ETHSC':
                 return 'gray-card card-row';
-            case 'ERC20':
-                return 'gray2-card card-row';
         }
+
+        if (this.walletManager.activeMasterWallet.subWallets[this.chainId] instanceof ERC20SubWallet) {
+            return 'gray2-card card-row';
+        }
+        
+        // Default: nothing? TODO
+        return '';
     }
 
     getSubwalletTitle() {
-        switch (this.walletManager.activeMasterWallet.subWallets[this.chainId].id) {
-            case 'ELA':
-                return 'Elastos Mainchain';
-            case 'IDChain':
-                return 'Elastos ID Chain';
-            case 'ETHSC':
-                return 'Ethereum Sidechain';
-        }
+        return this.walletManager.activeMasterWallet.subWallets[this.chainId].getFriendlyName();
     }
 }
