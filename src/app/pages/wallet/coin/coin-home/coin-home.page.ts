@@ -39,6 +39,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import * as moment from 'moment';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { ERC20SubWallet } from 'src/app/model/ERC20SubWallet';
+import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
 
 enum TransactionType {
     RECEIVED = 1,
@@ -420,5 +421,15 @@ export class CoinHomePage implements OnInit {
 
     getSubwalletTitle() {
         return this.walletManager.activeMasterWallet.subWallets[this.chainId].getFriendlyName();
+    }
+
+    coinCanBeTransferred() {
+        let subWallet = this.walletManager.activeMasterWallet.subWallets[this.chainId];
+        
+        // Standard ELA coins can be transferred; ERC20 coins can't
+        if (subWallet instanceof StandardSubWallet)
+            return true;
+        else
+            return false;
     }
 }
