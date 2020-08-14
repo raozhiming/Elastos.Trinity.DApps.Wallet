@@ -52,7 +52,7 @@
             <ion-col size="2" class="right-col">
                 <ion-toggle
                     *ngIf="item.coin.canBeRemoved()"
-                    (checked)="item.isOpen"
+                    [checked]="item.isOpen"
                     (ionChange)="onSelect(item)"
                 >
                 </ion-toggle>

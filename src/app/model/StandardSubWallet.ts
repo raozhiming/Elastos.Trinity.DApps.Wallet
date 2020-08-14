@@ -54,6 +54,14 @@ export class StandardSubWallet extends SubWallet {
         if (blockInfo) this.updateSyncProgress(0, blockInfo.Timestamp);
     }
 
+    public getFriendlyName(): string {
+        return this.masterWallet.coinService.getCoinByID(this.id).getDescription();
+    }
+
+    public getDisplayTokenName(): string {
+        return this.masterWallet.coinService.getCoinByID(this.id).getName();
+    }
+
     /**
      * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,
      * saying that a new balance amount is available.

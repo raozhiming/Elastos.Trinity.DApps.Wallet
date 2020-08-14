@@ -37,11 +37,11 @@ export class CoinService {
     private initializeCoinList() {
         this.availableCoins = [];
 
-        this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "ELA mainchain"));
-        this.availableCoins.push(new StandardCoin(StandardCoinName.IDChain, "ELA-DID", "Elastos Identity sidechain"));
-        this.availableCoins.push(new StandardCoin(StandardCoinName.ETHSC, "ELA-ETH", "Elastos Ethereum sidechain"));
-        this.availableCoins.push(new ERC20Coin("MEC", "MyERC20Coin", "Ben's ERC20 token", "0xc4032babad2b76c39abec3c4e365611de78528ed"));
-        this.availableCoins.push(new ERC20Coin("COOL", "CoolERC20Coin", "Another ERC20 token", "0xc4032babad2b76c39abec3c4e365611de78528ed"));
+        this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "Elastos"));
+        this.availableCoins.push(new StandardCoin(StandardCoinName.IDChain, "ELA/ID", "Elastos DID"));
+        this.availableCoins.push(new StandardCoin(StandardCoinName.ETHSC, "ELA/ETHSC", "Elastos ETH"));
+        this.availableCoins.push(new ERC20Coin("MEC", "MEC", "Ben's ERC20 token", "0xc4032babad2b76c39abec3c4e365611de78528ed"));
+        this.availableCoins.push(new ERC20Coin("COOL", "COOL", "Another ERC20 token", "0xc4032babad2b76c39abec3c4e365611de78528ed"));
     }
 
     public getAvailableCoins(): Coin[] {

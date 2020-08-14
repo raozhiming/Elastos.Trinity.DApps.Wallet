@@ -63,15 +63,15 @@ export class WalletCreatePage implements OnInit {
 
     onCreate() {
         if (Util.isNull(this.wallet.name)) {
-            this.native.toast_trans("text-wallet-name-validator");
+            this.native.toast_trans("text-wallet-name-validator-enter-name");
             return;
         }
         if (Util.isWalletName(this.wallet.name)) {
-            this.native.toast_trans("text-wallet-name-validator1");
+            this.native.toast_trans("text-wallet-name-validator-not-valid-name");
             return;
         }
         if (this.walletManager.walletNameExists(this.wallet.name)) {
-            this.native.toast_trans("text-wallet-name-validator2");
+            this.native.toast_trans("text-wallet-name-validator-already-exists");
             return;
         }
         /*if (!Util.password(this.wallet.payPassword)) {

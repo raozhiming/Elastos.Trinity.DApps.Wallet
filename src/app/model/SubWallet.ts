@@ -48,6 +48,8 @@ export abstract class SubWallet {
     public async destroy() {
     }
 
+    public abstract getFriendlyName(): string;
+    public abstract getDisplayTokenName(): string;
     public abstract async updateBalance();
     public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
 }

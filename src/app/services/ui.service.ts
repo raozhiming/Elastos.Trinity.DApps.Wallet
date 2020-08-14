@@ -23,29 +23,10 @@ export class UiService {
   }
 
   getSubwalletTitle(subwallet: SubWallet): string {
-    switch (subwallet.id) {
-        case 'ELA':
-            return 'Elastos';
-        case 'IDChain':
-            return 'Elastos DID';
-        case 'ETHSC':
-            return 'Elastos ETH';
-        case 'ERC20':
-            return subwallet.id;
-    }
+      return subwallet.getFriendlyName();
   }
 
   getSubwalletSubtitle(subwallet: SubWallet): string {
-    switch (subwallet.id) {
-        case 'ELA':
-            return subwallet.id;
-        case 'IDChain':
-            return 'ELA/ID';
-        case 'ETHSC':
-            return 'ELA/ETHSC';
-        case 'ERC20':
-            return 'ERC20 Token';
-    }
+    return subwallet.getDisplayTokenName();
   }
-
 }

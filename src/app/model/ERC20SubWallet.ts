@@ -7,7 +7,7 @@ import { TrinitySDK } from "@elastosfoundation/trinity-dapp-sdk"
 
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
-import { CoinType, CoinID, Coin, ERC20Coin } from './Coin';
+import { CoinType, CoinID, Coin, ERC20Coin, StandardCoinName } from './Coin';
 import { Config } from '../config/Config';
 import { Util } from './Util';
 
@@ -51,16 +51,24 @@ export class ERC20SubWallet extends SubWallet {
         return subWallet;
     }
 
+    public getFriendlyName(): string {
+        return this.masterWallet.coinService.getCoinByID(this.id).getDescription();
+    }
+
+    public getDisplayTokenName(): string {
+        return this.masterWallet.coinService.getCoinByID(this.id).getName();
+    }
+
     public async updateBalance() {
         console.log("Updating ERC20 token balance", this.id);
 
-        // TMP - TODO: replace with real user account when we can get it from the SPV SDK
-        var myAddress = "0x40da0e9AD0f40A6e26eC03c49eCCec01e2B8f9d4"; // SongSJun cryptoname self account
+        // "Create" actually always returns the same address because ETH sidechain accounts have only one address.
+        let ethAccountAddress = await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, StandardCoinName.ETHSC);
 
         var contractAddress = this.coin.getContractAddress();
-        let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: myAddress });
+        let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
 
-        let balanceEla = await erc20Contract.methods.balanceOf(myAddress).call();
+        let balanceEla = await erc20Contract.methods.balanceOf(ethAccountAddress).call();
         this.balance = balanceEla * Config.SELA;
 
         // Update the "last sync" date. Just consider this http call date as the sync date for now

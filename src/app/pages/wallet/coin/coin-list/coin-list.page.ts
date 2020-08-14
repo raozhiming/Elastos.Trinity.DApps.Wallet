@@ -13,6 +13,7 @@ import { AppService } from 'src/app/services/app.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from 'src/app/model/Util';
 import { TranslateService } from '@ngx-translate/core';
+import { UiService } from 'src/app/services/ui.service';
 
 type EditableCoinInfo = {
     coin: Coin,
@@ -48,6 +49,7 @@ export class CoinListPage implements OnInit, OnDestroy {
         public localStorage: LocalStorage,
         public modalCtrl: ModalController,
         public events: Events,
+        private uiService: UiService,
         private translate: TranslateService,
         public theme: ThemeService
     ) {
@@ -91,6 +93,7 @@ export class CoinListPage implements OnInit, OnDestroy {
         this.coinList = [];
         for (let availableCoin of this.coinService.getAvailableCoins()) {
             let isOpen = (availableCoin.getID() in this.masterWallet.subWallets);
+            console.log(availableCoin, "isOpen?", isOpen);
             this.coinList.push({ coin: availableCoin, isOpen: isOpen });
         }
         console.log('coin list', this.coinList);
@@ -119,12 +122,12 @@ export class CoinListPage implements OnInit, OnDestroy {
     }
 
     onSelect(item: EditableCoinInfo) {
-        if (!item.isOpen) {
+        if (item.isOpen) {
             this.popupProvider.ionicConfirm('confirmTitle', 'text-coin-close-warning').then((data) => {
                 if (data) {
                     this.switchCoin(item, false);
                 } else {
-                    //TODO cancel, set checked
+                    // TODO cancel, set checked
                 }
             });
         } else {// open
@@ -133,29 +136,11 @@ export class CoinListPage implements OnInit, OnDestroy {
     }
 
     getCoinTitle(item: EditableCoinInfo) {
-        switch (item.coin.getID()) {
-            case 'ELA':
-                return "Elastos";
-            case 'IDChain':
-                return "Elastos DID"
-            case 'ETHSC':
-                return "Elastos ETH";
-            default:
-                return "Ethereum";
-        }
+        return this.masterWallet.coinService.getCoinByID(item.coin.getID()).getDescription();
     }
 
     getCoinSubtitle(item: EditableCoinInfo) {
-        switch (item.coin.getID()) {
-            case 'ELA':
-                return this.translate.instant("ela-mainchain");
-            case 'IDChain':
-                return this.translate.instant("ela-idchain");
-            case 'ETHSC':
-                return this.translate.instant("ela-ethchain");
-            default:
-                return this.translate.instant("erc-20-token");
-        }
+        return this.masterWallet.coinService.getCoinByID(item.coin.getID()).getName();
     }
 
     getCoinIcon(item: EditableCoinInfo) {

@@ -132,6 +132,8 @@ export class MasterWallet {
     public async createSubWallet(coin: Coin) {
         this.subWallets[coin.getID()] = await SubWalletBuilder.newFromCoin(this, coin);
 
+        console.log("Created subwallet with id "+coin.getID()+" for wallet "+this.id);
+        
         await this.walletManager.saveMasterWallet(this);
     }
 

@@ -106,6 +106,7 @@ export class AccessPage implements OnInit {
     }
 
     async createAddress(chainId: string) {
+        // "Create" actually always returns the same address because ETH sidechain accounts have only one address.
         return await this.walletManager.spvBridge.createAddress(this.masterWalletId, chainId);
     }
 
