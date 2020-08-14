@@ -156,6 +156,12 @@ export const fr = {
     "dposvote-voting-for": "Vous allez voter pour:",
     "dpostvote-with": "Avec:",
 
+    // ESC transaction intent screen
+    "esctransaction-title": "Transaction Ethereum",
+    "esctransaction-smart-contract": "Smart Contract",
+    "esctransaction-intro": "Vous allez signer et éxécuter une action sur la châine publique Elastos Ethereum.",
+    "esttransaction-you-are-using": "Vous utilisez:",
+
     // Wait for sync
     "waitforsync-loading": "En attente...",
     "waitforsync-intro": "Cette opération pourra continuer une fois toutes vos données synchronisées depuis la châine publique.",

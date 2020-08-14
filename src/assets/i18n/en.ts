@@ -143,7 +143,6 @@ export const en = {
     'text-warning': 'Warning',
     'text-share-mnemonic-warning': 'Mnemonic is the only proof of blockchain assets. Please confirm that there is no risk of leakage before sharing!',
 
-
     // DID transaction intent screen
     "didtransaction-title": "Publish Identity",
     "didtransaction-publish-identity": "Publish Identity",
@@ -155,6 +154,11 @@ export const en = {
     "dposvote-transaction-fees": "0.001 transfaction fee will be charged",
     "dposvote-voting-for": "You are voting for:",
     "dpostvote-with": "With:",
+
+    // ESC transaction intent screen
+    "esctransaction-smart-contract": "Smart Contract",
+    "esctransaction-intro": "You are going to sign and run a smart contract on the Ethereum Sidechain.",
+    "esttransaction-you-are-using": "You are using:",
 
     // Wait for sync
     "waitforsync-loading": "Loading...",

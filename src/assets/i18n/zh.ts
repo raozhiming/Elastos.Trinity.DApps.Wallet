@@ -8,7 +8,7 @@ export const zh = {
     "send": "Send",
     "from": "From",
     "to": "To",
-    "amount": "数量",
+    "amount": "金额",
     "cancel": "取消",
     "confirm": "确定",
     'click-to-load-more': "点击加载更多",
@@ -157,6 +157,12 @@ export const zh = {
     "dposvote-voting-for": "You are voting for:",
     "dpostvote-with": "With:",
 
+    // ESC transaction intent screen
+    "esctransaction-title": "ETH Transaction",
+    "esctransaction-smart-contract": "Smart Contract",
+    "esctransaction-intro": "You are going to sign and run a smart contract on the Ethereum Sidechain.",
+    "esttransaction-you-are-using": "You are using:",
+
     // Wait for sync
     "waitforsync-loading": "加载中...",
     "waitforsync-intro": "链的数据同步完成后才能执行相关操作，请耐心等待！",
@@ -270,7 +276,6 @@ export const zh = {
     'text-fees-pay-sender': '我来支付',
     'text-fees-receiver': '对方支付',
     'text-fees': '手续费',
-    'text-price': '金额',
     'text-balance': '余额',
     'text-record': '交易记录',
     'text-select-file': '选择文件',
