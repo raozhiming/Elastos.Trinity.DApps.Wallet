@@ -8,6 +8,7 @@ import { Config } from '../../../config/Config';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export enum MnemonicLanguage {
   CHINESE_SIMPLIFIED,
@@ -45,19 +46,20 @@ export class WalletImportPage implements OnInit, OnDestroy {
         public popupProvider: PopupProvider,
         public zone: NgZone,
         private authService: AuthService,
+        private translate: TranslateService,
         private walletCreateService: WalletCreationService
     ) {
         this.masterWalletId = Util.uuid(6, 16);
         this.events.subscribe("error:update", (item) => {
             if (item && item["error"]) {
                 if (item["error"]["code"] === 20036) {
-                    this.popupProvider.webKeyPrompt().then((val) => {
+                    /* NOT SUPPORTED ANY MORE - COMMENTED OUT FOR NOW this.popupProvider.webKeyPrompt().then((val) => {
                         console.log("========webKeyStore" + val);
                         if (val === null) {
                             return;
                         }
                         this.webKeyStore(val.toString());
-                    });
+                    });*/
                 }
             }
         });
@@ -109,7 +111,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
                 // Cancelled, do nothing
             }
         } else {
-            this.native.toast('Please fill in all inputs');
+            this.native.toast(this.translate.instant("mnemonic-import-missing-words"));
             this.inputStr = "";
         }
     }

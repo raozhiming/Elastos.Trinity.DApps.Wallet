@@ -1,13 +1,5 @@
 <ion-content>
     <ion-grid *ngIf="hideMnemonic" class="verify-container ion-no-padding ion-no-margin" [class.verify-dark-container]="theme.darkMode">
-        <!-- <ion-row>
-            <ion-input
-                type="password"
-                placeholder="{{ 'unlock-paypassword-placeholder' | translate }}"
-                [(ngModel)]="payPassword"
-            >
-            </ion-input>
-        </ion-row> -->
         <ion-row class="btn-container">
             <ion-button color="primary" (click)="onExport()">
                 <ion-label>{{ 'text-export-mnemonic' | translate }}</ion-label>

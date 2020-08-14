@@ -38,17 +38,17 @@ export class WalletCreateNamePage implements OnInit {
 
     checkParms() {
         if (Util.isNull(this.name)) {
-            this.native.toast_trans("text-wallet-name-validator");
+            this.native.toast_trans("text-wallet-name-validator-enter-name");
             return false;
         }
 
         if (Util.isWalletName(this.name)) {
-            this.native.toast_trans("text-wallet-name-validator1");
+            this.native.toast_trans("text-wallet-name-validator-not-valid-name");
             return;
         }
 
         if (this.walletManager.walletNameExists(this.name)) {
-            this.native.toast_trans("text-wallet-name-validator2");
+            this.native.toast_trans("text-wallet-name-validator-already-exists");
             return;
         }
 

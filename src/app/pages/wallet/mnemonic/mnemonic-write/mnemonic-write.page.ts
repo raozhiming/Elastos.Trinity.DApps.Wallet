@@ -128,7 +128,7 @@ export class MnemonicWritePage implements OnInit {
         } else {
             console.log('Current progress for input string', this.inputStr);
             this.inputStr = "";
-            this.native.toast('Please fill in all inputs before proceeding');
+            this.native.toast(this.translate.instant("mnemonic-import-missing-words"));
         }
     }
 

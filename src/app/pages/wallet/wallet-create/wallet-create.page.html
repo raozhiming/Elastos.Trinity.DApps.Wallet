@@ -6,7 +6,7 @@
         <ion-row>
             <ion-input
                 type="text"
-                placeholder="Enter Name"
+                [placeholder]="'enter-name' | translate"
                 [(ngModel)]="wallet.name"
             >
             </ion-input>

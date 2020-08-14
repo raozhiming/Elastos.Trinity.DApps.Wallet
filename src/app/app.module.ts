@@ -79,7 +79,6 @@ import { MnemonicWritePage } from './pages/wallet/mnemonic/mnemonic-write/mnemon
 import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wallet-password-reset.page';
 import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
 import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
-import { MnemonicCheckPage } from './pages/wallet/mnemonic/mnemonic-check/mnemonic-check.page';
 import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
 import { ScanCodePage } from './pages/scancode/scancode.page';
 import { SettingsPage } from './pages/settings/settings.page';
@@ -178,7 +177,6 @@ export function TranslateLoaderFactory() {
         WaitForSyncPage,
         MnemonicWritePage,
         MnemonicExportPage,
-        MnemonicCheckPage,
         MnemonicWritePage,
         MnemonicCreatePage,
         WalletCreatedComponent,

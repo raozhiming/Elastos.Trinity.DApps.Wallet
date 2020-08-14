@@ -1,6 +1,7 @@
 export const fr = {
     // Generic actions
     "send-to": "Envoyer à",
+    "enter-name": "Saisir un nom",
     "enter-amount": "Saisie du montant",
     "total-amount": "MONTANT TOTAL",
     "advanced-options": "Options avancées",
@@ -13,6 +14,10 @@ export const fr = {
     "confirm": "Confirmer",
     'click-to-load-more': "Toucher pour voir davantage",
     'transaction-fail': 'Erreur de transaction',
+    "confirmTitle": "Confirmez-vous?",
+
+    // Generic messages 
+    'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
 
     // Home screen
     "wallet-home-title": "Accueil Portefeuille",
@@ -67,10 +72,11 @@ export const fr = {
     "coin-dir-from-mainchain": "Depuis ELA mainchain",
     "coin-dir-from-idchain": "Depuis la chaîne Identité",
     "coin-dir-to-mainchain": "Vers ELA mainchain",
-    "coin-dir-to-idchain": "Versla chaîne Identité",
+    "coin-dir-to-idchain": "Vers la chaîne Identité",
     "coin-transaction-status-confirmed": "Confirmé",
     "coin-transaction-status-pending": "En attente",
     "coin-transaction-status-unconfirmed": "Non confirmé",
+    "text-coin-close-warning": "Le jeton sera supprimé de la liste",
 
     // Coin select screen
     "coin-select-title": "Selection du Jeton",
@@ -121,7 +127,6 @@ export const fr = {
     "ela-ethchain": "Elastos ETH SideChain",
     "erc-20-token": " ERC 20 Token",
 
-
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirmer la suppression?",
     "delete-wallet-confirm-subtitle": "Votre portefeuille sera supprimé de cet appareil. Vous pourrez le réimporter plus tard mais veillez à enregistrer votre mnémonique avant la suppression.",
@@ -171,25 +176,34 @@ export const fr = {
     'your-mnemonic-prompt1': 'Voici vos 12 mots secrets (mnémonique). Si vous les perdez, vous perdez votre portefeuille, alors notez-les quelque part ',
     'your-mnemonic-prompt2': 'dans le bon ordre',
     'your-mnemonic-prompt3': ', et en sécurité!',
-    'back-to-setting': 'Back to Settings',
-    'view-mnemonic': "View Mnemonic",
-    'mnemonic-warning1': 'Keep It secret,',
-    'mnemonic-warning2': 'Keep it safe!',
-    'mnemonic-warning3': 'Never share your mnemonic phrase with anyone and always keep it safe! Make sure no one is watching you and click below.',
-    'type-menmonic-verify': 'Please type your 12 security words (mnemonic phrase) in order to verify it.',
-    'type-menmonic-import': 'Type your mnemonic sequence of words to import your wallet. ',
+    'back-to-setting': 'Retour aux paramètres',
+    'view-mnemonic': "Voir le mnémonique",
+    'mnemonic-warning1': 'Gardez-le secret,',
+    'mnemonic-warning2': 'Gardez-le en sécurité!',
+    'mnemonic-warning3': 'Ne partagez jamais votre mnémonique avec personne et gardez-le toujours en sécurité! Assurez-vous que personne ne regarde lorsque vous cliquez ci-dessous.',
+    'type-menmonic-verify': 'Veuillez saisir vos 12 mots de sécurité (Votre mnémonique) afin de les vérifier.',
+    'type-menmonic-import': 'Saisissez les mots de votre mnémonique pour importer votre portefeuille.',
+    'import-text-word-sucess': 'Portefeuille importé depuis votre mnémonique',
+    "mnemonic-import-missing-words": "Veuillez saisir tous les mots avant de continuer",
+
+    // Export mnemonic screen
+    'text-export-mnemonic': 'Exporter le mnémonique',
 
     // Launcher screen
-    'wallet': 'Wallet',
-    'wallet-prompt1': 'Secure Wallet for',
-    'wallet-prompt2': 'The Elastos ecosystem',
-    'get-started': 'Get Started',
-    'import-wallet': 'Already got a Wallet? Import it.',
+    'wallet': 'Portefeuille',
+    'wallet-prompt1': 'Portefeuille Sécurisé pour',
+    'wallet-prompt2': "L'écosystème Elastos",
+    'get-started': 'Commencer',
+    'import-wallet': 'Vous avez déjà un portefeuille? Importez-le.',
 
-    'launcher-create-wallet': 'Create Wallet',
-    'enter-wallet-name': 'Please enter a wallet name',
-    'signaddress-wallet': 'Single Address Wallet',
-    'launcher-backup-import': 'Import Wallet',
+    // Wallet creation screen
+    'launcher-create-wallet': 'Créer le portefeuille',
+    'enter-wallet-name': 'Veuillez saisir un nom pour le portefeuille',
+    'signaddress-wallet': 'Portefeuille à adresse unique',
+    'launcher-backup-import': 'Importer le portefeuille',
+    "text-wallet-name-validator-enter-name": "Veuillez saisir un nom pour votre portefeuille",
+    "text-wallet-name-validator-not-valid-name": "Le nom saisi n'est pas valide",
+    "text-wallet-name-validator-already-exists": "Ce nom est déjà utilisé par un autre portefeuille",
 
     // Error codes
     'Error-10000': 'Json parse error of action parameters',

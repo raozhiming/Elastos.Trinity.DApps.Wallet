@@ -101,10 +101,6 @@ export class MnemonicExportPage implements OnInit {
         }
     }
 
-    onNext() {
-        this.native.go('/mnemonic-check', { mnemonicStr: this.mnemonicStr, mnemonicList: JSON.stringify(this.mnemonicList) });
-    }
-
     return() {
         this.native.go('/wallet-home');
     }
