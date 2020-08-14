@@ -27,16 +27,14 @@
             </ion-note>
         </ion-item>
         <ion-item>
-            <ion-input type="text" placeholder="{{ 'text-price' | translate}}" [(ngModel)]="transfer.amount"
-                [readonly]="readonly">
+            <ion-input type="text" placeholder="{{ 'text-price' | translate}}" [(ngModel)]="transfer.amount">
             </ion-input>
         </ion-item>
         <ion-item *ngIf="!hideMemo">
             <ion-label>{{ 'text-memo' | translate}}</ion-label>
         </ion-item>
         <ion-item *ngIf="!hideMemo">
-            <ion-input type="text" placeholder="{{ 'text-memo' | translate}}" [(ngModel)]="transfer.memo"
-                [readonly]="readonly"></ion-input>
+            <ion-input type="text" placeholder="{{ 'text-memo' | translate}}" [(ngModel)]="transfer.memo"></ion-input>
         </ion-item>
     </ion-list>
 </ion-content>

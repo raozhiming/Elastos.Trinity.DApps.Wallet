@@ -222,7 +222,7 @@ export class AppService {
 
             case 'pay':
                 Config.coinObj.transfer.toAddress = intent.params.receiver;
-                Config.coinObj.transfer.amount = intent.params.amount;
+                Config.coinObj.transfer.amount = intent.params.amount || '';
                 Config.coinObj.transfer.type = 'payment-confirm';
                 break;
             default:
