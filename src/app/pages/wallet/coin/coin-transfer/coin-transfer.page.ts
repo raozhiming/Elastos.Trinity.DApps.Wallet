@@ -29,7 +29,7 @@ import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { CoinTransferService, TransferType } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, TransferType, Transfer } from 'src/app/services/cointransfer.service';
 import { StandardCoinName, StandardCoin } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { SubWallet } from 'src/app/model/SubWallet';
@@ -43,18 +43,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { UiService } from 'src/app/services/ui.service';
+import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
-
-export type Transfer = {
-    masterWalletId: string,
-    chainId: string,
-    rawTransaction: any,
-    payPassword: string,
-    action: any,
-    intentId: Number,
-};
 
 @Component({
     selector: 'app-coin-transfer',
@@ -171,6 +163,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             // For Send Transfer
             case TransferType.SEND:
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
+                this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
                 this.transaction = this.createSendTransaction;
                 break;
             // For Pay Intent
@@ -194,27 +187,26 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async createSendTransaction() {
         const toAmount = this.accMul(this.amount, Config.SELA);
 
-        const rawTx =
-            await this.walletManager.spvBridge.createTransaction(
-                this.masterWallet.id,
-                this.chainId, // From subwallet id
-                '', // From address, not necessary
-                this.toAddress, // User input address
-                toAmount.toString(), // User input amount
-                this.memo // User input memo
-            );
+        // Call dedicated api to the source subwallet to generate the appropriate transaction type.
+        // For example, ERC20 token transactions are different from standard coin transactions (for now - as
+        // the spv sdk doesn't support ERC20 yet).
+        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
+        let rawTx = await sourceSubwallet.createPaymentTransaction(
+            this.toAddress, // User input address
+            toAmount.toString(), // User input amount
+            this.memo // User input memo
+        );
 
-        const transfer: Transfer = {
+        let transfer = new Transfer();
+        Object.assign(transfer, {
             masterWalletId: this.masterWallet.id,
             chainId: this.chainId,
             rawTransaction: rawTx,
-            payPassword: '',
-            action: this.transferType === 3 ? this.coinTransferService.intentTransfer.action : null ,
-            intentId: this.transferType === 3 ? this.coinTransferService.intentTransfer.intentId : null ,
-        };
+            action: this.transferType === TransferType.PAY ? this.coinTransferService.intentTransfer.action : null ,
+            intentId: this.transferType === TransferType.PAY ? this.coinTransferService.intentTransfer.intentId : null ,
+        });
 
-        console.log('Received raw transaction', rawTx);
-        this.walletManager.openPayModal(transfer);
+        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
     async createRechargeTransaction() {
@@ -231,17 +223,18 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.memo // Memo, not necessary
             );
 
-        const transfer: Transfer = {
+        const transfer = new Transfer();
+        Object.assign(transfer, {
             masterWalletId: this.masterWallet.id,
             chainId: this.chainId,
             rawTransaction: rawTx,
             payPassword: '',
             action: null,
             intentId: null,
-        };
+        });
 
-        console.log('Received raw transaction', rawTx);
-        this.walletManager.openPayModal(transfer);
+        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
+        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
 /*     async createWithdrawTransaction() {
@@ -393,5 +386,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         // Hide/reset suggestions
         this.suggestedAddresses = [];
+    }
+
+    isStandardSubwallet(subWallet: SubWallet) {
+        return subWallet instanceof StandardSubWallet;
     }
 }

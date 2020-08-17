@@ -49,8 +49,7 @@ export class CoinReceivePage implements OnInit {
     }
 
     async createAddress() {
-        this.qrcode = await this.walletManager.spvBridge.createAddress(this.masterWalletId, this.chainId);
+        this.qrcode = await this.walletManager.getActiveMasterWallet().getSubWallet(this.chainId).createAddress();
         console.log('qrcode', this.qrcode);
     }
-
 }

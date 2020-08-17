@@ -4,6 +4,10 @@ import { CoinType, Coin, StandardCoinName } from './Coin';
 import { Util } from './Util';
 import { AllTransactions } from './Transaction';
 import * as moment from 'moment';
+import { Transfer } from '../services/cointransfer.service';
+import { SignedTransaction } from './SPVWalletPluginBridge';
+
+declare let appManager: AppManagerPlugin.AppManager;
 
 export class StandardSubWallet extends SubWallet {
     constructor(masterWallet: MasterWallet, id: StandardCoinName) {
@@ -54,6 +58,10 @@ export class StandardSubWallet extends SubWallet {
         if (blockInfo) this.updateSyncProgress(0, blockInfo.Timestamp);
     }
 
+    public async createAddress(): Promise<string> {
+        return await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, this.id);
+    }
+
     public getFriendlyName(): string {
         return this.masterWallet.coinService.getCoinByID(this.id).getDescription();
     }
@@ -101,5 +109,77 @@ export class StandardSubWallet extends SubWallet {
         if (progress === 100) {
             this.masterWallet.walletManager.events.publish(this.id + ':synccompleted', this.id);
         }
+    }
+
+    public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string> {
+        const rawTx = await this.masterWallet.walletManager.spvBridge.createTransaction(
+            this.masterWallet.id,
+            this.id, // From subwallet id
+            '', // From address, not necessary
+            toAddress, 
+            amount, 
+            memo // User input memo
+        );
+        return rawTx;
+    }
+
+    /**
+     * Signs raw transaction and sends the signed transaction to the SPV SDK for publication.
+     */
+    public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void> {
+        return new Promise(async (resolve)=>{
+            console.log('Received raw transaction', transaction);
+            let password = await this.masterWallet.walletManager.openPayModal(transfer);
+            if (!password) {
+                resolve(null);
+                return;
+            }
+
+            await this.masterWallet.walletManager.native.showLoading();
+
+            const signedTx = await this.masterWallet.walletManager.spvBridge.signTransaction(
+                this.masterWallet.id,
+                this.id,
+                transaction,
+                password
+            );
+    
+            const publishedTransaction =
+            await this.masterWallet.walletManager.spvBridge.publishTransaction(
+                this.masterWallet.id,
+                this.id,
+                signedTx
+            );
+    
+            if (!Util.isEmptyObject(transfer.action)) {
+                this.masterWallet.walletManager.lockTx(publishedTransaction.TxHash);
+    
+                setTimeout(async () => {
+                    let txId = publishedTransaction.TxHash;
+                    const code = this.masterWallet.walletManager.getTxCode(txId);
+                    if (code !== 0) {
+                        txId = null;
+                    }
+                    this.masterWallet.walletManager.native.hideLoading();
+                    this.masterWallet.walletManager.native.toast_trans('send-raw-transaction');
+                    console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
+                    await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
+                        { txid: txId },
+                        transfer.intentId);
+                    // this.native.setRootRouter('/wallet-home');
+                    appManager.close();
+
+                    resolve();
+                }, 5000); // wait for 5s for txPublished
+            } else {
+                console.log("Published transaction id:", publishedTransaction.TxHash);
+    
+                this.masterWallet.walletManager.native.hideLoading();
+                this.masterWallet.walletManager.native.toast_trans('send-raw-transaction');
+                this.masterWallet.walletManager.native.setRootRouter('/wallet-home');
+
+                resolve();
+            }
+        });
     }
 }

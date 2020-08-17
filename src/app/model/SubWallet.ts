@@ -2,6 +2,7 @@ import { MasterWallet } from './MasterWallet';
 import { Events } from '@ionic/angular';
 import { CoinType, CoinID, StandardCoinName } from './Coin';
 import { AllTransactions } from './Transaction';
+import { Transfer } from '../services/cointransfer.service';
 
 /**
  * Subwallet representation ready to save to local storage for persistance.
@@ -48,8 +49,12 @@ export abstract class SubWallet {
     public async destroy() {
     }
 
+    /** Create a new wallet address for receiving payments. */
+    public abstract createAddress(): Promise<string>;
     public abstract getFriendlyName(): string;
     public abstract getDisplayTokenName(): string;
     public abstract async updateBalance();
     public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
+    public abstract async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string>;
+    public abstract async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void>;
 }

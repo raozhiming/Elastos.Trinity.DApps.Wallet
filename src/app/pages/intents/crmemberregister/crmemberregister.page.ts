@@ -164,7 +164,7 @@ export class CRMemberRegisterPage implements OnInit {
 
         this.transfer.rawTransaction  = await this.walletManager.spvBridge.createRegisterCRTransaction(this.masterWallet.id, this.chainId,
                 '', payload, this.depositAmount, this.transfer.memo);
-        this.walletManager.openPayModal(this.transfer);
+        this.walletManager.openPayModal(this.transfer); // TODO: USE signAndSendRawTransaction
     }
 
     async createUpdateCRTransaction() {
@@ -175,7 +175,9 @@ export class CRMemberRegisterPage implements OnInit {
                 this.transfer.url, this.transfer.location);
         this.transfer.rawTransaction  = await this.walletManager.spvBridge.createUpdateCRTransaction(this.masterWallet.id, this.chainId,
                 '', payload, this.transfer.memo);
-        this.walletManager.openPayModal(this.transfer);
+
+        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
+        await sourceSubwallet.signAndSendRawTransaction(this.transfer.rawTransaction, this.transfer);
     }
 
     async createUnregisterCRTransaction() {
@@ -185,7 +187,7 @@ export class CRMemberRegisterPage implements OnInit {
                 this.transfer.crDID);
         this.transfer.rawTransaction  = await this.walletManager.spvBridge.createUnregisterCRTransaction(this.masterWallet.id, this.chainId,
                 '', payload, this.transfer.memo);
-        this.walletManager.openPayModal(this.transfer);
+        this.walletManager.openPayModal(this.transfer); // TODO: USE signAndSendRawTransaction
     }
 
     async createRetrieveCRDepositTransaction() {
@@ -193,6 +195,6 @@ export class CRMemberRegisterPage implements OnInit {
 
         this.transfer.rawTransaction  = await this.walletManager.spvBridge.createRetrieveCRDepositTransaction(this.masterWallet.id, this.chainId,
             this.transfer.crPublicKey, this.transfer.account, this.transfer.memo);
-        this.walletManager.openPayModal(this.transfer);
+        this.walletManager.openPayModal(this.transfer); // TODO: USE signAndSendRawTransaction
     }
 }

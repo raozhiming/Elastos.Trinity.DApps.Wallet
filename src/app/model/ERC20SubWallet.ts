@@ -10,6 +10,7 @@ import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, CoinID, Coin, ERC20Coin, StandardCoinName } from './Coin';
 import { Config } from '../config/Config';
 import { Util } from './Util';
+import { Transfer } from '../services/cointransfer.service';
 
 export class ERC20SubWallet extends SubWallet {
     /** Coin related to this wallet */
@@ -51,6 +52,11 @@ export class ERC20SubWallet extends SubWallet {
         return subWallet;
     }
 
+    public async createAddress(): Promise<string> {
+        // Create on ETH always returns the same unique address.
+        return await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, StandardCoinName.ETHSC);
+    }
+
     public getFriendlyName(): string {
         return this.masterWallet.coinService.getCoinByID(this.id).getDescription();
     }
@@ -62,9 +68,7 @@ export class ERC20SubWallet extends SubWallet {
     public async updateBalance() {
         console.log("Updating ERC20 token balance", this.id);
 
-        // "Create" actually always returns the same address because ETH sidechain accounts have only one address.
-        let ethAccountAddress = await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, StandardCoinName.ETHSC);
-
+        let ethAccountAddress = await this.getEthAccountAddress();
         var contractAddress = this.coin.getContractAddress();
         let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
 
@@ -83,6 +87,55 @@ export class ERC20SubWallet extends SubWallet {
         // After the SPV SDK is synced and we get all transactions, we can probably filter transfers to/from the
         // ERC20 contract and cache it.
         return Promise.resolve([]);
+    }
+
+    async getEthAccountAddress(): Promise<string> {
+        // "Create" actually always returns the same address because ETH sidechain accounts have only one address.
+        return await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, StandardCoinName.ETHSC);
+    }
+
+    public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<any> {
+        let ethAccountAddress = await this.getEthAccountAddress();
+        var contractAddress = this.coin.getContractAddress();
+        let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
+
+        // Determine the nonce
+        var count = await this.web3.eth.getTransactionCount(ethAccountAddress);
+        console.log(`num transactions so far: ${count}`);
+
+        // TODO: CHECK FIELDS CONTENT BELOW
+        var rawTransaction = {
+            "from": ethAccountAddress,
+            "nonce": "0x" + count.toString(16),
+            "gasPrice": "0x003B9ACA00",
+            "gasLimit": "0x250CA",
+            "to": contractAddress,
+            "value": "0x0",
+            "data": erc20Contract.methods.transfer(toAddress, amount).encodeABI(),
+            "chainId": 0x01
+        };
+
+        return rawTransaction;
+    }
+
+    public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void> {
+        console.error("ERC20 signAndSendRawTransaction not yet implemented!");
+
+        // TODO WHEN THE SPVSDK WITH ETH CONTRACT TRANSACTIONS IS AVAILABLE.
+
+        // Example private key (do not use): 'e331b6d69882b4cb4ea581d88e0b604039a3de5967688d3dcffdd2270c0fd109'
+        // The private key must be for myAddress
+        /*var privKey = new Buffer(my_privkey, 'hex');
+        var tx = new Tx(rawTransaction);
+        tx.sign(privKey);
+        var serializedTx = tx.serialize();
+
+        // Comment out these three lines if you don't really want to send the TX right now
+        console.log(`Attempting to send signed tx:  ${serializedTx.toString('hex')}`);
+        var receipt = await this.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'));
+        console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);*/
+
+        return Promise.resolve();
     }
 
     async tempInitialTestToUseERC20Stuff() {

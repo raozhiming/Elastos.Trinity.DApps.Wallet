@@ -26,11 +26,10 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
-import { CoinTransferService, IntentTransfer } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, IntentTransfer, Transfer } from 'src/app/services/cointransfer.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { Transfer } from '../../wallet/coin/coin-transfer/coin-transfer.page';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -181,16 +180,18 @@ export class DPoSVotePage implements OnInit {
                 '', // Memo, not necessary
             );
 
-        const transfer: Transfer = {
+        const transfer = new Transfer();
+        Object.assign(transfer, {
             masterWalletId: this.masterWalletId,
             chainId: this.chainId,
             rawTransaction: rawTx,
             payPassword: '',
             action: this.intentTransfer.action,
             intentId: this.intentTransfer.intentId,
-        };
+        });
 
-        this.walletManager.openPayModal(transfer);
+        let sourceSubwallet = this.walletManager.getActiveMasterWallet().getSubWallet(this.chainId);
+        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 }
 

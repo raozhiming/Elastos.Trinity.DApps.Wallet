@@ -73,7 +73,7 @@
         <ion-row class="item-row">
             <ion-col size="6" class="left-col">
                 <h2>{{ chainId }}</h2>
-                <p>{{ currencyService.selectedCurrency.symbol }}</p>
+                <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.selectedCurrency.symbol }}</p>
             </ion-col>
             <ion-col size="6" class="right-col">
                 <ion-input
@@ -83,7 +83,7 @@
                     [(ngModel)]="amount"
                 >
                 </ion-input>
-                <p>{{ currencyService.getCurrencyBalance(amount)}}</p>
+                <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.getCurrencyBalance(amount)}}</p>
             </ion-col>
         </ion-row>
 

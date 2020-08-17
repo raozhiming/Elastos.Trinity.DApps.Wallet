@@ -30,7 +30,6 @@ import { CoinTransferService, IntentTransfer } from 'src/app/services/cointransf
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
-import { Transfer } from '../../wallet/coin/coin-transfer/coin-transfer.page';
 import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;

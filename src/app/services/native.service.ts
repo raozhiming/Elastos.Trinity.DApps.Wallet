@@ -31,7 +31,7 @@ import { Logger } from '../model/Logger';
 export class Native {
 
     private mnemonicLang: string = "english";
-    private loader: any = null;
+    private loader: HTMLIonLoadingElement = null;
 
     constructor(
         public toastCtrl: ToastController,
@@ -134,19 +134,23 @@ export class Native {
     }
 
     public async showLoading(content: string = ''): Promise<void> {
+        // Hide a previous loader in case there was one already.
+        await this.hideLoading();
+
         this.loader = await this.loadingCtrl.create({
             mode: 'ios',
             message: content
         });
-        this.loader.onWillDismiss().then(() => {
-            this.loader = null;
-          });
+        await this.loader.onWillDismiss();
+        this.loader = null;
+        
         return await this.loader.present();
     }
 
-    public hideLoading(): void {
+    public async hideLoading(): Promise<void> {
         if (this.loader) {
-            this.loader.dismiss();
+            await this.loader.dismiss();
+            this.loader = null;
         }
     }
 }

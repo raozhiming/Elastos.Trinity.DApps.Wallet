@@ -509,7 +509,7 @@ export class SPVWalletPluginBridge {
         toAddress: string,
         amount: string,
         memo: string
-    ): Promise<void> {
+    ): Promise<any> {
         return new Promise(async (resolve, reject) => {
             walletManager.createTransaction(
                 [

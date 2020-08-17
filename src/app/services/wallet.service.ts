@@ -42,7 +42,6 @@ import { Native } from './native.service';
 import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
 import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
-import { Transfer } from '../pages/wallet/coin/coin-transfer/coin-transfer.page';
 import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -665,7 +664,7 @@ export class WalletManager {
         }
     }
 
-    private getTxCode(hash) {
+    public getTxCode(hash) {
         let code = 0;
         if (this.transactionMap[hash].Code) {
             code = this.transactionMap[hash].Code;
@@ -710,66 +709,16 @@ export class WalletManager {
     /**
      * Opens the payment popup with all the necessary transaction information.
      * Once password is entered by the user, a transaction is created and signed, then sent
-     * for the SPV SDK for publishing.
+     * to the SPV SDK for publishing.
      */
-    async openPayModal(transfer) {
+    public async openPayModal(transfer): Promise<string> {
         const payPassword = await this.getPassword(transfer);
         if (payPassword === null) {
-            return;
+            return Promise.resolve(payPassword);
         }
         transfer.payPassword = payPassword;
 
-        await this.native.showLoading();
-        this.signAndSendTransaction(transfer);
-    }
-
-    /**
-     * Signs raw transaction and sends the signed transaction to the SPV SDK for publication.
-     */
-    async signAndSendTransaction(transfer) {
-        const signedTx = await this.spvBridge.signTransaction(
-            this.activeMasterWallet.id,
-            transfer.chainId,
-            transfer.rawTransaction,
-            transfer.payPassword
-        );
-
-        this.sendTransaction(transfer, signedTx);
-    }
-
-    private async sendTransaction(transfer, signedTx: SignedTransaction) {
-        const publishedTransaction =
-            await this.spvBridge.publishTransaction(
-                this.activeMasterWallet.id,
-                transfer.chainId,
-                signedTx
-            );
-
-        if (!Util.isEmptyObject(transfer.action)) {
-            this.lockTx(publishedTransaction.TxHash);
-
-            setTimeout(async () => {
-                let txId = publishedTransaction.TxHash;
-                const code = this.getTxCode(txId);
-                if (code !== 0) {
-                    txId = null;
-                }
-                this.native.hideLoading();
-                this.native.toast_trans('send-raw-transaction');
-                console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
-                await this.sendIntentResponse(transfer.action,
-                    { txid: txId },
-                    transfer.intentId);
-                // this.native.setRootRouter('/wallet-home');
-                appManager.close();
-            }, 5000); // wait for 5s for txPublished
-        } else {
-            console.log(publishedTransaction.TxHash);
-
-            this.native.hideLoading();
-            this.native.toast_trans('send-raw-transaction');
-            this.native.setRootRouter('/wallet-home');
-        }
+        return Promise.resolve(payPassword);
     }
 
     /**
