@@ -35,7 +35,7 @@ export class LocalStorage {
 
     public async get(key: string): Promise<any> {
         console.log('Fetching for ' + key + ' in app manager settings');
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve)=>{
             appManager.getSetting(key, (val)=>{
                 if (typeof(val) === "string") {
                     val = JSON.parse(val);

@@ -35,6 +35,7 @@ import { Util } from '../../../model/Util';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
+import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -144,5 +145,9 @@ export class WalletHomePage implements OnInit {
 
     getWalletIndex(masterWallet: MasterWallet): number {
         return this.walletManager.getWalletsList().indexOf(masterWallet);
+    }
+
+    isStandardSubwallet(subWallet: SubWallet) {
+        return subWallet instanceof StandardSubWallet;
     }
 }

@@ -94,9 +94,12 @@ export class MasterWallet {
 
     public getBalance(): number {
         // Sum all subwallets balances to get the master wallet total balance
+        // Only standard ELA wallets are summed up as ERC20 wallets amounts use their own currency 
+        // and canno't be stacked on top of ELA as we don't have a exchange rate for now.
         let balance = 0;
         for (let subWallet of Object.values(this.subWallets)) {
-            balance += subWallet.balance;
+            if (subWallet instanceof StandardSubWallet)
+                balance += subWallet.balance;
         }
         return balance;
     }
@@ -133,7 +136,7 @@ export class MasterWallet {
         this.subWallets[coin.getID()] = await SubWalletBuilder.newFromCoin(this, coin);
 
         console.log("Created subwallet with id "+coin.getID()+" for wallet "+this.id);
-        
+
         await this.walletManager.saveMasterWallet(this);
     }
 
