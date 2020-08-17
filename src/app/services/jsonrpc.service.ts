@@ -51,7 +51,8 @@ export class JsonRPCService {
 
         const balance = await this.httpRequest(rpcApiUrl, param);
         const balanceOfSELA = parseFloat(balance) * Config.SELA;
-        return balanceOfSELA;
+        console.log(' debug: getBalanceByAddress:', balanceOfSELA);
+        return Math.round(balanceOfSELA);
     }
 
     async getBlockHeight(chainID: StandardCoinName) {
