@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { AppService } from '../../../services/AppService';
 import { Config } from '../../../services/Config';
@@ -42,6 +42,12 @@ export class WaitforsyncPage implements OnInit {
     }
 
     ngOnInit() {
+        // If this screen has exist, then use intent:transaction to update
+        this.events.subscribe('intent:transaction', (params) => {
+            this.zone.run(() => {
+                this.init();
+            });
+        });
     }
 
     ionViewDidEnter() {
@@ -124,7 +130,7 @@ export class WaitforsyncPage implements OnInit {
     }
 
     doAction() {
-        this.native.setRootRouter(this.nextScreen);
+        this.native.go(this.nextScreen);
     }
 
     cancelOperation() {

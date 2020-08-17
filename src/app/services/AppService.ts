@@ -230,6 +230,8 @@ export class AppService {
                 return;
         }
 
+        // If waitforsync is exist, then use events to update
+        this.events.publish('intent:transaction', {});
         myService.native.go('/waitforsync');
     }
 
