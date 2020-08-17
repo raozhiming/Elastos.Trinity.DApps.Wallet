@@ -35,7 +35,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
     public walletType: string;
     private masterWalletId: string = "1";
 
-    public inputList: Array<any> = [];
+    public inputList: Array<{input:string}> = [];
     private inputStr: string = "";
 
     constructor(
@@ -80,12 +80,41 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     goToNextInput(event, nextInput) {
         console.log('Input key code', event);
-        if (nextInput) {
+
+        // Convenient way to paste a full mnemonic (non chinese only): if only the first input has text,
+        // try to split the existing input with spaces and dispatch the words into the other inputs automatically.
+        let allInputFieldsWereFilled = this.tryToSplitFirstInputWords();
+
+        if (nextInput && !allInputFieldsWereFilled) {
             nextInput === 'input5' || nextInput === 'input9' ? this.slider.slideNext() : () => {};
             nextInput.setFocus();
         } else {
             this.onImport();
         }
+    }
+
+    /** 
+     * If only the first input has text, try to split the existing input with spaces and dispatch 
+     * the words into the other inputs automatically.
+     * Returns true if all input box could be filled, false otherwise.
+     */
+    private tryToSplitFirstInputWords(): boolean {
+        let firstInputContent = this.inputList[0].input;
+        let firstInputWords = firstInputContent.toLowerCase().split(" ");
+        if (firstInputWords.length <= 1) {
+            // Just a word, we don't do anything special.
+            return false;
+        }
+
+        // Dispatch all single line mnemonic input into single input fields.
+        for (let wordIndex in firstInputWords) {
+            this.inputList[wordIndex].input = firstInputWords[wordIndex];
+        }
+
+        if (firstInputWords.length == 12)
+            return true; // All mnemonic words are entered
+        else
+            return false;
     }
 
     webKeyStore(webKeyStore) {
