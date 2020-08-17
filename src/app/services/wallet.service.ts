@@ -144,10 +144,9 @@ export class WalletManager {
                 // Try to retrieve locally storage extended info about this wallet
                 let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
                 if (!extendedInfo) {
-                    // No backward compatibility support: old wallets are just skipped.
-                    // Could also be because of a switch between debug and nodebug modes in the CLI:
-                        // -> the spvsdk shares the same wallets list, but extended info are not shared (different webview storages)
-                    continue; // Break the for loop for this wallet.
+                    // No backward compatibility support: old wallets are just destroyed.
+                    await this.spvBridge.destroyWallet(masterId);
+                    continue;
                 } else {
                     console.log("Found extended wallet info for master wallet id " + masterId, extendedInfo);
 
@@ -158,13 +157,13 @@ export class WalletManager {
                         // open IDChain and ETHSC automatic
                         let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
                         if (!subwallet) {
-                            console.log('Open IDChain');
+                            console.log('Opening IDChain');
                             const subWallet = new StandardSubWallet(this.masterWallets[masterId], StandardCoinName.IDChain);
                             extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                         }
                         subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
                         if (!subwallet) {
-                            console.log('Open ETHSC');
+                            console.log('Opening ETHSC');
                             // TODO call verifyPassPhrase when create ETHSC
                             // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
                             // await this.spvBridge.verifyPayPassword(masterId, '12345678');

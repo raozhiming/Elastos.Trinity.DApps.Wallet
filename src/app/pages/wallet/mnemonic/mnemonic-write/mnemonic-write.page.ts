@@ -72,7 +72,7 @@ export class MnemonicWritePage implements OnInit {
         }, 200); */
     }
 
-    goToNextInput(event, nextInput) {
+    goToNextInput(event, nextInput?: any) {
         console.log('Input key code', event);
         if (nextInput) {
             nextInput === 'input5' || nextInput === 'input9' ? this.slider.slideNext() : () => {};

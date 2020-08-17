@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { WalletID, ExtendedWalletInfo } from '../model/MasterWallet';
 
+declare let appManager: AppManagerPlugin.AppManager;
+
 /***
- * 封装存储操作
+ * Local storage using app manager settings ot make sure debug (CLI) and no debug app versions share the same
+ * data.
  */
 @Injectable()
 export class LocalStorage {
-    constructor(private storage: Storage) { }
+    constructor() { }
 
     public add(key: string, value: any): any {
         return this.get(key).then((val) => {
@@ -15,47 +17,51 @@ export class LocalStorage {
             if (val === null) {
                 let initObj = {};
                 initObj[id] = value;
-                return this.storage.set(key, JSON.stringify(initObj));
+                return this.set(key, JSON.stringify(initObj));
             }
             let addObj = JSON.parse(val);
             addObj[id] = value;
-            return this.storage.set(key, JSON.stringify(addObj));
+            return this.set(key, JSON.stringify(addObj));
         });
     }
 
     public set(key: string, value: any): Promise<any> {
-        return this.storage.set(key, value);
+        return new Promise((resolve)=>{
+            appManager.setSetting(key, value, ()=>{
+                resolve();
+            });
+        });
     }
 
     public async get(key: string): Promise<any> {
-        console.log('Fetching for ' + key + ' in local storage');
-        let val = await this.storage.get(key);
-        if (typeof(val) === "string") {
-            val = JSON.parse(val);
-        }
-        return val;
+        console.log('Fetching for ' + key + ' in app manager settings');
+        return new Promise((resolve, reject)=>{
+            appManager.getSetting(key, (val)=>{
+                if (typeof(val) === "string") {
+                    val = JSON.parse(val);
+                }
+                resolve(val);
+            }, (err)=>{
+                // DoesnKey not found in setting
+                resolve(null);
+            });
+        });
     }
 
     public getVal(key, func) {
-        this.storage.get(key).then((val) => {
+        appManager.getSetting(key, (val)=>{
             if (typeof(val) === "string") {
                 val = JSON.parse(val);
             }
             func(val);
+        }, (err)=>{
+            console.error("Get setting error for key "+key, err);
         });
-    }
-
-    public remove(key: string): any {
-        return this.storage.remove(key);
-    }
-
-    public clear(): any {
-        return this.storage.clear();
     }
 
     public saveCurMasterId(value) {
         let key = "cur-masterId";
-        return this.storage.set(key, JSON.stringify(value));
+        return this.set(key, JSON.stringify(value));
     }
 
     public async getCurMasterId(): Promise<any> {
@@ -73,7 +79,7 @@ export class LocalStorage {
      */
     public setExtendedMasterWalletInfo(masterId: WalletID, extendedInfo: ExtendedWalletInfo): Promise<void> {
         let key = "extended-wallet-infos-"+masterId;
-        return this.storage.set(key, JSON.stringify(extendedInfo));
+        return this.set(key, JSON.stringify(extendedInfo));
     }
 
     public async getExtendedMasterWalletInfos(masterId: WalletID): Promise<ExtendedWalletInfo> {
@@ -83,7 +89,7 @@ export class LocalStorage {
 
     public savePublishTxList(obj) {
         let key = "publishTx";
-        this.storage.set(key, JSON.stringify(obj));
+        this.set(key, JSON.stringify(obj));
     }
 
     public async getPublishTxList(): Promise<any> {
@@ -91,29 +97,27 @@ export class LocalStorage {
     }
 
     public setCurrency(value: string) {
-        return this.storage.set("currency", JSON.stringify(value)).then((data) => {
+        return this.set("currency", JSON.stringify(value)).then((data) => {
           console.log('Currency stored', data);
         });
     }
 
-    public getCurrency(): Promise<string> {
-        return this.storage.get("currency").then((data) => {
-          console.log('Found currency stored', data);
-          return JSON.parse(data);
-        });
+    public async getCurrency(): Promise<string> {
+        let rawCurrency = await this.get("currency");
+        console.log('Found currency stored', rawCurrency);
+        return await JSON.parse(rawCurrency);
     }
 
     public setPrice(symbol: string, price: number) {
-        return this.storage.set(symbol, JSON.stringify(price)).then((data) => {
+        return this.set(symbol, JSON.stringify(price)).then((data) => {
           console.log('Ela price stored', data);
         });
     }
 
-    public getPrice(symbol: string): Promise<number> {
-        return this.storage.get(symbol).then((data) => {
-          console.log('Found Ela price stored', data);
-          return JSON.parse(data);
-        });
+    public async getPrice(symbol: string): Promise<number> {
+        let rawPrice = await this.get(symbol);
+        console.log('Found Ela price stored', rawPrice);
+        return JSON.parse(rawPrice);
     }
 }
 

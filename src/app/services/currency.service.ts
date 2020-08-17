@@ -48,6 +48,8 @@ export class CurrencyService {
     await this.getSavedPrices();
     await this.getSavedCurrency();
     this.fetch();
+
+    console.log("Currency service initialization complete");
   }
 
   getSavedPrices() {
@@ -65,6 +67,7 @@ export class CurrencyService {
   getSavedCurrency() {
     return new Promise((resolve, reject) => {
       this.storage.getCurrency().then((symbol) => {
+        console.log("Got storage currency", symbol);
         if (symbol) {
           this.selectedCurrency = this.currencies.find((currency) => currency.symbol === symbol);
           console.log('Currency saved', this.selectedCurrency);

@@ -78,7 +78,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
         this.events.unsubscribe("error:update");
     }
 
-    goToNextInput(event, nextInput) {
+    goToNextInput(event, nextInput?: any) {
         console.log('Input key code', event);
 
         // Convenient way to paste a full mnemonic (non chinese only): if only the first input has text,
@@ -107,8 +107,14 @@ export class WalletImportPage implements OnInit, OnDestroy {
         }
 
         // Dispatch all single line mnemonic input into single input fields.
+        let wordCount = 0;
         for (let wordIndex in firstInputWords) {
             this.inputList[wordIndex].input = firstInputWords[wordIndex];
+            
+            // Don't try to fill more inputs than available, in case user types too many words.
+            wordCount++;
+            if (wordCount == 12)
+                break;
         }
 
         if (firstInputWords.length == 12)
