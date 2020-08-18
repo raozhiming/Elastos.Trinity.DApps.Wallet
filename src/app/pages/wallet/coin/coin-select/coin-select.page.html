@@ -11,7 +11,7 @@
                 <span *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</span>
             </ion-col>
             <ion-col size="5" class="right-col">
-                <h1>{{ subWallet.balance/SELA }}</h1>
+                <h1>{{ uiService.getFixedBalance(subWallet.balance/SELA) }}</h1>
                 <p>
                     {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }}
                     {{ currencyService.selectedCurrency.symbol }}

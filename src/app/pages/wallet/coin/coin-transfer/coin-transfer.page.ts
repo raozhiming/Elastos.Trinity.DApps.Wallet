@@ -58,7 +58,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     private masterWallet: MasterWallet;
     private walletInfo: WalletAccount;
     private syncCompletionEventName: string = null;
-    private waitingForSyncCompletion: boolean = false;
+    public waitingForSyncCompletion = false;
 
     // Define transfer type
     public transferType: TransferType;
@@ -67,14 +67,14 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     // User inputs
     public toAddress: string;
     public amount: number;
-    public memo: string = '';
+    public memo = '';
 
     // Display recharge wallets
     public fromSubWallet: SubWallet;
     public toSubWallet: SubWallet;
 
     // Display memo
-    public hideMemo: boolean = true;
+    public hideMemo = true;
 
     // Submit transaction
     public transaction: any;

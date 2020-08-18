@@ -29,4 +29,8 @@ export class UiService {
   getSubwalletSubtitle(subwallet: SubWallet): string {
     return subwallet.getDisplayTokenName();
   }
+
+  getFixedBalance(balance: number): string {
+    return balance.toFixed(4);
+  }
 }
