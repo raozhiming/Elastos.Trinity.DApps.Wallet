@@ -87,7 +87,7 @@ export class Util {
     }
 
     public static isAddressValid(address): boolean {
-        return address.length == 34 ? true : false
+        return address.length === 34 ? true : false
     }
 
 
@@ -100,7 +100,7 @@ export class Util {
         return true;
     }
 
-    static dateFormat(date: Date, format) {
+    static dateFormat(date: Date, format: string = 'YYYY-MM-DD HH:mm:ss') {
         return moment(date).format(format);
     }
 

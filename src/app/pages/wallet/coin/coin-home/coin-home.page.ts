@@ -40,6 +40,7 @@ import * as moment from 'moment';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { ERC20SubWallet } from 'src/app/model/ERC20SubWallet';
 import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
+import { UiService } from 'src/app/services/ui.service';
 
 enum TransactionType {
     RECEIVED = 1,
@@ -72,9 +73,9 @@ export class CoinHomePage implements OnInit {
     public chainId: StandardCoinName = null;
     public transferList: Transaction[] = [];
 
-    private votedCount: number = 0;
-    private isShowMore: boolean = false;
-    private isNodata: boolean = false;
+    private votedCount = 0;
+    private isShowMore = false;
+    private isNodata = false;
 
     // Total transactions today
     public todaysTransactions: number = 0;
@@ -98,7 +99,8 @@ export class CoinHomePage implements OnInit {
         public popupProvider: PopupProvider,
         private appService: AppService,
         public theme: ThemeService,
-        public currencyService: CurrencyService
+        public currencyService: CurrencyService,
+        public uiService: UiService
     ) {
         this.init();
     }

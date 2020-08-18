@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SubWallet } from '../model/SubWallet';
 import { StandardCoinName } from '../model/Coin';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,14 @@ export class UiService {
   }
 
   getFixedBalance(balance: number): string {
-    return balance.toFixed(4);
+    if (balance === 0) {
+      return String(0);
+    } else {
+      return balance.toFixed(4);
+    }
+  }
+
+  getSyncDate(timestamp) {
+    return moment(new Date(timestamp)).format();
   }
 }
