@@ -139,10 +139,17 @@
     [class.dark-footer]="theme.darkMode"
 >
     <ion-row class="btn-container">
-        <ion-button color="primary" (click)="goTransaction()">
+        <ion-button color="primary" (click)="goTransaction()" *ngIf="!waitingForSyncCompletion">
             <ion-label *ngIf="transferType === 1">{{ 'transfer' | translate}}</ion-label>
             <ion-label *ngIf="transferType === 2">{{ 'send' | translate}}</ion-label>
         </ion-button>
+        <div *ngIf="waitingForSyncCompletion">
+            <ion-card-title>{{ 'waitforsync-loading' | translate }}</ion-card-title>
+            <ion-card-subtitle>
+                {{ 'waitforsync-intro' | translate }}
+            </ion-card-subtitle>
+            <span class="syncing">&#8226; {{ 'sync-progress' | translate: { progress: toSubWallet.progress } }}</span>
+        </div>
     </ion-row>
 </ion-footer>
 

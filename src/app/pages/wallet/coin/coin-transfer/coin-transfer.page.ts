@@ -57,6 +57,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     private masterWallet: MasterWallet;
     private walletInfo: WalletAccount;
+    private syncCompletionEventName: string = null;
+    private waitingForSyncCompletion: boolean = false;
 
     // Define transfer type
     public transferType: TransferType;
@@ -130,12 +132,17 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.events.unsubscribe('address:update');
+        this.events.unsubscribe('intent:pay');
+
+        if (this.syncCompletionEventName)
+            this.events.unsubscribe(this.syncCompletionEventName);
     }
 
     init() {
         this.masterWallet = this.walletManager.getActiveMasterWallet();
         this.transferType = this.coinTransferService.transferType;
         this.chainId = this.coinTransferService.chainId;
+        this.waitingForSyncCompletion = false;
 
         console.log('Balance', this.walletManager.activeMasterWallet.subWallets[this.chainId].balance / this.SELA);
 
@@ -159,6 +166,20 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 console.log('Transferring from..', this.fromSubWallet);
                 console.log('Transferring To..', this.toSubWallet);
                 console.log('Subwallet address', this.toAddress);
+
+                // In case the destination subwallet is not fully synced we wait for the sync completion
+                // Before allowing to transfer, to make sure the transfer will not be lost, as even if this is queued
+                // by the SPVSDK, it's not persistant in case of restart.
+                if (this.walletManager.activeMasterWallet.subWallets[this.toSubWallet.id].progress !== 100) {
+                    this.waitingForSyncCompletion = true;
+                    this.syncCompletionEventName = this.toSubWallet.id + ':synccompleted';
+                    this.events.subscribe(this.syncCompletionEventName, (coin) => {
+                        console.log('WaitforsyncPage coin:', coin);
+                        this.waitingForSyncCompletion = false;
+                        this.events.unsubscribe(this.syncCompletionEventName);
+                    });
+                }
+
                 break;
             // For Send Transfer
             case TransferType.SEND:
