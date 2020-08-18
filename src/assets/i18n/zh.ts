@@ -18,8 +18,8 @@ export const zh = {
 
     // Generic messages
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从您的主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
-    'amount-null': "Please set the transaction amount",
-    'transaction-has-been-published': "Transaction has been published! Please wait a moment",
+    'amount-null': "请输入交易金额",
+    'transaction-has-been-published': "交易已经发布，请稍后",
 
     // Home screen
     "wallet-home-title": "钱包主页",
@@ -61,7 +61,7 @@ export const zh = {
     "coin-overview": "{{coinName}} 概述",
     "coin-new-transactions-today": "{{ todaysTransactions }} 当天的交易",
     "coin-balance": "金额",
-    "coin-action-transfer": "TRANSFER",
+    "coin-action-transfer": "转移",
     "coin-action-send": "发送",
     "coin-action-receive": "接收",
     "coin-transactions": "交易",
@@ -70,15 +70,15 @@ export const zh = {
     "coin-op-sent-ela": "发送ELA",
     "coin-op-transfered-ela": "Transfered ELA",
     "coin-op-vote": "投票",
-    "coin-op-identity": "Identity publication",
-    "coin-dir-from-mainchain": "From ELA mainchain",
-    "coin-dir-from-idchain": "From Identity sidechain",
-    "coin-dir-to-mainchain": "To ELA mainchain",
-    "coin-dir-to-idchain": "To Identity sidechain",
-    "coin-transaction-status-confirmed": "Confirmed",
-    "coin-transaction-status-pending": "Pending",
+    "coin-op-identity": "发布 DID",
+    "coin-dir-from-mainchain": "来自 ELA 主链",
+    "coin-dir-from-idchain": "来自 ID 侧链",
+    "coin-dir-to-mainchain": "主链提现",
+    "coin-dir-to-idchain": "ID 侧链充值",
+    "coin-transaction-status-confirmed": "已确认",
+    "coin-transaction-status-pending": " 确认中",
     "coin-transaction-status-unconfirmed": "未确认",
-    "text-coin-close-warning": "Token will be removed from the list",
+    "text-coin-close-warning": "此币种将从列表中删除",
 
     // Coin select screen
     "coin-select-title": "选择币种",
@@ -88,10 +88,10 @@ export const zh = {
 
     // Coin transfer screen
     "coin-transfer-send-title": "Send from {{coinName}}",
-    "coin-transfer-transfer-title": "transfer {{coinName}}",
-    "transfer-from": "Transfer from",
-    "transfer-to": "Transfer to",
-    "transfer-amount": "Transfer amount",
+    "coin-transfer-transfer-title": "转移 {{coinName}}",
+    "transfer-from": "来自",
+    "transfer-to": "转移到",
+    "transfer-amount": "转移金额",
     "transfer-receiver-address": "接收地址",
     "transfer-send-ela": "发送ELA",
 
@@ -158,10 +158,10 @@ export const zh = {
 
 
     // DID transaction intent screen
-    "didtransaction-title": "Publish Identity",
-    "didtransaction-publish-identity": "Publish Identity",
-    "didtransaction-transaction-fee": "This will cost a minor transaction fee",
-    "didtransaction-intro": "You are publishing your latest identity changes to the public DID Sidechain.",
+    "didtransaction-title": "发布身份",
+    "didtransaction-publish-identity": "发布身份",
+    "didtransaction-transaction-fee": "只需要花费很少的交易费",
+    "didtransaction-intro": "您正在将最新的身份更改发布到DID侧链",
 
     // DPos voting intent screen
     "dposvote-you-are-voting": "You are Voting!",
@@ -171,9 +171,9 @@ export const zh = {
 
     // ESC transaction intent screen
     "esctransaction-title": "ETH Transaction",
-    "esctransaction-smart-contract": "Smart Contract",
-    "esctransaction-intro": "You are going to sign and run a smart contract on the Ethereum Sidechain.",
-    "esttransaction-you-are-using": "You are using:",
+    "esctransaction-smart-contract": "智能合约",
+    "esctransaction-intro": "您将在以太坊侧链上签名并运行一个智能合约",
+    "esttransaction-you-are-using": "您正在使用:",
 
     // Wait for sync
     "waitforsync-syncing": "正在同步",
@@ -196,10 +196,10 @@ export const zh = {
     'mnemonic-warning1': '保密,',
     'mnemonic-warning2': '安全保存!',
     'mnemonic-warning3': '切勿与任何人分享您的助记词，并始终保持安全！确保没有人在看着你再继续',
-    'type-menmonic-verify': '请键入您的12个助记词进行验证',
+    'type-menmonic-verify': '请输入您的12个助记词进行验证',
     'type-menmonic-import': '请按顺序输入钱包的12个助记词以导入钱包',
     'import-text-word-sucess': '导入助记词成功',
-    "mnemonic-import-missing-words": "Please fill in all inputs before proceeding",
+    "mnemonic-import-missing-words": "请输入所有的助记词",
 
     // Export mnemonic screen
     'text-export-mnemonic': '导出助记词',
@@ -216,9 +216,9 @@ export const zh = {
     'enter-wallet-name': '请输入钱包名称',
     'signaddress-wallet': '单地址钱包',
     'launcher-backup-import': '导入钱包',
-    "text-wallet-name-validator-enter-name": "Please enter a name for your wallet",
-    "text-wallet-name-validator-not-valid-name": "Sorry, this is not a valid wallet name",
-    "text-wallet-name-validator-already-exists": "This wallet name is already in use",
+    "text-wallet-name-validator-enter-name": "请给您的钱包设置名称",
+    "text-wallet-name-validator-not-valid-name": "抱歉，这个钱包名称无效",
+    "text-wallet-name-validator-already-exists": "此钱包名称已经存在",
 
     // Error codes
     'Error-10000': 'Action参数Json格式错误',
