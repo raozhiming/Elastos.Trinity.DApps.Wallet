@@ -83,6 +83,9 @@ export const fr = {
     // Coin select screen
     "coin-select-title": "Selection du Jeton",
 
+    // Coin payment
+    "payment-title": "Payment",
+
     // Coin transfer screen
     "coin-transfer-send-title": "Envoi depuis {{coinName}}",
     "coin-transfer-transfer-title": "Transfert d'{{coinName}}",
@@ -90,6 +93,7 @@ export const fr = {
     "transfer-to": "Transfert vers",
     "transfer-amount": "Montant du transfert",
     "transfer-receiver-address": "Adresse de destination",
+    "transfer-send-ela": "Send ELA",
 
     // Coin receive screen
     "coin-receive-title": "Réception de {{coinName}}",
@@ -170,6 +174,7 @@ export const fr = {
     "esttransaction-you-are-using": "Vous utilisez:",
 
     // Wait for sync
+    "waitforsync-syncing": "Syncing",
     "waitforsync-loading": "En attente...",
     "waitforsync-intro": "Cette opération pourra continuer une fois toutes vos données synchronisées depuis la châine publique.",
 

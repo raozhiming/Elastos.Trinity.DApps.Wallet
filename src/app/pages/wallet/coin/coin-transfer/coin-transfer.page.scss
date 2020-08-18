@@ -386,12 +386,93 @@
       padding-bottom: 15px;
       font-weight: 400;
     }
+
+    .item-row {
+        // width: 100%;
+        margin-left: 25px;
+        margin-right: 25px;
+        border-radius: 16px;
+        padding: 10px 10px 10px 10px;
+        box-shadow: 0 3px 15px 0 #ededf0;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2, .amount-input {
+            width: 100%;
+            margin: 0;
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: 0.95px;
+        }
+
+        p {
+            margin: 0;
+            padding-top: 4px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #8888b0;
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            overflow: hidden;
+
+            h4 {
+                text-align: left;
+                padding-left: 0px;
+                padding-bottom: 10px;
+            }
+
+            p {
+                text-align: left;
+            }
+        }
+
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+
+            .amount-input, p {
+                text-align: right;
+            }
+
+            .amount-input {
+                --padding-end: 0;
+                --padding-top: 0;
+                --padding-bottom: 4px;
+                font-weight: 700;
+            }
+        }
+    }
 }
 
 /********************** Pay Intent Dark Container **********************/
 .dark-pay-container {
     h4 {
         color: #8888b0;
+    }
+
+    .item-row {
+        box-shadow: 0 3px 15px 0 #151626;
+        background-color: #2b2c49;
+
+        .amount-input {
+            color: #ffffff;
+        }
+
+        .left-col {
+            ion-input {
+                background-color: #2b2c49;
+            }
+        }
     }
 }
 

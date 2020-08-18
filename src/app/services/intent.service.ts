@@ -139,7 +139,7 @@ export class IntentService {
                 this.coinTransferService.transferType = TransferType.PAY;
                 const transfer = {
                     toAddress: intent.params.receiver,
-                    amount: intent.params.amount,
+                    amount: intent.params.amount || '',
                     memo: intent.params.memo || ''
                 };
                 this.coinTransferService.transfer.toAddress = transfer.toAddress;

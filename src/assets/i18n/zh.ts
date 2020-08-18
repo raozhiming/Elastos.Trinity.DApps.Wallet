@@ -1,14 +1,14 @@
 export const zh = {
     // Generic actions
-    "send-to": "Send to",
-    "enter-name": "Enter name",
+    "send-to": "发送到",
+    "enter-name": "输入名称",
     "enter-amount": "输入金额",
     "total-amount": "总额",
     "advanced-options": "高级选项",
-    "transfer": "Transfer",
-    "send": "Send",
-    "from": "From",
-    "to": "To",
+    "transfer": "充值",
+    "send": "发送",
+    "from": "从",
+    "to": "至",
     "amount": "金额",
     "cancel": "取消",
     "confirm": "确定",
@@ -60,10 +60,10 @@ export const zh = {
     // Coin home screen
     "coin-overview": "{{coinName}} 概述",
     "coin-new-transactions-today": "{{ todaysTransactions }} 当天的交易",
-    "coin-balance": "Balance",
+    "coin-balance": "金额",
     "coin-action-transfer": "TRANSFER",
-    "coin-action-send": "SEND",
-    "coin-action-receive": "RECEIVE",
+    "coin-action-send": "发送",
+    "coin-action-receive": "接收",
     "coin-transactions": "交易",
     "coin-no-transactions": "没有交易",
     "coin-op-received-ela": "接收ELA",
@@ -83,6 +83,9 @@ export const zh = {
     // Coin select screen
     "coin-select-title": "选择币种",
 
+    // Coin payment
+    "payment-title": "支付",
+
     // Coin transfer screen
     "coin-transfer-send-title": "Send from {{coinName}}",
     "coin-transfer-transfer-title": "transfer {{coinName}}",
@@ -90,23 +93,24 @@ export const zh = {
     "transfer-to": "Transfer to",
     "transfer-amount": "Transfer amount",
     "transfer-receiver-address": "接收地址",
+    "transfer-send-ela": "发送ELA",
 
     // Coin receive screen
-    "coin-receive-title": "Receive {{coinName}}",
-    "coin-receive-ela-address": "Your ELA Address",
+    "coin-receive-title": "接收 {{coinName}}",
+    "coin-receive-ela-address": "您的ELA地址",
     "coin-receive-tap-to-copy": "点击地址即可复制",
     "coin-address-copied": "{{coinName}} 地址已复制!",
 
     // Confirm transaction component
-    "confirm-transaction-title": "Confirm Transaction",
-    "transfer-transaction-type": "Transfer Transaction",
-    "send-transaction-type": "Send Transaction",
+    "confirm-transaction-title": "确认交易",
+    "transfer-transaction-type": "充值交易",
+    "send-transaction-type": "转账交易",
 
     // Transaction details screen (coin-tx-info)
     "tx-info-title": "交易详情",
     "tx-info-confirmations": "Confirmations",
     "tx-info-transaction-time": "交易时间",
-    "tx-info-memo": "Memo",
+    "tx-info-memo": "备注",
     "tx-info-transaction-fees": "交易手续费",
     "tx-info-transaction-id": "交易ID",
     "tx-info-type-received": "Received",
@@ -172,6 +176,7 @@ export const zh = {
     "esttransaction-you-are-using": "You are using:",
 
     // Wait for sync
+    "waitforsync-syncing": "正在同步",
     "waitforsync-loading": "加载中...",
     "waitforsync-intro": "链的数据同步完成后才能执行相关操作，请耐心等待！",
 

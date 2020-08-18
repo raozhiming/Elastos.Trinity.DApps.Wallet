@@ -93,8 +93,8 @@ export class WalletImportPage implements OnInit, OnDestroy {
         }
     }
 
-    /** 
-     * If only the first input has text, try to split the existing input with spaces and dispatch 
+    /**
+     * If only the first input has text, try to split the existing input with spaces and dispatch
      * the words into the other inputs automatically.
      * Returns true if all input box could be filled, false otherwise.
      */
@@ -110,7 +110,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
         let wordCount = 0;
         for (let wordIndex in firstInputWords) {
             this.inputList[wordIndex].input = firstInputWords[wordIndex];
-            
+
             // Don't try to fill more inputs than available, in case user types too many words.
             wordCount++;
             if (wordCount == 12)
@@ -142,7 +142,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     async onImport() {
         if (this.allInputsFilled()) {
-            console.log('Input string is valid', this.inputStr);
+            console.log('Input string is valid');
             await this.native.showLoading();
 
             const payPassword = await this.authService.createAndSaveWalletPassword(this.masterWalletId);

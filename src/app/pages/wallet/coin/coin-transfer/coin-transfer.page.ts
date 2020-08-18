@@ -171,7 +171,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress = this.coinTransferService.transfer.toAddress;
                 this.amount = this.coinTransferService.transfer.amount;
                 this.memo = this.coinTransferService.transfer.memo;
-                this.appService.setTitleBarTitle('Payment');
+                this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
+                this.appService.setTitleBarTitle(this.translate.instant("payment-title"));
                 this.transaction = this.createSendTransaction;
                 break;
         }
@@ -263,10 +264,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     async checkValue() {
-        if (Util.isNull(this.toAddress)) {
-            this.native.toast_trans('correct-address');
-            return;
-        }
         if (Util.isNull(this.amount)) {
             this.native.toast_trans('amount-null');
             return;
@@ -288,10 +285,15 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             return;
         }
         try {
-            await this.walletManager.spvBridge.isAddressValid(
+            let isAddressValid = await this.walletManager.spvBridge.isAddressValid(
                 this.masterWallet.id,
                 this.toAddress
             );
+
+            if (!isAddressValid) {
+                this.native.toast_trans('correct-address');
+                return;
+            }
 
             if (this.transferType === TransferType.PAY) {
                 this.transaction();

@@ -83,6 +83,9 @@ export const en = {
     // Coin select screen
     "coin-select-title": "Select Coin",
 
+    // Coin payment
+    "payment-title": "Payment",
+
     // Coin transfer screen
     "coin-transfer-send-title": "Send from {{coinName}}",
     "coin-transfer-transfer-title": "transfer {{coinName}}",
@@ -90,6 +93,7 @@ export const en = {
     "transfer-to": "Transfer to",
     "transfer-amount": "Transfer amount",
     "transfer-receiver-address": "Receiver address",
+    "transfer-send-ela": "Send ELA",
 
     // Coin receive screen
     "coin-receive-title": "Receive {{coinName}}",
@@ -170,6 +174,7 @@ export const en = {
     "esttransaction-you-are-using": "You are using:",
 
     // Wait for sync
+    "waitforsync-syncing": "Syncing",
     "waitforsync-loading": "Loading...",
     "waitforsync-intro": "Operation can only be performed after data has synced from chain.",
 
