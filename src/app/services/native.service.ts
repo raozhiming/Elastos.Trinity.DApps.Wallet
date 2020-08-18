@@ -141,8 +141,9 @@ export class Native {
             mode: 'ios',
             message: content
         });
-        await this.loader.onWillDismiss();
-        this.loader = null;
+        this.loader.onWillDismiss().then(()=>{
+            this.loader = null;
+        });
         
         return await this.loader.present();
     }

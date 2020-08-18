@@ -688,7 +688,7 @@ export class WalletManager {
     /**
      * Prompts and returns wallet password to user.
      */
-    getPassword(transfer): Promise<string> {
+    /*getPassword(transfer): Promise<string> {
         return new Promise(async (resolve, reject) => {
             const props = this.native.clone(transfer);
             const modal = await this.modalCtrl.create({
@@ -704,17 +704,17 @@ export class WalletManager {
             });
             modal.present();
         });
-    }
+    }*/
 
     /**
-     * Opens the payment popup with all the necessary transaction information.
-     * Once password is entered by the user, a transaction is created and signed, then sent
-     * to the SPV SDK for publishing.
+     * Retrieves the wallet store password from the password manager.
+     * This method is here since the beginning and seems useless. Could probably be replaced by 
+     * authService's getWalletPassword() directly.
      */
     public async openPayModal(transfer): Promise<string> {
-        const payPassword = await this.getPassword(transfer);
+        const payPassword = await this.authService.getWalletPassword(this.activeMasterWallet.id);
         if (payPassword === null) {
-            return Promise.resolve(payPassword);
+            return Promise.resolve(null);
         }
         transfer.payPassword = payPassword;
 

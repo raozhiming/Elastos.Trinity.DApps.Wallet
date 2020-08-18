@@ -18,6 +18,8 @@ export const fr = {
 
     // Generic messages 
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
+    'amount-null': "Veuillez saisir un montant pour la transaction",
+    'transaction-has-been-published': "La transaction est publiée! Veuillez patienter un moment",
 
     // Home screen
     "wallet-home-title": "Accueil Portefeuille",

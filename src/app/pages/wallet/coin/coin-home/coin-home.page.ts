@@ -193,7 +193,7 @@ export class CoinHomePage implements OnInit {
             if (transactions.hasOwnProperty(key)) {
                 const transaction = transactions[key];
                 const timestamp = transaction.Timestamp * 1000;
-                const datetime = timestamp === 0 ? 'Pending' : moment(new Date(timestamp)).startOf('minutes').fromNow();
+                const datetime = timestamp === 0 ? this.translate.instant("coin-transaction-status-pending") : moment(new Date(timestamp)).startOf('minutes').fromNow();
                 const txId = transaction.TxHash;
                 let txType: TransactionType;
                 let payStatusIcon: string = null;

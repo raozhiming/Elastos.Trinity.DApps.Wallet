@@ -31,6 +31,7 @@ import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.ser
 import { WalletAccount, WalletAccountType } from 'src/app/model/WalletAccount';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -60,6 +61,7 @@ export class CRMemberRegisterPage implements OnInit {
                 private intentService: IntentService,
                 public popupProvider: PopupProvider,
                 private coinTransferService: CoinTransferService,
+                private authService: AuthService,
                 public native: Native, public zone: NgZone) {
         this.init();
         // TODO: upgrade spv sdk and test
@@ -154,7 +156,7 @@ export class CRMemberRegisterPage implements OnInit {
                 crPublicKey, this.transfer.did, this.transfer.nickname, this.transfer.url, this.transfer.location);
         const digest = payload.Digest;
 
-        const payPassword = await this.walletManager.getPassword(this.transfer);
+        const payPassword = await this.authService.getWalletPassword(this.masterWallet.id);
         if (payPassword === null) {// cancelled by user
             return;
         }

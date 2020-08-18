@@ -18,6 +18,8 @@ export const zh = {
 
     // Generic messages
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从您的主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
+    'amount-null': "Please set the transaction amount",
+    'transaction-has-been-published': "Transaction has been published! Please wait a moment",
 
     // Home screen
     "wallet-home-title": "钱包主页",

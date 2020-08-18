@@ -131,9 +131,12 @@ export class StandardSubWallet extends SubWallet {
             console.log('Received raw transaction', transaction);
             let password = await this.masterWallet.walletManager.openPayModal(transfer);
             if (!password) {
+                console.log("No password received. Cancelling");
                 resolve(null);
                 return;
             }
+
+            console.log("Password retrieved. Now signing the transaction.");
 
             await this.masterWallet.walletManager.native.showLoading();
 
@@ -143,6 +146,8 @@ export class StandardSubWallet extends SubWallet {
                 transaction,
                 password
             );
+
+            console.log("Transaction signed. Now publishing.");
     
             const publishedTransaction =
             await this.masterWallet.walletManager.spvBridge.publishTransaction(
@@ -152,6 +157,7 @@ export class StandardSubWallet extends SubWallet {
             );
     
             if (!Util.isEmptyObject(transfer.action)) {
+                console.log("Mode: transfer with intent action");
                 this.masterWallet.walletManager.lockTx(publishedTransaction.TxHash);
     
                 setTimeout(async () => {
@@ -161,7 +167,7 @@ export class StandardSubWallet extends SubWallet {
                         txId = null;
                     }
                     this.masterWallet.walletManager.native.hideLoading();
-                    this.masterWallet.walletManager.native.toast_trans('send-raw-transaction');
+                    this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
                     console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
                     await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
                         { txid: txId },
@@ -174,9 +180,9 @@ export class StandardSubWallet extends SubWallet {
             } else {
                 console.log("Published transaction id:", publishedTransaction.TxHash);
     
-                this.masterWallet.walletManager.native.hideLoading();
-                this.masterWallet.walletManager.native.toast_trans('send-raw-transaction');
-                this.masterWallet.walletManager.native.setRootRouter('/wallet-home');
+                await this.masterWallet.walletManager.native.hideLoading();
+                this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
+                await this.masterWallet.walletManager.native.setRootRouter('/wallet-home');
 
                 resolve();
             }
