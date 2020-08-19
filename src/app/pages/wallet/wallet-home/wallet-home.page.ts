@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
@@ -36,6 +36,7 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
+import { IonSlides } from '@ionic/angular';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -47,9 +48,11 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 })
 export class WalletHomePage implements OnInit {
 
+    @ViewChild('slider', {static: false}) slider: IonSlides;
+
     public masterWallet: MasterWallet = null;
     public masterWallets: MasterWallet[] = [];
-    public isSingleWallet: boolean = false;
+    public isSingleWallet = false;
 
     // Helpers
     public Util = Util;

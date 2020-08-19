@@ -79,6 +79,10 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     // Submit transaction
     public transaction: any;
 
+    // CryptoName
+    cryptoNameSelected = false;
+    cryptoName: string = null;
+
     // Helpers
     public Config = Config;
     public SELA = Config.SELA;
@@ -377,9 +381,11 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      */
     async onSendToAddressInput(enteredText: string) {
         this.suggestedAddresses = [];
+        this.cryptoName = null;
 
-        if (!enteredText)
+        if (!enteredText) {
             return;
+        }
 
         // Quick and dirty way to not try to resolve a name when it's actually an address already, not name.
         // Could be improved later.
@@ -389,7 +395,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         // Cryptoname
         if (enteredText.length >= 3) {
             // For now, handle only ELA addresses for cryptoname
-            if (this.chainId != StandardCoinName.ELA)
+            if (this.chainId !== StandardCoinName.ELA)
                 return;
 
             let cryptoNameResolver = new CryptoAddressResolvers.CryptoNameResolver(this.http);
@@ -406,6 +412,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      */
     selectSuggestedAddress(suggestedAddress: CryptoAddressResolvers.CryptoNameAddress) {
         this.toAddress = suggestedAddress.address;
+        this.cryptoName = suggestedAddress.getDisplayName();
 
         // Hide/reset suggestions
         this.suggestedAddresses = [];

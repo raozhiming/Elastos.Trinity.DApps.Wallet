@@ -89,13 +89,7 @@
 
         <p [class.invisible]="!amount">Balance Remaining {{ walletManager.activeMasterWallet.subWallets[chainId].balance/SELA - amount }}</p>
         <h1 class="send">{{ 'send-to' | translate }}</h1>
-        <ion-row *ngIf="suggestedAddresses.length > 0">
-            <ion-col size="12">
-                <p style="color:black" *ngFor="let suggestedAddress of suggestedAddresses" (click)="selectSuggestedAddress(suggestedAddress)">
-                    {{ suggestedAddress.getDisplayName() }}
-                </p>
-            </ion-col>
-        </ion-row>
+      
         <ion-row class="item-row">
             <ion-col size="10" class="left-col">
                 <ion-input
@@ -110,12 +104,41 @@
             </ion-col>
         </ion-row>
 
-        <h1 (click)="hideMemo = !hideMemo">
+        <p [class.invisible]="!cryptoName">{{ cryptoName }}</p>
+
+        <ion-row *ngIf="suggestedAddresses.length > 0" class="cryptoname-row">
+            <ion-col size="12" *ngFor="let suggestedAddress of suggestedAddresses" (click)="selectSuggestedAddress(suggestedAddress)">
+                <span>{{ suggestedAddress.getDisplayName() }}</span>
+                <ion-icon mode="ios" name="add"></ion-icon>
+            </ion-col>
+        </ion-row>
+
+   <!--      <ion-row class="cryptoname-row">
+            <h1>Suggested Crypto Names</h1>
+            <ion-col size="12">
+                <span>rong</span>
+                <ion-icon mode="ios" name="add"></ion-icon>
+            </ion-col>
+            <ion-col size="12">
+                <span>rongful</span>
+                <ion-icon mode="ios" name="add"></ion-icon>
+            </ion-col>
+            <ion-col size="12">
+                <span>rongy</span>
+                <ion-icon mode="ios" name="add"></ion-icon>
+            </ion-col>
+            <ion-col size="12">
+                <span>rongchen</span>
+                <ion-icon mode="ios" name="add"></ion-icon>
+            </ion-col>
+        </ion-row> -->
+
+        <h1 *ngIf="suggestedAddresses.length === 0" (click)="hideMemo = !hideMemo">
             {{ 'advanced-options' | translate }}
             <img *ngIf="!theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/down-arrow.svg"/>
             <img *ngIf="theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/darkmode/down-arrow.svg"/>
         </h1>
-        <ion-row *ngIf="!hideMemo" class="item-row memo-row">
+        <ion-row *ngIf="!hideMemo && suggestedAddresses.length === 0" class="item-row memo-row">
             <ion-col size="10" class="left-col">
                 <ion-input
                     type="text"
