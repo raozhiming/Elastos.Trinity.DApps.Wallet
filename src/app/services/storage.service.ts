@@ -105,7 +105,7 @@ export class LocalStorage {
     public async getCurrency(): Promise<string> {
         let rawCurrency = await this.get("currency");
         console.log('Found currency stored', rawCurrency);
-        return await JSON.parse(rawCurrency);
+        return rawCurrency;
     }
 
     public setPrice(symbol: string, price: number) {
@@ -117,7 +117,7 @@ export class LocalStorage {
     public async getPrice(symbol: string): Promise<number> {
         let rawPrice = await this.get(symbol);
         console.log('Found Ela price stored', rawPrice);
-        return JSON.parse(rawPrice);
+        return rawPrice;
     }
 }
 
