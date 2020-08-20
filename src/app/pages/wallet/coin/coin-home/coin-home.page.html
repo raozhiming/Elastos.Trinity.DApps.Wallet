@@ -22,7 +22,7 @@
                     <span>{{ getSubwalletTitle() }}</span>
                     {{ 'coin-balance' | translate }}</h1>
                 <h2>
-                    {{ 'synchronized' | translate : {progress: walletManager.activeMasterWallet.subWallets[chainId].progress} }} - {{ Util.dateFormat(walletManager.activeMasterWallet.subWallets[chainId].timestamp) }}
+                    {{ 'synchronized' | translate : {progress: walletManager.activeMasterWallet.subWallets[chainId].progress} }} - {{ walletManager.activeMasterWallet.subWallets[chainId].lastBlockTime }}
                 </h2>
                 <h3>{{ 'total-amount' | translate }}</h3>
                 <h4>

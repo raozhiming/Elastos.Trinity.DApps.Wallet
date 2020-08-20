@@ -19,9 +19,12 @@ export const zh = {
     "refresh-refreshing-text": "正在更新...",
 
     // Generic messages
-    'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从您的主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
+    'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
     'amount-null': "请输入交易金额",
+    "amount-invalid": "请输入正确的金额",
+    "amount-not-enough": "余额不足",
     'transaction-has-been-published': "交易已经发布，请稍后",
+    "sync-completed": "已完成同步",
 
     // Home screen
     "wallet-home-title": "钱包主页",
@@ -96,6 +99,7 @@ export const zh = {
     "transfer-amount": "转移金额",
     "transfer-receiver-address": "接收地址",
     "transfer-send-ela": "发送ELA",
+    "transfer-remain-balance": "余额 {{amount}}",
 
     // Coin receive screen
     "coin-receive-title": "接收 {{coinName}}",
@@ -104,7 +108,7 @@ export const zh = {
     "coin-address-copied": "{{coinName}} 地址已复制!",
 
     // Confirm transaction component
-    "confirm-transaction-title": "确认交易",
+    "confirm-transaction-title": "支付交易",
     "transfer-transaction-type": "充值交易",
     "send-transaction-type": "转账交易",
 
@@ -202,7 +206,7 @@ export const zh = {
     'mnemonic-warning2': '安全保存!',
     'mnemonic-warning3': '切勿与任何人分享您的助记词，并始终保持安全！确保没有人在看着你再继续',
     'type-menmonic-verify': '请输入您的12个助记词进行验证',
-    'type-menmonic-import': '请按顺序输入钱包的12个助记词以导入钱包',
+    'type-menmonic-import': '请按顺序输入钱包的12个助记词',
     'import-text-word-sucess': '导入助记词成功',
     "mnemonic-import-missing-words": "请输入所有的助记词",
 

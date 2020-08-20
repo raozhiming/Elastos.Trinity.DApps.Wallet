@@ -294,19 +294,19 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             return;
         }
         if (!Util.number(this.amount)) {
-            this.native.toast_trans('correct-amount');
+            this.native.toast_trans('amount-invalid');
             return;
         }
         if (this.amount <= 0) {
-            this.native.toast_trans('correct-amount');
+            this.native.toast_trans('amount-invalid');
             return;
         }
         if (this.amount * this.SELA > this.walletManager.activeMasterWallet.subWallets[this.chainId].balance) {
-            this.native.toast_trans('error-amount');
+            this.native.toast_trans('amount-not-enough');
             return;
         }
         if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
-            this.native.toast_trans('correct-amount');
+            this.native.toast_trans('amount-invalid');
             return;
         }
         try {

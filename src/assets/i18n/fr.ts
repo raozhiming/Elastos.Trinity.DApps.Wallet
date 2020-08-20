@@ -21,7 +21,10 @@ export const fr = {
     // Generic messages
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
     'amount-null': "Veuillez saisir un montant pour la transaction",
+    "amount-invalid": "Please enter the correct amount",
+    "amount-not-enough": "Insufficient balance",
     'transaction-has-been-published': "La transaction est publiée! Veuillez patienter un moment",
+    "sync-completed": "Sync completed",
 
     // Home screen
     "wallet-home-title": "Accueil Portefeuille",
@@ -96,6 +99,7 @@ export const fr = {
     "transfer-amount": "Montant du transfert",
     "transfer-receiver-address": "Adresse de destination",
     "transfer-send-ela": "Send ELA",
+    "transfer-remain-balance": "Balance Remaining {{amount}}",
 
     // Coin receive screen
     "coin-receive-title": "Réception de {{coinName}}",
