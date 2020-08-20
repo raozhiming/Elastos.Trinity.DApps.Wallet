@@ -1,11 +1,11 @@
 <ion-content *ngIf="walletManager.activeMasterWallet">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content 
+        <ion-refresher-content
             class="refresh"
-            pullingText="Update Wallet"
-            pullingIcon="arrow-dropdown" 
+            pullingText="{{'refresh-pulling-text'|translate}}"
+            pullingIcon="arrow-dropdown"
             refreshingSpinner="bubbles"
-            refreshingText="Updating Wallet..."
+            refreshingText="{{'refresh-refreshing-text'|translate}}"
         >
         </ion-refresher-content>
     </ion-refresher>
@@ -69,7 +69,7 @@
                 <ion-col [size]="subWallet.balance/SELA === 0 ? 2.5 : 5" class="right-col">
                     <h1>{{ uiService.getFixedBalance(subWallet.balance/SELA) }}</h1>
                     <p>
-                        {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }} 
+                        {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>
                 </ion-col>
@@ -124,9 +124,9 @@
                 <h1>{{ 'coin-list' | translate }}</h1>
             </ion-col>
         </ion-row>
-        <ion-row 
-            class="item-row ripple ion-activatable" 
-            *ngFor="let subWallet of walletManager.getActiveMasterWallet().getSubWallets()" 
+        <ion-row
+            class="item-row ripple ion-activatable"
+            *ngFor="let subWallet of walletManager.getActiveMasterWallet().getSubWallets()"
             [routerLink]="['/coin', subWallet.id]"
         >
             <ion-col size="2" class="left-col">
@@ -141,7 +141,7 @@
             <ion-col [size]="subWallet.balance/SELA === 0 ? 2.5 : 5" class="right-col">
                 <h1>{{ uiService.getFixedBalance(subWallet.balance/SELA) }}</h1>
                 <p *ngIf="isStandardSubwallet(subWallet)">
-                    {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }} 
+                    {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>

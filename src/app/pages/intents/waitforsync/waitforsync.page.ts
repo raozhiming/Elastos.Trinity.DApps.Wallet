@@ -61,7 +61,7 @@ export class WaitForSyncPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.appService.setTitleBarTitle(this.translate.instant('syncing'));
+        this.appService.setTitleBarTitle(this.translate.instant('waitforsync-syncing'));
         appManager.setVisible("show", () => {}, (err) => {});
     }
 

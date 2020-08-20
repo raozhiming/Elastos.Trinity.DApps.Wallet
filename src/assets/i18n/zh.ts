@@ -14,7 +14,9 @@ export const zh = {
     "confirm": "确定",
     'click-to-load-more': "点击加载更多",
     'transaction-fail': '交易失败',
-    "confirmTitle": "Do you confirm?",
+    "confirmTitle": "确定?",
+    "refresh-pulling-text": "更新钱包",
+    "refresh-refreshing-text": "正在更新...",
 
     // Generic messages
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从您的主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
@@ -59,7 +61,7 @@ export const zh = {
 
     // Coin home screen
     "coin-overview": "{{coinName}} 概述",
-    "coin-new-transactions-today": "{{ todaysTransactions }} 当天的交易",
+    "coin-new-transactions-today": "今天有 {{ todaysTransactions }} 笔交易",
     "coin-balance": "金额",
     "coin-action-transfer": "转移",
     "coin-action-send": "发送",
@@ -68,7 +70,7 @@ export const zh = {
     "coin-no-transactions": "没有交易",
     "coin-op-received-ela": "接收ELA",
     "coin-op-sent-ela": "发送ELA",
-    "coin-op-transfered-ela": "Transfered ELA",
+    "coin-op-transfered-ela": "转移ELA",
     "coin-op-vote": "投票",
     "coin-op-identity": "发布 DID",
     "coin-dir-from-mainchain": "来自 ELA 主链",
@@ -87,7 +89,7 @@ export const zh = {
     "payment-title": "支付",
 
     // Coin transfer screen
-    "coin-transfer-send-title": "Send from {{coinName}}",
+    "coin-transfer-send-title": "从 {{coinName}} 发送",
     "coin-transfer-transfer-title": "转移 {{coinName}}",
     "transfer-from": "来自",
     "transfer-to": "转移到",
@@ -108,14 +110,14 @@ export const zh = {
 
     // Transaction details screen (coin-tx-info)
     "tx-info-title": "交易详情",
-    "tx-info-confirmations": "Confirmations",
+    "tx-info-confirmations": "确认数",
     "tx-info-transaction-time": "交易时间",
     "tx-info-memo": "备注",
     "tx-info-transaction-fees": "交易手续费",
     "tx-info-transaction-id": "交易ID",
-    "tx-info-type-received": "Received",
+    "tx-info-type-received": "收到",
     "tx-info-type-sent": "发送",
-    "tx-info-type-transferred": "Transferred",
+    "tx-info-type-transferred": "转移",
 
     // Wallet edit name screen
     "wallet-edit-name-title": "更改钱包名称",
@@ -143,14 +145,16 @@ export const zh = {
 
 
     // Access intent screen
-    "access-title-wallet-access-from": "数据请求来自于:",
-    "access-title-access-mnemonic-from": "索取助记词来自于:",
-    "access-request-for-info": "此请求需要从您的钱包索取信息",
+    "access-title": "钱包访问请求",
+    "access-subtitle-wallet-access-from": "数据请求来自于:",
+    "access-subtitle-access-mnemonic-from": "索取助记词来自于:",
+    "access-request-for-info": "此请求需要从您的钱包索取如下信息",
     "access-reason": "说明",
     "access-data-access": "请求的数据",
     'access-mnemonic': '获取助记词',
-    'elaaddress': '钱包地址',
+    'elaaddress': 'ELA钱包地址',
     'elaamount': 'ELA 金额',
+    'ethaddress': 'ETH侧链钱包地址',
     'requester': '请求授权应用',
     'text-allow': '允许',
     'text-warning': '警告',
@@ -164,10 +168,11 @@ export const zh = {
     "didtransaction-intro": "您正在将最新的身份更改发布到DID侧链",
 
     // DPos voting intent screen
-    "dposvote-you-are-voting": "You are Voting!",
-    "dposvote-transaction-fees": "0.001 transfaction fee will be charged",
-    "dposvote-voting-for": "You are voting for:",
-    "dpostvote-with": "With:",
+    "dposvote-title": "超级节点投票",
+    "dposvote-you-are-voting": "正在投票!",
+    "dposvote-transaction-fees": "将会收取0.0001 ELA的交易费",
+    "dposvote-voting-for": "您正在投票给:",
+    "dpostvote-with": "使用:",
 
     // ESC transaction intent screen
     "esctransaction-title": "ETH Transaction",

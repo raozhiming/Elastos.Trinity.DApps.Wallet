@@ -39,7 +39,7 @@ export class CoinReceivePage implements OnInit {
     init() {
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
         this.chainId = this.coinTransferService.chainId;
-        this.appService.setTitleBarTitle('Receive ' + this.chainId);
+        this.appService.setTitleBarTitle(this.translate.instant("coin-receive-title", { coinName: this.chainId}));
         this.createAddress();
     }
 

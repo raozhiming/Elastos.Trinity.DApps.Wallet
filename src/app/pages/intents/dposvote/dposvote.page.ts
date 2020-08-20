@@ -30,6 +30,7 @@ import { CoinTransferService, IntentTransfer, Transfer } from 'src/app/services/
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -54,7 +55,8 @@ export class DPoSVotePage implements OnInit {
         public native: Native,
         public zone: NgZone,
         public popupProvider: PopupProvider,
-        public theme: ThemeService
+        public theme: ThemeService,
+        private translate: TranslateService,
     ) {
         this.init();
     }
@@ -63,7 +65,7 @@ export class DPoSVotePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.appService.setTitleBarTitle('Vote for Supernodes');
+        this.appService.setTitleBarTitle(this.translate.instant('dposvote-title'));
         appManager.setVisible("show", () => {}, (err) => {});
     }
 

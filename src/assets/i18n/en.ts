@@ -15,8 +15,10 @@ export const en = {
     'click-to-load-more': "Click to load more",
     'transaction-fail': 'Transaction Failed',
     "confirmTitle": "Do you confirm?",
+    "refresh-pulling-text": "Update Wallet",
+    "refresh-refreshing-text": "Updating Wallet...",
 
-    // Generic messages 
+    // Generic messages
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
     'amount-null': "Please set the transaction amount",
     'transaction-has-been-published': "Transaction has been published! Please wait a moment",
@@ -142,14 +144,16 @@ export const en = {
     "wallet-manager-add-wallet": "Add Wallet",
 
     // Access intent screen
-    "access-title-wallet-access-from": "Wallet Access from:",
-    "access-title-access-mnemonic-from": "Access Mnemonic from:",
+    "access-title": "Wallet Access",
+    "access-subtitle-wallet-access-from": "Wallet Access from:",
+    "access-subtitle-access-mnemonic-from": "Access Mnemonic from:",
     "access-request-for-info": "This is a request for information from your wallet.",
     "access-reason": "Reason",
     "access-data-access": "Data Access",
     'access-mnemonic': 'Request Mnemonic',
-    'elaaddress': 'Wallet Address',
+    'elaaddress': 'ELA Address',
     'elaamount': 'ELA Balance',
+    'ethaddress': 'ETHSC Address',
     'requester': 'Request from',
     'text-allow': 'Allow',
     'text-warning': 'Warning',
@@ -162,8 +166,9 @@ export const en = {
     "didtransaction-intro": "You are publishing your latest identity changes to the public DID Sidechain.",
 
     // DPos voting intent screen
+    "dposvote-title": "Vote for Supernodes",
     "dposvote-you-are-voting": "You are Voting!",
-    "dposvote-transaction-fees": "0.001 transfaction fee will be charged",
+    "dposvote-transaction-fees": "0.0001 transfaction fee will be charged",
     "dposvote-voting-for": "You are voting for:",
     "dpostvote-with": "With:",
 
@@ -323,7 +328,7 @@ export const en = {
     'txPublished-65': 'Dust Transaction',
     'txPublished-66': 'Insufficient Fee',
     'txPublished-67': 'Checkpoint Error',
-    
+
     /*'Afghanistan': 'Afghanistan',
     'Albania': 'Albania',
     'Algeria': 'Algeria',

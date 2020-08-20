@@ -1,11 +1,11 @@
 <ion-content *ngIf="chainId">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content 
+        <ion-refresher-content
             class="refresh"
-            pullingText="Update Wallet"
-            pullingIcon="arrow-dropdown" 
+            pullingText="{{'refresh-pulling-text'|translate}}"
+            pullingIcon="arrow-dropdown"
             refreshingSpinner="bubbles"
-            refreshingText="Updating Wallet..."
+            refreshingText="{{'refresh-refreshing-text'|translate}}"
         >
         </ion-refresher-content>
     </ion-refresher>
@@ -85,7 +85,7 @@
                 <ion-col [size]="item.resultAmount === 0 ? 3 : 5" class="right-col">
                     <h1>{{ item.symbol }}{{ item.resultAmount }}</h1>
                     <p>
-                        {{ currencyService.getCurrencyBalance(item.resultAmount) }} 
+                        {{ currencyService.getCurrencyBalance(item.resultAmount) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>
                 </ion-col>
@@ -113,7 +113,7 @@
                 <ion-col [size]="5" class="right-col">
                     <h1>+6</h1>
                     <p>
-                        {{ currencyService.getCurrencyBalance(6) }} 
+                        {{ currencyService.getCurrencyBalance(6) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>
                 </ion-col>
@@ -132,7 +132,7 @@
                 <ion-col [size]="5" class="right-col">
                     <h1>-100</h1>
                     <p>
-                        {{ currencyService.getCurrencyBalance(100) }} 
+                        {{ currencyService.getCurrencyBalance(100) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>
                 </ion-col>
@@ -151,7 +151,7 @@
                 <ion-col [size]="5" class="right-col">
                     <h1>21</h1>
                     <p>
-                        {{ currencyService.getCurrencyBalance(21) }} 
+                        {{ currencyService.getCurrencyBalance(21) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>
                 </ion-col>

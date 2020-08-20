@@ -15,8 +15,10 @@ export const fr = {
     'click-to-load-more': "Toucher pour voir davantage",
     'transaction-fail': 'Erreur de transaction',
     "confirmTitle": "Confirmez-vous?",
+    "refresh-pulling-text": "Update Wallet",
+    "refresh-refreshing-text": "Updating Wallet...",
 
-    // Generic messages 
+    // Generic messages
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
     'amount-null': "Veuillez saisir un montant pour la transaction",
     'transaction-has-been-published': "La transaction est publiée! Veuillez patienter un moment",
@@ -142,14 +144,16 @@ export const fr = {
     "wallet-manager-add-wallet": "Ajouter un portefeuille",
 
     // Access intent screen
-    "access-title-wallet-access-from": "Demande d'informations:",
-    "access-title-access-mnemonic-from": "Accès au Mnémonique (!):",
+    "access-title": "Wallet Access",
+    "access-subtitle-wallet-access-from": "Demande d'informations:",
+    "access-subtitle-access-mnemonic-from": "Accès au Mnémonique (!):",
     "access-request-for-info": "Ceci est une demande d'accès aux informations de votre portefeuille.",
     "access-reason": "Raison",
     "access-data-access": "Accès aux données",
     'access-mnemonic': 'Request Mnemonic',
-    'elaaddress': 'Wallet Address',
+    'elaaddress': 'ELA Address',
     'elaamount': 'ELA Balance',
+    'ethaddress': 'ETHSC Address',
     'requester': 'Request from',
     'text-allow': 'Allow',
     'text-warning': 'Warning',
@@ -162,8 +166,9 @@ export const fr = {
     "didtransaction-intro": "Vous vous apprêtez à publier votre identité sur la châine publique.",
 
     // DPos voting intent screen
+    "dposvote-title": "Vote for Supernodes",
     "dposvote-you-are-voting": "Vous votez!",
-    "dposvote-transaction-fees": "Des frais de transaction de 0.001 ELA seront prélevés",
+    "dposvote-transaction-fees": "Des frais de transaction de 0.0001 ELA seront prélevés",
     "dposvote-voting-for": "Vous allez voter pour:",
     "dpostvote-with": "Avec:",
 

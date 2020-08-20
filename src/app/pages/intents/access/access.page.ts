@@ -46,7 +46,8 @@ export class AccessPage implements OnInit {
         this.init();
     }
 
-    ionViewDidEnter() {
+    ionViewWillEnter() {
+        this.appService.setTitleBarTitle(this.translate.instant('access-title'));
         appManager.setVisible("show", () => {}, (err) => {});
     }
 
@@ -55,10 +56,10 @@ export class AccessPage implements OnInit {
         this.masterWalletId = this.walletManager.getCurMasterWalletId();
         if (this.requestDapp.action === 'walletaccess') {
             this.organizeRequestedFields();
-            this.title = this.translate.instant("access-title-wallet-access-from");
+            this.title = this.translate.instant("access-subtitle-wallet-access-from");
         } else {
             this.exportMnemonic = true;
-            this.title = this.translate.instant("access-title-access-mnemonic-from");;
+            this.title = this.translate.instant("access-subtitle-access-mnemonic-from");;
         }
     }
 
