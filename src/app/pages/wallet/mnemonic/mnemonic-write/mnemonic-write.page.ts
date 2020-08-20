@@ -63,7 +63,7 @@ export class MnemonicWritePage implements OnInit {
         this.appService.setBackKeyVisibility(true);
         titleBarManager.setBackgroundColor('#732cd0');
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-        titleBarManager.setTitle(this.translate.instant('text-mnemonic-check'));
+        titleBarManager.setTitle(this.translate.instant('mnemonic-check-title'));
     }
 
     ionViewDidEnter() {
@@ -100,11 +100,11 @@ export class MnemonicWritePage implements OnInit {
                 if (this.walletCreationService.isMulti) {
                     this.native.go("/mpublickey");
                 } else {
-                    this.native.toast_trans('text-mnemonic-ok');
-                    await this.native.showLoading();
+                    this.native.toast_trans('mnemonic-verify-sucess');
 
                     const payPassword = await this.authService.createAndSaveWalletPassword(this.walletCreationService.masterId);
                     if (payPassword) {
+                        await this.native.showLoading();
                         await this.walletManager.createNewMasterWallet(
                                 this.walletCreationService.masterId,
                                 this.walletCreationService.name,
@@ -124,7 +124,7 @@ export class MnemonicWritePage implements OnInit {
                 console.log('Input string ', this.inputStr);
                 // console.log('Mnemonic str - ', this.mnemonicStr);
                 this.inputStr = "";
-                this.native.toast_trans('text-mnemonic-prompt3');
+                this.native.toast_trans('mnemonic-verify-fail');
             }
         } else {
             console.log('Current progress for input string', this.inputStr);

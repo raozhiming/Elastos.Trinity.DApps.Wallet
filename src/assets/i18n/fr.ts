@@ -189,9 +189,9 @@ export const fr = {
 
     // Mnemonic
     'mnemonic': 'Mnémonique',
-    'your-mnemonic-prompt1': 'Voici vos 12 mots secrets (mnémonique). Si vous les perdez, vous perdez votre portefeuille, alors notez-les quelque part ',
-    'your-mnemonic-prompt2': 'dans le bon ordre',
-    'your-mnemonic-prompt3': ', et en sécurité!',
+    'mnemonic-prompt1': 'Voici vos 12 mots secrets (mnémonique). Si vous les perdez, vous perdez votre portefeuille, alors notez-les quelque part ',
+    'mnemonic-prompt2': 'dans le bon ordre',
+    'mnemonic-prompt3': ', et en sécurité!',
     'back-to-setting': 'Retour aux paramètres',
     'view-mnemonic': "Voir le mnémonique",
     'mnemonic-warning1': 'Gardez-le secret,',
@@ -201,6 +201,10 @@ export const fr = {
     'type-menmonic-import': 'Saisissez les mots de votre mnémonique pour importer votre portefeuille.',
     'import-text-word-sucess': 'Portefeuille importé depuis votre mnémonique',
     "mnemonic-import-missing-words": "Veuillez saisir tous les mots avant de continuer",
+    "mnemonic-check-title": "Mnemonics Verification",
+    "memory-written-down": "I have written it down",
+    "mnemonic-verify-sucess": "Mnemonic phrase verification succeeded",
+    "mnemonic-verify-fail": "Mnemonic phrase verification failed, please re-enter the mnemonic phrase",
 
     // Export mnemonic screen
     'text-export-mnemonic': 'Exporter le mnémonique',

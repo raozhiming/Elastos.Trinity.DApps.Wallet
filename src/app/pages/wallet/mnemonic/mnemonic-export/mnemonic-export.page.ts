@@ -22,7 +22,6 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 export class MnemonicExportPage implements OnInit {
 
     public title = '';
-    public mnemonicPrompt = '';
     public payPassword: string = '';
     public masterWalletId: string = "1";
     public mnemonicList = [];
@@ -76,10 +75,8 @@ export class MnemonicExportPage implements OnInit {
                     this.isFromIntent = true;
                     this.requestDapp = Config.requestDapp;
                     this.title = 'access-mnemonic';
-                    this.mnemonicPrompt = 'text-share-mnemonic-warning';
                 } else {
                     this.title = 'text-export-mnemonic';
-                    this.mnemonicPrompt = 'text-mnemonic-prompt';
                 }
                 this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
                 this.walletname = this.walletManager.getActiveMasterWallet().name;

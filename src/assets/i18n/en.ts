@@ -195,9 +195,9 @@ export const en = {
 
     // Mnemonic
     'mnemonic': 'Mnemonic',
-    'your-mnemonic-prompt1': 'These are your 12 security words (mnemonic). Lose these and you will lose the wallet, so you must keep them written down ',
-    'your-mnemonic-prompt2': 'in order',
-    'your-mnemonic-prompt3': ', and safe!',
+    'mnemonic-prompt1': 'These are your 12 security words (mnemonic). Lose these and you will lose the wallet, so you must keep them written down ',
+    'mnemonic-prompt2': 'in order',
+    'mnemonic-prompt3': ', and safe!',
     'back-to-setting': 'Back to Settings',
     'view-mnemonic': "View Mnemonic",
     'mnemonic-warning1': 'Keep It secret,',
@@ -207,6 +207,10 @@ export const en = {
     'type-menmonic-import': 'Type your mnemonic sequence of words to import your wallet. ',
     'import-text-word-sucess': 'Wallet imported from Mnemonics',
     "mnemonic-import-missing-words": "Please fill in all inputs before proceeding",
+    "mnemonic-check-title": "Mnemonic Verification",
+    "memory-written-down": "I have written it down",
+    "mnemonic-verify-sucess": "Mnemonic phrase verification succeeded",
+    "mnemonic-verify-fail": "Mnemonic phrase verification failed, please re-enter the mnemonic phrase",
 
     // Export mnemonic screen
     'text-export-mnemonic': 'Export Mnemonic',

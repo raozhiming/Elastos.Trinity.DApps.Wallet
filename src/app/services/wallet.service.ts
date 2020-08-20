@@ -373,7 +373,8 @@ export class WalletManager {
 
         // If there is at least one remaining wallet, select it as the new active wallet in the app.
         if (Object.values(this.masterWallets).length > 0) {
-            this.setActiveMasterWalletId(Object.values(this.masterWallets)[0]);
+            await this.setActiveMasterWalletId(Object.values(this.masterWallets)[0].id);
+            this.native.setRootRouter("/wallet-home");
         }
         else {
             this.goToLauncherScreen();
@@ -708,7 +709,7 @@ export class WalletManager {
 
     /**
      * Retrieves the wallet store password from the password manager.
-     * This method is here since the beginning and seems useless. Could probably be replaced by 
+     * This method is here since the beginning and seems useless. Could probably be replaced by
      * authService's getWalletPassword() directly.
      */
     public async openPayModal(transfer): Promise<string> {

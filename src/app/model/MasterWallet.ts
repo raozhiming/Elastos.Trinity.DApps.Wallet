@@ -67,7 +67,7 @@ export class MasterWallet {
 
     /**
      * Appends extended info from the local storage to this wallet model.
-     * This includes everything the SPV plugin could not save and that we saved in our local 
+     * This includes everything the SPV plugin could not save and that we saved in our local
      * storage instead.
      */
     public async populateWithExtendedInfo(extendedInfo: ExtendedWalletInfo) {
@@ -94,7 +94,7 @@ export class MasterWallet {
 
     public getBalance(): number {
         // Sum all subwallets balances to get the master wallet total balance
-        // Only standard ELA wallets are summed up as ERC20 wallets amounts use their own currency 
+        // Only standard ELA wallets are summed up as ERC20 wallets amounts use their own currency
         // and canno't be stacked on top of ELA as we don't have a exchange rate for now.
         let balance = 0;
         for (let subWallet of Object.values(this.subWallets)) {
@@ -108,8 +108,10 @@ export class MasterWallet {
      * Requests a wallet to update its sync progress. Call this only for SPV SDK sub-wallets.
      */
     public updateSyncProgress(chainId: StandardCoinName, progress: number, lastBlockTime: number) {
-        let subWallet = this.subWallets[chainId] as StandardSubWallet;
-        subWallet.updateSyncProgress(progress, lastBlockTime);
+        const subWallet = this.subWallets[chainId] as StandardSubWallet;
+        if (subWallet) {
+            subWallet.updateSyncProgress(progress, lastBlockTime);
+        }
     }
 
     public getSubWalletBalance(coinId: CoinID): number {
@@ -175,7 +177,7 @@ class SubWalletBuilder {
         switch (coin.getType()) {
             case CoinType.STANDARD:
                 return StandardSubWallet.newFromCoin(masterWallet, coin);
-            case CoinType.ERC20: 
+            case CoinType.ERC20:
                 return ERC20SubWallet.newFromCoin(masterWallet, coin);
             default:
                 console.warn("Unsupported coin type", coin.getType());

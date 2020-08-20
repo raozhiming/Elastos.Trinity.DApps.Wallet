@@ -28,7 +28,7 @@ export const zh = {
 
     // Home screen
     "wallet-home-title": "钱包主页",
-    "wallet-overview": "钱包概述",
+    "wallet-overview": "钱包总览",
     "you-have-n-wallets": "您有 {{walletsCount}} 个币种",
     "synchronized": "{{progress}}% 完成",
     "sync-progress": "同步中 {{progress}}%",
@@ -197,9 +197,9 @@ export const zh = {
 
     // Mnemonic
     'mnemonic': '助记词',
-    'your-mnemonic-prompt1': '这是您的12个安全字（助记词）。丢失这些，您将丢失钱包，因此必须将它们',
-    'your-mnemonic-prompt2': '按顺序',
-    'your-mnemonic-prompt3': '写下来，并且安全地保存。',
+    'mnemonic-prompt1': '这是您的12个安全字（助记词）。丢失这些，您将丢失钱包，因此必须将它们',
+    'mnemonic-prompt2': '按顺序',
+    'mnemonic-prompt3': '写下来，并且安全地保存。',
     'back-to-setting': '返回',
     'view-mnemonic': "查看助记词",
     'mnemonic-warning1': '保密,',
@@ -209,6 +209,10 @@ export const zh = {
     'type-menmonic-import': '请按顺序输入钱包的12个助记词',
     'import-text-word-sucess': '导入助记词成功',
     "mnemonic-import-missing-words": "请输入所有的助记词",
+    "mnemonic-check-title": '验证助记词',
+    "memory-written-down": "已经记下了",
+    "mnemonic-verify-sucess": '助记词验证成功',
+    "mnemonic-verify-fail": '助记词验证失败，请重新输入助记词',
 
     // Export mnemonic screen
     'text-export-mnemonic': '导出助记词',
