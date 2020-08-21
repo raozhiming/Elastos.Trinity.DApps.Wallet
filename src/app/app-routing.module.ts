@@ -81,7 +81,7 @@ const routes: Routes = [
     { path: 'currency-select', component: CurrencySelectPage },
 
     // Coin
-    { path: 'coin/:name', component: CoinHomePage },
+    { path: 'coin', component: CoinHomePage },
     { path: 'coin-list', component: CoinListPage },
     { path: 'coin-select', component: CoinSelectPage },
     { path: 'coin-receive', component: CoinReceivePage },

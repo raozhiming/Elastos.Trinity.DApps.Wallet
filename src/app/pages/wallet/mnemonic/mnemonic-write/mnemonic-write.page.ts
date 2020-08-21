@@ -114,6 +114,10 @@ export class MnemonicWritePage implements OnInit {
                                 this.walletCreationService.singleAddress
                         );
 
+                        this.events.publish("masterwalletcount:changed", {
+                            action: 'add',
+                        });
+
                         // this.createWalletSuccess();
                     } else {
                         // Cancelled, do nothing

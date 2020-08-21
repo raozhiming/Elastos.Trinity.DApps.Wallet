@@ -168,11 +168,11 @@ export class WalletImportPage implements OnInit, OnDestroy {
             payPassword,
             this.walletCreateService.singleAddress
         );
+
+        this.events.publish("masterwalletcount:changed", {
+            action: 'add',
+        });
+
         this.native.toast_trans('import-text-word-sucess');
     }
 }
-
-
-
-
-

@@ -119,20 +119,20 @@ export class CoinHomePage implements OnInit {
     }
 
     async init() {
-        this.coinTransferService.reset();
+        this.route.queryParams.subscribe((data) => {
+            this.masterWallet = this.walletManager.getMasterWallet(data.masterWalletId);
+            this.chainId = data.chainId as StandardCoinName;
 
-        this.masterWallet = this.walletManager.getActiveMasterWallet();
+            this.coinTransferService.reset();
+            this.coinTransferService.masterWalletId = data.masterWalletId;
+            this.coinTransferService.chainId = this.chainId;
+            this.coinTransferService.walletInfo = this.native.clone(this.masterWallet.account);
 
-        this.coinTransferService.reset();
-        this.coinTransferService.walletInfo = this.native.clone(this.masterWallet.account);
-
-        this.route.paramMap.subscribe((params) => {
-            this.chainId = params.get('name') as StandardCoinName;
             this.appService.setTitleBarTitle(this.chainId);
 
             this.initData();
 
-            if (this.walletManager.activeMasterWallet.subWallets[this.chainId].progress !== 100) {
+            if (this.masterWallet.subWallets[this.chainId].progress !== 100) {
                 this.events.subscribe(this.chainId + ':synccompleted', (coin) => {
                     this.CheckPublishTx();
                     this.checkUTXOCount();
@@ -297,29 +297,25 @@ export class CoinHomePage implements OnInit {
     }
 
     onItem(item) {
-        this.native.go('/coin-tx-info', { chainId: this.chainId, txId: item.txId });
+        this.native.go('/coin-tx-info', { masterWalletId: this.masterWallet.id, chainId: this.chainId, txId: item.txId });
     }
 
     receiveFunds() {
-        this.coinTransferService.chainId = this.chainId;
         this.native.go('/coin-receive');
     }
 
     sendFunds() {
         this.coinTransferService.transferType = TransferType.SEND;
-        this.coinTransferService.chainId = this.chainId;
         this.native.go('/coin-transfer');
     }
 
     rechargeFunds() {
         this.coinTransferService.transferType = TransferType.RECHARGE;
-        this.coinTransferService.chainId = this.chainId;
         this.native.go('/coin-select');
     }
 
     // Not sure what 'withdraw' is for
     withdrawFunds() {
-        this.coinTransferService.chainId = this.chainId;
         this.coinTransferService.transferType = TransferType.WITHDRAW;
         this.native.go('/coin-transfer');
     }
@@ -405,11 +401,11 @@ export class CoinHomePage implements OnInit {
 
     /** Returns the currency to be displayed for this coin. */
     getCoinBalanceCurrency() {
-        return this.walletManager.activeMasterWallet.subWallets[this.chainId].getDisplayTokenName();
+        return this.masterWallet.subWallets[this.chainId].getDisplayTokenName();
     }
 
     getSubwalletClass() {
-        switch (this.walletManager.activeMasterWallet.subWallets[this.chainId].id) {
+        switch (this.masterWallet.subWallets[this.chainId].id) {
             case 'ELA':
                 return 'black-card card-row';
             case 'IDChain':
@@ -417,7 +413,7 @@ export class CoinHomePage implements OnInit {
             case 'ETHSC':
                 return 'gray-card card-row';
         }
-        if (this.walletManager.activeMasterWallet.subWallets[this.chainId] instanceof ERC20SubWallet) {
+        if (this.masterWallet.subWallets[this.chainId] instanceof ERC20SubWallet) {
             return 'gray2-card card-row';
         }
 
@@ -425,12 +421,12 @@ export class CoinHomePage implements OnInit {
     }
 
     getSubwalletTitle() {
-        return this.walletManager.activeMasterWallet.subWallets[this.chainId].getFriendlyName();
+        return this.masterWallet.subWallets[this.chainId].getFriendlyName();
     }
 
     coinCanBeTransferred() {
-        let subWallet = this.walletManager.activeMasterWallet.subWallets[this.chainId];
-        
+        let subWallet = this.masterWallet.subWallets[this.chainId];
+
         // Standard ELA coins can be transferred; ERC20 coins can't
         if (subWallet instanceof StandardSubWallet)
             return true;

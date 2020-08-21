@@ -79,6 +79,7 @@ export class CoinTransferService {
 
     // Define transfer type
     public transferType: TransferType;
+    public masterWalletId: string;
     // From subwallet
     public chainId: StandardCoinName;
     // To subwallet (only for recharging funds)
@@ -113,6 +114,7 @@ export class CoinTransferService {
         this.transfer = new Transfer();
 
         this.transferType = null;
+        this.masterWalletId = null;
         this.chainId = null;
         this.subchainId = null;
         this.intentTransfer = null;

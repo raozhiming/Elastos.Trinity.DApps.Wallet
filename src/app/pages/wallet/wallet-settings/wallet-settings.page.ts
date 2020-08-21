@@ -118,8 +118,12 @@ export class WalletSettingsPage implements OnInit {
         }
     }
 
-    public destroyWallet(id: string) {
-        this.walletManager.destroyMasterWallet(id);
+    public async destroyWallet(id: string) {
+        await this.walletManager.destroyMasterWallet(id);
+
+        this.events.publish("masterwalletcount:changed", {
+            action: 'remove',
+        });
     }
 
     private async getMasterWalletBasicInfo() {

@@ -53,10 +53,6 @@ export class MnemonicExportPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
-        this.walletname = this.walletManager.getActiveMasterWallet().name;
-        this.account = this.walletManager.getActiveMasterWallet().account.Type;
-
         this.events.subscribe("error:update", () => {
             this.hideMnemonic = true;
         });
@@ -79,7 +75,9 @@ export class MnemonicExportPage implements OnInit {
                     this.title = 'text-export-mnemonic';
                 }
                 this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
-                this.walletname = this.walletManager.getActiveMasterWallet().name;
+                const masterWallet = this.walletManager.getMasterWallet(this.masterWalletId);
+                this.walletname = masterWallet.name;
+                this.account = masterWallet.account.Type;
             });
         });
     }
@@ -126,7 +124,8 @@ export class MnemonicExportPage implements OnInit {
 
             this.hideMnemonic = false;
         } else {
-            this.native.toast('Password is incorrect');
+            // User cancel
+            console.log('MnemonicExportPage use cancel');
         }
     }
 }

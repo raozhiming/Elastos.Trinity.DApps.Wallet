@@ -55,7 +55,7 @@ export let popover: any = null;
 })
 export class CoinTransferPage implements OnInit, OnDestroy {
 
-    private masterWallet: MasterWallet;
+    public masterWallet: MasterWallet;
     private walletInfo: WalletAccount;
     private syncCompletionEventName: string = null;
     public waitingForSyncCompletion = false;
@@ -66,7 +66,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // User inputs
     public toAddress: string;
-    public amount: number;
+    public amount: number = 0;
     public memo = '';
 
     // Display recharge wallets
@@ -143,20 +143,20 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     init() {
-        this.masterWallet = this.walletManager.getActiveMasterWallet();
+        this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
         this.transferType = this.coinTransferService.transferType;
         this.chainId = this.coinTransferService.chainId;
         this.waitingForSyncCompletion = false;
 
-        console.log('Balance', this.walletManager.activeMasterWallet.subWallets[this.chainId].balance / this.SELA);
+        console.log('Balance', this.masterWallet.subWallets[this.chainId].balance / this.SELA);
 
         switch (this.transferType) {
             // For Recharge Transfer
             case TransferType.RECHARGE:
                 // Setup page display
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
-                this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
-                this.toSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.coinTransferService.subchainId);
+                this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
+                this.toSubWallet = this.masterWallet.getSubWallet(this.coinTransferService.subchainId);
 
                 // Setup params for recharge transaction
                 this.transaction = this.createRechargeTransaction;
@@ -174,7 +174,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 // In case the destination subwallet is not fully synced we wait for the sync completion
                 // Before allowing to transfer, to make sure the transfer will not be lost, as even if this is queued
                 // by the SPVSDK, it's not persistant in case of restart.
-                if (this.walletManager.activeMasterWallet.subWallets[this.toSubWallet.id].progress !== 100) {
+                if (this.masterWallet.subWallets[this.toSubWallet.id].progress !== 100) {
                     this.waitingForSyncCompletion = true;
                     this.syncCompletionEventName = this.toSubWallet.id + ':synccompleted';
                     this.events.subscribe(this.syncCompletionEventName, (coin) => {
@@ -188,7 +188,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             // For Send Transfer
             case TransferType.SEND:
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
-                this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
+                this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
                 this.transaction = this.createSendTransaction;
                 break;
             // For Pay Intent
@@ -196,7 +196,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress = this.coinTransferService.transfer.toAddress;
                 this.amount = this.coinTransferService.transfer.amount;
                 this.memo = this.coinTransferService.transfer.memo;
-                this.fromSubWallet = this.walletManager.activeMasterWallet.getSubWallet(this.chainId);
+                this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
                 this.appService.setTitleBarTitle(this.translate.instant("payment-title"));
                 this.transaction = this.createSendTransaction;
                 break;
@@ -301,7 +301,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.native.toast_trans('amount-invalid');
             return;
         }
-        if (this.amount * this.SELA > this.walletManager.activeMasterWallet.subWallets[this.chainId].balance) {
+        if (this.amount * this.SELA > this.masterWallet.subWallets[this.chainId].balance) {
             this.native.toast_trans('amount-not-enough');
             return;
         }

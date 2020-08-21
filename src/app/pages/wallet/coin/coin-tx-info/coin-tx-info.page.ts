@@ -89,8 +89,8 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     init() {
-        this.masterWallet = this.walletManager.getActiveMasterWallet();
         this.route.queryParams.subscribe((data) => {
+            this.masterWallet = this.walletManager.getMasterWallet(data.masterWalletId);
             this.txId = data.txId;
             this.name = data.chainId;
 

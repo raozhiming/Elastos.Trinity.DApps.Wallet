@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, NgZone } from '@angular/core';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
@@ -36,7 +36,7 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
-import { IonSlides } from '@ionic/angular';
+import { IonSlides, Events } from '@ionic/angular';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -46,12 +46,12 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
     templateUrl: './wallet-home.page.html',
     styleUrls: ['./wallet-home.page.scss'],
 })
-export class WalletHomePage implements OnInit {
+export class WalletHomePage implements OnInit, OnDestroy {
 
     @ViewChild('slider', {static: false}) slider: IonSlides;
 
     public masterWallet: MasterWallet = null;
-    public masterWallets: MasterWallet[] = [];
+    public masterWalletList: MasterWallet[] = [];
     public isSingleWallet = false;
 
     // Helpers
@@ -62,6 +62,7 @@ export class WalletHomePage implements OnInit {
     private onItemClickedListener: any;
 
     constructor(
+        private events: Events,
         public native: Native,
         public appService: AppService,
         public popupProvider: PopupProvider,
@@ -70,7 +71,8 @@ export class WalletHomePage implements OnInit {
         private translate: TranslateService,
         public currencyService: CurrencyService,
         public theme: ThemeService,
-        public uiService: UiService
+        public uiService: UiService,
+        private zone: NgZone,
     ) {
     }
 
@@ -79,13 +81,33 @@ export class WalletHomePage implements OnInit {
             this.handleItem(menuIcon.key);
         });
 
-        if (this.walletManager.getWalletsList().length > 1) {
-            this.isSingleWallet = true;
-            this.masterWallet = this.walletManager.getActiveMasterWallet();
-        } else {
-            this.isSingleWallet = false;
-            this.masterWallets = this.walletManager.getWalletsList();
+        this.updateWallet();
+
+        this.events.subscribe("masterwalletcount:changed", (result) => {
+            console.log("masterwalletcount:changed event received result:", result);
+            this.zone.run(() => {
+                this.updateWallet();
+            });
+        });
+    }
+
+    updateWallet() {
+        this.masterWalletList = this.walletManager.getWalletsList();
+        switch (this.masterWalletList.length) {
+            case 0:
+                // TODO
+                break;
+            case 1:
+                this.isSingleWallet = true;
+                this.masterWallet = this.masterWalletList[0];
+                break;
+            default:
+                this.isSingleWallet = false;
         }
+    }
+
+    ngOnDestroy() {
+        this.events.unsubscribe('masterwalletcount:changed');
     }
 
     ionViewWillEnter() {
@@ -118,7 +140,7 @@ export class WalletHomePage implements OnInit {
     }
 
     goToGeneralSettings() {
-        this.walletEditionService.modifiedMasterWalletId = this.walletManager.getCurMasterWalletId();
+        // this.walletEditionService.modifiedMasterWalletId = this.walletManager.getCurMasterWalletId();
         this.native.go('/settings');
 
         // Not sure what this does but it throws an err using it
@@ -131,8 +153,20 @@ export class WalletHomePage implements OnInit {
         this.native.go("/wallet-settings");
     }
 
-    doRefresh(event) {
-        this.walletManager.getActiveMasterWallet().getSubWalletBalance(StandardCoinName.ELA);
+    goCoinHome(masterWalletId: string, chainId: string) {
+        this.native.go("/coin", { masterWalletId, chainId});
+    }
+
+    async doRefresh(event) {
+        let curMasterWallet = null;
+        if (this.isSingleWallet) {
+            curMasterWallet = this.masterWallet;
+        } else {
+            const index = await this.slider.getActiveIndex();
+            curMasterWallet = this.masterWalletList[index];
+        }
+
+        curMasterWallet.getSubWalletBalance(StandardCoinName.ELA);
         this.currencyService.fetch();
         setTimeout(() => {
             event.target.complete();

@@ -12,6 +12,7 @@ import { Config } from 'src/app/config/Config';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 
 @Component({
     selector: 'app-coin-select',
@@ -21,6 +22,7 @@ import { UiService } from 'src/app/services/ui.service';
 
 export class CoinSelectPage implements OnInit {
 
+    public masterWallet: MasterWallet;
     // Available subwallets to transfer to
     public subWallets: SubWallet[] = [];
 
@@ -51,7 +53,8 @@ export class CoinSelectPage implements OnInit {
 
     init() {
         // Filter out the subwallet being transferred from
-        this.subWallets = this.walletManager.getActiveMasterWallet().subWalletsWithExcludedCoin(this.coinTransferService.chainId);
+        this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
+        this.subWallets = this.masterWallet.subWalletsWithExcludedCoin(this.coinTransferService.chainId);
     }
 
     onItem(wallet: SubWallet) {
