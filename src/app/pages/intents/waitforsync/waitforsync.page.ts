@@ -70,7 +70,7 @@ export class WaitForSyncPage implements OnInit {
         this.transfer = this.coinTransferService.transfer;
         this.chainId = this.coinTransferService.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
-        this.masterWallet = this.walletManager.getActiveMasterWallet();
+        this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
 
         console.log("Wait for sync - Master wallet:", this.masterWallet, "Chain ID:", this.chainId);
 
@@ -129,7 +129,7 @@ export class WaitForSyncPage implements OnInit {
             }
         }
 
-        if (this.walletManager.activeMasterWallet.subWallets[this.chainId].progress !== 100) {
+        if (this.masterWallet.subWallets[this.chainId].progress !== 100) {
             this.eventType = this.chainId + ':synccompleted';
             this.events.subscribe(this.eventType, (coin) => {
                 console.log('WaitforsyncPage coin:', coin);

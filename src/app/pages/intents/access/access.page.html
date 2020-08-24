@@ -57,7 +57,7 @@
             <ion-img *ngIf="exportMnemonic" class="warning" src="assets/intents/warning.svg"></ion-img>
             <ion-img *ngIf="!exportMnemonic" class="wallet" src="assets/intents/wallet.svg"></ion-img>
             <ion-card-title>{{ title }}</ion-card-title>
-            <ion-card-subtitle *ngIf="requestDapp">{{ requestDapp.name }}</ion-card-subtitle>
+            <ion-card-subtitle *ngIf="requestDapp">{{ requestDapp }}</ion-card-subtitle>
         </ion-card>
 
         <div *ngIf="!exportMnemonic">

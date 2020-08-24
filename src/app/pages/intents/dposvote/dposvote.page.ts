@@ -80,7 +80,7 @@ export class DPoSVotePage implements OnInit {
         this.chainId = this.coinTransferService.chainId;
         this.intentTransfer = this.coinTransferService.intentTransfer;
         this.walletInfo = this.coinTransferService.walletInfo;
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
+        this.masterWalletId = this.coinTransferService.masterWalletId;
         this.fetchBalance();
 
         this.hasPendingVoteTransaction();
@@ -192,7 +192,7 @@ export class DPoSVotePage implements OnInit {
             intentId: this.intentTransfer.intentId,
         });
 
-        let sourceSubwallet = this.walletManager.getActiveMasterWallet().getSubWallet(this.chainId);
+        let sourceSubwallet = this.walletManager.getMasterWallet(this.masterWalletId).getSubWallet(this.chainId);
         await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 }

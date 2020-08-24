@@ -80,7 +80,7 @@ export class DidTransactionPage implements OnInit {
         this.chainId = this.coinTransferService.chainId;
         this.intentTransfer = this.coinTransferService.intentTransfer;
         this.walletInfo = this.coinTransferService.walletInfo;
-        this.masterWallet = this.walletManager.getActiveMasterWallet();
+        this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
 
         if (this.chainId === StandardCoinName.IDChain && !this.masterWallet.hasSubWallet(StandardCoinName.IDChain)) {
             await this.notifyNoIDChain();
@@ -143,7 +143,7 @@ export class DidTransactionPage implements OnInit {
             intentId: this.intentTransfer.intentId,
         });
 
-        let sourceSubwallet = this.walletManager.getActiveMasterWallet().getSubWallet(this.chainId);
+        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
         await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 }

@@ -11,6 +11,8 @@ import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
+import { IntentTransfer } from 'src/app/services/cointransfer.service';
+import { WalletAccessService } from 'src/app/services/walletaccess.service';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -27,10 +29,10 @@ export class MnemonicExportPage implements OnInit {
     public mnemonicList = [];
     public hideMnemonic: boolean = true;
     public isFromIntent = false;
-    public requestDapp: any = null;
     public mnemonicStr: string = "";
     public walletname: string = "";
     public account: any = {};
+    public intentTransfer: IntentTransfer;
 
     constructor(
         public route: ActivatedRoute,
@@ -43,7 +45,8 @@ export class MnemonicExportPage implements OnInit {
         public appService: AppService,
         private authService: AuthService,
         public theme: ThemeService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private walletAccessService: WalletAccessService
     ) {
         this.init();
     }
@@ -69,12 +72,14 @@ export class MnemonicExportPage implements OnInit {
                 if (!Util.isEmptyObject(data)) {
                     console.log('From intent');
                     this.isFromIntent = true;
-                    this.requestDapp = Config.requestDapp;
+                    this.intentTransfer = this.walletAccessService.intentTransfer;
+                    this.masterWalletId = this.walletAccessService.masterWalletId;
                     this.title = 'access-mnemonic';
                 } else {
                     this.title = 'text-export-mnemonic';
+                    this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
                 }
-                this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
+
                 const masterWallet = this.walletManager.getMasterWallet(this.masterWalletId);
                 this.walletname = masterWallet.name;
                 this.account = masterWallet.account.Type;
@@ -102,9 +107,9 @@ export class MnemonicExportPage implements OnInit {
 
     async onShare() {
         await this.intentService.sendIntentResponse(
-            this.requestDapp.action,
+            this.intentTransfer.action,
             { mnemonic: this.mnemonicStr },
-            this.requestDapp.intentId
+            this.intentTransfer.intentId
         );
         this.appService.close();
     }

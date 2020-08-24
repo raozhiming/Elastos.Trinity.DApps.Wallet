@@ -24,7 +24,7 @@ export class NavService {
                 // No pending intent - show the appropriate startup screen
                 console.log("There is no pending intent - showing home screen");
 
-                if (this.walletManager.activeMasterWallet) {
+                if (this.walletManager.getWalletsCount() > 0) {
                     // Go to wallet's home page.
                     this.native.setRootRouter("/wallet-home");
                 }

@@ -26,7 +26,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class Config {
     public static APP_ID = "org.elastos.trinity.dapp.wallet";
-    /**后台服务*/ 
+    /**后台服务*/
     public static SERVER:string = 'https://39.106.96.168:8446/api';
     /**后台服务*/
     public static SERVER1:string = 'https://123.206.52.29/api';
@@ -52,6 +52,4 @@ export class Config {
     // TODO: cleanup the below urls / find a better way
     // public static BLOCKCHAIN_URL: String = 'https://blockchain-beta.elastos.org/';
     //public static BLOCKCHAIN_URL: String = 'https://blockchain-regtest.elastos.org/';
-
-    public static requestDapp: any; // TODO: ???
 }

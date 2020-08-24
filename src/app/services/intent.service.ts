@@ -6,6 +6,7 @@ import { Util } from '../model/Util';
 import { StandardCoinName } from '../model/Coin';
 import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService, TransferType } from './cointransfer.service';
+import { WalletAccessService } from './walletaccess.service';
 import { WalletManager } from './wallet.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -15,12 +16,15 @@ declare let appManager: AppManagerPlugin.AppManager;
 })
 export class IntentService {
 
+    private masterWalletId = '';
+
     constructor(
         private zone: NgZone,
         public events: Events,
         public native: Native,
         private walletManager: WalletManager,
-        private coinTransferService: CoinTransferService
+        private coinTransferService: CoinTransferService,
+        private walletAccessService: WalletAccessService
     ) {
     }
 
@@ -44,6 +48,14 @@ export class IntentService {
             ". from: ", intent.from
         );
 
+        // TODO:Select masterWallet
+        const masteWalletList = this.walletManager.getWalletsList();
+        if (masteWalletList.length === 0) {
+            this.sendIntentResponse(intent.action, "No active master wallet!", intent.intentId);
+            return false;
+        }
+        this.masterWalletId = masteWalletList[0].id;
+
         switch (intent.action) {
             case 'elawalletmnemonicaccess':
             case 'walletaccess':
@@ -62,12 +74,8 @@ export class IntentService {
             return false;
         }
 
-        if (!this.walletManager.activeMasterWallet) {
-            this.sendIntentResponse(intent.action, "No active master wallet!", intent.intentId);
-            return false;
-        }
-
         this.coinTransferService.reset();
+        this.coinTransferService.masterWalletId = this.masterWalletId;
 
         // Deprecated for pay intent
         // this.coinTransferService.transfer.memo = intent.params.memo || '';
@@ -77,7 +85,7 @@ export class IntentService {
         // this.coinTransferService.transfer.fee = 0;
         // this.coinTransferService.transfer.chainId = StandardCoinName.ELA;
 
-        this.coinTransferService.walletInfo = this.walletManager.activeMasterWallet.account;
+        this.coinTransferService.walletInfo = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId).account;
         this.coinTransferService.chainId = StandardCoinName.ELA;
         this.coinTransferService.intentTransfer = {
             action: intent.action,
@@ -168,12 +176,14 @@ export class IntentService {
     }
 
     handleAccessIntent(intent: AppManagerPlugin.ReceivedIntent) {
-        Config.requestDapp = {
-            name: intent.from,
-            intentId: intent.intentId,
+        this.walletAccessService.reset();
+        this.walletAccessService.masterWalletId = this.masterWalletId;
+        this.walletAccessService.intentTransfer = {
             action: intent.action,
-            requestFields: intent.params.reqfields || intent.params,
+            intentId: intent.intentId,
+            from: intent.from,
         };
+        this.walletAccessService.requestFields = intent.params.reqfields || intent.params;
         this.native.go('/access');
     }
 

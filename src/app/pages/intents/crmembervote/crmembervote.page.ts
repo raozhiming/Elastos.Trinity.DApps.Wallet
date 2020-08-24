@@ -26,7 +26,7 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
-import { CoinTransferService, Transfer } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, Transfer, IntentTransfer } from 'src/app/services/cointransfer.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { IntentService } from 'src/app/services/intent.service';
 
@@ -40,6 +40,7 @@ declare let appManager: AppManagerPlugin.AppManager;
 export class CRmembervotePage implements OnInit {
     masterWallet: MasterWallet = null;
     chainId: string; // ELA
+    intentTransfer: IntentTransfer;
     transfer: Transfer = null;
     votecount = 0;
 
@@ -67,8 +68,9 @@ export class CRmembervotePage implements OnInit {
 
     init() {
         this.transfer = this.coinTransferService.transfer;
+        this.intentTransfer = this.coinTransferService.intentTransfer;
         this.chainId = this.coinTransferService.chainId;
-        this.masterWallet = this.walletManager.getActiveMasterWallet();
+        this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
 
         this.parseVotes();
 
@@ -104,7 +106,7 @@ export class CRmembervotePage implements OnInit {
      * sending the intent response.
      */
     async cancelOperation() {
-        await this.intentService.sendIntentResponse(this.transfer.action, {txid: null}, this.transfer.intentId);
+        await this.intentService.sendIntentResponse(this.intentTransfer.action, {txid: null}, this.intentTransfer.intentId);
         this.appService.close();
     }
 

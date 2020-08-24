@@ -127,10 +127,6 @@ export class WalletManager {
             if (idList.length === 0) {
                 console.log("No SPV wallet found, going to launcher screen");
                 this.goToLauncherScreen();
-                // this.native.setRootRouter("/dposvote");
-                // this.native.setRootRouter("/didtransaction");
-                // this.native.setRootRouter("/esctransaction");
-                // this.native.setRootRouter("/waitforsync");
                 return;
             }
 
@@ -243,6 +239,10 @@ export class WalletManager {
 
     public getWalletsList(): MasterWallet[] {
         return Object.values(this.masterWallets);
+    }
+
+    public getWalletsCount(): number {
+        return Object.values(this.masterWallets).length;
     }
 
     public walletNameExists(name: string): boolean {
@@ -581,7 +581,7 @@ export class WalletManager {
 
             // Check if it's a right time to prompt user for ID chain transfers, but only if we are fully synced.
             if (elaProgress == 100 && idChainProgress == 100) {
-                this.checkIDChainBalance();
+                this.checkIDChainBalance(masterId);
             }
         }
     }
@@ -630,7 +630,7 @@ export class WalletManager {
     }
 
     // TODO: make a more generic flow to not do this only for the ID chain but also for the ETH chain.
-    public checkIDChainBalance() {
+    public checkIDChainBalance(masterId: WalletID) {
         if (this.hasPromptTransfer2IDChain) { return; }
         if (this.needToPromptTransferToIDChain) { return; }
 
@@ -639,13 +639,14 @@ export class WalletManager {
         //     return;
         // }
 
-        if (this.getActiveMasterWallet().subWallets[StandardCoinName.ELA].balance <= 1000000) {
-            console.log('ELA balance ', this.getActiveMasterWallet().subWallets[StandardCoinName.ELA].balance);
+        const masterWallet = this.getMasterWallet(masterId);
+        if (masterWallet.subWallets[StandardCoinName.ELA].balance <= 1000000) {
+            console.log('ELA balance ', masterWallet.subWallets[StandardCoinName.ELA].balance);
             return;
         }
 
-        if (this.getActiveMasterWallet().subWallets[StandardCoinName.IDChain].balance > 100000) {
-            console.log('IDChain balance ', this.getActiveMasterWallet().subWallets[StandardCoinName.IDChain].balance);
+        if (masterWallet.subWallets[StandardCoinName.IDChain].balance > 100000) {
+            console.log('IDChain balance ',  masterWallet.subWallets[StandardCoinName.IDChain].balance);
             return;
         }
 

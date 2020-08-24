@@ -81,7 +81,7 @@ export class EscTransactionPage implements OnInit {
         this.chainId = this.coinTransferService.chainId;
         this.intentTransfer = this.coinTransferService.intentTransfer;
         this.walletInfo = this.coinTransferService.walletInfo;
-        this.masterWallet = this.walletManager.getActiveMasterWallet();
+        this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
 
         if (this.chainId === StandardCoinName.ETHSC && !this.masterWallet.hasSubWallet(StandardCoinName.ETHSC)) {
             await this.notifyNoETHSCChain();

@@ -122,7 +122,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
     }
 
     ionViewDidEnter() {
-        if (this.walletManager.getCurMasterWalletId() !== '-1') {
+        if (this.walletManager.getWalletsCount() > 0) {
             this.promptTransfer2IDChain();
         }
     }
@@ -140,7 +140,6 @@ export class WalletHomePage implements OnInit, OnDestroy {
     }
 
     goToGeneralSettings() {
-        // this.walletEditionService.modifiedMasterWalletId = this.walletManager.getCurMasterWalletId();
         this.native.go('/settings');
 
         // Not sure what this does but it throws an err using it

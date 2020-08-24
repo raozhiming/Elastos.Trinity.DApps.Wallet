@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { WalletManager } from '../../../services/wallet.service';
+import { WalletAccessService, IntentTransfer } from '../../../services/walletaccess.service';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MasterWallet } from 'src/app/model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -25,10 +27,10 @@ type ClaimRequest = {
 export class AccessPage implements OnInit {
 
     public Config = Config;
-    public requestDapp: any = null;
-    public masterWalletId = '1';
+    public intentTransfer: IntentTransfer;
+    public requestDapp = '';
+    public masterWallet: MasterWallet = null;
     public exportMnemonic = false;
-    public reason = '';
     public title = '';
     public requestItems: ClaimRequest[] = [];
 
@@ -39,7 +41,8 @@ export class AccessPage implements OnInit {
         public popupProvider: PopupProvider,
         public native: Native,
         private translate: TranslateService,
-        public theme: ThemeService
+        public theme: ThemeService,
+        private walletAccessService: WalletAccessService
     ) { }
 
     ngOnInit() {
@@ -52,9 +55,10 @@ export class AccessPage implements OnInit {
     }
 
     init() {
-        this.requestDapp = Config.requestDapp;
-        this.masterWalletId = this.walletManager.getCurMasterWalletId();
-        if (this.requestDapp.action === 'walletaccess') {
+        this.requestDapp = this.walletAccessService.intentTransfer.from;
+        this.intentTransfer = this.walletAccessService.intentTransfer;
+        this.masterWallet = this.walletManager.getMasterWallet(this.walletAccessService.masterWalletId);
+        if (this.intentTransfer.action === 'walletaccess') {
             this.organizeRequestedFields();
             this.title = this.translate.instant("access-subtitle-wallet-access-from");
         } else {
@@ -64,10 +68,10 @@ export class AccessPage implements OnInit {
     }
 
     async organizeRequestedFields() {
-        console.log('organizeRequestedFields:', this.requestDapp.requestFields);
-        for (const key of Object.keys(this.requestDapp.requestFields)) {
+        console.log('organizeRequestedFields:', this.walletAccessService.requestFields);
+        for (const key of Object.keys(this.walletAccessService.requestFields)) {
             console.log('key:', key);
-            const claim = this.requestDapp.requestFields[key];
+            const claim = this.walletAccessService.requestFields[key];
             const claimValue = await this.getClaimValue(key);
             const claimRequest: ClaimRequest = {
                 name: key,
@@ -94,7 +98,7 @@ export class AccessPage implements OnInit {
                 break;
             case 'elaamount':
                 // for now just return the amount of ELA Chain, not include IDChain
-                value = this.walletManager.activeMasterWallet.subWallets.ELA.balance.toString();
+                value = this.masterWallet.subWallets.ELA.balance.toString();
                 break;
             case 'ethaddress':
                 value = await this.createAddress(StandardCoinName.ETHSC);
@@ -107,7 +111,7 @@ export class AccessPage implements OnInit {
     }
 
     async createAddress(chainId: string) {
-        return this.walletManager.activeMasterWallet.getSubWallet(chainId).createAddress();
+        return this.masterWallet.getSubWallet(chainId).createAddress();
     }
 
     reduceArrayToDict(keyProperty: string) {
@@ -134,7 +138,7 @@ export class AccessPage implements OnInit {
      * sending the intent response.
      */
     async cancelOperation() {
-        await this.intentService.sendIntentResponse(this.requestDapp.action, { walletinfo: null }, this.requestDapp.intentId);
+        await this.intentService.sendIntentResponse(this.intentTransfer.action, { walletinfo: null }, this.intentTransfer.intentId);
         this.appService.close();
     }
 
@@ -143,8 +147,8 @@ export class AccessPage implements OnInit {
             this.native.go('/mnemonic-export', { fromIntent: true });
         } else {
             const selectedClaim = this.buildDeliverableList();
-            await this.intentService.sendIntentResponse(this.requestDapp.action,
-                    {walletinfo: selectedClaim}, this.requestDapp.intentId);
+            await this.intentService.sendIntentResponse(this.intentTransfer.action,
+                    {walletinfo: selectedClaim}, this.intentTransfer.intentId);
             this.appService.close();
         }
     }
