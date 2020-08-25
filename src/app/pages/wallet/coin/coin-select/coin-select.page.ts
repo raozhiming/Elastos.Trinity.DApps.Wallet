@@ -52,9 +52,14 @@ export class CoinSelectPage implements OnInit {
     }
 
     init() {
-        // Filter out the subwallet being transferred from
         this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
-        this.subWallets = this.masterWallet.subWalletsWithExcludedCoin(this.coinTransferService.chainId);
+
+        // Filter out the subwallet being transferred from
+        if (this.coinTransferService.chainId !== 'ELA') {
+            this.subWallets = [this.masterWallet.getSubWallet('ELA')];
+        } else {
+            this.subWallets = this.masterWallet.subWalletsWithExcludedCoin(this.coinTransferService.chainId);
+        }
     }
 
     onItem(wallet: SubWallet) {
