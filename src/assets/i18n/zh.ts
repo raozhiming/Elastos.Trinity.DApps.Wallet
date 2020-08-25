@@ -175,7 +175,7 @@ export const zh = {
     // DPos voting intent screen
     "dposvote-title": "超级节点投票",
     "dposvote-you-are-voting": "正在投票!",
-    "dposvote-transaction-fees": "将会收取0.0001 ELA的交易费",
+    "dposvote-transaction-fees": "大约需要0.0001 ELA的交易费",
     "dposvote-voting-for": "您正在投票给:",
     "dpostvote-with": "使用:",
 

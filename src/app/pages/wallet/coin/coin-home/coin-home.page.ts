@@ -31,7 +31,7 @@ import { WalletManager } from '../../../../services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { AppService } from 'src/app/services/app.service';
-import { CoinTransferService, TransferType } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, TransferType, Transfer } from 'src/app/services/cointransfer.service';
 import { StandardCoinName, Coin, CoinType } from 'src/app/model/Coin';
 import { SubWallet } from 'src/app/model/SubWallet';
 import { TransactionDirection, TransactionStatus } from 'src/app/model/Transaction';
@@ -378,18 +378,20 @@ export class CoinHomePage implements OnInit {
     }
 
     async createConsolidateTransaction() {
-        let txJson = await this.walletManager.spvBridge.createConsolidateTransaction(this.masterWallet.id, this.chainId, '');
-        console.log('coin.page createConsolidateTransaction');
-        let transfer = {
+        let rawTx = await this.walletManager.spvBridge.createConsolidateTransaction(this.masterWallet.id, this.chainId, '');
+        console.log('coin-home.page createConsolidateTransaction');
+        const transfer = new Transfer();
+        Object.assign(transfer, {
+            masterWalletId: this.masterWallet.id,
             chainId: this.chainId,
-            toAddress: '',
-            amount: '',
-            memo: '',
-            fee: 0,
+            rawTransaction: rawTx,
             payPassword: '',
-            rawTransaction: txJson,
-        };
-        this.walletManager.openPayModal(transfer);
+            action: null,
+            intentId: null,
+        });
+
+        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
+        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
     isNewTransaction(timestamp: number) {
