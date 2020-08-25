@@ -22,17 +22,15 @@
 
     ion-row {
         margin-bottom: 15px;
-        display: flex;
-        flex-direction: column;
         width: 100%;
 
         ion-input {
             background: #803fd5;
             height: 45px;
             border-radius: 8px;
-            font-size: 16px;
-            line-height: 1.06;
-            letter-spacing: -0.41px;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: -0.34px;
             text-align: left;
             color: #fdfeff;
             --padding-start: 12px;
@@ -82,22 +80,30 @@
         }
     }
 
-    .toggle-row {
-        justify-content: space-between;
+    .options-container {
+        width: 100%;
+
+        .toggle-row {
+            justify-content: space-between;
+        }
+    
+        .password-row {
+            width: 100%;
+            padding: 0;
+            background: #803fd5;
+            border-radius: 8px;
+
+            ion-col {
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                ion-icon {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+        }
     }
 }
-
-/* @import "../../../functions.scss";
-
-ion-item {
-    background-color: #783aff;
-}
-
-ion-label {
-    font-size: 16px;
-}
-
-ion-note {
-    font-size: 14px;
-}
- */

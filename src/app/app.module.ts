@@ -95,6 +95,7 @@ import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component
 import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { PaymentboxComponent } from './components/paymentbox/paymentbox.component';
+import { HelpComponent } from './components/help/help.component';
 
 
 Sentry.init({
@@ -179,15 +180,17 @@ export function TranslateLoaderFactory() {
         MnemonicExportPage,
         MnemonicWritePage,
         MnemonicCreatePage,
-        WalletCreatedComponent,
-        TxConfirmComponent,
         CurrencySelectPage,
         WalletColorPage,
+        WalletCreatedComponent,
+        TxConfirmComponent,
+        HelpComponent,
     ],
     entryComponents: [
         LauncherPage,
         WalletCreatedComponent,
         TxConfirmComponent,
+        HelpComponent
     ],
     imports: [
         BrowserModule,

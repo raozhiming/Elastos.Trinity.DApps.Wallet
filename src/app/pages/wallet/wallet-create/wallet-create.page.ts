@@ -4,9 +4,10 @@ import { Native } from '../../../services/native.service';
 import { Config } from '../../../config/Config';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
-import { WalletCreationService } from 'src/app/services/walletcreation.service';
+import { WalletCreationService, NewWallet } from 'src/app/services/walletcreation.service';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
+import { UiService } from 'src/app/services/ui.service';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -21,10 +22,11 @@ export class WalletCreatePage implements OnInit {
     public wallet = {
         name: '',
         singleAddress: false,
-        // payPassword: '',
-        // rePayPassword: '',
         mnemonicPassword: ''
     };
+    public repeatMnemonicPassword: '';
+
+    public helpMessage = 'This is an optional password to give your wallet extra security. It will be saved in the blockchain so it\'s important to keep this stored safely along with your mnemonic passphrase';
 
     constructor(
         public route: ActivatedRoute,
@@ -34,6 +36,7 @@ export class WalletCreatePage implements OnInit {
         public zone: NgZone,
         private appService: AppService,
         public translate: TranslateService,
+        public uiService: UiService
     ) {
         if (this.walletCreationService.isMulti) {
             this.wallet.singleAddress = true;
@@ -74,19 +77,18 @@ export class WalletCreatePage implements OnInit {
             this.native.toast_trans("text-wallet-name-validator-already-exists");
             return;
         }
-        /*if (!Util.password(this.wallet.payPassword)) {
-            this.native.toast_trans("text-pwd-validator");
-            return;
-        }
-        if (this.wallet.payPassword !== this.wallet.rePayPassword) {
+        if (
+            this.walletCreationService.type === NewWallet.CREATE &&
+            this.wallet.mnemonicPassword &&
+            this.wallet.mnemonicPassword !== this.repeatMnemonicPassword
+        ) {
             this.native.toast_trans("text-repwd-validator");
             return;
-        }*/
+        }
         this.createWallet();
     }
 
     createWallet() {
-        //this.walletCreationService.payPassword = this.wallet.payPassword;
         this.walletCreationService.name = this.wallet.name;
         this.walletCreationService.singleAddress = this.wallet.singleAddress;
         this.walletCreationService.mnemonicPassword = this.wallet.mnemonicPassword;
@@ -96,5 +98,10 @@ export class WalletCreatePage implements OnInit {
         } else {
             this.native.go("/wallet-import");
         }
+    }
+
+    goToNextInput(event, nextInput: any) {
+        console.log('Input key code', event);
+        nextInput.setFocus();
     }
 }

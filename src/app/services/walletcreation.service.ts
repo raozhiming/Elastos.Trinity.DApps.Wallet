@@ -27,7 +27,7 @@ export type SelectableMnemonic = {
     selected: boolean;
 };
 
-enum NewWallet {
+export enum NewWallet {
     CREATE = 1,
     IMPORT = 2,
 }
@@ -45,7 +45,6 @@ export class WalletCreationService {
     public singleAddress: boolean;
     public isMulti: boolean;
     public name: string;
-
     public mnemonicPassword: string;
 
     constructor() {

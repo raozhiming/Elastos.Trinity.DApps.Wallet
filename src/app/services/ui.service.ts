@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { SubWallet } from '../model/SubWallet';
 import { StandardCoinName } from '../model/Coin';
 import * as moment from 'moment';
+import { PopoverController } from '@ionic/angular';
+import { HelpComponent } from '../components/help/help.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UiService {
 
-  constructor() { }
+  constructor(
+    private popoverCtrl: PopoverController
+  ) { }
 
   getSubWalletIcon(subwallet: SubWallet): string {
     switch (subwallet.id) {
@@ -41,5 +45,19 @@ export class UiService {
 
   getSyncDate(timestamp) {
     return moment(new Date(timestamp)).format();
+  }
+
+  public async showHelp(ev: any, helpMessage: string) {
+    const popover = await this.popoverCtrl.create({
+      mode: 'ios',
+      component: HelpComponent,
+      cssClass: 'helpComponent',
+      event: ev,
+      componentProps: {
+        message: helpMessage
+      },
+      translucent: false
+    });
+    return await popover.present();
   }
 }
