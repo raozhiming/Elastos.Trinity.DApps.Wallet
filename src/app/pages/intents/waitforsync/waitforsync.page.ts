@@ -26,9 +26,8 @@ export class WaitForSyncPage implements OnInit {
     SELA = Config.SELA;
     showOn = true;
 
-    masterWallet: MasterWallet = null;
-    intentTransfer: IntentTransfer = null;
-    transfer: any = null;
+    masterWallet: MasterWallet;
+    intentTransfer: IntentTransfer;
 
     chainId: StandardCoinName;
     txId: string;
@@ -66,15 +65,14 @@ export class WaitForSyncPage implements OnInit {
     }
 
     async init() {
-        this.intentTransfer = this.coinTransferService.intentTransfer;
-        this.transfer = this.coinTransferService.transfer;
         this.chainId = this.coinTransferService.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
 
         console.log("Wait for sync - Master wallet:", this.masterWallet, "Chain ID:", this.chainId);
+        console.log('Intent Transfer params', this.coinTransferService.intentTransfer);
 
-        switch (this.intentTransfer.action) {
+        switch (this.coinTransferService.intentTransfer.action) {
             case 'crmembervote':
                 this.action = 'text-vote-crcouncil';
                 this.nextScreen = '/crmembervote';
@@ -116,7 +114,7 @@ export class WaitForSyncPage implements OnInit {
                 this.nextScreen = '/crproposalvoteagainst';
                 break;
             default:
-                console.log('pls check the action - '+this.transfer.action+' is not supported.');
+                console.log('Please check the action - ' + this.action + ' is not supported.');
                 break;
         }
 

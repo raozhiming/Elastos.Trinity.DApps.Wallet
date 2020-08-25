@@ -16,8 +16,6 @@ declare let appManager: AppManagerPlugin.AppManager;
 })
 export class IntentService {
 
-    private masterWalletId = '';
-
     constructor(
         private zone: NgZone,
         public events: Events,
@@ -48,13 +46,10 @@ export class IntentService {
             ". from: ", intent.from
         );
 
-        // TODO:Select masterWallet
-        const masteWalletList = this.walletManager.getWalletsList();
-        if (masteWalletList.length === 0) {
+        if (this.walletManager.getWalletsList().length === 0) {
             this.sendIntentResponse(intent.action, "No active master wallet!", intent.intentId);
             return false;
         }
-        this.masterWalletId = masteWalletList[0].id;
 
         switch (intent.action) {
             case 'elawalletmnemonicaccess':
@@ -70,30 +65,18 @@ export class IntentService {
     handleTransactionIntent(intent: AppManagerPlugin.ReceivedIntent) {
         if (Util.isEmptyObject(intent.params)) {
             console.error('Invalid intent parameters received. No params.', intent.params);
-            // TODO: send intent response
+            this.sendIntentResponse(intent.action, "Invalid intent parameters", intent.intentId);
             return false;
+        } else {
+            this.coinTransferService.reset();
+            this.coinTransferService.chainId = StandardCoinName.ELA;
+            this.coinTransferService.intentTransfer = {
+                action: intent.action,
+                intentId: intent.intentId,
+                from: intent.from,
+            };
         }
 
-        this.coinTransferService.reset();
-        this.coinTransferService.masterWalletId = this.masterWalletId;
-
-        // Deprecated for pay intent
-        // this.coinTransferService.transfer.memo = intent.params.memo || '';
-        // this.coinTransferService.transfer.intentId = intent.intentId;
-        // this.coinTransferService.transfer.action = intent.action;
-        // this.coinTransferService.transfer.from = intent.from;
-        // this.coinTransferService.transfer.fee = 0;
-        // this.coinTransferService.transfer.chainId = StandardCoinName.ELA;
-
-        this.coinTransferService.walletInfo = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId).account;
-        this.coinTransferService.chainId = StandardCoinName.ELA;
-        this.coinTransferService.intentTransfer = {
-            action: intent.action,
-            intentId: intent.intentId,
-            from: intent.from,
-        };
-
-        let continueToWaitForSync = true;
         switch (intent.action) {
             case 'crmembervote':
                 console.log('CR member vote Transaction intent content:', intent.params);
@@ -145,19 +128,15 @@ export class IntentService {
             case 'pay':
                 this.coinTransferService.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
                 this.coinTransferService.transferType = TransferType.PAY;
-                const transfer = {
+
+                this.coinTransferService.payTransfer = {
                     toAddress: intent.params.receiver,
-                    amount: intent.params.amount || '',
-                    memo: intent.params.memo || ''
+                    amount: parseInt(intent.params.amount),
+                    memo: intent.params.memo
                 };
-                this.coinTransferService.transfer.toAddress = transfer.toAddress;
-                this.coinTransferService.transfer.amount = transfer.amount;
-                this.coinTransferService.transfer.memo = transfer.memo;
-                this.events.publish('intent:pay', transfer);
                 break;
 
             case 'crproposalcreatedigest':
-                continueToWaitForSync = false;
                 this.handleCreateProposalDigestIntent(intent);
                 break;
 
@@ -169,26 +148,31 @@ export class IntentService {
                 console.log('AppService unknown intent:', intent);
                 return;
         }
-
-        if (continueToWaitForSync) {
-            this.native.go('/waitforsync');
-        }
+        this.native.go('wallet-manager', { forIntent: true, forWalletAccess: false });
     }
 
     handleAccessIntent(intent: AppManagerPlugin.ReceivedIntent) {
         this.walletAccessService.reset();
-        this.walletAccessService.masterWalletId = this.masterWalletId;
         this.walletAccessService.intentTransfer = {
             action: intent.action,
             intentId: intent.intentId,
             from: intent.from,
         };
         this.walletAccessService.requestFields = intent.params.reqfields || intent.params;
-        this.native.go('/access');
+        this.native.go('wallet-manager', { forIntent: true, forWalletAccess: true });
+    }
+
+    private async handleVoteAgainstProposalIntent(intent: AppManagerPlugin.ReceivedIntent) {
+        console.log("Handling vote against proposal intent");
+
+        // Let the screen know for which proposal we want to vote against
+        this.coinTransferService.transfer.votes = [
+            intent.params.proposalHash
+        ];
     }
 
     sendIntentResponse(action, result, intentId): Promise<void> {
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             appManager.sendIntentResponse(action, result, intentId, () => {
                 resolve();
             }, (err) => {
@@ -217,15 +201,6 @@ export class IntentService {
             // This is a silent intent, app will close right after calling sendIntentresponse()
             this.sendIntentResponse("crproposalcreatedigest", "Missing proposal input parameter in the intent", intent.intentId);
         }
-    }
-
-    private async handleVoteAgainstProposalIntent(intent: AppManagerPlugin.ReceivedIntent) {
-        console.log("Handling vote against proposal intent");
-
-        // Let the screen know for which proposal we want to vote against
-        this.coinTransferService.transfer.votes = [
-            intent.params.proposalHash
-        ];
     }
 
     private getChainIDByCurrency(currency: string) {

@@ -60,6 +60,12 @@ export class IntentTransfer {
     from: string = null;
 }
 
+export class PayTransfer {
+    toAddress = '';
+    amount = 0;
+    memo = '';
+}
+
 export enum TransferType {
     RECHARGE = 1, // Tranfer between subwallets
     SEND = 2, // Sending
@@ -93,6 +99,8 @@ export class CoinTransferService {
 
     // Intent params
     public intentTransfer: IntentTransfer;
+    // intent: pay
+    public payTransfer: PayTransfer;
     // intent: dposvotetransaction
     public publickeys: any;
     // intent: crmembervote
@@ -113,12 +121,13 @@ export class CoinTransferService {
     public reset() {
         this.transfer = new Transfer();
 
+        this.walletInfo = new WalletAccount();
         this.transferType = null;
         this.masterWalletId = null;
         this.chainId = null;
         this.subchainId = null;
-        this.intentTransfer = null;
-        this.walletInfo = new WalletAccount();
+        this.intentTransfer = new IntentTransfer();
+        this.payTransfer = new PayTransfer();
         this.publickeys = null;
         this.crcvotes = null;
         this.didrequest = null;

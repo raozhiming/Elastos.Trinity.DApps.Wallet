@@ -397,7 +397,7 @@ export class WalletManager {
         await this.localStorage.saveCurMasterId({ masterId: id });
 
         let activeMasterId = this.activeMasterWallet ? this.activeMasterWallet.id : null;
-        if (id != activeMasterId) {
+        if (id !== activeMasterId) {
             /* TODO IN BG SERVICE if (this.activeMasterWallet)
                 this.syncStopSubWallets(activeMasterId);*/
 

@@ -44,6 +44,7 @@ import { CurrencyService } from 'src/app/services/currency.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
@@ -118,13 +119,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress = address;
             });
         });
-        this.events.subscribe('intent:pay', (params) => {
-            this.zone.run(() => {
-                this.toAddress = params.address;
-                this.amount = params.amount;
-                this.memo = params.memo;
-            });
-        });
     }
 
     ionViewWillEnter() {
@@ -193,12 +187,14 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 break;
             // For Pay Intent
             case TransferType.PAY:
-                this.toAddress = this.coinTransferService.transfer.toAddress;
-                this.amount = this.coinTransferService.transfer.amount;
-                this.memo = this.coinTransferService.transfer.memo;
                 this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
                 this.appService.setTitleBarTitle(this.translate.instant("payment-title"));
                 this.transaction = this.createSendTransaction;
+
+                console.log('Pay intent params', this.coinTransferService.payTransfer);
+                this.toAddress = this.coinTransferService.payTransfer.toAddress;
+                this.amount = this.coinTransferService.payTransfer.amount;
+                this.memo = this.coinTransferService.payTransfer.memo;
                 break;
         }
     }
