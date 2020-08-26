@@ -18,6 +18,7 @@ export const fr = {
     "confirmTitle": "Confirmez-vous?",
     "refresh-pulling-text": "Update Wallet",
     "refresh-refreshing-text": "Updating Wallet...",
+    "intent-select-wallet": "Select Wallet",
 
     // Generic messages
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
@@ -206,6 +207,8 @@ export const fr = {
     "memory-written-down": "I have written it down",
     "mnemonic-verify-sucess": "Mnemonic phrase verification succeeded",
     "mnemonic-verify-fail": "Mnemonic phrase verification failed, please re-enter the mnemonic phrase",
+    "mnemonic-input-passphase": "Enter mnemonic passphase",
+    "mnemonic-reinput-passphase": "Repeat mnemonic passphase",
 
     // Export mnemonic screen
     'text-export-mnemonic': 'Exporter le mnémonique',

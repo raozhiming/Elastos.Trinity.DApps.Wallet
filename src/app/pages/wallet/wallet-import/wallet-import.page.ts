@@ -143,10 +143,10 @@ export class WalletImportPage implements OnInit, OnDestroy {
     async onImport() {
         if (this.allInputsFilled()) {
             console.log('Input string is valid');
-            await this.native.showLoading();
 
             const payPassword = await this.authService.createAndSaveWalletPassword(this.masterWalletId);
             if (payPassword) {
+                await this.native.showLoading();
                 await this.importWalletWithMnemonic(payPassword);
             } else {
                 // Cancelled, do nothing

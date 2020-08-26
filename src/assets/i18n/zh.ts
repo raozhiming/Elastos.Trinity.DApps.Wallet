@@ -18,6 +18,7 @@ export const zh = {
     "confirmTitle": "确定?",
     "refresh-pulling-text": "更新钱包",
     "refresh-refreshing-text": "正在更新...",
+    "intent-select-wallet": "请选择钱包",
 
     // Generic messages
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
@@ -109,7 +110,7 @@ export const zh = {
     "coin-address-copied": "{{coinName}} 地址已复制!",
 
     // Confirm transaction component
-    "confirm-transaction-title": "支付交易",
+    "confirm-transaction-title": "确认交易",
     "transfer-transaction-type": "充值交易",
     "send-transaction-type": "转账交易",
 
@@ -214,6 +215,8 @@ export const zh = {
     "memory-written-down": "已经记下了",
     "mnemonic-verify-sucess": '助记词验证成功',
     "mnemonic-verify-fail": '助记词验证失败，请重新输入助记词',
+    "mnemonic-input-passphase": "输入助记词密码",
+    "mnemonic-reinput-passphase": "再次输入助记词密码",
 
     // Export mnemonic screen
     'text-export-mnemonic': '导出助记词',

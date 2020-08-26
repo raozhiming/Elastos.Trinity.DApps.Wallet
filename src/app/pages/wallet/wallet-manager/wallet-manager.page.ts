@@ -58,7 +58,7 @@ export class WalletManagerPage implements OnInit {
         appManager.setVisible("show", () => {}, (err) => {});
         this.theme.getTheme();
         this.forIntent ?
-            this.appService.setTitleBarTitle('Select Wallet') :
+            this.appService.setTitleBarTitle(this.translate.instant('intent-select-wallet')) :
             this.appService.setTitleBarTitle(this.translate.instant('settings-my-wallets'));
     }
 

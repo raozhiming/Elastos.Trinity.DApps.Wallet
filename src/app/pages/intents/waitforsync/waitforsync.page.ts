@@ -27,7 +27,6 @@ export class WaitForSyncPage implements OnInit {
     showOn = true;
 
     masterWallet: MasterWallet;
-    intentTransfer: IntentTransfer;
 
     chainId: StandardCoinName;
     txId: string;
@@ -150,7 +149,7 @@ export class WaitForSyncPage implements OnInit {
     }
 
     async cancelOperation() {
-        await this.intentService.sendIntentResponse(this.intentTransfer.action, {txid: null}, this.intentTransfer.intentId);
+        await this.intentService.sendIntentResponse(this.coinTransferService.intentTransfer.action, {txid: null}, this.coinTransferService.intentTransfer.intentId);
         this.appService.close();
     }
 
