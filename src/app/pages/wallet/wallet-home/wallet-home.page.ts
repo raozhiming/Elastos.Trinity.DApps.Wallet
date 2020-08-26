@@ -102,7 +102,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
         this.masterWalletList = this.walletManager.getWalletsList();
         switch (this.masterWalletList.length) {
             case 0:
-                this.native.go('/launcher');
+                // this.native.go('/launcher');
                 break;
             case 1:
                 this.isSingleWallet = true;
