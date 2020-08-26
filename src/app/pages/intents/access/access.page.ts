@@ -10,6 +10,7 @@ import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/MasterWallet';
+import { UiService } from 'src/app/services/ui.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -42,7 +43,8 @@ export class AccessPage implements OnInit {
         public native: Native,
         private translate: TranslateService,
         public theme: ThemeService,
-        private walletAccessService: WalletAccessService
+        private walletAccessService: WalletAccessService,
+        public uiService: UiService
     ) { }
 
     ngOnInit() {

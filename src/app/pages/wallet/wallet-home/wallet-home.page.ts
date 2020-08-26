@@ -50,6 +50,13 @@ export class WalletHomePage implements OnInit, OnDestroy {
 
     @ViewChild('slider', {static: false}) slider: IonSlides;
 
+    public slideOpts = {
+        initialSlide: 0,
+        speed: 400,
+        centeredSlides: true,
+        slidesPerView: 1.1
+    };
+
     public masterWallet: MasterWallet = null;
     public masterWalletList: MasterWallet[] = [];
     public isSingleWallet = false;
@@ -95,7 +102,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
         this.masterWalletList = this.walletManager.getWalletsList();
         switch (this.masterWalletList.length) {
             case 0:
-                // TODO
+                this.native.go('/launcher');
                 break;
             case 1:
                 this.isSingleWallet = true;
@@ -103,6 +110,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
                 break;
             default:
                 this.isSingleWallet = false;
+                this.masterWallet = this.masterWalletList[0];
         }
     }
 

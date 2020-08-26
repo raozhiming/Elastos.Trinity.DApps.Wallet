@@ -9,7 +9,7 @@
         >
         </ion-refresher-content>
     </ion-refresher>
-    <ion-slides *ngIf="masterWalletList.length > 1" [class.dark-slides]="theme.darkMode" #slider pager>
+    <ion-slides *ngIf="!isSingleWallet" [class.dark-slides]="theme.darkMode" [options]="slideOpts" #slider pager>
         <ion-slide *ngFor="let masterWallet of masterWalletList">
             <ion-row class="main-title-row">
                 <ion-col size="12">
@@ -78,7 +78,7 @@
         </ion-slide>
     </ion-slides>
 
-    <ion-grid class="single-slide" [class.dark-slide]="theme.darkMode" *ngIf="masterWalletList.length === 1">
+    <ion-grid class="single-slide" [class.dark-slide]="theme.darkMode" *ngIf="isSingleWallet">
         <ion-row class="main-title-row">
             <ion-col size="12">
                 <h1>{{ 'wallet-overview' | translate }}</h1>

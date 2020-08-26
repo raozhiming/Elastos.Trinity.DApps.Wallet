@@ -62,8 +62,8 @@
 
         <div *ngIf="!exportMnemonic">
             <div class="msg-container">
-                <p *ngIf="!requestDapp.reason">{{ 'access-request-for-info' | translate }}</p>
-                <p *ngIf="requestDapp.reason">{{ 'access-reason' | translate }}: {{ requestDapp.reason }}</p>
+                <p *ngIf="!requestItems[0].reason">{{ 'access-request-for-info' | translate }}</p>
+                <p *ngIf="requestItems[0].reason">{{ 'access-reason' | translate }}: {{ !requestItems[0].reason }}</p>
                 <p class="second-msg">{{ 'access-data-access' | translate }}</p>
             </div>
             <ion-row class="data-row" *ngFor="let item of requestItems">
@@ -75,8 +75,8 @@
 
         <div *ngIf="exportMnemonic">
             <div class="msg-container">
-                <p *ngIf="!requestDapp.reason">{{ 'text-share-mnemonic-warning' | translate }}</p>
-                <p *ngIf="requestDapp.reason">{{ 'access-reason' | translate }}: {{ requestDapp.reason }}</p>
+                <p *ngIf="!requestItems[0].reason">{{ 'text-share-mnemonic-warning' | translate }}</p>
+                <p *ngIf="requestItems[0].reason">{{ 'access-reason' | translate }}: {{ requestItems[0].reason }}</p>
             </div>
         </div>
 

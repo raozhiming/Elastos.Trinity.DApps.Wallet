@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { NavParams } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -13,7 +14,10 @@ export class HelpComponent implements OnInit {
 
   message: string;
 
-  constructor(private navParams: NavParams) { }
+  constructor(
+    private navParams: NavParams,
+    public translate: TranslateService
+  ) { }
 
   ngOnInit() {
     this.message = this.navParams.get('message');

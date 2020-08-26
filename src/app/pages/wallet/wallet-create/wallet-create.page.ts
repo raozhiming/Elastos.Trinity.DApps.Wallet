@@ -26,7 +26,7 @@ export class WalletCreatePage implements OnInit {
     };
     public repeatMnemonicPassword: '';
 
-    public helpMessage = 'This is an optional password to give your wallet extra security. It will be saved in the blockchain so it\'s important to keep this stored safely along with your mnemonic passphrase';
+    public helpMessage = 'help:mnemonic-password';
 
     constructor(
         public route: ActivatedRoute,

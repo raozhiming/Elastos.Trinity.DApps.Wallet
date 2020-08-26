@@ -12,6 +12,7 @@ import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { TranslateService } from '@ngx-translate/core';
+import { UiService } from 'src/app/services/ui.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -48,7 +49,8 @@ export class WaitForSyncPage implements OnInit {
         public popupProvider: PopupProvider,
         public theme: ThemeService,
         public translate: TranslateService,
-        public currencyService: CurrencyService
+        public currencyService: CurrencyService,
+        public uiService: UiService
     ) {
     }
 

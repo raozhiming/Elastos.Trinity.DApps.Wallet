@@ -209,6 +209,7 @@ export const fr = {
     "mnemonic-verify-fail": "Mnemonic phrase verification failed, please re-enter the mnemonic phrase",
     "mnemonic-input-passphase": "Enter mnemonic passphase",
     "mnemonic-reinput-passphase": "Repeat mnemonic passphase",
+    "help:mnemonic-password": 'This is an optional password to give your wallet extra security. It will be saved in the blockchain so it\'s important to keep this stored safely along with your mnemonic passphrase',
 
     // Export mnemonic screen
     'text-export-mnemonic': 'Exporter le mnémonique',
