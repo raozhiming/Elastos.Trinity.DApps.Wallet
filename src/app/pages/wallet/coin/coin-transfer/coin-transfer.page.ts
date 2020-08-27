@@ -67,7 +67,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // User inputs
     public toAddress: string;
-    public amount: number = 0;
+    public amount: number;
     public memo = '';
 
     // Display recharge wallets
