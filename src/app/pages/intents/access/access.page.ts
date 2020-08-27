@@ -34,6 +34,7 @@ export class AccessPage implements OnInit {
     public exportMnemonic = false;
     public title = '';
     public requestItems: ClaimRequest[] = [];
+    public showReason = false;
 
     constructor(
         public appService: AppService,
@@ -65,22 +66,23 @@ export class AccessPage implements OnInit {
             this.title = this.translate.instant("access-subtitle-wallet-access-from");
         } else {
             this.exportMnemonic = true;
-            this.title = this.translate.instant("access-subtitle-access-mnemonic-from");;
+            this.title = this.translate.instant("access-subtitle-access-mnemonic-from");
         }
     }
 
     async organizeRequestedFields() {
         console.log('organizeRequestedFields:', this.walletAccessService.requestFields);
         for (const key of Object.keys(this.walletAccessService.requestFields)) {
-            console.log('key:', key);
-            const claim = this.walletAccessService.requestFields[key];
             const claimValue = await this.getClaimValue(key);
+            console.log('key:', key, ' value:', claimValue);
             const claimRequest: ClaimRequest = {
                 name: key,
                 value: claimValue,
-                reason: ''
+                reason: this.claimReason(this.walletAccessService.requestFields[key])
             };
-
+            if (claimRequest.reason) {
+                this.showReason = true;
+            }
             this.requestItems.push(claimRequest);
         }
     }
