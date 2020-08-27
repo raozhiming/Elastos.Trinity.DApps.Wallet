@@ -73,7 +73,6 @@ export class MnemonicWritePage implements OnInit {
     }
 
     goToNextInput(event, nextInput?: any) {
-        console.log('Input key code', event);
         if (nextInput) {
             nextInput === 'input5' || nextInput === 'input9' ? this.slider.slideNext() : () => {};
             nextInput.setFocus();
@@ -84,6 +83,7 @@ export class MnemonicWritePage implements OnInit {
 
     allInputsFilled() {
         let inputsFilled = true;
+        this.inputStr = '';
         this.inputList.forEach((word) => {
             if (word.input === '') {
                 inputsFilled = false;
@@ -96,7 +96,7 @@ export class MnemonicWritePage implements OnInit {
 
     async onNext() {
         if (this.allInputsFilled()) {
-            if (this.inputStr.replace(/\s+/g, "") === this.mnemonicStr.replace(/\s+/g, "")) {
+            if (this.inputStr.replace(/\s+/g, "").toLowerCase() === this.mnemonicStr.replace(/\s+/g, "")) {
                 if (this.walletCreationService.isMulti) {
                     this.native.go("/mpublickey");
                 } else {
@@ -125,13 +125,10 @@ export class MnemonicWritePage implements OnInit {
                 }
 
             } else {
-                console.log('Input string ', this.inputStr);
-                // console.log('Mnemonic str - ', this.mnemonicStr);
                 this.inputStr = "";
                 this.native.toast_trans('mnemonic-verify-fail');
             }
         } else {
-            console.log('Current progress for input string', this.inputStr);
             this.inputStr = "";
             this.native.toast(this.translate.instant("mnemonic-import-missing-words"));
         }

@@ -217,7 +217,7 @@ export const zh = {
     "mnemonic-verify-fail": '助记词验证失败，请重新输入助记词',
     "mnemonic-input-passphase": "输入助记词密码",
     "mnemonic-reinput-passphase": "再次输入助记词密码",
-    "help:mnemonic-password": 'This is an optional password to give your wallet extra security. It will be saved in the blockchain so it\'s important to keep this stored safely along with your mnemonic passphrase',
+    "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码',
 
     // Export mnemonic screen
     'text-export-mnemonic': '导出助记词',
@@ -261,7 +261,7 @@ export const zh = {
     'Error-20005': '创建主钱包失败，该钱包已经存在',
     'Error-20006': '创建子钱包失败',
     'Error-20007': '解析JSON数组错误',
-    'Error-20008': '无效助记词',
+    'Error-20008': '助记词无效',
     'Error-20009': '公钥格式错误',
     'Error-20010': '公钥长度错误',
     'Error-20011': '侧链充值参数错误',

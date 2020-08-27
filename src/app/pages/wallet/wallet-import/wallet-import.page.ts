@@ -129,12 +129,13 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     allInputsFilled() {
         let inputsFilled = true;
+        this.inputStr = '';
 
         this.inputList.forEach((word) => {
             if (word.input === '') {
                 inputsFilled = false;
             } else {
-                this.inputStr += word.input.replace(/\s+/g, "") + " "; // Append trimmed word plus a space between each word
+                this.inputStr += word.input.replace(/\s+/g, "").toLowerCase() + " "; // Append trimmed word plus a space between each word
             }
         });
         return inputsFilled;
