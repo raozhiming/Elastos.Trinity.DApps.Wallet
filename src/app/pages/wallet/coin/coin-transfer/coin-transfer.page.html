@@ -1,4 +1,4 @@
-<ion-content *ngIf="transferType === 1">
+<ion-content *ngIf="transferType === 1 || transferType === 4">
     <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <ion-row class="main-title-row">
             <ion-col size="12">
@@ -57,7 +57,7 @@
             >
             </ion-input>
         </ion-row>
-     <!--    <ion-row class="btn-container">
+     <!-- <ion-row class="btn-container">
             <ion-button color="primary" (click)="goTransaction()">
                 <ion-label>{{ 'transfer' | translate}}</ion-label>
             </ion-button>
@@ -164,7 +164,8 @@
 >
     <ion-row class="btn-container">
         <ion-button color="primary" (click)="goTransaction()" *ngIf="!waitingForSyncCompletion">
-            <ion-label *ngIf="transferType === 1">{{ 'transfer' | translate}}</ion-label>
+            <ion-label *ngIf="transferType === 1">{{ 'recharge' | translate}}</ion-label>
+            <ion-label *ngIf="transferType === 4">{{ 'withdraw' | translate}}</ion-label>
             <ion-label *ngIf="transferType === 2">{{ 'send' | translate}}</ion-label>
         </ion-button>
         <div *ngIf="waitingForSyncCompletion">
@@ -172,7 +173,7 @@
             <ion-card-subtitle>
                 {{ 'waitforsync-intro' | translate }}
             </ion-card-subtitle>
-            <span class="syncing">&#8226; {{ 'sync-progress' | translate: { progress: toSubWallet.progress } }}</span>
+            <span class="syncing">&#8226; {{ 'sync-progress' | translate: { progress: fromSubWallet.progress } }}</span>
         </div>
     </ion-row>
 </ion-footer>

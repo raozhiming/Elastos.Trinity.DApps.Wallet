@@ -37,12 +37,13 @@ import { StandardSubWallet } from '../model/StandardSubWallet';
 import { InvalidVoteCandidatesHelper, InvalidCandidateForVote } from '../model/InvalidVoteCandidatesHelper';
 import { CoinService } from './coin.service';
 import { JsonRPCService } from './jsonrpc.service';
+import { EthJsonRPCService } from './ethjsonrpc.service';
 import { PopupProvider } from './popup.service';
 import { Native } from './native.service';
 import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
 import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
-import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
+import { Transfer } from './cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -71,8 +72,6 @@ type TransactionMap = {
     providedIn: 'root'
 })
 export class WalletManager {
-    public activeMasterWallet: MasterWallet = null;
-
     public masterWallets: {
         [index: string]: MasterWallet
     } = {};
@@ -101,6 +100,7 @@ export class WalletManager {
         public popupProvider: PopupProvider,
         private http: HttpClient,
         public jsonRPCService: JsonRPCService,
+        public ethJsonRPCService: EthJsonRPCService,
     ) {
     }
 
@@ -175,11 +175,12 @@ export class WalletManager {
 
                 // Get last block time from walletservice
                 if (!this.appService.runningAsAService()) {
+                    this.startSyncAllWallet();
+
                     const rpcMessage: InAppRPCMessage = {
                         method: RPCMethod.GET_WALLET_SYNC_PROGRESS,
                         params: ''
                     };
-
                     appManager.sendMessage("#service:walletservice",
                                             AppManagerPlugin.MessageType.INTERNAL,
                                             JSON.stringify(rpcMessage), () => {
@@ -206,31 +207,21 @@ export class WalletManager {
         console.log("Wallet manager initialization complete");
 
         // Set Active Master Wallet
-        if (Object.values(this.masterWallets).length > 0) {
-            let storedMasterId = await this.getCurrentMasterIdFromStorage();
+        // if (Object.values(this.masterWallets).length > 0) {
+        //     let storedMasterId = await this.getCurrentMasterIdFromStorage();
 
-            // Wrong master id or something desynchronized. use the first wallet in the list as default
-            if (!storedMasterId || !(storedMasterId in this.masterWallets)) {
-                console.warn("Invalid master ID retrieved from storage. Using the first wallet as default");
-                storedMasterId = Object.values(this.masterWallets)[0].id;
-            }
-
-            await this.setActiveMasterWalletId(storedMasterId);
-        }
+        //     // Wrong master id or something desynchronized. use the first wallet in the list as default
+        //     if (!storedMasterId || !(storedMasterId in this.masterWallets)) {
+        //         console.warn("Invalid master ID retrieved from storage. Using the first wallet as default");
+        //         storedMasterId = Object.values(this.masterWallets)[0].id;
+        //     }
+        // }
 
         this.events.publish("walletmanager:initialized");
     }
 
-    public getCurMasterWalletId() {
-        return this.activeMasterWallet.id;
-    }
-
-    public setCurMasterWalletId(id) {
-        this.setActiveMasterWalletId(id);
-    }
-
-    public getActiveMasterWallet(): MasterWallet {
-        return this.activeMasterWallet;
+    public setRecentWalletId(id) {
+        this.localStorage.saveCurMasterId({ masterId: id });
     }
 
     public getMasterWallet(masterId: WalletID): MasterWallet {
@@ -343,14 +334,15 @@ export class WalletManager {
         // Save state to local storage
         await this.saveMasterWallet(this.masterWallets[id]);
 
-        // Set the newly created wallet as the active one.
-        await this.setActiveMasterWalletId(id);
+        this.setRecentWalletId(id);
+
+        this.startWalletSync(id);
 
         // Go to wallet's home page.
         this.native.setRootRouter("/wallet-home");
 
         // Get balance by rpc
-        this.getAllSubwalletsBalanceByRPC();
+        this.getAllSubwalletsBalanceByRPC(id);
     }
 
     /**
@@ -366,14 +358,8 @@ export class WalletManager {
         // Destroy from our local model
         delete this.masterWallets[id];
 
-        if (this.activeMasterWallet.id === id) {
-            this.activeMasterWallet = null;
-            // TODO: we need more cleanup than this on the active wallet here!
-        }
-
         // If there is at least one remaining wallet, select it as the new active wallet in the app.
         if (Object.values(this.masterWallets).length > 0) {
-            await this.setActiveMasterWalletId(Object.values(this.masterWallets)[0].id);
             this.native.setRootRouter("/wallet-home");
         }
         else {
@@ -385,26 +371,15 @@ export class WalletManager {
      * Save master wallets list to permanent local storage.
      */
     public async saveMasterWallet(masterWallet: MasterWallet) {
-        let extendedInfo = masterWallet.getExtendedWalletInfo();
+        const extendedInfo = masterWallet.getExtendedWalletInfo();
         console.log("Saving wallet extended info", masterWallet.id, extendedInfo);
 
         await this.localStorage.setExtendedMasterWalletInfo(masterWallet.id, extendedInfo);
     }
 
-    public async setActiveMasterWalletId(id) {
-        console.log("Setting active master wallet id", id);
-
-        await this.localStorage.saveCurMasterId({ masterId: id });
-
-        let activeMasterId = this.activeMasterWallet ? this.activeMasterWallet.id : null;
-        if (id !== activeMasterId) {
-            /* TODO IN BG SERVICE if (this.activeMasterWallet)
-                this.syncStopSubWallets(activeMasterId);*/
-
-            this.activeMasterWallet = this.masterWallets[id];
-
-            this.startWalletSync(id);
-            // this.native.setRootRouter("/wallet-home");
+    public startSyncAllWallet() {
+        for (const masterWallet of Object.values(this.masterWallets)) {
+            this.startWalletSync(masterWallet.id);
         }
     }
 
@@ -519,7 +494,7 @@ export class WalletManager {
                     }
                 }
 
-                this.getAllSubwalletsBalanceByRPC();
+                this.getAllMasterWalletBalanceByRPC();
                 break;
             default:
                 break;
@@ -688,33 +663,12 @@ export class WalletManager {
     }
 
     /**
-     * Prompts and returns wallet password to user.
-     */
-    /*getPassword(transfer): Promise<string> {
-        return new Promise(async (resolve, reject) => {
-            const props = this.native.clone(transfer);
-            const modal = await this.modalCtrl.create({
-                component: PaymentboxComponent,
-                componentProps: props
-            });
-            modal.onDidDismiss().then((params) => {
-                if (params.data) {
-                    resolve(params.data);
-                } else {
-                    resolve(null);
-                }
-            });
-            modal.present();
-        });
-    }*/
-
-    /**
      * Retrieves the wallet store password from the password manager.
      * This method is here since the beginning and seems useless. Could probably be replaced by
      * authService's getWalletPassword() directly.
      */
-    public async openPayModal(transfer): Promise<string> {
-        const payPassword = await this.authService.getWalletPassword(this.activeMasterWallet.id);
+    public async openPayModal(transfer: Transfer): Promise<string> {
+        const payPassword = await this.authService.getWalletPassword(transfer.masterWalletId);
         if (payPassword === null) {
             return Promise.resolve(null);
         }
@@ -746,16 +700,21 @@ export class WalletManager {
         return await helper.computeInvalidCandidates();
     }
 
-    async getAllSubwalletsBalanceByRPC() {
+    async getAllMasterWalletBalanceByRPC() {
+        for (const masterWallet of Object.values(this.masterWallets)) {
+            this.getAllSubwalletsBalanceByRPC(masterWallet.id);
+        }
+    }
+
+    async getAllSubwalletsBalanceByRPC(masterWalletId) {
         let currentTimestamp = moment().valueOf();
         let onedayago = moment().add(-1, 'days').valueOf();
-        let activeMasterId = this.activeMasterWallet ? this.activeMasterWallet.id : null;
-        for (let subWallet of Object.values(this.getMasterWallet(activeMasterId).subWallets)) {
+        for (let subWallet of Object.values(this.getMasterWallet(masterWalletId).subWallets)) {
             if (subWallet.type === CoinType.STANDARD) {
                 // Get balance by RPC if the last block time is one day ago.
                 if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
                     try {
-                        let balance = await this.getBalanceByRPC(activeMasterId, subWallet.id as StandardCoinName);
+                        let balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName);
                         subWallet.balanceByRPC = balance;
                         subWallet.balance = balance;
                         subWallet.timestampRPC = currentTimestamp;
@@ -769,12 +728,12 @@ export class WalletManager {
 
     //
     async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
-        // TODO
-        if (chainID === StandardCoinName.ETHSC) {
-            console.log('getBalanceByRPC for ETHSC is not ready');
-            throw new Error('ETHSC rpc is not ready');
-        }
         console.log('TIMETEST getBalanceByRPC start:', chainID);
+        if (chainID === StandardCoinName.ETHSC) {
+            let balance = await this.getETHBalanceByRPC(masterWalletID, chainID);
+            console.log('TIMETEST getBalanceByRPC end');
+            return balance;
+        }
 
         // If the balance of 20 consecutive addresses is 0, then end the query
         let maxBlanks = 20;
@@ -795,7 +754,7 @@ export class WalletManager {
             if (addressArray.Addresses.length === 0) {
                 break;
             }
-
+            // console.log('----internal addressArray:', addressArray);
             for (const address of addressArray.Addresses) {
                 try {
                     const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
@@ -816,6 +775,10 @@ export class WalletManager {
                     throw e;
                 }
             }
+            // Single address wallet
+            if (addressArray.Addresses.length === 1) {
+                break;
+            }
         }
 
         // external address for user
@@ -831,7 +794,7 @@ export class WalletManager {
             if (addressArray.Addresses.length === 0) {
                 break;
             }
-
+            // console.log('----external addressArray:', addressArray);
             if (currentReceiveAddressIndex === -1) {
                 currentReceiveAddressIndex = addressArray.Addresses.findIndex((address) => (address === currentReceiveAddress));
                 if (currentReceiveAddressIndex !== -1) {
@@ -863,6 +826,10 @@ export class WalletManager {
                     throw e;
                 }
             }
+            // Single address wallet
+            if (addressArray.Addresses.length === 1) {
+                break;
+            }
         }
 
         console.log('TIMETEST getBalanceByRPC end');
@@ -872,6 +839,18 @@ export class WalletManager {
                 ' maxExternalBlanks:', maxExternalBlanks);
 
         return totalBalance;
+    }
+
+    async getETHBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
+        // TODO
+        if (chainID !== StandardCoinName.ETHSC) {
+            throw new Error('only for ETHSC');
+        }
+        // only one address
+        let address = await this.spvBridge.createAddress(masterWalletID, chainID);
+        const balance = await this.ethJsonRPCService.getBalanceByAddress(address, 'id');
+        console.log('getETHBalanceByRPC balance:', balance)
+        return balance;
     }
 
     sendIntentResponse(action, result, intentId): Promise<void> {

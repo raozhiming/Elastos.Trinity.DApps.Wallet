@@ -5,7 +5,8 @@ export const zh = {
     "enter-amount": "输入金额",
     "total-amount": "总额",
     "advanced-options": "高级选项",
-    "transfer": "充值",
+    "recharge": "侧链充值",
+    "withdraw": "主链提现",
     "send": "发送",
     "from": "从",
     "to": "至",
@@ -68,7 +69,8 @@ export const zh = {
     "coin-overview": "{{coinName}} 概述",
     "coin-new-transactions-today": "今天有 {{ todaysTransactions }} 笔交易",
     "coin-balance": "金额",
-    "coin-action-transfer": "转移",
+    "coin-action-recharge": "侧链充值",
+    "coin-action-withdraw": "主链提现",
     "coin-action-send": "发送",
     "coin-action-receive": "接收",
     "coin-transactions": "交易",
@@ -95,7 +97,8 @@ export const zh = {
 
     // Coin transfer screen
     "coin-transfer-send-title": "从 {{coinName}} 发送",
-    "coin-transfer-transfer-title": "转移 {{coinName}}",
+    "coin-transfer-recharge-title": "{{coinName}} 充值",
+    "coin-transfer-withdraw-title": "{{coinName}} 提现",
     "transfer-from": "来自",
     "transfer-to": "转移到",
     "transfer-amount": "转移金额",
@@ -105,7 +108,7 @@ export const zh = {
 
     // Coin receive screen
     "coin-receive-title": "接收 {{coinName}}",
-    "coin-receive-ela-address": "您的ELA地址",
+    "coin-receive-ela-address": "您的{{coinName}}地址",
     "coin-receive-tap-to-copy": "点击地址即可复制",
     "coin-address-copied": "{{coinName}} 地址已复制!",
 

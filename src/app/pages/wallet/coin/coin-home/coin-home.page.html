@@ -34,11 +34,12 @@
             <ion-row class="card-btn-row">
                 <ion-col size="3" *ngIf="!coinCanBeTransferred()"></ion-col>
                 <ion-col size="3" *ngIf="coinCanBeTransferred()">
-                    <div class="ion-activatable btn-box" (click)="rechargeFunds()">
+                    <div class="ion-activatable btn-box" (click)="transferFunds()">
                         <ion-img class="transfer" src="assets/buttons/transfer.png"></ion-img>
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>
-                    <p class="btn-label">{{ 'coin-action-transfer' | translate }}</p>
+                    <p *ngIf="chainIsELA()" class="btn-label">{{ 'coin-action-recharge' | translate }}</p>
+                    <p *ngIf="!chainIsELA()" class="btn-label">{{ 'coin-action-withdraw' | translate }}</p>
                 </ion-col>
                 <ion-col offset="0.25" size="3" (click)="sendFunds()">
                     <div class="ion-activatable btn-box">

@@ -136,7 +136,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.events.unsubscribe(this.syncCompletionEventName);
     }
 
-    init() {
+    async init() {
         this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
         this.transferType = this.coinTransferService.transferType;
         this.chainId = this.coinTransferService.chainId;
@@ -148,13 +148,13 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             // For Recharge Transfer
             case TransferType.RECHARGE:
                 // Setup page display
-                this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
+                this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-recharge-title", {coinName: this.coinTransferService.subchainId}));
                 this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
                 this.toSubWallet = this.masterWallet.getSubWallet(this.coinTransferService.subchainId);
 
                 // Setup params for recharge transaction
                 this.transaction = this.createRechargeTransaction;
-                this.getSubwalletAddress(this.coinTransferService.subchainId);
+                await this.getSubwalletAddress(this.coinTransferService.subchainId);
 
                 // Auto suggest a transfer amount of 0.1 ELA (enough) to the ID chain. Otherwise, let user define his own amount.
                 if (this.toSubWallet.id === StandardCoinName.IDChain) {
@@ -164,20 +164,20 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 console.log('Transferring from..', this.fromSubWallet);
                 console.log('Transferring To..', this.toSubWallet);
                 console.log('Subwallet address', this.toAddress);
+                break;
+            case TransferType.WITHDRAW:
+                // Setup page display
+                this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-withdraw-title", {coinName: this.chainId}));
+                this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
+                this.toSubWallet = this.masterWallet.getSubWallet(StandardCoinName.ELA);
 
-                // In case the destination subwallet is not fully synced we wait for the sync completion
-                // Before allowing to transfer, to make sure the transfer will not be lost, as even if this is queued
-                // by the SPVSDK, it's not persistant in case of restart.
-                if (this.masterWallet.subWallets[this.toSubWallet.id].progress !== 100) {
-                    this.waitingForSyncCompletion = true;
-                    this.syncCompletionEventName = this.toSubWallet.id + ':synccompleted';
-                    this.events.subscribe(this.syncCompletionEventName, (coin) => {
-                        console.log('WaitforsyncPage coin:', coin);
-                        this.waitingForSyncCompletion = false;
-                        this.events.unsubscribe(this.syncCompletionEventName);
-                    });
-                }
+                // Setup params for withdraw transaction
+                this.transaction = this.createWithdrawTransaction;
+                await this.getSubwalletAddress(StandardCoinName.ELA);
 
+                console.log('Transferring from..', this.fromSubWallet);
+                console.log('Transferring To..', this.toSubWallet);
+                console.log('Subwallet address', this.toAddress);
                 break;
             // For Send Transfer
             case TransferType.SEND:
@@ -196,6 +196,23 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.amount = this.coinTransferService.payTransfer.amount;
                 this.memo = this.coinTransferService.payTransfer.memo;
                 break;
+        }
+
+        // In case the subwallet is not fully synced we wait for the sync completion
+        // Before allowing to transfer, to make sure the transfer will not be lost, as even if this is queued
+        // by the SPVSDK, it's not persistant in case of restart.
+        if (this.masterWallet.subWallets[this.fromSubWallet.id].progress !== 100) {
+            this.waitingForSyncCompletion = true;
+            this.syncCompletionEventName = this.masterWallet.id + ':' + this.fromSubWallet.id + ':synccompleted';
+            console.log('----coin-transfer WaitforsyncPage:', this.syncCompletionEventName);
+            this.events.subscribe(this.syncCompletionEventName, (coin) => {
+                this.zone.run(() => {
+                    console.log('---- WaitforsyncPage get the event coin:', coin);
+                    this.waitingForSyncCompletion = false;
+                    this.amount = 0.1;
+                });
+                // this.events.unsubscribe(this.syncCompletionEventName);
+            });
         }
     }
 
@@ -259,21 +276,32 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
-/*     async createWithdrawTransaction() {
-        const toAmount = this.accMul(this.transfer.amount, Config.SELA);
+    async createWithdrawTransaction() {
+        const toAmount = this.accMul(this.amount, Config.SELA);
 
-        this.transfer.rawTransaction =
+        const rawTx =
             await this.walletManager.spvBridge.createWithdrawTransaction(
                 this.masterWallet.id,
                 this.chainId,
                 '',
                 toAmount.toString(),
-                this.transfer.toAddress,
-                this.transfer.memo
+                this.toAddress,
+                this.memo
             );
 
-        this.walletManager.openPayModal(this.transfer);
-    } */
+        const transfer = new Transfer();
+        Object.assign(transfer, {
+            masterWalletId: this.masterWallet.id,
+            chainId: this.chainId,
+            rawTransaction: rawTx,
+            payPassword: '',
+            action: null,
+            intentId: null,
+        });
+
+        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
+        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
+    }
 
     goScan() {
         this.appService.scan(ScanType.Address);
@@ -331,7 +359,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         let txInfo = {
             type: this.transferType,
             transferFrom: this.chainId,
-            transferTo: this.transferType === 1 ? this.coinTransferService.subchainId : this.toAddress,
+            transferTo: this.transferType === TransferType.RECHARGE ? this.coinTransferService.subchainId : this.toAddress,
             amount: this.amount
         };
 

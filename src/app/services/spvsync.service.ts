@@ -138,7 +138,7 @@ export class SPVSyncService {
     }
 
     public async syncStartSubWallets(masterId: WalletID, chainIds: StandardCoinName[]) {
-        console.log("SubWallets sync is starting");
+        console.log("SubWallets sync is starting:", masterId);
 
         for (let chainId of chainIds) {
             this.spvBridge.syncStart(masterId, chainId);
@@ -146,7 +146,7 @@ export class SPVSyncService {
     }
 
     private syncStopSubWallets(masterId: WalletID, chainIds: StandardCoinName[]) {
-        console.log("SubWallets sync is stopping");
+        console.log("SubWallets sync is stopping:", masterId);
 
         for (let chainId of chainIds) {
             this.spvBridge.syncStop(masterId, chainId);
@@ -187,7 +187,7 @@ export class SPVSyncService {
     private async handleBlockSyncProgressEvent(masterId: WalletID, chainId: StandardCoinName, event: SPVWalletMessage) {
         // this.walletManager.masterWallets[masterId].updateSyncProgress(chainId, event.Progress, event.LastBlockTime);
         if (!this.walletsSyncProgress[masterId]) {
-          this.walletsSyncProgress[masterId] = {};
+            this.walletsSyncProgress[masterId] = {};
         }
         this.walletsSyncProgress[masterId][chainId] = {progress: event.Progress, lastBlockTime: event.LastBlockTime};
 

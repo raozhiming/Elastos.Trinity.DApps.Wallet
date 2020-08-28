@@ -89,6 +89,8 @@ export class CoinHomePage implements OnInit {
     public Util = Util;
     public SELA = Config.SELA;
 
+    private eventId = '';
+
     constructor(
         public route: ActivatedRoute,
         public walletManager: WalletManager,
@@ -115,7 +117,7 @@ export class CoinHomePage implements OnInit {
 
     ionViewDidLeave() {
         this.events.unsubscribe(this.chainId + ':syncprogress');
-        this.events.unsubscribe(this.chainId + ':synccompleted');
+        if (this.eventId) this.events.unsubscribe(this.eventId);
     }
 
     async init() {
@@ -133,7 +135,10 @@ export class CoinHomePage implements OnInit {
             this.initData();
 
             if (this.masterWallet.subWallets[this.chainId].progress !== 100) {
-                this.events.subscribe(this.chainId + ':synccompleted', (coin) => {
+                this.eventId = this.masterWallet.id + ':' + this.chainId + ':synccompleted';
+                this.events.subscribe(this.eventId, (coin) => {
+                    this.events.unsubscribe(this.eventId);
+                    this.eventId = null;
                     this.CheckPublishTx();
                     this.checkUTXOCount();
                 });
@@ -309,12 +314,21 @@ export class CoinHomePage implements OnInit {
         this.native.go('/coin-transfer');
     }
 
+    transferFunds() {
+        if (this.chainIsELA()) {
+            this.rechargeFunds();
+        } else {
+            this.withdrawFunds();
+        }
+    }
+
+    // mainchain to sidechain
     rechargeFunds() {
         this.coinTransferService.transferType = TransferType.RECHARGE;
         this.native.go('/coin-select');
     }
 
-    // Not sure what 'withdraw' is for
+    // sidechain to mainchain
     withdrawFunds() {
         this.coinTransferService.transferType = TransferType.WITHDRAW;
         this.native.go('/coin-transfer');

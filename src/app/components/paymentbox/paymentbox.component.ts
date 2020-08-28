@@ -42,7 +42,8 @@ export class PaymentboxComponent implements OnInit {
         private walletManager: WalletManager,
         public native: Native
     ) {
-        this.walletId = this.walletManager.getCurMasterWalletId();
+        // TODO delete this?
+        // this.walletId = this.walletManager.getCurMasterWalletId();
         const accountObj = this.walletManager.getMasterWallet(this.walletId).account.Type;
         if (accountObj["Type"] === "Multi-Sign" && accountObj["InnerType"] === "Readonly") {
             this.walltype = false;

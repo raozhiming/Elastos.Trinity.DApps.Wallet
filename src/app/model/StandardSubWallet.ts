@@ -107,7 +107,8 @@ export class StandardSubWallet extends SubWallet {
         }
 
         if (progress === 100) {
-            this.masterWallet.walletManager.events.publish(this.id + ':synccompleted', this.id);
+            const eventId = this.masterWallet.id + ':' + this.id + ':synccompleted';
+            this.masterWallet.walletManager.events.publish(eventId, this.id);
         }
     }
 
@@ -116,8 +117,8 @@ export class StandardSubWallet extends SubWallet {
             this.masterWallet.id,
             this.id, // From subwallet id
             '', // From address, not necessary
-            toAddress, 
-            amount, 
+            toAddress,
+            amount,
             memo // User input memo
         );
         return rawTx;
@@ -148,18 +149,20 @@ export class StandardSubWallet extends SubWallet {
             );
 
             console.log("Transaction signed. Now publishing.");
-    
+
             const publishedTransaction =
             await this.masterWallet.walletManager.spvBridge.publishTransaction(
                 this.masterWallet.id,
                 this.id,
                 signedTx
             );
-    
+
+            this.masterWallet.walletManager.setRecentWalletId(this.masterWallet.id);
+
             if (!Util.isEmptyObject(transfer.action)) {
                 console.log("Mode: transfer with intent action");
                 this.masterWallet.walletManager.lockTx(publishedTransaction.TxHash);
-    
+
                 setTimeout(async () => {
                     let txId = publishedTransaction.TxHash;
                     const code = this.masterWallet.walletManager.getTxCode(txId);
@@ -179,7 +182,7 @@ export class StandardSubWallet extends SubWallet {
                 }, 5000); // wait for 5s for txPublished
             } else {
                 console.log("Published transaction id:", publishedTransaction.TxHash);
-    
+
                 await this.masterWallet.walletManager.native.hideLoading();
                 this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
                 await this.masterWallet.walletManager.native.setRootRouter('/wallet-home');

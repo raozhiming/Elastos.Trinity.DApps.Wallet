@@ -18,7 +18,6 @@ type JSONRPCResponse = {
 export class JsonRPCService {
     private mainchainRPCApiUrl = 'http://api.elastos.io:20336';
     private IDChainRPCApiUrl = 'http://api.elastos.io:20606';
-    private ETHSCRPCApiUrl = 'https://mainrpc.elaeth.io';
 
     constructor(private http: HttpClient) {
     }
@@ -29,9 +28,6 @@ export class JsonRPCService {
         });
         appManager.getPreference('sidechain.id.rpcapi', (rpcapi) => {
             this.IDChainRPCApiUrl = rpcapi;
-        });
-        appManager.getPreference('sidechain.eth.rpcapi', (rpcapi) => {
-            this.ETHSCRPCApiUrl = rpcapi;
         });
     }
 
@@ -76,9 +72,6 @@ export class JsonRPCService {
                 break;
             case StandardCoinName.IDChain:
                 rpcApiUrl = this.IDChainRPCApiUrl;
-                break;
-            case StandardCoinName.ETHSC:
-                rpcApiUrl = this.ETHSCRPCApiUrl;
                 break;
             default:
                 rpcApiUrl = '';

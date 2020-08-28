@@ -64,14 +64,12 @@ export class WalletManagerPage implements OnInit {
 
     walletSelected(masterWallet: MasterWallet) {
         if (this.forIntent) {
-            this.walletManager.setActiveMasterWalletId(masterWallet.id);
             if (this.forWalletAccess) {
                 this.walletAccessService.masterWalletId = masterWallet.id;
                 this.native.go('/access');
             } else {
                 this.coinTransferService.masterWalletId = masterWallet.id;
                 this.coinTransferService.walletInfo = masterWallet.account;
-                this.walletManager.setActiveMasterWalletId(masterWallet.id);
                 this.native.go("/waitforsync");
             }
         } else {

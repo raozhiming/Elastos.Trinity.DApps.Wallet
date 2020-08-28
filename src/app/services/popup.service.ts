@@ -3,7 +3,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ThemeService } from './theme.service';
 import { Native } from './native.service';
-import { PaymentboxComponent } from '../components/paymentbox/paymentbox.component';
 
 @Injectable()
 export class PopupProvider {

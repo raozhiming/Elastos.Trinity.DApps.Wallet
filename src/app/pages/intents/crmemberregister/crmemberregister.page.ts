@@ -66,7 +66,6 @@ export class CRMemberRegisterPage implements OnInit {
                 public native: Native,
                 public zone: NgZone) {
         this.init();
-        // TODO: upgrade spv sdk and test
     }
 
     ngOnInit() {

@@ -129,7 +129,7 @@ export class WaitForSyncPage implements OnInit {
         }
 
         if (this.masterWallet.subWallets[this.chainId].progress !== 100) {
-            this.eventType = this.chainId + ':synccompleted';
+            this.eventType = this.masterWallet.id + ':' + this.chainId + ':synccompleted';
             this.events.subscribe(this.eventType, (coin) => {
                 console.log('WaitforsyncPage coin:', coin);
                 this.doAction();

@@ -5,7 +5,8 @@ export const en = {
     "enter-amount": "Enter amount",
     "total-amount": "TOTAL AMOUNT",
     "advanced-options": "Advanced options",
-    "transfer": "Transfer",
+    "recharge": "Recharge",
+    "withdraw": "Transfer",
     "send": "Send",
     "from": "From",
     "to": "To",
@@ -68,7 +69,8 @@ export const en = {
     "coin-overview": "{{coinName}} Overview",
     "coin-new-transactions-today": "{{ todaysTransactions }} NEW TRANSACTIONS TODAY",
     "coin-balance": "Balance",
-    "coin-action-transfer": "TRANSFER",
+    "coin-action-recharge": "RECHARGE",
+    "coin-action-withdraw": "TRANSFER",
     "coin-action-send": "SEND",
     "coin-action-receive": "RECEIVE",
     "coin-transactions": "Transactions",
@@ -95,7 +97,8 @@ export const en = {
 
     // Coin transfer screen
     "coin-transfer-send-title": "Send from {{coinName}}",
-    "coin-transfer-transfer-title": "transfer {{coinName}}",
+    "coin-transfer-recharge-title": "Recharge to {{coinName}}",
+    "coin-transfer-withdraw-title": "Withdraw from {{coinName}}",
     "transfer-from": "Transfer from",
     "transfer-to": "Transfer to",
     "transfer-amount": "Transfer amount",
@@ -105,7 +108,7 @@ export const en = {
 
     // Coin receive screen
     "coin-receive-title": "Receive {{coinName}}",
-    "coin-receive-ela-address": "Your ELA Address",
+    "coin-receive-ela-address": "Your {{coinName}} Address",
     "coin-receive-tap-to-copy": "Tap address to copy",
     "coin-address-copied": "{{coinName}} address copied!",
 
