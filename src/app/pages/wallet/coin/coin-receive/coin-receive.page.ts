@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class CoinReceivePage implements OnInit {
 
     private masterWalletId = '1';
-    private chainId: string;
+    public chainId: string;
     public qrcode: string = null;
 
     constructor(

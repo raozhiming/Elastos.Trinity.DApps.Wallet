@@ -8,6 +8,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService, TransferType } from './cointransfer.service';
 import { WalletAccessService } from './walletaccess.service';
 import { WalletManager } from './wallet.service';
+import { MasterWallet } from '../model/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -15,6 +16,8 @@ declare let appManager: AppManagerPlugin.AppManager;
     providedIn: 'root'
 })
 export class IntentService {
+
+    private walletList: MasterWallet [] = null;
 
     constructor(
         private zone: NgZone,
@@ -46,7 +49,8 @@ export class IntentService {
             ". from: ", intent.from
         );
 
-        if (this.walletManager.getWalletsList().length === 0) {
+        this.walletList = this.walletManager.getWalletsList();
+        if (this.walletList.length === 0) {
             this.sendIntentResponse(intent.action, "No active master wallet!", intent.intentId);
             return false;
         }
@@ -148,7 +152,14 @@ export class IntentService {
                 console.log('AppService unknown intent:', intent);
                 return;
         }
-        this.native.go('wallet-manager', { forIntent: true, forWalletAccess: false });
+        if (this.walletList.length === 1) {
+            const masterWallet = this.walletList[0];
+            this.coinTransferService.masterWalletId = masterWallet.id;
+            this.coinTransferService.walletInfo = masterWallet.account;
+            this.native.go("/waitforsync");
+        } else {
+            this.native.go('wallet-manager', { forIntent: true, forWalletAccess: false });
+        }
     }
 
     handleAccessIntent(intent: AppManagerPlugin.ReceivedIntent) {
@@ -159,7 +170,13 @@ export class IntentService {
             from: intent.from,
         };
         this.walletAccessService.requestFields = intent.params.reqfields || intent.params;
-        this.native.go('wallet-manager', { forIntent: true, forWalletAccess: true });
+        if (this.walletList.length === 1) {
+            const masterWallet = this.walletList[0];
+            this.walletAccessService.masterWalletId = masterWallet.id;
+            this.native.go("/access");
+        } else {
+            this.native.go('wallet-manager', { forIntent: true, forWalletAccess: true });
+        }
     }
 
     private async handleVoteAgainstProposalIntent(intent: AppManagerPlugin.ReceivedIntent) {
