@@ -127,7 +127,12 @@ export class CRMemberRegisterPage implements OnInit {
      * sending the intent response.
      */
     async cancelOperation() {
-        await this.intentService.sendIntentResponse(this.intentTransfer.action, { txid: null }, this.intentTransfer.intentId);
+        await this.intentService.sendIntentResponse(
+            this.intentTransfer.action,
+            { txid: null, status: 'cancelled' },
+            this.intentTransfer.intentId
+        );
+
         this.appService.close();
     }
 

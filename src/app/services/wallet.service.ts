@@ -360,6 +360,11 @@ export class WalletManager {
 
         // If there is at least one remaining wallet, select it as the new active wallet in the app.
         if (Object.values(this.masterWallets).length > 0) {
+            const recentWalletId = await this.getCurrentMasterIdFromStorage();
+            if (recentWalletId === id) {
+                this.setRecentWalletId(this.masterWallets[0].id);
+            }
+
             this.native.setRootRouter("/wallet-home");
         }
         else {

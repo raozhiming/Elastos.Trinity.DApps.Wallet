@@ -151,7 +151,12 @@ export class WaitForSyncPage implements OnInit {
     }
 
     async cancelOperation() {
-        await this.intentService.sendIntentResponse(this.coinTransferService.intentTransfer.action, {txid: null}, this.coinTransferService.intentTransfer.intentId);
+        await this.intentService.sendIntentResponse(
+            this.coinTransferService.intentTransfer.action,
+            {txid: null, status: 'cancelled'},
+            this.coinTransferService.intentTransfer.intentId
+        );
+
         this.appService.close();
     }
 

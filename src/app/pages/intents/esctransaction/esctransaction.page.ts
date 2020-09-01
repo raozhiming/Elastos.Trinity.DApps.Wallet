@@ -97,7 +97,7 @@ export class EscTransactionPage implements OnInit {
     async cancelOperation() {
         await this.intentService.sendIntentResponse(
             this.intentTransfer.action,
-            { txid: null },
+            { txid: null, status: 'cancelled' },
             this.intentTransfer.intentId
         );
         this.appService.close();

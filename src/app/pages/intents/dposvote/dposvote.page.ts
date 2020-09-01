@@ -112,9 +112,9 @@ export class DPoSVotePage implements OnInit {
     async cancelOperation() {
         await this.intentService.sendIntentResponse(
             this.intentTransfer.action,
-            { txid: null },
-            this.intentTransfer.intentId
-        );
+            { txid: null, status: 'cancelled' },
+            this.intentTransfer.intentId);
+
         this.appService.close();
     }
 

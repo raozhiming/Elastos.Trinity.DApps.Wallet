@@ -133,6 +133,8 @@ export class StandardSubWallet extends SubWallet {
             let password = await this.masterWallet.walletManager.openPayModal(transfer);
             if (!password) {
                 console.log("No password received. Cancelling");
+                await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
+                    { txid: null, status: 'cancelled' }, transfer.intentId);
                 resolve(null);
                 return;
             }
@@ -164,18 +166,18 @@ export class StandardSubWallet extends SubWallet {
                 this.masterWallet.walletManager.lockTx(publishedTransaction.TxHash);
 
                 setTimeout(async () => {
+                    let status = 'published';
                     let txId = publishedTransaction.TxHash;
                     const code = this.masterWallet.walletManager.getTxCode(txId);
                     if (code !== 0) {
                         txId = null;
+                        status = 'error';
                     }
                     this.masterWallet.walletManager.native.hideLoading();
                     this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
                     console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
                     await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
-                        { txid: txId },
-                        transfer.intentId);
-                    // this.native.setRootRouter('/wallet-home');
+                        { txid: txId, status }, transfer.intentId);
                     appManager.close();
 
                     resolve();

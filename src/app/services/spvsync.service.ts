@@ -126,7 +126,7 @@ export class SPVSyncService {
      * Starts synchronization for the active subwallet saved in local storage, if any
      */
     private async startSyncingActiveWallet() {
-        let storedMasterId = await this.walletManager.getCurrentMasterIdFromStorage()
+        let storedMasterId = await this.walletManager.getCurrentMasterIdFromStorage();
 
         let activeWallet = this.walletManager.getMasterWallet(storedMasterId);
         if (!activeWallet) {

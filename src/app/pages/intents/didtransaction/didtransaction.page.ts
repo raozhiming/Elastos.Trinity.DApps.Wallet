@@ -96,7 +96,7 @@ export class DidTransactionPage implements OnInit {
     async cancelOperation() {
         await this.intentService.sendIntentResponse(
             this.intentTransfer.action,
-            { txid: null },
+            { txid: null, status: 'cancelled' },
             this.intentTransfer.intentId
         );
 
