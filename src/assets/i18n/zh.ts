@@ -220,7 +220,7 @@ export const zh = {
     "mnemonic-verify-fail": '助记词验证失败，请重新输入助记词',
     "mnemonic-input-passphase": "输入助记词密码",
     "mnemonic-reinput-passphase": "再次输入助记词密码",
-    "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码',
+    "help:mnemonic-password": 'This is an optional password bound to your mnemonic words, to give your wallet extra security. Save it carefully, it is NOT recoverable if lost.',
 
     // Export mnemonic screen
     'text-export-mnemonic': '导出助记词',
