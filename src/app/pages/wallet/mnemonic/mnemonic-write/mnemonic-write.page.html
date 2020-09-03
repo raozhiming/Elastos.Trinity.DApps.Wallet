@@ -67,7 +67,7 @@
         <p>
             {{ 'type-menmonic-verify' | translate }}
         </p>
-        <ion-slides #slider pager [options]="slideOpts">
+        <ion-slides #slide pager [options]="slideOpts">
             <ion-slide>
                 <ion-row>
                     <ion-col size="1">
@@ -75,7 +75,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input1
@@ -91,7 +90,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input2
@@ -107,7 +105,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input3
@@ -123,11 +120,10 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input4
-                            (keypress)="goToNextInput($event.keyCode, input5)"
+                            (keypress)="goToNextInput($event.keyCode, input5, slide)"
                             [(ngModel)]="inputList[3].input"
                         >
                         </ion-input>
@@ -141,7 +137,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input5
@@ -157,7 +152,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input6
@@ -173,7 +167,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input7
@@ -189,11 +182,10 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input8
-                            (keypress)="goToNextInput($event.keyCode, input9)"
+                            (keypress)="goToNextInput($event.keyCode, input9, slide)"
                             [(ngModel)]="inputList[7].input"
                         >
                         </ion-input>
@@ -207,7 +199,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input9
@@ -223,7 +214,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input10
@@ -239,7 +229,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input11
@@ -255,7 +244,6 @@
                     </ion-col>
                     <ion-col class='input-col' size="10">
                         <ion-input
-                            style="text-transform:lowercase"
                             type="text"
                             autocapitalize='off'
                             #input12

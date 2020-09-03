@@ -78,7 +78,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
         this.events.unsubscribe("error:update");
     }
 
-    goToNextInput(event, nextInput?: any) {
+ /*    goToNextInput(event, nextInput?: any) {
         console.log('Input key code', event);
 
         // Convenient way to paste a full mnemonic (non chinese only): if only the first input has text,
@@ -88,6 +88,25 @@ export class WalletImportPage implements OnInit, OnDestroy {
         if (nextInput && !allInputFieldsWereFilled) {
             nextInput === 'input5' || nextInput === 'input9' ? this.slider.slideNext() : () => {};
             nextInput.setFocus();
+        } else {
+            this.onImport();
+        }
+    } */
+
+    goToNextInput(event, nextInput?: any, slide?: any) {
+        // Convenient way to paste a full mnemonic (non chinese only): if only the first input has text,
+        // try to split the existing input with spaces and dispatch the words into the other inputs automatically.
+        let allInputFieldsWereFilled = this.tryToSplitFirstInputWords();
+
+        if (nextInput && !allInputFieldsWereFilled) {
+            if (slide) {
+                slide.slideNext();
+                setTimeout(() => {
+                    nextInput.setFocus();
+                }, 400);
+            } else {
+                nextInput.setFocus();
+            }
         } else {
             this.onImport();
         }

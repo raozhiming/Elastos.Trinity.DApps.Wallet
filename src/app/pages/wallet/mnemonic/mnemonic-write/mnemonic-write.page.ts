@@ -72,10 +72,26 @@ export class MnemonicWritePage implements OnInit {
         }, 200); */
     }
 
-    goToNextInput(event, nextInput?: any) {
+/*     goToNextInput(event, nextInput?: any) {
         if (nextInput) {
-            nextInput === 'input5' || nextInput === 'input9' ? this.slider.slideNext() : () => {};
-            nextInput.setFocus();
+            nextInput === 'input5' || nextInput === 'input9' ?
+                this.slider.slideNext().then(() => { nextInput.setFocus(); }) :
+                nextInput.setFocus();
+        } else {
+            this.onNext();
+        }
+    } */
+
+    goToNextInput(event, nextInput?: any, slide?: any) {
+        if (nextInput) {
+            if (slide) {
+                slide.slideNext();
+                setTimeout(() => {
+                    nextInput.setFocus();
+                }, 400);
+            } else {
+                nextInput.setFocus();
+            }
         } else {
             this.onNext();
         }
