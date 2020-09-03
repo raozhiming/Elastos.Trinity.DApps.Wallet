@@ -188,6 +188,17 @@ export class WalletManager {
                     }, (err) => {
                         console.log("Failed to send start RPC message to the sync service", err);
                     });
+
+                    // Test
+                    // this.getAllMasterWalletBalanceByRPC();
+                    // let result = await this.ethJsonRPCService.getBalance("0x0aD689150EB4a3C541B7a37E6c69c1510BCB27A4", 'id');
+                    // console.log('----ethsc balance:', result);
+
+                    // result = await this.ethJsonRPCService.getGasPrice('id');
+                    // console.log('----ethsc gasPrice:', result);
+
+                    // let block = await this.ethJsonRPCService.getBlockNumber('id');
+                    // console.log('----ethsc getBlockNumber:', block);
                 }
             }
         }
@@ -712,14 +723,15 @@ export class WalletManager {
     }
 
     async getAllSubwalletsBalanceByRPC(masterWalletId) {
-        let currentTimestamp = moment().valueOf();
-        let onedayago = moment().add(-1, 'days').valueOf();
-        for (let subWallet of Object.values(this.getMasterWallet(masterWalletId).subWallets)) {
+        const currentTimestamp = moment().valueOf();
+        const onedayago = moment().add(-1, 'days').valueOf();
+        const masterWallet = this.getMasterWallet(masterWalletId);
+        for (let subWallet of Object.values(masterWallet.subWallets)) {
             if (subWallet.type === CoinType.STANDARD) {
                 // Get balance by RPC if the last block time is one day ago.
                 if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
                     try {
-                        let balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName);
+                        const balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName, masterWallet.account.singleAddress);
                         subWallet.balanceByRPC = balance;
                         subWallet.balance = balance;
                         subWallet.timestampRPC = currentTimestamp;
@@ -732,19 +744,20 @@ export class WalletManager {
     }
 
     //
-    async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
+    async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName, singleAddress: boolean) {
         console.log('TIMETEST getBalanceByRPC start:', chainID);
         if (chainID === StandardCoinName.ETHSC) {
             let balance = await this.getETHBalanceByRPC(masterWalletID, chainID);
-            console.log('TIMETEST getBalanceByRPC end');
+            console.log('TIMETEST getBalanceByRPC ETHSC end');
             return balance;
         }
 
-        // If the balance of 20 consecutive addresses is 0, then end the query
-        let maxBlanks = 20;
+        // If the balance of 5 consecutive request is 0, then end the query.(100 addresses)
+        let maxRequestTimesOfGetEmptyBalance = 5;
+        let requestTimesOfGetEmptyBalance = 0;
         // In order to calculate blanks
-        let maxInternalBlanks = 0;
-        let maxExternalBlanks = 0;
+        let requestAddressCountOfInternal = 1;
+        let requestAddressCountOfExternal = 1;
 
         let startIndex = 0;
         let totalBalance = 0;
@@ -752,109 +765,100 @@ export class WalletManager {
         let consecutiveBlanks = 0;
 
         // internal address
-        while (consecutiveBlanks <= maxBlanks) {
-            const addressArray = await this.spvBridge.getAllAddresses(masterWalletID, chainID, startIndex, true);
-            startIndex += addressArray.Addresses.length;
-
+        let addressArray = null;
+        do {
+            addressArray = await this.spvBridge.getAllAddresses(masterWalletID, chainID, startIndex, true);
             if (addressArray.Addresses.length === 0) {
+                requestAddressCountOfInternal = startIndex;
+                totalRequestCount = startIndex;
                 break;
             }
-            // console.log('----internal addressArray:', addressArray);
-            for (const address of addressArray.Addresses) {
-                try {
-                    const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
-                    totalBalance += balance;
+            startIndex += addressArray.Addresses.length;
 
-                    if (balance <= 0) {
-                        consecutiveBlanks++;
-                        if (consecutiveBlanks >= maxBlanks) {
-                            break;
-                        }
-                    } else {
-                        if (maxInternalBlanks < consecutiveBlanks) maxInternalBlanks = consecutiveBlanks;
-                        consecutiveBlanks = 0;
+            try {
+                const balance = await this.jsonRPCService.getBalanceByAddress(chainID, addressArray.Addresses);
+                totalBalance += balance;
+
+                if (balance <= 0) {
+                    requestTimesOfGetEmptyBalance++;
+                    if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
+                        requestAddressCountOfInternal = startIndex;
+                        totalRequestCount = startIndex;
+                        break;
                     }
-                    totalRequestCount++;
-                } catch (e) {
-                    console.log('jsonRPCService.getBalanceByAddress exception:', e);
-                    throw e;
+                } else {
+                    requestTimesOfGetEmptyBalance = 0;
                 }
+            } catch (e) {
+                console.log('jsonRPCService.getBalanceByAddress exception:', e);
+                throw e;
             }
-            // Single address wallet
-            if (addressArray.Addresses.length === 1) {
-                break;
-            }
-        }
+        } while (!singleAddress);
 
-        // external address for user
-        let currentReceiveAddress = await this.spvBridge.createAddress(masterWalletID, chainID);
-        let currentReceiveAddressIndex = -1;
-        let startCheckBlanks = false;
+        if (!singleAddress) {
+            // external address for user
+            const currentReceiveAddress = await this.spvBridge.createAddress(masterWalletID, chainID);
+            let currentReceiveAddressIndex = -1;
+            let startCheckBlanks = false;
 
-        consecutiveBlanks = 0;
-        startIndex = 0;
-        maxBlanks = 0; // query the balance until the current receive address.
-        while (consecutiveBlanks <= maxBlanks) {
-            const addressArray = await this.spvBridge.getAllAddresses(masterWalletID, chainID, startIndex, false);
-            if (addressArray.Addresses.length === 0) {
-                break;
-            }
-            // console.log('----external addressArray:', addressArray);
-            if (currentReceiveAddressIndex === -1) {
-                currentReceiveAddressIndex = addressArray.Addresses.findIndex((address) => (address === currentReceiveAddress));
-                if (currentReceiveAddressIndex !== -1) {
-                    currentReceiveAddressIndex += startIndex;
-                    startCheckBlanks = true;
+            maxRequestTimesOfGetEmptyBalance = 1; // is 1 ok for external?
+            startIndex = 0;
+            while (true) {
+                const addressArray = await this.spvBridge.getAllAddresses(masterWalletID, chainID, startIndex, false);
+                if (addressArray.Addresses.length === 0) {
+                    requestAddressCountOfExternal = startIndex;
+                    totalRequestCount += startIndex;
+                    break;
                 }
-            }
+                startIndex += addressArray.Addresses.length;
+                if (currentReceiveAddressIndex === -1) {
+                    currentReceiveAddressIndex = addressArray.Addresses.findIndex((address) => (address === currentReceiveAddress));
+                    if (currentReceiveAddressIndex !== -1) {
+                        currentReceiveAddressIndex += startIndex;
+                        startCheckBlanks = true;
+                    }
+                }
 
-            startIndex += addressArray.Addresses.length;
-            for (const address of addressArray.Addresses) {
                 try {
-                    const balance = await this.jsonRPCService.getBalanceByAddress(chainID, address);
+                    const balance = await this.jsonRPCService.getBalanceByAddress(chainID, addressArray.Addresses);
                     totalBalance += balance;
 
-                    if (startCheckBlanks && totalRequestCount > currentReceiveAddressIndex) {
+                    if (startCheckBlanks) {
                         if (balance <= 0) {
-                            consecutiveBlanks++;
-                            if (consecutiveBlanks > maxBlanks) {
+                            requestTimesOfGetEmptyBalance++;
+                            if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
+                                requestAddressCountOfExternal = startIndex;
+                                totalRequestCount += startIndex;
                                 break;
                             }
                         } else {
-                            if (maxExternalBlanks < consecutiveBlanks) maxExternalBlanks = consecutiveBlanks;
-                            consecutiveBlanks = 0;
+                            requestTimesOfGetEmptyBalance = 0;
                         }
                     }
-                    totalRequestCount++;
                 } catch (e) {
                     console.log('jsonRPCService.getBalanceByAddress exception:', e);
                     throw e;
                 }
             }
-            // Single address wallet
-            if (addressArray.Addresses.length === 1) {
-                break;
-            }
         }
 
-        console.log('TIMETEST getBalanceByRPC end');
+        console.log('TIMETEST getBalanceByRPC ', chainID, ' end');
         console.log('getBalanceByRPC totalBalance:', totalBalance,
                 ' totalRequestCount:', totalRequestCount,
-                ' maxInternalBlanks:', maxInternalBlanks,
-                ' maxExternalBlanks:', maxExternalBlanks);
+                ' requestAddressCountOfInternal:', requestAddressCountOfInternal,
+                ' requestAddressCountOfExternal:', requestAddressCountOfExternal);
 
         return totalBalance;
     }
 
     async getETHBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
-        // TODO
         if (chainID !== StandardCoinName.ETHSC) {
             throw new Error('only for ETHSC');
         }
         // only one address
         let address = await this.spvBridge.createAddress(masterWalletID, chainID);
-        const balance = await this.ethJsonRPCService.getBalanceByAddress(address, 'id');
-        console.log('getETHBalanceByRPC balance:', balance)
+        const balance = await this.ethJsonRPCService.getBalance(address, 'id');
+        console.log('getETHBalanceByRPC balance:', balance);
         return balance;
     }
 

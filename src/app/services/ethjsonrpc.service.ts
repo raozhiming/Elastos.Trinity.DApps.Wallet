@@ -15,7 +15,9 @@ type JSONRPCResponse = {
     providedIn: 'root'
 })
 export class EthJsonRPCService {
-    private ETHSCRPCApiUrl = 'http://api.elastos.io:21636';
+    // private ETHSCRPCApiUrl = 'http://api.elastos.io:21636';
+    private ETHSCRPCApiUrl = 'https://rpc.elaeth.io'; // TestNet
+    // private ETHSCRPCApiUrl = 'https://mainrpc.elaeth.io'; // MainNet
 
     constructor(private http: HttpClient) {
     }
@@ -36,24 +38,32 @@ export class EthJsonRPCService {
         };
 
         const result = await this.httpRequest(this.ETHSCRPCApiUrl, param);
-        console.log(' debug: getGasPrice:', result);
+        const balanceOfSELA = parseInt(result, 16) / 10000000000;
+        return balanceOfSELA;
     }
 
     // getGasEstimate
-    async getGasEstimate(id: string) {
+    async getGasEstimate(from: string, to: string, value: number, gasPrice: number, data: string, id: string) {
         const param = {
             method: 'eth_estimateGas',
             params: [
+                {
+                    from,
+                    to,
+                    gasPrice,
+                    value,
+                    data
+                }
             ],
             id
         };
 
         const result = await this.httpRequest(this.ETHSCRPCApiUrl, param);
-        console.log(' debug: getGasPrice:', result);
+        console.log(' debug: getGasEstimate:', result);
     }
 
     // getBalance
-    async getBalanceByAddress(address: string, id) {
+    async getBalance(address: string, id) {
         const param = {
             method: 'eth_getBalance',
             params: [
@@ -63,9 +73,6 @@ export class EthJsonRPCService {
         };
 
         const balance = await this.httpRequest(this.ETHSCRPCApiUrl, param);
-        // const balance = "0x10a741a462780000";
-        console.log(' debug: getBalanceByAddress:', balance);
-
         // TODO: SELA or wei
         const balanceOfSELA = parseInt(balance, 16) / 10000000000;
         console.log(' debug: getBalanceByAddress:', balanceOfSELA);
@@ -73,12 +80,43 @@ export class EthJsonRPCService {
     }
 
     // submitTransaction
+    async submitTransaction(tx: string, id: string) {
+        const param = {
+            method: ' eth_sendRawTransaction',
+            params: [
+                tx
+            ],
+            id
+        };
+
+        const result = await this.httpRequest(this.ETHSCRPCApiUrl, param);
+        return result;
+    }
+
+    // getTransactions
+    async getTransactions(address: string, begBlockNumber: number, endBlockNumber: number, id: string) {
+        const param = {
+            method: 'eth_blockNumber',
+            params: [
+            ],
+            id
+        };
+
+        const result = await this.httpRequest(this.ETHSCRPCApiUrl, param);
+        const blocNumber = parseInt(result, 16);
+        return blocNumber;
+    }
 
     // getLogs
-    async getLogs(id: string) {
+    async getLogs(contract: string, address: string, fromBlock: number, toBlock: number, id: string) {
         const param = {
             method: 'eth_getLogs',
             params: [
+                {
+                    address,
+                    fromBlock: fromBlock.toString(16),
+                    toBlock: toBlock.toString(16),
+                }
             ],
             id
         };
@@ -97,13 +135,29 @@ export class EthJsonRPCService {
         };
 
         const result = await this.httpRequest(this.ETHSCRPCApiUrl, param);
-        console.log(' debug: eth_blockNumber:', result);
+        const blocNumber = parseInt(result, 16);
+        return blocNumber;
     }
 
     // getTokens
+    async getTokens(id: string) {
+        const param = {
+            method: 'eth_blockNumber',
+            params: [
+            ],
+            id
+        };
+
+        const result = await this.httpRequest(this.ETHSCRPCApiUrl, param);
+        const blocNumber = parseInt(result, 16);
+        return blocNumber;
+    }
+
+    // GetNonce
 
 
     httpRequest(rpcApiUrl: string, param: any): Promise<string> {
+        console.log('httpRequest rpcApiUrl:', rpcApiUrl, ' param:', param);
         return new Promise((resolve, reject) => {
             const httpOptions = {
                 headers: new HttpHeaders({

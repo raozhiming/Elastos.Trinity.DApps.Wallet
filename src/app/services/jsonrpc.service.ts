@@ -32,21 +32,32 @@ export class JsonRPCService {
     }
 
     // return balance in SELA
-    async getBalanceByAddress(chainID: StandardCoinName, address: string) {
-        const param = {
-            method: 'getreceivedbyaddress',
-            params: {
-                address
-            }
-        };
+    async getBalanceByAddress(chainID: StandardCoinName, addressArray: string[]) {
+        const paramArray = [];
+        let index = 0;
+
+        for (const address of addressArray) {
+            const param = {
+                method: 'getreceivedbyaddress',
+                params: {
+                    address
+                },
+                id: index.toString()
+            };
+            index++;
+            paramArray.push(param);
+        }
 
         const rpcApiUrl = this.getRPCApiUrl(chainID);
         if (rpcApiUrl.length === 0) {
             return;
         }
 
-        const balance = await this.httpRequest(rpcApiUrl, param);
-        const balanceOfSELA = parseFloat(balance) * Config.SELA;
+        let balanceOfSELA = 0;
+        const resultArray = await this.httpRequest(rpcApiUrl, paramArray);
+        for (const result of resultArray) {
+            balanceOfSELA += parseFloat(result.result) * Config.SELA;
+        }
         console.log(' debug: getBalanceByAddress:', balanceOfSELA);
         return Math.round(balanceOfSELA);
     }
@@ -81,7 +92,7 @@ export class JsonRPCService {
         return rpcApiUrl;
     }
 
-    httpRequest(rpcApiUrl: string, param: any): Promise<string> {
+    httpRequest(rpcApiUrl: string, param: any): Promise<any> {
         return new Promise((resolve, reject) => {
             const httpOptions = {
                 headers: new HttpHeaders({
@@ -89,9 +100,12 @@ export class JsonRPCService {
                 })
             };
             this.http.post(rpcApiUrl, JSON.stringify(param), httpOptions)
-            .subscribe(res => {
-                const response = res as JSONRPCResponse;
-                resolve(response.result);
+            .subscribe((res: any) => {
+                if (res instanceof Array) {
+                    resolve(res);
+                } else {
+                    resolve(res.result || '');
+                }
             }, (err) => {
                 reject(err);
                 console.log('JsonRPCService httpRequest error:', err);
