@@ -84,8 +84,8 @@
                     <p>{{ item.datetime }}</p>
                 </ion-col>
                 <ion-col [size]="item.resultAmount === 0 ? 3 : 5" class="right-col">
-                    <h1>{{ item.symbol }}{{ item.resultAmount }}</h1>
-                    <p>
+                    <h1 *ngIf="canDisplayCurrency()">{{ item.symbol }}{{ item.resultAmount }}</h1>
+                    <p *ngIf="canDisplayCurrency()">
                         {{ currencyService.getCurrencyBalance(item.resultAmount) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>

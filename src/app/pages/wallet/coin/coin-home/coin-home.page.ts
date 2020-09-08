@@ -449,4 +449,12 @@ export class CoinHomePage implements OnInit {
         else
             return false;
     }
+
+    /**
+     * Whether the active subwallet can display currency amounts or not. For example for now,
+     * we are not able to display USD value for ERC20 tokens.
+     */
+    canDisplayCurrency(): boolean {
+        return !(this.subWallet instanceof ERC20SubWallet);
+    }
 }

@@ -37,6 +37,7 @@ import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
 import { IonSlides, Events } from '@ionic/angular';
+import { ERC20SubWallet } from 'src/app/model/ERC20SubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -193,5 +194,13 @@ export class WalletHomePage implements OnInit, OnDestroy {
 
     isStandardSubwallet(subWallet: SubWallet) {
         return subWallet instanceof StandardSubWallet;
+    }
+
+    /**
+     * Whether the active subwallet can display currency amounts or not. For example for now,
+     * we are not able to display USD value for ERC20 tokens.
+     */
+    canDisplayCurrency(subWallet: SubWallet): boolean {
+        return !(subWallet instanceof ERC20SubWallet);
     }
 }

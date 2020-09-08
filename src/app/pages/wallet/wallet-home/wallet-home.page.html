@@ -68,7 +68,7 @@
                 </ion-col>
                 <ion-col [size]="subWallet.balance/SELA === 0 ? 2.5 : 5" class="right-col">
                     <h1>{{ uiService.getFixedBalance(subWallet.balance/SELA) }}</h1>
-                    <p>
+                    <p *ngIf="canDisplayCurrency(subWallet)">
                         {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>
@@ -140,7 +140,7 @@
             </ion-col>
             <ion-col [size]="subWallet.balance/SELA === 0 ? 2.5 : 5" class="right-col">
                 <h1>{{ uiService.getFixedBalance(subWallet.balance/SELA) }}</h1>
-                <p *ngIf="isStandardSubwallet(subWallet)">
+                <p *ngIf="canDisplayCurrency(subWallet)">
                     {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
