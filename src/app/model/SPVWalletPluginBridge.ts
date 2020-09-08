@@ -564,7 +564,7 @@ export class SPVWalletPluginBridge {
         amountUnit: number
     ): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            /* TMP BPI walletManager.createTransfer(
+            walletManager.createTransfer(
                 [
                     masterWalletId,
                     toAddress,
@@ -572,7 +572,7 @@ export class SPVWalletPluginBridge {
                     amountUnit
                 ],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject); });*/
+                (err) => { this.handleError(err, reject); });
         });
     }
 
