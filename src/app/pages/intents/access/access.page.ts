@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { WalletManager } from '../../../services/wallet.service';
-import { WalletAccessService, IntentTransfer } from '../../../services/walletaccess.service';
+import { WalletAccessService } from '../../../services/walletaccess.service';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { IntentService } from 'src/app/services/intent.service';
@@ -11,6 +11,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { UiService } from 'src/app/services/ui.service';
+import { IntentTransfer } from 'src/app/services/cointransfer.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 

@@ -22,12 +22,7 @@
 
 import { Injectable } from '@angular/core';
 import { StandardCoinName } from '../model/Coin';
-
-export class IntentTransfer {
-    action: string = null;
-    intentId: number = null;
-    from: string = null;
-}
+import { IntentTransfer } from './cointransfer.service';
 
 @Injectable({
     providedIn: 'root'

@@ -56,7 +56,7 @@ export class Transfer {
 
 export class IntentTransfer {
     action: string = null;
-    intentId: number = null;
+    intentId: any = null;
     from: string = null;
 }
 

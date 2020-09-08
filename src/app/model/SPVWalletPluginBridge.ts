@@ -564,7 +564,8 @@ export class SPVWalletPluginBridge {
         amountUnit: number
     ): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            walletManager.createTransfer(
+            resolve(true);
+      /*       walletManager.createTransfer(
                 [
                     masterWalletId,
                     toAddress,
@@ -572,7 +573,7 @@ export class SPVWalletPluginBridge {
                     amountUnit
                 ],
                 (ret) => { resolve(ret); },
-                (err) => { this.handleError(err, reject); });
+                (err) => { this.handleError(err, reject); }); */
         });
     }
 

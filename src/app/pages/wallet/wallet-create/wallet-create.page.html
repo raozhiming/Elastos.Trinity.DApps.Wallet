@@ -18,7 +18,7 @@
         <div class="options-container" *ngIf="showOptions">
             <ion-row class="toggle-row">
                 <h1>{{ 'signaddress-wallet' | translate }}</h1>
-                <ion-toggle [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
+                <ion-toggle color="tertiary" [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
             </ion-row>
             <ion-row class="password-row">
                 <ion-col size="10">
