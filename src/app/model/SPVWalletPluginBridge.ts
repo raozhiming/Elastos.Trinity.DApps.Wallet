@@ -35,6 +35,38 @@ export type SPVWalletMessage = {
     result: string;
     Code: string;
     Reason: string;
+
+    // ETHSC
+    event: ETHSCEvent;
+}
+
+export type ETHSCEvent = {
+    ErrorDescription: string;
+    Event: string;
+    NewState?: string;
+    OldState?: string;
+    PercentComplete?: number;
+    Status: string;
+    Timestamp?: number;
+    Type: string;
+    WalletSymbol?: string;
+}
+
+export enum ETHSCEventType {
+    EWMEvent = "EWMEvent",
+    PeerEvent = "PeerEvent",
+    TransferEvent = "TransferEvent",
+    TokenEvent = "TokenEvent",
+    WalletEvent = "WalletEvent",
+}
+
+export enum ETHSCEventAction {
+    BALANCE_UPDATED = "BALANCE_UPDATED",
+    CHANGED = "CHANGED",
+    CREATED = "CREATED",
+    DEFAULT_GAS_PRICE_UPDATED = "DEFAULT_GAS_PRICE_UPDATED",
+    PROGRESS = "PROGRESS",
+    // TODO: add more
 }
 
 export type TxPublishedResult = {

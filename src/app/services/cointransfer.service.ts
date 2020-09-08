@@ -28,7 +28,7 @@ import { WalletID } from '../model/MasterWallet';
 export class Transfer {
     masterWalletId: WalletID = null;
     action: string = null;
-    intentId: Number = null;
+    intentId: number = null;
     memo: string = '';
     did: string = null;
     nickname: string = null;
@@ -56,7 +56,7 @@ export class Transfer {
 
 export class IntentTransfer {
     action: string = null;
-    intentId: Number = null;
+    intentId: number = null;
     from: string = null;
 }
 

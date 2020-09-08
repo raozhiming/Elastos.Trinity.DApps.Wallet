@@ -15,10 +15,12 @@ type JSONRPCResponse = {
     providedIn: 'root'
 })
 export class EthJsonRPCService {
-    // private ETHSCRPCApiUrl = 'http://api.elastos.io:21636';
-    private ETHSCRPCApiUrl = 'https://rpc.elaeth.io'; // TestNet
+    private ETHSCRPCApiUrl = 'http://api.elastos.io:21636';
+    // private ETHSCRPCApiUrl = 'http://api.bocheng.tech:20636';
+    // private ETHSCRPCApiUrl = 'https://rpc.elaeth.io'; // TestNet
     // private ETHSCRPCApiUrl = 'https://mainrpc.elaeth.io'; // MainNet
 
+    // TODO: should remove
     constructor(private http: HttpClient) {
     }
 
@@ -46,15 +48,13 @@ export class EthJsonRPCService {
     async getGasEstimate(from: string, to: string, value: number, gasPrice: number, data: string, id: string) {
         const param = {
             method: 'eth_estimateGas',
-            params: [
-                {
-                    from,
-                    to,
-                    gasPrice,
-                    value,
-                    data
-                }
-            ],
+            params: [{
+                from,
+                to,
+                gasPrice,
+                value,
+                data
+            }],
             id
         };
 
@@ -95,29 +95,26 @@ export class EthJsonRPCService {
 
     // getTransactions
     async getTransactions(address: string, begBlockNumber: number, endBlockNumber: number, id: string) {
-        const param = {
-            method: 'eth_blockNumber',
-            params: [
-            ],
-            id
-        };
+        // http://api.elastos.io:8080/api/1/eth/history?address=0x0aD689150EB4a3C541B7a37E6c69c1510BCB27A4&sort=desc&begBlockNumber=10000&endBlockNumber=2209890
+        const rpcUrl = 'http://api.elastos.io:8080/api/1/eth/history?';
+        // const rpcUrl = 'https://api-esc.elaphant.app/api/1/eth/history?';
+        const payload = 'address=' + address + '&begBlockNumber=' + begBlockNumber
+                 + '&endBlockNumber=' + endBlockNumber + '&sort=desc';
 
-        const result = await this.httpRequest(this.ETHSCRPCApiUrl, param);
-        const blocNumber = parseInt(result, 16);
-        return blocNumber;
+        const result = await this.getTransactionsByRPC(rpcUrl, payload);
+        // const blocNumber = parseInt(result, 16);
+        // return blocNumber;
     }
 
     // getLogs
     async getLogs(contract: string, address: string, fromBlock: number, toBlock: number, id: string) {
         const param = {
             method: 'eth_getLogs',
-            params: [
-                {
-                    address,
-                    fromBlock: fromBlock.toString(16),
-                    toBlock: toBlock.toString(16),
-                }
-            ],
+            params: [{
+                address,
+                fromBlock: fromBlock.toString(16),
+                toBlock: toBlock.toString(16),
+            }],
             id
         };
 
@@ -171,6 +168,20 @@ export class EthJsonRPCService {
             }, (err) => {
                 reject(err);
                 console.log('EthJsonRPCService httpRequest error:', err);
+            });
+        });
+    }
+
+    getTransactionsByRPC(rpcApiUrl: string, payload: string) {
+        return new Promise((resolve, reject) => {
+            const url = rpcApiUrl + payload;
+            console.log('getTransactionsByRPC:' + url);
+            this.http.get(url)
+            .subscribe(async response => {
+                console.log("get completed:", response);
+                resolve(response);
+            }, (err) => {
+                reject(url + ' error:' + err);
             });
         });
     }

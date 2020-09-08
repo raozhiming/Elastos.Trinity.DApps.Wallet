@@ -25,7 +25,7 @@ import { StandardCoinName } from '../model/Coin';
 
 export class IntentTransfer {
     action: string = null;
-    intentId: Number = null;
+    intentId: number = null;
     from: string = null;
 }
 

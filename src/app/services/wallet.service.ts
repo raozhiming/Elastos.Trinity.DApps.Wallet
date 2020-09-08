@@ -26,7 +26,7 @@ import { Events, ModalController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 
-import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult } from '../model/SPVWalletPluginBridge';
+import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
 import { MasterWallet, WalletID } from '../model/MasterWallet';
 import { StandardCoinName, CoinType } from '../model/Coin';
 import { Util } from '../model/Util';
@@ -151,13 +151,6 @@ export class WalletManager {
 
             // Test
             // this.getAllMasterWalletBalanceByRPC();
-            // try {
-            //     let result = await this.ethJsonRPCService.getBalance("0x0aD689150EB4a3C541B7a37E6c69c1510BCB27A4", 'id');
-            //     console.log('----ethsc balance:', result);
-            // }
-            // catch (e) {
-            //     console.log('----e:', e)
-            // }
         } else {
             // Start the sync service if we are in a background service
             await this.syncService.init(this);
@@ -544,7 +537,7 @@ export class WalletManager {
                 // Nothing
                 break;
             case "OnETHSCEventHandled":
-                // TODO: What needs to be done?
+                this.updateETHSCEventFromCallback(masterId, chainId, event);
                 break;
         }
     }
@@ -568,6 +561,38 @@ export class WalletManager {
             if (elaProgress == 100 && idChainProgress == 100) {
                 this.checkIDChainBalance(masterId);
             }
+        }
+    }
+
+    // ETHSC has different event
+    private updateETHSCEventFromCallback(masterId: WalletID, chainId: StandardCoinName, result: SPVWalletMessage) {
+        switch (result.event.Type) {
+            case ETHSCEventType.EWMEvent: // update progress
+                switch (result.event.Event) {
+                    case ETHSCEventAction.PROGRESS:
+                        result.Progress =  Math.round(result.event.PercentComplete);
+                        result.LastBlockTime = result.event.Timestamp;
+                        break;
+                    case ETHSCEventAction.CHANGED:
+                        if ('CONNECTED' === result.event.NewState) {
+                            result.Progress =  100;
+                            result.LastBlockTime = new Date().getTime();
+                        }
+                        break;
+                    default:
+                        // Do nothing
+                        break;
+                }
+                this.updateSyncProgress(masterId, chainId, result.Progress, result.LastBlockTime);
+                break;
+            case ETHSCEventType.WalletEvent: // update balance
+                if (result.event.Event === ETHSCEventAction.BALANCE_UPDATED) {
+                    this.getMasterWallet(masterId).getSubWallet(chainId).updateBalance();
+                }
+                break;
+            default:
+                // TODO: check other event
+                break;
         }
     }
 
@@ -721,9 +746,9 @@ export class WalletManager {
         const onedayago = moment().add(-1, 'days').valueOf();
         const masterWallet = this.getMasterWallet(masterWalletId);
         for (let subWallet of Object.values(masterWallet.subWallets)) {
-            if (subWallet.type === CoinType.STANDARD) {
+            if ((subWallet.type === CoinType.STANDARD) && (subWallet.id !== StandardCoinName.ETHSC)) {
                 // Get balance by RPC if the last block time is one day ago.
-                // if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
+                if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
                     try {
                         const balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName, masterWallet.account.singleAddress);
                         subWallet.balanceByRPC = balance;
@@ -732,7 +757,7 @@ export class WalletManager {
                     } catch (e) {
                         console.log('getBalanceByRPC exception:', e);
                     }
-                // }
+                }
             }
         }
     }
@@ -740,11 +765,6 @@ export class WalletManager {
     //
     async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName, singleAddress: boolean) {
         console.log('TIMETEST getBalanceByRPC start:', chainID);
-        if (chainID === StandardCoinName.ETHSC) {
-            let balance = await this.getETHBalanceByRPC(masterWalletID, chainID);
-            console.log('TIMETEST getBalanceByRPC ETHSC end');
-            return balance;
-        }
 
         // If the balance of 5 consecutive request is 0, then end the query.(100 addresses)
         let maxRequestTimesOfGetEmptyBalance = 5;
@@ -756,7 +776,6 @@ export class WalletManager {
         let startIndex = 0;
         let totalBalance = 0;
         let totalRequestCount = 0;
-        let consecutiveBlanks = 0;
 
         // internal address
         let addressArray = null;
@@ -845,16 +864,16 @@ export class WalletManager {
         return totalBalance;
     }
 
-    async getETHBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
-        if (chainID !== StandardCoinName.ETHSC) {
-            throw new Error('only for ETHSC');
-        }
-        // only one address
-        let address = await this.spvBridge.createAddress(masterWalletID, chainID);
-        const balance = await this.ethJsonRPCService.getBalance(address, 'id');
-        console.log('getETHBalanceByRPC balance:', balance);
-        return balance;
-    }
+    // async getETHBalanceByRPC(masterWalletID: string, chainID: StandardCoinName) {
+    //     if (chainID !== StandardCoinName.ETHSC) {
+    //         throw new Error('only for ETHSC');
+    //     }
+    //     // only one address
+    //     let address = await this.spvBridge.createAddress(masterWalletID, chainID);
+    //     const balance = await this.ethJsonRPCService.getBalance(address, 'id');
+    //     console.log('getETHBalanceByRPC balance:', balance);
+    //     return balance;
+    // }
 
     sendIntentResponse(action, result, intentId): Promise<void> {
         return new Promise((resolve, reject)=>{

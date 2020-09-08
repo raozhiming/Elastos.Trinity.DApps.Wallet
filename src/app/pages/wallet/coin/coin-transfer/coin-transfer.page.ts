@@ -306,15 +306,13 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     async createETHSCSendTransaction() {
-        const toAmount = this.accMul(this.amount, Config.SELA);
-
         // Call dedicated api to the source subwallet to generate the appropriate transaction type.
         // For example, ERC20 token transactions are different from standard coin transactions (for now - as
         // the spv sdk doesn't support ERC20 yet).
         let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
         let rawTx = await sourceSubwallet.createTransfer(
             this.toAddress, // User input address
-            toAmount.toString(), // User input amount
+            this.amount.toString(), // User input amount
             6 // ETHER_ETHER
         );
 

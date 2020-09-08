@@ -24,7 +24,7 @@ import { Injectable } from '@angular/core';
 import { StandardCoinName, CoinType } from '../model/Coin';
 import { Events } from '@ionic/angular';
 import { WalletID } from '../model/MasterWallet';
-import { SPVWalletPluginBridge, SPVWalletMessage } from '../model/SPVWalletPluginBridge';
+import { SPVWalletPluginBridge, SPVWalletMessage, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
 import { Native } from './native.service';
 import { PopupProvider } from './popup.service';
 import { WalletManager } from './wallet.service';
@@ -117,7 +117,7 @@ export class SPVSyncService {
                 // Nothing to do for now
                 break;
             case "OnETHSCEventHandled":
-                // TODO update progress
+                this.handleETHSCBlockSyncProgressEvent(masterId, chainId, event);
                 break;
         }
     }
@@ -183,6 +183,39 @@ export class SPVSyncService {
             if (!notificationSent) {
                 await this.sendSyncCompletedNotification(chainId);
             }
+        }
+    }
+
+    private async handleETHSCBlockSyncProgressEvent(masterId: WalletID, chainId: StandardCoinName, event: SPVWalletMessage) {
+        // TODO: check more event
+        if (event.event.Type !== ETHSCEventType.EWMEvent) {
+            return;
+        }
+
+        if (!this.walletsSyncProgress[masterId]) {
+            this.walletsSyncProgress[masterId] = {};
+        }
+
+        switch (event.event.Event) {
+            case ETHSCEventAction.PROGRESS:
+                this.walletsSyncProgress[masterId][chainId] = {progress: Math.round(event.event.PercentComplete), lastBlockTime: event.event.Timestamp};
+                break;
+            case ETHSCEventAction.CHANGED:
+                if ('CONNECTED' === event.event.NewState) {
+                    this.walletsSyncProgress[masterId][chainId] = {progress: 100, lastBlockTime: new Date().getTime()};
+                    // If we are reaching 100% sync and this is the first time we reach it, we show a notification
+                    // to the user.
+                    // if (event.Progress == 100) {
+                    //     let notificationSent = await this.syncCompletedNotificationSent(chainId);
+                    //     if (!notificationSent) {
+                    //         await this.sendSyncCompletedNotification(chainId);
+                    //     }
+                    // }
+                }
+                break;
+            default:
+                // Do nothing
+                break;
         }
     }
 
