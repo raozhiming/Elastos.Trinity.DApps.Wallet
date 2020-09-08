@@ -159,6 +159,8 @@ export class StandardSubWallet extends SubWallet {
                 signedTx
             );
 
+            console.log("----publishedTransaction:", publishedTransaction);
+
             this.masterWallet.walletManager.setRecentWalletId(this.masterWallet.id);
 
             if (!Util.isEmptyObject(transfer.action)) {
@@ -192,5 +194,15 @@ export class StandardSubWallet extends SubWallet {
                 resolve();
             }
         });
+    }
+
+    public async createTransfer(toAddress: string, amount: string, amountUnit: number): Promise<string> {
+        const rawTx = await this.masterWallet.walletManager.spvBridge.createTransfer(
+            this.masterWallet.id,
+            toAddress,
+            amount,
+            amountUnit
+        );
+        return rawTx;
     }
 }

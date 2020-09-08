@@ -2,7 +2,7 @@ import path from 'path'
 //var fs = require('fs');
 import Web3 from 'Web3'
 //var Tx = require('ethereumjs-tx');
-import { TrinitySDK } from "@elastosfoundation/trinity-dapp-sdk"
+import { Ethereum } from "@elastosfoundation/trinity-dapp-sdk"
 // import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
 
 import { MasterWallet } from './MasterWallet';
@@ -29,9 +29,9 @@ export class ERC20SubWallet extends SubWallet {
         this.coin = this.masterWallet.coinService.getCoinByID(this.id) as ERC20Coin;
 
         // Get Web3 and the ERC20 contract ready
-        let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
+        // let trinityWeb3Provider = new Ethereum.TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
         // let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
-        this.web3 = new Web3(trinityWeb3Provider);
+        // this.web3 = new Web3(trinityWeb3Provider);
 
         // Standard ERC20 contract ABI
         this.erc20ABI = require("../../assets/ethereum/StandardErc20ABI.json");
@@ -136,6 +136,10 @@ export class ERC20SubWallet extends SubWallet {
         console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);*/
 
         return Promise.resolve();
+    }
+
+    public async createTransfer(toAddress: string, amount: string, amountUnit: number): Promise<string> {
+        return Promise.resolve('');
     }
 
     async tempInitialTestToUseERC20Stuff() {

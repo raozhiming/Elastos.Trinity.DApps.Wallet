@@ -525,6 +525,25 @@ export class SPVWalletPluginBridge {
         });
     }
 
+    createTransfer(
+        masterWalletId: string,
+        toAddress: string,
+        amount: string,
+        amountUnit: number
+    ): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            walletManager.createTransfer(
+                [
+                    masterWalletId,
+                    toAddress,
+                    amount,
+                    amountUnit
+                ],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject); });
+        });
+    }
+
     createDepositTransaction(
         masterWalletId: string,
         chainId: string,

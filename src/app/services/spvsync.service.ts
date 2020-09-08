@@ -21,7 +21,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { StandardCoinName } from '../model/Coin';
+import { StandardCoinName, CoinType } from '../model/Coin';
 import { Events } from '@ionic/angular';
 import { WalletID } from '../model/MasterWallet';
 import { SPVWalletPluginBridge, SPVWalletMessage } from '../model/SPVWalletPluginBridge';
@@ -96,7 +96,7 @@ export class SPVSyncService {
             this.handleSubWalletEvent(event);
         });
 
-        await this.startSyncingActiveWallet();
+        await this.walletManager.startSyncAllWallet();
     }
 
     /**
@@ -117,23 +117,8 @@ export class SPVSyncService {
                 // Nothing to do for now
                 break;
             case "OnETHSCEventHandled":
-                // Nothing to do for now
+                // TODO update progress
                 break;
-        }
-    }
-
-    /**
-     * Starts synchronization for the active subwallet saved in local storage, if any
-     */
-    private async startSyncingActiveWallet() {
-        let storedMasterId = await this.walletManager.getCurrentMasterIdFromStorage();
-
-        let activeWallet = this.walletManager.getMasterWallet(storedMasterId);
-        if (!activeWallet) {
-            console.log("No active wallet. Not starting any SPV sync");
-        }
-        else {
-            this.walletManager.startWalletSync(activeWallet.id);
         }
     }
 
@@ -200,7 +185,6 @@ export class SPVSyncService {
             }
         }
     }
-
 
     /**
      * Tells if the "sync completed" notification has already been sent earlier for a given chain id or not.

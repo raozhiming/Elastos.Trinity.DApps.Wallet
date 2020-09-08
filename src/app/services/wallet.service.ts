@@ -109,17 +109,66 @@ export class WalletManager {
 
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
 
-        // Start the sync service if we are in a background service
-        if (this.appService.runningAsAService()) {
-            await this.syncService.init(this);
-        } else {
+        let hasWallet = await this.initWallets();
+
+        if (!this.appService.runningAsAService()) {
+            if (!hasWallet) {
+                this.goToLauncherScreen();
+                return;
+            }
+
+            this.registerSubWalletListener();
+
             appManager.setListener((message) => {
                 this.handleAppManagerMessage(message);
                 this.appService.onMessageReceived(message);
             });
             this.jsonRPCService.init();
+
+            this.startSyncAllWallet();
+
+            this.localStorage.get('hasPrompt').then((val) => {
+                this.hasPromptTransfer2IDChain = val ? val : false;
+            });
+
+            let publishTxList = await this.localStorage.getPublishTxList();
+            if (publishTxList) {
+                this.transactionMap = publishTxList;
+            }
+
+            // Get last block time from walletservice
+            const rpcMessage: InAppRPCMessage = {
+                method: RPCMethod.GET_WALLET_SYNC_PROGRESS,
+                params: ''
+            };
+            appManager.sendMessage("#service:walletservice",
+                                    AppManagerPlugin.MessageType.INTERNAL,
+                                    JSON.stringify(rpcMessage), () => {
+                // Nothing to do
+            }, (err) => {
+                console.log("Failed to send start RPC message to the sync service", err);
+            });
+
+            // Test
+            // this.getAllMasterWalletBalanceByRPC();
+            // try {
+            //     let result = await this.ethJsonRPCService.getBalance("0x0aD689150EB4a3C541B7a37E6c69c1510BCB27A4", 'id');
+            //     console.log('----ethsc balance:', result);
+            // }
+            // catch (e) {
+            //     console.log('----e:', e)
+            // }
+        } else {
+            // Start the sync service if we are in a background service
+            await this.syncService.init(this);
         }
 
+        console.log("Wallet manager initialization complete");
+
+        this.events.publish("walletmanager:initialized");
+    }
+
+    private async initWallets(): Promise<boolean> {
         try {
             console.log("Getting all master wallets from the SPV SDK");
             const idList = await this.spvBridge.getAllMasterWallets();
@@ -127,7 +176,7 @@ export class WalletManager {
             if (idList.length === 0) {
                 console.log("No SPV wallet found, going to launcher screen");
                 this.goToLauncherScreen();
-                return;
+                return false;
             }
 
             // Rebuild our local model for all wallets returned by the SPV SDK.
@@ -159,10 +208,6 @@ export class WalletManager {
                         subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
                         if (!subwallet) {
                             console.log('Opening ETHSC');
-                            // TODO call verifyPassPhrase when create ETHSC
-                            // await this.spvBridge.verifyPassPhrase(masterId, '', '12345678');
-                            // await this.spvBridge.verifyPayPassword(masterId, '12345678');
-                            // await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
                             const subWallet = new StandardSubWallet(this.masterWallets[masterId], StandardCoinName.ETHSC);
                             extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                         }
@@ -170,67 +215,16 @@ export class WalletManager {
                 }
 
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
-
-                this.registerSubWalletListener();
-
-                // Get last block time from walletservice
-                if (!this.appService.runningAsAService()) {
-                    this.startSyncAllWallet();
-
-                    const rpcMessage: InAppRPCMessage = {
-                        method: RPCMethod.GET_WALLET_SYNC_PROGRESS,
-                        params: ''
-                    };
-                    appManager.sendMessage("#service:walletservice",
-                                            AppManagerPlugin.MessageType.INTERNAL,
-                                            JSON.stringify(rpcMessage), () => {
-                        // Nothing to do
-                    }, (err) => {
-                        console.log("Failed to send start RPC message to the sync service", err);
-                    });
-
-                    // Test
-                    // this.getAllMasterWalletBalanceByRPC();
-                    // let result = await this.ethJsonRPCService.getBalance("0x0aD689150EB4a3C541B7a37E6c69c1510BCB27A4", 'id');
-                    // console.log('----ethsc balance:', result);
-
-                    // result = await this.ethJsonRPCService.getGasPrice('id');
-                    // console.log('----ethsc gasPrice:', result);
-
-                    // let block = await this.ethJsonRPCService.getBlockNumber('id');
-                    // console.log('----ethsc getBlockNumber:', block);
-                }
             }
         }
         catch (error) {
             console.error(error);
+            return false;
         }
-
-        this.localStorage.get('hasPrompt').then((val) => {
-            this.hasPromptTransfer2IDChain = val ? val : false;
-        });
-
-        let publishTxList = await this.localStorage.getPublishTxList();
-        if (publishTxList) {
-            this.transactionMap = publishTxList;
-        }
-
-        console.log("Wallet manager initialization complete");
-
-        // Set Active Master Wallet
-        // if (Object.values(this.masterWallets).length > 0) {
-        //     let storedMasterId = await this.getCurrentMasterIdFromStorage();
-
-        //     // Wrong master id or something desynchronized. use the first wallet in the list as default
-        //     if (!storedMasterId || !(storedMasterId in this.masterWallets)) {
-        //         console.warn("Invalid master ID retrieved from storage. Using the first wallet as default");
-        //         storedMasterId = Object.values(this.masterWallets)[0].id;
-        //     }
-        // }
-
-        this.events.publish("walletmanager:initialized");
+        return true;
     }
 
+    // TODO: delete it, we do not use active wallet
     public setRecentWalletId(id) {
         this.localStorage.saveCurMasterId({ masterId: id });
     }
@@ -718,7 +712,7 @@ export class WalletManager {
 
     async getAllMasterWalletBalanceByRPC() {
         for (const masterWallet of Object.values(this.masterWallets)) {
-            this.getAllSubwalletsBalanceByRPC(masterWallet.id);
+            await this.getAllSubwalletsBalanceByRPC(masterWallet.id);
         }
     }
 
@@ -729,7 +723,7 @@ export class WalletManager {
         for (let subWallet of Object.values(masterWallet.subWallets)) {
             if (subWallet.type === CoinType.STANDARD) {
                 // Get balance by RPC if the last block time is one day ago.
-                if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
+                // if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
                     try {
                         const balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName, masterWallet.account.singleAddress);
                         subWallet.balanceByRPC = balance;
@@ -738,7 +732,7 @@ export class WalletManager {
                     } catch (e) {
                         console.log('getBalanceByRPC exception:', e);
                     }
-                }
+                // }
             }
         }
     }
