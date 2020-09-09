@@ -73,7 +73,8 @@ export class ERC20SubWallet extends SubWallet {
         let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
 
         let balanceEla = await erc20Contract.methods.balanceOf(ethAccountAddress).call();
-        this.balance = balanceEla * Config.SELA;
+        // TODO: the balanceEla unit is wei(10^18), this.balance unit is sela(10^8)
+        this.balance = balanceEla / 10000000000;
 
         // Update the "last sync" date. Just consider this http call date as the sync date for now
         this.timestamp = new Date().getTime();

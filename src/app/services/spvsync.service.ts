@@ -202,15 +202,7 @@ export class SPVSyncService {
                 break;
             case ETHSCEventAction.CHANGED:
                 if ('CONNECTED' === event.event.NewState) {
-                    this.walletsSyncProgress[masterId][chainId] = {progress: 100, lastBlockTime: new Date().getTime()};
-                    // If we are reaching 100% sync and this is the first time we reach it, we show a notification
-                    // to the user.
-                    // if (event.Progress == 100) {
-                    //     let notificationSent = await this.syncCompletedNotificationSent(chainId);
-                    //     if (!notificationSent) {
-                    //         await this.sendSyncCompletedNotification(chainId);
-                    //     }
-                    // }
+                    this.walletsSyncProgress[masterId][chainId] = {progress: 100, lastBlockTime: new Date().getTime() / 1000};
                 }
                 break;
             default:
