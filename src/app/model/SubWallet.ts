@@ -57,6 +57,4 @@ export abstract class SubWallet {
     public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
     public abstract async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string>;
     public abstract async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void>;
-
-    public abstract async createTransfer(toAddress: string, amount: string, amountUnit: number): Promise<string>;
 }

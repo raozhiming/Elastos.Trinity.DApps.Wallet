@@ -138,10 +138,6 @@ export class ERC20SubWallet extends SubWallet {
         return Promise.resolve();
     }
 
-    public async createTransfer(toAddress: string, amount: string, amountUnit: number): Promise<string> {
-        return Promise.resolve('');
-    }
-
     async tempInitialTestToUseERC20Stuff() {
         /*
         // Determine the nonce

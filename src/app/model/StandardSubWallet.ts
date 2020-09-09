@@ -6,6 +6,7 @@ import { AllTransactions } from './Transaction';
 import * as moment from 'moment';
 import { Transfer } from '../services/cointransfer.service';
 import { SignedTransaction } from './SPVWalletPluginBridge';
+import { Config } from '../config/Config';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -75,13 +76,19 @@ export class StandardSubWallet extends SubWallet {
      * saying that a new balance amount is available.
      */
     public async updateBalance() {
-        // if the balance form spvsdk is newer, then use it.
-        if (!this.lastBlockTime || (moment(this.lastBlockTime).valueOf() > this.timestampRPC)) {
-            // Get the current balance from the wallet plugin.
+        if (this.id === StandardCoinName.ETHSC) {
             let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
+            // TODO: use Ether? Gwei? Wei?
+            this.balance = Math.round(parseFloat(balanceStr) * Config.SELA);
+        } else {
+            // if the balance form spvsdk is newer, then use it.
+            if (!this.lastBlockTime || (moment(this.lastBlockTime).valueOf() > this.timestampRPC)) {
+                // Get the current balance from the wallet plugin.
+                let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
 
-            // Balance in SELA
-            this.balance = parseInt(balanceStr, 10);
+                // Balance in SELA
+                this.balance = parseInt(balanceStr, 10);
+            }
         }
     }
 
@@ -113,14 +120,24 @@ export class StandardSubWallet extends SubWallet {
     }
 
     public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string> {
-        const rawTx = await this.masterWallet.walletManager.spvBridge.createTransaction(
-            this.masterWallet.id,
-            this.id, // From subwallet id
-            '', // From address, not necessary
-            toAddress,
-            amount,
-            memo // User input memo
-        );
+        let rawTx = '';
+        if (this.id === StandardCoinName.ETHSC) {
+            rawTx = await this.masterWallet.walletManager.spvBridge.createTransfer(
+                this.masterWallet.id,
+                toAddress,
+                amount,
+                6 // ETHER_ETHER
+            );
+        } else {// ELA, IDChain
+            rawTx = await this.masterWallet.walletManager.spvBridge.createTransaction(
+                this.masterWallet.id,
+                this.id, // From subwallet id
+                '', // From address, not necessary
+                toAddress,
+                amount,
+                memo // User input memo
+            );
+        }
         return rawTx;
     }
 
@@ -194,15 +211,5 @@ export class StandardSubWallet extends SubWallet {
                 resolve();
             }
         });
-    }
-
-    public async createTransfer(toAddress: string, amount: string, amountUnit: number): Promise<string> {
-        const rawTx = await this.masterWallet.walletManager.spvBridge.createTransfer(
-            this.masterWallet.id,
-            toAddress,
-            amount,
-            amountUnit
-        );
-        return rawTx;
     }
 }

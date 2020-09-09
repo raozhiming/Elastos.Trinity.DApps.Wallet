@@ -154,7 +154,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
                 // Setup params for recharge transaction
                 this.transaction = this.createRechargeTransaction;
-                await this.getSubwalletAddress(this.coinTransferService.subchainId);
+                this.toAddress = await this.toSubWallet.createAddress();
 
                 // Auto suggest a transfer amount of 0.1 ELA (enough) to the ID chain. Otherwise, let user define his own amount.
                 if (this.toSubWallet.id === StandardCoinName.IDChain) {
@@ -173,7 +173,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
                 // Setup params for withdraw transaction
                 this.transaction = this.createWithdrawTransaction;
-                await this.getSubwalletAddress(StandardCoinName.ELA);
+                this.toAddress = await this.toSubWallet.createAddress();
 
                 console.log('Transferring from..', this.fromSubWallet);
                 console.log('Transferring To..', this.toSubWallet);
@@ -183,11 +183,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             case TransferType.SEND:
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
                 this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
-                if (this.chainId === 'ETHSC') {
-                    this.transaction = this.createETHSCSendTransaction;
-                } else {
-                    this.transaction = this.createSendTransaction;
-                }
+                this.transaction = this.createSendTransaction;
                 break;
             // For Pay Intent
             case TransferType.PAY:
@@ -218,15 +214,13 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         }
     }
 
-    async getSubwalletAddress(chainId: string) {
-        this.toAddress = await this.walletManager.spvBridge.createAddress(
-            this.masterWallet.id,
-            chainId
-        );
-    }
-
     async createSendTransaction() {
-        const toAmount = this.accMul(this.amount, Config.SELA);
+        let toAmount: number;
+        if (this.chainId === StandardCoinName.ETHSC) {
+            toAmount = this.amount;
+        } else {
+            toAmount = this.accMul(this.amount, Config.SELA);
+        }
 
         // Call dedicated api to the source subwallet to generate the appropriate transaction type.
         // For example, ERC20 token transactions are different from standard coin transactions (for now - as
@@ -302,29 +296,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         });
 
         let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
-        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
-    }
-
-    async createETHSCSendTransaction() {
-        // Call dedicated api to the source subwallet to generate the appropriate transaction type.
-        // For example, ERC20 token transactions are different from standard coin transactions (for now - as
-        // the spv sdk doesn't support ERC20 yet).
-        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
-        let rawTx = await sourceSubwallet.createTransfer(
-            this.toAddress, // User input address
-            this.amount.toString(), // User input amount
-            6 // ETHER_ETHER
-        );
-
-        let transfer = new Transfer();
-        Object.assign(transfer, {
-            masterWalletId: this.masterWallet.id,
-            chainId: this.chainId,
-            rawTransaction: rawTx,
-            action: this.transferType === TransferType.PAY ? this.coinTransferService.intentTransfer.action : null ,
-            intentId: this.transferType === TransferType.PAY ? this.coinTransferService.intentTransfer.intentId : null ,
-        });
-
         await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
