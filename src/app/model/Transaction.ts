@@ -19,6 +19,7 @@ export type Transaction = {
     Height: number;
     Status: TransactionStatus;
     Timestamp: number;
+    TopUpSidechain: string;
     TxHash: string;
     Type: number;
     OutputPayload: string;

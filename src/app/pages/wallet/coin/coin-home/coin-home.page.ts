@@ -222,7 +222,16 @@ export class CoinHomePage implements OnInit {
                             name = this.translate.instant("coin-dir-from-mainchain");
                             break;
                         case 7: // WithdrawFromSideChain
-                            name = this.translate.instant("coin-dir-from-idchain");
+                            switch (transaction.TopUpSidechain) {
+                                case StandardCoinName.IDChain:
+                                    name = this.translate.instant("coin-dir-from-idchain");
+                                    break;
+                                case StandardCoinName.ETHSC:
+                                    name = this.translate.instant("coin-dir-from-ethsc");
+                                    break;
+                                default:
+                                    break;
+                            }
                             break;
                         default:
                         break;
@@ -234,10 +243,16 @@ export class CoinHomePage implements OnInit {
                     name = this.translate.instant("coin-op-sent-ela");
 
                     if (type === 8) { // TransferCrossChainAsset
-                        if (this.chainId === 'ELA') {
-                            name = this.translate.instant("coin-dir-to-idchain");
-                        } else { // IDChain
-                            name = this.translate.instant("coin-dir-to-mainchain");
+                        switch (transaction.TopUpSidechain) {
+                            case StandardCoinName.IDChain:
+                                name = this.translate.instant("coin-dir-to-idchain");
+                                break;
+                            case StandardCoinName.ETHSC:
+                                name = this.translate.instant("coin-dir-to-ethsc");
+                                break;
+                            default:
+                                name = this.translate.instant("coin-dir-to-mainchain");
+                                break;
                         }
                     }
                 } else if (transaction.Direction === TransactionDirection.MOVED) {
