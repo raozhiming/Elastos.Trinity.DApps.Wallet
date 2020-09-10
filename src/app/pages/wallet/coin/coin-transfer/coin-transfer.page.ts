@@ -214,6 +214,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Same chain, different "users"
+     */
     async createSendTransaction() {
         let toAmount: number;
         if (this.chainId === StandardCoinName.ETHSC) {
@@ -244,6 +247,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
+    /**
+     * From mainchain to sidechains (ID, ETH)
+     */
     async createRechargeTransaction() {
         const toAmount = this.accMul(this.amount, Config.SELA);
 
@@ -272,6 +278,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
+    /**
+     * From sidechain (ID, ETH) to mainchain
+     */
     async createWithdrawTransaction() {
         const toAmount = this.accMul(this.amount, Config.SELA);
 
