@@ -3,7 +3,7 @@ import { Native } from '../../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { SubWallet } from 'src/app/model/SubWallet';
-import { StandardCoinName } from 'src/app/model/Coin';
+import { StandardCoinName, CoinType } from 'src/app/model/Coin';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { AppService } from 'src/app/services/app.service';
 import { ThemeService } from 'src/app/services/theme.service';
@@ -58,7 +58,7 @@ export class CoinSelectPage implements OnInit {
         if (this.coinTransferService.chainId !== 'ELA') {
             this.subWallets = [this.masterWallet.getSubWallet('ELA')];
         } else {
-            this.subWallets = this.masterWallet.subWalletsWithExcludedCoin(this.coinTransferService.chainId);
+            this.subWallets = this.masterWallet.subWalletsWithExcludedCoin(this.coinTransferService.chainId, CoinType.STANDARD);
         }
     }
 

@@ -125,9 +125,9 @@ export class MasterWallet {
     /**
      * Returns the list of all subwallets except the excluded one.
      */
-    public subWalletsWithExcludedCoin(excludedCoinName: StandardCoinName): SubWallet[] {
+    public subWalletsWithExcludedCoin(excludedCoinName: StandardCoinName, type: CoinType = null): SubWallet[] {
         return Object.values(this.subWallets).filter((sw)=>{
-            return sw.id !== excludedCoinName;
+            return (sw.id !== excludedCoinName) && (type !== null ? sw.type === type : true);
         });
     }
 
