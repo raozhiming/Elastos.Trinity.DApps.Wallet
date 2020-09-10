@@ -3,7 +3,8 @@ import { Platform } from '@ionic/angular';
 import { Native } from '../../services/native.service';
 import { WalletManager } from '../../services/wallet.service'
 import { Config } from '../../config/Config';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { Util } from 'src/app/model/Util';
 
 @Component({
     selector: 'app-scancode',
@@ -17,10 +18,11 @@ export class ScanCodePage implements OnInit {
     public fee: any;
     public amount: string;
     public iwidth: string = null;
-    constructor(public route: ActivatedRoute, public native: Native, public walletManager: WalletManager, public zone: NgZone, public plt: Platform) {
+    constructor(public router: Router, public native: Native, public walletManager: WalletManager, public zone: NgZone, public plt: Platform) {
         this.iwidth = (this.plt.width() - 10).toString();
-        this.route.queryParams.subscribe((data) => {
-            let params = data;
+        const navigation = this.router.getCurrentNavigation();
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            let params = navigation.extras.state;
             this.fee = params["tx"]["fee"];
             let txObj = params["tx"]["raw"];
 
@@ -31,8 +33,7 @@ export class ScanCodePage implements OnInit {
             this.zone.run(() => {
                 this.qrcode = JSON.stringify(params);
             });
-            this.native.info(data);
-        });
+        }
     }
 
     ngOnInit() {

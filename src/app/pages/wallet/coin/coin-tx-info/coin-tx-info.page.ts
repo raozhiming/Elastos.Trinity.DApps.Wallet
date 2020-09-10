@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Events } from '@ionic/angular';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
@@ -8,16 +8,10 @@ import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { AppService } from 'src/app/services/app.service';
 import { StandardCoinName } from 'src/app/model/Coin';
-import { TransactionStatus, TransactionDirection } from 'src/app/model/Transaction';
+import { TransactionStatus, TransactionDirection, TransactionType, TransactionInfo } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ThrowStmt } from '@angular/compiler';
 
-enum TransactionType {
-    RECEIVE = 1,
-    SENT = 2,
-    TRANSFER = 3
-}
 
 @Component({
     selector: 'app-coin-tx-info',
@@ -27,6 +21,7 @@ enum TransactionType {
 export class CoinTxInfoPage implements OnInit {
 
     private masterWallet: MasterWallet = null;
+    private transactionInfo: TransactionInfo;
     private blockchain_url = Config.BLOCKCHAIN_URL;
     private idchain_url = Config.IDCHAIN_URL;
 
@@ -38,7 +33,7 @@ export class CoinTxInfoPage implements OnInit {
 
     // Params data
     public txId: string = '';
-    public name: string = '';
+    public chainId: string = '';
 
     // Raw tx data
     public memo: string = '';
@@ -47,7 +42,7 @@ export class CoinTxInfoPage implements OnInit {
 
     // Modified data
     public status: string = '';
-    public resultAmount: string = '';
+    public amount: string;
     public payFee: number;
     public datetime: any;
     public payType: string = '';
@@ -67,13 +62,14 @@ export class CoinTxInfoPage implements OnInit {
 
     constructor(
         public events: Events,
-        public route: ActivatedRoute,
+        public router: Router,
         public walletManager: WalletManager,
         public native: Native,
         private appService: AppService,
         private translate: TranslateService,
         public theme: ThemeService
     ) {
+        this.init();
     }
 
     ngOnInit() {
@@ -81,7 +77,6 @@ export class CoinTxInfoPage implements OnInit {
 
     ionViewWillEnter() {
         this.appService.setBackKeyVisibility(true);
-        this.init();
     }
 
     ionViewDidLeave() {
@@ -89,31 +84,46 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     init() {
-        this.route.queryParams.subscribe((data) => {
-            this.masterWallet = this.walletManager.getMasterWallet(data.masterWalletId);
-            this.txId = data.txId;
-            this.name = data.chainId;
+        this.appService.setTitleBarTitle(this.translate.instant("tx-info-title"));
 
-            this.appService.setTitleBarTitle(this.translate.instant("tx-info-title"));
+        const navigation = this.router.getCurrentNavigation();
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            this.transactionInfo = navigation.extras.state.transactionInfo;
+            console.log('----this.transactionInfo:', this.transactionInfo);
+
+            this.masterWallet = this.walletManager.getMasterWallet(navigation.extras.state.masterWalletId);
+            this.chainId = navigation.extras.state.chainId;
+            // Raw data
+            this.amount = this.transactionInfo.amount;
+            this.timestamp = this.transactionInfo.timestamp * 1000;
+            this.datetime = this.transactionInfo.datetime;
+            this.confirmCount = this.transactionInfo.confirmStatus;
+            this.memo = this.transactionInfo.memo;
+            this.symbol = this.transactionInfo.symbol;
+            this.type = this.transactionInfo.type;
+            this.payFee = this.transactionInfo.fee;
+            this.payStatusIcon = this.transactionInfo.payStatusIcon;
+
+            // Display header data
+            let direction = this.transactionInfo.direction;
+            if (direction === TransactionDirection.RECEIVED) {
+                this.direction = this.translate.instant("tx-info-type-received");
+            } else if (direction === TransactionDirection.SENT) {
+                this.direction = this.translate.instant("tx-info-type-sent");
+            } else if (direction === TransactionDirection.MOVED) {
+                this.direction = this.translate.instant("tx-info-type-transferred");
+            }
 
             this.getTransactionInfo();
-        });
+        }
     }
 
     async getTransactionInfo() {
-        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.name, 0, this.txId);
+        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id,
+            this.chainId, 0, this.transactionInfo.txId);
         let transaction = allTransactions.Transactions[0];
         console.log('Raw tx', transaction);
 
-        // Raw data
-        this.timestamp = transaction.Timestamp * 1000;
-        this.confirmCount = transaction.ConfirmStatus;
-        this.memo = transaction.Memo;
-
-        // Modified data
-        this.datetime = this.timestamp === 0 ? this.translate.instant("coin-transaction-status-pending") : Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
-        this.resultAmount = Util.scientificToNumber(transaction.Amount / Config.SELA);
-        this.payFee = Util.scientificToNumber(transaction.Fee / Config.SELA);
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
 
@@ -133,35 +143,16 @@ export class CoinTxInfoPage implements OnInit {
                 break;
         }
 
-        // Display header data
-        let direction = transaction.Direction;
-        if (direction === TransactionDirection.RECEIVED) {
-            this.type = 1;
-            this.direction = this.translate.instant("tx-info-type-received");
-            this.payStatusIcon = '/assets/buttons/receive.png';
-            this.symbol = "+";
-        } else if (direction === TransactionDirection.SENT) {
-            this.type = 2;
-            this.direction = this.translate.instant("tx-info-type-sent");
-            this.payStatusIcon = '/assets/buttons/send.png';
-            this.symbol = "-";
-        } else if (direction === TransactionDirection.MOVED) {
-            this.type = 3;
-            this.direction = this.translate.instant("tx-info-type-transferred");
-            this.payStatusIcon = '/assets/buttons/transfer.png';
-            this.symbol = "";
-        }
-
         this.payType = "transaction-type-13";
-        if ((transaction.Type >= 0) && transaction.Type <= 12) {
-            if (transaction.Type === 10) {
-                if (this.name === StandardCoinName.IDChain) {
+        if ((this.type >= 0) && this.type <= 12) {
+            if (this.type === 10) {
+                if (this.chainId === StandardCoinName.IDChain) {
                     this.payType = "transaction-type-did";
                 } else {
                     this.payType = "transaction-type-10";
                 }
             } else {
-                this.payType = "transaction-type-" + transaction.Type;
+                this.payType = "transaction-type-" + this.type;
             }
         }
 
@@ -173,7 +164,7 @@ export class CoinTxInfoPage implements OnInit {
 
     subscribeprogressEvent() {
         if (!this.hasSubscribeprogressEvent) {
-            this.events.subscribe(this.name + ':syncprogress', (coin) => {
+            this.events.subscribe(this.chainId + ':syncprogress', (coin) => {
                 this.getTransactionInfo();
             });
             this.hasSubscribeprogressEvent = true;
@@ -181,7 +172,7 @@ export class CoinTxInfoPage implements OnInit {
     }
     unsubscribeprogressEvent() {
         if (this.hasSubscribeprogressEvent) {
-            this.events.unsubscribe(this.name + ':syncprogress');
+            this.events.unsubscribe(this.chainId + ':syncprogress');
             this.hasSubscribeprogressEvent = false;
         }
     }
@@ -223,10 +214,10 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     getDisplayableName(): string {
-        if (this.name === 'IDChain') {
+        if (this.chainId === 'IDChain') {
             return 'ELA';
         } else {
-            return this.name;
+            return this.chainId;
         }
     }
 

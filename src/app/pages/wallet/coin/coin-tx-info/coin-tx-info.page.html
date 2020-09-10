@@ -10,7 +10,7 @@
                 <ion-img [src]="payStatusIcon"></ion-img>
             </div>
             <ion-card-title>{{ direction }} {{ getDisplayableName() }}</ion-card-title>
-            <ion-card-subtitle>{{ symbol }}{{ resultAmount }}</ion-card-subtitle>
+            <ion-card-subtitle>{{ symbol }}{{ amount }}</ion-card-subtitle>
             <p
                 [class.complete]="status === 'Confirmed'"
                 [class.pending]="status === 'Pending'"
@@ -18,7 +18,7 @@
             > {{ status }}
             </p>
         </ion-card>
-    
+
         <ion-row class="section-row"  (click)="timeActive = !timeActive">
             <ion-col size="11" class="name-col">
                 <h1>{{ 'tx-info-transaction-time' | translate }}</h1>
@@ -74,7 +74,7 @@
             </ion-col>
             <div *ngIf="feesActive" class="details-container">
                 <div class="details-row">
-                    <h2>{{ payFee }} {{ name }}</h2>
+                    <h2>{{ payFee }} {{ chainId }}</h2>
                 </div>
             </div>
         </ion-row>

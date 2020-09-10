@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { Native } from '../../../services/native.service';
 import { LocalStorage } from '../../../services/storage.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Util } from 'src/app/model/Util';
 
 @Component({
     selector: 'app-contacts',
@@ -15,10 +16,11 @@ export class ContactsPage implements OnInit {
     masterId: string = "1";
     isShow: boolean = false;
     params: any = {};
-    constructor(public route: ActivatedRoute, public native: Native, public localStorage: LocalStorage, public events: Events) {
-        this.route.queryParams.subscribe((data) => {
-            this.params = data || {};
-        });
+    constructor(public router: Router, public native: Native, public localStorage: LocalStorage, public events: Events) {
+        const navigation = this.router.getCurrentNavigation();
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            this.params = navigation.extras.state || {};
+        }
         if (typeof this.params["exatOption"] == "string") {
             this.params["exatOption"] = JSON.parse(this.params["exatOption"]);
             this.isShow = this.params["exatOption"]["hideButton"] || false;

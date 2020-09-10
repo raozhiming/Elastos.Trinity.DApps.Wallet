@@ -3,7 +3,7 @@ import { Util } from "../../../model/Util";
 import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { LocalStorage } from '../../../services/storage.service';
 import { PopupProvider } from '../../../services/popup.service';
 
@@ -13,7 +13,7 @@ import { PopupProvider } from '../../../services/popup.service';
     styleUrls: ['./contact-create.page.scss'],
 })
 export class ContactCreatePage implements OnInit {
-    contactUser = {};
+    contactUser: any;
     id: String;
     name: String;
     address: String;
@@ -22,33 +22,31 @@ export class ContactCreatePage implements OnInit {
     remark: String;
     isEdit: boolean = false;
 
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager,
-        public native: Native,
-        public localStorage: LocalStorage,
-        public events: Events,
-        public popupProvider: PopupProvider) {
+    constructor(public router: Router, public walletManager: WalletManager,
+            public native: Native,
+            public localStorage: LocalStorage,
+            public events: Events,
+            public popupProvider: PopupProvider) {
 
-        this.route.queryParams.subscribe((data) => {
-            if (!Util.isEmptyObject(data)) {
-                this.contactUser = data;
-                this.id = data.id;
-                this.name = data.name;
-                this.address = data.address;
-                this.phone = data.phone;
-                this.email = data.email;
-                this.remark = data.remark;
-                this.isEdit = true;
-            }
-            else {
-                this.id = Util.uuid();
-                // console.log(this.id);
-                this.name = "";
-                this.address = "";
-                this.phone = "";
-                this.email = "";
-            }
-        });
-
+        const navigation = this.router.getCurrentNavigation();
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            this.contactUser = navigation.extras.state;
+            this.id = this.contactUser.id;
+            this.name = this.contactUser.name;
+            this.address = this.contactUser.address;
+            this.phone = this.contactUser.phone;
+            this.email = this.contactUser.email;
+            this.remark = this.contactUser.remark;
+            this.isEdit = true;
+        }
+        else {
+            this.id = Util.uuid();
+            // console.log(this.id);
+            this.name = "";
+            this.address = "";
+            this.phone = "";
+            this.email = "";
+        }
     }
 
     ngOnInit() {

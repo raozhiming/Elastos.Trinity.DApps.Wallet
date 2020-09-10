@@ -21,7 +21,6 @@
  */
 
 import { Injectable, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
 import { ToastController, LoadingController, NavController } from '@ionic/angular';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { TranslateService } from '@ngx-translate/core';
@@ -40,7 +39,6 @@ export class Native {
         private loadingCtrl: LoadingController,
         private navCtrl: NavController,
         private zone: NgZone,
-        private router: Router
     ) {
     }
 
@@ -85,8 +83,7 @@ export class Native {
         console.log("Navigating to:", page);
         this.zone.run(() => {
             this.hideLoading();
-            this.navCtrl.setDirection('forward');
-            this.router.navigate([page], { queryParams: options });
+            this.navCtrl.navigateForward([page], { state: options });
         });
     }
 
@@ -102,8 +99,7 @@ export class Native {
         console.log("Setting root router path to:", page);
         this.zone.run(() => {
             this.hideLoading();
-            this.navCtrl.setDirection('root');
-            this.router.navigate([page], { queryParams: options });
+            this.navCtrl.navigateRoot([page], { state: options });
         });
     }
 
@@ -144,7 +140,7 @@ export class Native {
         this.loader.onWillDismiss().then(()=>{
             this.loader = null;
         });
-        
+
         return await this.loader.present();
     }
 

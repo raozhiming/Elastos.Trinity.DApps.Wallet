@@ -11,8 +11,30 @@ export enum TransactionDirection {
     DEPOSIT = "Deposit"
 }
 
+export enum TransactionType {
+    RECEIVED = 1,
+    SENT = 2,
+    TRANSFER = 3
+}
+
+export type TransactionInfo = {
+    amount: string,
+    confirmStatus: string,
+    datetime: any,
+    direction: TransactionDirection,
+    fee: number,
+    memo: string;
+    name: string,
+    payStatusIcon: string,
+    status: string,
+    symbol: string,
+    timestamp: number,
+    txId: string,
+    type: TransactionType,
+};
+
 export type Transaction = {
-    Amount: number;
+    Amount: string;
     Fee: number;
     ConfirmStatus: string;
     Direction: TransactionDirection;
@@ -26,9 +48,25 @@ export type Transaction = {
     Inputs: any; // TODO: type
     Outputs: any; // TODO: type
     Memo: string;
+
+    // ETHSC
+    BlockNumber: number;
+    Confirmations: number;
+    ErrorDesc: string;
+    GasLimit: number;
+    GasPrice: string;
+    GasUsed: number;
+    Hash: string;
+    ID: string;
+    IsConfirmed: boolean;
+    IsErrored: boolean;
+    IsSubmitted: boolean;
+    OriginTxHash: string;
+    SourceAddress: string;
+    TargetAddress: string;
 };
 
 export type AllTransactions = {
     MaxCount: number,
     Transactions: Transaction[]
-}
+};

@@ -1,9 +1,8 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Events } from '@ionic/angular';
 import { AppService } from '../../../../services/app.service';
 import { AuthService } from '../../../../services/auth.service';
-import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
@@ -35,7 +34,7 @@ export class MnemonicExportPage implements OnInit {
     public intentTransfer: IntentTransfer;
 
     constructor(
-        public route: ActivatedRoute,
+        public router: Router,
         public walletManager: WalletManager,
         public zone: NgZone,
         private walletEditionService: WalletEditionService,
@@ -67,23 +66,22 @@ export class MnemonicExportPage implements OnInit {
     }
 
     init() {
-        this.route.queryParams.subscribe((data) => {
-            this.zone.run(() => {
-                if (!Util.isEmptyObject(data)) {
-                    console.log('From intent');
-                    this.isFromIntent = true;
-                    this.intentTransfer = this.walletAccessService.intentTransfer;
-                    this.masterWalletId = this.walletAccessService.masterWalletId;
-                    this.title = 'access-mnemonic';
-                } else {
-                    this.title = 'text-export-mnemonic';
-                    this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
-                }
+        const navigation = this.router.getCurrentNavigation();
+        this.zone.run(() => {
+            if (!Util.isEmptyObject(navigation.extras.state)) {
+                console.log('From intent');
+                this.isFromIntent = true;
+                this.intentTransfer = this.walletAccessService.intentTransfer;
+                this.masterWalletId = this.walletAccessService.masterWalletId;
+                this.title = 'access-mnemonic';
+            } else {
+                this.title = 'text-export-mnemonic';
+                this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
+            }
 
-                const masterWallet = this.walletManager.getMasterWallet(this.masterWalletId);
-                this.walletname = masterWallet.name;
-                this.account = masterWallet.account.Type;
-            });
+            const masterWallet = this.walletManager.getMasterWallet(this.masterWalletId);
+            this.walletname = masterWallet.name;
+            this.account = masterWallet.account.Type;
         });
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
@@ -11,7 +11,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { WalletAccessService } from 'src/app/services/walletaccess.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -30,7 +30,7 @@ export class WalletManagerPage implements OnInit {
     constructor(
         public events: Events,
         public native: Native,
-        private route: ActivatedRoute,
+        public router: Router,
         private appService: AppService,
         public theme: ThemeService,
         private walletEditionService: WalletEditionService,
@@ -42,16 +42,14 @@ export class WalletManagerPage implements OnInit {
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe((data) => {
-            if (data.forIntent === 'true') {
-                this.forIntent = true;
-            }
-            if (data.forWalletAccess === 'true') {
-                this.forWalletAccess = true;
-            }
+        const navigation = this.router.getCurrentNavigation();
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            this.forIntent = navigation.extras.state.forIntent;
+            this.forWalletAccess = navigation.extras.state.forWalletAccess;
+
             console.log('For intent?', this.forIntent);
             console.log('For wallet access?', this.forWalletAccess);
-        });
+        }
     }
 
     ionViewWillEnter() {

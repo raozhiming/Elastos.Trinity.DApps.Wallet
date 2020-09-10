@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { LocalStorage } from '../../../services/storage.service';
 import { Util } from "../../../model/Util";
 
@@ -16,17 +16,19 @@ export class ContactListPage implements OnInit {
     contactUsers = [];
     params: any = {};
     isHide = true;
-    constructor(public route: ActivatedRoute, public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events) {
+    constructor(public router: Router, public walletManager: WalletManager, public native: Native, public localStorage: LocalStorage, public events: Events) {
         this.init();
     }
     ngOnInit() {
     }
 
     init() {
-        this.route.queryParams.subscribe((data) => {
-            this.params = data || {};
-            this.isHide = this.params["hideButton"] || false;
-        });
+        const navigation = this.router.getCurrentNavigation();
+        this.params = {};
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            this.params = navigation.extras.state;
+        }
+        this.isHide = this.params["hideButton"] || false;
         this.events.subscribe("contanctList:update", () => {
             this.localStorage.get('contactUsers').then((val) => {
                 if (val) {
