@@ -40,9 +40,7 @@ export class CoinService {
         this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "Elastos"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.IDChain, "ELA/ID", "Elastos DID"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.ETHSC, "ELA/ETHSC", "Elastos ETH"));
-        this.availableCoins.push(new ERC20Coin("MEC", "MEC", "Ben's ERC20 token", "0xc4032babad2b76c39abec3c4e365611de78528ed"));
-        this.availableCoins.push(new ERC20Coin("COOL", "COOL", "Another ERC20 token", "0xc4032babad2b76c39abec3c4e365611de78528ed"));
-        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech Demo", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c"));
+        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c"));
     }
 
     public getAvailableCoins(): Coin[] {
