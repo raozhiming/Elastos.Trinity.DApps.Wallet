@@ -1,0 +1,41 @@
+<ion-content>
+    <ion-grid class="container ion-no-padding ion-no-margin" [class.darkContainer]="theme.darkMode">
+        <ion-row>
+            Manually enter the token address or scan its QR code. After validation, the token will be added
+            to your wallet automatically.
+        </ion-row>
+        <ion-row>
+            <ion-col size="10" class="left-col">
+                <ion-input
+                    #input
+                    autosize
+                    clearInput
+                    [placeholder]="'coin-add-erc20-coin-address' | translate"
+                    [(ngModel)]="coinAddress"
+                    (input)='onInputAddress($event.target.value)'
+                    mode="ios">
+                </ion-input>
+            </ion-col>
+            <ion-col size="2" class="right-col">
+                <img (click)="scanCoinAddress()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="coinInfoFetched">
+            <h2>Coin Name</h2>
+        </ion-row>
+        <ion-row *ngIf="coinInfoFetched">
+            {{ coinName }}
+        </ion-row>
+        <ion-row *ngIf="coinInfoFetched">
+            <h2>Coin Symbol</h2>
+        </ion-row>
+        <ion-row *ngIf="coinInfoFetched">
+            {{ coinSymbol }}
+        </ion-row>
+        <ion-row class="btn-container">
+            <ion-button color="primary" (click)="addCoin()" *ngIf="coinInfoFetched">
+                <ion-label>{{ 'add-coin-to-wallet' | translate }}</ion-label>
+            </ion-button>
+        </ion-row>
+    </ion-grid>
+</ion-content>

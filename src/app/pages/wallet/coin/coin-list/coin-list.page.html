@@ -1,5 +1,5 @@
 <ion-content>
-    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+    <ion-grid class="container" [class.dark-container]="theme.darkMode" *ngIf="masterWallet">
         <ion-row
             class="card-row"
             [ngStyle]="

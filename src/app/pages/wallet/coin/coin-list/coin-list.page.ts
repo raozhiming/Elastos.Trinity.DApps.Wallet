@@ -15,6 +15,8 @@ import { Util } from 'src/app/model/Util';
 import { TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/services/ui.service';
 
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
+
 type EditableCoinInfo = {
     coin: Coin,
     isOpen: boolean
@@ -39,6 +41,9 @@ export class CoinListPage implements OnInit, OnDestroy {
     public Util = Util;
     public SELA = Config.SELA;
 
+    // Titlebar
+    private onItemClickedListener: any;
+
     constructor(
         public walletManager: WalletManager,
         public popupProvider: PopupProvider,
@@ -57,11 +62,32 @@ export class CoinListPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        titleBarManager.addOnItemClickedListener(this.onItemClickedListener = (menuIcon: TitleBarPlugin.TitleBarIcon) => {
+            if (menuIcon.key == "add-erc20-coin")
+                this.handleOnAddECR20Coin();
+        });
+    }
+
+    ngOnDestroy() {
+        this.events.unsubscribe("error:update");
+        this.events.unsubscribe("error:destroySubWallet");
+
+        titleBarManager.removeOnItemClickedListener(this.onItemClickedListener);
+        this.onItemClickedListener = null;
     }
 
     ionViewWillEnter() {
         this.appService.setBackKeyVisibility(true);
         this.appService.setTitleBarTitle(this.translate.instant("coin-list-title"));
+
+        titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, {
+            key: "add-erc20-coin",
+            iconPath: TitleBarPlugin.BuiltInIcon.ADD
+        });
+    }
+
+    ionViewWillLeave() {
+        titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
     }
 
     async switchCoin(item: EditableCoinInfo, open: boolean) {
@@ -85,11 +111,18 @@ export class CoinListPage implements OnInit, OnDestroy {
         this.events.subscribe("error:destroySubWallet", () => {
             this.currentCoin["open"] = true;
         });
+        this.events.subscribe("custom-coin-added", () => {
+            this.refreshCoinList();
+        });
 
         this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
 
         this.native.hideLoading();
 
+        this.refreshCoinList();
+    }
+
+    private refreshCoinList() {
         this.coinList = [];
         for (let availableCoin of this.coinService.getAvailableCoins()) {
             let isOpen = (availableCoin.getID() in this.masterWallet.subWallets);
@@ -114,11 +147,6 @@ export class CoinListPage implements OnInit, OnDestroy {
         this.native.hideLoading();
 
         await this.masterWallet.destroySubWallet(coin.getID());
-    }
-
-    ngOnDestroy() {
-        this.events.unsubscribe("error:update");
-        this.events.unsubscribe("error:destroySubWallet");
     }
 
     onSelect(item: EditableCoinInfo) {
@@ -154,5 +182,10 @@ export class CoinListPage implements OnInit, OnDestroy {
             default:
                 return "assets/coins/eth.svg";
         }
+    }
+
+    // User wants to add a new ERC20 token of his own to the available list of tokens.
+    private handleOnAddECR20Coin() {
+        this.native.go("/coin-add-erc20");
     }
 }

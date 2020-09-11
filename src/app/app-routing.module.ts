@@ -56,6 +56,7 @@ import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
 import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
+import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 
 const routes: Routes = [
 
@@ -87,6 +88,7 @@ const routes: Routes = [
     { path: 'coin-receive', component: CoinReceivePage },
     { path: 'coin-tx-info', component: CoinTxInfoPage },
     { path: 'coin-transfer', component: CoinTransferPage },
+    { path: 'coin-add-erc20', component: CoinAddERC20Page },
 
     // Contacts
     { path: 'contacts', component: ContactsPage },

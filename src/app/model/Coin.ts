@@ -19,7 +19,6 @@ export namespace StandardCoinName {
 }
 
 export class Coin {
-
     constructor(
         private type: CoinType,
         private id: CoinID,
@@ -66,5 +65,11 @@ export class ERC20Coin extends Coin {
      */
     getContractAddress(): string {
         return this.erc20ContractAddress;
+    }
+
+    static fromJson(jsonCoin: any): ERC20Coin {
+        let coin = new ERC20Coin(null, null, null, null);
+        Object.assign(coin, jsonCoin);
+        return coin;
     }
 }

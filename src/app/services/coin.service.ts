@@ -23,6 +23,9 @@
 import { Injectable } from '@angular/core';
 import { Coin, CoinID, ERC20Coin, StandardCoin } from '../model/Coin';
 import { StandardCoinName } from '../model/Coin';
+import { LocalStorage } from './storage.service';
+import { Events } from '@ionic/angular';
+import { MasterWallet } from '../model/MasterWallet';
 
 @Injectable({
     providedIn: 'root'
@@ -30,17 +33,21 @@ import { StandardCoinName } from '../model/Coin';
 export class CoinService {
     private availableCoins: Coin[] = null;
 
-    constructor() {
+    constructor(private storage: LocalStorage, private events: Events) {
         this.initializeCoinList();
     }
 
-    private initializeCoinList() {
+    private async initializeCoinList() {
         this.availableCoins = [];
 
         this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "Elastos"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.IDChain, "ELA/ID", "Elastos DID"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.ETHSC, "ELA/ETHSC", "Elastos ETH"));
         this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c"));
+
+        await this.addCustomERC20CoinsToAvailableCoins();
+
+        console.log("Available coins:", this.availableCoins);
     }
 
     public getAvailableCoins(): Coin[] {
@@ -51,5 +58,53 @@ export class CoinService {
         return this.availableCoins.find((c)=>{
             return c.getID() == id;
         });
+    }
+
+    /**
+     * Adds a custom ERC20 coin to the list of available coins.
+     * If activateInWallet is passed, the coin is automatically added to that wallet.
+     */
+    public async addCustomERC20Coin(coin: ERC20Coin, activateInWallet?: MasterWallet) {
+        console.log("Add coin to custom ERC20 coins list", coin);
+
+        let existingCoins = await this.getCustomERC20Coins();
+        existingCoins.push(coin);
+
+        // Add to the available coins list
+        this.availableCoins.push(coin);
+
+        // Save to permanent storage
+        await this.storage.set("custom-erc20-coins", existingCoins);
+
+        // If needed, activate this new coin in the given wallet
+        if (activateInWallet) {
+            await activateInWallet.createSubWallet(coin);
+        }
+
+        this.events.publish("custom-coin-added", coin.getID());
+    }
+
+    public async  getCustomERC20Coins(): Promise<ERC20Coin[]> {
+        let rawCoinList = await this.storage.get("custom-erc20-coins");
+        if (!rawCoinList)
+            return [];
+
+        let customCoins: ERC20Coin[] = [];
+        for (let rawCoin of rawCoinList) {
+            customCoins.push(ERC20Coin.fromJson(rawCoin));
+        }
+
+        return customCoins;
+    }
+
+    /**
+     * Appens all custom ERC20 coins to the list of available coins.
+     */
+    private async addCustomERC20CoinsToAvailableCoins() {
+        let existingCoins = await this.getCustomERC20Coins();
+
+        for (let coin of existingCoins) {
+            this.availableCoins.push(coin);
+        }
     }
 }

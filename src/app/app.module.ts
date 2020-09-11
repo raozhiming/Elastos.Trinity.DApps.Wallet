@@ -95,6 +95,7 @@ import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component
 import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { HelpComponent } from './components/help/help.component';
+import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 
 
 Sentry.init({
@@ -168,6 +169,7 @@ export function TranslateLoaderFactory() {
         CoinTxInfoPage,
         CoinReceivePage,
         CoinTransferPage,
+        CoinAddERC20Page,
         AboutPage,
         AccessPage,
         WalletCreateNamePage,

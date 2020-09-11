@@ -15,6 +15,9 @@ export class UiService {
   ) { }
 
   getSubWalletIcon(subwallet: SubWallet): string {
+    if (!subwallet)
+      return "";
+
     switch (subwallet.id) {
         case StandardCoinName.ELA:
             return "assets/coins/ela-black.svg";
@@ -28,10 +31,14 @@ export class UiService {
   }
 
   getSubwalletTitle(subwallet: SubWallet): string {
-      return subwallet.getFriendlyName();
+    if (!subwallet)
+      return "";
+    return subwallet.getFriendlyName();
   }
 
   getSubwalletSubtitle(subwallet: SubWallet): string {
+    if (!subwallet)
+      return "";
     return subwallet.getDisplayTokenName();
   }
 

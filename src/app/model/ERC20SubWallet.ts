@@ -58,11 +58,19 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public getFriendlyName(): string {
-        return this.masterWallet.coinService.getCoinByID(this.id).getDescription();
+        let coin = this.masterWallet.coinService.getCoinByID(this.id)
+        if (!coin)
+            return ""; // Just in case
+
+        return coin.getDescription();
     }
 
     public getDisplayTokenName(): string {
-        return this.masterWallet.coinService.getCoinByID(this.id).getName();
+        let coin = this.masterWallet.coinService.getCoinByID(this.id)
+        if (!coin)
+            return ""; // Just in case
+
+        return coin.getName();
     }
 
     public async updateBalance() {
