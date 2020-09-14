@@ -73,6 +73,15 @@ export enum TransferType {
     WITHDRAW = 4
 }
 
+export class ContractPayloadParam {
+    data: string = null;
+    from: string = null;
+    gas: string = null;
+    gasPrice: string = null;
+    to: string = null;
+    value: string = null;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -107,6 +116,9 @@ export class CoinTransferService {
     public crcvotes: any;
     // intent: didtransaction
     public didrequest: any;
+    // intent: esctransaction
+    public payloadParam: ContractPayloadParam;
+    // public amount: number;
 
     // In the process of deprecating
     public transfer: Transfer = null;

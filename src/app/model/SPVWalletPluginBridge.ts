@@ -576,6 +576,33 @@ export class SPVWalletPluginBridge {
         });
     }
 
+    createTransferGeneric(
+        masterWalletId: string,
+        toAddress: string,
+        amount: string,
+        amountUnit: number,
+        gasPrice,
+        gasPriceUnit: number,
+        gasLimit,
+        data: string
+    ): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+             walletManager.createTransferGeneric(
+                [
+                    masterWalletId,
+                    toAddress,
+                    amount,
+                    amountUnit,
+                    gasPrice,
+                    gasPriceUnit,
+                    gasLimit,
+                    data
+                ],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject); });
+        });
+    }
+
     createDepositTransaction(
         masterWalletId: string,
         chainId: string,

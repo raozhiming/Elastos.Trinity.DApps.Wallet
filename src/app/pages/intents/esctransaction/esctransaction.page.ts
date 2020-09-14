@@ -26,7 +26,7 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
-import { CoinTransferService, IntentTransfer } from 'src/app/services/cointransfer.service';
+import { CoinTransferService, IntentTransfer, Transfer } from 'src/app/services/cointransfer.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
@@ -121,26 +121,34 @@ export class EscTransactionPage implements OnInit {
     }
 
     async createEscTransaction() {
-        console.log("Calling createEscTransaction(): ", this.coinTransferService.didrequest);
+        console.log("Calling createEscTransaction(): ", this.coinTransferService.payloadParam);
 
-    /*  /* TODO const rawTx =
-        await this.walletManager.spvBridge.createTransaction(
+        const rawTx =
+        await this.walletManager.spvBridge.createTransferGeneric(
             this.masterWallet.id,
-            this.chainId,
+            this.coinTransferService.payloadParam.to,
+            this.coinTransferService.payloadParam.value,
+            0, // WEI
+            this.coinTransferService.payloadParam.gasPrice,
+            0, // WEI
+            this.coinTransferService.payloadParam.gas, // TODO: gasLimit
+            this.coinTransferService.payloadParam.data
         );
 
         console.log('Created raw ESC transaction:', rawTx);
 
-        const transfer: Transfer = {
+        const transfer = new Transfer();
+        Object.assign(transfer, {
             masterWalletId: this.masterWallet.id,
             chainId: this.chainId,
             rawTransaction: rawTx,
             payPassword: '',
             action: this.intentTransfer.action,
             intentId: this.intentTransfer.intentId,
-        };
+        });
 
-        this.walletManager.openPayModal(transfer); */
+        let sourceSubwallet = this.walletManager.getMasterWallet(this.masterWallet.id).getSubWallet(this.chainId);
+        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 }
 

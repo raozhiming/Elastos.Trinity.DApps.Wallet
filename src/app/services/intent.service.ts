@@ -126,7 +126,8 @@ export class IntentService {
 
             case 'esctransaction':
                 this.coinTransferService.chainId = StandardCoinName.ETHSC;
-                this.coinTransferService.didrequest = intent.params.didrequest;
+                this.coinTransferService.payloadParam = intent.params.payload.params[0];
+                // this.coinTransferService.amount = intent.params.amount;
                 break;
 
             case 'pay':
