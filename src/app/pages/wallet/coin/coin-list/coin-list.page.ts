@@ -119,12 +119,12 @@ export class CoinListPage implements OnInit, OnDestroy {
 
         this.native.hideLoading();
 
-        this.refreshCoinList();
+        await this.refreshCoinList();
     }
 
-    private refreshCoinList() {
+    private async refreshCoinList() {
         this.coinList = [];
-        for (let availableCoin of this.coinService.getAvailableCoins()) {
+        for (let availableCoin of await this.coinService.getAvailableCoins()) {
             let isOpen = (availableCoin.getID() in this.masterWallet.subWallets);
             console.log(availableCoin, "isOpen?", isOpen);
             this.coinList.push({ coin: availableCoin, isOpen: isOpen });

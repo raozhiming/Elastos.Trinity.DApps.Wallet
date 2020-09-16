@@ -18,7 +18,7 @@ export class SerializedSubWallet {
 
 export abstract class SubWallet {
     public id: CoinID = null;
-    public balance: number = 0;
+    public balance: number = 0; // raw balance. Will be sELA for standard wallets, or a token number for ERC20 coins.
     public lastBlockTime: string = null;
     public timestamp: number = -1;
     public progress: number = 0;
@@ -54,6 +54,8 @@ export abstract class SubWallet {
     public abstract getFriendlyName(): string;
     public abstract getDisplayTokenName(): string;
     public abstract async updateBalance();
+    /** Balance using a human friendly unit. For example, standard wallets have a balance in sELA but getDisplayBalance() returns the amount in ELA */
+    public abstract getDisplayBalance(): number;
     public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
     public abstract async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string>;
     public abstract async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void>;

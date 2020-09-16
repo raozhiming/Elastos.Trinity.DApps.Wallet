@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { Util } from '../../../../model/Util';
 import { Native } from '../../../../services/native.service';
@@ -15,6 +15,7 @@ import * as TrinitySDK from "@elastosfoundation/trinity-dapp-sdk"
 import { StandardCoinName, ERC20Coin } from 'src/app/model/Coin';
 import { PopupProvider } from 'src/app/services/popup.service';
 import { CoinService } from 'src/app/services/coin.service';
+import { PrefsService } from 'src/app/services/prefs.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -48,7 +49,9 @@ export class CoinAddERC20Page implements OnInit {
         private coinService: CoinService,
         private translate: TranslateService,
         public theme: ThemeService,
-        private popup: PopupProvider
+        private popup: PopupProvider,
+        private prefs: PrefsService,
+        private zone: NgZone
     ) {
         this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
         this.walletname = this.walletManager.masterWallets[this.masterWallet.id].name;
@@ -77,15 +80,17 @@ export class CoinAddERC20Page implements OnInit {
                 const address = res.result.scannedContent;
                 console.log('Got scanned content:', address);
 
-                // Check if this looks like a valid address. If not, give feedback to user.
-                if (!this.web3.utils.isAddress(address)) {
-                    this.popup.ionicAlert("Not a valid address", "The scanned content is not a valid ERC20 coin address", "Ok");
-                    return;
-                }
-                else {
-                    this.coinAddress = address;
-                    this.tryFetchingCoinByAddress(address);
-                }
+                this.zone.run(()=>{
+                    // Check if this looks like a valid address. If not, give feedback to user.
+                    if (!this.web3.utils.isAddress(address)) {
+                        this.popup.ionicAlert("Not a valid address", "The scanned content is not a valid ERC20 coin address", "Ok");
+                        return;
+                    }
+                    else {
+                        this.coinAddress = address;
+                        this.tryFetchingCoinByAddress(address);
+                    }
+                });
             }
         }, (err) => {
             console.error(err);
@@ -141,7 +146,8 @@ export class CoinAddERC20Page implements OnInit {
     }
 
     async addCoin() {
-        let newCoin = new ERC20Coin(this.coinSymbol, this.coinSymbol, this.coinName, this.coinAddress);
+        let activeNetwork = await this.prefs.getActiveNetworkType();
+        let newCoin = new ERC20Coin(this.coinSymbol, this.coinSymbol, this.coinName, this.coinAddress, activeNetwork);
         await this.coinService.addCustomERC20Coin(newCoin, this.masterWallet);
 
         // Coin added - go back to the previous screen

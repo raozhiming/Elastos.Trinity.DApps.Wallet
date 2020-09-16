@@ -26,24 +26,32 @@ import { StandardCoinName } from '../model/Coin';
 import { LocalStorage } from './storage.service';
 import { Events } from '@ionic/angular';
 import { MasterWallet } from '../model/MasterWallet';
+import { NetworkType } from '../model/NetworkType';
+import { PrefsService } from './prefs.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CoinService {
     private availableCoins: Coin[] = null;
+    private activeNetwork: NetworkType;
 
-    constructor(private storage: LocalStorage, private events: Events) {
+    constructor(private storage: LocalStorage, private events: Events, private prefs: PrefsService) {
         this.initializeCoinList();
     }
 
     private async initializeCoinList() {
         this.availableCoins = [];
 
+        this.activeNetwork = await this.prefs.getActiveNetworkType();
+
+        // Standard tokens
         this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "Elastos"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.IDChain, "ELA/ID", "Elastos DID"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.ETHSC, "ELA/ETHSC", "Elastos ETH"));
-        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c"));
+
+        // ERC20 tokens
+        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c", NetworkType.MainNet));
 
         await this.addCustomERC20CoinsToAvailableCoins();
 
@@ -51,11 +59,14 @@ export class CoinService {
     }
 
     public getAvailableCoins(): Coin[] {
-        return this.availableCoins;
+        // Return only coins that are usable on the active network.
+        return this.availableCoins.filter(c => {
+            return c.network == null || c.network == this.activeNetwork;
+        });
     }
 
     public getCoinByID(id: CoinID): Coin {
-        return this.availableCoins.find((c)=>{
+        return this.getAvailableCoins().find((c)=>{
             return c.getID() == id;
         });
     }

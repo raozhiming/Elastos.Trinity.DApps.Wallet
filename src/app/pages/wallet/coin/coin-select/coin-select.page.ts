@@ -28,7 +28,7 @@ export class CoinSelectPage implements OnInit {
 
     // Helpers
     public Util = Util;
-    public SELA = Config.SELA;
+    private SELA = Config.SELA;
 
     constructor(
         public route: ActivatedRoute,

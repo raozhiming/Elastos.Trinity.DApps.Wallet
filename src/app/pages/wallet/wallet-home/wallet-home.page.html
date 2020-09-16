@@ -60,16 +60,16 @@
                 <ion-col size="2" class="left-col">
                     <ion-img [src]="uiService.getSubWalletIcon(subWallet)"></ion-img>
                 </ion-col>
-                <ion-col [size]="subWallet.balance/SELA === 0 ? 7.5 : 5" class="middle-col">
+                <ion-col [size]="subWallet.getDisplayBalance() === 0 ? 7.5 : 5" class="middle-col">
                     <h1>{{ uiService.getSubwalletTitle(subWallet) }}</h1>
                     <p>{{ uiService.getSubwalletSubtitle(subWallet) }}</p>
                     <span *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</span>
                     <span *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</span>
                 </ion-col>
-                <ion-col [size]="subWallet.balance/SELA === 0 ? 2.5 : 5" class="right-col">
-                    <h1>{{ uiService.getFixedBalance(subWallet.balance/SELA) }}</h1>
+                <ion-col [size]="subWallet.getDisplayBalance() === 0 ? 2.5 : 5" class="right-col">
+                    <h1>{{ uiService.getFixedBalance(subWallet.getDisplayBalance()) }}</h1>
                     <p *ngIf="canDisplayCurrency(subWallet)">
-                        {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }}
+                        {{ currencyService.getCurrencyBalance(subWallet.getDisplayBalance()) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>
                 </ion-col>
@@ -132,16 +132,16 @@
             <ion-col size="2" class="left-col">
                 <ion-img [src]="uiService.getSubWalletIcon(subWallet)"></ion-img>
             </ion-col>
-            <ion-col [size]="subWallet.balance/SELA === 0 ? 7.5 : 5" class="middle-col">
+            <ion-col [size]="subWallet.getDisplayBalance() === 0 ? 7.5 : 5" class="middle-col">
                 <h1>{{ uiService.getSubwalletTitle(subWallet) }}</h1>
                 <p>{{ uiService.getSubwalletSubtitle(subWallet) }}</p>
                 <span *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</span>
                 <span *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</span>
             </ion-col>
-            <ion-col [size]="subWallet.balance/SELA === 0 ? 2.5 : 5" class="right-col">
-                <h1>{{ uiService.getFixedBalance(subWallet.balance/SELA) }}</h1>
+            <ion-col [size]="subWallet.getDisplayBalance() === 0 ? 2.5 : 5" class="right-col">
+                <h1>{{ uiService.getFixedBalance(subWallet.getDisplayBalance()) }}</h1>
                 <p *ngIf="canDisplayCurrency(subWallet)">
-                    {{ currencyService.getCurrencyBalance(subWallet.balance/SELA) }}
+                    {{ currencyService.getCurrencyBalance(subWallet.getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>

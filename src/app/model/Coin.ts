@@ -1,3 +1,5 @@
+import { NetworkType } from './NetworkType';
+
 export type CoinID = string; // ELA, IDChain, ERC1, ERC2...
 
 export enum CoinType {
@@ -24,7 +26,8 @@ export class Coin {
         private id: CoinID,
         private name: string,
         private description: string,
-        private removable: boolean
+        private removable: boolean,
+        public network: NetworkType
     ) {}
 
     public getType(): CoinType {
@@ -50,13 +53,14 @@ export class Coin {
 
 export class StandardCoin extends Coin {
     constructor(id: CoinID, name: string, description: string) {
-        super(CoinType.STANDARD, id, name, description, false);
+        // Null network means that the coin is available on all networks
+        super(CoinType.STANDARD, id, name, description, false, null);
     }
 }
 
 export class ERC20Coin extends Coin {
-    constructor(id: CoinID, name: string, description: string, private erc20ContractAddress: string) {
-        super(CoinType.ERC20, id, name, description, true);
+    constructor(id: CoinID, name: string, description: string, private erc20ContractAddress: string, network: NetworkType) {
+        super(CoinType.ERC20, id, name, description, true, network);
     }
 
     /**
@@ -68,7 +72,7 @@ export class ERC20Coin extends Coin {
     }
 
     static fromJson(jsonCoin: any): ERC20Coin {
-        let coin = new ERC20Coin(null, null, null, null);
+        let coin = new ERC20Coin(null, null, null, null, null);
         Object.assign(coin, jsonCoin);
         return coin;
     }

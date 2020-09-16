@@ -14,9 +14,9 @@
                 <p>{{ uiService.getSubwalletSubtitle(fromSubWallet) }}</p>
             </ion-col>
             <ion-col size="4.2" class="right-col">
-                <h1>{{ uiService.getFixedBalance(fromSubWallet.balance/SELA) }}</h1>
+                <h1>{{ uiService.getFixedBalance(fromSubWallet.getDisplayBalance()) }}</h1>
                 <p>
-                    {{ currencyService.getCurrencyBalance(fromSubWallet.balance/SELA) }}
+                    {{ currencyService.getCurrencyBalance(fromSubWallet.getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>
@@ -36,9 +36,9 @@
                 <p>{{ uiService.getSubwalletSubtitle(toSubWallet) }}</p>
             </ion-col>
             <ion-col size="4.2" class="right-col">
-                <h1>{{ uiService.getFixedBalance(toSubWallet.balance/SELA) }}</h1>
+                <h1>{{ uiService.getFixedBalance(toSubWallet.getDisplayBalance()) }}</h1>
                 <p>
-                    {{ currencyService.getCurrencyBalance(toSubWallet.balance/SELA) }}
+                    {{ currencyService.getCurrencyBalance(toSubWallet.getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>
@@ -87,8 +87,8 @@
             </ion-col>
         </ion-row>
 
-        <p *ngIf='amount'>{{ 'transfer-remain-balance' | translate: { amount: masterWallet.subWallets[chainId].balance/SELA - amount } }}</p>
-        <p *ngIf='!amount'>{{ 'transfer-remain-balance' | translate: { amount: masterWallet.subWallets[chainId].balance/SELA } }}</p>
+        <p *ngIf='amount'>{{ 'transfer-remain-balance' | translate: { amount: masterWallet.subWallets[chainId].getDisplayBalance() - amount } }}</p>
+        <p *ngIf='!amount'>{{ 'transfer-remain-balance' | translate: { amount: masterWallet.subWallets[chainId].getDisplayBalance() } }}</p>
         <h1 class="send">{{ 'send-to' | translate }}</h1>
 
         <ion-row class="item-row">

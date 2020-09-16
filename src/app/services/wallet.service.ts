@@ -44,6 +44,8 @@ import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSync
 import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
 import { Transfer } from './cointransfer.service';
+import { NetworkType } from '../model/NetworkType';
+import { PrefsService } from './prefs.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -101,6 +103,7 @@ export class WalletManager {
         private http: HttpClient,
         public jsonRPCService: JsonRPCService,
         public ethJsonRPCService: EthJsonRPCService,
+        private prefs: PrefsService
     ) {
     }
 
@@ -731,7 +734,7 @@ export class WalletManager {
      * 4) check whether it is in the election period. If it's not in the election period, we need to put C1 and C2 in invalidCandidates.
      */
     public async computeVoteInvalidCandidates(masterWalletId: string): Promise<InvalidCandidateForVote[]> {
-        let helper = new InvalidVoteCandidatesHelper(this.http, this, masterWalletId);
+        let helper = new InvalidVoteCandidatesHelper(this.http, this, masterWalletId, this.prefs);
         return await helper.computeInvalidCandidates();
     }
 

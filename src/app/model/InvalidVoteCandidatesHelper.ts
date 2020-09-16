@@ -6,6 +6,8 @@ import { StandardCoinName } from './Coin';
 import { CRProposalStatus } from './cyber-republic/CRProposalStatus';
 import { CRProposalsSearchResponse } from './cyber-republic/CRProposalsSearchResponse';
 import { VoteType, CRProposalVoteInfo } from './SPVWalletPluginBridge';
+import { NetworkType } from './NetworkType';
+import { PrefsService } from '../services/prefs.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -40,7 +42,7 @@ export type InvalidCandidateForVote = {
  * vote with previous vote types. Otherwise, the published transaction will be invalid, if we pass invalid candidates.
  */
 export class InvalidVoteCandidatesHelper {
-    constructor(private http: HttpClient, private walletManager: WalletManager, private masterWalletId: string) {}
+    constructor(private http: HttpClient, private walletManager: WalletManager, private masterWalletId: string, private prefs: PrefsService) {}
 
     public async computeInvalidCandidates(): Promise<InvalidCandidateForVote[]> {
         let invalidCandidatesList: InvalidCandidateForVote[] = [];
@@ -158,7 +160,7 @@ export class InvalidVoteCandidatesHelper {
 
         }
         return otherUnActiveVote;
-    } 
+    }
     */
 
     private async computeInvalidProposals(): Promise<InvalidCandidateForVote> {
@@ -167,7 +169,7 @@ export class InvalidVoteCandidatesHelper {
         // Retrieve previous vote info
         let previousVoteInfo = await this.walletManager.spvBridge.getVoteInfo(this.masterWalletId, StandardCoinName.ELA, VoteType.CRCProposal) as CRProposalVoteInfo[];
         console.log("previousVoteInfo", previousVoteInfo);
-    
+
         // Fetch all proposals currently in NOTIFICATION state.
         try {
             let proposalsInNotificationState = await this.fetchProposals(CRProposalStatus.NOTIFICATION);
@@ -175,7 +177,7 @@ export class InvalidVoteCandidatesHelper {
                 return null;
             }
 
-            // - For each proposal voted earlier, found in getVoteInfo(): 
+            // - For each proposal voted earlier, found in getVoteInfo():
             //      - All proposal not in the NOTIFICATION state any more should be considered invalid therefore
             //      be added to our list of invalid proposals, so the spv sdk can cleanup stuff.
             for (let previousVote of previousVoteInfo) {
@@ -183,9 +185,9 @@ export class InvalidVoteCandidatesHelper {
 
                 // Try to find this vote in the proposals currently in notificaion state on the CR website
                 if (previousVote.Type == VoteType.CRCProposal) {
-                    // Should have exactly one vote entry. 
+                    // Should have exactly one vote entry.
                     if (Object.keys(previousVote.Votes).length == 1) {
-                        let votedProposalHash = Object.keys(previousVote.Votes)[0]; 
+                        let votedProposalHash = Object.keys(previousVote.Votes)[0];
 
                         let matchingProposal = proposalsInNotificationState.data.list.find((proposalCurrentlyInNotification)=>{
                             return proposalCurrentlyInNotification.proposalHash === votedProposalHash;
@@ -213,40 +215,32 @@ export class InvalidVoteCandidatesHelper {
             console.error(err);
             return null;
         }
-    } 
-
-    private getNetworkType(): Promise<string> {
-        return new Promise((resolve)=>{
-            appManager.getPreference("chain.network.type", (value)=>{
-                resolve(value as string);
-            });
-        });
     }
 
     private async fetchProposals(status: CRProposalStatus): Promise<CRProposalsSearchResponse> {
         // Check which network we are currently configured for.
-        let networkType = await this.getNetworkType();
+        let networkType = await this.prefs.getActiveNetworkType();
         let crApiUrl: string = "";
         switch (networkType) {
-            case "MainNet":
+            case NetworkType.MainNet:
                 crApiUrl = "https://api.cyberrepublic.org";
                 break;
-            case "TestNet":
+            case NetworkType.TestNet:
                 crApiUrl = null; // TODO
                 break;
-            case "RegNet":
+            case NetworkType.RegNet:
                 crApiUrl = null; // TODO
                 break;
-            case "PrvNet":
+            case NetworkType.PrvNet:
                 crApiUrl = "http://crapi.longrunweather.com:18080";
                 break;
         }
 
         if (!crApiUrl) {
-            console.error("No CR API defined for networkt type "+networkType+"!");
+            console.error("No CR API defined for network type "+networkType+"!");
             return null;
         }
-        
+
         return new Promise((resolve, reject)=>{
             console.log('Fetching proposals...');
             this.http.get<any>(crApiUrl+'/api/cvote/all_search?status='+status+'&page=1&results=-1').subscribe((res: CRProposalsSearchResponse) => {

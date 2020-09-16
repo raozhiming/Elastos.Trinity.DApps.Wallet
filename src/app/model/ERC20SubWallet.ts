@@ -18,6 +18,7 @@ export class ERC20SubWallet extends SubWallet {
     /** Web3 variables to call smart contracts */
     private web3: Web3;
     private erc20ABI: any;
+    private tokenDecimals: number;
 
     constructor(masterWallet: MasterWallet, id: CoinID) {
         super(masterWallet, id, CoinType.ERC20);
@@ -25,7 +26,7 @@ export class ERC20SubWallet extends SubWallet {
         this.initialize();
     }
 
-    private initialize() {
+    private async initialize() {
         this.coin = this.masterWallet.coinService.getCoinByID(this.id) as ERC20Coin;
 
         // Get Web3 and the ERC20 contract ready
@@ -36,6 +37,9 @@ export class ERC20SubWallet extends SubWallet {
         // Standard ERC20 contract ABI
         this.erc20ABI = require("../../assets/ethereum/StandardErc20ABI.json");
 
+        // First retrieve the number of decimals used by this token. this is needed for a good display,
+        // as we need to convert the balance integer using the number of decimals.
+        await this.fetchTokenDecimals();
         this.updateBalance();
     }
 
@@ -73,16 +77,30 @@ export class ERC20SubWallet extends SubWallet {
         return coin.getName();
     }
 
+    private async fetchTokenDecimals(): Promise<void> {
+        let ethAccountAddress = await this.getEthAccountAddress();
+        var contractAddress = this.coin.getContractAddress();
+        let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
+        this.tokenDecimals = await erc20Contract.methods.decimals().call();
+
+        console.log(this.id+" decimals: ", this.tokenDecimals);
+    }
+
+    public getDisplayBalance(): number {
+        return this.balance; // Raw balance and display balance are the same: the number of tokens.
+    }
+
     public async updateBalance() {
-        console.log("Updating ERC20 token balance", this.id);
+        console.log("Updating ERC20 token balance for token: ", this.id);
 
         let ethAccountAddress = await this.getEthAccountAddress();
         var contractAddress = this.coin.getContractAddress();
         let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
 
         let balanceEla = await erc20Contract.methods.balanceOf(ethAccountAddress).call();
-        // TODO: the balanceEla unit is wei(10^18), this.balance unit is sela(10^8)
-        this.balance = balanceEla / 10000000000;
+        // The returned balance is an int. Need to devide by the number of decimals used by the token.
+        this.balance = balanceEla / Math.pow(10, this.tokenDecimals);
+        console.log(this.id+": raw balance:", balanceEla, " Converted balance: ", this.balance);
 
         // Update the "last sync" date. Just consider this http call date as the sync date for now
         this.timestamp = new Date().getTime();

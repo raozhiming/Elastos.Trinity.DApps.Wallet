@@ -86,7 +86,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // Helpers
     public Config = Config;
-    public SELA = Config.SELA;
+    private SELA = Config.SELA;
 
     // Display confirm popup
     public showPopover = popover;
@@ -142,7 +142,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.chainId = this.coinTransferService.chainId;
         this.waitingForSyncCompletion = false;
 
-        console.log('Balance', this.masterWallet.subWallets[this.chainId].balance / this.SELA);
+        console.log('Balance', this.masterWallet.subWallets[this.chainId].getDisplayBalance());
 
         switch (this.transferType) {
             // For Recharge Transfer

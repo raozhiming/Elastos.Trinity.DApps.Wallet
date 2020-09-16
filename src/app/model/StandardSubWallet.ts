@@ -71,6 +71,10 @@ export class StandardSubWallet extends SubWallet {
         return this.masterWallet.coinService.getCoinByID(this.id).getName();
     }
 
+    public getDisplayBalance(): number {
+        return this.balance / Config.SELA;
+    }
+
     /**
      * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,
      * saying that a new balance amount is available.
