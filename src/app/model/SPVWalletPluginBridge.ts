@@ -581,9 +581,9 @@ export class SPVWalletPluginBridge {
         toAddress: string,
         amount: string,
         amountUnit: number,
-        gasPrice,
+        gasPrice: string,
         gasPriceUnit: number,
-        gasLimit,
+        gasLimit: string,
         data: string
     ): Promise<any> {
         return new Promise(async (resolve, reject) => {
@@ -591,12 +591,27 @@ export class SPVWalletPluginBridge {
                 [
                     masterWalletId,
                     toAddress,
-                    amount,
+                    Util.getDicemalString(amount),
                     amountUnit,
-                    gasPrice,
+                    Util.getDicemalString(gasPrice),
                     gasPriceUnit,
-                    gasLimit,
+                    Util.getDicemalString(gasLimit),
                     data
+                ],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject); });
+        });
+    }
+
+    deleteTransfer(
+        masterWalletId: string,
+        tx: string
+    ): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+             walletManager.deleteTransfer(
+                [
+                    masterWalletId,
+                    tx
                 ],
                 (ret) => { resolve(ret); },
                 (err) => { this.handleError(err, reject); });

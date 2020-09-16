@@ -38,7 +38,7 @@
     "moment": "^2.27.0",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
-    "web3": "^1.2.9",
+    "web3": "^1.2.11",
     "zone.js": "~0.8.29"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "@angular/compiler": "~8.1.2",
     "@angular/compiler-cli": "~8.1.2",
     "@angular/language-service": "~8.1.2",
-    "@elastosfoundation/trinity-types": "^1.1.90",
+    "@elastosfoundation/trinity-types": "^1.1.92",
     "@ionic/angular-toolkit": "~2.0.0",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",

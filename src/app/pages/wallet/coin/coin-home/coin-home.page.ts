@@ -196,8 +196,9 @@ export class CoinHomePage implements OnInit {
                 let amount;
                 if (this.chainIsETHSC()) {
                     if (transaction.IsErrored) {
-                        // TODO: upgrade spvsdk, remove the wrong transaction
-                        continue; // Don't show error transaction.
+                        // remove the wrong transaction
+                        await this.deleteTransaction(transaction);
+                        continue;
                     }
                     // TODO: upgrade spvsdk, now the result from spvsdk like: 0.010000000000000
                     amount = parseFloat(transaction.Amount);
@@ -350,6 +351,15 @@ export class CoinHomePage implements OnInit {
                 break;
         }
         return statusName;
+    }
+
+    async deleteTransaction(tx) {
+        if (this.chainIsETHSC()) {
+            await this.masterWallet.walletManager.spvBridge.deleteTransfer(
+                this.masterWallet.id,
+                tx
+            );
+        }
     }
 
     onItem(item) {

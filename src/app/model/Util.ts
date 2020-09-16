@@ -229,4 +229,12 @@ export class Util {
         decimalBalance.toFixed(5);
         return decimalBalance.toLocaleString().slice(2, 6);
     }
+
+    public static getDicemalString(numberString: string) {
+        if (numberString.startsWith('0x')) {
+            return parseInt(numberString, 16).toString();
+        } else {
+            return numberString;
+        }
+    }
 }

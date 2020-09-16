@@ -52,6 +52,7 @@ export class CoinService {
 
         // ERC20 tokens
         this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c", NetworkType.MainNet));
+        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xfdce7fb4050cd43c654c6cecead950343990ce75", NetworkType.TestNet));
 
         await this.addCustomERC20CoinsToAvailableCoins();
 
