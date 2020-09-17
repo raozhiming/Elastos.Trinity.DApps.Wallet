@@ -87,6 +87,10 @@ export class ERC20SubWallet extends SubWallet {
         return this.balance; // Raw balance and display balance are the same: the number of tokens.
     }
 
+    /**
+     * Check whether the balance is enough.
+     * @param amount unit is ETHER
+     */
     public isBalanceEnough(amount: number) {
         return this.balance > amount;
     }

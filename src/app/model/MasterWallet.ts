@@ -165,6 +165,15 @@ export class MasterWallet {
     public getSubWallet(id: CoinID): SubWallet {
         return this.subWallets[id];
     }
+
+    /**
+     * Returns the list of all subwallets by CoinType
+     */
+    public getSubWalletsByType(type: CoinType): SubWallet[] {
+        return Object.values(this.subWallets).filter((sw)=>{
+            return (sw.type === type);
+        });
+    }
 }
 
 class SubWalletBuilder {

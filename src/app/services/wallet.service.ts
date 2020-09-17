@@ -28,7 +28,7 @@ import moment from 'moment';
 
 import { SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
 import { MasterWallet, WalletID } from '../model/MasterWallet';
-import { StandardCoinName, CoinType } from '../model/Coin';
+import { StandardCoinName, CoinType, StandardCoin } from '../model/Coin';
 import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
 import { AppService } from './app.service';
 import { SubWallet, SerializedSubWallet } from '../model/SubWallet';
@@ -589,6 +589,11 @@ export class WalletManager {
             case ETHSCEventType.WalletEvent: // update balance
                 if (result.event.Event === ETHSCEventAction.BALANCE_UPDATED) {
                     this.getMasterWallet(masterId).getSubWallet(chainId).updateBalance();
+
+                    const erc20SubWallets = this.getMasterWallet(masterId).getSubWalletsByType(CoinType.ERC20);
+                    for (let subWallet of erc20SubWallets) {
+                        subWallet.updateBalance();
+                    }
                 }
                 break;
             default:
@@ -746,18 +751,18 @@ export class WalletManager {
         const currentTimestamp = moment().valueOf();
         const onedayago = moment().add(-1, 'days').valueOf();
         const masterWallet = this.getMasterWallet(masterWalletId);
-        for (let subWallet of Object.values(masterWallet.subWallets)) {
-            if ((subWallet.type === CoinType.STANDARD) && (subWallet.id !== StandardCoinName.ETHSC)) {
-                // Get balance by RPC if the last block time is one day ago.
-                if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
-                    try {
-                        const balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName, masterWallet.account.singleAddress);
-                        subWallet.balanceByRPC = balance;
-                        subWallet.balance = balance;
-                        subWallet.timestampRPC = currentTimestamp;
-                    } catch (e) {
-                        console.log('getBalanceByRPC exception:', e);
-                    }
+
+        let subwallets = masterWallet.subWalletsWithExcludedCoin(StandardCoinName.ETHSC, CoinType.STANDARD);
+        for (let subWallet of subwallets) {
+            // Get balance by RPC if the last block time is one day ago.
+            if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
+                try {
+                    const balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName, masterWallet.account.singleAddress);
+                    subWallet.balanceByRPC = balance;
+                    subWallet.balance = balance;
+                    subWallet.timestampRPC = currentTimestamp;
+                } catch (e) {
+                    console.log('getBalanceByRPC exception:', e);
                 }
             }
         }

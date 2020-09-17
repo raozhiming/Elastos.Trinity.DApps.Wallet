@@ -82,6 +82,10 @@ export class StandardSubWallet extends SubWallet {
         return this.balance / Config.SELA;
     }
 
+    /**
+     * Check whether the balance is enough.
+     * @param amount unit is ELA
+     */
     public isBalanceEnough(amount: number) {
         return this.balance > (amount * Config.SELA);
     }
