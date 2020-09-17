@@ -1,16 +1,14 @@
-import path from 'path'
-//var fs = require('fs');
 import Web3 from 'Web3'
-//var Tx = require('ethereumjs-tx');
 import * as TrinitySDK from "@elastosfoundation/trinity-dapp-sdk"
 // import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
 
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, CoinID, Coin, ERC20Coin, StandardCoinName } from './Coin';
-import { Config } from '../config/Config';
 import { Util } from './Util';
 import { Transfer } from '../services/cointransfer.service';
+
+declare let appManager: AppManagerPlugin.AppManager;
 
 export class ERC20SubWallet extends SubWallet {
     /** Coin related to this wallet */
@@ -28,7 +26,6 @@ export class ERC20SubWallet extends SubWallet {
 
     private async initialize() {
         this.coin = this.masterWallet.coinService.getCoinByID(this.id) as ERC20Coin;
-
         // Get Web3 and the ERC20 contract ready
         // let trinityWeb3Provider = new Ethereum.TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
         let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
@@ -62,7 +59,7 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public getFriendlyName(): string {
-        let coin = this.masterWallet.coinService.getCoinByID(this.id)
+        let coin = this.masterWallet.coinService.getCoinByID(this.id);
         if (!coin)
             return ""; // Just in case
 
@@ -70,7 +67,7 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public getDisplayTokenName(): string {
-        let coin = this.masterWallet.coinService.getCoinByID(this.id)
+        let coin = this.masterWallet.coinService.getCoinByID(this.id);
         if (!coin)
             return ""; // Just in case
 
@@ -88,6 +85,10 @@ export class ERC20SubWallet extends SubWallet {
 
     public getDisplayBalance(): number {
         return this.balance; // Raw balance and display balance are the same: the number of tokens.
+    }
+
+    public isBalanceEnough(amount: number) {
+        return this.balance > amount;
     }
 
     public async updateBalance() {
@@ -125,44 +126,94 @@ export class ERC20SubWallet extends SubWallet {
         let ethAccountAddress = await this.getEthAccountAddress();
         var contractAddress = this.coin.getContractAddress();
         let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
+        let gasPrice = await this.web3.eth.getGasPrice();
 
-        // Determine the nonce
-        var count = await this.web3.eth.getTransactionCount(ethAccountAddress);
-        console.log(`num transactions so far: ${count}`);
+        console.log('createPaymentTransaction toAddress:', toAddress, ' amount:', amount);
 
-        // TODO: CHECK FIELDS CONTENT BELOW
-        var rawTransaction = {
-            "from": ethAccountAddress,
-            "nonce": "0x" + count.toString(16),
-            "gasPrice": "0x003B9ACA00",
-            "gasLimit": "0x250CA",
-            "to": contractAddress,
-            "value": "0x0",
-            "data": erc20Contract.methods.transfer(toAddress, amount).encodeABI(),
-            "chainId": 0x01
-        };
+        const rawTx =
+        await this.masterWallet.walletManager.spvBridge.createTransferGeneric(
+            this.masterWallet.id,
+            contractAddress,
+            '0',
+            0, // WEI
+            gasPrice,
+            0, // WEI
+            '1000000', // TODO: gasLimit
+            erc20Contract.methods.transfer(toAddress, amount).encodeABI(),
+        );
 
-        return rawTransaction;
+        console.log('Created raw ESC transaction:', rawTx);
+
+        return rawTx;
     }
 
     public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void> {
-        console.error("ERC20 signAndSendRawTransaction not yet implemented!");
+        console.error("ERC20 signAndSendRawTransaction transaction:", transfer);
 
-        // TODO WHEN THE SPVSDK WITH ETH CONTRACT TRANSACTIONS IS AVAILABLE.
+        return new Promise(async (resolve)=>{
+            console.log('Received raw transaction', transaction);
+            let password = await this.masterWallet.walletManager.openPayModal(transfer);
+            if (!password) {
+                console.log("No password received. Cancelling");
+                await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
+                    { txid: null, status: 'cancelled' }, transfer.intentId);
+                resolve(null);
+                return;
+            }
 
-        // Example private key (do not use): 'e331b6d69882b4cb4ea581d88e0b604039a3de5967688d3dcffdd2270c0fd109'
-        // The private key must be for myAddress
-        /*var privKey = new Buffer(my_privkey, 'hex');
-        var tx = new Tx(rawTransaction);
-        tx.sign(privKey);
-        var serializedTx = tx.serialize();
+            console.log("Password retrieved. Now signing the transaction.");
 
-        // Comment out these three lines if you don't really want to send the TX right now
-        console.log(`Attempting to send signed tx:  ${serializedTx.toString('hex')}`);
-        var receipt = await this.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'));
-        console.log(`Receipt info:  ${JSON.stringify(receipt, null, '\t')}`);*/
+            await this.masterWallet.walletManager.native.showLoading();
 
-        return Promise.resolve();
+            const signedTx = await this.masterWallet.walletManager.spvBridge.signTransaction(
+                this.masterWallet.id,
+                StandardCoinName.ETHSC,
+                transaction,
+                password
+            );
+
+            console.log("Transaction signed. Now publishing.");
+
+            const publishedTransaction =
+            await this.masterWallet.walletManager.spvBridge.publishTransaction(
+                this.masterWallet.id,
+                StandardCoinName.ETHSC,
+                signedTx
+            );
+
+            this.masterWallet.walletManager.setRecentWalletId(this.masterWallet.id);
+
+            if (!Util.isEmptyObject(transfer.action)) {
+                console.log("Mode: transfer with intent action");
+                this.masterWallet.walletManager.lockTx(publishedTransaction.TxHash);
+
+                setTimeout(async () => {
+                    let status = 'published';
+                    let txId = publishedTransaction.TxHash;
+                    const code = this.masterWallet.walletManager.getTxCode(txId);
+                    if (code !== 0) {
+                        txId = null;
+                        status = 'error';
+                    }
+                    this.masterWallet.walletManager.native.hideLoading();
+                    this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
+                    console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
+                    await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
+                        { txid: txId, status }, transfer.intentId);
+                    appManager.close();
+
+                    resolve();
+                }, 5000); // wait for 5s for txPublished
+            } else {
+                console.log("Published transaction id:", publishedTransaction.TxHash);
+
+                await this.masterWallet.walletManager.native.hideLoading();
+                this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
+                await this.masterWallet.walletManager.native.setRootRouter('/wallet-home');
+
+                resolve();
+            }
+        });
     }
 
     async tempInitialTestToUseERC20Stuff() {

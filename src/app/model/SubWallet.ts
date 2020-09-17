@@ -56,6 +56,7 @@ export abstract class SubWallet {
     public abstract async updateBalance();
     /** Balance using a human friendly unit. For example, standard wallets have a balance in sELA but getDisplayBalance() returns the amount in ELA */
     public abstract getDisplayBalance(): number;
+    public abstract isBalanceEnough(amount: number): boolean;
     public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
     public abstract async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string>;
     public abstract async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void>;

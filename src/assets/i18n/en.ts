@@ -184,7 +184,7 @@ export const en = {
     "dpostvote-with": "With:",
 
     // ESC transaction intent screen
-    "esctransaction-title": "ETH Transaction",
+    "esctransaction-title": "ETHSC Transaction",
     "esctransaction-smart-contract": "Smart Contract",
     "esctransaction-intro": "You are going to sign and run a smart contract on the Ethereum Sidechain.",
     "esctransaction-you-are-using": "You are using:",

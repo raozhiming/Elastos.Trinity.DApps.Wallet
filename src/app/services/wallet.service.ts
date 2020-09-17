@@ -22,14 +22,13 @@
 
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Events, ModalController, Platform } from '@ionic/angular';
+import { Events, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 
-import { SignedTransaction, SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
+import { SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
 import { MasterWallet, WalletID } from '../model/MasterWallet';
 import { StandardCoinName, CoinType } from '../model/Coin';
-import { Util } from '../model/Util';
 import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
 import { AppService } from './app.service';
 import { SubWallet, SerializedSubWallet } from '../model/SubWallet';
@@ -44,7 +43,6 @@ import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSync
 import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
 import { Transfer } from './cointransfer.service';
-import { NetworkType } from '../model/NetworkType';
 import { PrefsService } from './prefs.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -706,7 +704,7 @@ export class WalletManager {
      * authService's getWalletPassword() directly.
      */
     public async openPayModal(transfer: Transfer): Promise<string> {
-        const payPassword = await this.authService.getWalletPassword(transfer.masterWalletId);
+        const payPassword = await this.authService.getWalletPassword(transfer.masterWalletId, true, true);
         if (payPassword === null) {
             return Promise.resolve(null);
         }
@@ -780,6 +778,8 @@ export class WalletManager {
         let totalBalance = 0;
         let totalRequestCount = 0;
 
+        console.log('Internal address');
+
         // internal address
         let addressArray = null;
         do {
@@ -810,6 +810,8 @@ export class WalletManager {
                 throw e;
             }
         } while (!singleAddress);
+
+        console.log('External address');
 
         if (!singleAddress) {
             // external address for user

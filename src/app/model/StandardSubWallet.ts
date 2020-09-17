@@ -5,7 +5,6 @@ import { Util } from './Util';
 import { AllTransactions } from './Transaction';
 import * as moment from 'moment';
 import { Transfer } from '../services/cointransfer.service';
-import { SignedTransaction } from './SPVWalletPluginBridge';
 import { Config } from '../config/Config';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -64,15 +63,27 @@ export class StandardSubWallet extends SubWallet {
     }
 
     public getFriendlyName(): string {
-        return this.masterWallet.coinService.getCoinByID(this.id).getDescription();
+        let coin = this.masterWallet.coinService.getCoinByID(this.id)
+        if (!coin)
+            return ""; // Just in case
+
+        return coin.getDescription();
     }
 
     public getDisplayTokenName(): string {
-        return this.masterWallet.coinService.getCoinByID(this.id).getName();
+        let coin = this.masterWallet.coinService.getCoinByID(this.id)
+        if (!coin)
+            return ""; // Just in case
+
+        return coin.getName();
     }
 
     public getDisplayBalance(): number {
         return this.balance / Config.SELA;
+    }
+
+    public isBalanceEnough(amount: number) {
+        return this.balance > (amount * Config.SELA);
     }
 
     /**
@@ -180,8 +191,6 @@ export class StandardSubWallet extends SubWallet {
                 this.id,
                 signedTx
             );
-
-            console.log("----publishedTransaction:", publishedTransaction);
 
             this.masterWallet.walletManager.setRecentWalletId(this.masterWallet.id);
 

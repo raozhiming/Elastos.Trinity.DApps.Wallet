@@ -30,21 +30,18 @@ import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { CoinTransferService, TransferType, Transfer } from 'src/app/services/cointransfer.service';
-import { StandardCoinName, StandardCoin } from 'src/app/model/Coin';
+import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { SubWallet } from 'src/app/model/SubWallet';
 import * as CryptoAddressResolvers from 'src/app/model/address-resolvers';
 import { HttpClient } from '@angular/common/http';
-import { CryptoNameAddress } from 'src/app/model/address-resolvers';
 import { WalletAccount } from 'src/app/model/WalletAccount';
 import { TxConfirmComponent } from 'src/app/components/tx-confirm/tx-confirm.component';
-import { NumberFormatStyle } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
@@ -57,7 +54,6 @@ export let popover: any = null;
 export class CoinTransferPage implements OnInit, OnDestroy {
 
     public masterWallet: MasterWallet;
-    private walletInfo: WalletAccount;
     private syncCompletionEventName: string = null;
     public waitingForSyncCompletion = false;
 
@@ -219,10 +215,10 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      */
     async createSendTransaction() {
         let toAmount: number;
-        if (this.chainId === StandardCoinName.ETHSC) {
-            toAmount = this.amount;
-        } else {
+        if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
             toAmount = this.accMul(this.amount, Config.SELA);
+        } else {
+            toAmount = this.amount;
         }
 
         // Call dedicated api to the source subwallet to generate the appropriate transaction type.
@@ -330,10 +326,11 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.native.toast_trans('amount-invalid');
             return;
         }
-        if (this.amount * this.SELA > this.masterWallet.subWallets[this.chainId].balance) {
+        if (!this.masterWallet.subWallets[this.chainId].isBalanceEnough(this.amount)) {
             this.native.toast_trans('amount-not-enough');
             return;
         }
+        // TODO: not 8, should use tokenDecimals for ETHSC and ERC20 Token
         if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
             this.native.toast_trans('amount-invalid');
             return;
