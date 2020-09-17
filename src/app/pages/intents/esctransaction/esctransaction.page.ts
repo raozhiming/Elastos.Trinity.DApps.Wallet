@@ -31,6 +31,8 @@ import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
+import { SubWallet } from 'src/app/model/SubWallet';
+import BigNumber from "bignumber.js";
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -42,6 +44,7 @@ declare let appManager: AppManagerPlugin.AppManager;
 export class EscTransactionPage implements OnInit {
 
     private masterWallet: MasterWallet = null;
+    private ethSidechainSubWallet: SubWallet = null;
     private intentTransfer: IntentTransfer;
     private walletInfo = {};
     public balance: number; // ELA
@@ -88,6 +91,9 @@ export class EscTransactionPage implements OnInit {
             this.cancelOperation();
             return;
         }
+
+        this.ethSidechainSubWallet = this.masterWallet.getSubWallet(StandardCoinName.ETHSC);
+        this.balance = await this.ethSidechainSubWallet.getDisplayBalance();
     }
 
     /**
@@ -112,12 +118,37 @@ export class EscTransactionPage implements OnInit {
     }
 
     checkValue() {
-        if (this.balance < 0.0002) {
-            this.popupProvider.ionicAlert('confirmTitle', 'text-did-balance-not-enough');
-            return;
-        }
+        // Nothing to check
 
         this.createEscTransaction();
+    }
+
+    public balanceIsEnough(): boolean {
+        return this.getTotalTransactionCostInELA().totalAsBigNumber.lte(this.balance);
+    }
+
+    /**
+     * Returns the total transaction cost, ELA value + fees, in ELA.
+     *
+     * Input values in "payloadParam" are in WEI
+     */
+    public getTotalTransactionCostInELA(): {totalAsBigNumber: BigNumber, total: string, value: string, fees: string } {
+        let weiElaRatio = new BigNumber("1000000000000000000");
+
+        let elaEthValue = new BigNumber(this.coinTransferService.payloadParam.value).dividedBy(weiElaRatio);
+        let fees = new BigNumber(this.coinTransferService.payloadParam.gas).multipliedBy(new BigNumber(this.coinTransferService.payloadParam.gasPrice)).dividedBy(weiElaRatio);
+        let total = elaEthValue.plus(fees);
+
+        //console.log("elaEthValue", elaEthValue.toString())
+        //console.log("fees/gas", fees.toString());
+        //console.log("total", total.toString());
+
+        return {
+            totalAsBigNumber: total,
+            total: total.toString(),
+            value: elaEthValue.toString(),
+            fees: fees.toString()
+        }
     }
 
     async createEscTransaction() {

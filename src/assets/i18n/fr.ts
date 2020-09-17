@@ -187,7 +187,9 @@ export const fr = {
     "esctransaction-title": "Transaction Ethereum",
     "esctransaction-smart-contract": "Smart Contract",
     "esctransaction-intro": "Vous allez signer et éxécuter une action sur la châine publique Elastos Ethereum.",
-    "esttransaction-you-are-using": "Vous utilisez:",
+    "esctransaction-you-are-using": "Vous utilisez:",
+    "esctransaction-value": "Montant:",
+    "esctransaction-fees": "Frais:",
 
     // Wait for sync
     "waitforsync-syncing": "Syncing",

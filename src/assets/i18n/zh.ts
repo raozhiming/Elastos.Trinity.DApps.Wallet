@@ -189,7 +189,9 @@ export const zh = {
     "esctransaction-title": "ETH Transaction",
     "esctransaction-smart-contract": "智能合约",
     "esctransaction-intro": "您将在以太坊侧链上签名并运行一个智能合约",
-    "esttransaction-you-are-using": "您正在使用:",
+    "esctransaction-you-are-using": "您正在使用:",
+    "esctransaction-value": "Value:",
+    "esctransaction-fees": "Fees:",
 
     // Wait for sync
     "waitforsync-syncing": "正在同步",

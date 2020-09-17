@@ -86,7 +86,7 @@
 
     .btn-row {
         // margin-top: 45%;
-        margin-top: 65%;
+        margin-top: 45%;
         width: 100%;
         display: flex;
         justify-content: space-around;
@@ -98,26 +98,26 @@
             justify-content: center;
             align-items: center;
             border-radius: 8px;
-        
+
             ion-label {
                 font-size: 17px;
                 font-weight: 500;
             }
         }
-      
+
         .cancel {
             box-shadow: 0 3px 15px 0 #ededf0;
             background-color: #ffffff;
-    
+
             ion-label {
                 color: #000000;
             }
         }
-        
+
         .confirm {
             box-shadow: 0 3px 15px 0 #ededf0;
             background-color: #6e23d0;
-            
+
             ion-label {
                 color: #ffffff;
             }

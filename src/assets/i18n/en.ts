@@ -187,7 +187,9 @@ export const en = {
     "esctransaction-title": "ETH Transaction",
     "esctransaction-smart-contract": "Smart Contract",
     "esctransaction-intro": "You are going to sign and run a smart contract on the Ethereum Sidechain.",
-    "esttransaction-you-are-using": "You are using:",
+    "esctransaction-you-are-using": "You are using:",
+    "esctransaction-value": "Value:",
+    "esctransaction-fees": "Fees:",
 
     // Wait for sync
     "waitforsync-syncing": "Syncing",

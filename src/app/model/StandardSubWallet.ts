@@ -98,6 +98,7 @@ export class StandardSubWallet extends SubWallet {
 
     public async getTransactions(startIndex: number): Promise<AllTransactions> {
         let allTransactions = await this.masterWallet.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.id, startIndex, '');
+        console.log("Get all transaction count for coin "+this.id+": ", allTransactions && allTransactions.Transactions ? allTransactions.Transactions.length : -1, "startIndex: ", startIndex);
         return allTransactions;
     }
 

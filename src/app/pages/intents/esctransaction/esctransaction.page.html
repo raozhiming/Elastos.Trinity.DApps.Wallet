@@ -4,7 +4,7 @@
             <ion-img [src]="!theme.darkMode ? 'assets/intents/smartcontracts.svg' : 'assets/intents/darkmode/smartcontracts.svg'"></ion-img>
             <ion-card-title>Smart Contract</ion-card-title>
             <ion-card-subtitle>
-                You are going to sign and run a 
+                You are going to sign and run a
                 smart contract on the Ethereum Sidechain.
             </ion-card-subtitle>
         </ion-card>
@@ -38,14 +38,23 @@
         </ion-card>
         <div class="msg-container">
             <p>{{ 'esctransaction-you-are-using' | translate }}</p>
-            <h1 id="count">{{ balance }} <span>ELA</span></h1>
+            <h1 id="count">{{ getTotalTransactionCostInELA().total }} <span>ELA</span></h1>
+            <p><b>{{ 'esctransaction-value' | translate }}</b>: {{ getTotalTransactionCostInELA().value }} ELA</p>
+            <p><b>{{ 'esctransaction-fees' | translate }}</b>: {{ getTotalTransactionCostInELA().fees }} ELA</p>
+
+            <p><b>{{ 'coin-balance' | translate }}</b>: {{ balance }} ELA</p>
         </div>
+
         <ion-row class="btn-row">
+            <div class="msg-container" *ngIf="!balanceIsEnough()">
+                Insufficient balance for this operation
+            </div>
+
             <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelOperation()">
                 <ion-label>{{ 'cancel' | translate}}</ion-label>
                 <ion-ripple-effect></ion-ripple-effect>
             </ion-col>
-            <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="goTransaction()">
+            <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="goTransaction()" *ngIf="balanceIsEnough()">
                 <ion-label>{{ 'confirm' | translate}}</ion-label>
                 <ion-ripple-effect></ion-ripple-effect>
             </ion-col>
