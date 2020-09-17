@@ -456,7 +456,10 @@ export class SPVWalletPluginBridge {
     publishTransaction(masterWalletId: string, chainId: string, rawTransaction: string): Promise<PublishedTransaction> {
         return new Promise(async (resolve, reject) => {
             walletManager.publishTransaction([masterWalletId, chainId, rawTransaction],
-                (ret) => { resolve(ret); },
+                (ret) => {
+                    ret["TxHash"] = ret["Hash"]; // TMP SPVSDK BUG BPI
+                    resolve(ret);
+                },
                 (err) => { this.handleError(err, reject);  });
         });
     }
