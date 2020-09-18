@@ -1,5 +1,5 @@
-import Web3 from 'Web3'
-import * as TrinitySDK from "@elastosfoundation/trinity-dapp-sdk"
+import Web3 from 'web3';
+import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk'
 // import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
 
 import { MasterWallet } from './MasterWallet';

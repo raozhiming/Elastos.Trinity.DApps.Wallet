@@ -10,8 +10,8 @@ import { MasterWallet } from 'src/app/model/MasterWallet';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
-import Web3 from 'Web3'
-import * as TrinitySDK from "@elastosfoundation/trinity-dapp-sdk"
+import Web3 from 'web3';
+import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk'
 import { StandardCoinName, ERC20Coin } from 'src/app/model/Coin';
 import { PopupProvider } from 'src/app/services/popup.service';
 import { CoinService } from 'src/app/services/coin.service';
