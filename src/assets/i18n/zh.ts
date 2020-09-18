@@ -148,10 +148,10 @@ export const zh = {
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "确定删除?",
-    "delete-wallet-confirm-subtitle": "您的钱包将从此设备上删除. 您可以重新导入此钱包，请确保已经备份好钱包助记词。",
+    "delete-wallet-confirm-subtitle": "您的钱包将从此设备上删除。 您可以重新导入此钱包，请确保已经备份好钱包助记词。",
 
     // Wallet manager screen
-    "wallet-manager-intro": "每个钱包都有单独的设置，您可以检查每个钱包里的选项",
+    "wallet-manager-intro": "每个钱包都有单独的设置，您可以检查每个钱包里的选项。",
     "wallet-manager-add-wallet": "添加钱包",
 
 
@@ -246,7 +246,7 @@ export const zh = {
     "text-wallet-name-validator-already-exists": "此钱包名称已经存在",
 
     // Error codes
-    'Error-10000': 'Action参数Json格式错误',
+    'Error-10000': 'Action参数JSON格式错误',
     'Error-10001': 'Action参数错误',
     'Error-10002': '无效主钱包',
     'Error-10003': '无效子钱包',
@@ -295,7 +295,7 @@ export const zh = {
     'Error-20032': '签名错误',
     'Error-20035': '余额不足',
     'Error-30000': 'JSON转换错误',
-    'Error-20036': 'Json格式错误',
+    'Error-20036': 'JSON格式错误',
     'Error-20037': '无效投票数',
     'Error-20038': '无效输入',
     'Error-20039': '无效交易',

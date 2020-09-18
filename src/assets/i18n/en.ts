@@ -4,7 +4,7 @@ export const en = {
     "enter-name": "Enter name",
     "enter-amount": "Enter amount",
     "total-amount": "TOTAL AMOUNT",
-    "advanced-options": "Advanced options",
+    "advanced-options": "Advanced Options",
     "recharge": "Recharge",
     "withdraw": "Transfer",
     "send": "Send",
@@ -148,10 +148,10 @@ export const en = {
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirm deletion?",
-    "delete-wallet-confirm-subtitle": "Your wallet will be deleted from this device. You can re-import it later but make sure to backup your mnemonic first.",
+    "delete-wallet-confirm-subtitle": "Your wallet will be deleted from this device. You can re-import it later but make sure to backup your mnemonics first.",
 
     // Wallet manager screen
-    "wallet-manager-intro": "Wallets will have individual settings, you can check the options of each wallet below",
+    "wallet-manager-intro": "Wallets will have individual settings, you can check the options of each wallet below.",
     "wallet-manager-add-wallet": "Add Wallet",
 
     // Access intent screen
@@ -204,7 +204,7 @@ export const en = {
 
     // Mnemonic
     'mnemonic': 'Mnemonic',
-    'mnemonic-prompt1': 'These are your 12 security words (mnemonic). Lose these and you will lose the wallet, so you must keep them written down ',
+    'mnemonic-prompt1': 'These are your 12 security words (mnemonic phrase). Lose these and you will lose the wallet, so you must keep them written down ',
     'mnemonic-prompt2': 'in order',
     'mnemonic-prompt3': ', and safe!',
     'back-to-setting': 'Back to Settings',
@@ -230,7 +230,7 @@ export const en = {
     // Launcher screen
     'wallet': 'Wallet',
     'wallet-prompt1': 'Secure Wallet for',
-    'wallet-prompt2': 'The Elastos ecosystem',
+    'wallet-prompt2': 'The Elastos Ecosystem',
     'get-started': 'Get Started',
     'import-wallet': 'Already got a Wallet? Import it.',
 
@@ -244,7 +244,7 @@ export const en = {
     "text-wallet-name-validator-already-exists": "This wallet name is already in use",
 
     // Error codes
-    'Error-10000': 'Json parse error of action parameters',
+    'Error-10000': 'JSON parse error of action parameters',
     'Error-10001': 'Parameters error of action',
     'Error-10002': 'Invalid master wallet',
     'Error-10003': 'Invalid sub wallet',
@@ -265,7 +265,7 @@ export const en = {
     'Error-20004': 'ID not found',
     'Error-20005': 'Create master wallet error, the wallet already exists',
     'Error-20006': 'Create sub wallet error',
-    'Error-20007': 'Parse json array error',
+    'Error-20007': 'Parse JSON array error',
     'Error-20008': 'Invalid mnemonic',
     'Error-20009': 'Public key format error',
     'Error-20010': 'Public key length error',
@@ -293,7 +293,7 @@ export const en = {
     'Error-20032': 'Sign error',
     'Error-20035': 'Balance is not enough',
     'Error-30000': 'JSON Conversion error',
-    'Error-20036': 'Json format error',
+    'Error-20036': 'JSON format error',
     'Error-20037': 'Invalid vote stake',
     'Error-20038': 'Invalid input',
     'Error-20039': 'Invalid transaction',
