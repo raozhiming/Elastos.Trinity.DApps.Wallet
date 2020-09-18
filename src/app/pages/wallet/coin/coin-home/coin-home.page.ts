@@ -192,10 +192,10 @@ export class CoinHomePage implements OnInit {
         for (const key in transactions) {
             if (transactions.hasOwnProperty(key)) {
                 const transaction = transactions[key];
-
+                // console.log('----transaction:', transaction);
                 let amount;
                 if (this.chainIsETHSC()) {
-                    if (transaction.IsErrored) {
+                    if (transaction.IsErrored || (transaction.BlockNumber === 0)) {
                         // remove the wrong transaction
                         await this.deleteTransaction(transaction);
                         continue;

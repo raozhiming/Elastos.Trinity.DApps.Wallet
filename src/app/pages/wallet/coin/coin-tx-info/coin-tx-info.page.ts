@@ -95,14 +95,15 @@ export class CoinTxInfoPage implements OnInit {
             this.chainId = navigation.extras.state.chainId;
             // Raw data
             this.amount = this.transactionInfo.amount;
-            this.timestamp = this.transactionInfo.timestamp * 1000;
-            this.datetime = this.transactionInfo.datetime;
+            // this.timestamp = this.transactionInfo.timestamp * 1000;
+            this.datetime = Util.dateFormat(new Date(this.transactionInfo.timestamp), 'YYYY-MM-DD HH:mm:ss');
             this.confirmCount = this.transactionInfo.confirmStatus;
             this.memo = this.transactionInfo.memo;
             this.symbol = this.transactionInfo.symbol;
             this.type = this.transactionInfo.type;
             this.payFee = this.transactionInfo.fee;
             this.payStatusIcon = this.transactionInfo.payStatusIcon;
+            this.txId = this.transactionInfo.txId;
 
             // Display header data
             let direction = this.transactionInfo.direction;
@@ -124,6 +125,9 @@ export class CoinTxInfoPage implements OnInit {
         let transaction = allTransactions.Transactions[0];
         console.log('Raw tx', transaction);
 
+        if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
+            this.payFee = transaction.Fee / Config.SELA;
+        }
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
 
