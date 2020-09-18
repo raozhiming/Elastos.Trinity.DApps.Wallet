@@ -152,7 +152,7 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void> {
-        console.error("ERC20 signAndSendRawTransaction transaction:", transfer);
+        console.log("ERC20 signAndSendRawTransaction transaction:", transfer);
 
         return new Promise(async (resolve)=>{
             console.log('Received raw transaction', transaction);

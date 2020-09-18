@@ -5,6 +5,7 @@ import { Config } from '../config/Config';
 import { Util } from '../model/Util';
 import { StandardCoinName } from '../model/Coin';
 import { Injectable, NgZone } from '@angular/core';
+import { CoinService } from 'src/app/services/coin.service';
 import { CoinTransferService, TransferType } from './cointransfer.service';
 import { WalletAccessService } from './walletaccess.service';
 import { WalletManager } from './wallet.service';
@@ -24,6 +25,7 @@ export class IntentService {
         public events: Events,
         public native: Native,
         private walletManager: WalletManager,
+        private coinService: CoinService,
         private coinTransferService: CoinTransferService,
         private walletAccessService: WalletAccessService
     ) {
@@ -42,7 +44,7 @@ export class IntentService {
         });
     }
 
-    onReceiveIntent(intent: AppManagerPlugin.ReceivedIntent) {
+    async onReceiveIntent(intent: AppManagerPlugin.ReceivedIntent) {
         console.log(
             "Intent message receive:", intent.action,
             ". params: ", intent.params,
@@ -51,7 +53,7 @@ export class IntentService {
 
         this.walletList = this.walletManager.getWalletsList();
         if (this.walletList.length === 0) {
-            this.sendIntentResponse(intent.action, "No active master wallet!", intent.intentId);
+            await this.sendIntentResponse(intent.action, {message: 'No active master wallet!', status: 'error'}, intent.intentId);
             return false;
         }
 
@@ -66,10 +68,10 @@ export class IntentService {
         }
     }
 
-    handleTransactionIntent(intent: AppManagerPlugin.ReceivedIntent) {
+    async handleTransactionIntent(intent: AppManagerPlugin.ReceivedIntent) {
         if (Util.isEmptyObject(intent.params)) {
             console.error('Invalid intent parameters received. No params.', intent.params);
-            this.sendIntentResponse(intent.action, "Invalid intent parameters", intent.intentId);
+            await this.sendIntentResponse(intent.action, "Invalid intent parameters", intent.intentId);
             return false;
         } else {
             this.coinTransferService.reset();
@@ -132,6 +134,11 @@ export class IntentService {
 
             case 'pay':
                 this.coinTransferService.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
+                if (this.coinTransferService.chainId === null) {
+                    await this.sendIntentResponse('pay', {message: 'Not support Token:' + intent.params.currency, status: 'error'}, intent.intentId);
+                    return;
+                }
+
                 this.coinTransferService.transferType = TransferType.PAY;
 
                 this.coinTransferService.payTransfer = {
@@ -213,17 +220,19 @@ export class IntentService {
             let digest = await this.walletManager.spvBridge.proposalOwnerDigest(masterWalletID, StandardCoinName.ELA, intent.params.proposal);
 
             // This is a silent intent, app will close right after calling sendIntentresponse()
-            this.sendIntentResponse("crproposalcreatedigest", {digest: digest}, intent.intentId);
+            await this.sendIntentResponse("crproposalcreatedigest", {digest: digest}, intent.intentId);
         }
         else {
             // This is a silent intent, app will close right after calling sendIntentresponse()
-            this.sendIntentResponse("crproposalcreatedigest", "Missing proposal input parameter in the intent", intent.intentId);
+            await this.sendIntentResponse("crproposalcreatedigest", {message: "Missing proposal input parameter in the intent", status: 'error'}, intent.intentId);
         }
     }
 
     private getChainIDByCurrency(currency: string) {
         let chainID = StandardCoinName.ELA;
         switch (currency) {
+            case 'ELA':
+                break;
             case 'IDChain':
             case 'ELA/ID':
                 chainID = StandardCoinName.IDChain;
@@ -233,6 +242,17 @@ export class IntentService {
                 chainID = StandardCoinName.ETHSC;
                 break;
             default:
+                if (currency.startsWith('ELAETHSC')) {
+                    chainID = currency.substring(9) as StandardCoinName;
+                    const coin = this.coinService.getCoinByID(chainID);
+                    if (!coin) {
+                        chainID = null;
+                        console.log('Not support coin:', currency);
+                    }
+                } else {
+                    chainID = null;
+                    console.log('Not support coin:', currency);
+                }
                 break;
         }
         return chainID;
