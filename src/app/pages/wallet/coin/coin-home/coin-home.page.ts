@@ -41,6 +41,7 @@ import { CurrencyService } from 'src/app/services/currency.service';
 import { ERC20SubWallet } from 'src/app/model/ERC20SubWallet';
 import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
 import { UiService } from 'src/app/services/ui.service';
+import BigNumber from 'bignumber.js';
 
 @Component({
     selector: 'app-coin-home',
@@ -166,6 +167,8 @@ export class CoinHomePage implements OnInit {
 
     async getAllTx() {
         let allTransactions = await this.subWallet.getTransactions(this.start);
+        console.log("Got all transactions: ", JSON.parse(JSON.stringify(allTransactions)));
+
         const transactions = allTransactions.Transactions;
         this.MaxCount = allTransactions.MaxCount;
         if (this.MaxCount > 0) {
@@ -190,10 +193,11 @@ export class CoinHomePage implements OnInit {
         }
 
         for (const key in transactions) {
+            console.log("key", key, "transaction", transactions[key]);
             if (transactions.hasOwnProperty(key)) {
                 const transaction = transactions[key];
                 // console.log('----transaction:', transaction);
-                let amount;
+                let amount: BigNumber;
                 if (this.chainIsETHSC()) {
                     if (transaction.IsErrored || (transaction.BlockNumber === 0)) {
                         // remove the wrong transaction
@@ -201,11 +205,11 @@ export class CoinHomePage implements OnInit {
                         continue;
                     }
                     // TODO: upgrade spvsdk, now the result from spvsdk like: 0.010000000000000
-                    amount = parseFloat(transaction.Amount);
+                    amount = new BigNumber(transaction.Amount);
                     transaction.Fee = parseFloat(transaction.Fee.toString());
                     transaction.Direction = this.getETHSCTransactionDirection(transaction.TargetAddress);
                 } else {
-                    amount = parseInt(transaction.Amount, 10) / Config.SELA;
+                    amount = new BigNumber(transaction.Amount, 10).dividedBy(Config.SELAAsBigNumber);
                 }
 
                 const timestamp = transaction.Timestamp * 1000;
@@ -251,7 +255,7 @@ export class CoinHomePage implements OnInit {
 
                 const status = this.getTransactionStatusName(transaction.Status);
                 const transfer: TransactionInfo = {
-                    amount,
+                    amount: amount.toString(),
                     confirmStatus: transaction.ConfirmStatus || transaction.Confirmations.toString(), // ETHSC use Confirmations
                     datetime,
                     direction: transaction.Direction,
