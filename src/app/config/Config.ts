@@ -21,6 +21,7 @@
  */
 
 import { Injectable } from '@angular/core';
+import BigNumber from 'bignumber.js';
 
 // TODO: translate comments to english
 @Injectable()
@@ -44,6 +45,7 @@ export class Config {
     public static UTXO_CONSOLIDATE_PROMPT_THRESHOLD = 500; // Number of UTXOs after which the app will ask user to consolidate.
 
     public static SELA = 100000000; // Number of SELA per ELA.
+    public static SELAAsBigNumber = new BigNumber(Config.SELA);
 
     // TODO: comment what those below urls are
     public static IDCHAIN_URL: String = 'https://idchain.elastos.org/';

@@ -33,6 +33,7 @@ import { PopupProvider } from './services/popup.service';
 import { NavService } from './services/nav.service';
 import { IntentService } from './services/intent.service';
 import { CurrencyService } from './services/currency.service';
+import { CoinService } from './services/coin.service';
 
 @Component({
     selector: 'app-root',
@@ -55,7 +56,8 @@ export class AppComponent {
         private intentService: IntentService,
         private currencyService: CurrencyService,
         public popupProvider: PopupProvider,
-        public modalCtrl: ModalController
+        public modalCtrl: ModalController,
+        private coinService: CoinService
     ) {
         this.initializeApp();
     }
@@ -69,11 +71,13 @@ export class AppComponent {
             this.setupBackKeyNavigation();
 
             await this.appService.init();
-
+            await this.coinService.init();
             await this.currencyService.init();
 
             // Wait until the wallet manager is ready before showing the first screen.
             this.events.subscribe("walletmanager:initialized", () => {
+                console.log("walletmanager:initialized event received");
+
                 if (!this.appService.runningAsAService()) {
                     this.navService.showStartupScreen();
                 }

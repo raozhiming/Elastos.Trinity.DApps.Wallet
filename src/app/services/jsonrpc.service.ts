@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StandardCoinName } from '../model/Coin';
 import { Config } from '../config/Config';
+import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -32,7 +33,7 @@ export class JsonRPCService {
     }
 
     // return balance in SELA
-    async getBalanceByAddress(chainID: StandardCoinName, addressArray: string[]) {
+    async getBalanceByAddress(chainID: StandardCoinName, addressArray: string[]): Promise<BigNumber> {
         const paramArray = [];
         let index = 0;
 
@@ -53,13 +54,13 @@ export class JsonRPCService {
             return;
         }
 
-        let balanceOfSELA = 0;
+        let balanceOfSELA = new BigNumber(0);
         const resultArray = await this.httpRequest(rpcApiUrl, paramArray);
         for (const result of resultArray) {
-            balanceOfSELA += parseFloat(result.result) * Config.SELA;
+            balanceOfSELA  = balanceOfSELA.plus(new BigNumber(result.result).multipliedBy(Config.SELAAsBigNumber));
         }
         console.log(' debug: getBalanceByAddress:', balanceOfSELA);
-        return Math.round(balanceOfSELA);
+        return balanceOfSELA;
     }
 
     async getBlockHeight(chainID: StandardCoinName) {

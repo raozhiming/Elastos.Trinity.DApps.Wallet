@@ -37,10 +37,9 @@ export class CoinService {
     private activeNetwork: NetworkType;
 
     constructor(private storage: LocalStorage, private events: Events, private prefs: PrefsService) {
-        this.initializeCoinList();
     }
 
-    private async initializeCoinList() {
+    public async init() {
         this.availableCoins = [];
 
         this.activeNetwork = await this.prefs.getActiveNetworkType();

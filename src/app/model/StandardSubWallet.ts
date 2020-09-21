@@ -6,6 +6,7 @@ import { AllTransactions } from './Transaction';
 import * as moment from 'moment';
 import { Transfer } from '../services/cointransfer.service';
 import { Config } from '../config/Config';
+import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -78,16 +79,16 @@ export class StandardSubWallet extends SubWallet {
         return coin.getName();
     }
 
-    public getDisplayBalance(): number {
-        return this.balance / Config.SELA;
+    public getDisplayBalance(): BigNumber {
+        return this.balance.dividedBy(Config.SELAAsBigNumber);
     }
 
     /**
      * Check whether the balance is enough.
      * @param amount unit is ELA
      */
-    public isBalanceEnough(amount: number) {
-        return this.balance > (amount * Config.SELA);
+    public isBalanceEnough(amount: BigNumber) {
+        return this.balance.gt(amount.multipliedBy(Config.SELAAsBigNumber));
     }
 
     /**
@@ -98,7 +99,7 @@ export class StandardSubWallet extends SubWallet {
         if (this.id === StandardCoinName.ETHSC) {
             let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
             // TODO: use Ether? Gwei? Wei?
-            this.balance = Math.round(parseFloat(balanceStr) * Config.SELA);
+            this.balance = new BigNumber(balanceStr).multipliedBy(Config.SELAAsBigNumber);
         } else {
             // if the balance form spvsdk is newer, then use it.
             if (!this.lastBlockTime || (moment(this.lastBlockTime).valueOf() > this.timestampRPC)) {
@@ -106,7 +107,7 @@ export class StandardSubWallet extends SubWallet {
                 let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
 
                 // Balance in SELA
-                this.balance = parseInt(balanceStr, 10);
+                this.balance = new BigNumber(balanceStr, 10);
             }
         }
     }
