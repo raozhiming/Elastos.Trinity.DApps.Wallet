@@ -253,10 +253,16 @@ export class CoinHomePage implements OnInit {
                     }
                 }
 
+                let confirmStatus: number; // Number of confirmations
+                if (this.chainIsETHSC()) // ETHSC use Confirmations - TODO: FIX THIS - SHOULD BE EITHER CONFIRMSTATUS or CONFIRMATIONS BUT NOT BOTH
+                    confirmStatus = transaction.Confirmations;
+                else
+                    confirmStatus = transaction.ConfirmStatus;
+
                 const status = this.getTransactionStatusName(transaction.Status);
                 const transfer: TransactionInfo = {
                     amount: amount.toString(),
-                    confirmStatus: transaction.ConfirmStatus || transaction.Confirmations.toString(), // ETHSC use Confirmations
+                    confirmStatus: confirmStatus,
                     datetime,
                     direction: transaction.Direction,
                     fee: transaction.Fee,

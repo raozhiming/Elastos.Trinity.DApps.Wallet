@@ -19,7 +19,7 @@ export enum TransactionType {
 
 export type TransactionInfo = {
     amount: string,
-    confirmStatus: string,
+    confirmStatus: number,
     datetime: any,
     direction: TransactionDirection,
     fee: number,
@@ -36,7 +36,7 @@ export type TransactionInfo = {
 export type Transaction = {
     Amount: string;
     Fee: number;
-    ConfirmStatus: string;
+    ConfirmStatus: number;
     Direction: TransactionDirection;
     Height: number;
     Status: TransactionStatus;
