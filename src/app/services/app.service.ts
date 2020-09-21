@@ -62,6 +62,8 @@ export class AppService {
         // Check and save startup mode info
         this.startupInfo = await this.getStartupMode();
 
+        console.log("RUNNING AS: "+this.startupInfo.startupMode);
+
         // Listen to raw app manager messages.
         appManager.setListener((msg) => {
             this.onMessageReceived(msg);

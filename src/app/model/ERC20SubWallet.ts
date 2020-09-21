@@ -7,6 +7,7 @@ import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, CoinID, Coin, ERC20Coin, StandardCoinName } from './Coin';
 import { Util } from './Util';
 import { Transfer } from '../services/cointransfer.service';
+import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -83,7 +84,7 @@ export class ERC20SubWallet extends SubWallet {
         console.log(this.id+" decimals: ", this.tokenDecimals);
     }
 
-    public getDisplayBalance(): number {
+    public getDisplayBalance(): BigNumber {
         return this.balance; // Raw balance and display balance are the same: the number of tokens.
     }
 
@@ -91,8 +92,8 @@ export class ERC20SubWallet extends SubWallet {
      * Check whether the balance is enough.
      * @param amount unit is ETHER
      */
-    public isBalanceEnough(amount: number) {
-        return this.balance > amount;
+    public isBalanceEnough(amount: BigNumber) {
+        return this.balance.gt(amount);
     }
 
     public async updateBalance() {
@@ -102,9 +103,10 @@ export class ERC20SubWallet extends SubWallet {
         var contractAddress = this.coin.getContractAddress();
         let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
 
+        // TODO: what's the integer type returned by web3? Are we sure we can directly convert it to BigNumber like this? To be tested
         let balanceEla = await erc20Contract.methods.balanceOf(ethAccountAddress).call();
         // The returned balance is an int. Need to devide by the number of decimals used by the token.
-        this.balance = balanceEla / Math.pow(10, this.tokenDecimals);
+        this.balance = new BigNumber(balanceEla).dividedBy(new BigNumber(10).pow(this.tokenDecimals));
         console.log(this.id+": raw balance:", balanceEla, " Converted balance: ", this.balance);
 
         // Update the "last sync" date. Just consider this http call date as the sync date for now

@@ -47,7 +47,7 @@ export class EscTransactionPage implements OnInit {
     private ethSidechainSubWallet: SubWallet = null;
     private intentTransfer: IntentTransfer;
     private walletInfo = {};
-    public balance: number; // ELA
+    public balance: BigNumber; // ELA
     public chainId: string; // ETHSC
     public hasOpenETHSCChain = false;
 

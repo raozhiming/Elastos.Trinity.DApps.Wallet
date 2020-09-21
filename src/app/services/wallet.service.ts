@@ -44,6 +44,7 @@ import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
 import { Transfer } from './cointransfer.service';
 import { PrefsService } from './prefs.service';
+import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -172,6 +173,8 @@ export class WalletManager {
                 this.goToLauncherScreen();
                 return false;
             }
+
+            console.log("Got "+idList.length+" wallets from the SPVSDK");
 
             // Rebuild our local model for all wallets returned by the SPV SDK.
             for (var i = 0; i < idList.length; i++) {
@@ -656,12 +659,12 @@ export class WalletManager {
         // }
 
         const masterWallet = this.getMasterWallet(masterId);
-        if (masterWallet.subWallets[StandardCoinName.ELA].balance <= 1000000) {
+        if (masterWallet.subWallets[StandardCoinName.ELA].balance.lte(1000000)) {
             console.log('ELA balance ', masterWallet.subWallets[StandardCoinName.ELA].balance);
             return;
         }
 
-        if (masterWallet.subWallets[StandardCoinName.IDChain].balance > 100000) {
+        if (masterWallet.subWallets[StandardCoinName.IDChain].balance.gt(100000)) {
             console.log('IDChain balance ',  masterWallet.subWallets[StandardCoinName.IDChain].balance);
             return;
         }
@@ -769,7 +772,7 @@ export class WalletManager {
     }
 
     //
-    async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName, singleAddress: boolean) {
+    async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName, singleAddress: boolean): Promise<BigNumber> {
         console.log('TIMETEST getBalanceByRPC start:', chainID);
 
         // If the balance of 5 consecutive request is 0, then end the query.(100 addresses)
@@ -780,7 +783,7 @@ export class WalletManager {
         let requestAddressCountOfExternal = 1;
 
         let startIndex = 0;
-        let totalBalance = 0;
+        let totalBalance = new BigNumber(0);
         let totalRequestCount = 0;
 
         console.log('Internal address');
@@ -798,9 +801,9 @@ export class WalletManager {
 
             try {
                 const balance = await this.jsonRPCService.getBalanceByAddress(chainID, addressArray.Addresses);
-                totalBalance += balance;
+                totalBalance = totalBalance.plus(balance);
 
-                if (balance <= 0) {
+                if (balance.lte(0)) {
                     requestTimesOfGetEmptyBalance++;
                     if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
                         requestAddressCountOfInternal = startIndex;
@@ -844,10 +847,10 @@ export class WalletManager {
 
                 try {
                     const balance = await this.jsonRPCService.getBalanceByAddress(chainID, addressArray.Addresses);
-                    totalBalance += balance;
+                    totalBalance = totalBalance.plus(balance);
 
                     if (startCheckBlanks) {
-                        if (balance <= 0) {
+                        if (balance.lte(0)) {
                             requestTimesOfGetEmptyBalance++;
                             if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
                                 requestAddressCountOfExternal = startIndex;

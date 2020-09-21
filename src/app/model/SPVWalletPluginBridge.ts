@@ -591,11 +591,11 @@ export class SPVWalletPluginBridge {
                 [
                     masterWalletId,
                     toAddress,
-                    Util.getDicemalString(amount),
+                    Util.getDecimalString(amount),
                     amountUnit,
-                    Util.getDicemalString(gasPrice),
+                    Util.getDecimalString(gasPrice),
                     gasPriceUnit,
-                    Util.getDicemalString(gasLimit),
+                    Util.getDecimalString(gasLimit),
                     data
                 ],
                 (ret) => { resolve(ret); },

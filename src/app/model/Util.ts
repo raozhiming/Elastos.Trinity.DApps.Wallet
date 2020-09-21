@@ -230,7 +230,11 @@ export class Util {
         return decimalBalance.toLocaleString().slice(2, 6);
     }
 
-    public static getDicemalString(numberString: string) {
+    /**
+     * Converts a base-10 or base-16 string representation of a number (ex: "140" or "0xA45F" into
+     * a base-10 string representation (ex: "140"->"140", "0xA45F"->"42079")
+     */
+    public static getDecimalString(numberString: string) {
         if (numberString.startsWith('0x')) {
             return parseInt(numberString, 16).toString();
         } else {

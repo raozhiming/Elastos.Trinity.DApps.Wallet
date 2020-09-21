@@ -32,6 +32,7 @@ import { WalletAccount, WalletAccountType } from 'src/app/model/WalletAccount';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { AuthService } from 'src/app/services/auth.service';
+import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -45,7 +46,7 @@ export class CRMemberRegisterPage implements OnInit {
     intentTransfer: IntentTransfer;
     transfer: Transfer = null;
 
-    balance: number; // ELA
+    balance: BigNumber; // ELA
 
     chainId: StandardCoinName; // IDChain
     hasOpenIDChain = false;
@@ -55,7 +56,7 @@ export class CRMemberRegisterPage implements OnInit {
     title = '';
     info = '';
 
-    private depositAmount = '500000000000'; // 5000 ELA
+    private depositAmount = new BigNumber(500000000000); // 5000 ELA
 
     constructor(public walletManager: WalletManager,
                 public appService: AppService,
@@ -145,7 +146,7 @@ export class CRMemberRegisterPage implements OnInit {
     }
 
     checkValue() {
-        if (this.balance < 0.0002) {
+        if (this.balance.lt(0.0002)) {
             this.popupProvider.ionicAlert('confirmTitle', 'text-did-balance-not-enough');
             return;
         }
@@ -172,7 +173,7 @@ export class CRMemberRegisterPage implements OnInit {
                 this.transfer.did, digest, payPassword);
 
         this.transfer.rawTransaction  = await this.walletManager.spvBridge.createRegisterCRTransaction(this.masterWallet.id, this.chainId,
-                '', payload, this.depositAmount, this.transfer.memo);
+                '', payload, this.depositAmount.toString(), this.transfer.memo);
         this.walletManager.openPayModal(this.transfer); // TODO: USE signAndSendRawTransaction
     }
 

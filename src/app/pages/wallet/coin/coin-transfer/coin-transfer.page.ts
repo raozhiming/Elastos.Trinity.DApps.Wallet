@@ -42,6 +42,7 @@ import { CurrencyService } from 'src/app/services/currency.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/StandardSubWallet';
+import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
@@ -63,7 +64,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // User inputs
     public toAddress: string;
-    public amount: number;
+    public amount: number; // Here we can use JS "number" type, for now we consider we will never transfer a number that is larger than JS's MAX INT.
     public memo = '';
 
     // Display recharge wallets
@@ -326,7 +327,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.native.toast_trans('amount-invalid');
             return;
         }
-        if (!this.masterWallet.subWallets[this.chainId].isBalanceEnough(this.amount)) {
+        if (!this.masterWallet.subWallets[this.chainId].isBalanceEnough(new BigNumber(this.amount))) {
             this.native.toast_trans('amount-not-enough');
             return;
         }
