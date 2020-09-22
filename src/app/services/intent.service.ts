@@ -242,8 +242,8 @@ export class IntentService {
                 chainID = StandardCoinName.ETHSC;
                 break;
             default:
-                if (currency.startsWith('ELAETHSC')) {
-                    chainID = currency.substring(9) as StandardCoinName;
+                if (currency.startsWith('ELA/ETHSC:')) {
+                    chainID = currency.substring(10) as StandardCoinName;
                     const coin = this.coinService.getCoinByID(chainID);
                     if (!coin) {
                         chainID = null;
