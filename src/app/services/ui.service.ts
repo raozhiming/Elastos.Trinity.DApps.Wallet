@@ -4,6 +4,7 @@ import { StandardCoinName } from '../model/Coin';
 import * as moment from 'moment';
 import { PopoverController } from '@ionic/angular';
 import { HelpComponent } from '../components/help/help.component';
+import BigNumber from 'bignumber.js';
 
 @Injectable({
   providedIn: 'root'
@@ -42,11 +43,11 @@ export class UiService {
     return subwallet.getDisplayTokenName();
   }
 
-  getFixedBalance(balance: number): string {
-    if (balance === 0) {
-      return String(0);
+  getFixedBalance(balance: BigNumber): string {
+    if (balance.isZero()) {
+        return String(0);
     } else {
-      return balance.toFixed(4);
+        return balance.toFixed(4);
     }
   }
 
