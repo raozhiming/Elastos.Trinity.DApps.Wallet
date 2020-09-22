@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js';
 export class SerializedSubWallet {
     public type: CoinType = null;
     public id: StandardCoinName = null;
-    public balance: number = 0;
+    public balance: BigNumber = new BigNumber(0);
     public lastBlockTime: string = null;
     public timestamp: number = -1;
     public progress: number = 0;
