@@ -49,6 +49,21 @@
             </div>
         </ion-row>
 
+        <ion-row *ngIf="targetAddress != ''" class="section-row"  (click)="targetActive = !targetActive">
+            <ion-col size="11" class="name-col">
+                <h1>{{ 'tx-info-receiver-address' | translate }}</h1>
+            </ion-col>
+            <ion-col size="1" class="arrow-col">
+                <img *ngIf="!theme.darkMode" [class.rotate]="targetActive" src="assets/icons/down-arrow.svg"/>
+                <img *ngIf="theme.darkMode" [class.rotate]="targetActive" src="assets/icons/darkmode/down-arrow.svg"/>
+            </ion-col>
+            <div *ngIf="targetActive" class="details-container">
+                <div class="details-row">
+                    <h3>{{ targetAddress }}</h3>
+                </div>
+            </div>
+        </ion-row>
+
         <ion-row class="section-row"  (click)="confirmActive = !confirmActive">
             <ion-col size="11" class="name-col">
                 <h1>{{ 'tx-info-confirmations' | translate}}</h1>

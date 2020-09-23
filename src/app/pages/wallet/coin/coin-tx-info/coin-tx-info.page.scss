@@ -1,7 +1,7 @@
 ion-grid {
     padding: 20px;
     min-height: 100%;
-  
+
     ion-card {
         margin: 0;
         margin-bottom: 37.5px;
@@ -30,7 +30,7 @@ ion-grid {
             color: #2e2f4e;
             padding: 5px 5px 10px;
         }
-  
+
         ion-card-subtitle {
             font-size: 26px;
             font-weight: 600;
@@ -93,7 +93,7 @@ ion-grid {
             }
         }
     }
-  
+
     .section-row {
         box-shadow: 0 3px 15px 0 #ededf0;
         background-color: #ffffff;
@@ -113,7 +113,7 @@ ion-grid {
                 line-height: 1.46;
             }
         }
-  
+
         .arrow-col {
             display: flex;
             justify-content: center;
@@ -123,7 +123,7 @@ ion-grid {
                 transform: rotate(-180deg);
             }
         }
-  
+
         .details-container {
             margin-bottom: 7.5px;
             width: 100%;
@@ -135,13 +135,17 @@ ion-grid {
                 margin: 0px 15px 0px 5px;
                 overflow: hidden;
 
-                h2, p {
+                h2, h3, p {
                     margin: 5px 0 0;
                     font-size: 13px;
                     font-weight: 500;
                 }
+
+                h3 {
+                    font-size: 12px;
+                }
             }
-  
+
             .add-border {
                 border-bottom: 1px solid rgba(34, 34, 34, 0.07);
                 margin-top: 7.5px;
@@ -149,28 +153,28 @@ ion-grid {
         }
     }
 }
-  
+
 .dark-container {
     ion-card {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2e2f4e;
-  
+
         ion-card-title {
             color: #ffffff;
         }
     }
-  
+
     .section-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2e2f4e;
-  
+
         .details-container {
             .details-row {
-                h2, p {
+                h2, h3, p {
                     color: #cfd1f7;
                 }
             }
-  
+
             .add-border {
                 border-bottom: 1px solid #cfd1f7;
             }

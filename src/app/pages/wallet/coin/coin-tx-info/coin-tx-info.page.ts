@@ -8,7 +8,7 @@ import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/MasterWallet';
 import { AppService } from 'src/app/services/app.service';
 import { StandardCoinName } from 'src/app/model/Coin';
-import { TransactionStatus, TransactionDirection, TransactionType, TransactionInfo } from 'src/app/model/Transaction';
+import { TransactionStatus, TransactionDirection, TransactionType, TransactionInfo, Transaction } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -48,10 +48,14 @@ export class CoinTxInfoPage implements OnInit {
     public payType: string = '';
     public inputs = [];
     public outputs = [];
+    public targetAddress = '';
 
     // Tabs
-    public timeActive: boolean = true;
     public memoActive: boolean = true;
+    public timeActive: boolean = true;
+    public targetActive = true;
+    // public inputAtive: boolean = false;
+    // public outputAtive: boolean = false;
     public confirmActive: boolean = false;
     public feesActive: boolean = false;
     public txActive: boolean = false;
@@ -89,7 +93,6 @@ export class CoinTxInfoPage implements OnInit {
         const navigation = this.router.getCurrentNavigation();
         if (!Util.isEmptyObject(navigation.extras.state)) {
             this.transactionInfo = navigation.extras.state.transactionInfo;
-            console.log('----this.transactionInfo:', this.transactionInfo);
 
             this.masterWallet = this.walletManager.getMasterWallet(navigation.extras.state.masterWalletId);
             this.chainId = navigation.extras.state.chainId;
@@ -130,6 +133,8 @@ export class CoinTxInfoPage implements OnInit {
         }
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
+
+        this.targetAddress = this.getTargetAddressFromTransaction(transaction);
 
         // Display header data
         switch (transaction.Status) {
@@ -215,6 +220,22 @@ export class CoinTxInfoPage implements OnInit {
             }
         }
         return arr;
+    }
+
+    /**
+     * Get target address
+     */
+    getTargetAddressFromTransaction(transaction: Transaction): string {
+        let targetAddress = '';
+        if (transaction.Outputs) {
+            for (const key in transaction.Outputs) {
+                if (transaction.Amount === transaction.Outputs[key]) {
+                    targetAddress = key;
+                    break;
+                }
+            }
+        }
+        return targetAddress;
     }
 
     getDisplayableName(): string {
