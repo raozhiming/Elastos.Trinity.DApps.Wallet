@@ -50,7 +50,7 @@ export class ERC20SubWallet extends SubWallet {
         console.log("Initializing ERC20 subwallet from serialized sub wallet", serializedSubWallet);
 
         let subWallet = new ERC20SubWallet(masterWallet, serializedSubWallet.id);
-        Object.assign(subWallet, serializedSubWallet);
+        subWallet.initFromSerializedSubWallet(serializedSubWallet);
         return subWallet;
     }
 
@@ -60,17 +60,19 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public getFriendlyName(): string {
-        let coin = this.masterWallet.coinService.getCoinByID(this.id);
-        if (!coin)
-            return ""; // Just in case
+        const coin = this.masterWallet.coinService.getCoinByID(this.id);
+        if (!coin) {
+            return ''; // Just in case
+        }
 
         return coin.getDescription();
     }
 
     public getDisplayTokenName(): string {
-        let coin = this.masterWallet.coinService.getCoinByID(this.id);
-        if (!coin)
-            return ""; // Just in case
+        const coin = this.masterWallet.coinService.getCoinByID(this.id);
+        if (!coin) {
+            return ''; // Just in case
+        }
 
         return coin.getName();
     }
@@ -126,6 +128,10 @@ export class ERC20SubWallet extends SubWallet {
     async getEthAccountAddress(): Promise<string> {
         // "Create" actually always returns the same address because ETH sidechain accounts have only one address.
         return await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, StandardCoinName.ETHSC);
+    }
+
+    public async createWithdrawTransaction(toAddress: string, amount: number, memo: string): Promise<any> {
+        return Promise.resolve([]);
     }
 
     public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<any> {

@@ -11,10 +11,25 @@ import BigNumber from 'bignumber.js';
 export class SerializedSubWallet {
     public type: CoinType = null;
     public id: StandardCoinName = null;
-    public balance: BigNumber = new BigNumber(0);
+    public balance: string = null;
     public lastBlockTime: string = null;
     public timestamp: number = -1;
     public progress: number = 0;
+
+    /**
+     * Serialize only fields that we are willing to have in the serialized output.
+     * and the balance type of subwallet is bigNumber,
+     * It needs to be converted to string and then saved to localstorage.
+     */
+    public static fromSubWallet(subWallet: SubWallet): SerializedSubWallet {
+        const serializedSubWallet = new SerializedSubWallet();
+        serializedSubWallet.type = subWallet.type;
+        serializedSubWallet.id = subWallet.id as StandardCoinName;
+        serializedSubWallet.balance = subWallet.balance.toString();
+        serializedSubWallet.timestamp = subWallet.timestamp;
+        serializedSubWallet.progress = subWallet.progress;
+        return serializedSubWallet;
+    }
 }
 
 export abstract class SubWallet {
@@ -30,18 +45,22 @@ export abstract class SubWallet {
 
     constructor(protected masterWallet: MasterWallet, id: CoinID, public type: CoinType) {
         this.id = id;
+        this.type = type;
         this.events = this.masterWallet.walletManager.events;
     }
 
     public toSerializedSubWallet(): SerializedSubWallet {
-        let serializedSubWallet = new SerializedSubWallet();
+        return SerializedSubWallet.fromSubWallet(this);
+    }
 
-        // Serialize only fields that we are willing to have in the serialized output.
-        for(var key in serializedSubWallet) {
-            serializedSubWallet[key] = this[key];
-        }
-
-        return serializedSubWallet;
+    public initFromSerializedSubWallet(serializedSubWallet: SerializedSubWallet) {
+        // type and id are init in constructor
+        // this.type = serializedSubWallet.type;
+        // this.id = serializedSubWallet.id;
+        this.balance = new BigNumber(serializedSubWallet.balance);
+        this.lastBlockTime = serializedSubWallet.lastBlockTime;
+        this.timestamp = serializedSubWallet.timestamp;
+        this.progress = serializedSubWallet.progress;
     }
 
     /**
@@ -59,5 +78,6 @@ export abstract class SubWallet {
     public abstract isBalanceEnough(amount: BigNumber): boolean;
     public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
     public abstract async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string>;
+    public abstract async createWithdrawTransaction(toAddress: string, amount: number, memo: string): Promise<string>;
     public abstract async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void>;
 }

@@ -1,3 +1,6 @@
+import Web3 from 'web3';
+import { Contract } from 'web3-eth-contract';
+import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk';
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, Coin, StandardCoinName } from './Coin';
@@ -38,7 +41,7 @@ export class StandardSubWallet extends SubWallet {
     public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): StandardSubWallet {
         console.log("Initializing standard subwallet from serialized sub wallet", serializedSubWallet);
         let subWallet = new StandardSubWallet(masterWallet, serializedSubWallet.id);
-        Object.assign(subWallet, serializedSubWallet);
+        subWallet.initFromSerializedSubWallet(serializedSubWallet);
         return subWallet;
     }
 
@@ -64,17 +67,19 @@ export class StandardSubWallet extends SubWallet {
     }
 
     public getFriendlyName(): string {
-        let coin = this.masterWallet.coinService.getCoinByID(this.id)
-        if (!coin)
-            return ""; // Just in case
+        const coin = this.masterWallet.coinService.getCoinByID(this.id);
+        if (!coin) {
+            return ''; // Just in case
+        }
 
         return coin.getDescription();
     }
 
     public getDisplayTokenName(): string {
-        let coin = this.masterWallet.coinService.getCoinByID(this.id)
-        if (!coin)
-            return ""; // Just in case
+        const coin = this.masterWallet.coinService.getCoinByID(this.id);
+        if (!coin) {
+            return ''; // Just in case
+        }
 
         return coin.getName();
     }
@@ -159,6 +164,67 @@ export class StandardSubWallet extends SubWallet {
                 memo // User input memo
             );
         }
+        return rawTx;
+    }
+
+    /**
+     * Send ELA from ETHSC to mainchain by smartcontract
+     */
+    private getContractAddress(): Promise<string> {
+        return new Promise((resolve) => {
+            appManager.getPreference('chain.network.type', (value) => {
+                if (value === 'MainNet') {
+                    resolve(Config.CONTRACT_ADDRESS_MAINNET);
+                } else if (value === 'TestNet') {
+                    resolve(Config.CONTRACT_ADDRESS_TESTNET);
+                } else {
+                    resolve(null);
+                }
+            });
+        });
+    }
+
+    public async createWithdrawTransaction(toAddress: string, toAmount: number, memo: string): Promise<string> {
+        let rawTx = '';
+        if (this.id === StandardCoinName.ETHSC) {
+            const provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
+            const web3 = new Web3(provider);
+
+            const contractAbi = require('../../assets/ethereum/ETHSCWithdrawABI.json');
+            const contractAddress = await this.getContractAddress();
+            console.log('contractAbi:', contractAbi)
+            const ethscWithdrawContract = new web3.eth.Contract(contractAbi, contractAddress);
+            let gasPrice = await web3.eth.getGasPrice();
+
+            console.log('---- createWithdrawTransaction toAmount:', toAmount, ' toAddress:', toAddress, ' contractAddress:', contractAddress, ' gasPrice:', gasPrice);
+
+            let toAmountSend = web3.utils.toWei(toAmount.toString(), 'ether');
+            let data = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, 10000000000000).encodeABI();
+            console.log('toAmountSend:', toAmountSend)
+            console.log('data:', data)
+            rawTx = await this.masterWallet.walletManager.spvBridge.createTransferGeneric(
+                this.masterWallet.id,
+                contractAddress,
+                toAmountSend,
+                0, // WEI
+                '10000000000',
+                0, // WEI
+                '3000000', // TODO: gasLimit
+                data,
+            );
+        } else {// IDChain
+            rawTx = await this.masterWallet.walletManager.spvBridge.createWithdrawTransaction(
+                this.masterWallet.id,
+                this.id, // From subwallet id
+                '',
+                toAmount.toString(),
+                toAddress,
+                memo
+            );
+        }
+
+        console.log('----rawTx:', rawTx);
+
         return rawTx;
     }
 

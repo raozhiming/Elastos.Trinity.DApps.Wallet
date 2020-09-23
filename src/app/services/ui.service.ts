@@ -44,10 +44,16 @@ export class UiService {
   }
 
   getFixedBalance(balance: BigNumber): string {
-    if (balance.isZero()) {
+    try {
+        if (balance.isZero()) {
+            return String(0);
+        } else {
+            return balance.toFixed(4);
+        }
+    } catch (e) {
+        // The old wallet use number for balance, and save the wallet info to localstorage.
+        // So the balance form localstorage maybe isn't bigNumber.
         return String(0);
-    } else {
-        return balance.toFixed(4);
     }
   }
 
