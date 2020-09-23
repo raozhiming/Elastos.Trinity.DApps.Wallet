@@ -130,11 +130,15 @@ export class CoinTxInfoPage implements OnInit {
 
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
             this.payFee = transaction.Fee / Config.SELA;
+            this.targetAddress = this.getTargetAddressFromTransaction(transaction);
+        } else {
+            // TODO: How to distinguish between ordinary transfers and smart contracts
+            this.targetAddress = transaction.TargetAddress;
         }
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
 
-        this.targetAddress = this.getTargetAddressFromTransaction(transaction);
+
 
         // Display header data
         switch (transaction.Status) {
