@@ -112,7 +112,7 @@
                         *ngIf="walletManager.activeMasterWallet.account['Type']==='Multi-Sign'">{{'text-multi-wallet' | translate}}</span>
                 </div>
             </div>
-            <div class="valuation">{{walletManager.activeMasterWallet.getBalance()/Config.SELA}}</div>
+            <div class="valuation">{{walletManager.activeMasterWallet.getDisplayBalance()}}</div>
         </div>
 
         <div id="home-list-box" *ngIf="!exportMnemonic">

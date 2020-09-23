@@ -21,6 +21,7 @@
  */
 import { Config } from "../config/Config";
 import * as moment from 'moment';
+import BigNumber from 'bignumber.js';
 
 export class Util {
 
@@ -220,14 +221,13 @@ export class Util {
         return uuid.join('');
     }
 
-    public static getWholeBalance(balance: number): number {
-        return Math.trunc(balance);
+    public static getWholeBalance(balance: BigNumber): BigNumber {
+        return balance.dividedToIntegerBy(1);
     }
 
-    public static getDecimalBalance(balance: number): string {
-        let decimalBalance = balance - Math.trunc(balance);
-        decimalBalance.toFixed(5);
-        return decimalBalance.toLocaleString().slice(2, 6);
+    public static getDecimalBalance(balance: BigNumber): string {
+        const decimalBalance = balance.modulo(1);
+        return decimalBalance.toNumber().toLocaleString().slice(2, 5);
     }
 
     /**

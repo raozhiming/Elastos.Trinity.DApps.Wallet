@@ -7,6 +7,7 @@ import { Coin, CoinID, CoinType, StandardCoinName } from './Coin';
 import { CoinService } from '../services/coin.service';
 import { ɵNgStyleImpl } from '@angular/common';
 import BigNumber from 'bignumber.js';
+import { Config } from '../config/Config';
 
 export type WalletID = string;
 
@@ -93,7 +94,7 @@ export class MasterWallet {
         }
     }
 
-    public getBalance(): BigNumber {
+    public getDisplayBalance(): BigNumber {
         // Sum all subwallets balances to get the master wallet total balance
         // Only standard ELA wallets are summed up as ERC20 wallets amounts use their own currency
         // and canno't be stacked on top of ELA as we don't have a exchange rate for now.
@@ -102,7 +103,8 @@ export class MasterWallet {
             if (subWallet instanceof StandardSubWallet)
                 balance = balance.plus(subWallet.balance);
         }
-        return balance;
+
+        return balance.dividedBy(Config.SELAAsBigNumber);
     }
 
     /**

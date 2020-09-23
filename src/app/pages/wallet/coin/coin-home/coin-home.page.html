@@ -26,7 +26,7 @@
                 </h2>
                 <h3>{{ 'total-amount' | translate }}</h3>
                 <h4>
-                    {{ Util.getWholeBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}<span class="dot" *ngIf="masterWallet.subWallets[chainId].getDisplayBalance() !== 0">.</span>
+                    {{ Util.getWholeBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}<span class="dot" *ngIf="!masterWallet.subWallets[chainId].getDisplayBalance().isZero()">.</span>
                     <span class="decimals">{{ Util.getDecimalBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}</span>
                     <span class="ela"> {{ getCoinBalanceCurrency() }}</span>
                 </h4>
