@@ -55,7 +55,7 @@ export const zh = {
     // Wallet settings screen
     "wallet-settings-title": "钱包设置",
     "wallet-settings-backup-wallet": "备份钱包",
-    "wallet-settings-backup-wallet-subtitle": "查看要导出和备份的助记符",
+    "wallet-settings-backup-wallet-subtitle": "查看要导出和备份的助记词",
     "wallet-settings-change-name": "更改名称",
     "wallet-settings-change-name-subtitle": "自定义钱包名称",
     "wallet-settings-change-theme": "更换主题",
