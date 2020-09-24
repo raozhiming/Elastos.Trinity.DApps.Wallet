@@ -120,9 +120,11 @@ export class MnemonicExportPage implements OnInit {
             this.appService.setTitleBarTitle(this.translate.instant('mnemonic'));
 
             this.mnemonicStr = ret.toString();
-            let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/);
-            for (var i = 0; i < mnemonicArr.length; i++) {
-                this.mnemonicList.push({ "text": mnemonicArr[i], "selected": false });
+            let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/).filter(str => str.trim().length > 0);
+
+            // console.log('Mnemonic Array', mnemonicArr);
+            for (let i = 0; i < mnemonicArr.length; i++) {
+                this.mnemonicList.push(mnemonicArr[i]);
             }
 
             this.hideMnemonic = false;
