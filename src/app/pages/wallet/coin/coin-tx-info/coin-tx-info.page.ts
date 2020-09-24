@@ -139,8 +139,6 @@ export class CoinTxInfoPage implements OnInit {
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
 
-
-
         // Display header data
         switch (transaction.Status) {
             case TransactionStatus.CONFIRMED:
@@ -178,7 +176,7 @@ export class CoinTxInfoPage implements OnInit {
 
     subscribeprogressEvent() {
         if (!this.hasSubscribeprogressEvent) {
-            this.events.subscribe(this.chainId + ':syncprogress', (coin) => {
+            this.events.subscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress', (coin) => {
                 this.getTransactionInfo();
             });
             this.hasSubscribeprogressEvent = true;
@@ -186,7 +184,7 @@ export class CoinTxInfoPage implements OnInit {
     }
     unsubscribeprogressEvent() {
         if (this.hasSubscribeprogressEvent) {
-            this.events.unsubscribe(this.chainId + ':syncprogress');
+            this.events.unsubscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress');
             this.hasSubscribeprogressEvent = false;
         }
     }
