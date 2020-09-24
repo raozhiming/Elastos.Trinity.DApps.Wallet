@@ -221,7 +221,7 @@ export const en = {
     "memory-written-down": "I have written it down",
     "mnemonic-verify-sucess": "Mnemonic phrase verification succeeded",
     "mnemonic-verify-fail": "Mnemonic phrase verification failed, please re-enter the mnemonic phrase",
-    "mnemonic-input-passphase": "Enter mnemonic passphase",
+    "mnemonic-input-passphase": "Enter mnemonic passphase (At least 8 characters)",
     "mnemonic-reinput-passphase": "Repeat mnemonic passphase",
     "help:mnemonic-password": 'This is an optional password bound to your mnemonic words, to give your wallet extra security. Save it carefully, it is NOT recoverable if lost.',
 
@@ -243,6 +243,8 @@ export const en = {
     "text-wallet-name-validator-enter-name": "Please enter a name for your wallet",
     "text-wallet-name-validator-not-valid-name": "Sorry, this is not a valid wallet name",
     "text-wallet-name-validator-already-exists": "This wallet name is already in use",
+    "text-wallet-passphase-validator-repeat": "The two input mnemonic passphases are inconsistent",
+    "text-wallet-passphase-validator-min-length": "The mnemonic passphase must be at least 8 characters",
 
     // Error codes
     'Error-10000': 'JSON parse error of action parameters',

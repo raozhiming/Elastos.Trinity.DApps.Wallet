@@ -99,7 +99,8 @@ export class CoinTxInfoPage implements OnInit {
             // Raw data
             this.amount = this.transactionInfo.amount;
             // this.timestamp = this.transactionInfo.timestamp * 1000;
-            this.datetime = Util.dateFormat(new Date(this.transactionInfo.timestamp), 'YYYY-MM-DD HH:mm:ss');
+            this.datetime =  this.transactionInfo.timestamp === 0 ? this.translate.instant('coin-transaction-status-pending')
+                : Util.dateFormat(new Date(this.transactionInfo.timestamp), 'YYYY-MM-DD HH:mm:ss');
             this.confirmCount = this.transactionInfo.confirmStatus;
             this.memo = this.transactionInfo.memo;
             this.symbol = this.transactionInfo.symbol;

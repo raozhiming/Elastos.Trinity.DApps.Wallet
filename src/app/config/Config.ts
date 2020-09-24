@@ -26,20 +26,6 @@ import BigNumber from 'bignumber.js';
 // TODO: translate comments to english
 @Injectable()
 export class Config {
-    public static APP_ID = "org.elastos.trinity.dapp.wallet";
-    /**后台服务*/
-    public static SERVER:string = 'https://39.106.96.168:8446/api';
-    /**后台服务*/
-    public static SERVER1:string = 'https://123.206.52.29/api';
-    public static SERVER2:string = 'https://52.81.8.194:442/api';
-    /**获取认证费用定价 */
-    public static GET_PRICE:string = Config.SERVER +'/getPrice';
-    public static SEND_CODE:string = Config.SERVER +'/sendCode';
-    /**用户信息认证接口*/
-    public static AUTH:string = Config.SERVER +'/authreqstatus/auth';
-    /**APP认证结果请求接口 */
-    public static APP_AUTH:string = Config.SERVER +'/app/auth';
-
     public static DEBUG_LOGS_ENABLED = true;
 
     public static UTXO_CONSOLIDATE_PROMPT_THRESHOLD = 500; // Number of UTXOs after which the app will ask user to consolidate.
@@ -56,7 +42,11 @@ export class Config {
     //public static BLOCKCHAIN_URL: String = 'https://blockchain-regtest.elastos.org/';
 
     // Send ELA from ETHSC to mainchain by smartcontract
-    static CONTRACT_ADDRESS_MAINNET = "0xC445f9487bF570fF508eA9Ac320b59730e81e503";
-    static CONTRACT_ADDRESS_TESTNET = "0x491bC043672B9286fA02FA7e0d6A3E5A0384A31A";
-    static ETHSC_WITHDRAW_GASPRICE = 100000000000000; // >= 10^14 and must be an integer multiple of 10^10
+    public static CONTRACT_ADDRESS_MAINNET = "0xC445f9487bF570fF508eA9Ac320b59730e81e503";
+    public static CONTRACT_ADDRESS_TESTNET = "0x491bC043672B9286fA02FA7e0d6A3E5A0384A31A";
+    public static ETHSC_WITHDRAW_GASPRICE = 100000000000000; // >= 10^14 and must be an integer multiple of 10^10
+
+    // define in spvsdk
+    public static MIN_PASSWORD_LENGTH = 8;
+    public static MAX_PASSWORD_LENGTH = 128;
 }
