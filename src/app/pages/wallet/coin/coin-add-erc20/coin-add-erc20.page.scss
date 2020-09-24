@@ -1,22 +1,120 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   min-height: 100%;
-  padding: 30px 35px;
+  margin: 0;
+  padding: 30px;
 
-  ion-input {
-    background: #ffffff;
-    box-shadow: 0 3px 15px 0 #ededf0;
+  p {
+    margin: 0;
+    padding: 0 30px 15px;
     font-size: 15px;
-    --padding-start: 12px;
+    font-weight: 500;
+    line-height: 1.26;
+    letter-spacing: -0.46px;
+    text-align: center;
+  }
+
+  ion-row {
+    width: 100%;
+  }
+
+  .scan-row {
+    margin: 15px 0 30px;
+    border-radius: 16px;
+    padding: 10px 10px 10px 15px;
+    box-shadow: 0 3px 15px 0 #ededf0;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: hidden;
+
+      ion-input {
+        background-color: #ffffff;
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: -0.34px;
+        text-align: left;
+        color: #8888b0;
+      }
+    }
+
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      overflow: hidden;
+
+      img {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .coin-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+/*     width: 75%;
+    padding-top: 15px;
+    border-bottom: 1px solid rgba(34, 34, 34, 0.07);
+    border-top: 1px solid rgba(34, 34, 34, 0.07); */
+
+    h2, h3 {
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 1px;
+      color: #8888b0;
+    }
+
+    h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    #symbol {
+      letter-spacing: 4px;
+    }
   }
 
   .btn-container {
-    margin-top: 25px;
+    margin-top: 30px;
   }
 }
 
 .darkContainer {
-  ion-input {
-    background: #2b2c49;
+  .scan-row {
     box-shadow: 0 3px 15px 0 #151626;
+    background-color: #2b2c49;
+
+    .left-col {
+      ion-input {
+        background-color: #2b2c49;
+      }
+    }
   }
+
+/*   .coin-row {
+    border-bottom: 1px solid #2e2f4e;
+    border-top: 1px solid #2e2f4e;
+  } */
 }

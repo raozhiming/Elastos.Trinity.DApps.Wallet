@@ -147,6 +147,15 @@ export const zh = {
     "ela-ethchain": "Elastos ETH 侧链",
     "erc-20-token": " ERC 20 币种",
 
+    // Coin add erc20 screen
+    "coin-adderc20-title": "Add ERC20 Token",
+    "coin-adderc20-intro": 'Manually enter the token address or scan its QR code.',
+    "coin-adderc20-intro2": 'After validation, the token will be added to your wallet automatically.',
+    "coin-adderc20-enteraddress": 'Enter token address',
+    "coin-adderc20-add": 'Add Token',
+    "coin-adderc20-name": 'Token Name',
+    "coin-adderc20-symbol": 'Token Symbol',
+
     // Delete wallet popup
     "delete-wallet-confirm-title": "确定删除?",
     "delete-wallet-confirm-subtitle": "您的钱包将从此设备上删除。 您可以重新导入此钱包，请确保已经备份好钱包助记词。",

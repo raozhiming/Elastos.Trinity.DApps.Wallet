@@ -147,6 +147,15 @@ export const fr = {
     "ela-ethchain": "Elastos ETH SideChain",
     "erc-20-token": " ERC 20 Token",
 
+    // Coin add erc20 screen
+    "coin-adderc20-title": "Add ERC20 Token",
+    "coin-adderc20-intro": 'Manually enter the token address or scan its QR code.',
+    "coin-adderc20-intro2": 'After validation, the token will be added to your wallet automatically.',
+    "coin-adderc20-enteraddress": 'Enter token address',
+    "coin-adderc20-add": 'Add Token',
+    "coin-adderc20-name": 'Token Name',
+    "coin-adderc20-symbol": 'Token Symbol',
+
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirmer la suppression?",
     "delete-wallet-confirm-subtitle": "Votre portefeuille sera supprimé de cet appareil. Vous pourrez le réimporter plus tard mais veillez à enregistrer votre mnémonique avant la suppression.",

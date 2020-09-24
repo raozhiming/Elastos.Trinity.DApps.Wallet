@@ -68,7 +68,7 @@ export class CoinAddERC20Page implements OnInit {
 
     ionViewWillEnter() {
         this.appService.setBackKeyVisibility(true);
-        this.appService.setTitleBarTitle(this.translate.instant("coin-add-erc20-title"));
+        this.appService.setTitleBarTitle(this.translate.instant("coin-adderc20-title"));
     }
 
     /**
