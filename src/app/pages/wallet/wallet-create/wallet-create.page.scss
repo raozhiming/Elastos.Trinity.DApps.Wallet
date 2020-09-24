@@ -10,7 +10,6 @@
 
     p {
         margin: 0;
-        // padding: 30px 25px 40px;
         padding: 30px 25px;
         font-size: 18px;
         font-weight: 400;
@@ -35,11 +34,6 @@
             color: #fdfeff;
             --padding-start: 12px;
         }
-    }
-
-    .btn-container {
-        margin-top: 210px;
-        width: 100%;
     }
 
     .options-row, .toggle-row {
@@ -106,5 +100,9 @@
                 }
             }
         }
+    }
+
+    .btn-row {
+        margin-top: 30px;
     }
 }
