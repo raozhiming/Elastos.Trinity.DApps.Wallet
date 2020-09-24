@@ -214,7 +214,7 @@ export const zh = {
     'view-mnemonic': "查看助记词",
     'mnemonic-warning1': '保密,',
     'mnemonic-warning2': '安全保存!',
-    'mnemonic-warning3': '切勿与任何人分享您的助记词，并始终保持安全！确保没有人在看着你再继续',
+    'mnemonic-warning3': '切勿与任何人分享您的助记词，并始终保持安全！确保没有人在看着您再继续',
     'type-menmonic-verify': '请输入您的12个助记词进行验证',
     'type-menmonic-import': '请按顺序输入钱包的12个助记词',
     'import-text-word-sucess': '导入助记词成功',

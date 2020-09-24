@@ -210,7 +210,7 @@ export const en = {
     'mnemonic-prompt3': ', and safe!',
     'back-to-setting': 'Back to Settings',
     'view-mnemonic': "View Mnemonic",
-    'mnemonic-warning1': 'Keep It secret,',
+    'mnemonic-warning1': 'Keep it secret,',
     'mnemonic-warning2': 'Keep it safe!',
     'mnemonic-warning3': 'Never share your mnemonic phrase with anyone and always keep it safe! Make sure no one is watching you and click below.',
     'type-menmonic-verify': 'Please type your 12 security words (mnemonic phrase) in order to verify it.',
