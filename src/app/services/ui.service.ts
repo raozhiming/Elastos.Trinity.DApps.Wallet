@@ -45,10 +45,17 @@ export class UiService {
 
   getFixedBalance(balance: BigNumber): string {
     try {
+        // let balance = new BigNumber("98.3434343435345");
         if (balance.isZero()) {
-            return String(0);
+          return String(0);
+        } else if (balance.isLessThan(100)) {
+            return balance.toFixed(6);
+        } else if (balance.isGreaterThanOrEqualTo(100) && balance.isLessThan(1000)) {
+          return balance.toFixed(4);
+        } else if (balance.isGreaterThanOrEqualTo(1000) && balance.isLessThan(10000)) {
+          return balance.toFixed(2);
         } else {
-            return balance.toFixed(4);
+          return balance.toFixed(0) + 'k';
         }
     } catch (e) {
         // The old wallet use number for balance, and save the wallet info to localstorage.
