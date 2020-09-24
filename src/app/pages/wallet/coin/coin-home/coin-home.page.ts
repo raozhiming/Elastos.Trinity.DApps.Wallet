@@ -92,7 +92,7 @@ export class CoinHomePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.events.subscribe(this.chainId + ':syncprogress', (coin) => {
+        this.events.subscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress', (coin) => {
             this.initData();
         });
 
@@ -100,7 +100,7 @@ export class CoinHomePage implements OnInit {
     }
 
     ionViewDidLeave() {
-        this.events.unsubscribe(this.chainId + ':syncprogress');
+        this.events.unsubscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress');
         if (this.eventId) this.events.unsubscribe(this.eventId);
     }
 

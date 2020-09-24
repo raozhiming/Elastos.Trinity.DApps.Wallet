@@ -135,7 +135,7 @@ export class StandardSubWallet extends SubWallet {
 
         const curTimestampMs = (new Date()).getTime();
         if (curTimestampMs - this.timestamp > 5000) { // 5s
-            this.masterWallet.walletManager.events.publish(this.id + ':syncprogress', this.id);
+            this.masterWallet.walletManager.events.publish(this.masterWallet.id + ':' + this.id + ':syncprogress', this.id);
             this.timestamp = curTimestampMs;
         }
 
