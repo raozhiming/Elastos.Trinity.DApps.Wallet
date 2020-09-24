@@ -370,6 +370,14 @@ export class SPVWalletPluginBridge {
         });
     }
 
+    reSync(masterWalletId: string, chainId: string): Promise<void> {
+        return new Promise((resolve, reject)=>{
+            walletManager.reSync([masterWalletId, chainId],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
+    }
+
     getBalanceInfo(masterWalletId: string, chainId: string): Promise<string> {
         return new Promise((resolve, reject)=>{
             walletManager.getBalanceInfo([masterWalletId, chainId],

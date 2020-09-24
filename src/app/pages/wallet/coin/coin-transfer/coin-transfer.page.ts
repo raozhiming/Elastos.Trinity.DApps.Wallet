@@ -35,7 +35,6 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { SubWallet } from 'src/app/model/SubWallet';
 import * as CryptoAddressResolvers from 'src/app/model/address-resolvers';
 import { HttpClient } from '@angular/common/http';
-import { WalletAccount } from 'src/app/model/WalletAccount';
 import { TxConfirmComponent } from 'src/app/components/tx-confirm/tx-confirm.component';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
@@ -139,6 +138,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.chainId = this.coinTransferService.chainId;
         this.waitingForSyncCompletion = false;
 
+        this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
+
         console.log('Balance', this.masterWallet.subWallets[this.chainId].getDisplayBalance());
 
         switch (this.transferType) {
@@ -146,7 +147,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             case TransferType.RECHARGE:
                 // Setup page display
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-recharge-title", {coinName: this.coinTransferService.subchainId}));
-                this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
                 this.toSubWallet = this.masterWallet.getSubWallet(this.coinTransferService.subchainId);
 
                 // Setup params for recharge transaction
@@ -165,7 +165,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             case TransferType.WITHDRAW:
                 // Setup page display
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-withdraw-title", {coinName: this.chainId}));
-                this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
                 this.toSubWallet = this.masterWallet.getSubWallet(StandardCoinName.ELA);
 
                 // Setup params for withdraw transaction
@@ -179,12 +178,10 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             // For Send Transfer
             case TransferType.SEND:
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
-                this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
                 this.transaction = this.createSendTransaction;
                 break;
             // For Pay Intent
             case TransferType.PAY:
-                this.fromSubWallet = this.masterWallet.getSubWallet(this.chainId);
                 this.appService.setTitleBarTitle(this.translate.instant("payment-title"));
                 this.transaction = this.createSendTransaction;
 
@@ -225,8 +222,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         // Call dedicated api to the source subwallet to generate the appropriate transaction type.
         // For example, ERC20 token transactions are different from standard coin transactions (for now - as
         // the spv sdk doesn't support ERC20 yet).
-        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
-        let rawTx = await sourceSubwallet.createPaymentTransaction(
+        let rawTx = await this.fromSubWallet.createPaymentTransaction(
             this.toAddress, // User input address
             toAmount.toString(), // User input amount
             this.memo // User input memo
@@ -241,7 +237,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: this.transferType === TransferType.PAY ? this.coinTransferService.intentTransfer.intentId : null ,
         });
 
-        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
+        await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
     /**
@@ -271,25 +267,25 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: null,
         });
 
-        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
-        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
+        await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
     /**
      * From sidechain (ID, ETH) to mainchain
      */
     async createWithdrawTransaction() {
-        const toAmount = this.accMul(this.amount, Config.SELA);
+        let toAmount: number;
+        if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
+            toAmount = this.accMul(this.amount, Config.SELA);
+        } else {
+            toAmount = this.amount;
+        }
 
-        const rawTx =
-            await this.walletManager.spvBridge.createWithdrawTransaction(
-                this.masterWallet.id,
-                this.chainId,
-                '',
-                toAmount.toString(),
-                this.toAddress,
-                this.memo
-            );
+        const rawTx = await this.fromSubWallet.createWithdrawTransaction(
+            this.toAddress,
+            toAmount,
+            this.memo
+        );
 
         const transfer = new Transfer();
         Object.assign(transfer, {
@@ -301,8 +297,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: null,
         });
 
-        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
-        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
+        await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
     goScan() {

@@ -193,10 +193,9 @@ export class CoinHomePage implements OnInit {
         }
 
         for (const key in transactions) {
-            console.log("key", key, "transaction", transactions[key]);
+            // console.log("key", key, "transaction", transactions[key]);
             if (transactions.hasOwnProperty(key)) {
                 const transaction = transactions[key];
-                // console.log('----transaction:', transaction);
                 let amount: BigNumber;
                 if (this.chainIsETHSC()) {
                     if (transaction.IsErrored || (transaction.BlockNumber === 0)) {

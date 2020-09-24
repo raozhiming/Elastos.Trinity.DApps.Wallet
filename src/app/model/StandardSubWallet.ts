@@ -168,7 +168,7 @@ export class StandardSubWallet extends SubWallet {
     }
 
     /**
-     * Send ELA from ETHSC to mainchain by smartcontract
+     * Use smartcontract to Send ELA from ETHSC to mainchain.
      */
     private getContractAddress(): Promise<string> {
         return new Promise((resolve) => {
@@ -192,27 +192,22 @@ export class StandardSubWallet extends SubWallet {
 
             const contractAbi = require('../../assets/ethereum/ETHSCWithdrawABI.json');
             const contractAddress = await this.getContractAddress();
-            console.log('contractAbi:', contractAbi)
             const ethscWithdrawContract = new web3.eth.Contract(contractAbi, contractAddress);
-            let gasPrice = await web3.eth.getGasPrice();
+            const gasPrice = await web3.eth.getGasPrice();
 
-            console.log('---- createWithdrawTransaction toAmount:', toAmount, ' toAddress:', toAddress, ' contractAddress:', contractAddress, ' gasPrice:', gasPrice);
-
-            let toAmountSend = web3.utils.toWei(toAmount.toString(), 'ether');
-            let data = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, 10000000000000).encodeABI();
-            console.log('toAmountSend:', toAmountSend)
-            console.log('data:', data)
+            const toAmountSend = web3.utils.toWei(toAmount.toString());
+            const data = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE).encodeABI();
             rawTx = await this.masterWallet.walletManager.spvBridge.createTransferGeneric(
                 this.masterWallet.id,
                 contractAddress,
                 toAmountSend,
                 0, // WEI
-                '10000000000',
+                gasPrice,
                 0, // WEI
                 '3000000', // TODO: gasLimit
                 data,
             );
-        } else {// IDChain
+        } else { // IDChain
             rawTx = await this.masterWallet.walletManager.spvBridge.createWithdrawTransaction(
                 this.masterWallet.id,
                 this.id, // From subwallet id
@@ -222,9 +217,6 @@ export class StandardSubWallet extends SubWallet {
                 memo
             );
         }
-
-        console.log('----rawTx:', rawTx);
-
         return rawTx;
     }
 
