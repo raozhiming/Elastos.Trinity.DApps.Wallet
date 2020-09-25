@@ -62,7 +62,7 @@ export class EscTransactionPage implements OnInit {
         private translate: TranslateService,
         public theme: ThemeService
     ) {
-        // this.init();
+        this.init();
     }
 
     ngOnInit() {
