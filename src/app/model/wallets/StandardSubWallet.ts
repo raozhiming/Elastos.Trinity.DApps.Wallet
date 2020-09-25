@@ -90,9 +90,16 @@ export abstract class StandardSubWallet extends SubWallet {
         console.log("Standard subwallet "+this.id+" got update sync progress request. Progress = "+progress);
 
         const curTimestampMs = (new Date()).getTime();
-        if (curTimestampMs - this.timestamp > 5000) { // 5s
+        const timeInverval = curTimestampMs - this.timestamp;
+        if (timeInverval > 5000) { // 5s
             this.masterWallet.walletManager.events.publish(this.masterWallet.id + ':' + this.id + ':syncprogress', this.id);
             this.timestamp = curTimestampMs;
+        }
+
+        // Save wallet info every 30 minutes
+        // TODO: if spvsdk can get progress by api, then we can delete it
+        if (timeInverval > 1800000) { // 30 minutes
+            this.masterWallet.walletManager.saveMasterWallet(this.masterWallet);
         }
 
         if (progress === 100) {

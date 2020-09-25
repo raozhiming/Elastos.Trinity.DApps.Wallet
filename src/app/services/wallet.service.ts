@@ -123,6 +123,7 @@ export class WalletManager {
             this.registerSubWalletListener();
 
             appManager.setListener((message) => {
+                this.handleAppManagerMessage(message);
                 this.appService.onMessageReceived(message);
             });
             this.jsonRPCService.init();
@@ -138,7 +139,21 @@ export class WalletManager {
                 this.transactionMap = publishTxList;
             }
 
-            this.getAllMasterWalletBalanceByRPC();
+            // TODO: spvsdk can't get progress by api
+            // Get last block time, progress from walletservice
+            const rpcMessage: InAppRPCMessage = {
+                method: RPCMethod.GET_WALLET_SYNC_PROGRESS,
+                params: ''
+            };
+            appManager.sendMessage("#service:walletservice",
+                                    AppManagerPlugin.MessageType.INTERNAL,
+                                    JSON.stringify(rpcMessage), () => {
+                // Nothing to do
+            }, (err) => {
+                console.log("Failed to send start RPC message to the sync service", err);
+                // If the sync service does not start, then get balance by rpc.
+                this.getAllMasterWalletBalanceByRPC();
+            });
         } else {
             // Start the sync service if we are in a background service
             await this.syncService.init(this);
@@ -466,6 +481,35 @@ export class WalletManager {
     }
 
     /**
+     * Handler for AppManager Message.
+     */
+    private handleAppManagerMessage(message: AppManagerPlugin.ReceivedMessage) {
+        if (!message || !message.message)
+            return;
+
+        console.log('handleAppManagerMessage: ', message);
+        const rpcMessage = JSON.parse(message.message) as InAppRPCMessage;
+        switch (rpcMessage.method) {
+            case RPCMethod.SEND_WALLET_SYNC_PROGRESS:
+                // tslint:disable-next-line:forin
+                for (const masterId in rpcMessage.params) {
+                    // tslint:disable-next-line:forin
+                    for (const chainIdKey in rpcMessage.params[masterId]) {
+                        const chainId = chainIdKey as StandardCoinName;
+                        const progress = rpcMessage.params[masterId][chainId].progress || 0;
+                        const lastBlockTime = rpcMessage.params[masterId][chainId].lastBlockTime || 0;
+                        this.updateSyncProgress(masterId, chainId, progress, lastBlockTime);
+                    }
+                }
+
+                this.getAllMasterWalletBalanceByRPC();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
      * Handler for all SPV wallet events.
      */
     public handleSubWalletEvent(event: SPVWalletMessage) {
@@ -537,7 +581,7 @@ export class WalletManager {
                     case ETHSCEventAction.CHANGED:
                         if ('CONNECTED' === result.event.NewState) {
                             result.Progress =  100;
-                            result.LastBlockTime = new Date().getTime();
+                            result.LastBlockTime = new Date().getTime() / 1000;
                         }
                         break;
                     default:
@@ -548,7 +592,6 @@ export class WalletManager {
                 break;
             case ETHSCEventType.WalletEvent: // update balance
                 if (result.event.Event === ETHSCEventAction.BALANCE_UPDATED) {
-                    console.log('ETHSCEventAction.BALANCE_UPDATED:', result)
                     this.getMasterWallet(masterId).getSubWallet(chainId).updateBalance();
 
                     const erc20SubWallets = this.getMasterWallet(masterId).getSubWalletsByType(CoinType.ERC20);

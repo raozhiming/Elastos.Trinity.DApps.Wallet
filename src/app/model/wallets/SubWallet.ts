@@ -26,6 +26,7 @@ export class SerializedSubWallet {
         serializedSubWallet.type = subWallet.type;
         serializedSubWallet.id = subWallet.id as StandardCoinName;
         serializedSubWallet.balance = subWallet.balance.toString();
+        serializedSubWallet.lastBlockTime = subWallet.lastBlockTime;
         serializedSubWallet.timestamp = subWallet.timestamp;
         serializedSubWallet.progress = subWallet.progress;
         return serializedSubWallet;
@@ -54,13 +55,15 @@ export abstract class SubWallet {
     }
 
     public initFromSerializedSubWallet(serializedSubWallet: SerializedSubWallet) {
-        // type and id are init in constructor
+        // type and id are initialized in constructor
         // this.type = serializedSubWallet.type;
         // this.id = serializedSubWallet.id;
         this.balance = new BigNumber(serializedSubWallet.balance);
         this.lastBlockTime = serializedSubWallet.lastBlockTime;
         this.timestamp = serializedSubWallet.timestamp;
-        this.progress = serializedSubWallet.progress;
+        // This progress does not start with Block 0, but start with last synchronized blocks
+        // So do not get progress from local storage
+        // this.progress = serializedSubWallet.progress;
     }
 
     /**
