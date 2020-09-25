@@ -28,9 +28,9 @@ export const zh = {
     "insuff-balance": "余额不足",
     'transaction-has-been-published': "交易已经发布，请稍后",
     "sync-completed": "已完成同步",
-    "not-a-valid-address": "Not a valid address",
-    "no-ethereum-token": "No ethereum token",
-    "please-add-ethereum-first": "Please add the ethereum token to your wallet first",
+    "not-a-valid-address": "无效的地址",
+    "no-ethereum-token": "没有以太坊币种",
+    "please-add-ethereum-first": "请先将以太坊币种添加到您的钱包中",
 
     // Home screen
     "wallet-home-title": "钱包主页",
@@ -151,14 +151,14 @@ export const zh = {
     "erc-20-token": "ERC20 币种",
 
     // Coin add erc20 screen
-    "coin-adderc20-title": "Add ERC20 Token",
-    "coin-adderc20-intro": 'Manually enter the token address or scan its QR code.',
-    "coin-adderc20-intro2": 'After validation, the token will be added to your wallet automatically.',
-    "coin-adderc20-enteraddress": 'Enter token address',
-    "coin-adderc20-add": 'Add Token',
-    "coin-adderc20-name": 'Token Name',
-    "coin-adderc20-symbol": 'Token Symbol',
-    "coin-adderc20-not-a-erc20-contract": "The scanned content is not a valid ERC20 coin address",
+    "coin-adderc20-title": "添加 ERC20 币种",
+    "coin-adderc20-intro": '手动输入币种地址或扫描其QR码。',
+    "coin-adderc20-intro2": '验证后，币种将自动添加到您的钱包中。',
+    "coin-adderc20-enteraddress": '输入币种地址',
+    "coin-adderc20-add": '添加币种',
+    "coin-adderc20-name": '币种名称',
+    "coin-adderc20-symbol": '币种符号',
+    "coin-adderc20-not-a-erc20-contract": "扫描的内容不是有效的 ERC20 币种地址",
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "确定删除?",
