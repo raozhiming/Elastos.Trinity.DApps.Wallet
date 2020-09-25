@@ -236,7 +236,7 @@ export const en = {
     "memory-written-down": "I have written it down",
     "mnemonic-verify-sucess": "Mnemonic phrase verification succeeded",
     "mnemonic-verify-fail": "Mnemonic phrase verification failed, please re-enter the mnemonic phrase",
-    "mnemonic-input-passphrase": "Enter mnemonic passphrase (At least 8 characters)",
+    "mnemonic-input-passphrase": "Enter mnemonic passphrase",
     "mnemonic-reinput-passphrase": "Repeat mnemonic passphrase",
     "help:mnemonic-password": 'This is an optional password bound to your mnemonic words, to give your wallet extra security. Save it carefully, it is NOT recoverable if lost.',
 

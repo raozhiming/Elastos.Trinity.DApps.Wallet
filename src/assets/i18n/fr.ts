@@ -230,7 +230,7 @@ export const fr = {
     "memory-written-down": "Je l\'ai noté",
     "mnemonic-verify-sucess": "Mnémonique vérifié et confirmé",
     "mnemonic-verify-fail": "Le mnémonique est incorrect, veuillez le saisir à nouveau.",
-    "mnemonic-input-passphrase": "Mot de passe associé au mnémonique(au moins 8 caractères)",
+    "mnemonic-input-passphrase": "Mot de passe associé au mnémonique",
     "mnemonic-reinput-passphrase": "Saisir le mot de passe à nouveau",
     "help:mnemonic-password": 'Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Ne l\'oubliez pas, il ne peut pas être retrouvé.',
 
