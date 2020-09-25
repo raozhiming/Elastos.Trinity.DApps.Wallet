@@ -79,11 +79,11 @@ export class WalletCreatePage implements OnInit {
         }
         if (this.walletCreationService.type === NewWallet.CREATE && this.wallet.mnemonicPassword) {
             if (this.wallet.mnemonicPassword.length < Config.MIN_PASSWORD_LENGTH) {
-                this.native.toast_trans("text-wallet-passphase-validator-min-length");
+                this.native.toast_trans("text-wallet-passphrase-validator-min-length");
                 return;
             }
             if (this.wallet.mnemonicPassword !== this.repeatMnemonicPassword) {
-                this.native.toast_trans("text-wallet-passphase-validator-repeat");
+                this.native.toast_trans("text-wallet-passphrase-validator-repeat");
                 return;
             }
         }
@@ -105,7 +105,7 @@ export class WalletCreatePage implements OnInit {
     goToNextInput(event, nextInput: any) {
         console.log('Input key code', event);
         if (this.wallet.mnemonicPassword.length < Config.MIN_PASSWORD_LENGTH) {
-            this.native.toast_trans("text-wallet-passphase-validator-min-length");
+            this.native.toast_trans("text-wallet-passphrase-validator-min-length");
             return;
         }
         nextInput.setFocus();

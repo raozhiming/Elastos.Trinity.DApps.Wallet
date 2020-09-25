@@ -232,8 +232,8 @@ export const zh = {
     "memory-written-down": "已经记下了",
     "mnemonic-verify-sucess": '助记词验证成功',
     "mnemonic-verify-fail": '助记词验证失败，请重新输入助记词',
-    "mnemonic-input-passphase": "输入助记词密码（最少8位）",
-    "mnemonic-reinput-passphase": "再次输入助记词密码",
+    "mnemonic-input-passphrase": "输入助记词密码（最少8位）",
+    "mnemonic-reinput-passphrase": "再次输入助记词密码",
     "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码',
 
     // Export mnemonic screen
@@ -254,8 +254,8 @@ export const zh = {
     "text-wallet-name-validator-enter-name": "请给您的钱包设置名称",
     "text-wallet-name-validator-not-valid-name": "抱歉，这个钱包名称无效",
     "text-wallet-name-validator-already-exists": "此钱包名称已经存在",
-    "text-wallet-passphase-validator-repeat": "两次输入的助记词密码不一致",
-    "text-wallet-passphase-validator-min-length": "助记词密码最少8位",
+    "text-wallet-passphrase-validator-repeat": "两次输入的助记词密码不一致",
+    "text-wallet-passphrase-validator-min-length": "助记词密码最少8位",
 
     // Error codes
     'Error-10000': 'Action参数JSON格式错误',

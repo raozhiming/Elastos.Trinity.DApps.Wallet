@@ -224,8 +224,8 @@ export const fr = {
     "memory-written-down": "Je l\'ai noté",
     "mnemonic-verify-sucess": "Mnémonique vérifié et confirmé",
     "mnemonic-verify-fail": "Le mnémonique est incorrect, veuillez le saisir à nouveau.",
-    "mnemonic-input-passphase": "Mot de passe associé au mnémonique(au moins 8 caractères)",
-    "mnemonic-reinput-passphase": "Saisir le mot de passe à nouveau",
+    "mnemonic-input-passphrase": "Mot de passe associé au mnémonique(au moins 8 caractères)",
+    "mnemonic-reinput-passphrase": "Saisir le mot de passe à nouveau",
     "help:mnemonic-password": 'Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Ne l\'oubliez pas, il ne peut pas être retrouvé.',
 
     // Export mnemonic screen
@@ -246,8 +246,8 @@ export const fr = {
     "text-wallet-name-validator-enter-name": "Veuillez saisir un nom pour votre portefeuille",
     "text-wallet-name-validator-not-valid-name": "Le nom saisi n'est pas valide",
     "text-wallet-name-validator-already-exists": "Ce nom est déjà utilisé par un autre portefeuille",
-    "text-wallet-passphase-validator-repeat": "Les mots de passe des deux mnémoniques d'entrée ne sont pas cohérents",
-    "text-wallet-passphase-validator-min-length": "Mot de passe associé au mnémonique au moins 8 caractères",
+    "text-wallet-passphrase-validator-repeat": "Les mots de passe des deux mnémoniques d'entrée ne sont pas cohérents",
+    "text-wallet-passphrase-validator-min-length": "Mot de passe associé au mnémonique au moins 8 caractères",
 
     // Error codes
     'Error-10000': 'Json parse error of action parameters',
