@@ -27,12 +27,11 @@ import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 
 import { SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
-import { MasterWallet, WalletID } from '../model/MasterWallet';
+import { MasterWallet, WalletID } from '../model/wallets/MasterWallet';
 import { StandardCoinName, CoinType, StandardCoin } from '../model/Coin';
 import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
 import { AppService } from './app.service';
-import { SubWallet, SerializedSubWallet } from '../model/SubWallet';
-import { StandardSubWallet } from '../model/StandardSubWallet';
+import { SubWallet, SerializedSubWallet } from '../model/wallets/SubWallet';
 import { InvalidVoteCandidatesHelper, InvalidCandidateForVote } from '../model/InvalidVoteCandidatesHelper';
 import { CoinService } from './coin.service';
 import { JsonRPCService } from './jsonrpc.service';
@@ -45,8 +44,8 @@ import { AuthService } from './auth.service';
 import { Transfer } from './cointransfer.service';
 import { PrefsService } from './prefs.service';
 import BigNumber from 'bignumber.js';
-import { IDChainSubWallet } from '../model/IDChainSubWallet';
-import { MainchainSubWallet } from '../model/MainchainSubWallet';
+import { IDChainSubWallet } from '../model/wallets/IDChainSubWallet';
+import { MainchainSubWallet } from '../model/wallets/MainchainSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 

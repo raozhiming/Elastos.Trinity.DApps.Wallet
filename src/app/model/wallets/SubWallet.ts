@@ -1,8 +1,8 @@
 import { MasterWallet } from './MasterWallet';
 import { Events } from '@ionic/angular';
-import { CoinType, CoinID, StandardCoinName } from './Coin';
-import { AllTransactions } from './Transaction';
-import { Transfer } from '../services/cointransfer.service';
+import { CoinType, CoinID, StandardCoinName } from '../Coin';
+import { AllTransactions } from '../Transaction';
+import { Transfer } from '../../services/cointransfer.service';
 import BigNumber from 'bignumber.js';
 
 /**

@@ -6,7 +6,7 @@ import { LocalStorage } from '../../../../services/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
-import { MasterWallet } from 'src/app/model/MasterWallet';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';

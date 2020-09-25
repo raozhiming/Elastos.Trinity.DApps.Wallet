@@ -1,6 +1,6 @@
 import { StandardSubWallet } from './StandardSubWallet';
 import BigNumber from 'bignumber.js';
-import { Config } from '../config/Config';
+import { Config } from '../../config/Config';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk';
@@ -47,7 +47,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
         const provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
             const web3 = new Web3(provider);
 
-            const contractAbi = require('../../assets/ethereum/ETHSCWithdrawABI.json');
+            const contractAbi = require('../../../assets/ethereum/ETHSCWithdrawABI.json');
             const contractAddress = await this.getContractAddress();
             const ethscWithdrawContract = new web3.eth.Contract(contractAbi, contractAddress);
             const gasPrice = await web3.eth.getGasPrice();

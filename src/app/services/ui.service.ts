@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SubWallet } from '../model/SubWallet';
+import { SubWallet } from '../model/wallets/SubWallet';
 import { StandardCoinName } from '../model/Coin';
 import * as moment from 'moment';
 import { PopoverController } from '@ionic/angular';

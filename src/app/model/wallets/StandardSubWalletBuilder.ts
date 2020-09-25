@@ -1,5 +1,5 @@
 import { MasterWallet } from './MasterWallet';
-import { Coin, StandardCoinName, CoinID } from './Coin';
+import { Coin, StandardCoinName, CoinID } from '../Coin';
 import { StandardSubWallet } from './StandardSubWallet';
 import { SerializedSubWallet } from './SubWallet';
 import { ETHChainSubWallet } from './ETHChainSubWallet';

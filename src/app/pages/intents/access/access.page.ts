@@ -9,7 +9,7 @@ import { IntentService } from 'src/app/services/intent.service';
 import { StandardCoinName } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
-import { MasterWallet } from 'src/app/model/MasterWallet';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { UiService } from 'src/app/services/ui.service';
 import { IntentTransfer } from 'src/app/services/cointransfer.service';
 

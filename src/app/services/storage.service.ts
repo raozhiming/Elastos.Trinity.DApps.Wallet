@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WalletID, ExtendedWalletInfo } from '../model/MasterWallet';
+import { WalletID, ExtendedWalletInfo } from '../model/wallets/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 

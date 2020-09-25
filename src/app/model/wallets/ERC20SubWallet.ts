@@ -4,9 +4,9 @@ import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk'
 
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
-import { CoinType, CoinID, Coin, ERC20Coin, StandardCoinName } from './Coin';
-import { Util } from './Util';
-import { Transfer } from '../services/cointransfer.service';
+import { CoinType, CoinID, Coin, ERC20Coin, StandardCoinName } from '../Coin';
+import { Util } from '../Util';
+import { Transfer } from '../../services/cointransfer.service';
 import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -33,7 +33,7 @@ export class ERC20SubWallet extends SubWallet {
         this.web3 = new Web3(trinityWeb3Provider);
 
         // Standard ERC20 contract ABI
-        this.erc20ABI = require("../../assets/ethereum/StandardErc20ABI.json");
+        this.erc20ABI = require("../../../assets/ethereum/StandardErc20ABI.json");
 
         // First retrieve the number of decimals used by this token. this is needed for a good display,
         // as we need to convert the balance integer using the number of decimals.

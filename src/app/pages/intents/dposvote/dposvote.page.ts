@@ -29,7 +29,6 @@ import { WalletManager } from '../../../services/wallet.service';
 import { CoinTransferService, IntentTransfer, Transfer } from 'src/app/services/cointransfer.service';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
-import { MasterWallet } from 'src/app/model/MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;

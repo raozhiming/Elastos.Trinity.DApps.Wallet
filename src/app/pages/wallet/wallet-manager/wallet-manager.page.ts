@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
-import { MasterWallet } from 'src/app/model/MasterWallet';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { AppService } from 'src/app/services/app.service';
 import { Util } from 'src/app/model/Util';

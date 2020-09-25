@@ -1,10 +1,10 @@
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
-import { CoinType, Coin, StandardCoinName } from './Coin';
-import { Util } from './Util';
-import { AllTransactions } from './Transaction';
-import { Transfer } from '../services/cointransfer.service';
-import { Config } from '../config/Config';
+import { CoinType, Coin, StandardCoinName } from '../Coin';
+import { Util } from '../Util';
+import { AllTransactions } from '../Transaction';
+import { Transfer } from '../../services/cointransfer.service';
+import { Config } from '../../config/Config';
 import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;

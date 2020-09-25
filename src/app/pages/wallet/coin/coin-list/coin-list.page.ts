@@ -5,7 +5,7 @@ import { LocalStorage } from '../../../../services/storage.service';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider} from '../../../../services/popup.service';
 import { WalletManager } from '../../../../services/wallet.service';
-import { MasterWallet } from 'src/app/model/MasterWallet';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { Coin } from 'src/app/model/Coin';
 import { CoinService } from 'src/app/services/coin.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';

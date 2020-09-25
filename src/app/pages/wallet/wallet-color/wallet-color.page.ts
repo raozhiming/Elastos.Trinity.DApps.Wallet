@@ -1,7 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
-import { MasterWallet, Theme } from 'src/app/model/MasterWallet';
+import { MasterWallet, Theme } from 'src/app/model/wallets/MasterWallet';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { Native } from 'src/app/services/native.service';

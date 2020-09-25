@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Native } from '../../../../services/native.service';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
-import { SubWallet } from 'src/app/model/SubWallet';
+import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import { StandardCoinName, CoinType } from 'src/app/model/Coin';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { AppService } from 'src/app/services/app.service';
@@ -12,7 +12,7 @@ import { Config } from 'src/app/config/Config';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
-import { MasterWallet } from 'src/app/model/MasterWallet';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 
 @Component({
     selector: 'app-coin-select',

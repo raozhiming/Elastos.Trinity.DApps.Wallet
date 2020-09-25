@@ -1,13 +1,12 @@
 import { SubWallet, SerializedSubWallet  } from './SubWallet';
-import { WalletAccount, WalletAccountType } from './WalletAccount';
-import { WalletManager } from '../services/wallet.service';
+import { WalletAccount, WalletAccountType } from '../WalletAccount';
+import { WalletManager } from '../../services/wallet.service';
 import { StandardSubWallet } from './StandardSubWallet';
 import { ERC20SubWallet } from './ERC20SubWallet';
-import { Coin, CoinID, CoinType, StandardCoinName } from './Coin';
-import { CoinService } from '../services/coin.service';
-import { ɵNgStyleImpl } from '@angular/common';
+import { Coin, CoinID, CoinType, StandardCoinName } from '../Coin';
+import { CoinService } from '../../services/coin.service';
 import BigNumber from 'bignumber.js';
-import { Config } from '../config/Config';
+import { Config } from '../../config/Config';
 import { StandardSubWalletBuilder } from './StandardSubWalletBuilder';
 
 export type WalletID = string;

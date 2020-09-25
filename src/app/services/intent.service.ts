@@ -9,7 +9,7 @@ import { CoinService } from 'src/app/services/coin.service';
 import { CoinTransferService, TransferType } from './cointransfer.service';
 import { WalletAccessService } from './walletaccess.service';
 import { WalletManager } from './wallet.service';
-import { MasterWallet } from '../model/MasterWallet';
+import { MasterWallet } from '../model/wallets/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 

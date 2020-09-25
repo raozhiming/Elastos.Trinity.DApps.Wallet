@@ -46,8 +46,10 @@
         "android",
         "ios"
     ],
+    "intent_domain": "wallet.elastos.org",
     "intent_filters": [
         {
+            "domain": "wallet.elastos.org",
             "action": "pay"
         },
         {

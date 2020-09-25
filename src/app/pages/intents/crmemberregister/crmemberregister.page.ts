@@ -26,7 +26,7 @@ import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
-import { MasterWallet } from 'src/app/model/MasterWallet';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { CoinTransferService, Transfer, IntentTransfer } from 'src/app/services/cointransfer.service';
 import { WalletAccount, WalletAccountType } from 'src/app/model/WalletAccount';
 import { StandardCoinName } from 'src/app/model/Coin';

@@ -23,7 +23,7 @@
 import { Injectable } from '@angular/core';
 import { StandardCoinName, CoinType } from '../model/Coin';
 import { Events } from '@ionic/angular';
-import { WalletID } from '../model/MasterWallet';
+import { WalletID } from '../model/wallets/MasterWallet';
 import { SPVWalletPluginBridge, SPVWalletMessage, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
 import { Native } from './native.service';
 import { PopupProvider } from './popup.service';

@@ -23,7 +23,7 @@
 import { Injectable } from '@angular/core';
 import { StandardCoinName } from '../model/Coin';
 import { WalletAccount } from '../model/WalletAccount';
-import { WalletID } from '../model/MasterWallet';
+import { WalletID } from '../model/wallets/MasterWallet';
 
 export class Transfer {
     masterWalletId: WalletID = null;

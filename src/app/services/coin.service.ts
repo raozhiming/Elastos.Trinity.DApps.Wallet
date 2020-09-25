@@ -25,7 +25,7 @@ import { Coin, CoinID, ERC20Coin, StandardCoin } from '../model/Coin';
 import { StandardCoinName } from '../model/Coin';
 import { LocalStorage } from './storage.service';
 import { Events } from '@ionic/angular';
-import { MasterWallet } from '../model/MasterWallet';
+import { MasterWallet } from '../model/wallets/MasterWallet';
 import { NetworkType } from '../model/NetworkType';
 import { PrefsService } from './prefs.service';
 

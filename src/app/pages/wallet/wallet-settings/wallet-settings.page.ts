@@ -10,7 +10,7 @@ import { Config } from 'src/app/config/Config';
 import { AppService } from 'src/app/services/app.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { ThemeService } from 'src/app/services/theme.service';
-import { MasterWallet } from 'src/app/model/MasterWallet';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
