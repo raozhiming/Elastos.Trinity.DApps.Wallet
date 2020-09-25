@@ -226,8 +226,10 @@ export class Util {
     }
 
     public static getDecimalBalance(balance: BigNumber): string {
+        // const decimalBalance = new BigNumber('4.999999');
         const decimalBalance = balance.modulo(1);
-        return decimalBalance.toNumber().toLocaleString().slice(2, 5);
+        const fixedDecimalBalance = decimalBalance.toNumber().toLocaleString().slice(2, 5);
+        return fixedDecimalBalance;
     }
 
     /**

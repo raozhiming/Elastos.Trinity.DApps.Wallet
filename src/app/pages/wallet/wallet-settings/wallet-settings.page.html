@@ -17,7 +17,7 @@
                 </ion-row>
                 <h2></h2>
                 <h3>{{ 'total-amount' | translate }}</h3>
-                <h4>{{ Util.getWholeBalance(masterWallet.getDisplayBalance()) }}<span class="dot" *ngIf="!masterWallet.getDisplayBalance().isZero()">.</span>
+                <h4>{{ Util.getWholeBalance(masterWallet.getDisplayBalance()) }}<span class="dot" *ngIf="!masterWallet.getDisplayBalance().isZero() && Util.getDecimalBalance(masterWallet.getDisplayBalance())">.</span>
                     <span class="decimals">{{ Util.getDecimalBalance(masterWallet.getDisplayBalance()) }}</span>
                     <span class="ela">  ELA</span>
                 </h4>
