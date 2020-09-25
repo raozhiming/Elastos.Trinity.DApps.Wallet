@@ -20,7 +20,7 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader : subTitle ? this.translate.instant(subTitle) : '',
         backdropDismiss: false,
-        cssClass: 'my-custom-alert',
+        cssClass: 'alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
@@ -41,7 +41,7 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader : this.translate.instant(subTitle)+"("+suggestAmount+amount+")",
         backdropDismiss: false,
-        cssClass: 'my-custom-alert',
+        cssClass: 'alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
@@ -62,7 +62,7 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader :"txHash:"+"("+hash+")"+":"+transactionDeleted,
         backdropDismiss: false,
-        cssClass: 'my-custom-alert',
+        cssClass: 'alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
@@ -85,7 +85,7 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader : reason + ':' + sub,
         backdropDismiss: false,
-        cssClass: 'my-custom-alert',
+        cssClass: 'alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
@@ -106,7 +106,7 @@ export class PopupProvider {
         header : this.translate.instant(title),
         subHeader :sub+"<br/>"+"("+"txHash:"+hash+")",
         backdropDismiss: false,
-        cssClass: 'my-custom-alert',
+        cssClass: 'alert',
         buttons: [
           {
             text: okText ? okText : this.translate.instant('confirm'),
@@ -159,7 +159,7 @@ export class PopupProvider {
         header: this.translate.instant(title),
         subHeader : subTitle,
         message  : this.translate.instant(message),
-        cssClass: 'my-custom-alert',
+        cssClass: 'alert',
         buttons: [
           {
             text: this.translate.instant('cancel'),
@@ -178,7 +178,7 @@ export class PopupProvider {
         ]
       }).then(confirm => confirm.present());
     });
-  };
+  }
 
   // TODO: don't use a promise, use 2 callbacks here, "confirmed" and "cancelled"
   public ionicPrompt(title: string, message: string, opts?: any, okText?: string, cancelText?: string): Promise<any> {
