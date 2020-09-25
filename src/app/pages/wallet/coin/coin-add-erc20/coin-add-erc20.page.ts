@@ -83,7 +83,7 @@ export class CoinAddERC20Page implements OnInit {
                 this.zone.run(()=>{
                     // Check if this looks like a valid address. If not, give feedback to user.
                     if (!this.web3.utils.isAddress(address)) {
-                        this.popup.ionicAlert("Not a valid address", "The scanned content is not a valid ERC20 coin address", "Ok");
+                        this.popup.ionicAlert("not-a-valid-address", "coin-adderc20-not-a-erc20-contract", "Ok");
                         return;
                     }
                     else {
@@ -104,7 +104,7 @@ export class CoinAddERC20Page implements OnInit {
 
             // Make sure user has the ETH sidechain enabled
             if (!this.masterWallet.hasSubWallet(StandardCoinName.ETHSC)) {
-                this.popup.ionicAlert("No ethereum token", "Please add the ethereum token to your wallet first", "Ok");
+                this.popup.ionicAlert("no-ethereum-token", "please-add-ethereum-first", "Ok");
                 return;
             }
 

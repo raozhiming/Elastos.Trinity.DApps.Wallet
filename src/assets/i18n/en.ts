@@ -25,9 +25,12 @@ export const en = {
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
     'amount-null': "Please set the transaction amount",
     "amount-invalid": "Please enter the correct amount",
-    "amount-not-enough": "Insufficient balance",
+    "insuff-balance": "Insufficient balance",
     'transaction-has-been-published': "Transaction has been published! Please wait a moment",
     "sync-completed": "Sync completed",
+    "not-a-valid-address": "Not a valid address",
+    "no-ethereum-token": "No ethereum token",
+    "please-add-ethereum-first": "Please add the ethereum token to your wallet first",
 
     // Home screen
     "wallet-home-title": "Wallet Home",
@@ -155,6 +158,7 @@ export const en = {
     "coin-adderc20-add": 'Add Token',
     "coin-adderc20-name": 'Token Name',
     "coin-adderc20-symbol": 'Token Symbol',
+    "coin-adderc20-not-a-erc20-contract": "The scanned content is not a valid ERC20 coin address",
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirm deletion?",

@@ -25,9 +25,12 @@ export const zh = {
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
     'amount-null': "请输入交易金额",
     "amount-invalid": "请输入正确的金额",
-    "amount-not-enough": "余额不足",
+    "insuff-balance": "余额不足",
     'transaction-has-been-published': "交易已经发布，请稍后",
     "sync-completed": "已完成同步",
+    "not-a-valid-address": "Not a valid address",
+    "no-ethereum-token": "No ethereum token",
+    "please-add-ethereum-first": "Please add the ethereum token to your wallet first",
 
     // Home screen
     "wallet-home-title": "钱包主页",
@@ -155,6 +158,7 @@ export const zh = {
     "coin-adderc20-add": 'Add Token',
     "coin-adderc20-name": 'Token Name',
     "coin-adderc20-symbol": 'Token Symbol',
+    "coin-adderc20-not-a-erc20-contract": "The scanned content is not a valid ERC20 coin address",
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "确定删除?",

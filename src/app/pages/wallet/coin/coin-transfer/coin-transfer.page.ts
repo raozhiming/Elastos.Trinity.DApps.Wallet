@@ -323,7 +323,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             return;
         }
         if (!this.masterWallet.subWallets[this.chainId].isBalanceEnough(new BigNumber(this.amount))) {
-            this.native.toast_trans('amount-not-enough');
+            this.native.toast_trans('insuff-balance');
             return;
         }
         // TODO: not 8, should use tokenDecimals for ETHSC and ERC20 Token

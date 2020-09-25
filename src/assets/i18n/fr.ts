@@ -24,10 +24,13 @@ export const fr = {
     // Generic messages
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
     'amount-null': "Veuillez saisir un montant pour la transaction",
-    "amount-invalid": "Please enter the correct amount",
-    "amount-not-enough": "Insufficient balance",
+    "amount-invalid": "Veuillez saisir un montant valide",
+    "insuff-balance": "Solde insuffisant",
     'transaction-has-been-published': "La transaction est publiée! Veuillez patienter un moment",
-    "sync-completed": "Sync completed",
+    "sync-completed": "Synchr. terminée",
+    "not-a-valid-address": "Adresse invalide",
+    "no-ethereum-token": "Jeton Ethereum non activé",
+    "please-add-ethereum-first": "Veuillez d'abord ajouter le jeton Ethereum à votre portefeuille.",
 
     // Home screen
     "wallet-home-title": "Accueil Portefeuille",
@@ -46,10 +49,10 @@ export const fr = {
     "settings-currency-subtitle": "Selectionnez la devise à afficher",
 
     // Currencies screen
-    "select-currency-title": "Select Currency",
+    "select-currency-title": "Sélectionner la devise",
     "available-currencies": "Devises affichables",
-    "united-states-dollar": "United States Dollar",
-    "chinese-yuan": "Chinese Yuan",
+    "united-states-dollar": "Dollar Américain",
+    "chinese-yuan": "Yuan Chinois",
     "bitcoin": "Bitcoin",
 
     // Wallet settings screen
@@ -148,13 +151,14 @@ export const fr = {
     "erc-20-token": " ERC 20 Token",
 
     // Coin add erc20 screen
-    "coin-adderc20-title": "Add ERC20 Token",
-    "coin-adderc20-intro": 'Manually enter the token address or scan its QR code.',
-    "coin-adderc20-intro2": 'After validation, the token will be added to your wallet automatically.',
-    "coin-adderc20-enteraddress": 'Enter token address',
-    "coin-adderc20-add": 'Add Token',
-    "coin-adderc20-name": 'Token Name',
-    "coin-adderc20-symbol": 'Token Symbol',
+    "coin-adderc20-title": "Ajout de jeton ERC20",
+    "coin-adderc20-intro": 'Saisir l\'adresse du jeton, ou scanner son QR code.',
+    "coin-adderc20-intro2": 'Après confirmation, le jeton sera ajouté à votre portefeuille automatiquement.',
+    "coin-adderc20-enteraddress": 'Saisir l\'adresse du jeton',
+    "coin-adderc20-add": 'Ajouter le jeton',
+    "coin-adderc20-name": 'Nom du jeton',
+    "coin-adderc20-symbol": 'Symbole',
+    "coin-adderc20-not-a-erc20-contract": "Le contenu scanné n'est pas une adresse de jeton ERC20 valide.",
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirmer la suppression?",
