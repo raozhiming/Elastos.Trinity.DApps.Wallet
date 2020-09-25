@@ -1,6 +1,7 @@
 <ion-content>
     <ion-grid [class.dark-container]="theme.darkMode">
 
+        <!-- TRANSACTION HEADER -->
         <ion-card
             [class.received]="type === 1"
             [class.sent]="type === 2"
@@ -19,95 +20,23 @@
             </p>
         </ion-card>
 
-        <ion-row class="section-row"  (click)="timeActive = !timeActive">
-            <ion-col size="11" class="name-col">
-                <h1>{{ 'tx-info-transaction-time' | translate }}</h1>
-            </ion-col>
-            <ion-col size="1" class="arrow-col">
-                <img *ngIf="!theme.darkMode" [class.rotate]="timeActive" src="assets/icons/down-arrow.svg"/>
-                <img *ngIf="theme.darkMode" [class.rotate]="timeActive" src="assets/icons/darkmode/down-arrow.svg"/>
-            </ion-col>
-            <div *ngIf="timeActive" class="details-container">
-                <div class="details-row">
-                    <h2>{{ datetime }}</h2>
+        <!-- TRANSACTION DETAILS -->
+        <div *ngFor="let item of txDetails">
+            <ion-row *ngIf="item.value" class="item-row">
+                <ion-col size="11" class="title-col">
+                    <h1>{{ item.title | translate }}</h1> &nbsp;&nbsp;
+                    <ion-icon *ngIf="worthCopying(item)" mode="ios" name="copy" (click)="copy(item.value)"></ion-icon>
+                </ion-col>
+                <ion-col size="1" class="arrow-col" (click)="item.show = ! item.show">
+                    <img [src]="!theme.darkMode ? 'assets/icons/down-arrow.svg' : 'assets/icons/darkmode/down-arrow.svg'" [class.rotate]="item.show"/>
+                </ion-col>
+                <div *ngIf="item.show" class="details-container" (click)="item.show = ! item.show">
+                    <div class="details-row">
+                        <h2>{{ item.value }}</h2>
+                    </div>
                 </div>
-            </div>
-        </ion-row>
-
-        <ion-row *ngIf="memo" class="section-row"  (click)="memoActive = !memoActive">
-            <ion-col size="11" class="name-col">
-                <h1>{{ 'tx-info-memo' | translate }}</h1>
-            </ion-col>
-            <ion-col size="1" class="arrow-col">
-                <img *ngIf="!theme.darkMode" [class.rotate]="memoActive" src="assets/icons/down-arrow.svg"/>
-                <img *ngIf="theme.darkMode" [class.rotate]="memoActive" src="assets/icons/darkmode/down-arrow.svg"/>
-            </ion-col>
-            <div *ngIf="memoActive" class="details-container">
-                <div class="details-row">
-                    <h2>{{ memo }}</h2>
-                </div>
-            </div>
-        </ion-row>
-
-        <ion-row *ngIf="targetAddress != ''" class="section-row"  (click)="targetActive = !targetActive">
-            <ion-col size="11" class="name-col">
-                <h1>{{ 'tx-info-receiver-address' | translate }}</h1>
-            </ion-col>
-            <ion-col size="1" class="arrow-col">
-                <img *ngIf="!theme.darkMode" [class.rotate]="targetActive" src="assets/icons/down-arrow.svg"/>
-                <img *ngIf="theme.darkMode" [class.rotate]="targetActive" src="assets/icons/darkmode/down-arrow.svg"/>
-            </ion-col>
-            <div *ngIf="targetActive" class="details-container">
-                <div class="details-row">
-                    <h3>{{ targetAddress }}</h3>
-                </div>
-            </div>
-        </ion-row>
-
-        <ion-row class="section-row"  (click)="confirmActive = !confirmActive">
-            <ion-col size="11" class="name-col">
-                <h1>{{ 'tx-info-confirmations' | translate}}</h1>
-            </ion-col>
-            <ion-col size="1" class="arrow-col">
-                <img *ngIf="!theme.darkMode" [class.rotate]="confirmActive" src="assets/icons/down-arrow.svg"/>
-                <img *ngIf="theme.darkMode" [class.rotate]="confirmActive" src="assets/icons/darkmode/down-arrow.svg"/>
-            </ion-col>
-            <div *ngIf="confirmActive" class="details-container">
-                <div class="details-row">
-                    <h2>{{ confirmCount }}</h2>
-                </div>
-            </div>
-        </ion-row>
-
-        <ion-row class="section-row"  (click)="feesActive = !feesActive" *ngIf="payFee != 0">
-            <ion-col size="11" class="name-col">
-                <h1>{{ 'tx-info-transaction-fees' | translate }}</h1>
-            </ion-col>
-            <ion-col size="1" class="arrow-col">
-                <img *ngIf="!theme.darkMode" [class.rotate]="feesActive" src="assets/icons/down-arrow.svg"/>
-                <img *ngIf="theme.darkMode" [class.rotate]="feesActive" src="assets/icons/darkmode/down-arrow.svg"/>
-            </ion-col>
-            <div *ngIf="feesActive" class="details-container">
-                <div class="details-row">
-                    <h2>{{ payFee }} {{ chainId }}</h2>
-                </div>
-            </div>
-        </ion-row>
-
-        <ion-row class="section-row"  (click)="txActive = !txActive">
-            <ion-col size="11" class="name-col">
-                <h1>{{ 'tx-info-transaction-id' | translate }}</h1>
-            </ion-col>
-            <ion-col size="1" class="arrow-col">
-                <img *ngIf="!theme.darkMode" [class.rotate]="txActive" src="assets/icons/down-arrow.svg"/>
-                <img *ngIf="theme.darkMode" [class.rotate]="txActive" src="assets/icons/darkmode/down-arrow.svg"/>
-            </ion-col>
-            <div *ngIf="txActive" class="details-container">
-                <div class="details-row">
-                    <h2>{{ txId }}</h2>
-                </div>
-            </div>
-        </ion-row>
+            </ion-row>
+        </div>
 
     </ion-grid>
 </ion-content>

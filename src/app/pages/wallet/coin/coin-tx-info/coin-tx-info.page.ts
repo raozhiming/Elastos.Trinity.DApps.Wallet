@@ -12,6 +12,12 @@ import { TransactionStatus, TransactionDirection, TransactionType, TransactionIn
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 
+class TransactionDetail {
+    type: string;
+    title: string;
+    value: any = null;
+    show: boolean;
+}
 
 @Component({
     selector: 'app-coin-tx-info',
@@ -20,45 +26,30 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class CoinTxInfoPage implements OnInit {
 
+    // General Values
     private masterWallet: MasterWallet = null;
+    public chainId: string = '';
     private transactionInfo: TransactionInfo;
     private blockchain_url = Config.BLOCKCHAIN_URL;
     private idchain_url = Config.IDCHAIN_URL;
 
-    // Header display
+    // Header Display Values
     public type: TransactionType;
-    public direction: string = '';
     public payStatusIcon: string = '';
+    public direction: string = '';
     public symbol: string = '';
-
-    // Params data
-    public txId: string = '';
-    public chainId: string = '';
-
-    // Raw tx data
-    public memo: string = '';
-    public confirmCount: any;
-    public timestamp: number;
-
-    // Modified data
-    public status: string = '';
     public amount: string;
+    public status: string = '';
+
+    // Other Values
     public payFee: number;
-    public datetime: any;
     public payType: string = '';
     public inputs = [];
     public outputs = [];
     public targetAddress = '';
 
-    // Tabs
-    public memoActive: boolean = true;
-    public timeActive: boolean = true;
-    public targetActive = true;
-    // public inputAtive: boolean = false;
-    // public outputAtive: boolean = false;
-    public confirmActive: boolean = false;
-    public feesActive: boolean = false;
-    public txActive: boolean = false;
+    // List of displayable transaction details
+    public txDetails: TransactionDetail[] = [];
 
     // TODO: it should use callback if the spvsdk can send callback when the confirm count is 6
     preConfirmCount = '';
@@ -92,25 +83,18 @@ export class CoinTxInfoPage implements OnInit {
 
         const navigation = this.router.getCurrentNavigation();
         if (!Util.isEmptyObject(navigation.extras.state)) {
-            this.transactionInfo = navigation.extras.state.transactionInfo;
 
+            // General Values
+            this.transactionInfo = navigation.extras.state.transactionInfo;
             this.masterWallet = this.walletManager.getMasterWallet(navigation.extras.state.masterWalletId);
             this.chainId = navigation.extras.state.chainId;
-            // Raw data
-            this.amount = this.transactionInfo.amount;
-            // this.timestamp = this.transactionInfo.timestamp * 1000;
-            this.datetime =  this.transactionInfo.timestamp === 0 ? this.translate.instant('coin-transaction-status-pending')
-                : Util.dateFormat(new Date(this.transactionInfo.timestamp), 'YYYY-MM-DD HH:mm:ss');
-            this.confirmCount = this.transactionInfo.confirmStatus;
-            this.memo = this.transactionInfo.memo;
-            this.symbol = this.transactionInfo.symbol;
-            this.type = this.transactionInfo.type;
-            this.payFee = this.transactionInfo.fee;
-            this.payStatusIcon = this.transactionInfo.payStatusIcon;
-            this.txId = this.transactionInfo.txId;
 
-            // Display header data
-            let direction = this.transactionInfo.direction;
+            // Header display values
+            this.type = this.transactionInfo.type;
+            this.amount = this.transactionInfo.amount;
+            this.symbol = this.transactionInfo.symbol;
+            this.payStatusIcon = this.transactionInfo.payStatusIcon;
+            const direction = this.transactionInfo.direction;
             if (direction === TransactionDirection.RECEIVED) {
                 this.direction = this.translate.instant("tx-info-type-received");
             } else if (direction === TransactionDirection.SENT) {
@@ -119,16 +103,22 @@ export class CoinTxInfoPage implements OnInit {
                 this.direction = this.translate.instant("tx-info-type-transferred");
             }
 
-            this.getTransactionInfo();
+            this.getTransactionDetails();
         }
     }
 
-    async getTransactionInfo() {
-        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id,
-            this.chainId, 0, this.transactionInfo.txId);
-        let transaction = allTransactions.Transactions[0];
-        console.log('Raw tx', transaction);
+    async getTransactionDetails() {
+        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(
+            this.masterWallet.id,
+            this.chainId,
+            0,
+            this.transactionInfo.txId
+        );
 
+        const transaction = allTransactions.Transactions[0];
+        console.log('More tx info', transaction);
+
+        // Get tx fees and receiving address
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
             this.payFee = transaction.Fee / Config.SELA;
             this.targetAddress = this.getTargetAddressFromTransaction(transaction);
@@ -136,10 +126,11 @@ export class CoinTxInfoPage implements OnInit {
             // TODO: How to distinguish between ordinary transfers and smart contracts
             this.targetAddress = transaction.TargetAddress;
         }
+
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
 
-        // Display header data
+        // Get more header display values
         switch (transaction.Status) {
             case TransactionStatus.CONFIRMED:
                 this.status = this.translate.instant("coin-transaction-status-confirmed");
@@ -172,12 +163,68 @@ export class CoinTxInfoPage implements OnInit {
         if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
             this.payType = "transaction-type-vote";
         }
+
+        // Create array of displayable tx details
+        this.txDetails = [];
+        this.txDetails.push(
+            {
+                type: 'time',
+                title: 'tx-info-transaction-time',
+                value:
+                    this.transactionInfo.timestamp === 0 ?
+                        this.translate.instant('coin-transaction-status-pending') :
+                        Util.dateFormat(new Date(this.transactionInfo.timestamp), 'YYYY-MM-DD HH:mm:ss'),
+                show: true,
+            },
+            {
+                type: 'memo',
+                title: 'tx-info-memo',
+                value: this.transactionInfo.memo,
+                show: true,
+            },
+            {
+                type: 'fees',
+                title: 'tx-info-transaction-fees',
+                value: this.payFee,
+                show: false,
+            },
+            {
+                type: 'confirmations',
+                title: 'tx-info-confirmations',
+                value: this.transactionInfo.confirmStatus,
+                show: false,
+            },
+            {
+                type: 'blockId',
+                title: 'tx-info-block-id',
+                value: transaction.Height,
+                show: false,
+            },
+            {
+                type: 'txId',
+                title: 'tx-info-transaction-id',
+                value: this.transactionInfo.txId,
+                show: false,
+            },
+        );
+
+        // Only show receiving address if transaction was not received
+        if (this.direction === TransactionDirection.RECEIVED) {
+            this.txDetails.unshift(
+                {
+                    type: 'address',
+                    title: 'tx-info-receiver-address',
+                    value: this.targetAddress,
+                    show: true,
+                },
+            );
+        }
     }
 
     subscribeprogressEvent() {
         if (!this.hasSubscribeprogressEvent) {
             this.events.subscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress', (coin) => {
-                this.getTransactionInfo();
+                this.getTransactionDetails();
             });
             this.hasSubscribeprogressEvent = true;
         }
@@ -187,11 +234,6 @@ export class CoinTxInfoPage implements OnInit {
             this.events.unsubscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress');
             this.hasSubscribeprogressEvent = false;
         }
-    }
-
-    copyAddress(address) {
-        this.native.copyClipboard(address);
-        this.native.toast_trans('copy-ok');
     }
 
     goWebSite(chainId, txId) {
@@ -258,6 +300,19 @@ export class CoinTxInfoPage implements OnInit {
             case 3:
                 return 'transferred';
         }
+    }
+
+    worthCopying(item: TransactionDetail) {
+        if (item.type === 'blockId' || item.type === 'txId' || item.type === 'address') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    copy(value) {
+        this.native.copyClipboard(value);
+        this.native.toast_trans('copied');
     }
 }
 

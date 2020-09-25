@@ -22,6 +22,7 @@ export const en = {
     "intent-select-wallet": "Select Wallet",
 
     // Generic messages
+    "copied": "Copied to clipboard!",
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
     'amount-null': "Please set the transaction amount",
     "amount-invalid": "Please enter the correct amount",
@@ -130,6 +131,7 @@ export const en = {
     "tx-info-receiver-address": "Receiver address",
     "tx-info-transaction-fees": "Transaction fees",
     "tx-info-transaction-id": "Transaction ID",
+    "tx-info-block-id": "Block ID",
     "tx-info-type-received": "Received",
     "tx-info-type-sent": "Sent",
     "tx-info-type-transferred": "Transferred",

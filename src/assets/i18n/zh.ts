@@ -22,6 +22,7 @@ export const zh = {
     "intent-select-wallet": "请选择钱包",
 
     // Generic messages
+    "copied": "Copied to clipboard!",
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
     'amount-null': "请输入交易金额",
     "amount-invalid": "请输入正确的金额",
@@ -130,6 +131,7 @@ export const zh = {
     "tx-info-receiver-address": "接收地址",
     "tx-info-transaction-fees": "交易手续费",
     "tx-info-transaction-id": "交易ID",
+    "tx-info-block-id": "Block ID",
     "tx-info-type-received": "收到",
     "tx-info-type-sent": "发送",
     "tx-info-type-transferred": "转移",
