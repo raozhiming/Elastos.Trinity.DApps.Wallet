@@ -84,10 +84,10 @@ export const en = {
     "coin-op-vote": "Vote",
     "coin-op-identity": "Identity publication",
     "coin-dir-from-mainchain": "From ELA mainchain",
-    "coin-dir-from-idchain": "From Identity sidechain",
+    "coin-dir-from-idchain": "From ID sidechain",
     "coin-dir-from-ethsc": "From ETH sidechain",
     "coin-dir-to-mainchain": "To ELA mainchain",
-    "coin-dir-to-idchain": "To Identity sidechain",
+    "coin-dir-to-idchain": "To ID sidechain",
     "coin-dir-to-ethsc": "To ETH sidechain",
     "coin-transaction-status-confirmed": "Confirmed",
     "coin-transaction-status-pending": "Pending",
@@ -148,7 +148,7 @@ export const en = {
     "ela-mainchain": "Elastos MainChain",
     "ela-idchain": "Elastos ID SideChain",
     "ela-ethchain": "Elastos ETH SideChain",
-    "erc-20-token": " ERC 20 Token",
+    "erc-20-token": "ERC20 Token",
 
     // Coin add erc20 screen
     "coin-adderc20-title": "Add ERC20 Token",
@@ -193,7 +193,7 @@ export const en = {
     // DPos voting intent screen
     "dposvote-title": "Vote for Supernodes",
     "dposvote-you-are-voting": "You are Voting!",
-    "dposvote-transaction-fees": "0.0001 transfaction fee will be charged",
+    "dposvote-transaction-fees": "0.0001 ELA transfaction fee will be charged",
     "dposvote-voting-for": "You are voting for:",
     "dpostvote-with": "With:",
 

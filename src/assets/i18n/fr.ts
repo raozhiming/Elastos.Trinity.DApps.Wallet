@@ -148,7 +148,7 @@ export const fr = {
     "ela-mainchain": "Elastos MainChain",
     "ela-idchain": "Elastos ID SideChain",
     "ela-ethchain": "Elastos ETH SideChain",
-    "erc-20-token": " ERC 20 Token",
+    "erc-20-token": "ERC20 Token",
 
     // Coin add erc20 screen
     "coin-adderc20-title": "Ajout de jeton ERC20",

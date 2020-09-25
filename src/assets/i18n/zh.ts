@@ -90,7 +90,7 @@ export const zh = {
     "coin-dir-to-idchain": "ID 侧链充值",
     "coin-dir-to-ethsc": "ETH 侧链充值",
     "coin-transaction-status-confirmed": "已确认",
-    "coin-transaction-status-pending": " 确认中",
+    "coin-transaction-status-pending": "确认中",
     "coin-transaction-status-unconfirmed": "未确认",
     "text-coin-close-warning": "此币种将从列表中删除",
 
@@ -148,7 +148,7 @@ export const zh = {
     "ela-mainchain": "Elastos主链",
     "ela-idchain": "Elastos ID 侧链",
     "ela-ethchain": "Elastos ETH 侧链",
-    "erc-20-token": " ERC 20 币种",
+    "erc-20-token": "ERC20 币种",
 
     // Coin add erc20 screen
     "coin-adderc20-title": "Add ERC20 Token",
