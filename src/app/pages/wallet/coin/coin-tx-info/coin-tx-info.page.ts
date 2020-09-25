@@ -179,7 +179,7 @@ export class CoinTxInfoPage implements OnInit {
             {
                 type: 'memo',
                 title: 'tx-info-memo',
-                value: this.transactionInfo.memo,
+                value: transaction.Memo,
                 show: true,
             },
             {
