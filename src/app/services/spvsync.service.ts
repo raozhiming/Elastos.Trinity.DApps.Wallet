@@ -42,8 +42,6 @@ export type InAppRPCMessage = {
 export enum RPCMethod {
     START_WALLET_SYNC,
     STOP_WALLET_SYNC,
-    GET_WALLET_SYNC_PROGRESS,
-    SEND_WALLET_SYNC_PROGRESS,
 }
 
 export type RPCStartWalletSyncParams = {
@@ -144,18 +142,6 @@ export class SPVSyncService {
 
         let rpcMessage = JSON.parse(message.message) as InAppRPCMessage;
         switch (rpcMessage.method) {
-            case RPCMethod.GET_WALLET_SYNC_PROGRESS:
-                // TODO: upgraged spvsdk -- Get sync progress by api when it doesn't connet to node.
-                let sendRPCMessage: InAppRPCMessage = {
-                  method: RPCMethod.SEND_WALLET_SYNC_PROGRESS,
-                  params: this.walletsSyncProgress
-                };
-                appManager.sendMessage("org.elastos.trinity.dapp.wallet", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(sendRPCMessage), ()=>{
-                  // Nothing to do
-                }, (err)=>{
-                    console.log("Failed to send start RPC message to the sync service", err);
-                });
-                break;
             case RPCMethod.START_WALLET_SYNC:
                 let startWalletSyncParams = rpcMessage.params as RPCStartWalletSyncParams;
                 this.syncStartSubWallets(startWalletSyncParams.masterId, startWalletSyncParams.chainIds);
