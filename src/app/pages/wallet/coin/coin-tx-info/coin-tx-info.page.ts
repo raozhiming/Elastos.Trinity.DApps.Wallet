@@ -118,9 +118,11 @@ export class CoinTxInfoPage implements OnInit {
         const transaction = allTransactions.Transactions[0];
         console.log('More tx info', transaction);
 
-        // Get tx fees and receiving address
+        // Get tx fees, final tx amount and receiving address
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
             this.payFee = transaction.Fee / Config.SELA;
+            const amountMinusFees = Number(this.amount) - this.payFee;
+            this.amount = amountMinusFees.toString();
             this.targetAddress = this.getTargetAddressFromTransaction(transaction);
         } else {
             // TODO: How to distinguish between ordinary transfers and smart contracts

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LocalStorage } from './storage.service';
+import BigNumber from 'bignumber.js';
+import { constants } from 'perf_hooks';
 
 type Currency = {
   symbol: string;
@@ -111,11 +113,12 @@ export class CurrencyService {
     console.log('Currency ELA prices updated', this.currencies);
   }
 
-  getCurrencyBalance(cryptoBalance: number): string {
-    const currencyBalance = this.selectedCurrency.price * cryptoBalance;
-    if (!cryptoBalance) {
+  getCurrencyBalance(cryptoBalance: BigNumber): string {
+    const currencyPrice = new BigNumber(this.selectedCurrency.price);
+    const currencyBalance = currencyPrice.multipliedBy(cryptoBalance);
+    if (cryptoBalance.isZero()) {
       return String(0);
-    } else if (this.selectedCurrency.symbol === 'BTC' && cryptoBalance !== 0) {
+    } else if (this.selectedCurrency.symbol === 'BTC') {
       return currencyBalance.toFixed(8);
     } else {
       return currencyBalance.toFixed(2);
