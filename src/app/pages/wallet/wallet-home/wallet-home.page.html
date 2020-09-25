@@ -1,4 +1,5 @@
 <ion-content *ngIf="masterWalletList.length > 0">
+
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content
             class="refresh"
@@ -9,6 +10,7 @@
         >
         </ion-refresher-content>
     </ion-refresher>
+
     <ion-slides *ngIf="!isSingleWallet" [class.dark-slides]="theme.darkMode" [options]="slideOpts" #slider pager>
         <ion-slide *ngFor="let masterWallet of masterWalletList">
             <ion-row class="main-title-row">
@@ -148,4 +150,5 @@
             <ion-ripple-effect></ion-ripple-effect>
         </ion-row>
     </ion-grid>
+    
 </ion-content>
