@@ -45,6 +45,8 @@ import { AuthService } from './auth.service';
 import { Transfer } from './cointransfer.service';
 import { PrefsService } from './prefs.service';
 import BigNumber from 'bignumber.js';
+import { IDChainSubWallet } from '../model/IDChainSubWallet';
+import { MainchainSubWallet } from '../model/MainchainSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -184,13 +186,13 @@ export class WalletManager {
                         let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
                         if (!subwallet) {
                             console.log('Opening IDChain');
-                            const subWallet = new StandardSubWallet(this.masterWallets[masterId], StandardCoinName.IDChain);
+                            const subWallet = new IDChainSubWallet(this.masterWallets[masterId], StandardCoinName.IDChain);
                             extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                         }
                         subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
                         if (!subwallet) {
                             console.log('Opening ETHSC');
-                            const subWallet = new StandardSubWallet(this.masterWallets[masterId], StandardCoinName.ETHSC);
+                            const subWallet = new MainchainSubWallet(this.masterWallets[masterId], StandardCoinName.ETHSC);
                             extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                         }
                     }

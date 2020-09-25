@@ -1,19 +1,15 @@
-import Web3 from 'web3';
-import { Contract } from 'web3-eth-contract';
-import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk';
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, Coin, StandardCoinName } from './Coin';
 import { Util } from './Util';
 import { AllTransactions } from './Transaction';
-import * as moment from 'moment';
 import { Transfer } from '../services/cointransfer.service';
 import { Config } from '../config/Config';
 import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
-export class StandardSubWallet extends SubWallet {
+export abstract class StandardSubWallet extends SubWallet {
     constructor(masterWallet: MasterWallet, id: StandardCoinName) {
         super(masterWallet, id, CoinType.STANDARD);
 
@@ -24,25 +20,6 @@ export class StandardSubWallet extends SubWallet {
         // this.masterWallet.walletManager.registerSubWalletListener();
         this.initLastBlockInfo();
         this.updateBalance();
-    }
-
-    public static async newFromCoin(masterWallet: MasterWallet, coin: Coin): Promise<StandardSubWallet> {
-        let coinName = StandardCoinName.fromCoinID(coin.getID());
-
-        // Create the subwallet in the SPV SDK first, before creating it in our model, as further function
-        // calls need the SPV entry to be ready.
-        await masterWallet.walletManager.spvBridge.createSubWallet(masterWallet.id, coinName);
-
-        let subWallet = new StandardSubWallet(masterWallet, coinName);
-
-        return subWallet;
-    }
-
-    public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): StandardSubWallet {
-        console.log("Initializing standard subwallet from serialized sub wallet", serializedSubWallet);
-        let subWallet = new StandardSubWallet(masterWallet, serializedSubWallet.id);
-        subWallet.initFromSerializedSubWallet(serializedSubWallet);
-        return subWallet;
     }
 
     public async destroy() {
@@ -96,27 +73,6 @@ export class StandardSubWallet extends SubWallet {
         return this.balance.gt(amount.multipliedBy(Config.SELAAsBigNumber));
     }
 
-    /**
-     * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,
-     * saying that a new balance amount is available.
-     */
-    public async updateBalance() {
-        if (this.id === StandardCoinName.ETHSC) {
-            let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
-            // TODO: use Ether? Gwei? Wei?
-            this.balance = new BigNumber(balanceStr).multipliedBy(Config.SELAAsBigNumber);
-        } else {
-            // if the balance form spvsdk is newer, then use it.
-            if (!this.lastBlockTime || (moment(this.lastBlockTime).valueOf() > this.timestampRPC)) {
-                // Get the current balance from the wallet plugin.
-                let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
-
-                // Balance in SELA
-                this.balance = new BigNumber(balanceStr, 10);
-            }
-        }
-    }
-
     public async getTransactions(startIndex: number): Promise<AllTransactions> {
         let allTransactions = await this.masterWallet.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.id, startIndex, '');
         console.log("Get all transaction count for coin "+this.id+": ", allTransactions && allTransactions.Transactions ? allTransactions.Transactions.length : -1, "startIndex: ", startIndex);
@@ -143,81 +99,6 @@ export class StandardSubWallet extends SubWallet {
             const eventId = this.masterWallet.id + ':' + this.id + ':synccompleted';
             this.masterWallet.walletManager.events.publish(eventId, this.id);
         }
-    }
-
-    public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string> {
-        let rawTx = '';
-        if (this.id === StandardCoinName.ETHSC) {
-            rawTx = await this.masterWallet.walletManager.spvBridge.createTransfer(
-                this.masterWallet.id,
-                toAddress,
-                amount,
-                6 // ETHER_ETHER
-            );
-        } else {// ELA, IDChain
-            rawTx = await this.masterWallet.walletManager.spvBridge.createTransaction(
-                this.masterWallet.id,
-                this.id, // From subwallet id
-                '', // From address, not necessary
-                toAddress,
-                amount,
-                memo // User input memo
-            );
-        }
-        return rawTx;
-    }
-
-    /**
-     * Use smartcontract to Send ELA from ETHSC to mainchain.
-     */
-    private getContractAddress(): Promise<string> {
-        return new Promise((resolve) => {
-            appManager.getPreference('chain.network.type', (value) => {
-                if (value === 'MainNet') {
-                    resolve(Config.CONTRACT_ADDRESS_MAINNET);
-                } else if (value === 'TestNet') {
-                    resolve(Config.CONTRACT_ADDRESS_TESTNET);
-                } else {
-                    resolve(null);
-                }
-            });
-        });
-    }
-
-    public async createWithdrawTransaction(toAddress: string, toAmount: number, memo: string): Promise<string> {
-        let rawTx = '';
-        if (this.id === StandardCoinName.ETHSC) {
-            const provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
-            const web3 = new Web3(provider);
-
-            const contractAbi = require('../../assets/ethereum/ETHSCWithdrawABI.json');
-            const contractAddress = await this.getContractAddress();
-            const ethscWithdrawContract = new web3.eth.Contract(contractAbi, contractAddress);
-            const gasPrice = await web3.eth.getGasPrice();
-
-            const toAmountSend = web3.utils.toWei(toAmount.toString());
-            const data = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE).encodeABI();
-            rawTx = await this.masterWallet.walletManager.spvBridge.createTransferGeneric(
-                this.masterWallet.id,
-                contractAddress,
-                toAmountSend,
-                0, // WEI
-                gasPrice,
-                0, // WEI
-                '3000000', // TODO: gasLimit
-                data,
-            );
-        } else { // IDChain
-            rawTx = await this.masterWallet.walletManager.spvBridge.createWithdrawTransaction(
-                this.masterWallet.id,
-                this.id, // From subwallet id
-                '',
-                toAmount.toString(),
-                toAddress,
-                memo
-            );
-        }
-        return rawTx;
     }
 
     /**

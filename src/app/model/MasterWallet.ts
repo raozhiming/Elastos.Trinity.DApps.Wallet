@@ -8,6 +8,7 @@ import { CoinService } from '../services/coin.service';
 import { ɵNgStyleImpl } from '@angular/common';
 import BigNumber from 'bignumber.js';
 import { Config } from '../config/Config';
+import { StandardSubWalletBuilder } from './StandardSubWalletBuilder';
 
 export type WalletID = string;
 
@@ -188,7 +189,7 @@ class SubWalletBuilder {
 
         switch (coin.getType()) {
             case CoinType.STANDARD:
-                return StandardSubWallet.newFromCoin(masterWallet, coin);
+                return StandardSubWalletBuilder.newFromCoin(masterWallet, coin);
             case CoinType.ERC20:
                 return ERC20SubWallet.newFromCoin(masterWallet, coin);
             default:
@@ -203,7 +204,7 @@ class SubWalletBuilder {
     static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): SubWallet {
         switch (serializedSubWallet.type) {
             case CoinType.STANDARD:
-                return StandardSubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
+                return StandardSubWalletBuilder.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
             case CoinType.ERC20:
                 return ERC20SubWallet.newFromSerializedSubWallet(masterWallet, serializedSubWallet);
             default:

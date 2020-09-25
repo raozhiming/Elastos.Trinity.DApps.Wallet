@@ -68,12 +68,23 @@ export abstract class SubWallet {
      */
     public async destroy() {}
 
-    /** Create a new wallet address for receiving payments. */
+    /**
+     * Create a new wallet address for receiving payments.
+     */
     public abstract createAddress(): Promise<string>;
     public abstract getFriendlyName(): string;
     public abstract getDisplayTokenName(): string;
+
+    /**
+     * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,
+     * saying that a new balance amount is available.
+     */
     public abstract async updateBalance();
-    /** Balance using a human friendly unit. For example, standard wallets have a balance in sELA but getDisplayBalance() returns the amount in ELA */
+
+    /**
+     * Balance using a human friendly unit. For example, standard wallets have a balance in sELA but
+     * getDisplayBalance() returns the amount in ELA
+     */
     public abstract getDisplayBalance(): BigNumber;
     public abstract isBalanceEnough(amount: BigNumber): boolean;
     public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
