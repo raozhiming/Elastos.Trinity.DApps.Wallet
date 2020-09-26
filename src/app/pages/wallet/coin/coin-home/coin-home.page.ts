@@ -57,7 +57,6 @@ export class CoinHomePage implements OnInit {
     public transferList: TransactionInfo[] = [];
 
     private votedCount = 0;
-    private isShowMore = false;
     private isNodata = false;
 
     // Total transactions today
@@ -74,6 +73,8 @@ export class CoinHomePage implements OnInit {
     public SELA = Config.SELA;
 
     private eventId = '';
+
+    public isShowMore = false;
 
     constructor(
         public router: Router,
@@ -260,7 +261,7 @@ export class CoinHomePage implements OnInit {
 
                 const status = this.getTransactionStatusName(transaction.Status);
                 const transfer: TransactionInfo = {
-                    amount: amount.toString(),
+                    amount: amount,
                     confirmStatus: confirmStatus,
                     datetime,
                     direction: transaction.Direction,

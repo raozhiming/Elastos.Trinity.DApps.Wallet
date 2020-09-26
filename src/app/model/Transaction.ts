@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 export enum TransactionStatus {
     CONFIRMED = 'Confirmed',
     PENDING = 'Pending',
@@ -18,7 +20,7 @@ export enum TransactionType {
 }
 
 export type TransactionInfo = {
-    amount: string,
+    amount: BigNumber,
     confirmStatus: number,
     datetime: any,
     direction: TransactionDirection,
