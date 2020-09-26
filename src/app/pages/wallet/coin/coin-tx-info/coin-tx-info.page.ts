@@ -211,7 +211,7 @@ export class CoinTxInfoPage implements OnInit {
         );
 
         // Only show receiving address if transaction was not received
-        if (this.direction === TransactionDirection.RECEIVED) {
+        if (this.direction !== TransactionDirection.RECEIVED) {
             this.txDetails.unshift(
                 {
                     type: 'address',
