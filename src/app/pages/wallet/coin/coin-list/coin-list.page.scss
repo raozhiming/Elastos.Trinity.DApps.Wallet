@@ -197,3 +197,16 @@
       background-color: #2b2c49;    
   }
 }
+
+@media screen and (max-height: 670px) {
+    .container {
+        .item-row {
+            .right-col {
+                ion-toggle {
+                    zoom: 0.7;
+                }
+            }
+        }
+    }
+  }
+  

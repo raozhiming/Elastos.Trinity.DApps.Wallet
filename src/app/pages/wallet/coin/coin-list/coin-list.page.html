@@ -35,17 +35,14 @@
         <ion-row class="list-title-row">
             <ion-col size="12">
                 <h1>{{ 'coin-list-enable-disable-coins' | translate }}</h1>
-                <p>
-                    {{ 'coin-list-enable-disable-coins-intro' | translate }}
-                </p>
+                <p>{{ 'coin-list-enable-disable-coins-intro' | translate }}</p>
             </ion-col>
         </ion-row>
-        <ion-row class="item-row ripple ion-activatable" *ngFor="let item of coinList">
+        <ion-row class="item-row ripple" [class.ion-activatable]="item.coin.canBeRemoved()" *ngFor="let item of coinList">
             <ion-col size="2" class="left-col">
                 <ion-img [src]="getCoinIcon(item)"></ion-img>
             </ion-col>
             <ion-col size="8" class="middle-col">
-              <!--   <h1>{{ item.coin.getName() }}</h1> -->
                 <h1>{{ getCoinTitle(item) }}</h1>
                 <p>{{ getCoinSubtitle(item) }}</p>
             </ion-col>
