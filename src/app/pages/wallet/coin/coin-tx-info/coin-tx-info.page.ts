@@ -11,6 +11,7 @@ import { StandardCoinName } from 'src/app/model/Coin';
 import { TransactionStatus, TransactionDirection, TransactionType, TransactionInfo, Transaction } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
+import BigNumber from 'bignumber.js';
 
 class TransactionDetail {
     type: string;
@@ -38,7 +39,7 @@ export class CoinTxInfoPage implements OnInit {
     public payStatusIcon: string = '';
     public direction: string = '';
     public symbol: string = '';
-    public amount: string;
+    public amount: BigNumber;
     public status: string = '';
 
     // Other Values
@@ -121,8 +122,7 @@ export class CoinTxInfoPage implements OnInit {
         // Get tx fees, final tx amount and receiving address
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
             this.payFee = transaction.Fee / Config.SELA;
-            const amountMinusFees = Number(this.amount) - this.payFee;
-            this.amount = amountMinusFees.toString();
+            this.amount = this.amount.minus(this.payFee);
             this.targetAddress = this.getTargetAddressFromTransaction(transaction);
         } else {
             // TODO: How to distinguish between ordinary transfers and smart contracts
