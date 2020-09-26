@@ -150,16 +150,17 @@ export class CoinListPage implements OnInit, OnDestroy {
     }
 
     onSelect(item: EditableCoinInfo) {
+        console.log('Toggle triggered!', item);
         if (item.isOpen) {
+            this.switchCoin(item, true);
+        } else {
             this.popupProvider.ionicConfirm('confirmTitle', 'text-coin-close-warning').then((data) => {
                 if (data) {
                     this.switchCoin(item, false);
                 } else {
-                    // TODO cancel, set checked
+                    item.isOpen = true;
                 }
             });
-        } else {// open
-            this.switchCoin(item, true);
         }
     }
 
