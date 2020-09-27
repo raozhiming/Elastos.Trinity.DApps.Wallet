@@ -12,7 +12,7 @@
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-row class="main-title-row">
             <ion-col size="12">
-                <h1>{{ 'coin-overview' | translate: {coinName: masterWallet.subWallets[chainId].id} }}</h1>
+                <h1>{{ 'coin-overview' | translate: {coinName: getCoinBalanceCurrency() } }}</h1>
                 <p>{{ 'coin-new-transactions-today' | translate:{todaysTransactions: todaysTransactions} }}</p>
             </ion-col>
         </ion-row>
