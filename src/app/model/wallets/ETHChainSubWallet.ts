@@ -37,8 +37,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
             return null;
         }
 
-        // TODO: upgrade spvsdk, now the result from spvsdk like: 0.010000000000000
-        transactionInfo.amount = new BigNumber(transaction.Amount);
+        transactionInfo.amount = new BigNumber(transaction.Amount).dividedBy(Config.WEI);
         transactionInfo.fee = parseFloat(transaction.Fee.toString());
         transactionInfo.direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
         transactionInfo.txId = transaction.TxHash || transaction.Hash; // ETHSC use TD or Hash

@@ -33,6 +33,9 @@ export class Config {
     public static SELA = 100000000; // Number of SELA per ELA.
     public static SELAAsBigNumber = new BigNumber(Config.SELA);
 
+    public static WEI = 1000000000000000000; // 10 ^ 18
+    public static WEIAsBigNumber = new BigNumber(Config.WEI);
+
     // TODO: comment what those below urls are
     public static IDCHAIN_URL: String = 'https://idchain.elastos.org/';
     public static BLOCKCHAIN_URL: String = 'https://blockchain.elastos.org/';

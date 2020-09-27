@@ -40,6 +40,7 @@ export class CoinTxInfoPage implements OnInit {
     public direction: string = '';
     public symbol: string = '';
     public amount: BigNumber;
+    public displayAmount = '';
     public status: string = '';
 
     // Other Values
@@ -93,6 +94,7 @@ export class CoinTxInfoPage implements OnInit {
             // Header display values
             this.type = this.transactionInfo.type;
             this.amount = this.transactionInfo.amount;
+            this.displayAmount = this.amount.toFixed(6);
             this.symbol = this.transactionInfo.symbol;
             this.payStatusIcon = this.transactionInfo.payStatusIcon;
             const direction = this.transactionInfo.direction;
@@ -121,8 +123,9 @@ export class CoinTxInfoPage implements OnInit {
 
         // Get tx fees, final tx amount and receiving address
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
-            this.payFee = transaction.Fee / Config.SELA;
+            this.payFee = transaction.Fee / Config.WEI;
             this.amount = this.amount.minus(this.payFee);
+            this.displayAmount = this.amount.toFixed(6);
             this.targetAddress = this.getTargetAddressFromTransaction(transaction);
         } else {
             // TODO: How to distinguish between ordinary transfers and smart contracts
