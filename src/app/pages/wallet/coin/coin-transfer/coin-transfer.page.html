@@ -151,7 +151,7 @@
 <ion-content *ngIf="transferType === 3">
     <div class="pay-container" [class.dark-pay-container]="theme.darkMode">
         <ion-img src="./assets/tx/send.svg"></ion-img>
-        <h1>{{ 'transfer-send-ela' | translate }}</h1>
+        <h1>{{ 'coin-transfer-send-title' | translate: { coinName: fromSubWallet.getDisplayTokenName() } }}</h1>
         <h2>{{ 'confirm-transaction-title' | translate }}</h2>
         <div>
             <h3>{{ 'from' | translate }}:</h3>
