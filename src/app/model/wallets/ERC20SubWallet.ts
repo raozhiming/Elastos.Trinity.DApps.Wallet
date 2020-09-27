@@ -118,6 +118,9 @@ export class ERC20SubWallet extends SubWallet {
         this.timestamp = new Date().getTime();
         this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
         this.progress = 100;
+
+        const eventId = this.masterWallet.id + ':' + this.id + ':synccompleted';
+        this.masterWallet.walletManager.events.publish(eventId, this.id);
     }
 
     public getTransactions(startIndex: number): Promise<any> {
