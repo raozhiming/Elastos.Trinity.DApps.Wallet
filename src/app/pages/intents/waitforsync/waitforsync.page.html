@@ -55,9 +55,9 @@
                 <span *ngIf="masterWallet.subWallets[chainId].progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: { progress: masterWallet.subWallets[chainId].progress } }}</span>
             </ion-col>
             <ion-col size="5" class="right-col">
-                <h1>{{ masterWallet.subWallets[chainId].balance/SELA }}</h1>
+                <h1>{{ masterWallet.subWallets[chainId].getDisplayBalance() }}</h1>
                 <p>
-                    {{ currencyService.getCurrencyBalance(masterWallet.subWallets[chainId].balance/SELA) }}
+                    {{ currencyService.getCurrencyBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>
@@ -71,45 +71,3 @@
         </ion-row>
     </ion-grid>
 </ion-content>
-
-<!-- <ion-header>
-    <header-bar title="{{'text-wait-sync' | translate }}" [showBack]="false" [showMinimize]="false" [showClose]="false">
-    </header-bar>
-</ion-header>
-
-<ion-content>
-    <div class="note">
-        <div class="note-entry">
-            {{ action | translate }}
-        </div>
-        <div class="note-entry">
-            {{ 'text-wait-info' | translate }}
-        </div>
-        <div class="note-entry">
-            {{ 'text-wait-info-2' | translate }}
-        </div>
-    </div>
-
-    <div id="home-list-box">
-        <ion-list lines="none">
-            <ion-list-header>
-            <div>{{'text-coin-list' | translate}}</div>
-            </ion-list-header>
-
-            <ion-item>
-                <img *ngIf="chainId=='ELA'" src="assets/images/ela-coin.png" />
-                <img *ngIf="chainId!='ELA'"  src="assets/images/id-coin.png" />
-                <ion-label id="coin-name">{{chainId}}</ion-label>
-                <ion-label solt="end" id="coin-value">
-                    <h2 [hidden]="!showOn" class="line-limit-length">{{masterWallet.subWallets[chainId].balance/SELA}}</h2>
-                    <h2 [hidden]="showOn">****</h2>
-                    <p>{{masterWallet.subWallets[chainId].progress}}%</p>
-                </ion-label>
-            </ion-item>
-        </ion-list>
-    </div>
-</ion-content>
-
-<ion-footer>
-    <ion-button class="confirm" (click)="cancelOperation()">{{ 'cancel' | translate }}</ion-button>
-</ion-footer> -->
