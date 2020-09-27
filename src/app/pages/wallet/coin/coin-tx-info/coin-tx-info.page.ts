@@ -8,7 +8,7 @@ import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { AppService } from 'src/app/services/app.service';
 import { StandardCoinName } from 'src/app/model/Coin';
-import { TransactionStatus, TransactionDirection, TransactionType, TransactionInfo, Transaction } from 'src/app/model/Transaction';
+import { TransactionStatus, TransactionDirection, TransactionType, TransactionInfo, Transaction, EthTransaction } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
@@ -30,7 +30,7 @@ export class CoinTxInfoPage implements OnInit {
     // General Values
     private masterWallet: MasterWallet = null;
     public chainId: string = '';
-    private transactionInfo: TransactionInfo;
+    public transactionInfo: TransactionInfo;
     private blockchain_url = Config.BLOCKCHAIN_URL;
     private idchain_url = Config.IDCHAIN_URL;
 
@@ -126,7 +126,7 @@ export class CoinTxInfoPage implements OnInit {
             this.targetAddress = this.getTargetAddressFromTransaction(transaction);
         } else {
             // TODO: How to distinguish between ordinary transfers and smart contracts
-            this.targetAddress = transaction.TargetAddress;
+            this.targetAddress = (transaction as EthTransaction).TargetAddress; // TODO: move to a subwallet method
         }
 
         this.inputs = this.objtoarr(transaction.Inputs);

@@ -34,7 +34,7 @@ import { AppService } from 'src/app/services/app.service';
 import { CoinTransferService, TransferType, Transfer } from 'src/app/services/cointransfer.service';
 import { StandardCoinName, CoinType } from 'src/app/model/Coin';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
-import { TransactionDirection, TransactionStatus, TransactionInfo, TransactionType } from 'src/app/model/Transaction';
+import { TransactionDirection, TransactionStatus, TransactionInfo, TransactionType, EthTransaction, RawTransactionType } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import * as moment from 'moment';
 import { CurrencyService } from 'src/app/services/currency.service';
@@ -193,174 +193,20 @@ export class CoinHomePage implements OnInit {
             this.isShowMore = false;
         }
 
-        for (const key in transactions) {
+        for (let transaction of transactions) {
             // console.log("key", key, "transaction", transactions[key]);
-            if (transactions.hasOwnProperty(key)) {
-                const transaction = transactions[key];
-                let amount: BigNumber;
-                if (this.chainIsETHSC()) {
-                    if (transaction.IsErrored || (transaction.BlockNumber === 0)) {
-                        // remove the wrong transaction
-                        await this.deleteTransaction(transaction);
-                        continue;
-                    }
-                    // TODO: upgrade spvsdk, now the result from spvsdk like: 0.010000000000000
-                    amount = new BigNumber(transaction.Amount);
-                    transaction.Fee = parseFloat(transaction.Fee.toString());
-                    transaction.Direction = this.getETHSCTransactionDirection(transaction.TargetAddress);
-                } else {
-                    amount = new BigNumber(transaction.Amount, 10).dividedBy(Config.SELAAsBigNumber);
-                }
-
-                const timestamp = transaction.Timestamp * 1000;
-                const datetime = timestamp === 0 ? this.translate.instant('coin-transaction-status-pending')
-                        : moment(new Date(timestamp)).startOf('minutes').fromNow();
-                const txId = transaction.TxHash || transaction.Hash; // ETHSC use TD or Hash
-                let txType: TransactionType;
-                let payStatusIcon: string = null;
-                let name = '';
-                let symbol = '';
-                const type = transaction.Type;
-
-                // Check if transaction was made today
-                this.isNewTransaction(timestamp);
-
-                if (transaction.Direction === TransactionDirection.RECEIVED) {
-                    txType = TransactionType.RECEIVED;
-                    payStatusIcon = './assets/buttons/receive.png';
-                    symbol = '+';
-                    name = this.getTransactionName(transaction.Direction, type, transaction.TopUpSidechain);
-                } else if (transaction.Direction === TransactionDirection.SENT) {
-                    txType = TransactionType.SENT;
-                    payStatusIcon = './assets/buttons/send.png';
-                    symbol = '-';
-                    name = this.getTransactionName(transaction.Direction, type, transaction.TopUpSidechain);
-                } else if (transaction.Direction === TransactionDirection.MOVED) {
-                    txType = TransactionType.TRANSFER;
-                    payStatusIcon = './assets/buttons/transfer.png';
-                    symbol = '';
-                    name = this.translate.instant("coin-op-transfered-ela");
-
-                    if (this.chainIsELA()) { // IDChian no vote
-                        const isVote = await this.isVoteTransaction(txId);
-                        if (isVote) {
-                            name = this.translate.instant("coin-op-vote");
-                        }
-                    } else if (this.chainIsDID()) {
-                        if (transaction.Type === 10) { // DID transaction
-                            name = this.translate.instant("coin-op-identity");
-                        }
-                    }
-                }
-
-                let confirmStatus: number; // Number of confirmations
-                if (this.chainIsETHSC()) // ETHSC use Confirmations - TODO: FIX THIS - SHOULD BE EITHER CONFIRMSTATUS or CONFIRMATIONS BUT NOT BOTH
-                    confirmStatus = transaction.Confirmations;
-                else
-                    confirmStatus = transaction.ConfirmStatus;
-
-                const status = this.getTransactionStatusName(transaction.Status);
-                const transfer: TransactionInfo = {
-                    amount: amount,
-                    confirmStatus: confirmStatus,
-                    datetime,
-                    direction: transaction.Direction,
-                    fee: transaction.Fee,
-                    memo: transaction.Memo,
-                    name,
-                    payStatusIcon,
-                    status,
-                    symbol,
-                    timestamp,
-                    txId,
-                    type: txType,
-                };
-                this.transferList.push(transfer);
+            let transactionInfo = await this.subWallet.getTransactionInfo(transaction, this.translate);
+            if (!transactionInfo) {
+                // remove the wrong transaction
+                await this.deleteTransaction(transaction);
+                continue;
             }
+
+            // Check if transaction was made today and increment our counter if so.
+            this.countAsDailyTransactionIfNeeded(transactionInfo.timestamp);
+
+            this.transferList.push(transactionInfo);
         }
-    }
-
-    isVoteTransaction(txId: string): Promise<any> {
-        return new Promise(async (resolve, reject) => {
-            const transactions = await this.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.chainId, 0, txId);
-            const transaction = transactions.Transactions[0];
-            if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-        });
-    }
-
-    getETHSCTransactionDirection(targetAddress): TransactionDirection {
-        if (this.ethscAddress === targetAddress) {
-            return TransactionDirection.RECEIVED;
-        } else {
-            return TransactionDirection.SENT;
-        }
-    }
-
-    getTransactionName(direction: TransactionDirection, type: number, topUpSidechain: string): string {
-        let transactionName = '';
-        switch (direction) {
-            case TransactionDirection.RECEIVED:
-                // TODO: upgrade spvsdk, check the ETHSC
-                transactionName = this.translate.instant('coin-op-received-ela');
-                switch (type) {
-                    case 6: // RechargeToSideChain
-                        transactionName = this.translate.instant("coin-dir-from-mainchain");
-                        break;
-                    case 7: // WithdrawFromSideChain
-                        switch (topUpSidechain) {
-                            case StandardCoinName.IDChain:
-                                transactionName = this.translate.instant("coin-dir-from-idchain");
-                                break;
-                            case StandardCoinName.ETHSC:
-                                transactionName = this.translate.instant("coin-dir-from-ethsc");
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    default:
-                    break;
-                }
-                break;
-            case TransactionDirection.SENT:
-                transactionName = this.translate.instant("coin-op-sent-ela");
-
-                if (type === 8) { // TransferCrossChainAsset
-                    switch (topUpSidechain) {
-                        case StandardCoinName.IDChain:
-                            transactionName = this.translate.instant("coin-dir-to-idchain");
-                            break;
-                        case StandardCoinName.ETHSC:
-                            transactionName = this.translate.instant("coin-dir-to-ethsc");
-                            break;
-                        default:
-                            transactionName = this.translate.instant("coin-dir-to-mainchain");
-                            break;
-                    }
-                }
-                break;
-        }
-        return transactionName;
-    }
-
-    getTransactionStatusName(status: TransactionStatus): string {
-        let statusName = '';
-        switch (status) {
-            case TransactionStatus.CONFIRMED:
-                statusName = this.translate.instant("coin-transaction-status-confirmed");
-                break;
-            case TransactionStatus.PENDING:
-                statusName = this.translate.instant("coin-transaction-status-pending");
-                break;
-            case TransactionStatus.UNCONFIRMED:
-                statusName = this.translate.instant("coin-transaction-status-unconfirmed");
-                break;
-        }
-        return statusName;
     }
 
     async deleteTransaction(tx) {
@@ -479,7 +325,7 @@ export class CoinHomePage implements OnInit {
         await this.subWallet.signAndSendRawTransaction(rawTx, transfer);
     }
 
-    isNewTransaction(timestamp: number) {
+    countAsDailyTransactionIfNeeded(timestamp: number) {
         let today = moment(new Date());
         if (today.startOf('day').isSame(moment(timestamp).startOf('day'))) {
             this.todaysTransactions++;

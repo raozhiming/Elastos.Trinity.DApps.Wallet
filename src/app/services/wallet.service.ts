@@ -200,13 +200,13 @@ export class WalletManager {
                         let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
                         if (!subwallet) {
                             console.log('Opening IDChain');
-                            const subWallet = new IDChainSubWallet(this.masterWallets[masterId], StandardCoinName.IDChain);
+                            const subWallet = new IDChainSubWallet(this.masterWallets[masterId]);
                             extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                         }
                         subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
                         if (!subwallet) {
                             console.log('Opening ETHSC');
-                            const subWallet = new MainchainSubWallet(this.masterWallets[masterId], StandardCoinName.ETHSC);
+                            const subWallet = new MainchainSubWallet(this.masterWallets[masterId]);
                             extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                         }
                     }

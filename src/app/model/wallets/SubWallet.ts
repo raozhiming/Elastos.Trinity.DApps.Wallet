@@ -1,9 +1,11 @@
 import { MasterWallet } from './MasterWallet';
 import { Events } from '@ionic/angular';
 import { CoinType, CoinID, StandardCoinName } from '../Coin';
-import { AllTransactions } from '../Transaction';
+import { AllTransactions, RawTransactionType, Transaction, TransactionDirection, TransactionInfo, TransactionStatus, TransactionType } from '../Transaction';
 import { Transfer } from '../../services/cointransfer.service';
 import BigNumber from 'bignumber.js';
+import { TranslateService } from '@ngx-translate/core';
+import moment from 'moment';
 
 /**
  * Subwallet representation ready to save to local storage for persistance.
@@ -67,31 +69,112 @@ export abstract class SubWallet {
     }
 
     /**
+     * From a raw status, returns a UI readable string status.
+     */
+    public getTransactionStatusName(status: TransactionStatus, translate: TranslateService): string {
+        let statusName = null;
+        switch (status) {
+            case TransactionStatus.CONFIRMED:
+                statusName = translate.instant("coin-transaction-status-confirmed");
+                break;
+            case TransactionStatus.PENDING:
+                statusName = translate.instant("coin-transaction-status-pending");
+                break;
+            case TransactionStatus.UNCONFIRMED:
+                statusName = translate.instant("coin-transaction-status-unconfirmed");
+                break;
+        }
+        return statusName;
+    }
+
+    /**
+     * From a given transaction return a UI displayable transaction title.
+     */
+    protected abstract getTransactionName(transaction: Transaction, translate: TranslateService): Promise<string>;
+
+    /**
+     * From a given transaction return a UI displayable transaction icon that illustrates the transaction operation.
+     */
+    protected abstract getTransactionIconPath(transaction: Transaction): Promise<string>;
+
+    /**
      * Inheritable method to do some cleanup when a subwallet is removed/destroyed from a master wallet
      */
-    public async destroy() {}
+    public destroy(): Promise<void> {
+        return Promise.resolve();
+    }
 
     /**
      * Create a new wallet address for receiving payments.
      */
     public abstract createAddress(): Promise<string>;
+
+    /**
+     * Returns a UI readable name for this sub wallet.
+     * Ex: for a ERC20 token, this will be the token description such as "Trinity Tech"
+     */
     public abstract getFriendlyName(): string;
+
+    /**
+     * Returns a UI displayable token symbol.
+     * Ex: for a ERC20 token, this will be something like "TTECH"
+     */
     public abstract getDisplayTokenName(): string;
 
     /**
      * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,
      * saying that a new balance amount is available.
      */
-    public abstract async updateBalance();
+    public abstract updateBalance();
 
     /**
      * Balance using a human friendly unit. For example, standard wallets have a balance in sELA but
      * getDisplayBalance() returns the amount in ELA
      */
     public abstract getDisplayBalance(): BigNumber;
+
+    /**
+     * Tells if this subwallet has a balance greater than or equal to the given amount.
+     * For SPV subwallets, this method should be called only after wallet is synced.
+     */
     public abstract isBalanceEnough(amount: BigNumber): boolean;
-    public abstract async getTransactions(startIndex: number): Promise<AllTransactions>;
-    public abstract async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string>;
-    public abstract async createWithdrawTransaction(toAddress: string, amount: number, memo: string): Promise<string>;
-    public abstract async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void>;
+
+    /**
+     * Get a partial list of transactions, from the given index.
+     * TODO: The "AllTransactions" type is very specific to SPVSDK. We will maybe have to change this type to a common type
+     * with ERC20 "transaction" type when we have more info about it.
+     */
+    public abstract getTransactions(startIndex: number): Promise<AllTransactions>;
+
+    /**
+     * Based on a raw transaction object (from the SPV SDK or API), returns a higher level
+     * transaction info object ready to use on UI.
+     *
+     * Can be overriden to customize some fields.
+     */
+    public async getTransactionInfo(transaction: Transaction, translate: TranslateService): Promise<TransactionInfo> {
+        const timestamp = transaction.Timestamp * 1000; // Convert seconds to use milliseconds
+        const datetime = timestamp === 0 ? translate.instant('coin-transaction-status-pending') : moment(new Date(timestamp)).startOf('minutes').fromNow();
+
+        const transactionInfo: TransactionInfo = {
+            amount: new BigNumber(-1), // Defined by inherited classes
+            confirmStatus: -1, // Defined by inherited classes
+            datetime,
+            direction: transaction.Direction,
+            fee: transaction.Fee,
+            memo: transaction.Memo,
+            name: await this.getTransactionName(transaction, translate),
+            payStatusIcon: await this.getTransactionIconPath(transaction),
+            status: this.getTransactionStatusName(transaction.Status, translate),
+            symbol: '', // Defined by inherited classes
+            timestamp,
+            txId: null, // Defined by inherited classes
+            type: null, // Defined by inherited classes
+        };
+        return transactionInfo;
+    }
+
+    public abstract createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string>;
+    public abstract createWithdrawTransaction(toAddress: string, amount: number, memo: string): Promise<string>;
+    public abstract signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void>;
 }

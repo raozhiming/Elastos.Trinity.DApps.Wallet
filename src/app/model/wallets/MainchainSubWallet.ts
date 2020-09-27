@@ -1,41 +1,29 @@
 import { StandardSubWallet } from './StandardSubWallet';
 import moment from 'moment';
 import BigNumber from 'bignumber.js';
+import { EthTransaction, RawTransactionType, Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
+import { Config } from 'src/app/config/Config';
+import { TranslateService } from '@ngx-translate/core';
+import { StandardCoinName } from '../Coin';
+import { MasterWallet } from './MasterWallet';
+import { MainAndIDChainSubWallet } from './MainAndIDChainSubWallet';
 
 /**
  * Specialized standard sub wallet for ELA mainchain.
  */
-export class MainchainSubWallet extends StandardSubWallet {
-    public async updateBalance() {
-        // if the balance form spvsdk is newer, then use it.
-        if (!this.lastBlockTime || (moment(this.lastBlockTime).valueOf() > this.timestampRPC)) {
-            // Get the current balance from the wallet plugin.
-            let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
+export class MainchainSubWallet extends MainAndIDChainSubWallet {
+    constructor(masterWallet: MasterWallet) {
+        super(masterWallet, StandardCoinName.ELA);
+    }
 
-            // Balance in SELA
-            this.balance = new BigNumber(balanceStr, 10);
+    protected async getTransactionName(transaction: Transaction, translate: TranslateService): Promise<string> {
+        if (transaction.Direction === TransactionDirection.MOVED) {
+            const isVote = await this.isVoteTransaction(transaction.TxHash);
+            if (isVote) {
+                return translate.instant("coin-op-vote");
+            }
         }
-    }
 
-    public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string> {
-        return this.masterWallet.walletManager.spvBridge.createTransaction(
-            this.masterWallet.id,
-            this.id, // From subwallet id
-            '', // From address, not necessary
-            toAddress,
-            amount,
-            memo // User input memo
-        );
-    }
-
-    public async createWithdrawTransaction(toAddress: string, toAmount: number, memo: string): Promise<string> {
-        return this.masterWallet.walletManager.spvBridge.createWithdrawTransaction(
-            this.masterWallet.id,
-            this.id, // From subwallet id
-            '',
-            toAmount.toString(),
-            toAddress,
-            memo
-        );
+        return super.getTransactionName(transaction, translate);
     }
 }

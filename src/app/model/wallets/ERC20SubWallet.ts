@@ -8,6 +8,9 @@ import { CoinType, CoinID, Coin, ERC20Coin, StandardCoinName } from '../Coin';
 import { Util } from '../Util';
 import { Transfer } from '../../services/cointransfer.service';
 import BigNumber from 'bignumber.js';
+import { TranslateService } from '@ngx-translate/core';
+import { Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
+import moment from 'moment';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -123,6 +126,31 @@ export class ERC20SubWallet extends SubWallet {
         // After the SPV SDK is synced and we get all transactions, we can probably filter transfers to/from the
         // ERC20 contract and cache it.
         return Promise.resolve([]);
+    }
+
+    // TODO: Refine / translate with more detailed info: smart contract run, cross chain transfer or ERC payment, etc
+    protected async getTransactionName(transaction: Transaction, translate: TranslateService): Promise<string> {
+        switch (transaction.Direction) {
+            case TransactionDirection.RECEIVED:
+                return "Received "+this.coin.getName();
+            case TransactionDirection.SENT:
+                return "Sent "+this.coin.getName();
+            default:
+                return "Invalid";
+        }
+    }
+
+    // TODO: Refine with more detailed info: smart contract run, cross chain transfer or ERC payment, etc
+    protected async getTransactionIconPath(transaction: Transaction): Promise<string> {
+        if (transaction.Direction === TransactionDirection.RECEIVED) {
+            return './assets/buttons/receive.png';
+        } else if (transaction.Direction === TransactionDirection.SENT) {
+            return './assets/buttons/send.png';
+        } else if (transaction.Direction === TransactionDirection.MOVED) {
+            return './assets/buttons/transfer.png';
+        }
+
+        return null;
     }
 
     async getEthAccountAddress(): Promise<string> {

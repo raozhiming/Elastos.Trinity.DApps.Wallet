@@ -4,6 +4,11 @@ import { Config } from '../../config/Config';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk';
+import { EthTransaction, Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
+import { StandardCoinName } from '../Coin';
+import { MasterWallet } from './MasterWallet';
+import { TranslateService } from '@ngx-translate/core';
+import { transition } from '@angular/animations';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -11,6 +16,82 @@ declare let appManager: AppManagerPlugin.AppManager;
  * Specialized standard sub wallet for the ETH sidechain.
  */
 export class ETHChainSubWallet extends StandardSubWallet {
+    private ethscAddress: string = null;
+
+    constructor(masterWallet: MasterWallet) {
+        super(masterWallet, StandardCoinName.ETHSC);
+    }
+
+    private async getAddress(): Promise<string> {
+        if (this.ethscAddress)
+            return Promise.resolve(this.ethscAddress);
+
+        this.ethscAddress = await this.createAddress();
+    }
+
+    public async getTransactionInfo(transaction: EthTransaction, translate: TranslateService): Promise<TransactionInfo> {
+        let transactionInfo = await super.getTransactionInfo(transaction, translate);
+        let direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
+
+        if (transaction.IsErrored || (transaction.BlockNumber === 0)) {
+            return null;
+        }
+
+        // TODO: upgrade spvsdk, now the result from spvsdk like: 0.010000000000000
+        transactionInfo.amount = new BigNumber(transaction.Amount);
+        transactionInfo.fee = parseFloat(transaction.Fee.toString());
+        transactionInfo.direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
+        transactionInfo.txId = transaction.TxHash || transaction.Hash; // ETHSC use TD or Hash
+
+        // ETHSC use Confirmations - TODO: FIX THIS - SHOULD BE EITHER CONFIRMSTATUS (mainchain) or CONFIRMATIONS BUT NOT BOTH
+        transactionInfo.confirmStatus = transaction.Confirmations;
+
+        // MESSY again - No "Direction" field in ETH transactions (contrary to other chains). Calling a private method to determine this.
+        if (direction === TransactionDirection.RECEIVED) {
+            transactionInfo.type = TransactionType.RECEIVED;
+            transactionInfo.symbol = '+';
+        } else if (direction === TransactionDirection.SENT) {
+            transactionInfo.type = TransactionType.SENT;
+            transactionInfo.symbol = '-';
+        } else if (direction === TransactionDirection.MOVED) {
+            transactionInfo.type = TransactionType.TRANSFER;
+            transactionInfo.symbol = '';
+        }
+
+        return transactionInfo;
+    }
+
+    // TODO: https://app.clickup.com/t/4fu5cw - "Get the transaction type from ETHSC  transaction"
+    protected async getTransactionName(transaction: EthTransaction, translate: TranslateService): Promise<string> {
+        let direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
+        switch (direction) {
+            case TransactionDirection.RECEIVED:
+                return translate.instant("coin-op-received-ela");
+            case TransactionDirection.SENT:
+                return translate.instant("coin-op-sent-ela");
+        }
+        return null;
+    }
+
+    protected async getTransactionIconPath(transaction: EthTransaction): Promise<string> {
+        let direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
+        switch (direction) {
+            case TransactionDirection.RECEIVED:
+                return './assets/buttons/receive.png';
+            case TransactionDirection.SENT:
+                return './assets/buttons/send.png';
+        }
+    }
+
+    private async getETHSCTransactionDirection(targetAddress: string): Promise<TransactionDirection> {
+        let address = await this.getAddress();
+        if (address === targetAddress) {
+            return TransactionDirection.RECEIVED;
+        } else {
+            return TransactionDirection.SENT;
+        }
+    }
+
     public async updateBalance(): Promise<void> {
         let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
         // TODO: use Ether? Gwei? Wei?

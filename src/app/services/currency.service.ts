@@ -114,6 +114,9 @@ export class CurrencyService {
   }
 
   getCurrencyBalance(cryptoBalance: BigNumber): string {
+    if (!cryptoBalance)
+      return null;
+
     const currencyPrice = new BigNumber(this.selectedCurrency.price);
     const currencyBalance = currencyPrice.multipliedBy(cryptoBalance);
     if (cryptoBalance.isZero()) {

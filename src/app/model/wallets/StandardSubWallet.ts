@@ -2,10 +2,12 @@ import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
 import { CoinType, Coin, StandardCoinName } from '../Coin';
 import { Util } from '../Util';
-import { AllTransactions } from '../Transaction';
+import { AllTransactions, RawTransactionType, Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
 import { Transfer } from '../../services/cointransfer.service';
 import { Config } from '../../config/Config';
 import BigNumber from 'bignumber.js';
+import moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -16,7 +18,7 @@ export abstract class StandardSubWallet extends SubWallet {
         this.initialize();
     }
 
-    private initialize() {
+    protected initialize() {
         // this.masterWallet.walletManager.registerSubWalletListener();
         this.initLastBlockInfo();
         this.updateBalance();
@@ -77,6 +79,97 @@ export abstract class StandardSubWallet extends SubWallet {
         let allTransactions = await this.masterWallet.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.id, startIndex, '');
         console.log("Get all transaction count for coin "+this.id+": ", allTransactions && allTransactions.Transactions ? allTransactions.Transactions.length : -1, "startIndex: ", startIndex);
         return allTransactions;
+    }
+
+    protected async getTransactionName(transaction: Transaction, translate: TranslateService): Promise<string> {
+        let transactionName: string = '';
+        console.log("getTransactionName std subwallet", transaction);
+
+        switch (transaction.Direction) {
+            case TransactionDirection.RECEIVED:
+                transactionName = translate.instant('coin-op-received-ela');
+                // TODO: upgrade spvsdk, check the ETHSC
+                switch (transaction.Type) {
+                    case RawTransactionType.RechargeToSideChain:
+                        transactionName = translate.instant("coin-dir-from-mainchain");
+                        break;
+                    case RawTransactionType.WithdrawFromSideChain:
+                        switch (transaction.TopUpSidechain) {
+                            case StandardCoinName.IDChain:
+                                transactionName = translate.instant("coin-dir-from-idchain");
+                                break;
+                            case StandardCoinName.ETHSC:
+                                transactionName = translate.instant("coin-dir-from-ethsc");
+                                break;
+                            default:
+                                transactionName = translate.instant('coin-op-received-ela');
+                        }
+                        break;
+                }
+                break;
+            case TransactionDirection.SENT:
+                transactionName = translate.instant("coin-op-sent-ela");
+
+                if (transaction.Type === RawTransactionType.TransferCrossChainAsset) {
+                    switch (transaction.TopUpSidechain) {
+                        case StandardCoinName.IDChain:
+                            transactionName = translate.instant("coin-dir-to-idchain");
+                            break;
+                        case StandardCoinName.ETHSC:
+                            transactionName = translate.instant("coin-dir-to-ethsc");
+                            break;
+                        default:
+                            transactionName = translate.instant("coin-dir-to-mainchain");
+                            break;
+                    }
+                }
+                break;
+        }
+        return transactionName;
+    }
+
+    protected async getTransactionIconPath(transaction: Transaction): Promise<string> {
+        if (transaction.Direction === TransactionDirection.RECEIVED) {
+            switch (transaction.Type) {
+                case RawTransactionType.RechargeToSideChain:
+                case RawTransactionType.WithdrawFromSideChain:
+                case RawTransactionType.TransferCrossChainAsset:
+                    return './assets/buttons/transfer.png';
+                default:
+                    return './assets/buttons/receive.png';
+            }
+        } else if (transaction.Direction === TransactionDirection.SENT) {
+            switch (transaction.Type) {
+                case RawTransactionType.RechargeToSideChain:
+                case RawTransactionType.WithdrawFromSideChain:
+                case RawTransactionType.TransferCrossChainAsset:
+                    return './assets/buttons/transfer.png';
+                default:
+                    return './assets/buttons/send.png';
+            }
+        } else if (transaction.Direction === TransactionDirection.MOVED) {
+            return './assets/buttons/transfer.png';
+        }
+
+        // In case the transaction type is a cross chain transfer, we don't mind the direction, we show
+        // a transfer icon
+        /*if (transaction.Type == RawTransactionType.TransferCrossChainAsset) {
+            payStatusIcon = './assets/buttons/transfer.png';
+        }*/
+
+        return null;
+    }
+
+    protected isVoteTransaction(txId: string): Promise<any> {
+        return new Promise(async (resolve) => {
+            const transactions = await this.masterWallet.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.id, 0, txId);
+            const transaction = transactions.Transactions[0];
+            if (!Util.isNull(transaction.OutputPayload) && (transaction.OutputPayload.length > 0)) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
     }
 
    /*

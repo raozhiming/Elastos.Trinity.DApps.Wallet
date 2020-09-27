@@ -13,11 +13,11 @@ export class StandardSubWalletBuilder {
     private static newSubWalletFromId(masterWallet: MasterWallet, coinName: StandardCoinName): StandardSubWallet {
         switch (coinName) {
             case StandardCoinName.ELA:
-                return new MainchainSubWallet(masterWallet, coinName);
+                return new MainchainSubWallet(masterWallet);
             case StandardCoinName.IDChain:
-                return new IDChainSubWallet(masterWallet, coinName);
+                return new IDChainSubWallet(masterWallet);
             case StandardCoinName.ETHSC:
-                return new ETHChainSubWallet(masterWallet, coinName);
+                return new ETHChainSubWallet(masterWallet);
             default:
                 return null;
         }

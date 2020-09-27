@@ -49,7 +49,7 @@ export class WalletCreatePage implements OnInit {
     ionViewWillEnter() {
         titleBarManager.setBackgroundColor('#732cd0');
         this.appService.setBackKeyVisibility(true);
-        if (this.walletCreationService.type === 1) {
+        if (this.walletCreationService.type === NewWallet.CREATE) {
             titleBarManager.setTitle(this.translate.instant('launcher-create-wallet'));
         } else {
             titleBarManager.setTitle(this.translate.instant('launcher-backup-import'));

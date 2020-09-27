@@ -35,6 +35,51 @@ export type TransactionInfo = {
     type: TransactionType,
 };
 
+/**
+ * Transaction type as returned by the SPV SDK.
+ * TODO: Use a different type enum for each chain. Values are partly common, partly different.
+ */
+export enum RawTransactionType {
+    CoinBase                 = 0x00,
+    RegisterAsset            = 0x01,
+    TransferAsset            = 0x02,
+    Record                   = 0x03,
+    Deploy                   = 0x04,
+    SideChainPow             = 0x05,
+    RechargeToSideChain      = 0x06,
+    WithdrawFromSideChain    = 0x07,
+    TransferCrossChainAsset  = 0x08,
+    RegisterProducer         = 0x09,
+    CancelProducer           = 0x0a, // NOTE - MESSY - For IDChain, This value means "DID published"
+    UpdateProducer           = 0x0b,
+    ReturnDepositCoin        = 0x0c,
+    ActivateProducer         = 0x0d,
+
+    IllegalProposalEvidence  = 0x0e,
+    IllegalVoteEvidence      = 0x0f,
+    IllegalBlockEvidence     = 0x10,
+    IllegalSidechainEvidence = 0x11,
+    InactiveArbitrators      = 0x12,
+    UpdateVersion            = 0x13,
+
+    RegisterCR               = 0x21,
+    UnregisterCR             = 0x22,
+    UpdateCR                 = 0x23,
+    ReturnCRDepositCoin      = 0x24,
+
+    CrcProposal              = 0x25,
+    CrcProposalReview        = 0x26,
+    CrcProposalTracking      = 0x27,
+    CrcAppropriation         = 0x28,
+    CrcProposalWithdraw      = 0x29,
+    CrcProposalRealWithdraw  = 0x2a,
+
+    CrCouncilMemberClaimNode = 0x31
+}
+
+/**
+ * Raw transaction as received from the SPVSDK.
+ */
 export type Transaction = {
     Amount: string;
     Fee: number;
@@ -45,12 +90,14 @@ export type Transaction = {
     Timestamp: number;
     TopUpSidechain: string;
     TxHash: string;
-    Type: number;
+    Type: RawTransactionType;
     OutputPayload: string;
     Inputs: any; // TODO: type
     Outputs: any; // TODO: type
     Memo: string;
+};
 
+export type EthTransaction = Transaction & {
     // ETHSC
     BlockNumber: number;
     Confirmations: number;
@@ -66,8 +113,11 @@ export type Transaction = {
     OriginTxHash: string;
     SourceAddress: string;
     TargetAddress: string;
-};
+}
 
+/**
+ * Raw list of transactions as received from the SPVSDK.
+ */
 export type AllTransactions = {
     MaxCount: number,
     Transactions: Transaction[]
