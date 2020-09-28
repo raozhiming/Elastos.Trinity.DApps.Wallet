@@ -173,6 +173,9 @@ export class ERC20SubWallet extends SubWallet {
 
         console.log('createPaymentTransaction toAddress:', toAddress, ' amount:', amount, 'gasPrice:', gasPrice);
 
+        // Convert the Token amount (ex: 20 TTECH) to contract amount (=token amount (20) * 10^decimals)
+        let amountWithDecimals = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(this.tokenDecimals));
+
         const rawTx =
         await this.masterWallet.walletManager.spvBridge.createTransferGeneric(
             this.masterWallet.id,
@@ -182,7 +185,7 @@ export class ERC20SubWallet extends SubWallet {
             gasPrice,
             0, // WEI
             '1000000', // TODO: gasLimit
-            erc20Contract.methods.transfer(toAddress, amount).encodeABI(),
+            erc20Contract.methods.transfer(toAddress, amountWithDecimals).encodeABI(),
         );
 
         console.log('Created raw ESC transaction:', rawTx);
