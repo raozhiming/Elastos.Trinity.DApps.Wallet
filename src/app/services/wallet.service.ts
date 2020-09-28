@@ -143,7 +143,8 @@ export class WalletManager {
             // Get last block time, progress from walletservice
             const rpcMessage: InAppRPCMessage = {
                 method: RPCMethod.GET_WALLET_SYNC_PROGRESS,
-                params: ''
+                params: '',
+                startupMode: this.appService.getStartupMode()
             };
             appManager.sendMessage("#service:walletservice",
                                     AppManagerPlugin.MessageType.INTERNAL,
@@ -413,7 +414,8 @@ export class WalletManager {
 
         let rpcMessage: InAppRPCMessage = {
             method: RPCMethod.START_WALLET_SYNC,
-            params: messageParams
+            params: messageParams,
+            startupMode: this.appService.getStartupMode()
         };
 
         if (this.appService.runningAsAService()) {
@@ -451,7 +453,8 @@ export class WalletManager {
 
         let rpcMessage: InAppRPCMessage = {
             method: RPCMethod.STOP_WALLET_SYNC,
-            params: messageParams
+            params: messageParams,
+            startupMode: this.appService.getStartupMode()
         };
 
         appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), () => {

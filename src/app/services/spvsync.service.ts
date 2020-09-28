@@ -37,7 +37,8 @@ declare let notificationManager: NotificationManagerPlugin.NotificationManager;
 export type InAppRPCMessage = {
     method: RPCMethod;
     params: any;
-}
+    startupMode: string;
+};
 
 export enum RPCMethod {
     START_WALLET_SYNC,
@@ -148,9 +149,16 @@ export class SPVSyncService {
                 // TODO: upgraged spvsdk -- Get sync progress by api when it doesn't connet to node.
                 let sendRPCMessage: InAppRPCMessage = {
                   method: RPCMethod.SEND_WALLET_SYNC_PROGRESS,
-                  params: this.walletsSyncProgress
+                  params: this.walletsSyncProgress,
+                  startupMode: 'service'
                 };
-                appManager.sendMessage("org.elastos.trinity.dapp.wallet", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(sendRPCMessage), ()=>{
+
+                let appId = "org.elastos.trinity.dapp.wallet";
+                if (rpcMessage.startupMode === 'intent') { // from intent
+                  appId += '#intent';
+                }
+
+                appManager.sendMessage(appId, AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(sendRPCMessage), ()=>{
                   // Nothing to do
                 }, (err)=>{
                     console.log("Failed to send start RPC message to the sync service", err);

@@ -44,7 +44,7 @@ export class AppService {
     ) {
     }
 
-    private getStartupMode(): Promise<AppManagerPlugin.StartupInfo> {
+    private getStartupModeFromRuntime(): Promise<AppManagerPlugin.StartupInfo> {
         return new Promise((resolve)=>{
             appManager.getStartupMode((startupInfo: AppManagerPlugin.StartupInfo) => {
                 resolve(startupInfo);
@@ -56,11 +56,15 @@ export class AppService {
         return this.startupInfo.startupMode === 'service';
     }
 
+    public getStartupMode(): string {
+      return this.startupInfo.startupMode;
+    }
+
     public async init() {
         console.log("AppmanagerService init");
 
         // Check and save startup mode info
-        this.startupInfo = await this.getStartupMode();
+        this.startupInfo = await this.getStartupModeFromRuntime();
 
         console.log("RUNNING AS: "+this.startupInfo.startupMode);
 

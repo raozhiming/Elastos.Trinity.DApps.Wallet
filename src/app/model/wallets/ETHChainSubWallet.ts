@@ -125,29 +125,29 @@ export class ETHChainSubWallet extends StandardSubWallet {
 
     public async createWithdrawTransaction(toAddress: string, toAmount: number, memo: string): Promise<string> {
         const provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
-            const web3 = new Web3(provider);
+        const web3 = new Web3(provider);
 
-            const contractAbi = require('../../../assets/ethereum/ETHSCWithdrawABI.json');
-            const contractAddress = await this.getContractAddress();
-            const ethscWithdrawContract = new web3.eth.Contract(contractAbi, contractAddress);
-            const gasPrice = await web3.eth.getGasPrice();
-            const toAmountSend = web3.utils.toWei(toAmount.toString());
+        const contractAbi = require('../../../assets/ethereum/ETHSCWithdrawABI.json');
+        const contractAddress = await this.getContractAddress();
+        const ethscWithdrawContract = new web3.eth.Contract(contractAbi, contractAddress);
+        const gasPrice = await web3.eth.getGasPrice();
+        const toAmountSend = web3.utils.toWei(toAmount.toString());
 
-            let method = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE);
+        let method = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE);
 
-            // Estimate gas cost
-            let gasLimit: number = await method.estimateGas();
+        // Estimate gas cost
+        let gasLimit: number = await method.estimateGas();
 
-            const data = method.encodeABI();
-            return this.masterWallet.walletManager.spvBridge.createTransferGeneric(
-                this.masterWallet.id,
-                contractAddress,
-                toAmountSend,
-                0, // WEI
-                gasPrice,
-                0, // WEI
-                gasLimit.toString(),
-                data,
-            );
+        const data = method.encodeABI();
+        return this.masterWallet.walletManager.spvBridge.createTransferGeneric(
+            this.masterWallet.id,
+            contractAddress,
+            toAmountSend,
+            0, // WEI
+            gasPrice,
+            0, // WEI
+            gasLimit.toString(),
+            data,
+        );
     }
 }
