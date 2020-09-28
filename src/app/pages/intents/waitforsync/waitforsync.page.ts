@@ -13,6 +13,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/services/ui.service';
+import { SubWallet } from 'src/app/model/wallets/SubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -28,6 +29,7 @@ export class WaitForSyncPage implements OnInit {
     showOn = true;
 
     masterWallet: MasterWallet;
+    public subWallet: SubWallet;
 
     chainId: StandardCoinName;
     txId: string;
@@ -69,8 +71,9 @@ export class WaitForSyncPage implements OnInit {
         this.chainId = this.coinTransferService.chainId;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
+        this.subWallet = this.masterWallet.subWallets[this.chainId];
 
-        console.log("Wait for sync - Master wallet:", this.masterWallet, "Chain ID:", this.chainId);
+        console.log("Wait for sync - Master wallet:", this.masterWallet, "Chain ID:", this.chainId, "SubWallet:", this.subWallet);
         console.log('Intent Transfer params', this.coinTransferService.intentTransfer);
 
         switch (this.coinTransferService.intentTransfer.action) {

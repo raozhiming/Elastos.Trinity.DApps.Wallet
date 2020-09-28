@@ -93,6 +93,12 @@ export class ERC20SubWallet extends SubWallet {
         return this.balance; // Raw balance and display balance are the same: the number of tokens.
     }
 
+    public getAmountInExternalCurrency(value: BigNumber): string {
+        // No way to compute the actual value in currency for this token - would require to be bound to an exchange
+        // to get its valuation, which we have not for now.
+        return null;
+    }
+
     /**
      * Check whether the balance is enough.
      * @param amount unit is ETHER

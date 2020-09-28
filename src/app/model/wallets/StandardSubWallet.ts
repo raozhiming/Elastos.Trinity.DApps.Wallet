@@ -8,6 +8,7 @@ import { Config } from '../../config/Config';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -65,6 +66,10 @@ export abstract class StandardSubWallet extends SubWallet {
 
     public getDisplayBalance(): BigNumber {
         return this.balance.dividedBy(Config.SELAAsBigNumber);
+    }
+
+    public getAmountInExternalCurrency(value: BigNumber): string {
+        return CurrencyService.instance.getCurrencyBalance(value);
     }
 
     /**

@@ -122,6 +122,13 @@ export abstract class SubWallet {
     public abstract getDisplayTokenName(): string;
 
     /**
+     * Converts a given value in this wallet in the external currency chosen by user (USD, BTC, CNY, etc).
+     * In case the subwallet is not able to compute this value (ex: ERC20 coins for now), the returned
+     * value is null.
+     */
+    public abstract getAmountInExternalCurrency(value: BigNumber): string;
+
+    /**
      * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,
      * saying that a new balance amount is available.
      */

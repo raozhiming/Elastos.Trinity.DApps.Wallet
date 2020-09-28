@@ -15,6 +15,7 @@ type Currency = {
   providedIn: 'root'
 })
 export class CurrencyService {
+  public static instance: CurrencyService = null;
 
   public elaStats: any;
   private proxyurl = "https://cors-anywhere.herokuapp.com/";
@@ -44,7 +45,9 @@ export class CurrencyService {
   constructor(
     private http: HttpClient,
     private storage: LocalStorage
-  ) { }
+  ) {
+    CurrencyService.instance = this;
+  }
 
   async init() {
     await this.getSavedPrices();
@@ -113,6 +116,9 @@ export class CurrencyService {
     console.log('Currency ELA prices updated', this.currencies);
   }
 
+  /**
+   * NOTE: for now, this API converts amounts in ELA to values in user's selected currencies only.
+   */
   getCurrencyBalance(cryptoBalance: BigNumber): string {
     if (!cryptoBalance)
       return null;

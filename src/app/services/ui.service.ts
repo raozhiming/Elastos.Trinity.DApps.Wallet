@@ -43,6 +43,10 @@ export class UiService {
     return subwallet.getDisplayTokenName();
   }
 
+  /**
+   * Returns a string representation of an asset value, with user friendly rounding to avoid long
+   * numbers with many decimals.
+   */
   getFixedBalance(balance: BigNumber): string {
     try {
         // let balance = new BigNumber("172400");

@@ -55,9 +55,9 @@
                 <span *ngIf="masterWallet.subWallets[chainId].progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: { progress: masterWallet.subWallets[chainId].progress } }}</span>
             </ion-col>
             <ion-col size="5" class="right-col">
-                <h1>{{ uiService.getFixedBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}</h1>
-                <p>
-                    {{ currencyService.getCurrencyBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}
+                <h1>{{ uiService.getFixedBalance(subWallet.getDisplayBalance()) }}</h1>
+                <p *ngIf="subWallet.getAmountInExternalCurrency(subWallet.getDisplayBalance())">
+                    {{ subWallet.getAmountInExternalCurrency(subWallet.getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>

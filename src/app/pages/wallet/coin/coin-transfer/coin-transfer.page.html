@@ -15,8 +15,8 @@
             </ion-col>
             <ion-col size="4.2" class="right-col">
                 <h1>{{ uiService.getFixedBalance(fromSubWallet.getDisplayBalance()) }}</h1>
-                <p>
-                    {{ currencyService.getCurrencyBalance(fromSubWallet.getDisplayBalance()) }}
+                <p *ngIf="fromSubWallet.getAmountInExternalCurrency(fromSubWallet.getDisplayBalance())">
+                    {{ fromSubWallet.getAmountInExternalCurrency(fromSubWallet.getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>
@@ -37,8 +37,8 @@
             </ion-col>
             <ion-col size="4.2" class="right-col">
                 <h1>{{ uiService.getFixedBalance(toSubWallet.getDisplayBalance()) }}</h1>
-                <p>
-                    {{ currencyService.getCurrencyBalance(toSubWallet.getDisplayBalance()) }}
+                <p *ngIf="toSubWallet.getAmountInExternalCurrency(toSubWallet.getDisplayBalance())">
+                    {{ toSubWallet.getAmountInExternalCurrency(toSubWallet.getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>
@@ -78,7 +78,9 @@
                     [(ngModel)]="amount"
                 >
                 </ion-input>
-                <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.getCurrencyBalance(amount)}}</p>
+                <p *ngIf="fromSubWallet.getAmountInExternalCurrency(amount)">
+                    {{ fromSubWallet.getAmountInExternalCurrency(amount) }}
+                </p>
             </ion-col>
         </ion-row>
 
@@ -182,7 +184,9 @@
                     [(ngModel)]="amount"
                 >
                 </ion-input>
-                <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.getCurrencyBalance(amount)}}</p>
+                <p *ngIf="fromSubWallet.getAmountInExternalCurrency(amount)">
+                    {{ fromSubWallet.getAmountInExternalCurrency(amount) }}
+                </p>
             </ion-col>
         </ion-row>
     </div>

@@ -70,8 +70,8 @@
                 </ion-col>
                 <ion-col [size]="subWallet.getDisplayBalance().isZero() ? 2.5 : 5" class="right-col">
                     <h1>{{ uiService.getFixedBalance(subWallet.getDisplayBalance()) }}</h1>
-                    <p *ngIf="canDisplayCurrency(subWallet)">
-                        {{ currencyService.getCurrencyBalance(subWallet.getDisplayBalance()) }}
+                    <p *ngIf="subWallet.getAmountInExternalCurrency(subWallet.getDisplayBalance())">
+                        {{ subWallet.getAmountInExternalCurrency(subWallet.getDisplayBalance()) }}
                         {{ currencyService.selectedCurrency.symbol }}
                     </p>
                 </ion-col>
@@ -142,13 +142,13 @@
             </ion-col>
             <ion-col [size]="subWallet.getDisplayBalance().isZero() ? 2.5 : 5" class="right-col">
                 <h1>{{ uiService.getFixedBalance(subWallet.getDisplayBalance()) }}</h1>
-                <p *ngIf="canDisplayCurrency(subWallet)">
-                    {{ currencyService.getCurrencyBalance(subWallet.getDisplayBalance()) }}
+                <p *ngIf="subWallet.getAmountInExternalCurrency(subWallet.getDisplayBalance())">
+                    {{ subWallet.getAmountInExternalCurrency(subWallet.getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
             </ion-col>
             <ion-ripple-effect></ion-ripple-effect>
         </ion-row>
     </ion-grid>
-    
+
 </ion-content>
