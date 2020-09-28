@@ -131,9 +131,14 @@ export class ETHChainSubWallet extends StandardSubWallet {
             const contractAddress = await this.getContractAddress();
             const ethscWithdrawContract = new web3.eth.Contract(contractAbi, contractAddress);
             const gasPrice = await web3.eth.getGasPrice();
-
             const toAmountSend = web3.utils.toWei(toAmount.toString());
-            const data = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE).encodeABI();
+
+            let method = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE);
+
+            // Estimate gas cost
+            let gasLimit: number = await method.estimateGas();
+
+            const data = method.encodeABI();
             return this.masterWallet.walletManager.spvBridge.createTransferGeneric(
                 this.masterWallet.id,
                 contractAddress,
@@ -141,7 +146,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
                 0, // WEI
                 gasPrice,
                 0, // WEI
-                '3000000', // TODO: gasLimit
+                gasLimit.toString(),
                 data,
             );
     }
