@@ -14,18 +14,18 @@
          <!-- TX INFO -->
         <div class="msg-container">
             <p>{{ 'esctransaction-you-are-using' | translate }}</p>
-            <h1><span>{{ getTotalTransactionCostInELA().total }}</span> ELA</h1>
+            <h1><span>{{ uiService.getFixedBalance(getTotalTransactionCostInELA().totalAsBigNumber) }}</span> ELA</h1>
             <h2>
                 <b>{{ 'esctransaction-value' | translate }}</b>
-                <span> {{ getTotalTransactionCostInELA().value }}</span> ELA
+                <span> {{ uiService.getFixedBalance(getTotalTransactionCostInELA().valueAsBigNumber) }}</span> ELA
             </h2>
             <h2>
                 <b>{{ 'esctransaction-fees' | translate }}</b>
-                <span> {{ getTotalTransactionCostInELA().fees }}</span> ELA
+                <span> {{ uiService.getFixedBalance(getTotalTransactionCostInELA().feesAsBigNumber) }}</span> ELA
             </h2>
             <h2>
                 <b>{{ 'coin-balance' | translate }}</b>
-                <span> {{ balance }}</span> ELA
+                <span> {{ uiService.getFixedBalance(balance) }}</span> ELA
             </h2>
         </div>
 
@@ -39,7 +39,7 @@
             <ion-label>{{ 'confirm' | translate}}</ion-label>
             <ion-ripple-effect></ion-ripple-effect>
         </div>
-    
+
     </ion-grid>
 </ion-content>
 
@@ -69,7 +69,7 @@
             </h2>
         </div>
 
-        
+
         <div class="btn cancel ion-activatable ripple" (click)="cancelOperation()">
             <h3>Insufficient balance for this operation</h3>
             <ion-label>{{ 'cancel' | translate}}</ion-label>
@@ -81,4 +81,3 @@
         </div>
     </ion-grid>
 </ion-content> -->
-    

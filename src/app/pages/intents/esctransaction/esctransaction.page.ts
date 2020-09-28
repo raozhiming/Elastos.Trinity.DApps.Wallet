@@ -33,6 +33,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import BigNumber from "bignumber.js";
+import { UiService } from 'src/app/services/ui.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -60,7 +61,8 @@ export class EscTransactionPage implements OnInit {
         public native: Native,
         public zone: NgZone,
         private translate: TranslateService,
-        public theme: ThemeService
+        public theme: ThemeService,
+        public uiService: UiService
     ) {
         this.init();
     }
@@ -132,7 +134,7 @@ export class EscTransactionPage implements OnInit {
      *
      * Input values in "payloadParam" are in WEI
      */
-    public getTotalTransactionCostInELA(): {totalAsBigNumber: BigNumber, total: string, value: string, fees: string } {
+    public getTotalTransactionCostInELA(): {totalAsBigNumber: BigNumber, total: string, valueAsBigNumber: BigNumber, value: string, feesAsBigNumber: BigNumber, fees: string } {
         let weiElaRatio = new BigNumber("1000000000000000000");
 
         let elaEthValue = new BigNumber(this.coinTransferService.payloadParam.value).dividedBy(weiElaRatio);
@@ -146,7 +148,9 @@ export class EscTransactionPage implements OnInit {
         return {
             totalAsBigNumber: total,
             total: total.toString(),
+            valueAsBigNumber: elaEthValue,
             value: elaEthValue.toString(),
+            feesAsBigNumber: fees,
             fees: fees.toString()
         }
     }

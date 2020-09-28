@@ -171,7 +171,7 @@ export class ERC20SubWallet extends SubWallet {
         let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
         let gasPrice = await this.web3.eth.getGasPrice();
 
-        console.log('createPaymentTransaction toAddress:', toAddress, ' amount:', amount);
+        console.log('createPaymentTransaction toAddress:', toAddress, ' amount:', amount, 'gasPrice:', gasPrice);
 
         const rawTx =
         await this.masterWallet.walletManager.spvBridge.createTransferGeneric(
@@ -191,7 +191,7 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void> {
-        console.log("ERC20 signAndSendRawTransaction transaction:", transfer);
+        console.log("ERC20 signAndSendRawTransaction transaction:", transaction, transfer);
 
         return new Promise(async (resolve)=>{
             console.log('Received raw transaction', transaction);
