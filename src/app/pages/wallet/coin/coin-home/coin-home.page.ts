@@ -34,14 +34,13 @@ import { AppService } from 'src/app/services/app.service';
 import { CoinTransferService, TransferType, Transfer } from 'src/app/services/cointransfer.service';
 import { StandardCoinName, CoinType } from 'src/app/model/Coin';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
-import { TransactionDirection, TransactionStatus, TransactionInfo, TransactionType, EthTransaction, RawTransactionType } from 'src/app/model/Transaction';
+import { TransactionInfo } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import * as moment from 'moment';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { ERC20SubWallet } from 'src/app/model/wallets/ERC20SubWallet';
 import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import { UiService } from 'src/app/services/ui.service';
-import BigNumber from 'bignumber.js';
 
 @Component({
     selector: 'app-coin-home',
@@ -56,17 +55,11 @@ export class CoinHomePage implements OnInit {
     public chainId: StandardCoinName = null;
     public transferList: TransactionInfo[] = [];
 
-    private votedCount = 0;
-    private isNodata = false;
-
-    // Total transactions today
+// Total transactions today
     public todaysTransactions: number = 0;
     private MaxCount: number = 0;
     private pageNo: number = 0;
     private start: number = 0;
-    private ethscAddress: string;
-
-    private autoFefreshInterval: any;
 
     // Helpers
     public Util = Util;
@@ -142,8 +135,9 @@ export class CoinHomePage implements OnInit {
 
     async initData() {
         this.subWallet = this.masterWallet.getSubWallet(this.chainId);
-        if (this.chainIsETHSC()) {
-            this.ethscAddress = await this.subWallet.createAddress();
+        if (this.chainIsERC20) {
+            // ERC20 token update balance by web3
+            this.subWallet.updateBalance();
         }
 
         this.pageNo = 0;
@@ -166,17 +160,16 @@ export class CoinHomePage implements OnInit {
         return this.chainId === StandardCoinName.ETHSC;
     }
 
+    chainIsERC20(): boolean {
+      return this.subWallet instanceof ERC20SubWallet;
+    }
+
     async getAllTx() {
         let allTransactions = await this.subWallet.getTransactions(this.start);
         console.log("Got all transactions: ", JSON.parse(JSON.stringify(allTransactions)));
 
         const transactions = allTransactions.Transactions;
         this.MaxCount = allTransactions.MaxCount;
-        if (this.MaxCount > 0) {
-            this.isNodata = false;
-        } else {
-            this.isNodata = true;
-        }
 
         if (this.start >= this.MaxCount) {
             this.isShowMore = false;
