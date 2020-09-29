@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Events } from '@ionic/angular';
 import { Config } from '../../../../config/Config';
+import { JsonRPCService } from '../../../../services/jsonrpc.service';
 import { Native } from '../../../../services/native.service';
 import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
@@ -13,6 +14,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
+import { ETHChainSubWallet } from 'src/app/model/wallets/ETHChainSubWallet';
 
 class TransactionDetail {
     type: string;
@@ -64,6 +66,7 @@ export class CoinTxInfoPage implements OnInit {
         public walletManager: WalletManager,
         public native: Native,
         private appService: AppService,
+        public jsonRPCService: JsonRPCService,
         private translate: TranslateService,
         public theme: ThemeService
     ) {
@@ -132,7 +135,7 @@ export class CoinTxInfoPage implements OnInit {
             this.targetAddress = this.getTargetAddressFromTransaction(transaction);
         } else {
             // TODO: How to distinguish between ordinary transfers and smart contracts
-            this.targetAddress = (transaction as EthTransaction).TargetAddress; // TODO: move to a subwallet method
+            this.targetAddress = await this.getETHSCWithdrawTransactionTargetAddres(transaction as EthTransaction);
         }
 
         this.inputs = this.objtoarr(transaction.Inputs);
@@ -287,6 +290,20 @@ export class CoinTxInfoPage implements OnInit {
                     break;
                 }
             }
+        }
+        return targetAddress;
+    }
+
+    /**
+     * Get the real targeAddress by rpc
+     */
+    async getETHSCWithdrawTransactionTargetAddres(transaction: EthTransaction) {
+        let targetAddress = transaction.TargetAddress;
+        const withdrawContractAddress = await (this.subWallet as ETHChainSubWallet).getWithdrawContractAddress();
+        if (transaction.TargetAddress === withdrawContractAddress) {
+            targetAddress = await this.jsonRPCService.getETHSCWithdrawTargetAddress(transaction.BlockNumber + 6, transaction.Hash);
+            // If the targetAddress is empty, then this transaction is error.
+            // TODO: But now, the spvsdk does not set any flag to this transaction. 2020.9.29
         }
         return targetAddress;
     }

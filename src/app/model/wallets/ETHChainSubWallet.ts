@@ -17,6 +17,7 @@ declare let appManager: AppManagerPlugin.AppManager;
  */
 export class ETHChainSubWallet extends StandardSubWallet {
     private ethscAddress: string = null;
+    private withdrawContractAddress: string = null;
 
     constructor(masterWallet: MasterWallet) {
         super(masterWallet, StandardCoinName.ETHSC);
@@ -27,6 +28,26 @@ export class ETHChainSubWallet extends StandardSubWallet {
             return Promise.resolve(this.ethscAddress);
 
         this.ethscAddress = await this.createAddress();
+    }
+
+    /**
+     * Use smartcontract to Send ELA from ETHSC to mainchain.
+     */
+    public getWithdrawContractAddress(): Promise<string> {
+        if (this.withdrawContractAddress)
+            return Promise.resolve(this.withdrawContractAddress);
+
+        return new Promise((resolve) => {
+            appManager.getPreference('chain.network.type', (value) => {
+                if (value === 'MainNet') {
+                    resolve(Config.CONTRACT_ADDRESS_MAINNET);
+                } else if (value === 'TestNet') {
+                    resolve(Config.CONTRACT_ADDRESS_TESTNET);
+                } else {
+                    resolve(null);
+                }
+            });
+        });
     }
 
     public async getTransactionInfo(transaction: EthTransaction, translate: TranslateService): Promise<TransactionInfo> {
@@ -106,29 +127,12 @@ export class ETHChainSubWallet extends StandardSubWallet {
         );
     }
 
-    /**
-     * Use smartcontract to Send ELA from ETHSC to mainchain.
-     */
-    private getContractAddress(): Promise<string> {
-        return new Promise((resolve) => {
-            appManager.getPreference('chain.network.type', (value) => {
-                if (value === 'MainNet') {
-                    resolve(Config.CONTRACT_ADDRESS_MAINNET);
-                } else if (value === 'TestNet') {
-                    resolve(Config.CONTRACT_ADDRESS_TESTNET);
-                } else {
-                    resolve(null);
-                }
-            });
-        });
-    }
-
     public async createWithdrawTransaction(toAddress: string, toAmount: number, memo: string): Promise<string> {
         const provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
         const web3 = new Web3(provider);
 
         const contractAbi = require('../../../assets/ethereum/ETHSCWithdrawABI.json');
-        const contractAddress = await this.getContractAddress();
+        const contractAddress = await this.getWithdrawContractAddress();
         const ethscWithdrawContract = new web3.eth.Contract(contractAbi, contractAddress);
         const gasPrice = await web3.eth.getGasPrice();
         const toAmountSend = web3.utils.toWei(toAmount.toString());

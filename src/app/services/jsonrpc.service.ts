@@ -19,6 +19,7 @@ type JSONRPCResponse = {
 export class JsonRPCService {
     private mainchainRPCApiUrl = 'http://api.elastos.io:20336';
     private IDChainRPCApiUrl = 'http://api.elastos.io:20606';
+    private ethscOracleRPCApiUrl = 'http://api.elastos.io:20632';
 
     constructor(private http: HttpClient) {
     }
@@ -29,6 +30,9 @@ export class JsonRPCService {
         });
         appManager.getPreference('sidechain.id.rpcapi', (rpcapi) => {
             this.IDChainRPCApiUrl = rpcapi;
+        });
+        appManager.getPreference('sidechain.eth.oracle', (rpcapi) => {
+            this.ethscOracleRPCApiUrl = rpcapi;
         });
     }
 
@@ -76,6 +80,26 @@ export class JsonRPCService {
         const blockHeight  = await this.httpRequest(rpcApiUrl, param);
         return parseInt(blockHeight, 10);
     }
+
+    // Get the real target address for the send transaction from ethsc to mainchain.
+    async getETHSCWithdrawTargetAddress(blockHeight: number, txHash: string) {
+      const param = {
+          method: 'getwithdrawtransactionsbyheight',
+          params: {
+            height: blockHeight
+        },
+      };
+
+      const result  = await this.httpRequest(this.ethscOracleRPCApiUrl, param);
+      for (var i = 0; i < result.length; i++) {
+          if ('0x' + result[i].txid === txHash) {
+              // TODO: crosschainassets has multiple value?
+              // TODO: define the result type
+              return result[i].crosschainassets[0].crosschainaddress;
+          }
+      }
+      return '';
+  }
 
     getRPCApiUrl(chainID: string) {
         let rpcApiUrl = this.mainchainRPCApiUrl;
