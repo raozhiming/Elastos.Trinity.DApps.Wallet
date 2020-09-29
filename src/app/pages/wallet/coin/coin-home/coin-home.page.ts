@@ -90,6 +90,8 @@ export class CoinHomePage implements OnInit {
             this.initData();
         });
 
+        this.coinTransferService.chainId = this.chainId;
+        this.appService.setTitleBarTitle(this.chainId);
         this.appService.setBackKeyVisibility(true);
     }
 
@@ -110,8 +112,6 @@ export class CoinHomePage implements OnInit {
             this.coinTransferService.masterWalletId = masterWalletId;
             this.coinTransferService.chainId = this.chainId;
             this.coinTransferService.walletInfo = this.native.clone(this.masterWallet.account);
-
-            this.appService.setTitleBarTitle(this.chainId);
 
             this.initData();
 

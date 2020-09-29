@@ -77,6 +77,7 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     ionViewWillEnter() {
+        this.appService.setTitleBarTitle(this.translate.instant("tx-info-title"));
         this.appService.setBackKeyVisibility(true);
     }
 
@@ -85,8 +86,6 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     init() {
-        this.appService.setTitleBarTitle(this.translate.instant("tx-info-title"));
-
         const navigation = this.router.getCurrentNavigation();
         if (!Util.isEmptyObject(navigation.extras.state)) {
 
