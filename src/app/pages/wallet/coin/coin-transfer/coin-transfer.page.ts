@@ -42,6 +42,8 @@ import { IntentService } from 'src/app/services/intent.service';
 import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import BigNumber from 'bignumber.js';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
+
 
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
@@ -87,6 +89,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     // Display confirm popup
     public showPopover = popover;
 
+    // Hide footer when keyboard is shown
+    public showFooter = true;
+
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     suggestedAddresses: CryptoAddressResolvers.Address[] = [];
 
@@ -104,7 +109,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         private popoverCtrl: PopoverController,
         public currencyService: CurrencyService,
         private intentService: IntentService,
-        public uiService: UiService
+        public uiService: UiService,
+        public keyboard: Keyboard
     ) {
     }
 
@@ -119,6 +125,14 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     ionViewWillEnter() {
         appManager.setVisible("show");
+
+        this.keyboard.onKeyboardWillShow().subscribe(() => {
+            this.showFooter = false;
+        });
+
+        this.keyboard.onKeyboardWillHide().subscribe(() => {
+            this.showFooter = true;
+        });
     }
 
     ionViewWillLeave() {
