@@ -39,6 +39,7 @@ export const fr = {
     "you-have-n-wallets": "VOUS AVEZ {{walletsCount}} JETONS",
     "synchronized": "Synchronisé {{progress}}%",
     "sync-progress": "Synchronisation {{progress}}%",
+    "ela-erc20": "ELASTOS ERC20 TOKEN",
     "coin-list": "Liste des jetons",
 
     // Settings screen

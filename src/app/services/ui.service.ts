@@ -27,7 +27,7 @@ export class UiService {
         case StandardCoinName.ETHSC:
             return "assets/coins/ela-gray.svg";
         default:
-            return "assets/coins/eth.svg";
+            return "assets/coins/eth-purple.svg";
     }
   }
 

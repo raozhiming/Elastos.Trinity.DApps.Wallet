@@ -39,6 +39,7 @@ export const zh = {
     "you-have-n-wallets": "您有 {{walletsCount}} 个币种",
     "synchronized": "{{progress}}% 完成",
     "sync-progress": "同步中 {{progress}}%",
+    "ela-erc20": "ELASTOS ERC20 TOKEN",
     "coin-list": "币列表",
 
     // Settings screen

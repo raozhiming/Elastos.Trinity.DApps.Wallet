@@ -29,7 +29,7 @@ import { WalletManager } from 'src/app/services/wallet.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
-import { StandardCoinName } from 'src/app/model/Coin';
+import { StandardCoinName, CoinType } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from '../../../model/Util';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
@@ -64,6 +64,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
 
     // Helpers
     public Util = Util;
+    public CoinType = CoinType;
     public SELA = Config.SELA;
 
     // Titlebar

@@ -180,11 +180,35 @@ ion-slide, .single-slide {
             align-items: flex-start;
             padding-left: 10px;
 
-            ion-img {
-                object-fit: contain;
-                width: 40px;
-                height: 40px;
-                object-fit: contain;
+            .icon-container {
+                position: relative;
+
+                ion-img {
+                    width: 40px;
+                    height: 40px;
+                    object-fit: contain;
+                }
+
+                .ela-icon {
+                    position: absolute;
+                    z-index: 10;
+                    top: -6px;
+                    left: -4px;
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: #000000;
+                    border: 2px solid white;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    img {
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                    }
+                }
             }
         }
         
@@ -245,6 +269,14 @@ ion-slide, .single-slide {
         .item-row {
             box-shadow: 0 3px 15px 0 #151626;
             background-color: #2b2c49; 
+
+            .left-col {
+                .icon-container {
+                    .ela-icon {
+                        border: 2px solid #2b2c49;
+                    }
+                }
+            }
         }
     }
 }
@@ -253,5 +285,13 @@ ion-slide, .single-slide {
     .item-row {
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;   
+
+        .left-col {
+            .icon-container {
+                .ela-icon {
+                    border: 2px solid #2b2c49;
+                }
+            }
+        }
     }
 }
