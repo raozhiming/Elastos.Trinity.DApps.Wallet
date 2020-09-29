@@ -159,6 +159,16 @@
 
   --ion-item-background: #272d41;
   --ion-item-background-activated: #3d4254;
+
+  ion-alert   {
+    --background: #191a2f;
+    --ion-text-color: #ffffff;
+    button {
+      span {
+        color: #ffffff;
+      }
+    }
+  }
 }
 
 /*
