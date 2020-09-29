@@ -55,47 +55,6 @@ ion-slides {
             margin: 0;
             padding: 20px 25px 40px;
         }
-    
-        .mnemonic-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: space-between;
-    
-            ion-col {
-                height: 35px;
-                background: #42117d;
-                border-radius: 8px;
-                margin-bottom: 30px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-    
-                .mnemonic-index {
-                    position: absolute;
-                    z-index: 100;
-                    top: -11px;
-                    left: -11px;
-                    width: 22px;
-                    height: 22px;
-                    background: #42117d;
-                    border-radius: 100%;
-                    border: 2px solid #6a25c4;
-                    color: #fdfeff;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 9px;
-                }
-    
-                ion-label {
-                    font-size: 12px;
-                    font-weight: 500;
-                    line-height: 1.25;
-                    letter-spacing: -0.29px;
-                    color: #fdfeff;
-                }
-            } 
-        }
 
         .btn-container {
             width: 95%;

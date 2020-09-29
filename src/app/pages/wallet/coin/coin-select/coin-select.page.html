@@ -1,14 +1,12 @@
 <ion-content>
-    <ion-grid class="container" [class.dark-container]="theme.darkMode">
-        <ion-row class="item-row ripple ion-activatable" *ngFor="let subWallet of subWallets" (click)="onItem(subWallet)">
+    <ion-grid class="container">
+        <ion-row class="subwallet-row ripple ion-activatable" [class.dark-subwallet-row]="theme.darkMode" *ngFor="let subWallet of subWallets" (click)="onItem(subWallet)">
             <ion-col size="2" class="left-col">
                 <ion-img [src]="uiService.getSubWalletIcon(subWallet)"></ion-img>
             </ion-col>
             <ion-col [size]="subWallet.getDisplayBalance().isZero() ? 7.5 : 5" class="middle-col">
                 <h1>{{ uiService.getSubwalletTitle(subWallet) }}</h1>
                 <p>{{ uiService.getSubwalletSubtitle(subWallet) }}</p>
-                <span *ngIf="subWallet.progress === 100" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</span>
-                <span *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</span>
             </ion-col>
             <ion-col [size]="subWallet.getDisplayBalance().isZero() ? 2.5 : 5" class="right-col">
                 <h1>{{ uiService.getFixedBalance(subWallet.getDisplayBalance()) }}</h1>
@@ -16,6 +14,11 @@
                     {{ subWallet.getAmountInExternalCurrency(subWallet.getDisplayBalance()) }}
                     {{ currencyService.selectedCurrency.symbol }}
                 </p>
+            </ion-col>
+            <ion-col offset="2" size="10" class="bottom-col">
+                <span *ngIf="subWallet.progress === 100 && subWallet.type !== CoinType.ERC20" class="synced">&#8226; {{ 'synchronized' | translate: {progress: subWallet.progress} }}</span>
+                <span *ngIf="subWallet.progress === 100 && subWallet.type === CoinType.ERC20" class="synced">{{ 'ela-erc20' | translate }}</span>
+                <span *ngIf="subWallet.progress !== 100" class="syncing">&#8226; {{ 'sync-progress' | translate: {progress: subWallet.progress} }}</span>
             </ion-col>
             <ion-ripple-effect></ion-ripple-effect>
         </ion-row>

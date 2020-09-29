@@ -58,7 +58,7 @@
                     <h1>{{ 'coin-list' | translate }}</h1>
                 </ion-col>
             </ion-row>
-            <ion-row class="item-row ripple ion-activatable" *ngFor="let subWallet of masterWallet.getSubWallets()" (click)="goCoinHome(masterWallet.id, subWallet.id)">
+            <ion-row class="subwallet-row ripple ion-activatable" [class.dark-subwallet-row]="theme.darkMode" *ngFor="let subWallet of masterWallet.getSubWallets()" (click)="goCoinHome(masterWallet.id, subWallet.id)">
                 <ion-col size="2" class="left-col">
                     <div class="icon-container">
                         <ion-img [src]="uiService.getSubWalletIcon(subWallet)"></ion-img>
@@ -135,7 +135,8 @@
             </ion-col>
         </ion-row>
         <ion-row
-            class="item-row ripple ion-activatable"
+            class="subwallet-row ripple ion-activatable"
+            [class.dark-subwallet-row]="theme.darkMode"
             *ngFor="let subWallet of masterWallet.getSubWallets()"
             (click)="goCoinHome(masterWallet.id, subWallet.id)"
         >

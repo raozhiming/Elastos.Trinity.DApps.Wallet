@@ -1,5 +1,5 @@
 <ion-content>
-    <ion-grid class="container" [class.dark-container]="theme.darkMode" *ngIf="masterWallet">
+    <ion-grid class="container" *ngIf="masterWallet">
         <ion-row
             class="card-row"
             [ngStyle]="
@@ -38,7 +38,7 @@
                 <p>{{ 'coin-list-enable-disable-coins-intro' | translate }}</p>
             </ion-col>
         </ion-row>
-        <ion-row class="item-row ripple" [class.ion-activatable]="item.coin.canBeRemoved()" *ngFor="let item of coinList">
+        <ion-row class="subwallet-row ripple" [class.dark-subwallet-row]="theme.darkMode" [class.ion-activatable]="item.coin.canBeRemoved()" *ngFor="let item of coinList">
             <ion-col size="2" class="left-col">
                 <ion-img [src]="getCoinIcon(item)"></ion-img>
             </ion-col>

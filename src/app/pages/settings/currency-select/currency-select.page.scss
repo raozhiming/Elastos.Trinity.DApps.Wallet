@@ -17,55 +17,9 @@
     }
   }
 
-  .item-row {
-    width: 100%;
-    border-radius: 17px;
-    padding: 7.5px 10px 7.5px 0;
-    margin-bottom: 7.5px;
-    box-shadow: 0 3px 15px 0 #ededf0;
-    background-color: #ffffff;
-
-    h1, p {
-      margin: 0;
-    }
-
-    h1 {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.7px;
-      text-align: left;
-    }
-
-    p {
-      font-size: 13px;
-      font-weight: 400;
-      padding-top: 3px;
-      text-align: left;
-    }
-    
-    .left-col {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-left: 10px;
-
-      ion-img {
-        width: 40px;
-        height: 40px;
-        object-fit: contain;
-      }
-    }
-    
-    .middle-col, .right-col {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        overflow: hidden;
-    }
-    
+  .subwallet-row {    
     .right-col {
-      align-items: flex-end;
+      justify-content: center;
   
       ion-icon {
         width: 30px;
@@ -80,10 +34,5 @@
     p {
       color: #8888b0
     }
-  }
-
-  .item-row {
-    box-shadow: 0 3px 15px 0 #151626;
-    background-color: #2b2c49;      
   }
 }

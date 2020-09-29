@@ -7,7 +7,7 @@ import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { CoinTransferService, IntentTransfer } from 'src/app/services/cointransfer.service';
-import { StandardCoinName } from 'src/app/model/Coin';
+import { StandardCoinName, CoinType } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { CurrencyService } from 'src/app/services/currency.service';
@@ -26,6 +26,7 @@ export class WaitForSyncPage implements OnInit {
 
     Config = Config;
     SELA = Config.SELA;
+    CoinType = CoinType;
     showOn = true;
 
     masterWallet: MasterWallet;
