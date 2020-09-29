@@ -1,3 +1,4 @@
+<!------------------ RECHARGE ------------------>
 <ion-content *ngIf="transferType === 1 || transferType === 4">
     <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <ion-row class="main-title-row">
@@ -60,6 +61,7 @@
     </ion-grid>
 </ion-content>
 
+<!------------------ SEND ------------------>
 <ion-content *ngIf="transferType === 2">
     <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="showPopover">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
@@ -78,8 +80,8 @@
                     [(ngModel)]="amount"
                 >
                 </ion-input>
-                <p *ngIf="fromSubWallet.getAmountInExternalCurrency(amount)">
-                    {{ fromSubWallet.getAmountInExternalCurrency(amount) }}
+                <p *ngIf="amount">
+                    {{ fromSubWallet.getAmountInExternalCurrency(convertAmountToBigNumber(amount)) }}
                 </p>
             </ion-col>
         </ion-row>
@@ -129,6 +131,7 @@
     </ion-grid>
 </ion-content>
 
+<!------------------ RECHARGE AND SEND FOOTER ------------------>
 <ion-footer
     *ngIf="!showPopover && transferType !== 3"
     class="footer"
@@ -150,6 +153,7 @@
     </ion-row>
 </ion-footer>
 
+<!------------------ PAY INTENT ------------------>
 <ion-content *ngIf="transferType === 3">
     <div class="pay-container" [class.dark-pay-container]="theme.darkMode">
         <ion-img src="./assets/tx/send.svg"></ion-img>
@@ -192,6 +196,7 @@
     </div>
 </ion-content>
 
+<!------------------ PAY INTENT FOOTER ------------------>
 <ion-footer
     *ngIf="transferType === 3"
     class="pay-footer"

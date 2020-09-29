@@ -443,4 +443,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     isStandardSubwallet(subWallet: SubWallet) {
         return subWallet instanceof StandardSubWallet;
     }
+
+    convertAmountToBigNumber(amount: number) {
+        return new BigNumber(amount);
+    }
 }
