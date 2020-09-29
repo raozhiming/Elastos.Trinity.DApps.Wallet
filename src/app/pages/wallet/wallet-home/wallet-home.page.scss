@@ -212,7 +212,7 @@ ion-slide, .single-slide {
             }
         }
         
-        .middle-col, .right-col {
+        .middle-col, .right-col, .bottom-col {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -233,9 +233,26 @@ ion-slide, .single-slide {
             p {
                 font-size: 13px;
                 font-weight: 400;
-                padding: 3px 0 3.5px;
+                padding: 3px 0 0;
                 text-align: left;
             }
+        }
+
+        .middle-col, .right-col {
+            padding-bottom: 3px;
+        }
+
+        .right-col {
+            justify-content: flex-start;
+            align-items: flex-end;
+
+            p {
+                color: #8888b0;
+            }
+        }
+
+        .bottom-col {
+            padding-top: 0;
 
             span {
                 font-weight: 700;
@@ -249,15 +266,6 @@ ion-slide, .single-slide {
 
             .syncing {
                 color: #20e3d2;
-            }
-        }
-        
-        .right-col {
-            justify-content: flex-start;
-            align-items: flex-end;
-
-            p {
-                color: #8888b0;
             }
         }
     }
