@@ -185,7 +185,7 @@
             align-items: flex-end;
 
             ion-toggle {
-                zoom: 0.8;
+                zoom: 0.65;
             }
         }
     }
@@ -198,7 +198,7 @@
   }
 }
 
-@media screen and (max-height: 670px) {
+/* @media screen and (max-height: 670px) {
     .container {
         .item-row {
             .right-col {
@@ -209,4 +209,4 @@
         }
     }
   }
-  
+   */
