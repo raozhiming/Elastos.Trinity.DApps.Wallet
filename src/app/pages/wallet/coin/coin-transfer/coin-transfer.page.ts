@@ -52,6 +52,7 @@ export let popover: any = null;
     selector: 'app-coin-transfer',
     templateUrl: './coin-transfer.page.html',
     styleUrls: ['./coin-transfer.page.scss'],
+    providers: [Keyboard],
 })
 export class CoinTransferPage implements OnInit, OnDestroy {
 
@@ -89,9 +90,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     // Display confirm popup
     public showPopover = popover;
 
-    // Hide footer when keyboard is shown
-    public showFooter = true;
-
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     suggestedAddresses: CryptoAddressResolvers.Address[] = [];
 
@@ -125,14 +123,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     ionViewWillEnter() {
         appManager.setVisible("show");
-
-        this.keyboard.onKeyboardWillShow().subscribe(() => {
-            this.showFooter = false;
-        });
-
-        this.keyboard.onKeyboardWillHide().subscribe(() => {
-            this.showFooter = true;
-        });
     }
 
     ionViewWillLeave() {
