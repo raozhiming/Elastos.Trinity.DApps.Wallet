@@ -90,7 +90,11 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public getDisplayBalance(): BigNumber {
-        return this.balance; // Raw balance and display balance are the same: the number of tokens.
+        return this.getDisplayAmount(this.balance);
+    }
+
+    public getDisplayAmount(amount: BigNumber): BigNumber {
+        return amount; // Raw value and display value are the same: the number of tokens.
     }
 
     public getAmountInExternalCurrency(value: BigNumber): string {

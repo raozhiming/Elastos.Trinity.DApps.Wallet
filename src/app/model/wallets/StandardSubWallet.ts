@@ -65,7 +65,11 @@ export abstract class StandardSubWallet extends SubWallet {
     }
 
     public getDisplayBalance(): BigNumber {
-        return this.balance.dividedBy(Config.SELAAsBigNumber);
+        return this.getDisplayAmount(this.balance);
+    }
+
+    public getDisplayAmount(amount: BigNumber): BigNumber {
+        return amount.dividedBy(Config.SELAAsBigNumber);
     }
 
     public getAmountInExternalCurrency(value: BigNumber): string {

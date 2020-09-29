@@ -53,11 +53,11 @@ export class UiService {
         if (balance.isZero()) {
           return String(0);
         } else if (balance.isLessThan(100)) {
-            return balance.toFixed(6);
+            return balance.decimalPlaces(6).toString();
         } else if (balance.isGreaterThanOrEqualTo(100) && balance.isLessThan(1000)) {
-          return balance.toFixed(4);
+          return balance.decimalPlaces(4).toString();
         } else if (balance.isGreaterThanOrEqualTo(1000) && balance.isLessThan(10000)) {
-          return balance.toFixed(2);
+          return balance.decimalPlaces(2).toString();
         } else {
           return balance.dividedBy(1000).toFixed(0) + 'k';
         }

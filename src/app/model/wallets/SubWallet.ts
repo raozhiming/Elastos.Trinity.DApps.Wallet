@@ -135,10 +135,15 @@ export abstract class SubWallet {
     public abstract updateBalance();
 
     /**
-     * Balance using a human friendly unit. For example, standard wallets have a balance in sELA but
-     * getDisplayBalance() returns the amount in ELA
+     * Shortcut for getDisplayAmount(balance)
      */
     public abstract getDisplayBalance(): BigNumber;
+
+    /**
+     * Returns a given value converted to a human friendly unit. For example, standard wallets have a balance in sELA but
+     * getDisplayBalance() returns the amount in ELA.
+     */
+    public abstract getDisplayAmount(amount: BigNumber): BigNumber;
 
     /**
      * Tells if this subwallet has a balance greater than or equal to the given amount.

@@ -12,6 +12,7 @@ import { TransactionStatus, TransactionDirection, TransactionType, TransactionIn
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
+import { SubWallet } from 'src/app/model/wallets/SubWallet';
 
 class TransactionDetail {
     type: string;
@@ -30,6 +31,7 @@ export class CoinTxInfoPage implements OnInit {
     // General Values
     private masterWallet: MasterWallet = null;
     public chainId: string = '';
+    public subWallet: SubWallet = null;
     public transactionInfo: TransactionInfo;
     private blockchain_url = Config.BLOCKCHAIN_URL;
     private idchain_url = Config.IDCHAIN_URL;
@@ -89,6 +91,7 @@ export class CoinTxInfoPage implements OnInit {
             this.transactionInfo = navigation.extras.state.transactionInfo;
             this.masterWallet = this.walletManager.getMasterWallet(navigation.extras.state.masterWalletId);
             this.chainId = navigation.extras.state.chainId;
+            this.subWallet = this.masterWallet.getSubWallet(this.chainId);
 
             // Header display values
             this.type = this.transactionInfo.type;
@@ -121,7 +124,7 @@ export class CoinTxInfoPage implements OnInit {
 
         // Get tx fees, final tx amount and receiving address
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
-            this.payFee = transaction.Fee / Config.WEI;
+            this.payFee = this.subWallet.getDisplayAmount(new BigNumber(transaction.Fee)).toNumber();
             // If the fee is too small, then amount doesn't subtract fee
             if (transaction.Fee > 10000000000) {
               this.amount = this.amount.minus(this.payFee);
