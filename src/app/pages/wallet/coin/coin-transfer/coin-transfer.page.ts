@@ -358,11 +358,12 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     async showConfirm() {
         this.showPopover = true;
-        let txInfo = {
+        const txInfo = {
             type: this.transferType,
             transferFrom: this.chainId,
             transferTo: this.transferType === TransferType.RECHARGE ? this.coinTransferService.subchainId : this.toAddress,
-            amount: this.amount
+            amount: this.amount,
+            memo: this.memo ? this.memo : null,
         };
 
         popover = await this.popoverCtrl.create({

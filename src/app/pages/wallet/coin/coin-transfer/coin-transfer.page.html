@@ -88,7 +88,7 @@
 
         <p *ngIf='amount'>{{ 'transfer-remain-balance' | translate: { amount: masterWallet.subWallets[chainId].getDisplayBalance() - amount } }}</p>
         <p *ngIf='!amount'>{{ 'transfer-remain-balance' | translate: { amount: masterWallet.subWallets[chainId].getDisplayBalance() } }}</p>
-        <h1 class="send">{{ 'send-to' | translate }}</h1>
+        <h1>{{ 'send-to' | translate }}</h1>
 
         <ion-row class="item-row">
             <ion-col size="10" class="left-col">
@@ -122,7 +122,7 @@
             <ion-col size="10" class="left-col">
                 <ion-input
                     type="text"
-                    placeholder="{{ 'tx-info-memo' | translate}}"
+                    placeholder="{{ 'tx-info-memo' | translate }}"
                     [(ngModel)]="memo"
                 >
                 </ion-input>
