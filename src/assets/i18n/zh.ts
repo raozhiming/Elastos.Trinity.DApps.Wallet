@@ -131,6 +131,7 @@ export const zh = {
     "tx-info-memo": "备注",
     "tx-info-receiver-address": "接收地址",
     "tx-info-transaction-fees": "交易手续费",
+    "tx-info-cost": "Total Cost",
     "tx-info-transaction-id": "交易ID",
     "tx-info-block-id": "Block ID",
     "tx-info-type-received": "收到",

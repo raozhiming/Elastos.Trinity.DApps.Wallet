@@ -47,8 +47,8 @@ export class CoinTxInfoPage implements OnInit {
     public status: string = '';
 
     // Other Values
-    public payFee: number;
-    public totalCost: BigNumber;
+    public payFee: number = null;
+    public totalCost: BigNumber = null;
     public payType: string = '';
     public inputs = [];
     public outputs = [];
@@ -203,7 +203,7 @@ export class CoinTxInfoPage implements OnInit {
             },
             {
                 type: 'cost',
-                title: 'Total Cost',
+                title: 'tx-info-cost',
                 value: this.totalCost,
                 show: false,
             },

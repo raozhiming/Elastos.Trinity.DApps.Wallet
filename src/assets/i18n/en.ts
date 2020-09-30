@@ -131,6 +131,7 @@ export const en = {
     "tx-info-memo": "Memo",
     "tx-info-receiver-address": "Receiver address",
     "tx-info-transaction-fees": "Transaction fees",
+    "tx-info-cost": "Total Cost",
     "tx-info-transaction-id": "Transaction ID",
     "tx-info-block-id": "Block ID",
     "tx-info-type-received": "Received",
