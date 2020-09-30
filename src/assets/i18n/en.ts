@@ -82,7 +82,7 @@ export const en = {
     "coin-no-transactions": "No transactions",
     "coin-op-received-ela": "Received ELA",
     "coin-op-sent-ela": "Sent ELA",
-    "coin-op-transferred-ela": "Transferred ELA",
+    "coin-op-transfered-ela": "Transferred ELA",
     "coin-op-vote": "Vote",
     "coin-op-identity": "Identity publication",
     "coin-dir-from-mainchain": "From ELA mainchain",
