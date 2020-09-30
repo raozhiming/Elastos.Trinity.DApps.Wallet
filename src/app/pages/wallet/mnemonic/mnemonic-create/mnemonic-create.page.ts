@@ -53,8 +53,8 @@ export class MnemonicCreatePage implements OnInit {
 
     ionViewWillEnter() {
         this.appService.setBackKeyVisibility(true);
-        titleBarManager.setBackgroundColor('#732cd0');
-        // titleBarManager.setBackgroundColor('#6B26C6');
+        // titleBarManager.setBackgroundColor('#732cd0');
+        titleBarManager.setBackgroundColor('#6B26C6');
         titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
         titleBarManager.setTitle(this.translate.instant('mnemonic'));
     }
