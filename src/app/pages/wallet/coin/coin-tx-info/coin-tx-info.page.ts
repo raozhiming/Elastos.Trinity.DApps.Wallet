@@ -48,6 +48,7 @@ export class CoinTxInfoPage implements OnInit {
 
     // Other Values
     public payFee: number;
+    public totalCost: BigNumber;
     public payType: string = '';
     public inputs = [];
     public outputs = [];
@@ -127,6 +128,8 @@ export class CoinTxInfoPage implements OnInit {
         // Get tx fees, final tx amount and receiving address
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
             this.payFee = this.subWallet.getDisplayAmount(new BigNumber(transaction.Fee)).toNumber();
+            this.totalCost = this.payFee ? this.transactionInfo.amount.plus(this.payFee) : null;
+
             // If the fee is too small, then amount doesn't subtract fee
             if (transaction.Fee > 10000000000) {
               this.amount = this.amount.minus(this.payFee);
@@ -199,6 +202,12 @@ export class CoinTxInfoPage implements OnInit {
                 show: false,
             },
             {
+                type: 'cost',
+                title: 'Total Cost',
+                value: this.totalCost,
+                show: false,
+            },
+            {
                 type: 'confirmations',
                 title: 'tx-info-confirmations',
                 value: this.transactionInfo.confirmStatus,
@@ -229,6 +238,8 @@ export class CoinTxInfoPage implements OnInit {
                 },
             );
         }
+
+        console.log('Tx details', this.txDetails);
     }
 
     subscribeprogressEvent() {

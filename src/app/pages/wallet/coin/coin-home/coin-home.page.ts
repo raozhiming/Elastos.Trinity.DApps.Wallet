@@ -55,7 +55,7 @@ export class CoinHomePage implements OnInit {
     public chainId: StandardCoinName = null;
     public transferList: TransactionInfo[] = [];
 
-// Total transactions today
+    // Total transactions today
     public todaysTransactions: number = 0;
     private MaxCount: number = 0;
     private pageNo: number = 0;
@@ -187,8 +187,8 @@ export class CoinHomePage implements OnInit {
         }
 
         for (let transaction of transactions) {
-            // console.log("key", key, "transaction", transactions[key]);
-            let transactionInfo = await this.subWallet.getTransactionInfo(transaction, this.translate);
+            const transactionInfo = await this.subWallet.getTransactionInfo(transaction, this.translate);
+
             if (!transactionInfo) {
                 // remove the wrong transaction
                 await this.deleteTransaction(transaction);
