@@ -120,8 +120,8 @@ ion-button {
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
 }
 
-.txConfirm {
-  --background: #f8f8ff;
+.txPopup {
+  --background: transparent;
   animation: animate;
   animation-duration: 300ms;
   animation-fill-mode: forwards;
@@ -146,28 +146,3 @@ ion-button {
   }
 }
 
-.txConfirmDark {
-  --background: #191a2f;
-  animation: animate;
-  animation-duration: 300ms;
-  animation-fill-mode: forwards;
-
-  @keyframes animate {
-    0% { bottom: -1000px }
-    100% { bottom: 0px }
-  }
-
-  ion-backdrop {
-    background: transparent !important;
-  }
-
-  .popover-wrapper{
-    .popover-content {
-      position: relative !important;
-      margin: 0 auto !important;
-      left: auto !important;
-      top: auto !important;
-      width: 85vw !important;
-    }
-  }
-}

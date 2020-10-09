@@ -43,6 +43,7 @@ import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import BigNumber from 'bignumber.js';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
+import { TxSuccessComponent } from 'src/app/components/tx-success/tx-success.component';
 
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -302,6 +303,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         });
 
         await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        this.showSuccess();
     }
 
     goScan() {
@@ -310,6 +312,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     goTransaction() {
         // this.showConfirm();
+        // this.showSuccess();
         this.checkValue();
     }
 
@@ -368,7 +371,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         popover = await this.popoverCtrl.create({
             mode: 'ios',
-            cssClass: !this.theme.darkMode ? 'txConfirm' : 'txConfirmDark',
+            cssClass: 'txPopup',
             component: TxConfirmComponent,
             componentProps: {
                 txInfo: txInfo
@@ -381,6 +384,21 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             if (params.data && params.data.confirm) {
                 this.transaction();
             }
+        });
+        return await popover.present();
+    }
+
+
+    async showSuccess() {
+        this.showPopover = true;
+        popover = await this.popoverCtrl.create({
+            mode: 'ios',
+            cssClass: 'txPopup',
+            component: TxSuccessComponent,
+        });
+        popover.onWillDismiss().then(() => {
+            this.showPopover = false;
+            popover = null;
         });
         return await popover.present();
     }

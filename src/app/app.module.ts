@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { NgModule, Injectable, ErrorHandler } from '@angular/core';
+import { NgModule, Injectable, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -92,11 +92,11 @@ import * as Sentry from "@sentry/browser";
 import { HttpClientModule } from '@angular/common/http';
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
 import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component';
+import { TxSuccessComponent } from './components/tx-success/tx-success.component';
 import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { HelpComponent } from './components/help/help.component';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
-
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -185,12 +185,14 @@ export function TranslateLoaderFactory() {
         WalletColorPage,
         WalletCreatedComponent,
         TxConfirmComponent,
+        TxSuccessComponent,
         HelpComponent,
     ],
     entryComponents: [
         LauncherPage,
         WalletCreatedComponent,
         TxConfirmComponent,
+        TxSuccessComponent,
         HelpComponent
     ],
     imports: [
@@ -230,6 +232,7 @@ export function TranslateLoaderFactory() {
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         { provide: ErrorHandler, useClass: SentryErrorHandler }
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

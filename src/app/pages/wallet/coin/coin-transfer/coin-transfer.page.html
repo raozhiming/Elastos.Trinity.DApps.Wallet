@@ -133,23 +133,30 @@
 
 <!------------------ RECHARGE AND SEND FOOTER ------------------>
 <ion-footer
-    *ngIf="!showPopover && transferType !== 3"
+    *ngIf="!showPopover && transferType !== 3 && waitingForSyncCompletion"
     class="footer"
     [class.dark-footer]="theme.darkMode"
 >
     <ion-row class="btn-container">
-        <ion-button color="primary" (click)="goTransaction()" *ngIf="!waitingForSyncCompletion">
+        <ion-card-title>{{ 'waitforsync-loading' | translate }}</ion-card-title>
+        <ion-card-subtitle>
+            {{ 'waitforsync-intro' | translate }}
+        </ion-card-subtitle>
+        <span class="syncing">&#8226; {{ 'sync-progress' | translate: { progress: fromSubWallet.progress } }}</span>
+    </ion-row>
+</ion-footer>
+
+<ion-footer
+    *ngIf="!showPopover && transferType !== 3 && !waitingForSyncCompletion && amount && toAddress"
+    class="footer"
+    [class.dark-footer]="theme.darkMode"
+>
+    <ion-row class="btn-container">
+        <ion-button color="primary" (click)="goTransaction()">
             <ion-label *ngIf="transferType === 1">{{ 'recharge' | translate}}</ion-label>
             <ion-label *ngIf="transferType === 4">{{ 'withdraw' | translate}}</ion-label>
             <ion-label *ngIf="transferType === 2">{{ 'send' | translate}}</ion-label>
         </ion-button>
-        <div *ngIf="waitingForSyncCompletion">
-            <ion-card-title>{{ 'waitforsync-loading' | translate }}</ion-card-title>
-            <ion-card-subtitle>
-                {{ 'waitforsync-intro' | translate }}
-            </ion-card-subtitle>
-            <span class="syncing">&#8226; {{ 'sync-progress' | translate: { progress: fromSubWallet.progress } }}</span>
-        </div>
     </ion-row>
 </ion-footer>
 
