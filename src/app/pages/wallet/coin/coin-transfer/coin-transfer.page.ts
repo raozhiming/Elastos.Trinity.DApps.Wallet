@@ -243,6 +243,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         });
 
         await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        this.showSuccess();
     }
 
     /**
@@ -273,6 +274,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         });
 
         await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        this.showSuccess();
     }
 
     /**
