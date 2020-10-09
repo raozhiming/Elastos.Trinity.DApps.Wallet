@@ -5,7 +5,7 @@
         </p>
         <ion-row
             *ngFor="let masterWallet of walletManager.getWalletsList()"
-            class="card-row"
+            class="card-row ripple ion-activatable"
             [ngStyle]="
             {
                 'background-image': masterWallet.theme ?
@@ -31,6 +31,7 @@
                     <span class="ela">  ELA</span>
                 </h4>
             </ion-row>
+            <ion-ripple-effect></ion-ripple-effect>
         </ion-row>
         <ion-row *ngIf="!forIntent" class="btn-container">
             <ion-button [routerLink]="['/launcher']" routerDirection="forward">

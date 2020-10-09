@@ -196,7 +196,7 @@ export class CoinHomePage implements OnInit {
                 continue;
             }
 
-            if (this.chainIsETHSC()) {
+            if (this.chainIsETHSC() || this.chainIsERC20()) {
                 const newAmount = new BigNumber(transaction.Amount);
                 transactionInfo.amount = newAmount.isInteger() ? newAmount.integerValue() : newAmount.decimalPlaces(6);
             }
