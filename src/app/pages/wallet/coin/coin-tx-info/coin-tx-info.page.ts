@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import { ETHChainSubWallet } from 'src/app/model/wallets/ETHChainSubWallet';
+import { getHeapStatistics } from 'v8';
 
 class TransactionDetail {
     type: string;
@@ -96,6 +97,8 @@ export class CoinTxInfoPage implements OnInit {
             this.chainId = navigation.extras.state.chainId;
             this.subWallet = this.masterWallet.getSubWallet(this.chainId);
 
+            console.log('Tx info', this.transactionInfo);
+
             // Header display values
             this.type = this.transactionInfo.type;
             this.amount = this.transactionInfo.amount;
@@ -125,18 +128,31 @@ export class CoinTxInfoPage implements OnInit {
         const transaction = allTransactions.Transactions[0];
         console.log('More tx info', transaction);
 
-        // Get tx fees, final tx amount and receiving address
-        if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) { // ELA, IDChain
+        // Tx is NOT ETH - Define total cost and address
+        if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
+            // Pay Fee
             this.payFee = this.subWallet.getDisplayAmount(new BigNumber(transaction.Fee)).toNumber();
+            // Total Cost
             this.totalCost = this.payFee ? this.transactionInfo.amount.plus(this.payFee) : null;
+            // Address
+            this.targetAddress = this.getTargetAddressFromTransaction(transaction);
 
             // If the fee is too small, then amount doesn't subtract fee
             if (transaction.Fee > 10000000000) {
               this.amount = this.amount.minus(this.payFee);
             }
-            this.targetAddress = this.getTargetAddressFromTransaction(transaction);
+
+        // Tx is ETH - Define amount, fee, total cost and address
         } else {
-            // TODO: How to distinguish between ordinary transfers and smart contracts
+            // Amount
+            const newAmount = new BigNumber(transaction.Amount);
+            this.amount = newAmount.isInteger() ? newAmount.integerValue() : newAmount.decimalPlaces(6);
+            // Pay Fee
+            const newPayFee = new BigNumber(transaction.Fee);
+            this.payFee = newPayFee.toNumber();
+            // Total Cost
+            this.totalCost = newPayFee ? newAmount.plus(newPayFee) : null;
+            // Address
             this.targetAddress = await this.getETHSCWithdrawTransactionTargetAddres(transaction as EthTransaction);
         }
 

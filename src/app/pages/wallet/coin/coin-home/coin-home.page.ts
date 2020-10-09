@@ -41,6 +41,7 @@ import { CurrencyService } from 'src/app/services/currency.service';
 import { ERC20SubWallet } from 'src/app/model/wallets/ERC20SubWallet';
 import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import { UiService } from 'src/app/services/ui.service';
+import BigNumber from 'bignumber.js';
 
 @Component({
     selector: 'app-coin-home',
@@ -193,6 +194,11 @@ export class CoinHomePage implements OnInit {
                 // remove the wrong transaction
                 await this.deleteTransaction(transaction);
                 continue;
+            }
+
+            if (this.chainIsETHSC()) {
+                const newAmount = new BigNumber(transaction.Amount);
+                transactionInfo.amount = newAmount.isInteger() ? newAmount.integerValue() : newAmount.decimalPlaces(6);
             }
 
             // Check if transaction was made today and increment our counter if so.
