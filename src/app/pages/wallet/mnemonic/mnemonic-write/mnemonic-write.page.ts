@@ -83,6 +83,11 @@ export class MnemonicWritePage implements OnInit {
     } */
 
     goToNextInput(event, nextInput?: any, slide?: any) {
+        // android: only press enter will trigger keypress event
+        // ios: press any key will trigger keypress event
+        if (event !== 13) {
+            return;
+        }
         if (nextInput) {
             if (slide) {
                 slide.slideNext();
@@ -99,6 +104,7 @@ export class MnemonicWritePage implements OnInit {
 
     allInputsFilled() {
         let inputsFilled = true;
+        // return inputsFilled; // for test
         this.inputStr = '';
         this.inputList.forEach((word) => {
             if (word.input === '') {
@@ -112,6 +118,7 @@ export class MnemonicWritePage implements OnInit {
 
     async onNext() {
         if (this.allInputsFilled()) {
+            // if (true) { // for test
             if (this.inputStr.replace(/\s+/g, "").toLowerCase() === this.mnemonicStr.replace(/\s+/g, "")) {
                 if (this.walletCreationService.isMulti) {
                     this.native.go("/mpublickey");
