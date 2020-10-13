@@ -88,9 +88,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     public Config = Config;
     private SELA = Config.SELA;
 
-    // Display confirm popup
-    public showPopover = popover;
-
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     suggestedAddresses: CryptoAddressResolvers.Address[] = [];
 
@@ -362,7 +359,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     async showConfirm() {
-        this.showPopover = true;
+        this.uiService.showPopover = true;
         const txInfo = {
             type: this.transferType,
             transferFrom: this.chainId,
@@ -380,7 +377,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             }
         });
         popover.onWillDismiss().then((params) => {
-            this.showPopover = false;
+            this.uiService.showPopover = false;
             popover = null;
             console.log('Confirm tx params', params);
             if (params.data && params.data.confirm) {
@@ -392,14 +389,14 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
 
     async showSuccess() {
-        this.showPopover = true;
+        this.uiService.showPopover = true;
         popover = await this.popoverCtrl.create({
             mode: 'ios',
             cssClass: 'txPopup',
             component: TxSuccessComponent,
         });
         popover.onWillDismiss().then(() => {
-            this.showPopover = false;
+            this.uiService.showPopover = false;
             popover = null;
         });
         return await popover.present();

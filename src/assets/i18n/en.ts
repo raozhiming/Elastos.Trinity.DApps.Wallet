@@ -124,6 +124,10 @@ export const en = {
     "transfer-transaction-type": "Transfer Transaction",
     "send-transaction-type": "Send Transaction",
 
+    // Tx successful component (tx-success),
+    'tx-success': "Transaction Successful",
+    'continue': 'Continue',
+
     // Transaction details screen (coin-tx-info)
     "tx-info-title": "Transaction Details",
     "tx-info-confirmations": "Confirmations",

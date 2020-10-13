@@ -58,7 +58,7 @@ export class Native {
         this.toastCtrl.create({
             mode: 'ios',
             color: 'primary',
-            position: 'bottom',
+            position: 'top',
             header: message,
             duration: 2000,
         }).then(toast => toast.present());
@@ -69,7 +69,7 @@ export class Native {
         this.toastCtrl.create({
             mode: 'ios',
             color: 'primary',
-            position: 'bottom',
+            position: 'top',
             header: message,
             duration: 2000,
         }).then(toast => toast.present());

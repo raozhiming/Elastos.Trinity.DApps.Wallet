@@ -124,6 +124,10 @@ export const fr = {
     "transfer-transaction-type": "Transfert d'argent",
     "send-transaction-type": "Envoi d'argent",
 
+    // Tx successful component (tx-success),
+    'tx-success': "Transaction réussie",
+    'continue': 'Continuer',
+
     // Transaction details screen (coin-tx-info)
     "tx-info-title": "Détails sur la transaction",
     "tx-info-confirmations": "Confirmations",

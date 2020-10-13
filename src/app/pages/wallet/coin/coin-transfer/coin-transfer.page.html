@@ -1,6 +1,6 @@
 <!------------------ RECHARGE ------------------>
 <ion-content *ngIf="transferType === 1 || transferType === 4">
-    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="showPopover">
+    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="uiService.showPopover">
         <ion-row class="main-title-row">
             <ion-col size="12">
                 <p>{{ 'transfer-from' | translate }}</p>
@@ -63,7 +63,7 @@
 
 <!------------------ SEND ------------------>
 <ion-content *ngIf="transferType === 2">
-    <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="showPopover">
+    <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="uiService.showPopover">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
 
         <h1>{{ 'enter-amount' | translate }}</h1>
@@ -133,7 +133,7 @@
 
 <!------------------ RECHARGE AND SEND FOOTER ------------------>
 <ion-footer
-    *ngIf="!showPopover && transferType !== 3 && waitingForSyncCompletion"
+    *ngIf="!uiService.showPopover && transferType !== 3 && waitingForSyncCompletion"
     class="footer"
     [class.dark-footer]="theme.darkMode"
 >
@@ -147,7 +147,7 @@
 </ion-footer>
 
 <ion-footer
-    *ngIf="!showPopover && transferType !== 3 && !waitingForSyncCompletion && amount && toAddress"
+    *ngIf="!uiService.showPopover && transferType !== 3 && !waitingForSyncCompletion && amount && toAddress"
     class="footer"
     [class.dark-footer]="theme.darkMode"
 >

@@ -124,6 +124,10 @@ export const zh = {
     "transfer-transaction-type": "充值交易",
     "send-transaction-type": "转账交易",
 
+    // Tx successful component (tx-success),
+    'tx-success': "Transaction Successful",
+    'continue': 'Continue',
+
     // Transaction details screen (coin-tx-info)
     "tx-info-title": "交易详情",
     "tx-info-confirmations": "确认数",
