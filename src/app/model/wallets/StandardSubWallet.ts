@@ -72,7 +72,7 @@ export abstract class StandardSubWallet extends SubWallet {
         return amount.dividedBy(Config.SELAAsBigNumber);
     }
 
-    public getAmountInExternalCurrency(value: BigNumber): string {
+    public getAmountInExternalCurrency(value: BigNumber): BigNumber {
         return CurrencyService.instance.getCurrencyBalance(value);
     }
 

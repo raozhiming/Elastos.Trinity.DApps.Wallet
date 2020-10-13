@@ -126,7 +126,7 @@ export abstract class SubWallet {
      * In case the subwallet is not able to compute this value (ex: ERC20 coins for now), the returned
      * value is null.
      */
-    public abstract getAmountInExternalCurrency(value: BigNumber): string;
+    public abstract getAmountInExternalCurrency(value: BigNumber): BigNumber;
 
     /**
      * Requests a wallet to update its balance. Usually called when we receive an event from the SPV SDK,

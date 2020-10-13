@@ -97,7 +97,7 @@ export class ERC20SubWallet extends SubWallet {
         return amount; // Raw value and display value are the same: the number of tokens.
     }
 
-    public getAmountInExternalCurrency(value: BigNumber): string {
+    public getAmountInExternalCurrency(value: BigNumber): BigNumber {
         // No way to compute the actual value in currency for this token - would require to be bound to an exchange
         // to get its valuation, which we have not for now.
         return null;
