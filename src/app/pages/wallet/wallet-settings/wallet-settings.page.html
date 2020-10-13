@@ -17,10 +17,16 @@
                 </ion-row>
                 <h2></h2>
                 <h3>{{ 'total-amount' | translate }}</h3>
-                <h4>{{ Util.getWholeBalance(masterWallet.getDisplayBalance()) }}<span class="dot" *ngIf="!masterWallet.getDisplayBalance().isZero() && Util.getDecimalBalance(masterWallet.getDisplayBalance())">.</span>
-                    <span class="decimals">{{ Util.getDecimalBalance(masterWallet.getDisplayBalance()) }}</span>
-                    <span class="ela">  ELA</span>
-                </h4>
+                <div (click)="currencyService.toggleCurrencyDisplay()">
+                    <h4 *ngIf="!currencyService.useCurrency">{{ Util.getWholeBalance(masterWallet.getDisplayBalance()) }}<span class="dot" *ngIf="!masterWallet.getDisplayBalance().isZero() && Util.getDecimalBalance(masterWallet.getDisplayBalance())">.</span>
+                        <span class="decimals">{{ Util.getDecimalBalance(masterWallet.getDisplayBalance()) }}</span>
+                        <span class="ela">  ELA</span>
+                    </h4>
+                    <h4 *ngIf="currencyService.useCurrency">{{ Util.getWholeBalance(currencyService.getCurrencyBalance(masterWallet.getDisplayBalance())) }}<span class="dot" *ngIf="!masterWallet.getDisplayBalance().isZero() && Util.getDecimalBalance(currencyService.getCurrencyBalance(masterWallet.getDisplayBalance()))">.</span>
+                        <span class="decimals">{{ Util.getDecimalBalance(currencyService.getCurrencyBalance(masterWallet.getDisplayBalance())) }}</span>
+                        <span class="ela">  {{ currencyService.selectedCurrency.symbol }}</span>
+                    </h4>
+                </div>
             </ion-row>
             <div
                 class="arrow-down"

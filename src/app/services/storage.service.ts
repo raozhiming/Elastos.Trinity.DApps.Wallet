@@ -26,8 +26,8 @@ export class LocalStorage {
     }
 
     public set(key: string, value: any): Promise<any> {
-        return new Promise((resolve)=>{
-            appManager.setSetting(key, value, ()=>{
+        return new Promise((resolve) => {
+            appManager.setSetting(key, value, () => {
                 resolve();
             });
         });
@@ -35,13 +35,13 @@ export class LocalStorage {
 
     public async get(key: string): Promise<any> {
         console.log('Fetching for ' + key + ' in app manager settings');
-        return new Promise((resolve)=>{
-            appManager.getSetting(key, (val)=>{
+        return new Promise((resolve) => {
+            appManager.getSetting(key, (val) => {
                 if (typeof(val) === "string") {
                     val = JSON.parse(val);
                 }
                 resolve(val);
-            }, (err)=>{
+            }, (err) => {
                 // DoesnKey not found in setting
                 resolve(null);
             });
@@ -106,6 +106,18 @@ export class LocalStorage {
         let rawCurrency = await this.get("currency");
         console.log('Found currency stored', rawCurrency);
         return rawCurrency;
+    }
+
+    public setCurrencyDisplayPreference(useCurrency: boolean) {
+        return this.set('useCurrency', JSON.stringify(useCurrency)).then((data) => {
+            console.log('Currency display preference stored', data);
+        });
+    }
+
+    public async getCurrencyDisplayPreference(): Promise<boolean> {
+        let pref = await this.get("useCurrency");
+        console.log('User prefers using currency?', pref);
+        return pref;
     }
 
     public setPrice(symbol: string, price: number) {

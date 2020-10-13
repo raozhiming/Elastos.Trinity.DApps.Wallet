@@ -14,6 +14,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Util } from 'src/app/model/Util';
 import { TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/services/ui.service';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -54,9 +55,9 @@ export class CoinListPage implements OnInit, OnDestroy {
         public localStorage: LocalStorage,
         public modalCtrl: ModalController,
         public events: Events,
-        private uiService: UiService,
         private translate: TranslateService,
-        public theme: ThemeService
+        public theme: ThemeService,
+        public currencyService: CurrencyService
     ) {
         this.init();
     }

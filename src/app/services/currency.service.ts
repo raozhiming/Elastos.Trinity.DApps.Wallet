@@ -20,6 +20,9 @@ export class CurrencyService {
   public elaStats: any;
   private proxyurl = "https://cors-anywhere.herokuapp.com/";
 
+  // Use currency as main wallet total amount
+  public useCurrency = false;
+
   public selectedCurrency: Currency;
   public currencies: Currency[] = [
     {
@@ -52,6 +55,7 @@ export class CurrencyService {
   async init() {
     await this.getSavedPrices();
     await this.getSavedCurrency();
+    await this.getSavedCurrencyDisplayPreference();
     this.fetch();
 
     console.log("Currency service initialization complete");
@@ -79,6 +83,18 @@ export class CurrencyService {
         } else {
           this.selectedCurrency = this.currencies.find((currency) => currency.symbol === 'USD');
           console.log('No currency saved, using default USD', this.selectedCurrency);
+        }
+        resolve();
+      });
+    });
+  }
+
+  getSavedCurrencyDisplayPreference() {
+    return new Promise((resolve, reject) => {
+      this.storage.getCurrencyDisplayPreference().then((useCurrency) => {
+        console.log('Got stored currency display preference', useCurrency);
+        if (useCurrency) {
+          this.useCurrency = useCurrency;
         }
         resolve();
       });
@@ -119,23 +135,29 @@ export class CurrencyService {
   /**
    * NOTE: for now, this API converts amounts in ELA to values in user's selected currencies only.
    */
-  getCurrencyBalance(cryptoBalance: BigNumber): string {
-    if (!cryptoBalance)
+  getCurrencyBalance(cryptoBalance: BigNumber): BigNumber {
+    if (!cryptoBalance) {
       return null;
+    }
 
     const currencyPrice = new BigNumber(this.selectedCurrency.price);
     const currencyBalance = currencyPrice.multipliedBy(cryptoBalance);
     if (cryptoBalance.isZero()) {
-      return String(0);
+      return new BigNumber(0);
     } else if (this.selectedCurrency.symbol === 'BTC') {
-      return currencyBalance.toFixed(8);
+      return currencyBalance.decimalPlaces(4);
     } else {
-      return currencyBalance.toFixed(2);
+      return currencyBalance.decimalPlaces(2);
     }
   }
 
   saveCurrency(currency: Currency) {
     this.selectedCurrency = currency;
     this.storage.setCurrency(currency.symbol);
+  }
+
+  toggleCurrencyDisplay() {
+    this.useCurrency = !this.useCurrency;
+    this.storage.setCurrencyDisplayPreference(this.useCurrency);
   }
 }

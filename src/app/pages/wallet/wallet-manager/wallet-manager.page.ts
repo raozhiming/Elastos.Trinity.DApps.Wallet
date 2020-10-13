@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { WalletAccessService } from 'src/app/services/walletaccess.service';
 import { Router } from '@angular/router';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -37,7 +38,8 @@ export class WalletManagerPage implements OnInit {
         public walletManager: WalletManager,
         private translate: TranslateService,
         private coinTransferService: CoinTransferService,
-        private walletAccessService: WalletAccessService
+        private walletAccessService: WalletAccessService,
+        public currencyService: CurrencyService
     ) {
     }
 

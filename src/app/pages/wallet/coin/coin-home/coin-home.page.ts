@@ -198,7 +198,7 @@ export class CoinHomePage implements OnInit {
 
             if (this.chainIsETHSC() || this.chainIsERC20()) {
                 const newAmount = new BigNumber(transaction.Amount);
-                transactionInfo.amount = newAmount.isInteger() ? newAmount.integerValue() : newAmount.decimalPlaces(6);
+                transactionInfo.amount = newAmount.isInteger() ? newAmount.integerValue() : newAmount;
             }
 
             // Check if transaction was made today and increment our counter if so.

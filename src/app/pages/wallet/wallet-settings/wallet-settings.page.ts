@@ -12,6 +12,7 @@ import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 @Component({
     selector: 'app-wallet-settings',
@@ -92,7 +93,8 @@ export class WalletSettingsPage implements OnInit {
         private translate: TranslateService,
         private walletEditionService: WalletEditionService,
         private appService: AppService,
-        public theme: ThemeService
+        public theme: ThemeService,
+        public currencyService: CurrencyService
     ) {
     }
 

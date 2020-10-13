@@ -25,11 +25,16 @@
                     {{ 'synchronized' | translate : {progress: masterWallet.subWallets[chainId].progress} }} - {{ masterWallet.subWallets[chainId].lastBlockTime }}
                 </h2>
                 <h3>{{ 'total-amount' | translate }}</h3>
-                <h4>
-                    {{ Util.getWholeBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}<span class="dot" *ngIf="!masterWallet.subWallets[chainId].getDisplayBalance().isZero() && Util.getDecimalBalance(masterWallet.subWallets[chainId].getDisplayBalance())">.</span>
-                    <span class="decimals">{{ Util.getDecimalBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}</span>
-                    <span class="ela"> {{ getCoinBalanceCurrency() }}</span>
-                </h4>
+                <div (click)="currencyService.toggleCurrencyDisplay()">
+                    <h4 *ngIf="!currencyService.useCurrency">{{ Util.getWholeBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}<span class="dot" *ngIf="!masterWallet.getDisplayBalance().isZero() && Util.getDecimalBalance(masterWallet.subWallets[chainId].getDisplayBalance())">.</span>
+                        <span class="decimals">{{ Util.getDecimalBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}</span>
+                        <span class="ela"> {{ getCoinBalanceCurrency() }}</span>
+                    </h4>
+                    <h4 *ngIf="currencyService.useCurrency">{{ Util.getWholeBalance(currencyService.getCurrencyBalance(masterWallet.subWallets[chainId].getDisplayBalance())) }}<span class="dot" *ngIf="!masterWallet.getDisplayBalance().isZero() && Util.getDecimalBalance(currencyService.getCurrencyBalance(masterWallet.subWallets[chainId].getDisplayBalance()))">.</span>
+                        <span class="decimals">{{ Util.getDecimalBalance(currencyService.getCurrencyBalance(masterWallet.subWallets[chainId].getDisplayBalance())) }}</span>
+                        <span class="ela">  {{ currencyService.selectedCurrency.symbol }}</span>
+                    </h4>
+                </div>
             </ion-row>
             <ion-row class="card-btn-row">
                 <ion-col size="3" *ngIf="!coinCanBeTransferred()"></ion-col>
