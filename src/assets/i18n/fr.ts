@@ -231,6 +231,9 @@ export const fr = {
     'type-menmonic-verify': 'Veuillez saisir vos 12 mots de sécurité (Votre mnémonique) afin de les vérifier.',
     'type-menmonic-import': 'Saisissez les mots de votre mnémonique pour importer votre portefeuille.',
     'import-text-word-sucess': 'Portefeuille importé depuis votre mnémonique',
+    'next-four-words': '4 mots suivants',
+    'create-wallet': 'Create Wallet',
+    'import-wallet': 'Import Wallet',
     "mnemonic-import-missing-words": "Veuillez saisir tous les mots avant de continuer",
     "mnemonic-check-title": "Vérification du mnémonique",
     "memory-written-down": "Je l\'ai noté",
@@ -248,7 +251,7 @@ export const fr = {
     'wallet-prompt1': 'Portefeuille Sécurisé pour',
     'wallet-prompt2': "L'écosystème Elastos",
     'get-started': 'Commencer',
-    'import-wallet': 'Vous avez déjà un portefeuille? Importez-le.',
+    'import-wallet-msg': 'Vous avez déjà un portefeuille? Importez-le.',
 
     // Wallet creation screen
     'launcher-create-wallet': 'Créer le portefeuille',

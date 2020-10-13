@@ -311,8 +311,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     goTransaction() {
         // this.showConfirm();
-        this.showSuccess();
-        // this.checkValue();
+        // this.showSuccess();
+        this.checkValue();
     }
 
     async checkValue() {

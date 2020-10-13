@@ -25,12 +25,12 @@
 
         ion-slide {
             width: 100%;
-            padding: 0 30px;
+            padding: 0 15px;
             display: flex;
             flex-direction: column;
 
-            ion-row {
-                width: 100%;
+            .input-row {
+                width: 95%;
                 background: #803fd5;
                 padding: 0px 10px;
                 border-radius: 8px;
@@ -68,13 +68,10 @@
                     justify-content: flex-start;
                 }
             }        
-        }
-    }
 
-    .btn-container {
-        margin-top: 210px;
-        padding-left: 30px;
-        padding-right: 30px;
-        width: 100%;
+            .btn-container {
+                margin-top: 200px;
+            }
+        }
     }
 }

@@ -93,6 +93,10 @@ export class WalletImportPage implements OnInit, OnDestroy {
         }
     } */
 
+    slideNext(slide) {
+        slide.slideNext();
+    }
+
     goToNextInput(event, nextInput?: any, slide?: any) {
         // android: only press enter will trigger keypress event
         // ios: press any key will trigger keypress event

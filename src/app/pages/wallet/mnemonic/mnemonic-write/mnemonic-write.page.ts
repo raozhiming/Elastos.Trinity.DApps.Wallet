@@ -82,6 +82,10 @@ export class MnemonicWritePage implements OnInit {
         }
     } */
 
+    slideNext(slide) {
+        slide.slideNext();
+    }
+
     goToNextInput(event, nextInput?: any, slide?: any) {
         // android: only press enter will trigger keypress event
         // ios: press any key will trigger keypress event
@@ -98,7 +102,7 @@ export class MnemonicWritePage implements OnInit {
                 nextInput.setFocus();
             }
         } else {
-            this.onNext();
+            this.onCreate();
         }
     }
 
@@ -116,7 +120,7 @@ export class MnemonicWritePage implements OnInit {
         return inputsFilled;
     }
 
-    async onNext() {
+    async onCreate() {
         if (this.allInputsFilled()) {
             // if (true) { // for test
             if (this.inputStr.replace(/\s+/g, "").toLowerCase() === this.mnemonicStr.replace(/\s+/g, "")) {

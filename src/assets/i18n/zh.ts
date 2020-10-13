@@ -239,6 +239,9 @@ export const zh = {
     'type-menmonic-verify': '请输入您的12个助记词进行验证',
     'type-menmonic-import': '请按顺序输入钱包的12个助记词',
     'import-text-word-sucess': '导入助记词成功',
+    'next-four-words': 'Next 4 words',
+    'create-wallet': 'Create Wallet',
+    'import-wallet': 'Import Wallet',
     "mnemonic-import-missing-words": "请输入所有的助记词",
     "mnemonic-check-title": '验证助记词',
     "memory-written-down": "已经记下了",
@@ -256,7 +259,7 @@ export const zh = {
     'wallet-prompt1': 'Elastos 生态系统的',
     'wallet-prompt2': '安全钱包',
     'get-started': '开始',
-    'import-wallet': '已经有钱包? 点击这里导入钱包',
+    'import-wallet-msg': '已经有钱包? 点击这里导入钱包',
 
     // Wallet creation screen
     'launcher-create-wallet': '创建钱包',

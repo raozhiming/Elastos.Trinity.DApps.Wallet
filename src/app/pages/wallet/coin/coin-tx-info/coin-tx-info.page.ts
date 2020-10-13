@@ -103,6 +103,7 @@ export class CoinTxInfoPage implements OnInit {
             this.type = this.transactionInfo.type;
             this.amount = this.transactionInfo.amount;
             this.symbol = this.transactionInfo.symbol;
+            this.status = this.transactionInfo.status;
             this.payStatusIcon = this.transactionInfo.payStatusIcon;
             const direction = this.transactionInfo.direction;
             if (direction === TransactionDirection.RECEIVED) {
@@ -158,22 +159,6 @@ export class CoinTxInfoPage implements OnInit {
 
         this.inputs = this.objtoarr(transaction.Inputs);
         this.outputs = this.objtoarr(transaction.Outputs);
-
-        // Get more header display values
-        switch (transaction.Status) {
-            case TransactionStatus.CONFIRMED:
-                this.status = this.translate.instant("coin-transaction-status-confirmed");
-                this.unsubscribeprogressEvent();
-                break;
-            case TransactionStatus.PENDING:
-                this.status = this.translate.instant("coin-transaction-status-pending");
-                this.subscribeprogressEvent();
-                break;
-            case TransactionStatus.UNCONFIRMED:
-                this.status = this.translate.instant("coin-transaction-status-unconfirmed");
-                this.subscribeprogressEvent();
-                break;
-        }
 
         this.payType = "transaction-type-13";
         if ((this.type >= 0) && this.type <= 12) {

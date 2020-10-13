@@ -25,11 +25,12 @@
 
         ion-slide {
             width: 100%;
-            padding: 0 30px;
+            padding: 0 15px;
             display: flex;
             flex-direction: column;
 
-            ion-row {
+            .input-row {
+                width: 95%;
                 background: #803fd5;
                 padding: 0px 10px;
                 border-radius: 8px;
@@ -61,46 +62,16 @@
                         text-transform: lowercase;
                         --padding-start: 12px;
                     }
-
-                    .invisible {
-                        visibility: hidden;
-                    }
                 }
 
                 .input-col {
                     justify-content: flex-start;
                 }
             }        
+
+            .btn-container {
+                margin-top: 200px;
+            }
         }
     }
-
-    .btn-container {
-        margin-top: 210px;
-        padding-left: 30px;
-        padding-right: 30px;
-        width: 100%;
-    }
 }
-
-/* @import "../../../functions.scss";
-
-.kuangTextArea {
-    text-align: center;
-    padding: 10px
-}
-
-ion-label {
-    font-size: 16px
-};
-
-ion-note {
-    font-size: 12px;
-};
-
-ion-segment-button {
-    --color:#666666;
-    --color-checked: white;
-    --indicator-color-checked: #FFCB0F;
-    font-size: 16px;
-}
- */

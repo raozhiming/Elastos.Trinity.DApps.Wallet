@@ -237,6 +237,9 @@ export const en = {
     'type-menmonic-verify': 'Please type your 12 security words (mnemonic phrase) in order to verify it.',
     'type-menmonic-import': 'Type your mnemonic sequence of words to import your wallet. ',
     'import-text-word-sucess': 'Wallet imported from Mnemonics',
+    'next-four-words': 'Next 4 words',
+    'create-wallet': 'Create Wallet',
+    'import-wallet': 'Import Wallet',
     "mnemonic-import-missing-words": "Please fill in all inputs before proceeding",
     "mnemonic-check-title": "Mnemonic Verification",
     "memory-written-down": "I have written it down",
@@ -254,7 +257,7 @@ export const en = {
     'wallet-prompt1': 'Secure Wallet for',
     'wallet-prompt2': 'The Elastos Ecosystem',
     'get-started': 'Get Started',
-    'import-wallet': 'Already got a Wallet? Import it.',
+    'import-wallet-msg': 'Already got a Wallet? Import it.',
 
     // Wallet creation screen
     'launcher-create-wallet': 'Create Wallet',
