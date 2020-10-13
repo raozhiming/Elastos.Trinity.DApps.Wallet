@@ -94,9 +94,15 @@ export class WalletImportPage implements OnInit, OnDestroy {
     } */
 
     goToNextInput(event, nextInput?: any, slide?: any) {
+        // android: only press enter will trigger keypress event
+        // ios: press any key will trigger keypress event
+        if (event !== 13) {
+            return;
+        }
+
         // Convenient way to paste a full mnemonic (non chinese only): if only the first input has text,
         // try to split the existing input with spaces and dispatch the words into the other inputs automatically.
-        let allInputFieldsWereFilled = this.tryToSplitFirstInputWords();
+        const allInputFieldsWereFilled = this.tryToSplitFirstInputWords();
 
         if (nextInput && !allInputFieldsWereFilled) {
             if (slide) {
@@ -148,8 +154,8 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     allInputsFilled() {
         let inputsFilled = true;
+        // return inputsFilled; // for test
         this.inputStr = '';
-
         this.inputList.forEach((word) => {
             if (word.input === '') {
                 inputsFilled = false;
