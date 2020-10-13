@@ -79,7 +79,7 @@ export class WalletCreatePage implements OnInit {
             this.native.toast_trans("text-wallet-name-validator-already-exists");
             return;
         }
-        if (this.walletCreationService.type === NewWallet.CREATE && this.wallet.mnemonicPassword) {
+        if (this.wallet.mnemonicPassword) {
             if (this.wallet.mnemonicPassword.length < Config.MIN_PASSWORD_LENGTH) {
                 this.native.toast_trans("text-wallet-passphrase-validator-min-length");
                 return;
