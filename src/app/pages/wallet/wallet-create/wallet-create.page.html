@@ -26,7 +26,7 @@
                         type="text"
                         placeholder="{{ 'mnemonic-input-passphrase' | translate }}"
                         [(ngModel)]="wallet.mnemonicPassword"
-                        (keypress)="goToNextInput($event.keyCode, repeat)"
+                        (keypress)="goToNextInput($event.keyCode, input)"
                     >
                     </ion-input>
                 </ion-col>
@@ -36,7 +36,7 @@
             </ion-row>
             <ion-row *ngIf="walletCreationService.type === 1">
                 <ion-input
-                    #repeat
+                    #input
                     type="text"
                     placeholder="{{ 'mnemonic-reinput-passphrase' | translate }}"
                     [(ngModel)]="repeatMnemonicPassword"

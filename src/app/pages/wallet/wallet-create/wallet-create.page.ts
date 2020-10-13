@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { Util } from "../../../model/Util";
 import { Native } from '../../../services/native.service';
 import { Config } from '../../../config/Config';
@@ -8,6 +8,7 @@ import { WalletCreationService, NewWallet } from 'src/app/services/walletcreatio
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/services/ui.service';
+import { IonInput } from '@ionic/angular';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -17,6 +18,7 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
     styleUrls: ['./wallet-create.page.scss'],
 })
 export class WalletCreatePage implements OnInit {
+    @ViewChild('input', {static: false}) input: IonInput;
 
     public showOptions: boolean = false;
     public wallet = {
@@ -103,7 +105,12 @@ export class WalletCreatePage implements OnInit {
     }
 
     goToNextInput(event, nextInput: any) {
-        console.log('Input key code', event);
+        // android: only press enter will trigger keypress event
+        // ios: press any key will trigger keypress event
+        if (event !== 13) {
+            return;
+        }
+
         if (this.wallet.mnemonicPassword.length < Config.MIN_PASSWORD_LENGTH) {
             this.native.toast_trans("text-wallet-passphrase-validator-min-length");
             return;
