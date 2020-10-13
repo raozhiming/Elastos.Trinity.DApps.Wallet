@@ -13,6 +13,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-wallet-settings',
@@ -23,14 +24,14 @@ export class WalletSettingsPage implements OnInit {
 
     public masterWallet: MasterWallet;
 
-    public walletName: string = "";
-    private masterWalletId: string = "1";
-    public masterWalletType: string = "";
+    public walletName = "";
+    private masterWalletId = "1";
+    public masterWalletType = "";
 
-    public singleAddress: boolean = false;
+    public singleAddress = false;
 
-    public currentLanguageName: string = "";
-    public readonly: string = "";
+    public currentLanguageName = "";
+    public readonly = "";
 
     // Helpers
     public Util = Util;
@@ -38,13 +39,16 @@ export class WalletSettingsPage implements OnInit {
 
     public settings = [
         {
-            route: "/mnemonic-export",
+            type: 'wallet-export',
+            // route: "/mnemonic-export",
+            route: null,
             title: this.translate.instant("wallet-settings-backup-wallet"),
             subtitle: this.translate.instant("wallet-settings-backup-wallet-subtitle"),
             icon: '/assets/settings/key.svg',
             iconDarkmode: '/assets/settings/darkmode/key.svg'
         },
         {
+            type: 'wallet-name',
             route: "/wallet-edit-name",
             title: this.translate.instant("wallet-settings-change-name"),
             subtitle: this.translate.instant("wallet-settings-change-name-subtitle"),
@@ -52,6 +56,7 @@ export class WalletSettingsPage implements OnInit {
             iconDarkmode: '/assets/settings/darkmode/pen.svg'
         },
         {
+            type: 'wallet-color',
             route: "/wallet-color",
             title: this.translate.instant("wallet-settings-change-theme"),
             subtitle: this.translate.instant("wallet-settings-change-theme-subtitle"),
@@ -67,6 +72,7 @@ export class WalletSettingsPage implements OnInit {
         //     iconDarkmode: '/assets/settings/darkmode/lock.svg'
         // },
         {
+            type: 'coin-list',
             route: "/coin-list",
             title: this.translate.instant("wallet-settings-manage-coin-list"),
             subtitle: this.translate.instant("wallet-settings-manage-coin-list-subtitle"),
@@ -74,6 +80,7 @@ export class WalletSettingsPage implements OnInit {
             iconDarkmode: '/assets/settings/darkmode/coins.svg'
         },
         {
+            type: 'wallet-delete',
             route: null,
             title: this.translate.instant("wallet-settings-delete-wallet"),
             subtitle: this.translate.instant("wallet-settings-delete-wallet-subtitle"),
@@ -94,7 +101,8 @@ export class WalletSettingsPage implements OnInit {
         private walletEditionService: WalletEditionService,
         private appService: AppService,
         public theme: ThemeService,
-        public currencyService: CurrencyService
+        public currencyService: CurrencyService,
+        private authService: AuthService,
     ) {
     }
 
@@ -111,6 +119,17 @@ export class WalletSettingsPage implements OnInit {
 
         this.appService.setBackKeyVisibility(true);
         this.appService.setTitleBarTitle("wallet-settings-title");
+    }
+
+    async getPassword() {
+        try {
+            const payPassword = await this.authService.getWalletPassword(this.masterWalletId, true, true);
+            if (payPassword) {
+                this.native.go('/mnemonic-export', { payPassword: payPassword });
+            }
+        } catch (e) {
+            console.error('MnemonicExportPage getWalletPassword error:' + e);
+        }
     }
 
     async onDelete() {
@@ -137,7 +156,17 @@ export class WalletSettingsPage implements OnInit {
         this.readonly = ret["InnerType"] || "";
     }
 
-    public goToSetting(item) {
+  /*   public goToSetting(item) {
         item.route !== null ? this.native.go(item.route) : this.onDelete();
+    } */
+
+    public goToSetting(item) {
+        if (item.type === 'wallet-export') {
+            this.getPassword();
+        } else if (item.type === 'wallet-delete') {
+            this.onDelete();
+        } else {
+            this.native.go(item.route);
+        }
     }
 }

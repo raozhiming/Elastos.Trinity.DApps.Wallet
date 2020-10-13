@@ -69,11 +69,17 @@ export class MnemonicExportPage implements OnInit {
         const navigation = this.router.getCurrentNavigation();
         this.zone.run(() => {
             if (!Util.isEmptyObject(navigation.extras.state)) {
-                console.log('From intent');
-                this.isFromIntent = true;
-                this.intentTransfer = this.walletAccessService.intentTransfer;
-                this.masterWalletId = this.walletAccessService.masterWalletId;
-                this.title = 'access-mnemonic';
+                if (navigation.extras.state.payPassword) {
+                    this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
+                    this.payPassword = navigation.extras.state.payPassword;
+                    this.showMnemonics();
+                } else {
+                    console.log('From intent');
+                    this.isFromIntent = true;
+                    this.intentTransfer = this.walletAccessService.intentTransfer;
+                    this.masterWalletId = this.walletAccessService.masterWalletId;
+                    this.title = 'access-mnemonic';
+                }
             } else {
                 this.title = 'text-export-mnemonic';
                 this.masterWalletId = this.walletEditionService.modifiedMasterWalletId;
@@ -99,8 +105,29 @@ export class MnemonicExportPage implements OnInit {
         }
     }
 
-    return() {
-        this.native.go('/wallet-home');
+    async onExport() {
+        if (await this.getPassword()) {
+           this.showMnemonics();
+        } else {
+            // User cancel
+            console.log('MnemonicExportPage user cancel');
+        }
+    }
+
+    async showMnemonics() {
+        const ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
+        titleBarManager.setBackgroundColor('#6B26C6');
+        titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
+        this.appService.setTitleBarTitle(this.translate.instant('mnemonic'));
+
+        this.mnemonicStr = ret.toString();
+        let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/).filter(str => str.trim().length > 0);
+
+        for (let i = 0; i < mnemonicArr.length; i++) {
+            this.mnemonicList.push(mnemonicArr[i]);
+        }
+
+        this.hideMnemonic = false;
     }
 
     async onShare() {
@@ -112,25 +139,7 @@ export class MnemonicExportPage implements OnInit {
         this.appService.close();
     }
 
-    async onExport() {
-        if (await this.getPassword()) {
-            const ret = await this.walletManager.spvBridge.exportWalletWithMnemonic(this.masterWalletId, this.payPassword);
-            titleBarManager.setBackgroundColor('#6B26C6');
-            titleBarManager.setForegroundMode(TitleBarPlugin.TitleBarForegroundMode.LIGHT);
-            this.appService.setTitleBarTitle(this.translate.instant('mnemonic'));
-
-            this.mnemonicStr = ret.toString();
-            let mnemonicArr = this.mnemonicStr.split(/[\u3000\s]+/).filter(str => str.trim().length > 0);
-
-            // console.log('Mnemonic Array', mnemonicArr);
-            for (let i = 0; i < mnemonicArr.length; i++) {
-                this.mnemonicList.push(mnemonicArr[i]);
-            }
-
-            this.hideMnemonic = false;
-        } else {
-            // User cancel
-            console.log('MnemonicExportPage use cancel');
-        }
+    return() {
+        this.native.go("/wallet-settings");
     }
 }
