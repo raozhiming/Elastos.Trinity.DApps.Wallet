@@ -163,6 +163,11 @@
   ion-alert   {
     --background: #191a2f;
     --ion-text-color: #ffffff;
+
+    h2 {
+        color: #ffffff;
+    }
+    
     button {
       span {
         color: #ffffff;

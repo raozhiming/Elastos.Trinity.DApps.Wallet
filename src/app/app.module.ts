@@ -97,6 +97,7 @@ import { CurrencySelectPage } from './pages/settings/currency-select/currency-se
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { HelpComponent } from './components/help/help.component';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
+import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
@@ -145,7 +146,6 @@ export function TranslateLoaderFactory() {
 @NgModule({
     declarations: [
         AppComponent,
-
         LauncherPage,
         WalletSettingsPage,
         ContactsPage,
@@ -163,6 +163,7 @@ export function TranslateLoaderFactory() {
         WalletPasswordResetPage,
         WalletEditNamePage,
         WalletImportPage,
+        WalletAdvancedImportPage,
         CoinHomePage,
         CoinListPage,
         CoinSelectPage,

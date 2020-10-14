@@ -250,6 +250,10 @@ export const en = {
     "mnemonic-reinput-passphrase": "Repeat mnemonic passphrase",
     "help:mnemonic-password": 'This is an optional password bound to your mnemonic words, to give your wallet extra security. Save it carefully, it is NOT recoverable if lost.',
 
+    // Advanced mnemonic import screen
+    'advanced-import-intro': 'You can paste and enter your mnemonic phrase in one line.',
+    'advanced-import-msg': '*Spaces are required between words',
+
     // Export mnemonic screen
     'text-export-mnemonic': 'Export Mnemonic',
 

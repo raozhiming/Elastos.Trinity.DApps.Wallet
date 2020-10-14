@@ -205,4 +205,8 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
         this.native.toast_trans('import-text-word-sucess');
     }
+
+    goToAdvancedImport() {
+        this.native.go('wallet-advanced-import');
+    }
 }

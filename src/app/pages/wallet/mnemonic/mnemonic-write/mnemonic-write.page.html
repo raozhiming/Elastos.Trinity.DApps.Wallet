@@ -64,9 +64,7 @@
 
 <ion-content>
     <ion-grid class="ion-text-center container">
-        <p>
-            {{ 'type-menmonic-verify' | translate }}
-        </p>
+        <p>{{ 'type-menmonic-verify' | translate }}</p>
         <ion-slides #slide pager [options]="slideOpts">
             <!------------ SLIDE 1 ------------>
             <ion-slide>
@@ -267,7 +265,7 @@
                     </ion-col>
                 </ion-row>
                 <ion-row class="btn-container">
-                    <ion-button color="secondary" (click)="onCreate()">
+                    <ion-button [disabled]="!allInputsFilled()" color="secondary" (click)="onCreate()">
                         <ion-label>{{ 'create-wallet' | translate }}</ion-label>
                     </ion-button>
                 </ion-row>

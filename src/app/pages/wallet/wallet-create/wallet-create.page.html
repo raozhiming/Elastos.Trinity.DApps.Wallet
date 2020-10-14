@@ -5,16 +5,17 @@
             <ion-input
                 type="text"
                 [placeholder]="'enter-name' | translate"
-                [(ngModel)]="wallet.name"
-            >
+                [(ngModel)]="wallet.name">
             </ion-input>
         </ion-row>
+
         <ion-row class="options-row" (click)="showOptions = !showOptions">
             <span>
                 {{ 'advanced-options' | translate }} &nbsp;
                 <img [class.rotate]="showOptions" src="assets/icons/darkmode/down-arrow.svg"/>
             </span>
         </ion-row>
+
         <div class="options-container" *ngIf="showOptions">
             <ion-row class="toggle-row">
                 <h1>{{ 'signaddress-wallet' | translate }}</h1>
@@ -26,8 +27,7 @@
                         type="text"
                         placeholder="{{ 'mnemonic-input-passphrase' | translate }}"
                         [(ngModel)]="wallet.mnemonicPassword"
-                        (keypress)="goToNextInput($event.keyCode, input)"
-                    >
+                        (keypress)="goToNextInput($event.keyCode, input)">
                     </ion-input>
                 </ion-col>
                 <ion-col *ngIf="walletCreationService.type === 1" size="2" (click)="uiService.showHelp($event, helpMessage)">
@@ -39,15 +39,14 @@
                     #input
                     type="text"
                     placeholder="{{ 'mnemonic-reinput-passphrase' | translate }}"
-                    [(ngModel)]="repeatMnemonicPassword"
-                >
+                    [(ngModel)]="repeatMnemonicPassword">
                 </ion-input>
             </ion-row>
         </div>
 
         <ion-row class="btn-row">
-            <ion-button color="secondary" (click)="onCreate()">
-                <ion-label>{{ 'confirm' | translate }}</ion-label>
+            <ion-button [disabled]='!wallet.name' color="secondary" (click)="onCreate()">
+                <ion-label>{{ 'continue' | translate }}</ion-label>
             </ion-button>
         </ion-row>
     </ion-grid>

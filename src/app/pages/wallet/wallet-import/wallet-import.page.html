@@ -1,8 +1,6 @@
 <ion-content>
     <ion-grid class="ion-text-center container">
-        <p>
-            {{ 'type-menmonic-import' | translate }}
-        </p>
+        <p>{{ 'type-menmonic-import' | translate }}</p>
         <!-- <ion-slides #slider pager [options]="slideOpts">
             <ion-slide>
                 <ion-row *ngFor="let word of inputList.slice(0,4); let i = index;">
@@ -251,11 +249,12 @@
                     </ion-col>
                 </ion-row>
                 <ion-row class="btn-container">
-                    <ion-button color="secondary" (click)="onImport()">
+                    <ion-button [disabled]="!allInputsFilled()" color="secondary" (click)="onImport()">
                         <ion-label>{{ 'import-wallet' | translate }}</ion-label>
                     </ion-button>
                 </ion-row>
             </ion-slide>
         </ion-slides>
+        <h1 (click)="goToAdvancedImport()">Advanced Import</h1>
     </ion-grid>
 </ion-content>

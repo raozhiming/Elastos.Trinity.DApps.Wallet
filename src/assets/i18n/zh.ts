@@ -176,7 +176,6 @@ export const zh = {
     "wallet-manager-intro": "每个钱包都有单独的设置，您可以检查每个钱包里的选项。",
     "wallet-manager-add-wallet": "添加钱包",
 
-
     // Access intent screen
     "access-title": "钱包访问请求",
     "access-subtitle-wallet-access-from": "数据请求来自于:",
@@ -251,6 +250,10 @@ export const zh = {
     "mnemonic-input-passphrase": "输入助记词密码（最少8位）",
     "mnemonic-reinput-passphrase": "再次输入助记词密码",
     "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码',
+
+    // Advanced mnemonic import screen
+    'advanced-import-intro': 'You can paste and enter your mnemonic phrase in one line.',
+    'advanced-import-msg': '*Spaces are required between words',
 
     // Export mnemonic screen
     'text-export-mnemonic': '导出助记词',

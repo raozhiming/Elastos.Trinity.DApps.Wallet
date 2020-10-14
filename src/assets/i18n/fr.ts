@@ -244,6 +244,10 @@ export const fr = {
     "mnemonic-reinput-passphrase": "Saisir le mot de passe à nouveau",
     "help:mnemonic-password": 'Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Ne l\'oubliez pas, il ne peut pas être retrouvé.',
 
+    // Advanced mnemonic import screen
+    'advanced-import-intro': 'You can paste and enter your mnemonic phrase in one line.',
+    'advanced-import-msg': '*Spaces are required between words',
+
     // Export mnemonic screen
     'text-export-mnemonic': 'Exporter le mnémonique',
 

@@ -57,6 +57,7 @@ import { EscTransactionPage } from './pages/intents/esctransaction/esctransactio
 import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
+import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
 
 const routes: Routes = [
 
@@ -67,6 +68,7 @@ const routes: Routes = [
     { path: 'wallet-home', component: WalletHomePage },
     { path: 'wallet-create', component: WalletCreatePage },
     { path: 'wallet-import', component: WalletImportPage },
+    { path: 'wallet-advanced-import', component: WalletAdvancedImportPage },
     { path: 'wallet-manager', component: WalletManagerPage },
     { path: 'mnemonic-create', component: MnemonicCreatePage },
     { path: 'wallet-create-name', component: WalletCreateNamePage },
@@ -104,7 +106,6 @@ const routes: Routes = [
     { path: 'dposvote', component: DPoSVotePage },
     { path: 'crmemberregister', component: CRMemberRegisterPage },
     { path: 'crproposalvoteagainst', component: CRProposalVoteAgainstPage },
-
 ];
 @NgModule({
     imports: [
