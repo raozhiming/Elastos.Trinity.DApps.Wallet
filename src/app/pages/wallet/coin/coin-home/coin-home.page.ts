@@ -189,7 +189,6 @@ export class CoinHomePage implements OnInit {
 
         for (let transaction of transactions) {
             const transactionInfo = await this.subWallet.getTransactionInfo(transaction, this.translate);
-
             if (!transactionInfo) {
                 // remove the wrong transaction
                 await this.deleteTransaction(transaction);
@@ -197,8 +196,7 @@ export class CoinHomePage implements OnInit {
             }
 
             if (this.chainIsETHSC() || this.chainIsERC20()) {
-                const newAmount = new BigNumber(transaction.Amount);
-                transactionInfo.amount = newAmount.isInteger() ? newAmount.integerValue() : newAmount;
+                transactionInfo.amount = transactionInfo.amount.isInteger() ? transactionInfo.amount.integerValue() : transactionInfo.amount;
             }
 
             // Check if transaction was made today and increment our counter if so.

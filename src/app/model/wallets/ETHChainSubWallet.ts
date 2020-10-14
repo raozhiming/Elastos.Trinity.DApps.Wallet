@@ -59,7 +59,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
         }
 
         transactionInfo.amount = new BigNumber(transaction.Amount).dividedBy(Config.WEI);
-        transactionInfo.fee = parseFloat(transaction.Fee.toString());
+        transactionInfo.fee = transaction.Fee / Config.WEI;
         transactionInfo.direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
         transactionInfo.txId = transaction.TxHash || transaction.Hash; // ETHSC use TD or Hash
 

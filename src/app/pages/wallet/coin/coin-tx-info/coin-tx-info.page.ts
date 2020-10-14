@@ -129,10 +129,12 @@ export class CoinTxInfoPage implements OnInit {
         const transaction = allTransactions.Transactions[0];
         console.log('More tx info', transaction);
 
+        const transactionInfo = await this.subWallet.getTransactionInfo(transaction, this.translate);
+
         // Tx is NOT ETH - Define total cost and address
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
             // Pay Fee
-            this.payFee = this.subWallet.getDisplayAmount(new BigNumber(transaction.Fee)).toNumber();
+            this.payFee = this.subWallet.getDisplayAmount(new BigNumber(transactionInfo.fee)).toNumber();
             // Total Cost
             this.totalCost = this.payFee ? this.transactionInfo.amount.plus(this.payFee) : null;
             // Address
@@ -146,13 +148,12 @@ export class CoinTxInfoPage implements OnInit {
         // Tx is ETH - Define amount, fee, total cost and address
         } else {
             // Amount
-            const newAmount = new BigNumber(transaction.Amount);
-            this.amount = newAmount.isInteger() ? newAmount.integerValue() : newAmount.decimalPlaces(6);
+            this.amount = transactionInfo.amount.isInteger() ? transactionInfo.amount.integerValue() : transactionInfo.amount.decimalPlaces(6);
             // Pay Fee
-            const newPayFee = new BigNumber(transaction.Fee);
+            const newPayFee = new BigNumber(transactionInfo.fee);
             this.payFee = newPayFee.toNumber();
             // Total Cost
-            this.totalCost = newPayFee ? newAmount.plus(newPayFee) : null;
+            this.totalCost = newPayFee ? transactionInfo.amount.plus(newPayFee) : null;
             // Address
             this.targetAddress = await this.getETHSCWithdrawTransactionTargetAddres(transaction as EthTransaction);
         }

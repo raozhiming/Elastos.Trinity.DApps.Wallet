@@ -22,7 +22,7 @@ export const zh = {
     "intent-select-wallet": "请选择钱包",
 
     // Generic messages
-    "copied": "Copied to clipboard!",
+    "copied": "已复制到剪切板!",
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
     'amount-null': "请输入交易金额",
     "amount-invalid": "请输入正确的金额",
@@ -125,8 +125,8 @@ export const zh = {
     "send-transaction-type": "转账交易",
 
     // Tx successful component (tx-success),
-    'tx-success': "Transaction Successful",
-    'continue': 'Continue',
+    'tx-success': "交易成功",
+    'continue': '继续',
 
     // Transaction details screen (coin-tx-info)
     "tx-info-title": "交易详情",
@@ -135,9 +135,9 @@ export const zh = {
     "tx-info-memo": "备注",
     "tx-info-receiver-address": "接收地址",
     "tx-info-transaction-fees": "交易手续费",
-    "tx-info-cost": "Total Cost",
+    "tx-info-cost": "总花费",
     "tx-info-transaction-id": "交易ID",
-    "tx-info-block-id": "Block ID",
+    "tx-info-block-id": "区块ID",
     "tx-info-type-received": "收到",
     "tx-info-type-sent": "发送",
     "tx-info-type-transferred": "转移",
@@ -240,9 +240,9 @@ export const zh = {
     'type-menmonic-verify': '请输入您的12个助记词进行验证',
     'type-menmonic-import': '请按顺序输入钱包的12个助记词',
     'import-text-word-sucess': '导入助记词成功',
-    'next-four-words': 'Next 4 words',
-    'create-wallet': 'Create Wallet',
-    'import-wallet': 'Import Wallet',
+    'next-four-words': '后四个词',
+    'create-wallet': '创建钱包',
+    'import-wallet': '导入钱包',
     "mnemonic-import-missing-words": "请输入所有的助记词",
     "mnemonic-check-title": '验证助记词',
     "memory-written-down": "已经记下了",
