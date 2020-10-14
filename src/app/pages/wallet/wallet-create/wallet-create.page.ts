@@ -84,7 +84,7 @@ export class WalletCreatePage implements OnInit {
                 this.native.toast_trans("text-wallet-passphrase-validator-min-length");
                 return;
             }
-            if (this.wallet.mnemonicPassword !== this.repeatMnemonicPassword) {
+            if (this.walletCreationService.type === NewWallet.CREATE && this.wallet.mnemonicPassword !== this.repeatMnemonicPassword) {
                 this.native.toast_trans("text-wallet-passphrase-validator-repeat");
                 return;
             }
