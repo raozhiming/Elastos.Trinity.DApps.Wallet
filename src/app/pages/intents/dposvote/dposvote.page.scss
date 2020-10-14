@@ -96,42 +96,39 @@
         }
     }
 
-    .btn-row {
-        margin-top: 28%;
-        width: 100%;
+    .btn {
+        height: 47px;
+        width: 46.5%;
+        position: fixed;
+        bottom: 20px;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
+        border-radius: 8px;
 
-        .btn {
-            height: 47px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 8px;
-        
-            ion-label {
-                font-size: 17px;
-                font-weight: 500;
-            }
+        ion-label {
+            font-size: 17px;
+            font-weight: 500;
         }
-      
-        .cancel {
-            box-shadow: 0 3px 15px 0 #ededf0;
-            background-color: #ffffff;
-    
-            ion-label {
-                color: #000000;
-            }
+    }
+
+    .cancel {
+        left: 2%;
+        box-shadow: 0 3px 15px 0 #ededf0;
+        background-color: #ffffff;
+
+        ion-label {
+            color: #000000;
         }
-        
-        .confirm {
-            box-shadow: 0 3px 15px 0 #ededf0;
-            background-color: #6e23d0;
-            
-            ion-label {
-                color: #ffffff;
-            }
+    }
+
+    .confirm {
+        right: 2%;
+        box-shadow: 0 3px 15px 0 #ededf0;
+        background-color: #6e23d0;
+
+        ion-label {
+            color: #ffffff;
         }
     }
 }
@@ -152,19 +149,17 @@
         }
     }
 
-    .btn-row {
-        .cancel {
-            box-shadow: 0 3px 6px 0 #151626;
-            background-color: #202039;
+    .cancel {
+        box-shadow: 0 3px 6px 0 #151626;
+        background-color: #202039;
 
-            ion-label {
-                color: #ffffff;
-            }
+        ion-label {
+            color: #ffffff;
         }
+    }
 
-        .confirm {
-            box-shadow: 0 3px 15px 0 #151626;
-        }
+    .confirm {
+        box-shadow: 0 3px 15px 0 #151626;
     }
 }
 

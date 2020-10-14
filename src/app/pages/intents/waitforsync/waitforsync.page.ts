@@ -60,7 +60,7 @@ export class WaitForSyncPage implements OnInit {
     ngOnInit() {
         this.zone.run(() => {
             this.init();
-            // this.native.setRootRouter('/dposvote');
+            // this.native.setRootRouter('/didtransaction');
         });
     }
 

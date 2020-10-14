@@ -8,15 +8,13 @@
         <div class="msg-container">
             <p>{{ 'didtransaction-intro' | translate }}</p>
         </div>
-        <ion-row class="btn-row">
-            <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelOperation()">
-                <ion-label>{{ 'cancel' | translate}}</ion-label>
-                <ion-ripple-effect></ion-ripple-effect>
-            </ion-col>
-            <ion-col class="btn confirm ion-activatable ripple" size="5.6" (click)="goTransaction()">
-                <ion-label>{{ 'confirm' | translate}}</ion-label>
-                <ion-ripple-effect></ion-ripple-effect>
-            </ion-col>
-        </ion-row>
+        <div class="btn cancel ion-activatable ripple" (click)="cancelOperation()">
+            <ion-label>{{ 'cancel' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </div>
+        <div class="btn confirm ion-activatable ripple" (click)="goTransaction()">
+            <ion-label>{{ 'confirm' | translate}}</ion-label>
+            <ion-ripple-effect></ion-ripple-effect>
+        </div>
     </ion-grid>
 </ion-content>
