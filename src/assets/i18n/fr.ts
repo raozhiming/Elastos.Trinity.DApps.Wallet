@@ -203,7 +203,8 @@ export const fr = {
     "dposvote-you-are-voting": "Vous votez!",
     "dposvote-transaction-fees": "Des frais de transaction de 0.0001 ELA seront prélevés",
     "dposvote-voting-for": "Vous allez voter pour:",
-    "dpostvote-with": "Avec:",
+    "dposvote-with": "Avec:",
+    "dposvote-revote": "Don't forget to re-vote when you spend any ELA from your main ELA wallet",
 
     // ESC transaction intent screen
     "esctransaction-title": "Transaction Ethereum",

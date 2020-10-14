@@ -203,7 +203,8 @@ export const en = {
     "dposvote-you-are-voting": "You are Voting!",
     "dposvote-transaction-fees": "0.0001 ELA transfaction fee will be charged",
     "dposvote-voting-for": "You are voting for:",
-    "dpostvote-with": "With:",
+    "dposvote-with": "With:",
+    "dposvote-revote": "Don't forget to re-vote when you spend any ELA from your main ELA wallet",
 
     // ESC transaction intent screen
     "esctransaction-title": "ETHSC Transaction",
