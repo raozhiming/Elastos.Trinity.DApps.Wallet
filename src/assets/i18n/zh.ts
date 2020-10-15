@@ -205,7 +205,7 @@ export const zh = {
     "dposvote-transaction-fees": "大约需要0.0001 ELA的交易费",
     "dposvote-voting-for": "您正在投票给:",
     "dposvote-with": "使用:",
-    "dposvote-revote": "Don't forget to re-vote when you spend any ELA from your main ELA wallet",
+    "dposvote-revote": "当您从ELA钱包中消费任意ELA后，请记得重新投票",
 
     // ESC transaction intent screen
     "esctransaction-title": "ETHSC 交易",
