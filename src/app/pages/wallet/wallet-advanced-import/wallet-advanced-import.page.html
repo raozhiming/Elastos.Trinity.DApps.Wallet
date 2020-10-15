@@ -4,7 +4,7 @@
       <ion-row class="txt-container">
         <ion-textarea
           autoGrow
-          placeholder="Paste Mnemonic"
+          placeholder="{{ 'paste-mnemonic' | translate }}"
           [(ngModel)]="mnemonicSentence"
           (ionChange)="onMnemonicSentenceChanged()"
           mode="ios"
