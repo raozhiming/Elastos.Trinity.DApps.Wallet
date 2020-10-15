@@ -44,6 +44,13 @@ export class SettingsPage implements OnInit {
     public available = 0;
     public settings = [
         {
+            route: "/launcher",
+            title: this.translate.instant("settings-add-wallet"),
+            subtitle: this.translate.instant("settings-add-wallet-subtitle"),
+            icon: '/assets/settings/wallet.svg',
+            iconDarkmode: '/assets/settings/darkmode/wallet.svg'
+        },
+        {
             route: "/wallet-manager",
             title: this.translate.instant("settings-my-wallets"),
             subtitle: this.translate.instant("settings-my-wallets-subtitle"),
@@ -57,13 +64,6 @@ export class SettingsPage implements OnInit {
             icon: '/assets/settings/dollar.svg',
             iconDarkmode: '/assets/settings/darkmode/dollar.svg'
         },
-  /*       {
-            route: "/launcher",
-            title: "Add Wallet",
-            subtitle: "Create or import a new wallet",
-            icon: '/assets/settings/wallet.svg',
-            iconDarkmode: '/assets/settings/darkmode/wallet.svg'
-        }, */
     ];
 
     public Util = Util;
@@ -81,5 +81,6 @@ export class SettingsPage implements OnInit {
     ionViewWillEnter() {
       this.appService.setBackKeyVisibility(true);
       this.appService.setTitleBarTitle(this.translate.instant("settings-title"));
+      this.theme.getTheme();
     }
 }

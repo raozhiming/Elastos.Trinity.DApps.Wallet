@@ -45,6 +45,8 @@ export const fr = {
     // Settings screen
     "settings-title": "Paramètres",
     "settings-general": "Général",
+    "settings-add-wallet": "New Wallet",
+    "settings-add-wallet-subtitle": "Create or import a new wallet",
     "settings-my-wallets": "Mes portefeuilles",
     "settings-my-wallets-subtitle": "Sauvegardez vos portefeuilles et accédez à leurs paramètres",
     "settings-currency": "Devise",

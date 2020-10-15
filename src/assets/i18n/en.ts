@@ -45,6 +45,8 @@ export const en = {
     // Wallet Settings screen
     'settings-title': 'Settings',
     "settings-general": "General",
+    "settings-add-wallet": "New Wallet",
+    "settings-add-wallet-subtitle": "Create or import a new wallet",
     "settings-my-wallets": "My Wallets",
     "settings-my-wallets-subtitle": "Backup wallets and access their individual settings",
     "settings-currency": "Currency",
