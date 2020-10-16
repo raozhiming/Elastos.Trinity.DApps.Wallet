@@ -17,13 +17,13 @@ export const fr = {
     'click-to-load-more': "Toucher pour voir davantage",
     'transaction-fail': 'Erreur de transaction',
     "confirmTitle": "Confirmez-vous?",
-    "refresh-pulling-text": "Update Wallet",
-    "refresh-refreshing-text": "Updating Wallet...",
-    "intent-select-wallet": "Select Wallet",
+    "refresh-pulling-text": "Rafraîchir",
+    "refresh-refreshing-text": "Mise à jour du portefeuille...",
+    "intent-select-wallet": "Sélect. du portefeuille",
 
     // Generic messages
-    "copied": "Copied to clipboard!",
-    'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
+    "copied": "Copié dans le presse-papier!",
+    'text-did-balance-not-enough': "Enregistrer des informations sur la châine d'identité requièrt une faible somme d'ELA pour les frais de transactions. Veuillez d'abord transférer un petit montant (ex: 0,1 ELA) depuis votre portefeuille principal vers le portefeuille DID!",
     'amount-null': "Veuillez saisir un montant pour la transaction",
     "amount-invalid": "Veuillez saisir un montant valide",
     "insuff-balance": "Solde insuffisant",
@@ -39,14 +39,14 @@ export const fr = {
     "you-have-n-wallets": "VOUS AVEZ {{walletsCount}} JETONS",
     "synchronized": "Synchronisé {{progress}}%",
     "sync-progress": "Synchronisation {{progress}}%",
-    "ela-erc20": "ELASTOS ERC20 TOKEN",
+    "ela-erc20": "JETON ERC20 ELASTOS",
     "coin-list": "Liste des jetons",
 
     // Settings screen
     "settings-title": "Paramètres",
     "settings-general": "Général",
-    "settings-add-wallet": "New Wallet",
-    "settings-add-wallet-subtitle": "Create or import a new wallet",
+    "settings-add-wallet": "Nouveau portefeuille",
+    "settings-add-wallet-subtitle": "Créer ou importer un portefeuille",
     "settings-my-wallets": "Mes portefeuilles",
     "settings-my-wallets-subtitle": "Sauvegardez vos portefeuilles et accédez à leurs paramètres",
     "settings-currency": "Devise",
@@ -75,7 +75,7 @@ export const fr = {
     // Coin home screen
     "coin-overview": "Jeton {{coinName}} - Aperçu",
     "coin-new-transactions-today": "{{ todaysTransactions }} NOUVELLE(S) TRANSACTION(S) AUJOURD'HUI",
-    "coin-balance": "Balance",
+    "coin-balance": "Solde",
     "coin-action-recharge": "RECHARGER",
     "coin-action-withdraw": "TRANSFERER",
     "coin-action-send": "ENVOYER",
@@ -99,10 +99,10 @@ export const fr = {
     "text-coin-close-warning": "Le jeton sera supprimé de la liste",
 
     // Coin select screen
-    "coin-select-title": "Selection du Jeton",
+    "coin-select-title": "Sélection du Jeton",
 
     // Coin payment
-    "payment-title": "Payment",
+    "payment-title": "Paiement",
 
     // Coin transfer screen
     "coin-transfer-send-title": "Envoi depuis {{coinName}}",
@@ -112,8 +112,8 @@ export const fr = {
     "transfer-to": "Transfert vers",
     "transfer-amount": "Montant du transfert",
     "transfer-receiver-address": "Adresse de destination",
-    "transfer-send-ela": "Send ELA",
-    "transfer-remain-balance": "Balance Remaining {{amount}}",
+    "transfer-send-ela": "Envoi d'ELA",
+    "transfer-remain-balance": "Solde restant {{amount}}",
 
     // Coin receive screen
     "coin-receive-title": "Réception de {{coinName}}",
@@ -158,7 +158,7 @@ export const fr = {
     "ela-mainchain": "Elastos MainChain",
     "ela-idchain": "Elastos ID SideChain",
     "ela-ethchain": "Elastos ETH SideChain",
-    "erc-20-token": "ERC20 Token",
+    "erc-20-token": "Jeton ERC20",
 
     // Coin add erc20 screen
     "coin-adderc20-title": "Ajout de jeton ERC20",
@@ -179,20 +179,20 @@ export const fr = {
     "wallet-manager-add-wallet": "Ajouter un portefeuille",
 
     // Access intent screen
-    "access-title": "Wallet Access",
+    "access-title": "Accès portefeuille",
     "access-subtitle-wallet-access-from": "Demande d'informations:",
     "access-subtitle-access-mnemonic-from": "Accès au Mnémonique (!):",
     "access-request-for-info": "Ceci est une demande d'accès aux informations de votre portefeuille.",
     "access-reason": "Raison",
     "access-data-access": "Accès aux données",
-    'access-mnemonic': 'Request Mnemonic',
-    'elaaddress': 'ELA Address',
-    'elaamount': 'ELA Balance',
-    'ethaddress': 'ETHSC Address',
-    'requester': 'Request from',
-    'text-allow': 'Allow',
-    'text-warning': 'Warning',
-    'text-share-mnemonic-warning': 'Mnemonic is the only proof of blockchain assets. Please confirm that there is no risk of leakage before sharing!',
+    'access-mnemonic': 'Accès au mnémonique',
+    'elaaddress': 'Adresse ELA',
+    'elaamount': "Solde d'ELA",
+    'ethaddress': 'Adresses ETHSC',
+    'requester': 'Demandé par',
+    'text-allow': 'Autoriser',
+    'text-warning': 'Attention',
+    'text-share-mnemonic-warning': 'Le mnémonique donne un accès total à tous vos actifs numériques. Veuillez confirmez que vous le partagez avec un tiers de confiance!',
 
     // DID transaction intent screen
     "didtransaction-title": "Publication d'identité",
@@ -201,12 +201,12 @@ export const fr = {
     "didtransaction-intro": "Vous vous apprêtez à publier votre identité sur la châine publique.",
 
     // DPos voting intent screen
-    "dposvote-title": "Vote for Supernodes",
+    "dposvote-title": "Vote pour les Supernodes",
     "dposvote-you-are-voting": "Vous votez!",
     "dposvote-transaction-fees": "Des frais de transaction de 0.0001 ELA seront prélevés",
     "dposvote-voting-for": "Vous allez voter pour:",
     "dposvote-with": "Avec:",
-    "dposvote-revote": "Don't forget to re-vote when you spend any ELA from your main ELA wallet",
+    "dposvote-revote": "Pensez à voter à nouveau après avoir utilisé des ELA de votre portefeuille principal.",
 
     // ESC transaction intent screen
     "esctransaction-title": "Transaction Ethereum",
@@ -217,7 +217,7 @@ export const fr = {
     "esctransaction-fees": "Frais:",
 
     // Wait for sync
-    "waitforsync-syncing": "Syncing",
+    "waitforsync-syncing": "Synchronisation",
     "waitforsync-loading": "En attente...",
     "waitforsync-intro": "Cette opération pourra continuer une fois toutes vos données synchronisées depuis la châine publique.",
 
@@ -235,8 +235,8 @@ export const fr = {
     'type-menmonic-import': 'Saisissez les mots de votre mnémonique pour importer votre portefeuille.',
     'import-text-word-sucess': 'Portefeuille importé depuis votre mnémonique',
     'next-four-words': '4 mots suivants',
-    'create-wallet': 'Create Wallet',
-    'import-wallet': 'Import Wallet',
+    'create-wallet': 'Créer Portefeuille',
+    'import-wallet': 'Importer Portefeuiller',
     "mnemonic-import-missing-words": "Veuillez saisir tous les mots avant de continuer",
     "mnemonic-check-title": "Vérification du mnémonique",
     "memory-written-down": "Je l\'ai noté",
@@ -247,10 +247,10 @@ export const fr = {
     "help:mnemonic-password": 'Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Ne l\'oubliez pas, il ne peut pas être retrouvé.',
 
     // Advanced mnemonic import screen
-    'advanced-import': 'Advanced Import',
-    'advanced-import-intro': 'You can paste and enter your mnemonic phrase in one line.',
-    'advanced-import-msg': '*Spaces are required between words',
-    'paste-mnemonic': 'Paste or Enter Mnemonic',
+    'advanced-import': 'Importation avancée',
+    'advanced-import-intro': 'Vous pouvez coller votre mnémonique entier sur une seule ligne ici.',
+    'advanced-import-msg': '*Espace requis entre chaque mot',
+    'paste-mnemonic': 'Coller ou saisir le mnémonique',
 
     // Export mnemonic screen
     'text-export-mnemonic': 'Exporter le mnémonique',
