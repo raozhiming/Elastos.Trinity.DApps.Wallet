@@ -24,10 +24,10 @@ import { NgModule, Injectable, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@ang
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { AlertController, IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
@@ -98,24 +98,49 @@ import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { HelpComponent } from './components/help/help.component';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
+import { RewriteFrames } from '@sentry/integrations';
 
 Sentry.init({
-  dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741"
+  dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741",
+  release: "default",
+  integrations: [
+    new RewriteFrames(),
+  ]
 });
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor(public alertCtrl: AlertController, public translate: TranslateService) {}
 
   handleError(error) {
     console.error("Globally catched exception:", error);
 
     console.log(document.URL);
     // Only send reports to sentry if we are not debugging.
-    if (document.URL.includes('localhost')) { // Prod builds or --nodebug CLI builds use "http://localhost"
-      Sentry.captureException(error.originalError || error);
+    if (document.URL.includes('org.elastos.trinity.dapp.wallet')) { // Prod builds or --nodebug CLI builds use the app package id instead of a local IP
+        /*const eventId = */ Sentry.captureException(error.originalError || error);
+        //Sentry.showReportDialog({ eventId });
     }
-  }
+    // TODO: Build error if use this.popup
+    // this.popup.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
+    this.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
+}
+
+public ionicAlert(title: string, subTitle?: string, okText?: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+      this.alertCtrl.create({
+          header : this.translate.instant(title),
+          subHeader: subTitle ? this.translate.instant(subTitle) : '',
+          backdropDismiss: false,
+          buttons: [{
+              text: okText ? okText : this.translate.instant('confirm'),
+              handler: () => {
+                  resolve();
+              }
+          }]
+      }).then(alert => alert.present());
+  });
+}
 }
 
 /** 通过类引用方式解析国家化文件 */
