@@ -31,7 +31,7 @@
     "@ionic/angular": "^4.11.7",
     "@ionic/storage": "2.2.0",
     "@ngx-translate/core": "^11.0.1",
-    "@sentry/browser": "^5.21.4",
+    "@sentry/browser": "~5.21.4",
     "@teamhive/lottie-player": "^1.0.0",
     "angularx-qrcode": "^1.6.1",
     "bignumber.js": "^9.0.0",
