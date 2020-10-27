@@ -53,7 +53,11 @@ export class AppService {
     }
 
     public runningAsAService(): boolean {
-        return this.startupInfo.startupMode === 'service';
+        return this.startupInfo.startupMode === AppManagerPlugin.StartupMode.SERVICE;
+    }
+
+    public runningAsMainUI(): boolean {
+        return this.startupInfo.startupMode === AppManagerPlugin.StartupMode.APP;
     }
 
     public getStartupMode(): string {

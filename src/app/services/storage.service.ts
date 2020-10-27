@@ -38,7 +38,12 @@ export class LocalStorage {
         return new Promise((resolve) => {
             appManager.getSetting(key, (val) => {
                 if (typeof(val) === "string") {
-                    val = JSON.parse(val);
+                    try {
+                        val = JSON.parse(val);
+                    }
+                    catch (e) {
+                        // Do nothing. Saved value is probably a real string
+                    }
                 }
                 resolve(val);
             }, (err) => {

@@ -185,8 +185,10 @@ export abstract class StandardSubWallet extends SubWallet {
     * Updates current SPV synchonization progress information for this coin.
     */
    public updateSyncProgress(progress: number, lastBlockTime: number) {
+        this.syncTimestamp = lastBlockTime*1000;
+
         if (lastBlockTime) {
-            const userReadableDateTime = Util.dateFormat(new Date(lastBlockTime * 1000), 'YYYY-MM-DD HH:mm:ss');
+            const userReadableDateTime = Util.dateFormat(new Date(this.syncTimestamp), 'YYYY-MM-DD HH:mm:ss');
             this.lastBlockTime = userReadableDateTime;
         } else { // for ETHSC, no lastBlockTime
             this.lastBlockTime = '';

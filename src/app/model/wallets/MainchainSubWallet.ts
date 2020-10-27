@@ -26,4 +26,16 @@ export class MainchainSubWallet extends MainAndIDChainSubWallet {
 
         return super.getTransactionName(transaction, translate);
     }
+
+    /**
+     * Returns the first payment address for this ELA wallet. This should be a constant address
+     * for a given mnemonic.
+     */
+    public async getRootPaymentAddress(): Promise<string> {
+        let allAddresses = await this.masterWallet.walletManager.spvBridge.getAllAddresses(this.masterWallet.id, this.id, 0, false);
+        if (!allAddresses || !allAddresses.Addresses || allAddresses.Addresses.length == 0)
+            return null;
+
+        return allAddresses.Addresses[0];
+    }
 }

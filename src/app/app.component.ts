@@ -34,6 +34,7 @@ import { NavService } from './services/nav.service';
 import { IntentService } from './services/intent.service';
 import { CurrencyService } from './services/currency.service';
 import { CoinService } from './services/coin.service';
+import { BackupRestoreService } from './services/backuprestore.service';
 
 @Component({
     selector: 'app-root',
@@ -57,7 +58,8 @@ export class AppComponent {
         private currencyService: CurrencyService,
         public popupProvider: PopupProvider,
         public modalCtrl: ModalController,
-        private coinService: CoinService
+        private coinService: CoinService,
+        private backupService:BackupRestoreService
     ) {
         this.initializeApp();
     }
@@ -82,6 +84,11 @@ export class AppComponent {
                     this.navService.showStartupScreen();
                 }
             });
+
+            // Backup service runs only in the UI because it requires user interaction sometimes, and we don't
+            // wan't data model overlaps/conflicts with the background service or with intents.
+            if (this.appService.runningAsMainUI())
+                await this.backupService.init();
 
             await this.walletManager.init();
             await this.intentService.init();

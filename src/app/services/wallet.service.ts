@@ -46,8 +46,11 @@ import { PrefsService } from './prefs.service';
 import BigNumber from 'bignumber.js';
 import { IDChainSubWallet } from '../model/wallets/IDChainSubWallet';
 import { MainchainSubWallet } from '../model/wallets/MainchainSubWallet';
+import { BackupRestoreService } from './backuprestore.service';
+import { StandardSubWallet } from '../model/wallets/StandardSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
+declare let walletManager: WalletPlugin.WalletManager;
 
 class TransactionMapEntry {
     Code: number = null;
@@ -74,6 +77,8 @@ type TransactionMap = {
     providedIn: 'root'
 })
 export class WalletManager {
+    public static instance: WalletManager = null;
+
     public masterWallets: {
         [index: string]: MasterWallet
     } = {};
@@ -103,8 +108,10 @@ export class WalletManager {
         private http: HttpClient,
         public jsonRPCService: JsonRPCService,
         public ethJsonRPCService: EthJsonRPCService,
-        private prefs: PrefsService
+        private prefs: PrefsService,
+        private backupService: BackupRestoreService
     ) {
+        WalletManager.instance = this;
     }
 
     async init() {
@@ -128,7 +135,7 @@ export class WalletManager {
             });
             this.jsonRPCService.init();
 
-            this.startSyncAllWallet();
+            await this.startSyncAllWallet();
 
             this.localStorage.get('hasPrompt').then((val) => {
                 this.hasPromptTransfer2IDChain = val ? val : false;
@@ -197,7 +204,7 @@ export class WalletManager {
                     this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
 
                     if (extendedInfo.subWallets.length < 3) {
-                        // open IDChain and ETHSC automatic
+                        // open IDChain and ETHSC automatically
                         let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
                         if (!subwallet) {
                             console.log('Opening IDChain');
@@ -214,7 +221,13 @@ export class WalletManager {
                 }
 
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
+
+                if (this.appService.runningAsMainUI())
+                    await this.backupService.setupBackupForWallet(this.masterWallets[masterId]);
             }
+
+            if (this.appService.runningAsMainUI())
+                await this.backupService.checkSync(Object.values(this.masterWallets));
         }
         catch (error) {
             console.error(error);
@@ -339,6 +352,12 @@ export class WalletManager {
 
         this.setRecentWalletId(id);
 
+        // Add this new wallet to the backup service
+        await this.backupService.setupBackupForWallet(this.getMasterWallet(id));
+
+        // Sync with remote
+        await this.backupService.checkSync(this.getWalletsList());
+
         this.startWalletSync(id);
 
         // Go to wallet's home page.
@@ -352,6 +371,9 @@ export class WalletManager {
      * Destroy a master wallet, active or not, base on its id
      */
     async destroyMasterWallet(id: string) {
+        // Stop dealing with this wallet in the backup service
+        await this.backupService.removeBackupTrackingForWallet(id);
+
         // Destroy the wallet in the wallet plugin
         await this.spvBridge.destroyWallet(id);
 
@@ -360,6 +382,9 @@ export class WalletManager {
 
         // Destroy from our local model
         delete this.masterWallets[id];
+
+        // Notify some listeners
+        this.events.publish("masterwallet:destroyed", id);
 
         if (Object.values(this.masterWallets).length > 0) {
 
@@ -382,13 +407,18 @@ export class WalletManager {
      * Save master wallets list to permanent local storage.
      */
     public async saveMasterWallet(masterWallet: MasterWallet) {
+        if (this.appService.runningAsAService()) {
+            console.log("NOT saving the master wallet from the background service to avoid conflicts with the UI model that would save at the same time");
+            return;
+        }
+
         const extendedInfo = masterWallet.getExtendedWalletInfo();
         console.log("Saving wallet extended info", masterWallet.id, extendedInfo);
 
         await this.localStorage.setExtendedMasterWalletInfo(masterWallet.id, extendedInfo);
     }
 
-    public startSyncAllWallet() {
+    public async startSyncAllWallet() {
         for (const masterWallet of Object.values(this.masterWallets)) {
             this.startWalletSync(masterWallet.id);
         }
@@ -398,39 +428,21 @@ export class WalletManager {
      * Inform the background service (via RPC) that we want to start syncing a wallet.
      * If there is another wallet syncing, its on going sync will be stopped first.
      */
-    public startWalletSync(masterId: WalletID) {
+    public async startWalletSync(masterId: WalletID): Promise<void> {
         console.log("Requesting sync service to start syncing wallet " + masterId);
 
-        let messageParams: RPCStartWalletSyncParams = {
-            masterId: masterId,
-            chainIds: []
-        };
-
         // Add only standard subwallets to SPV sync request
+        let chainIds: StandardCoinName[] = [];
         for (let subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
             if (subWallet.type == CoinType.STANDARD)
-                messageParams.chainIds.push(subWallet.id as StandardCoinName);
+                chainIds.push(subWallet.id as StandardCoinName);
         }
 
-        let rpcMessage: InAppRPCMessage = {
-            method: RPCMethod.START_WALLET_SYNC,
-            params: messageParams,
-            startupMode: this.appService.getStartupMode()
-        };
-
-        if (this.appService.runningAsAService()) {
-            this.syncService.syncStartSubWallets(messageParams.masterId, messageParams.chainIds);
-        } else {
-            appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), () => {
-                // Nothing to do
-            }, (err) => {
-                console.log("Failed to send start RPC message to the sync service", err);
-            });
-        }
+        await this.startSubWalletsSync(masterId, chainIds);
     }
 
     // TODO: When wallet is destroyed
-    private stopWalletSync(masterId: WalletID) {
+    public async stopWalletSync(masterId: WalletID): Promise<void> {
         console.log("Requesting sync service to stop syncing wallet " + masterId);
 
         // Add only standard subwallets to SPV stop sync request
@@ -440,32 +452,73 @@ export class WalletManager {
                 chainIds.push(subWallet.id as StandardCoinName);
         }
 
-        this.stopSubWalletsSync(masterId, chainIds);
+        await this.stopSubWalletsSync(masterId, chainIds);
     }
 
-    private stopSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]) {
-        console.log("Requesting sync service to stop syncing some subwallets for wallet " + masterId);
+    private startSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]): Promise<void> {
+        return new Promise(async (resolve, reject)=>{
+            let messageParams: RPCStartWalletSyncParams = {
+                masterId: masterId,
+                chainIds: subWalletIds
+            };
 
-        let messageParams: RPCStopWalletSyncParams = {
-            masterId: masterId,
-            chainIds: subWalletIds
-        };
+            let rpcMessage: InAppRPCMessage = {
+                method: RPCMethod.START_WALLET_SYNC,
+                params: messageParams,
+                startupMode: this.appService.getStartupMode()
+            };
 
-        let rpcMessage: InAppRPCMessage = {
-            method: RPCMethod.STOP_WALLET_SYNC,
-            params: messageParams,
-            startupMode: this.appService.getStartupMode()
-        };
-
-        appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), () => {
-            // Nothing to do
-        }, (err) => {
-            console.log("Failed to send stop RPC message to the sync service:", err);
+            if (this.appService.runningAsAService()) {
+                await this.syncService.syncStartSubWallets(messageParams.masterId, messageParams.chainIds);
+                resolve();
+            } else {
+                appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), () => {
+                    resolve();
+                }, (err) => {
+                    // Service probably not running
+                    console.log("Failed to send start RPC message to the sync service", err);
+                    resolve();
+                });
+            }
         });
     }
 
-    public stopSubWalletSync(masterId: WalletID, subWalletId: StandardCoinName) {
-        this.stopSubWalletsSync(masterId, [subWalletId]);
+    private stopSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]): Promise<void> {
+        return new Promise(async (resolve, reject)=>{
+            console.log("Requesting sync service to stop syncing some subwallets for wallet " + masterId);
+
+            let messageParams: RPCStopWalletSyncParams = {
+                masterId: masterId,
+                chainIds: subWalletIds
+            };
+
+            let rpcMessage: InAppRPCMessage = {
+                method: RPCMethod.STOP_WALLET_SYNC,
+                params: messageParams,
+                startupMode: this.appService.getStartupMode()
+            };
+
+            if (this.appService.runningAsAService()) {
+                await this.syncService.syncStopSubWallets(messageParams.masterId, messageParams.chainIds);
+                resolve();
+            } else {
+                appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), () => {
+                    resolve();
+                }, (err) => {
+                    // Service probably not running
+                    console.warn("Failed to send stop RPC message to the sync service:", err);
+                    resolve();
+                });
+            }
+        });
+    }
+
+    public async startSubWalletSync(masterId: WalletID, subWalletId: StandardCoinName): Promise<void> {
+        await this.startSubWalletsSync(masterId, [subWalletId]);
+    }
+
+    public async stopSubWalletSync(masterId: WalletID, subWalletId: StandardCoinName): Promise<void> {
+        await this.stopSubWalletsSync(masterId, [subWalletId]);
     }
 
     /**
@@ -560,8 +613,24 @@ export class WalletManager {
         this.updateSyncProgress(masterId, chainId, result.Progress, result.LastBlockTime);
     }
 
-    private updateSyncProgress(masterId: WalletID, chainId: StandardCoinName, progress: number, lastBlockTime: number) {
-        this.masterWallets[masterId].updateSyncProgress(chainId, progress, lastBlockTime);
+    private async updateSyncProgress(masterId: WalletID, chainId: StandardCoinName, progress: number, lastBlockTime: number) {
+        let masterWallet = this.getMasterWallet(masterId);
+        if (!masterWallet) {
+            console.warn("updateSyncProgress() called but wallet with ID", masterId, "does not exist!");
+            return;
+        }
+
+        masterWallet.updateSyncProgress(chainId, progress, lastBlockTime);
+
+        let subWallet = masterWallet.getSubWallet(chainId) as StandardSubWallet;
+        console.log("DEBUG updateSyncProgress", masterId, chainId, masterWallet.getSubWallets())
+        // Seems like we can sometimes receive an update progress about a subwallet not yet added. Reason unknown for now.
+        if (!subWallet) {
+            console.warn("updateSyncProgress() called but subwallet with ID", chainId, "does not exist in wallet!", masterWallet);
+            return;
+        }
+
+        await this.backupService.onSyncProgress(masterWallet, subWallet);
 
         if (!this.hasPromptTransfer2IDChain && (chainId === StandardCoinName.IDChain)) {
             let elaProgress = this.masterWallets[masterId].subWallets[StandardCoinName.ELA].progress;
