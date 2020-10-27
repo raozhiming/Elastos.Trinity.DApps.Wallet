@@ -137,10 +137,15 @@ export class ETHChainSubWallet extends StandardSubWallet {
         const gasPrice = await web3.eth.getGasPrice();
         const toAmountSend = web3.utils.toWei(toAmount.toString());
 
-        let method = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE);
+        const method = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE);
 
-        // Estimate gas cost
-        let gasLimit: number = await method.estimateGas();
+        let gasLimit = 100000;
+        try {
+            // Estimate gas cost
+            gasLimit = await method.estimateGas();
+        } catch (error) {
+            console.log('estimateGas error:', error);
+        }
 
         const data = method.encodeABI();
         return this.masterWallet.walletManager.spvBridge.createTransferGeneric(
