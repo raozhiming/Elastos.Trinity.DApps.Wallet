@@ -123,7 +123,8 @@ export class SentryErrorHandler implements ErrorHandler {
     }
     // TODO: Build error if use this.popup
     // this.popup.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
-    this.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
+    // TODO: open it after release
+    // this.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
 }
 
 public ionicAlert(title: string, subTitle?: string, okText?: string): Promise<any> {
