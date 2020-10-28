@@ -133,11 +133,10 @@ export class ERC20SubWallet extends SubWallet {
         this.masterWallet.walletManager.events.publish(eventId, this.id);
     }
 
-    public getTransactions(startIndex: number): Promise<any> {
-        // TODO: How to get all transactions that happened between a user account and a ERC20 contract?
-        // Do we have to make a local cache as this may be slow to check all blocks for transactions?
-        // After the SPV SDK is synced and we get all transactions, we can probably filter transfers to/from the
-        // ERC20 contract and cache it.
+    public async getTransactions(startIndex: number): Promise<any> {
+        // let allTransactions = await this.masterWallet.walletManager.spvBridge.getTokenTransactions(this.masterWallet.id, startIndex, '', this.id);
+        // console.log("Get all transaction count for coin "+this.id+": ", allTransactions && allTransactions.Transactions ? allTransactions.Transactions.length : -1, "startIndex: ", startIndex);
+        // return allTransactions;
         return Promise.resolve([]);
     }
 
@@ -181,6 +180,7 @@ export class ERC20SubWallet extends SubWallet {
         let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
         let gasPrice = await this.web3.eth.getGasPrice();
 
+
         console.log('createPaymentTransaction toAddress:', toAddress, ' amount:', amount, 'gasPrice:', gasPrice);
 
         // Convert the Token amount (ex: 20 TTECH) to contract amount (=token amount (20) * 10^decimals)
@@ -188,8 +188,13 @@ export class ERC20SubWallet extends SubWallet {
 
         let method = erc20Contract.methods.transfer(toAddress, amountWithDecimals);
 
-        // Estimate gas cost
-        let gasLimit: number = await method.estimateGas();
+        let gasLimit = 200000;
+        try {
+            // Estimate gas cost
+            gasLimit = await method.estimateGas();
+        } catch (error) {
+            console.log('estimateGas error:', error);
+        }
 
         const rawTx =
         await this.masterWallet.walletManager.spvBridge.createTransferGeneric(

@@ -139,7 +139,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
 
         const method = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE);
 
-        let gasLimit = 100000;
+        let gasLimit = 200000;
         try {
             // Estimate gas cost
             gasLimit = await method.estimateGas();
