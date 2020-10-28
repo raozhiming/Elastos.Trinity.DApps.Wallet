@@ -38,6 +38,7 @@ import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import { IonSlides, Events } from '@ionic/angular';
 import { ERC20SubWallet } from 'src/app/model/wallets/ERC20SubWallet';
+import { BackupRestoreService } from 'src/app/services/backuprestore.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -48,7 +49,6 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
     styleUrls: ['./wallet-home.page.scss'],
 })
 export class WalletHomePage implements OnInit, OnDestroy {
-
     @ViewChild('slider', {static: false}) slider: IonSlides;
 
     public slideOpts = {
@@ -61,6 +61,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
     public masterWallet: MasterWallet = null;
     public masterWalletList: MasterWallet[] = [];
     public isSingleWallet = false;
+    public resolvingBackupService = false;
 
     // Helpers
     public Util = Util;
@@ -82,6 +83,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
         public theme: ThemeService,
         public uiService: UiService,
         private zone: NgZone,
+        private backupService: BackupRestoreService
     ) {
     }
 
@@ -192,5 +194,14 @@ export class WalletHomePage implements OnInit, OnDestroy {
 
     isStandardSubwallet(subWallet: SubWallet) {
         return subWallet instanceof StandardSubWallet;
+    }
+
+    enableHiveBackup() {
+        this.resolvingBackupService = true;
+        this.backupService.activateVaultAccess();
+    }
+
+    shouldPromptToEnableHiveVaultForBackup(): boolean {
+        return !this.resolvingBackupService && this.backupService.initialized() && !this.backupService.vaultIsConfigured();
     }
 }

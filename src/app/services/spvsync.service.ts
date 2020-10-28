@@ -30,6 +30,8 @@ import { PopupProvider } from './popup.service';
 import { WalletManager } from './wallet.service';
 import { LocalStorage } from './storage.service';
 import { TranslateService } from '@ngx-translate/core';
+import { BackupRestoreService } from './backuprestore.service';
+import { StandardSubWallet } from '../model/wallets/StandardSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let notificationManager: NotificationManagerPlugin.NotificationManager;
@@ -123,30 +125,30 @@ export class SPVSyncService {
         }
     }
 
-    public async syncStartSubWallets(masterId: WalletID, chainIds: StandardCoinName[]) {
+    public async syncStartSubWallets(masterId: WalletID, chainIds: StandardCoinName[]): Promise<void> {
         console.log("SubWallets sync is starting:", masterId);
 
         for (let chainId of chainIds) {
-            this.spvBridge.syncStart(masterId, chainId);
+            await this.spvBridge.syncStart(masterId, chainId);
         }
     }
 
-    private syncStopSubWallets(masterId: WalletID, chainIds: StandardCoinName[]) {
+    public async syncStopSubWallets(masterId: WalletID, chainIds: StandardCoinName[]): Promise<void> {
         console.log("SubWallets sync is stopping:", masterId);
 
         for (let chainId of chainIds) {
-            this.spvBridge.syncStop(masterId, chainId);
+            await this.spvBridge.syncStop(masterId, chainId);
         }
     }
 
-    private handleAppManagerMessage(message: AppManagerPlugin.ReceivedMessage) {
+    private async handleAppManagerMessage(message: AppManagerPlugin.ReceivedMessage) {
         if (!message || !message.message)
             return;
 
         let rpcMessage = JSON.parse(message.message) as InAppRPCMessage;
         switch (rpcMessage.method) {
             case RPCMethod.GET_WALLET_SYNC_PROGRESS:
-                // TODO: upgraged spvsdk -- Get sync progress by api when it doesn't connet to node.
+                // TODO: upgraded spvsdk -- Get sync progress by api when it doesn't connect to node.
                 let sendRPCMessage: InAppRPCMessage = {
                   method: RPCMethod.SEND_WALLET_SYNC_PROGRESS,
                   params: this.walletsSyncProgress,
@@ -166,11 +168,11 @@ export class SPVSyncService {
                 break;
             case RPCMethod.START_WALLET_SYNC:
                 let startWalletSyncParams = rpcMessage.params as RPCStartWalletSyncParams;
-                this.syncStartSubWallets(startWalletSyncParams.masterId, startWalletSyncParams.chainIds);
+                await this.syncStartSubWallets(startWalletSyncParams.masterId, startWalletSyncParams.chainIds);
                 break;
             case RPCMethod.STOP_WALLET_SYNC:
                 let stopWalletSyncParams = rpcMessage.params as RPCStopWalletSyncParams;
-                this.syncStopSubWallets(stopWalletSyncParams.masterId, stopWalletSyncParams.chainIds);
+                await this.syncStopSubWallets(stopWalletSyncParams.masterId, stopWalletSyncParams.chainIds);
                 break;
             default:
                 break;
@@ -178,7 +180,8 @@ export class SPVSyncService {
     }
 
     private async handleBlockSyncProgressEvent(masterId: WalletID, chainId: StandardCoinName, event: SPVWalletMessage) {
-        // this.walletManager.masterWallets[masterId].updateSyncProgress(chainId, event.Progress, event.LastBlockTime);
+        this.walletManager.masterWallets[masterId].updateSyncProgress(chainId, event.Progress, event.LastBlockTime);
+
         if (!this.walletsSyncProgress[masterId]) {
             this.walletsSyncProgress[masterId] = {};
         }

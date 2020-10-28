@@ -34,6 +34,7 @@ import { NavService } from './services/nav.service';
 import { IntentService } from './services/intent.service';
 import { CurrencyService } from './services/currency.service';
 import { CoinService } from './services/coin.service';
+import { BackupRestoreService } from './services/backuprestore.service';
 
 @Component({
     selector: 'app-root',
@@ -57,7 +58,8 @@ export class AppComponent {
         private currencyService: CurrencyService,
         public popupProvider: PopupProvider,
         public modalCtrl: ModalController,
-        private coinService: CoinService
+        private coinService: CoinService,
+        private backupService:BackupRestoreService
     ) {
         this.initializeApp();
     }

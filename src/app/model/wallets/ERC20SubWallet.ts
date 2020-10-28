@@ -126,6 +126,7 @@ export class ERC20SubWallet extends SubWallet {
 
         // Update the "last sync" date. Just consider this http call date as the sync date for now
         this.timestamp = new Date().getTime();
+        this.syncTimestamp = this.timestamp;
         this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
         this.progress = 100;
 
