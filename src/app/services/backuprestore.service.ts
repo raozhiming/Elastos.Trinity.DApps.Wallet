@@ -14,18 +14,24 @@ import { AppService } from './app.service';
 import { WalletManager } from './wallet.service';
 import { Events } from '@ionic/angular';
 import { CoinService } from './coin.service';
+import { ResolveEnd } from '@angular/router';
 
+declare let appManager: AppManagerPlugin.AppManager;
 declare let walletManager: WalletPlugin.WalletManager;
 
 @Injectable({
   providedIn: 'root'
 })
 export class BackupRestoreService {
-  private userVault: HivePlugin.Vault;
+  private static SHOW_DEBUG_LOGS = true;
+
+  private initializationComplete = false;
+  private userVault: HivePlugin.Vault = null;
   private backupRestoreHelper: BackupRestoreHelper;
   private subWalletBackupInProgress = false;
   private walletsList: MasterWallet[] = [];
   private fullySuccessfulSyncExpected = true;
+  private activeNetwork: string = null; // MainNet, TestNet, PrvNet
 
   constructor(private http: HttpClient, private storage: LocalStorage, private appService: AppService,
     private events: Events, private coinService: CoinService) {
@@ -34,26 +40,63 @@ export class BackupRestoreService {
   async init() {
     this.log("Initializing");
 
+    await this.loadActiveNetwork();
+
     // Check if we have a vault already configured or not
     let userDID = await this.storage.get("backup-user-with-vault-did");
     if (userDID) {
       // DID and vault already configured - we can automatically initialize the backup mechanism.
-      this.log("A user DID is already configured for the backup service. Using it.", userDID);
+      this.logDebug("A user DID is already configured for the backup service. Using it.", userDID);
       await this.setupBackupHelper();
     }
+
+    this.initializationComplete = true;
+  }
+
+  public initialized(): boolean {
+    return this.initializationComplete;
+  }
+
+  public vaultIsConfigured(): boolean {
+    return (this.userVault != null);
+  }
+
+  /**
+   * Gets and saves current blockchain network (mainnet, testnet) from the preferences.
+   */
+  private async loadActiveNetwork(): Promise<void> {
+    return new Promise((resolve, reject)=>{
+      appManager.getPreference("chain.network.type", (networkCode) => {
+        this.activeNetwork = networkCode;
+        resolve();
+      }, (err)=>{
+        reject(err);
+      });
+    });
   }
 
   // TODO: how to make it easier for all apps to connect to Hive, without opening the did app every time
   // Can we make the app did intent silent ? -> Problem: it requires master password
 
-  // TODO: by manual button click
+  /**
+   * Called whenever user's hive vault is enabled in the app. From this point, we can setup the backup helper
+   * and start syncing to the vault.
+   */
   public async activateVaultAccess() {
+    if (!this.appService.runningAsMainUI()) {
+      this.logError("BackupRestoreService should be called only from the UI!");
+    }
+
     await this.setupBackupHelper();
+
+    // After a manual vault activation, we start a sync immediatelly, to be able to restore sync states
+    // after a wallet reinstallation.
+    await this.checkSync(WalletManager.instance.getWalletsList());
   }
 
   private ensureRunningInUI() {
     if (!this.appService.runningAsMainUI()) {
-      console.error("BackupRestoreService should be called only from the UI!");
+      this.logError("BackupRestoreService should be called only from the UI!");
     }
   }
 
@@ -68,7 +111,7 @@ export class BackupRestoreService {
 
     let didHelper = new TrinitySDK.DID.DIDHelper();
     let userDID = (await didHelper.getOrCreateAppIdentityCredential()).getIssuer();
-    this.log("Current user DID:", userDID);
+    this.logDebug("Current user DID:", userDID);
 
     this.userVault = await hiveClient.getVault(userDID);
     if (!this.userVault) {
@@ -88,10 +131,13 @@ export class BackupRestoreService {
   /**
    * In order to get a permanent wallet context key after reinstallation and across devices, we use
    * the first address of the ELA subwallet.
+   *
+   * A different context is used for different chain networks in order to not mix sync states from different
+   * chains.
    */
   private async getWalletSyncContextName(wallet: MasterWallet): Promise<string> {
     let rootAddress = await this.getWalletFirstELAAddress(wallet);
-    return "walletbackup-" + rootAddress;
+    return "walletbackup-" + this.activeNetwork + "-" + rootAddress;
   }
 
   private async getWalletFirstELAAddress(wallet: MasterWallet): Promise<string> {
@@ -105,26 +151,26 @@ export class BackupRestoreService {
 
     if (!this.backupRestoreHelper) {
       // No vault / backup service initialized yet - forget this request for now.
-      this.log("Backup restore helper not initialized. Skipping backup setup for wallet", wallet);
+      this.logDebug("Backup restore helper not initialized. Skipping backup setup for wallet", wallet);
       return;
     }
 
     this.walletsList.push(wallet);
 
-    this.log("Initializing backup sync context for wallet", wallet);
+    this.logDebug("Initializing backup sync context for wallet", wallet);
 
     let walletContextName = await this.getWalletSyncContextName(wallet);
     await this.backupRestoreHelper.addSyncContext(walletContextName, async (entry) => {
       // insertion
-      this.log("Insertion request from the backup helper", entry)
+      this.logDebug("Insertion request from the backup helper", entry)
       return await this.handleRemoteBackupEntryChanged(entry);
     }, async (entry) => {
       // modification
-      this.log("Modification request from the backup helper", entry)
+      this.logDebug("Modification request from the backup helper", entry)
       return await this.handleRemoteBackupEntryChanged(entry);
     }, async (entry) => {
       // deletion
-      this.log("Deletion request from the backup helper", entry)
+      this.logDebug("Deletion request from the backup helper", entry)
       // Nothing to do: we don't sync deleted wallets for now.
       return true;
     });
@@ -132,25 +178,6 @@ export class BackupRestoreService {
     // We are maybe adding a new wallet. We must make sure that a full successful sync is completed before
     // doing more backups, not not overwrite what could exist on the vault.
     this.fullySuccessfulSyncExpected = true;
-
-
-
-    // TMP TEST
-    const BYTES_TO_READ = 20000;
-    let reader = await walletManager.getBackupFile(wallet.id, "ELA.db");
-    let readContent: Uint8Array;
-    let totalBytesRead = 0;
-    while (true) {
-      readContent = await reader.read(BYTES_TO_READ);
-      if (readContent && readContent.length > 0) {
-        console.log("Read file content (partial): ", readContent.length);
-        totalBytesRead += readContent.length;
-      }
-      else
-        break; // No more content to read, stop looping.
-    }
-
-    console.log("Read file total:", totalBytesRead);
   }
 
   /**
@@ -161,15 +188,15 @@ export class BackupRestoreService {
 
     if (!this.userVault) {
       // No user vault available
-      this.log("No user vault available, skipping sync check for wallets backup");
+      this.logDebug("No user vault available, skipping sync check for wallets backup");
       return false;
     }
 
-    this.log("Check sync is starting");
+    this.logDebug("Check sync is starting");
 
     try {
       // Stop all on going wallets synchronization first
-      this.log("Stopping on going subwallets sync");
+      this.logDebug("Stopping on going subwallets sync");
       for (let wallet of wallets) {
         await WalletManager.instance.stopWalletSync(wallet.id);
       }
@@ -178,7 +205,7 @@ export class BackupRestoreService {
       this.log("Starting backup helper sync()");
       let fullSyncCompleted = await this.backupRestoreHelper.sync(false);
       if (fullSyncCompleted) {
-        this.log("Backup helper sync() was fully completed.");
+        this.logDebug("Backup helper sync() was fully completed.");
 
         this.fullySuccessfulSyncExpected = false;
 
@@ -189,14 +216,14 @@ export class BackupRestoreService {
               continue;
             }
 
-            this.log("Checking if subwallet needs to be backup now", wallet, subWallet);
+            this.logDebug("Checking if subwallet needs to be backup now", wallet, subWallet);
             this.checkBackupSubWallet(wallet, subWallet);
           }
         }
       }
 
       // Restart all wallets synchronizations
-      this.log("Restarting subwallets sync");
+      this.logDebug("Restarting subwallets sync");
       for (let wallet of wallets) {
         await WalletManager.instance.startWalletSync(wallet.id);
       }
@@ -213,14 +240,14 @@ export class BackupRestoreService {
   private async checkBackupSubWallet(masterWallet: MasterWallet, subWallet: SubWallet) {
     let walletContextName = await this.getWalletSyncContextName(masterWallet);
 
-    this.log("checkBackupSubWallet()", masterWallet, subWallet)
+    this.logDebug("checkBackupSubWallet()", masterWallet, subWallet)
     if (!this.supportedWalletForBackup(subWallet)) {
       return;
     }
 
     if (this.fullySuccessfulSyncExpected) {
       // We are requested to not allow doing more backups until a full sync is successful.
-      this.log("Fully successful sync is expected. Not doing a backup now.");
+      this.logDebug("Fully successful sync is expected. Not doing a backup now.");
       return;
     }
 
@@ -238,20 +265,20 @@ export class BackupRestoreService {
         walletKey: await this.getWalletFirstELAAddress(masterWallet), // Constant reference to the parent master wallet
         lastSyncDate: subWallet.syncTimestamp // Timestamp in MS at which this subwallet was last modified
       };
-      this.log("It's a good time to backup:", masterWallet, subWallet);
+      this.logDebug("It's a good time to backup:", masterWallet, subWallet);
 
       // Stop wallet sycn to make sure the SPV SDK doesn't keep writing while we read that .db file
       await WalletManager.instance.stopSubWalletSync(masterWallet.id, subWallet.id as StandardCoinName);
 
       // Upload the sync state file that is related to the given subwallet (ela.db, idchain.db...)
       let fileName = this.getSubwalletBackupFileName(subWallet)
-      this.log("Uploading file", fileName);
+      this.logDebug("Uploading file", fileName);
       if (await this.getAndUploadSPVSyncStateFile(masterWallet, fileName)) {
-        this.log("File successfully uploaded. Upserting database entry", entryData);
+        this.logDebug("File successfully uploaded. Upserting database entry", entryData);
         await this.backupRestoreHelper.upsertDatabaseEntry(walletContextName, subWallet.id, entryData);
       }
       else {
-        this.log("Failed to upload file "+fileName+" to the vault");
+        this.logError("Failed to upload file "+fileName+" to the vault");
       }
 
       await WalletManager.instance.startSubWalletSync(masterWallet.id, subWallet.id as StandardCoinName);
@@ -259,7 +286,7 @@ export class BackupRestoreService {
       this.subWalletBackupInProgress = false;
     }
     else {
-      this.log("Not a good time to backup:", masterWallet, subWallet);
+      this.logDebug("Not a good time to backup:", masterWallet, subWallet);
     }
   }
 
@@ -284,7 +311,7 @@ export class BackupRestoreService {
   }
 
   private async getAndUploadSPVSyncStateFile(masterWallet: MasterWallet, backupFileName: string): Promise<boolean> {
-    this.log("Uploading vault file", backupFileName, masterWallet);
+    this.logDebug("Uploading vault file", backupFileName, masterWallet);
 
     try {
       // Reader to read the local spv state sync file on the device
@@ -299,7 +326,6 @@ export class BackupRestoreService {
       while (true) {
         readContent = await reader.read(20000);
         if (readContent && readContent.length > 0) {
-          this.log("content length:", readContent.length)
           await vaultWriter.write(readContent);
           await vaultWriter.flush();
         }
@@ -309,17 +335,17 @@ export class BackupRestoreService {
       await reader.close();
       await vaultWriter.close();
 
-      this.log("File " + backupFileName + " successfully uploaded to the vault");
+      this.logDebug("File " + backupFileName + " successfully uploaded to the vault");
       return true;
     }
     catch (e) {
-      console.error("Exception while uploading sync state file to vault: " + e);
+      this.logError("Exception while uploading sync state file to vault: " + e);
       return false;
     }
   }
 
   private async downloadAndSaveSPVSyncStateFile(masterWallet: MasterWallet, subWallet: SubWallet, backupFileName: string): Promise<boolean> {
-    this.log("Downloading vault file", backupFileName, masterWallet);
+    this.logDebug("Downloading vault file", backupFileName, masterWallet);
 
      try {
       let walletContextKey = await this.getWalletSyncContextName(masterWallet);
@@ -345,12 +371,12 @@ export class BackupRestoreService {
 
       await masterWallet.createSubWallet(this.coinService.getCoinByID(subWallet.id));
 
-      console.log("File downloaded and saved successfully");
+      this.logDebug("File downloaded and saved successfully");
       return true;
     }
     catch (e) {
       console.error(e);
-      console.log("Exception while downloading sync state file from vault: "+e);
+      this.logError("Exception while downloading sync state file from vault: "+e);
       return false;
     }
   }
@@ -370,7 +396,7 @@ export class BackupRestoreService {
    * A wallet that does not exist locally exists on the vault backup. We must restore it locally.
    */
   private async handleRemoteBackupEntryChanged(entry: BackupRestoreEntry): Promise<boolean> {
-    this.log("handleRemoteBackupEntryChanged()", entry);
+    this.logDebug("handleRemoteBackupEntryChanged()", entry);
 
     // Compare the remote lastsyncdate vs local
     let remoteLastSyncDate = entry.data.lastSyncDate; // Timestamp MS
@@ -383,31 +409,31 @@ export class BackupRestoreService {
         let localLastSyncDate = subWallet.syncTimestamp;
         // If remote last sync date is more recent, download and restore files
         if (remoteLastSyncDate > localLastSyncDate) {
-          this.log("Remote sync date is more recent than local. We have to download the latest file version from the vault");
+          this.logDebug("Remote sync date is more recent than local. We have to download the latest file version from the vault");
           if (await this.downloadAndSaveSPVSyncStateFile(wallet, subWallet, this.getSubwalletBackupFileName(subWallet))) {
-            this.log("Local sync file updated successfully with the more recent vault version");
+            this.logDebug("Local sync file updated successfully with the more recent vault version");
             return true;
           }
           else {
-            this.log("Failed to download vault sync file");
+            this.logWarn("Failed to download vault sync file");
             return false;
           }
         }
         else {
           // Local is more recent, don't restore.
-          this.log("Local sync date is more recent than remote", wallet, subWallet, remoteLastSyncDate, localLastSyncDate)
+          this.logDebug("Local sync date is more recent than remote", wallet, subWallet, remoteLastSyncDate, localLastSyncDate)
           return true;
         }
       }
       else {
-        this.log("Trying to handle a remote entry change but subwallet does not exist", wallet, entry.key);
+        this.logDebug("Trying to handle a remote entry change but subwallet does not exist", wallet, entry.key);
         return false;
       }
     }
     else {
       // No wallet found for the given root address, which means user must first re-import his mnemonic.
       // At that time we can sync with remote data later.
-      this.log("No existing local wallet found for root address", entry.data.walletKey);
+      this.logDebug("No existing local wallet found for root address", entry.data.walletKey);
       return false;
     }
   }
@@ -427,7 +453,7 @@ export class BackupRestoreService {
     let stdSubWallet = subWallet as StandardSubWallet;
     let walletSyncDate = moment(stdSubWallet.syncTimestamp);
     let backupEntryDate = moment(localBackupEntry.data.lastSyncDate);
-    this.log("good time ?", walletSyncDate, backupEntryDate);
+    this.logDebug("Good time to backup wallet?", walletSyncDate, backupEntryDate);
     if (walletSyncDate.isAfter(backupEntryDate.add(30, "days"))) {
       return true;
     }
@@ -442,7 +468,7 @@ export class BackupRestoreService {
    * delete sync state from the vault.
    */
   public async removeBackupTrackingForWallet(masterId: string) {
-    this.log("Removing all local backup entries for the wallet, without syncing this deletion to the vault.");
+    this.logDebug("Removing all local backup entries for the wallet, without syncing this deletion to the vault.");
 
     let wallet = WalletManager.instance.getMasterWallet(masterId);
     let contextName = await this.getWalletSyncContextName(wallet);
@@ -454,6 +480,15 @@ export class BackupRestoreService {
 
   private log(message: any, ...params: any) {
     console.log("BackupRestoreService: ", message, ...params);
+  }
+
+  private logDebug(message: any, ...params: any) {
+    if (BackupRestoreService.SHOW_DEBUG_LOGS)
+      console.log("BackupRestoreService: ", message, ...params);
+  }
+
+  private logWarn(message: any, ...params: any) {
+    console.warn("BackupRestoreService: ", message, ...params);
   }
 
   private logError(message: any, ...params: any) {

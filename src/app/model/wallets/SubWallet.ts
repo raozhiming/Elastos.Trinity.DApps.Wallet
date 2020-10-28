@@ -39,10 +39,11 @@ export abstract class SubWallet {
     public id: CoinID = null;
     public balance: BigNumber = new BigNumber(0); // raw balance. Will be sELA for standard wallets, or a token number for ERC20 coins.
     public lastBlockTime: string = null;
-    public timestamp: number = -1;
+    public syncTimestamp: number = -1; // Time (ms) at which the wallet was last synced
+    public timestamp: number = -1; // Time (ms) at which the progress was last updated (CAUTION: this is NOT the block sync time)
     public progress: number = 0;
     public balanceByRPC: BigNumber = new BigNumber(0);
-    public timestampRPC: number = 0;
+    public timestampRPC: number = 0; // Time at which the "get balance" RPC API was last called
 
     private events: Events;
 

@@ -200,4 +200,8 @@ export class WalletHomePage implements OnInit, OnDestroy {
         this.resolvingBackupService = true;
         this.backupService.activateVaultAccess();
     }
+
+    shouldPromptToEnableHiveVaultForBackup(): boolean {
+        return !this.resolvingBackupService && this.backupService.initialized() && !this.backupService.vaultIsConfigured();
+    }
 }

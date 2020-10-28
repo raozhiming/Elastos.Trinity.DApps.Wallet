@@ -85,11 +85,6 @@ export class AppComponent {
                 }
             });
 
-            // Backup service runs only in the UI because it requires user interaction sometimes, and we don't
-            // wan't data model overlaps/conflicts with the background service or with intents.
-            if (this.appService.runningAsMainUI())
-                await this.backupService.init();
-
             await this.walletManager.init();
             await this.intentService.init();
         });

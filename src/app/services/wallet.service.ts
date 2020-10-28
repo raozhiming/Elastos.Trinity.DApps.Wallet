@@ -170,6 +170,9 @@ export class WalletManager {
         console.log("Wallet manager initialization complete");
 
         this.events.publish("walletmanager:initialized");
+
+        // The base init is completed. Now let's start the backup service in background (not a blocking await)
+        this.initBackupService();
     }
 
     private async initWallets(): Promise<boolean> {
@@ -221,19 +224,32 @@ export class WalletManager {
                 }
 
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
-
-                if (this.appService.runningAsMainUI())
-                    await this.backupService.setupBackupForWallet(this.masterWallets[masterId]);
             }
-
-            if (this.appService.runningAsMainUI())
-                await this.backupService.checkSync(Object.values(this.masterWallets));
         }
         catch (error) {
             console.error(error);
             return false;
         }
         return true;
+    }
+
+    // Backup service runs only in the UI because it requires user interaction sometimes, and we don't
+    // wan't data model overlaps/conflicts with the background service or with intents.
+    private async initBackupService() {
+        if (!this.appService.runningAsMainUI())
+            return;
+
+        // Give some fresh air to the wallet while starting, to show the UI first without overloading the CPU.
+        // There is no hurry to start the backup service.
+        setTimeout(async ()=>{
+            await this.backupService.init();
+
+            for (let wallet of this.getWalletsList()) {
+                await this.backupService.setupBackupForWallet(wallet);
+            }
+
+            await this.backupService.checkSync(Object.values(this.masterWallets));
+        }, 5000);
     }
 
     // TODO: delete it, we do not use active wallet

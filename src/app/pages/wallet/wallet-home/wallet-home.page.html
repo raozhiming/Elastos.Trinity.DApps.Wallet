@@ -11,14 +11,9 @@
         </ion-refresher-content>
     </ion-refresher>
 
-    <ion-button (click)="enableHiveBackup()" *ngIf="!resolvingBackupService">
-        Enable hive backup test
+    <ion-button (click)="enableHiveBackup()" *ngIf="shouldPromptToEnableHiveVaultForBackup()">
+        Activate your Hive vault for backups
     </ion-button>
-
-    <ion-label *ngIf="resolvingBackupService" class="ion-padding ion-text-centered">
-        Getting backup service ready...
-        <ion-spinner></ion-spinner>
-    </ion-label>
 
     <ion-slides *ngIf="!isSingleWallet" [class.dark-slides]="theme.darkMode" [class.blur]="uiService.showPopover" [options]="slideOpts" #slider pager>
         <ion-slide *ngFor="let masterWallet of masterWalletList">
