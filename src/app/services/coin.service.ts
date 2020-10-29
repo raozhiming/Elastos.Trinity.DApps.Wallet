@@ -52,6 +52,7 @@ export class CoinService {
         // ERC20 tokens
         this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c", NetworkType.MainNet));
         this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xfdce7fb4050cd43c654c6cecead950343990ce75", NetworkType.TestNet));
+        this.availableCoins.push(new ERC20Coin("DMA", "DMA", "DMA Token", "0x9c22cec60392cb8c87eb65c6e344872f1ead1115", NetworkType.MainNet));
 
         await this.addCustomERC20CoinsToAvailableCoins();
 
