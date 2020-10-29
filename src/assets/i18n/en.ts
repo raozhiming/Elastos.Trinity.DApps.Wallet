@@ -272,7 +272,8 @@ export const en = {
     // Wallet creation screen
     'launcher-create-wallet': 'Create Wallet',
     'enter-wallet-name': 'Please enter a wallet name',
-    'signaddress-wallet': 'Single Address Wallet',
+    'single-address': 'Single-Address Wallet',
+    'multiple-address': 'Multi-Address Wallet',
     'launcher-backup-import': 'Import Wallet',
     "text-wallet-name-validator-enter-name": "Please enter a name for your wallet",
     "text-wallet-name-validator-not-valid-name": "Sorry, this is not a valid wallet name",

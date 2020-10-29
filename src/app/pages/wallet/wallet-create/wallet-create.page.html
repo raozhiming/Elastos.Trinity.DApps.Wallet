@@ -9,7 +9,7 @@
             </ion-input>
         </ion-row>
 
-        <ion-row class="options-row" (click)="showOptions = !showOptions">
+        <ion-row class="advanced-row" (click)="showOptions = !showOptions">
             <span>
                 {{ 'advanced-options' | translate }} &nbsp;
                 <img [class.rotate]="showOptions" src="assets/icons/darkmode/down-arrow.svg"/>
@@ -18,8 +18,13 @@
 
         <div class="options-container" *ngIf="showOptions">
             <ion-row class="toggle-row">
-                <h1>{{ 'signaddress-wallet' | translate }}</h1>
-                <ion-toggle color="tertiary" [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
+                <ion-col class="left-col" size="10">
+                    <h1 *ngIf="wallet.singleAddress">{{ 'single-address' | translate }}</h1>
+                    <h1 *ngIf="!wallet.singleAddress">{{ 'multiple-address' | translate }}</h1>
+                </ion-col>
+                <ion-col class="right-col" size="2">
+                    <ion-toggle color="tertiary" [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
+                </ion-col>
             </ion-row>
             <ion-row class="password-row">
                 <ion-col size="10">

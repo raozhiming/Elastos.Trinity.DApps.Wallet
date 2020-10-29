@@ -266,6 +266,8 @@ export const fr = {
     // Wallet creation screen
     'launcher-create-wallet': 'Créer le portefeuille',
     'enter-wallet-name': 'Veuillez saisir un nom pour le portefeuille',
+    'single-address': 'Portefeuille à adresse unique',
+    'multiple-address': 'Portefeuille à adresses multiples',
     'signaddress-wallet': 'Portefeuille à adresse unique',
     'launcher-backup-import': 'Importer le portefeuille',
     "text-wallet-name-validator-enter-name": "Veuillez saisir un nom pour votre portefeuille",

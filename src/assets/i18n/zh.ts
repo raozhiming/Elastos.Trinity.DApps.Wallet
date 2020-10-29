@@ -273,7 +273,8 @@ export const zh = {
     // Wallet creation screen
     'launcher-create-wallet': '创建钱包',
     'enter-wallet-name': '请输入钱包名称',
-    'signaddress-wallet': '单地址钱包',
+    'single-address': '单地址钱包',
+    'multiple-address': 'Multi-Address Wallet',
     'launcher-backup-import': '导入钱包',
     "text-wallet-name-validator-enter-name": "请给您的钱包设置名称",
     "text-wallet-name-validator-not-valid-name": "抱歉，这个钱包名称无效",

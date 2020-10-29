@@ -35,7 +35,7 @@
         }
     }
 
-    .options-row, .toggle-row {
+    .advanced-row, .toggle-row {
         flex-direction: row;
         justify-content: center;
         align-items: center;
@@ -68,20 +68,32 @@
         align-items: center;
 
         .toggle-row {
-            justify-content: space-between;
-
-            h1 {
-                margin: 0;
-                font-size: 16px;
-                font-weight: 500;
-                letter-spacing: 0.9px;
-                text-align: left;
-                color: #ffffff;
+            ion-col {
+                padding: 0;
+                display: flex;
+                align-items: center;
             }
 
-            ion-toggle {
-                zoom: 0.8;
-                --background-checked: #803fd5;
+            .left-col {
+                justify-content: flex-start;
+
+                h1 {
+                    margin: 0;
+                    font-size: 16px;
+                    font-weight: 500;
+                    letter-spacing: 0.9px;
+                    text-align: left;
+                    color: #ffffff;
+                }
+            }
+
+            .right-col {
+                justify-content: flex-end;
+
+                ion-toggle {
+                    zoom: 0.8;
+                    --background-checked: #803fd5;
+                }
             }
         }
     
@@ -107,6 +119,5 @@
 
     .btn-row {
         margin-top: 30px;
-        width: 100%;
     }
 }
