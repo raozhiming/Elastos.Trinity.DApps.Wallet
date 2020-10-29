@@ -179,7 +179,7 @@ export class CoinTxInfoPage implements OnInit {
             this.payType = "transaction-type-vote";
         }
 
-        // Create array of displayable tx details for Txs
+        // Create array of displayable details for txs
         this.txDetails = [];
         this.txDetails.push(
             {
@@ -217,7 +217,7 @@ export class CoinTxInfoPage implements OnInit {
             },
         );
 
-        // Only show receiving address if tx was not received
+        // Only show receiving address, total cost and fees if tx was not received
         if (this.direction !== TransactionDirection.RECEIVED) {
             this.txDetails.unshift(
                 {
