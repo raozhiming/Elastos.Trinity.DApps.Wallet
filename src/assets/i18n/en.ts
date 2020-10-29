@@ -41,6 +41,7 @@ export const en = {
     "sync-progress": "Synchronization {{progress}}%",
     "ela-erc20": "ELASTOS ERC20 TOKEN",
     "coin-list": "Token List",
+    "activate-hive-vault": "Activate your Hive vault for backups",
 
     // Wallet Settings screen
     'settings-title': 'Settings',

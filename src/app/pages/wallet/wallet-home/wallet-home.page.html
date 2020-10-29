@@ -12,7 +12,7 @@
     </ion-refresher>
 
     <ion-button (click)="enableHiveBackup()" *ngIf="shouldPromptToEnableHiveVaultForBackup()">
-        Activate your Hive vault for backups
+        {{ 'activate-hive-vault' | translate }}
     </ion-button>
 
     <ion-slides *ngIf="!isSingleWallet" [class.dark-slides]="theme.darkMode" [class.blur]="uiService.showPopover" [options]="slideOpts" #slider pager>
