@@ -59,6 +59,18 @@ ion-slide, .single-slide {
     }
 }    
 
+.sticky-btn {
+    position: sticky;
+    top: 10px;
+    left: 7.5%;
+    width: 85%;
+    z-index: 10;
+
+    ion-icon {
+        color: white;
+    }
+}
+
 
 .dark-slides  {
 }

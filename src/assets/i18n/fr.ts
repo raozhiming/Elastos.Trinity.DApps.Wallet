@@ -41,7 +41,7 @@ export const fr = {
     "sync-progress": "Synchronisation {{progress}}%",
     "ela-erc20": "JETON ERC20 ELASTOS",
     "coin-list": "Liste des jetons",
-    "activate-hive-vault": "Activate your Hive vault for backups",    // TODO   need to translate
+    "activate-hive-vault": "Activate Hive Vault",   // TODO   need to translate
 
     // Settings screen
     "settings-title": "Paramètres",
