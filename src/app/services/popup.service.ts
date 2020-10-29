@@ -132,6 +132,7 @@ export class PopupProvider {
         header: this.translate.instant(title),
         message  : this.translate.instant(message),
         cssClass: 'alert',
+        backdropDismiss: false,
         buttons: [
           {
             text: cancelText ? cancelText : this.translate.instant('cancel'),

@@ -59,7 +59,7 @@ export class AppComponent {
         public popupProvider: PopupProvider,
         public modalCtrl: ModalController,
         private coinService: CoinService,
-        private backupService:BackupRestoreService
+        private backupService: BackupRestoreService
     ) {
         this.initializeApp();
     }
