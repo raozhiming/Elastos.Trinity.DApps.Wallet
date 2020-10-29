@@ -179,7 +179,7 @@ export class CoinTxInfoPage implements OnInit {
             this.payType = "transaction-type-vote";
         }
 
-        // Create array of displayable tx details
+        // Create array of displayable tx details for Txs
         this.txDetails = [];
         this.txDetails.push(
             {
@@ -196,18 +196,6 @@ export class CoinTxInfoPage implements OnInit {
                 title: 'tx-info-memo',
                 value: transaction.Memo,
                 show: true,
-            },
-            {
-                type: 'fees',
-                title: 'tx-info-transaction-fees',
-                value: this.payFee,
-                show: false,
-            },
-            {
-                type: 'cost',
-                title: 'tx-info-cost',
-                value: this.totalCost,
-                show: false,
             },
             {
                 type: 'confirmations',
@@ -229,7 +217,7 @@ export class CoinTxInfoPage implements OnInit {
             },
         );
 
-        // Only show receiving address if transaction was not received
+        // Only show receiving address if tx was not received
         if (this.direction !== TransactionDirection.RECEIVED) {
             this.txDetails.unshift(
                 {
@@ -237,6 +225,18 @@ export class CoinTxInfoPage implements OnInit {
                     title: 'tx-info-receiver-address',
                     value: this.targetAddress,
                     show: true,
+                },
+                {
+                    type: 'fees',
+                    title: 'tx-info-transaction-fees',
+                    value: this.payFee,
+                    show: false,
+                },
+                {
+                    type: 'cost',
+                    title: 'tx-info-cost',
+                    value: this.totalCost,
+                    show: false,
                 },
             );
         }
