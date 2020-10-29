@@ -45,7 +45,7 @@ export class CoinService {
         this.activeNetwork = await this.prefs.getActiveNetworkType();
 
         // Standard tokens
-        this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "Elastos"));
+        this.availableCoins.push(new StandardCoin(StandardCoinName.ELA, "ELA", "Elastos ELA"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.IDChain, "ELA/ID", "Elastos DID"));
         this.availableCoins.push(new StandardCoin(StandardCoinName.ETHSC, "ELA/ETHSC", "Elastos ETH"));
 
