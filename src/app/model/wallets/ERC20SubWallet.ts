@@ -181,14 +181,13 @@ export class ERC20SubWallet extends SubWallet {
         let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
         let gasPrice = await this.web3.eth.getGasPrice();
 
-
         console.log('createPaymentTransaction toAddress:', toAddress, ' amount:', amount, 'gasPrice:', gasPrice);
 
         // Convert the Token amount (ex: 20 TTECH) to contract amount (=token amount (20) * 10^decimals)
         let amountWithDecimals = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(this.tokenDecimals));
 
         // Incompatibility between our bignumber lib and web3's BN lib. So we must convert by using intermediate strings
-        let web3BigNumber = this.web3.utils.toBN(amountWithDecimals.toString());
+        let web3BigNumber = this.web3.utils.toBN(amountWithDecimals.toString(10));
         let method = erc20Contract.methods.transfer(toAddress, web3BigNumber);
 
         let gasLimit = 200000;
