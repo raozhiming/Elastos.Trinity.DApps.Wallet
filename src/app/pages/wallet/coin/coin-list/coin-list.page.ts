@@ -6,7 +6,7 @@ import { Native } from '../../../../services/native.service';
 import { PopupProvider} from '../../../../services/popup.service';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
-import { Coin } from 'src/app/model/Coin';
+import { Coin, CoinType } from 'src/app/model/Coin';
 import { CoinService } from 'src/app/services/coin.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { AppService } from 'src/app/services/app.service';
@@ -21,7 +21,7 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 type EditableCoinInfo = {
     coin: Coin,
     isOpen: boolean
-}
+};
 
 @Component({
     selector: 'app-coin-list',
@@ -41,6 +41,7 @@ export class CoinListPage implements OnInit, OnDestroy {
     // Helpers
     public Util = Util;
     public SELA = Config.SELA;
+    public CoinType = CoinType;
 
     // Titlebar
     private onItemClickedListener: any;
@@ -57,7 +58,8 @@ export class CoinListPage implements OnInit, OnDestroy {
         public events: Events,
         private translate: TranslateService,
         public theme: ThemeService,
-        public currencyService: CurrencyService
+        public currencyService: CurrencyService,
+        public uiService: UiService
     ) {
         this.init();
     }
@@ -182,7 +184,7 @@ export class CoinListPage implements OnInit, OnDestroy {
             case 'ETHSC':
                 return "assets/coins/ela-gray.svg";
             default:
-                return "assets/coins/eth.svg";
+                return "assets/coins/eth-purple.svg";
         }
     }
 

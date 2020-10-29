@@ -45,7 +45,12 @@
         </ion-row>
         <ion-row class="subwallet-row ripple" [class.dark-subwallet-row]="theme.darkMode" [class.ion-activatable]="item.coin.canBeRemoved()" *ngFor="let item of coinList">
             <ion-col size="2" class="left-col">
-                <ion-img [src]="getCoinIcon(item)"></ion-img>
+                <div class="icon-container">
+                    <ion-img [src]="getCoinIcon(item)"></ion-img>
+                    <div *ngIf="item.coin.type === CoinType.ERC20" class="ela-icon">
+                        <img src="assets/coins/ela-black.svg"/>
+                    </div>
+                </div>
             </ion-col>
             <ion-col size="8" class="middle-col">
                 <h1>{{ getCoinTitle(item) }}</h1>
