@@ -20,6 +20,12 @@
                 <img (click)="scanCoinAddress()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
             </ion-col>
         </ion-row>
+
+        <ion-row class="btn-row" *ngIf="!coinInfoFetched">
+            <ion-button color="primary" [disabled]="!coinAddress" (click)="checkCoinAddress()">
+                <ion-label>{{ 'coin-adderc20-add' | translate }}</ion-label>
+            </ion-button>
+        </ion-row>
     
         <ion-row class="coin-row" *ngIf="coinInfoFetched">
             <h2>{{ 'coin-adderc20-name' | translate }}</h2>
@@ -28,7 +34,7 @@
             <h3 id="symbol">{{ coinSymbol }}</h3>
         </ion-row>
 
-        <ion-row class="btn-container" *ngIf="coinInfoFetched">
+        <ion-row class="btn-row" *ngIf="coinInfoFetched">
             <ion-button color="primary" (click)="addCoin()">
                 <ion-label>{{ 'coin-adderc20-add' | translate }}</ion-label>
             </ion-button>

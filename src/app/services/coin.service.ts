@@ -96,7 +96,7 @@ export class CoinService {
         this.events.publish("custom-coin-added", coin.getID());
     }
 
-    public async  getCustomERC20Coins(): Promise<ERC20Coin[]> {
+    public async getCustomERC20Coins(): Promise<ERC20Coin[]> {
         let rawCoinList = await this.storage.get("custom-erc20-coins");
         if (!rawCoinList)
             return [];

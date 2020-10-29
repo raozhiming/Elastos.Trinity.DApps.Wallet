@@ -170,6 +170,7 @@ export const zh = {
     "coin-adderc20-name": '币种名称',
     "coin-adderc20-symbol": '币种符号',
     "coin-adderc20-not-a-erc20-contract": "扫描的内容不是有效的 ERC20 币种地址",
+    'coin-adderc20-alreadyadded': 'Token already added',
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "确定删除?",

@@ -170,6 +170,7 @@ export const en = {
     "coin-adderc20-name": 'Token Name',
     "coin-adderc20-symbol": 'Token Symbol',
     "coin-adderc20-not-a-erc20-contract": "The scanned content is not a valid ERC20 coin address",
+    'coin-adderc20-alreadyadded': 'Token already added',
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirm deletion?",

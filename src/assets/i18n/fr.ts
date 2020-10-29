@@ -170,6 +170,7 @@ export const fr = {
     "coin-adderc20-name": 'Nom du jeton',
     "coin-adderc20-symbol": 'Symbole',
     "coin-adderc20-not-a-erc20-contract": "Le contenu scanné n'est pas une adresse de jeton ERC20 valide.",
+    'coin-adderc20-alreadyadded': 'Token already added',
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirmer la suppression?",
