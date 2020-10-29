@@ -159,10 +159,10 @@ export class MasterWallet {
     }
 
     /**
-     * Convenient method to access subwallets as an array.
+     * Convenient method to access subwallets as an array alphabetically.
      */
     public getSubWallets(): SubWallet[] {
-        return Object.values(this.subWallets);
+        return Object.values(this.subWallets).sort((a, b) => a.getFriendlyName() > b.getFriendlyName() ? 1 : -1);
     }
 
     public getSubWallet(id: CoinID): SubWallet {
