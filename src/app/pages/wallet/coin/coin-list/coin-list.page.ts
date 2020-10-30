@@ -61,7 +61,6 @@ export class CoinListPage implements OnInit, OnDestroy {
         public currencyService: CurrencyService,
         public uiService: UiService
     ) {
-        this.init();
     }
 
     ngOnInit() {
@@ -87,6 +86,8 @@ export class CoinListPage implements OnInit, OnDestroy {
             key: "add-erc20-coin",
             iconPath: TitleBarPlugin.BuiltInIcon.ADD
         });
+
+        this.init();
     }
 
     ionViewWillLeave() {
