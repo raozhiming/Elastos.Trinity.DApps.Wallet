@@ -7,7 +7,7 @@ import { Native } from './native.service';
 @Injectable()
 export class PopupProvider {
   constructor(
-    private alertCtrl: AlertController,
+    public alertCtrl: AlertController,
     private translate: TranslateService,
     private theme: ThemeService,
     private modalCtrl: ModalController,

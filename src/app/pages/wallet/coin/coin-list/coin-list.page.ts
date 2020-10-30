@@ -91,6 +91,7 @@ export class CoinListPage implements OnInit, OnDestroy {
 
     ionViewWillLeave() {
         titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
+        this.popupProvider.alertCtrl.dismiss();
     }
 
     async switchCoin(item: EditableCoinInfo, open: boolean) {
