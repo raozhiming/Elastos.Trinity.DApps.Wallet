@@ -283,6 +283,11 @@ export const zh = {
     "text-wallet-passphrase-validator-repeat": "两次输入的助记词密码不一致",
     "text-wallet-passphrase-validator-min-length": "助记词密码最少8位",
 
+    // Consolidate
+    'text-consolidate-prompt': '是否零钱换整？',
+    'text-consolidate-UTXO-counts': 'UTXO 个数已达到：{{ count }}',
+    'text-consolidate-note': 'UTXO 数量过多可能会导致一些交易失败，执行零钱换整后不影响已有的超级节点投票',
+
     // Error codes
     'Error-10000': 'Action参数JSON格式错误',
     'Error-10001': 'Action参数错误',
