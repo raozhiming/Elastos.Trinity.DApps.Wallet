@@ -278,9 +278,9 @@ export const fr = {
     "text-wallet-passphrase-validator-min-length": "Mot de passe associé au mnémonique au moins 8 caractères",
 
     // Consolidate
-    'text-consolidate-prompt': 'Consolidate?',
-    'text-consolidate-UTXO-counts': 'Number of UTXOs: {{ count }}',
-    'text-consolidate-note': 'Too many UTXOs may cause some transactions to fail, and the consolidation will not affect existing supernodes voting',
+    'text-consolidate-prompt': 'Consolider?',
+    'text-consolidate-UTXO-counts': 'Nombre d\'UTXOs: {{ count }}',
+    'text-consolidate-note': 'Trop d\'UTXO peuvent provoquer l\'échec de certaines transactions, il est recommandé de consolider. La consolidation n\'affecte pas les votes en cours',
 
     // Error codes
     'Error-10000': 'Json parse error of action parameters',
