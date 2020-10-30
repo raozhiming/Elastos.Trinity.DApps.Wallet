@@ -277,6 +277,11 @@ export const fr = {
     "text-wallet-passphrase-validator-repeat": "Les mots de passe des deux mnémoniques d'entrée ne sont pas cohérents",
     "text-wallet-passphrase-validator-min-length": "Mot de passe associé au mnémonique au moins 8 caractères",
 
+    // Consolidate
+    'text-consolidate-prompt': 'Consolider?',
+    'text-consolidate-UTXO-counts': 'Nombre d\'UTXOs: {{ count }}',
+    'text-consolidate-note': 'Trop d\'UTXO peuvent provoquer l\'échec de certaines transactions, il est recommandé de consolider. La consolidation n\'affecte pas les votes en cours',
+
     // Error codes
     'Error-10000': 'Json parse error of action parameters',
     'Error-10001': 'Parameters error of action',

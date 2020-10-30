@@ -282,6 +282,11 @@ export const en = {
     "text-wallet-passphrase-validator-repeat": "The two input mnemonic passphrases are inconsistent",
     "text-wallet-passphrase-validator-min-length": "The mnemonic passphrase must be at least 8 characters",
 
+    // Consolidate
+    'text-consolidate-prompt': 'Consolidate?',
+    'text-consolidate-UTXO-counts': 'Number of UTXOs: {{ count }}',
+    'text-consolidate-note': 'Too many UTXOs may cause some transactions to fail, and the consolidation will not affect existing supernodes voting',
+
     // Error codes
     'Error-10000': 'JSON parse error of action parameters',
     'Error-10001': 'Parameters error of action',
