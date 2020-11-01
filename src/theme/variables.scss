@@ -160,6 +160,8 @@
   --ion-item-background: #272d41;
   --ion-item-background-activated: #3d4254;
 
+  --ion-color-step-600: #fff;
+
   ion-alert   {
     --background: #191a2f;
     --ion-text-color: #ffffff;
@@ -167,7 +169,7 @@
     h2 {
         color: #ffffff;
     }
-    
+
     button {
       span {
         color: #ffffff;
@@ -203,11 +205,11 @@
 
   --ion-text-color: #ffffff;
   --ion-text-color-rgb: 255,255,255;
-  
+
   --ion-item-background: #272d41;
 }
 
-/************************************ 
+/************************************
         Ionic Elements
 ************************************/
 ion-row {
