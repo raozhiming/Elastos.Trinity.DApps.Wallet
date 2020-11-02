@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes, NoPreloading } from '@angular/router';
 import { LauncherPage } from './pages/launcher/launcher.page';
 import { WalletSettingsPage } from './pages/wallet/wallet-settings/wallet-settings.page';
@@ -58,6 +58,9 @@ import { CurrencySelectPage } from './pages/settings/currency-select/currency-se
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
+
+@Component({ template: "<div></div>" })
+export class EmptyPage  {}
 
 const routes: Routes = [
 
@@ -106,6 +109,8 @@ const routes: Routes = [
     { path: 'dposvote', component: DPoSVotePage },
     { path: 'crmemberregister', component: CRMemberRegisterPage },
     { path: 'crproposalvoteagainst', component: CRProposalVoteAgainstPage },
+
+    { path: '**', component: EmptyPage }, // Prevent angular from calling a random default route sometimes when starting, leading to crashes if platform is not ready yet
 ];
 @NgModule({
     imports: [

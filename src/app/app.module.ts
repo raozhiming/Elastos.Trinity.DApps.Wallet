@@ -36,7 +36,7 @@ import { en } from './../assets/i18n/en';
 import { fr } from './../assets/i18n/fr';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule, EmptyPage } from './app-routing.module';
 
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -217,8 +217,10 @@ export function TranslateLoaderFactory() {
         TxConfirmComponent,
         TxSuccessComponent,
         HelpComponent,
+        EmptyPage
     ],
     entryComponents: [
+        EmptyPage,
         LauncherPage,
         WalletCreatedComponent,
         TxConfirmComponent,
