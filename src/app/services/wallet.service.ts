@@ -393,6 +393,9 @@ export class WalletManager {
         // Destroy the wallet in the wallet plugin
         await this.spvBridge.destroyWallet(id);
 
+        // Remove password
+        await this.authService.deleteWalletPassword(id);
+
         // Save this modification to our permanent local storage
         await this.localStorage.setExtendedMasterWalletInfo(this.masterWallets[id].id, null);
 

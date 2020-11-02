@@ -468,6 +468,10 @@ export class BackupRestoreService {
    * delete sync state from the vault.
    */
   public async removeBackupTrackingForWallet(masterId: string) {
+    if (!this.vaultIsConfigured()) {
+      return;
+    }
+
     this.logDebug("Removing all local backup entries for the wallet, without syncing this deletion to the vault.");
 
     let wallet = WalletManager.instance.getMasterWallet(masterId);

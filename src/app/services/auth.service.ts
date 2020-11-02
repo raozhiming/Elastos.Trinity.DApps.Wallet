@@ -65,6 +65,28 @@ export class AuthService {
         });
     }
 
+    public async deleteWalletPassword(walletId: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const resultInfo = await passwordManager.deletePasswordInfo("wallet-"+walletId) as PasswordManagerPlugin.BooleanWithReason;
+                if (resultInfo) {
+                    if (resultInfo.value) {
+                        resolve(null);
+                    } else {
+                        console.error('deletePasswordInfo error:', resultInfo.reason);
+                        reject(resultInfo.reason);
+                    }
+                } else {
+                    resolve(null);
+                }
+            } catch (e) {
+                console.error(e);
+                // TODO: better handle various kind of errors
+                reject();
+            }
+        });
+    }
+
     /**
      * Activates fingerprint authentication instead of using a password.
      */
