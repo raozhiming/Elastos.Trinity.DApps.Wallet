@@ -38,10 +38,13 @@ export class ERC20SubWallet extends SubWallet {
         // Standard ERC20 contract ABI
         this.erc20ABI = require("../../../assets/ethereum/StandardErc20ABI.json");
 
+        // Use NaN if can't get balance from web3
+        this.balance = new BigNumber(NaN);
+
         // First retrieve the number of decimals used by this token. this is needed for a good display,
         // as we need to convert the balance integer using the number of decimals.
         await this.fetchTokenDecimals();
-        this.updateBalance();
+        await this.updateBalance();
     }
 
     public static newFromCoin(masterWallet: MasterWallet, coin: Coin): Promise<ERC20SubWallet> {
@@ -53,7 +56,8 @@ export class ERC20SubWallet extends SubWallet {
         console.log("Initializing ERC20 subwallet from serialized sub wallet", serializedSubWallet);
 
         let subWallet = new ERC20SubWallet(masterWallet, serializedSubWallet.id);
-        subWallet.initFromSerializedSubWallet(serializedSubWallet);
+        // Get info by web3, don't use the data in local storage.
+        // subWallet.initFromSerializedSubWallet(serializedSubWallet);
         return subWallet;
     }
 
@@ -81,12 +85,16 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     private async fetchTokenDecimals(): Promise<void> {
-        let ethAccountAddress = await this.getEthAccountAddress();
-        var contractAddress = this.coin.getContractAddress();
-        let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
-        this.tokenDecimals = await erc20Contract.methods.decimals().call();
+        try {
+            let ethAccountAddress = await this.getEthAccountAddress();
+            var contractAddress = this.coin.getContractAddress();
+            let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
+            this.tokenDecimals = await erc20Contract.methods.decimals().call();
 
-        console.log(this.id+" decimals: ", this.tokenDecimals);
+            console.log(this.id+" decimals: ", this.tokenDecimals);
+        } catch (error) {
+            console.log('ERC20 Token (', this.id, ') fetchTokenDecimals error:', error);
+        }
     }
 
     public getDisplayBalance(): BigNumber {
@@ -113,25 +121,28 @@ export class ERC20SubWallet extends SubWallet {
 
     public async updateBalance() {
         console.log("Updating ERC20 token balance for token: ", this.id);
+        try {
+            let ethAccountAddress = await this.getEthAccountAddress();
+            var contractAddress = this.coin.getContractAddress();
+            let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
 
-        let ethAccountAddress = await this.getEthAccountAddress();
-        var contractAddress = this.coin.getContractAddress();
-        let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
+            // TODO: what's the integer type returned by web3? Are we sure we can directly convert it to BigNumber like this? To be tested
+            let balanceEla = await erc20Contract.methods.balanceOf(ethAccountAddress).call();
+            // The returned balance is an int. Need to devide by the number of decimals used by the token.
+            this.balance = new BigNumber(balanceEla).dividedBy(new BigNumber(10).pow(this.tokenDecimals));
+            console.log(this.id+": raw balance:", balanceEla, " Converted balance: ", this.balance);
 
-        // TODO: what's the integer type returned by web3? Are we sure we can directly convert it to BigNumber like this? To be tested
-        let balanceEla = await erc20Contract.methods.balanceOf(ethAccountAddress).call();
-        // The returned balance is an int. Need to devide by the number of decimals used by the token.
-        this.balance = new BigNumber(balanceEla).dividedBy(new BigNumber(10).pow(this.tokenDecimals));
-        console.log(this.id+": raw balance:", balanceEla, " Converted balance: ", this.balance);
+            // Update the "last sync" date. Just consider this http call date as the sync date for now
+            this.timestamp = new Date().getTime();
+            this.syncTimestamp = this.timestamp;
+            this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
+            this.progress = 100;
 
-        // Update the "last sync" date. Just consider this http call date as the sync date for now
-        this.timestamp = new Date().getTime();
-        this.syncTimestamp = this.timestamp;
-        this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
-        this.progress = 100;
-
-        const eventId = this.masterWallet.id + ':' + this.id + ':synccompleted';
-        this.masterWallet.walletManager.events.publish(eventId, this.id);
+            const eventId = this.masterWallet.id + ':' + this.id + ':synccompleted';
+            this.masterWallet.walletManager.events.publish(eventId, this.id);
+        } catch (error) {
+            console.log('ERC20 Token (', this.id, ') updateBalance error:', error);
+        }
     }
 
     public async getTransactions(startIndex: number): Promise<any> {

@@ -174,6 +174,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
             curMasterWallet = this.masterWalletList[index];
         }
 
+        await curMasterWallet.updateBalance();
         curMasterWallet.getSubWalletBalance(StandardCoinName.ELA);
         this.currencyService.fetch();
         setTimeout(() => {

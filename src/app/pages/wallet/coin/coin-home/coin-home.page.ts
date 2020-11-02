@@ -136,10 +136,7 @@ export class CoinHomePage implements OnInit {
 
     async initData() {
         this.subWallet = this.masterWallet.getSubWallet(this.chainId);
-        if (this.chainIsERC20) {
-            // ERC20 token update balance by web3
-            this.subWallet.updateBalance();
-        }
+        this.subWallet.updateBalance();
 
         this.pageNo = 0;
         this.start = 0;

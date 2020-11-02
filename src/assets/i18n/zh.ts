@@ -39,7 +39,7 @@ export const zh = {
     "you-have-n-wallets": "您有 {{walletsCount}} 个币种",
     "synchronized": "{{progress}}% 完成",
     "sync-progress": "同步中 {{progress}}%",
-    "ela-erc20": "ELASTOS ERC20 TOKEN",
+    "ela-erc20": "ELASTOS ERC20 币种",
     "coin-list": "币列表",
     "activate-hive-vault": "激活 Hive Vault 以进行备份",
 
@@ -170,7 +170,7 @@ export const zh = {
     "coin-adderc20-name": '币种名称',
     "coin-adderc20-symbol": '币种符号',
     "coin-adderc20-not-a-erc20-contract": "扫描的内容不是有效的 ERC20 币种地址",
-    'coin-adderc20-alreadyadded': 'Token already added',
+    'coin-adderc20-alreadyadded': '币种已经添加',
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "确定删除?",
@@ -275,7 +275,7 @@ export const zh = {
     'launcher-create-wallet': '创建钱包',
     'enter-wallet-name': '请输入钱包名称',
     'single-address': '单地址钱包',
-    'multiple-address': 'Multi-Address Wallet',
+    'multiple-address': '多地址钱包',
     'launcher-backup-import': '导入钱包',
     "text-wallet-name-validator-enter-name": "请给您的钱包设置名称",
     "text-wallet-name-validator-not-valid-name": "抱歉，这个钱包名称无效",

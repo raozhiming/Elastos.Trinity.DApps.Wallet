@@ -54,6 +54,8 @@ export class UiService {
         // let balance = new BigNumber("172400");
         if (balance.isZero()) {
           return String(0);
+        } else if (balance.isNaN()) {
+          return String('NaN');
         } else if (balance.isLessThan(100)) {
           return balance.decimalPlaces(6).toString();
         } else if (balance.isGreaterThanOrEqualTo(100) && balance.isLessThan(1000)) {

@@ -107,6 +107,12 @@ export class MasterWallet {
         return balance.dividedBy(Config.SELAAsBigNumber);
     }
 
+    public async updateBalance() {
+        for (let subWallet of Object.values(this.subWallets)) {
+            await subWallet.updateBalance();
+        }
+    }
+
     /**
      * Requests a wallet to update its sync progress. Call this only for SPV SDK sub-wallets.
      */

@@ -226,6 +226,10 @@ export class Util {
     }
 
     public static getDecimalBalance(balance: BigNumber): string {
+        if (balance.isNaN()) {
+            return '';
+        }
+
         // const decimalBalance = new BigNumber('4.999999');
         const decimalBalance = balance.modulo(1);
         const fixedDecimalBalance = decimalBalance.toNumber().toLocaleString().slice(2, 5);
