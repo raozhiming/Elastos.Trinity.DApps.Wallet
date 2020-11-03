@@ -28,6 +28,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
             return Promise.resolve(this.ethscAddress);
 
         this.ethscAddress = await this.createAddress();
+        return Promise.resolve(this.ethscAddress);
     }
 
     /**
