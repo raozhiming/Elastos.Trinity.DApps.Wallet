@@ -1,0 +1,26 @@
+<ion-content>
+    <ion-grid class="container" [class.dark-container]="theme.darkMode">
+        <div *ngIf="addressList.length > 0">
+            <ion-row
+                class="item-row ripple ion-activatable"
+                *ngFor="let address of addressList"
+            >
+                <ion-col class="left-col">
+                    <p> {{ address }} </p>
+                </ion-col>
+                <ion-col size="2" class="right-col">
+                    <img src="{{
+                        this.theme.darkMode
+                          ? '/assets/icons/icon-feather-dark.svg'
+                          : '/assets/icons/icon-feather.svg'
+                      }}" (click)="copyToClipboard(address)" />
+                  </ion-col>
+                <ion-ripple-effect></ion-ripple-effect>
+            </ion-row>
+        </div>
+    </ion-grid>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'coin-address-load-more'|translate}}">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

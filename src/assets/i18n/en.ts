@@ -121,6 +121,13 @@ export const en = {
     "coin-receive-ela-address": "Your {{coinName}} Address",
     "coin-receive-tap-to-copy": "Tap address to copy",
     "coin-address-copied": "{{coinName}} address copied!",
+    "coin-receive-address-list": "Enter Address List",
+
+    // Coin address screen
+    "coin-address-title": "Address List",
+    'coin-address-load-more': 'Loading...',
+    "coin-address-load-finish": 'All addresses listed',
+
 
     // Confirm transaction component
     "confirm-transaction-title": "Confirm Transaction",

@@ -121,6 +121,13 @@ export const zh = {
     "coin-receive-ela-address": "您的{{coinName}}地址",
     "coin-receive-tap-to-copy": "点击地址即可复制",
     "coin-address-copied": "{{coinName}} 地址已复制!",
+    "coin-receive-address-list": "查看地址列表",
+
+
+    // Coin address screen
+    "coin-address-title": "地址列表",
+    'coin-address-load-more': '正在努力加载',
+    "coin-address-load-finish": '已显示所有地址',
 
     // Confirm transaction component
     "confirm-transaction-title": "确认交易",

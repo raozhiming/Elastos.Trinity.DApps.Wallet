@@ -9,5 +9,9 @@
             {{ qrcode.slice(0,20) }}<br>{{ qrcode.slice(20,50) }}
         </h2>
         <p>{{ 'coin-receive-tap-to-copy' | translate }}</p>
+
+        <h3 *ngIf="!isSingleAddress" (click)="showAddressList()">
+            {{ 'coin-receive-address-list' | translate }}
+        </h3>
     </ion-grid>
 </ion-content>

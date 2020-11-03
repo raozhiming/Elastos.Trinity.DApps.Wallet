@@ -66,6 +66,7 @@ import { WaitForSyncPage } from './pages/intents/waitforsync/waitforsync.page';
 import { CRmembervotePage } from './pages/intents/crmembervote/crmembervote.page';
 import { DPoSVotePage } from './pages/intents/dposvote/dposvote.page';
 import { CRMemberRegisterPage } from './pages/intents/crmemberregister/crmemberregister.page';
+import { CoinAddressPage } from './pages/wallet/coin/coin-address/coin-address.page';
 import { CoinTransferPage } from './pages/wallet/coin/coin-transfer/coin-transfer.page';
 import { CoinTxInfoPage } from './pages/wallet/coin/coin-tx-info/coin-tx-info.page';
 import { CoinReceivePage } from './pages/wallet/coin/coin-receive/coin-receive.page';
@@ -113,7 +114,7 @@ export class SentryErrorHandler implements ErrorHandler {
   constructor(public alertCtrl: AlertController, public translate: TranslateService) {}
 
   handleError(error) {
-    if (error.promise.__zone_symbol__value.type && error.promise.__zone_symbol__value.type === 'skipsentry') {
+    if (error.promise && error.promise.__zone_symbol__value && 'skipsentry' === error.promise.__zone_symbol__value.type) {
         console.log('This exception has been handled:', error);
         return;
     }
@@ -194,6 +195,7 @@ export function TranslateLoaderFactory() {
         WalletImportPage,
         WalletAdvancedImportPage,
         CoinHomePage,
+        CoinAddressPage,
         CoinListPage,
         CoinSelectPage,
         CoinTxInfoPage,

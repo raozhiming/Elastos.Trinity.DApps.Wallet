@@ -6,6 +6,7 @@ import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 
 @Component({
     selector: 'app-coin-receive',
@@ -14,9 +15,11 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class CoinReceivePage implements OnInit {
 
+    public masterWallet: MasterWallet = null;
     private masterWalletId = '1';
     public chainId: string;
     public qrcode: string = null;
+    public isSingleAddress = false;
 
     constructor(
         public route: ActivatedRoute,
@@ -36,6 +39,8 @@ export class CoinReceivePage implements OnInit {
     init() {
         this.masterWalletId = this.coinTransferService.masterWalletId;
         this.chainId = this.coinTransferService.chainId;
+        this.masterWallet = this.walletManager.getMasterWallet(this.masterWalletId);
+        this.isSingleAddress = this.masterWallet.account.singleAddress;
         this.appService.setTitleBarTitle(this.translate.instant("coin-receive-title", { coinName: this.chainId}));
         this.createAddress();
     }
@@ -46,7 +51,12 @@ export class CoinReceivePage implements OnInit {
     }
 
     async createAddress() {
-        this.qrcode = await this.walletManager.getMasterWallet(this.masterWalletId).getSubWallet(this.chainId).createAddress();
+        this.qrcode = await this.masterWallet.getSubWallet(this.chainId).createAddress();
         console.log('qrcode', this.qrcode);
+    }
+
+    showAddressList() {
+        this.native.go('/coin-address', { masterWalletId: this.masterWalletId,
+            chainId: this.chainId});
     }
 }
