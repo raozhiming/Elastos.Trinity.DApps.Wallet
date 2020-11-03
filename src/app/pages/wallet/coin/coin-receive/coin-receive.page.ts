@@ -7,6 +7,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
+import { StandardCoinName } from 'src/app/model/Coin';
 
 @Component({
     selector: 'app-coin-receive',
@@ -36,13 +37,25 @@ export class CoinReceivePage implements OnInit {
         this.init();
     }
 
+    ionViewWillEnter() {
+        this.appService.setTitleBarTitle(this.translate.instant("coin-receive-title", { coinName: this.chainId}));
+    }
+
     init() {
         this.masterWalletId = this.coinTransferService.masterWalletId;
         this.chainId = this.coinTransferService.chainId;
         this.masterWallet = this.walletManager.getMasterWallet(this.masterWalletId);
-        this.isSingleAddress = this.masterWallet.account.singleAddress;
-        this.appService.setTitleBarTitle(this.translate.instant("coin-receive-title", { coinName: this.chainId}));
+
         this.createAddress();
+        this.isSingleAddressSubwallet();
+    }
+
+    isSingleAddressSubwallet() {
+        if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
+            this.isSingleAddress = this.masterWallet.account.singleAddress;
+        } else {
+            this.isSingleAddress = true;
+        }
     }
 
     copyAddress() {

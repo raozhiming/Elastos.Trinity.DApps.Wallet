@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
-import { ModalController, Events } from '@ionic/angular';
 import { Native } from '../../../../services/native.service';
-import { PopupProvider} from '../../../../services/popup.service';
 import { WalletManager } from '../../../../services/wallet.service';
-import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { AppService } from 'src/app/services/app.service';
 import { Util } from 'src/app/model/Util';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,18 +16,14 @@ import { ThemeService } from 'src/app/services/theme.service';
 export class CoinAddressPage {
 
     addressList = [];
-    private masterWallet: MasterWallet = null;
     public masterWalletId: string;
     public chainId: string;
     curCount = 0;
 
     constructor(
         public walletManager: WalletManager,
-        public popupProvider: PopupProvider,
         private appService: AppService,
         public native: Native,
-        public modalCtrl: ModalController,
-        public events: Events,
         public router: Router,
         public theme: ThemeService,
         private translate: TranslateService,
@@ -49,8 +42,6 @@ export class CoinAddressPage {
     }
 
     ionViewWillEnter() {
-        console.log('---- coin-address ionViewWillEnter addressList:', this.addressList)
-        // this.appService.setBackKeyVisibility(true);
         this.appService.setTitleBarTitle(this.translate.instant("coin-address-title"));
     }
 

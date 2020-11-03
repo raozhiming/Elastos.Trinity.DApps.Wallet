@@ -2,13 +2,11 @@ import { StandardSubWallet } from './StandardSubWallet';
 import BigNumber from 'bignumber.js';
 import { Config } from '../../config/Config';
 import Web3 from 'web3';
-import { Contract } from 'web3-eth-contract';
 import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk';
-import { EthTransaction, Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
+import { EthTransaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
 import { StandardCoinName } from '../Coin';
 import { MasterWallet } from './MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
-import { transition } from '@angular/animations';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -24,30 +22,32 @@ export class ETHChainSubWallet extends StandardSubWallet {
     }
 
     private async getAddress(): Promise<string> {
-        if (this.ethscAddress)
-            return Promise.resolve(this.ethscAddress);
-
-        this.ethscAddress = await this.createAddress();
-        return Promise.resolve(this.ethscAddress);
+        if (!this.ethscAddress) {
+            this.ethscAddress = await this.createAddress();
+        }
+        return this.ethscAddress;
     }
 
     /**
      * Use smartcontract to Send ELA from ETHSC to mainchain.
      */
     public getWithdrawContractAddress(): Promise<string> {
-        if (this.withdrawContractAddress)
-            return Promise.resolve(this.withdrawContractAddress);
-
         return new Promise((resolve) => {
-            appManager.getPreference('chain.network.type', (value) => {
-                if (value === 'MainNet') {
-                    resolve(Config.CONTRACT_ADDRESS_MAINNET);
-                } else if (value === 'TestNet') {
-                    resolve(Config.CONTRACT_ADDRESS_TESTNET);
-                } else {
-                    resolve(null);
-                }
-            });
+            if (this.withdrawContractAddress) {
+                resolve(this.withdrawContractAddress);
+            } else {
+                appManager.getPreference('chain.network.type', (value) => {
+                    if (value === 'MainNet') {
+                        this.withdrawContractAddress = Config.CONTRACT_ADDRESS_MAINNET;
+                        resolve(this.withdrawContractAddress);
+                    } else if (value === 'TestNet') {
+                        this.withdrawContractAddress = Config.CONTRACT_ADDRESS_MAINNET;
+                        resolve(this.withdrawContractAddress);
+                    } else {
+                        resolve(null);
+                    }
+                });
+            }
         });
     }
 
