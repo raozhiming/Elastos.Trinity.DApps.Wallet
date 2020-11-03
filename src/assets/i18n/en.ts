@@ -42,6 +42,7 @@ export const en = {
     "ela-erc20": "ELASTOS ERC20 TOKEN",
     "coin-list": "Token List",
     "activate-hive-vault": "Activate Hive Vault",
+    "pull-down-to-refresh": "Pull Down Screen to Refresh",
 
     // Wallet Settings screen
     'settings-title': 'Settings',

@@ -42,6 +42,7 @@ export const zh = {
     "ela-erc20": "ELASTOS ERC20 币种",
     "coin-list": "币列表",
     "activate-hive-vault": "激活 Hive Vault",
+    "pull-down-to-refresh": "Pull Down Screen to Refresh",
 
     // Settings screen
     "settings-title": "设置",

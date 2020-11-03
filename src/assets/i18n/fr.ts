@@ -42,6 +42,7 @@ export const fr = {
     "ela-erc20": "JETON ERC20 ELASTOS",
     "coin-list": "Liste des jetons",
     "activate-hive-vault": "Activate Hive Vault",   // TODO   need to translate
+    "pull-down-to-refresh": "Pull Down Screen to Refresh",
 
     // Settings screen
     "settings-title": "Paramètres",
