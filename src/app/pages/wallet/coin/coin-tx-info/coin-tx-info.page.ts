@@ -206,7 +206,9 @@ export class CoinTxInfoPage implements OnInit {
             {
                 type: 'blockId',
                 title: 'tx-info-block-id',
-                value: transaction.Height,
+                value:
+                    this.transactionInfo.confirmStatus === 0 ?
+                        0 : transaction.Height, // the Height is 2147483647(-1) when the transaction is not confirmed.
                 show: false,
             },
             {
