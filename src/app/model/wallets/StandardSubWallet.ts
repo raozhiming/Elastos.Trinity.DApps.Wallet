@@ -133,6 +133,9 @@ export abstract class StandardSubWallet extends SubWallet {
                     }
                 }
                 break;
+            case TransactionDirection.MOVED:
+                transactionName = translate.instant("coin-op-transfered-ela");
+                break;
         }
         return transactionName;
     }

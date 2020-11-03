@@ -85,7 +85,7 @@ export const zh = {
     "coin-no-transactions": "没有交易",
     "coin-op-received-ela": "接收ELA",
     "coin-op-sent-ela": "发送ELA",
-    "coin-op-transfered-ela": "转移ELA",
+    "coin-op-transfered-ela": "钱包内部转账",
     "coin-op-vote": "投票",
     "coin-op-identity": "发布 DID",
     "coin-dir-from-mainchain": "ELA 主链充值",

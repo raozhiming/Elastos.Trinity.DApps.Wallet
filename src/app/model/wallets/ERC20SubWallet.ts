@@ -121,6 +121,10 @@ export class ERC20SubWallet extends SubWallet {
 
     public async updateBalance() {
         console.log("Updating ERC20 token balance for token: ", this.id);
+        if (!this.tokenDecimals) {
+            await this.fetchTokenDecimals();
+        }
+
         try {
             let ethAccountAddress = await this.getEthAccountAddress();
             var contractAddress = this.coin.getContractAddress();
@@ -156,9 +160,9 @@ export class ERC20SubWallet extends SubWallet {
     protected async getTransactionName(transaction: Transaction, translate: TranslateService): Promise<string> {
         switch (transaction.Direction) {
             case TransactionDirection.RECEIVED:
-                return "Received "+this.coin.getName();
+                return translate.instant("coin-action-receive") + ' ' + this.coin.getName();
             case TransactionDirection.SENT:
-                return "Sent "+this.coin.getName();
+                return translate.instant("coin-action-send") + ' ' + this.coin.getName();
             default:
                 return "Invalid";
         }
