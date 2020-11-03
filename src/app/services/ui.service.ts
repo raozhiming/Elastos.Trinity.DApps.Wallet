@@ -24,7 +24,7 @@ export class UiService {
     await this.getVisit();
   }
 
-  getVisit() {
+  getVisit(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.storage.getVisit().then((visited) => {
         if (visited) {
