@@ -31,9 +31,11 @@ export class CoinAddERC20Page implements OnInit {
 
     // public coinAddress: string = "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c"; // TEST - TTECH ERC20 on mainnet
     public coinAddress: string = "";
-    public coinInfoFetched: boolean = false;
     public coinName: string = null;
     public coinSymbol: string = null;
+
+    public coinInfoFetched: boolean = false;
+    public fetchingCoinInfo: boolean = false;
 
     /** Web3 variables to call smart contracts */
     private web3: Web3;
@@ -77,6 +79,7 @@ export class CoinAddERC20Page implements OnInit {
 
     async getAllCustomERC20Coins() {
         this.allCustomERC20Coins = await this.coinService.getCustomERC20Coins();
+        console.log('all erc20 coins', this.allCustomERC20Coins);
     }
 
     /**
@@ -99,34 +102,38 @@ export class CoinAddERC20Page implements OnInit {
             // Check if this looks like a valid address. If not, give feedback to user.
             if (!this.web3.utils.isAddress(this.coinAddress)) {
                 this.popup.ionicAlert("not-a-valid-address", "coin-adderc20-not-a-erc20-contract", "Ok");
-            } else if (this.coinAlreadyAdded(this.coinAddress)) {
-                this.native.toast_trans('coin-adderc20-alreadyadded');
+                this.coinAddress = '';
             } else {
-                this.tryFetchingCoinByAddress(this.coinAddress);
+                if (this.coinAlreadyAdded(this.coinAddress)) {
+                    this.native.toast_trans('coin-adderc20-alreadyadded');
+                    this.coinAddress = '';
+                } else {
+                    this.tryFetchingCoinByAddress(this.coinAddress);
+                }
             }
-
-            this.coinAddress = '';
         });
     }
 
     coinAlreadyAdded(address: string): boolean {
-        this.allCustomERC20Coins.forEach((coin) => {
-            if (coin.getContractAddress() === address) {
-                return true;
-            }
-        });
-
-        return false;
+        const targetCoin = this.allCustomERC20Coins.find((coin) => coin.getContractAddress() === address);
+        if (targetCoin) {
+            console.log('Address already exists', address);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private async tryFetchingCoinByAddress(address: string) {
         if (address !== "" && this.web3.utils.isAddress(address)) {
             // Coin address entered/changed: fetch its info.
+            this.fetchingCoinInfo = true;
             this.coinInfoFetched = false;
 
             // Make sure user has the ETH sidechain enabled
             if (!this.masterWallet.hasSubWallet(StandardCoinName.ETHSC)) {
                 this.popup.ionicAlert("no-ethereum-token", "please-add-ethereum-first", "Ok");
+                this.fetchingCoinInfo = false;
                 return;
             }
 
@@ -136,11 +143,12 @@ export class CoinAddERC20Page implements OnInit {
 
             let contractCode = await this.web3.eth.getCode(address);
 
-            if (contractCode == "0x") {
+            if (contractCode === "0x") {
                 console.log("Contract at "+address+" does not exist");
+                this.fetchingCoinInfo = false;
                 // TODO: Show feedback to user on screen such as "no coin found at this address"
             } else {
-                console.log("Found contract at address "+address);
+                console.log("Found contract at address " + address);
 
                 try {
                     this.coinName = await erc20Contract.methods.name().call();
@@ -150,7 +158,9 @@ export class CoinAddERC20Page implements OnInit {
                     console.log("Coin symbol", this.coinSymbol);
 
                     this.coinInfoFetched = true;
+                    this.fetchingCoinInfo = false;
                 } catch (e) {
+                    this.fetchingCoinInfo = false;
                     console.log("Contract call exception - invalid contract? Not ERC20?");
                 }
             }
@@ -158,7 +168,9 @@ export class CoinAddERC20Page implements OnInit {
     }
 
     async onInputAddress(address: string) {
-        this.tryFetchingCoinByAddress(address);
+        if (!address) {
+            this.coinInfoFetched = false;
+        }
     }
 
     private async getEthAccountAddress(): Promise<string> {

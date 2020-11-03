@@ -21,25 +21,33 @@
             </ion-col>
         </ion-row>
 
-        <ion-row class="btn-row" *ngIf="!coinInfoFetched">
+        <ion-row class="btn-row" *ngIf="!coinInfoFetched && !fetchingCoinInfo">
             <ion-button color="primary" [disabled]="!coinAddress" (click)="checkCoinAddress()">
                 <ion-label>{{ 'coin-adderc20-add' | translate }}</ion-label>
             </ion-button>
         </ion-row>
+
+        <!-- Fetching Coin -->
+        <ion-row class="coin-row" *ngIf="fetchingCoinInfo">
+            <ion-spinner name="crescent"></ion-spinner>
+        </ion-row>
     
-        <ion-row class="coin-row" *ngIf="coinInfoFetched">
-            <h2>{{ 'coin-adderc20-name' | translate }}</h2>
-            <h3>{{ coinName }}</h3>
-            <h2>{{ 'coin-adderc20-symbol' | translate }}</h2>
-            <h3 id="symbol">{{ coinSymbol }}</h3>
-        </ion-row>
-
-        <ion-row class="btn-row" *ngIf="coinInfoFetched">
-            <ion-button color="primary" (click)="addCoin()">
-                <ion-label>{{ 'coin-adderc20-add' | translate }}</ion-label>
-            </ion-button>
-        </ion-row>
-
+        <!-- Coin Fetched -->
+        <div *ngIf="coinInfoFetched && !fetchingCoinInfo">
+            <ion-row class="coin-row">
+                <h2>{{ 'coin-adderc20-name' | translate }}</h2>
+                <h3>{{ coinName }}</h3>
+                <h2>{{ 'coin-adderc20-symbol' | translate }}</h2>
+                <h3 id="symbol">{{ coinSymbol }}</h3>
+            </ion-row>
+    
+            <ion-row class="btn-row">
+                <ion-button color="primary" (click)="addCoin()">
+                    <ion-label>{{ 'coin-adderc20-add' | translate }}</ion-label>
+                </ion-button>
+            </ion-row>
+        </div>
+    
     </ion-grid>
 </ion-content>
 
