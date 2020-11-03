@@ -136,6 +136,18 @@ export class LocalStorage {
         console.log('Found Ela price stored', rawPrice);
         return rawPrice;
     }
+
+    public setVisit(visited: boolean) {
+        return this.set('visited', JSON.stringify(visited)).then((data) => {
+            console.log('Visit stored', data);
+        });
+    }
+
+    public async getVisit(): Promise<boolean> {
+        let visited = await this.get("visited");
+        console.log('User already visited?', visited);
+        return visited;
+    }
 }
 
 

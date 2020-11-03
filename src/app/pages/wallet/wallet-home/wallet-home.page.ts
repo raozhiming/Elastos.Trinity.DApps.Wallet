@@ -39,6 +39,7 @@ import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import { IonSlides, Events } from '@ionic/angular';
 import { ERC20SubWallet } from 'src/app/model/wallets/ERC20SubWallet';
 import { BackupRestoreService } from 'src/app/services/backuprestore.service';
+import { LocalStorage } from 'src/app/services/storage.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -83,7 +84,8 @@ export class WalletHomePage implements OnInit, OnDestroy {
         public theme: ThemeService,
         public uiService: UiService,
         private zone: NgZone,
-        private backupService: BackupRestoreService
+        private backupService: BackupRestoreService,
+        private storage: LocalStorage
     ) {
     }
 
@@ -166,6 +168,11 @@ export class WalletHomePage implements OnInit, OnDestroy {
     }
 
     async doRefresh(event) {
+        if (!this.uiService.returnedUser) {
+            this.uiService.returnedUser = true;
+            this.storage.setVisit(true);
+        }
+
         let curMasterWallet = null;
         if (this.isSingleWallet) {
             curMasterWallet = this.masterWallet;
@@ -204,5 +211,10 @@ export class WalletHomePage implements OnInit, OnDestroy {
 
     shouldPromptToEnableHiveVaultForBackup(): boolean {
         return !this.resolvingBackupService && this.backupService.initialized() && !this.backupService.vaultIsConfigured();
+    }
+
+    closeRefreshBox() {
+        this.uiService.returnedUser = true;
+        this.storage.setVisit(true);
     }
 }

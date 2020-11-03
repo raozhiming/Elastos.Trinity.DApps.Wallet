@@ -42,6 +42,7 @@ import { ERC20SubWallet } from 'src/app/model/wallets/ERC20SubWallet';
 import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import { UiService } from 'src/app/services/ui.service';
 import BigNumber from 'bignumber.js';
+import { LocalStorage } from 'src/app/services/storage.service';
 
 @Component({
     selector: 'app-coin-home',
@@ -81,7 +82,8 @@ export class CoinHomePage implements OnInit {
         private appService: AppService,
         public theme: ThemeService,
         public currencyService: CurrencyService,
-        public uiService: UiService
+        public uiService: UiService,
+        private storage: LocalStorage
     ) {
         this.init();
     }
@@ -258,6 +260,11 @@ export class CoinHomePage implements OnInit {
     }
 
     doRefresh(event) {
+        if (!this.uiService.returnedUser) {
+            this.uiService.returnedUser = true;
+            this.storage.setVisit(true);
+        }
+
         this.initData();
         this.currencyService.fetch();
         setTimeout(() => {
@@ -365,5 +372,10 @@ export class CoinHomePage implements OnInit {
      */
     canDisplayCurrency(): boolean {
         return !(this.subWallet instanceof ERC20SubWallet);
+    }
+
+    closeRefreshBox() {
+        this.uiService.returnedUser = true;
+        this.storage.setVisit(true);
     }
 }

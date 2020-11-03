@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { PopoverController } from '@ionic/angular';
 import { HelpComponent } from '../components/help/help.component';
 import BigNumber from 'bignumber.js';
+import { LocalStorage } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +13,29 @@ import BigNumber from 'bignumber.js';
 export class UiService {
 
   public showPopover = false;
+  public returnedUser = true;
 
   constructor(
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
+    private storage: LocalStorage
   ) { }
+
+  async init() {
+    await this.getVisit();
+  }
+
+  getVisit() {
+    return new Promise((resolve, reject) => {
+      this.storage.getVisit().then((visited) => {
+        if (visited) {
+          this.returnedUser = true;
+        } else {
+          this.returnedUser = false;
+        }
+        resolve();
+      });
+    });
+  }
 
   getSubWalletIcon(subwallet: SubWallet): string {
     if (!subwallet)

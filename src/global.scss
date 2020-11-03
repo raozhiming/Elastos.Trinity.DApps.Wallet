@@ -441,3 +441,59 @@
     } 
 }
 
+/************************************ 
+  REFRESH BOX
+  pages ~ wallet-home, coin-home
+************************************/
+.refresh-row {
+    box-shadow: 0 3px 15px 0 #ededf0;
+    background-color: #ffffff;
+    border-radius: 17px;
+    width: 95%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 2.5%;
+
+    ion-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .left-col {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .mid-col {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 15px;
+
+        h1 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.44;
+        }
+    }
+
+    .right-col {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 17px; 
+        box-shadow: 0 3px 15px 0 #ededf0;
+    }
+}
+
+.dark-refresh-row {
+    box-shadow: 0 3px 15px 0 #151626;
+    background-color: #2e2f4e;
+   
+    .right-col {
+        box-shadow: 0 3px 15px 0 #151626;
+    }
+}
+
