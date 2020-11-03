@@ -43,7 +43,8 @@
                         <ion-img class="transfer" src="assets/buttons/transfer.png"></ion-img>
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>
-                    <p class="btn-label">{{ 'coin-action-withdraw' | translate }}</p>
+                    <p *ngIf="chainIsELA()" class="btn-label">{{ 'coin-action-recharge' | translate }}</p>
+                    <p *ngIf="!chainIsELA()" class="btn-label">{{ 'coin-action-withdraw' | translate }}</p>
                 </ion-col>
                 <ion-col offset="0.25" size="3" (click)="sendFunds()">
                     <div class="ion-activatable btn-box">

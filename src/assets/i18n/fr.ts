@@ -77,7 +77,7 @@ export const fr = {
     "coin-overview": "Jeton {{coinName}} - Aperçu",
     "coin-new-transactions-today": "{{ todaysTransactions }} NOUVELLE(S) TRANSACTION(S) AUJOURD'HUI",
     "coin-balance": "Solde",
-    "coin-action-recharge": "RECHARGER",
+    "coin-action-recharge": "TRANSFERER",
     "coin-action-withdraw": "TRANSFERER",
     "coin-action-send": "ENVOYER",
     "coin-action-receive": "RECEVOIR",
