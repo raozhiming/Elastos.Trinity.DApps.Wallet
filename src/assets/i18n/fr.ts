@@ -259,7 +259,7 @@ export const fr = {
     'advanced-import': 'Fast mnemonic input',
     'advanced-import-intro': 'Vous pouvez coller votre 12 mnémonique entier sur une seule ligne ici.',
     'advanced-import-msg': '*Espace requis entre chaque mot',
-    'paste-mnemonic': 'Coller ou saisir le mnémonique',
+    'paste-mnemonic': 'Coller ou saisir le 12 mnémonique',
 
     // Export mnemonic screen
     'text-export-mnemonic': 'Exporter le mnémonique',
