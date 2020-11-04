@@ -256,8 +256,8 @@ export const fr = {
     "help:mnemonic-password": 'Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Ne l\'oubliez pas, il ne peut pas être retrouvé.',
 
     // Advanced mnemonic import screen
-    'advanced-import': 'Importation avancée',
-    'advanced-import-intro': 'Vous pouvez coller votre mnémonique entier sur une seule ligne ici.',
+    'advanced-import': 'Fast mnemonic input',
+    'advanced-import-intro': 'Vous pouvez coller votre 12 mnémonique entier sur une seule ligne ici.',
     'advanced-import-msg': '*Espace requis entre chaque mot',
     'paste-mnemonic': 'Coller ou saisir le mnémonique',
 

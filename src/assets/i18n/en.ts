@@ -263,8 +263,8 @@ export const en = {
     "help:mnemonic-password": 'This is an optional password bound to your mnemonic words, to give your wallet extra security. Save it carefully, it is NOT recoverable if lost.',
 
     // Advanced mnemonic import screen
-    'advanced-import': 'Advanced Import',
-    'advanced-import-intro': 'You can paste and enter your mnemonic phrase in one line.',
+    'advanced-import': 'Fast mnemonic input',
+    'advanced-import-intro': 'You can paste and enter your 12 mnemonic phrases in one line.',
     'advanced-import-msg': '*Spaces are required between words',
     'paste-mnemonic': 'Paste or Enter Mnemonic',
 

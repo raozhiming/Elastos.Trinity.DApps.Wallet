@@ -264,8 +264,8 @@ export const zh = {
     "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码',
 
     // Advanced mnemonic import screen
-    'advanced-import': '便捷导入',
-    'advanced-import-intro': '您可以直接粘贴或输入您的助记词',
+    'advanced-import': '快速输入助记词',
+    'advanced-import-intro': '您可以直接粘贴或输入您的12个助记词',
     'advanced-import-msg': '*助记词之间需要空格',
     'paste-mnemonic': '粘贴或输入助记词',
 
