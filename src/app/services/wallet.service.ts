@@ -312,7 +312,7 @@ export class WalletManager {
         );
 
         let account: WalletAccount = {
-            singleAddress: singleAddress,
+            SingleAddress: singleAddress,
             Type: WalletAccountType.STANDARD
         };
 
@@ -335,7 +335,7 @@ export class WalletManager {
         await this.spvBridge.importWalletWithMnemonic(masterId, mnemonicStr, mnemonicPassword, payPassword, singleAddress);
 
         let account: WalletAccount = {
-            singleAddress: singleAddress,
+            SingleAddress: singleAddress,
             Type: WalletAccountType.STANDARD
         };
 
@@ -854,7 +854,7 @@ export class WalletManager {
             // Get balance by RPC if the last block time is one day ago.
             if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
                 try {
-                    const balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName, masterWallet.account.singleAddress);
+                    const balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName, masterWallet.account.SingleAddress);
                     subWallet.balanceByRPC = balance;
                     subWallet.balance = balance;
                     subWallet.timestampRPC = currentTimestamp;

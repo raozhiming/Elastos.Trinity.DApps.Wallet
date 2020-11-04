@@ -37,7 +37,7 @@ export class MasterWallet {
 
     public account: WalletAccount = {
         Type: WalletAccountType.STANDARD,
-        singleAddress: false
+        SingleAddress: false
     };
 
     constructor(

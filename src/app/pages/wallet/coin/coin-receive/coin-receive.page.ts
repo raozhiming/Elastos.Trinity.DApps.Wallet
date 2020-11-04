@@ -52,7 +52,7 @@ export class CoinReceivePage implements OnInit {
 
     isSingleAddressSubwallet() {
         if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
-            this.isSingleAddress = this.masterWallet.account.singleAddress;
+            this.isSingleAddress = this.masterWallet.account.SingleAddress;
         } else {
             this.isSingleAddress = true;
         }

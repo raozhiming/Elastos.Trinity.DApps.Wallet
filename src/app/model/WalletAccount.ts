@@ -4,6 +4,6 @@ export enum WalletAccountType {
 }
 
 export class WalletAccount {
-    singleAddress: boolean;
+    SingleAddress: boolean;
     Type: WalletAccountType;
 }
