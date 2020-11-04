@@ -32,6 +32,8 @@ export class WalletImportPage implements OnInit, OnDestroy {
         slidesPerView: 1
     };
 
+    public slideIndex = 0;
+
     public walletType: string;
     private masterWalletId: string = "1";
 
@@ -208,5 +210,11 @@ export class WalletImportPage implements OnInit, OnDestroy {
 
     goToAdvancedImport() {
         this.native.go('wallet-advanced-import');
+    }
+
+    ionSlideDidChange() {
+        this.zone.run(async () => {
+            this.slideIndex = await this.slider.getActiveIndex();
+        });
     }
 }
