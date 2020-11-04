@@ -122,12 +122,12 @@ export const fr = {
     "coin-receive-ela-address": "Votre adresse de réception {{coinName}}",
     "coin-receive-tap-to-copy": "Touchez l'adresse pour la copier",
     "coin-address-copied": "Adresse de votre portefeuille {{coinName}} copiée!",
-    "coin-receive-address-list": "Enter Address List",
+    "coin-receive-address-list": "Voir la liste des adresses",
 
     // Coin address screen
-    "coin-address-title": "Address List",
-    'coin-address-load-more': 'Loading...',
-    "coin-address-load-finish": 'All addresses listed',
+    "coin-address-title": "Liste des adresses",
+    'coin-address-load-more': 'Chargement...',
+    "coin-address-load-finish": 'Toutes les adresses sont affichées',
 
     // Confirm transaction component
     "confirm-transaction-title": "Confirmer la Transaction",
