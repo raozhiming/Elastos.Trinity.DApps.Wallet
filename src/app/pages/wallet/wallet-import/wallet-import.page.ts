@@ -193,7 +193,7 @@ export class WalletImportPage implements OnInit, OnDestroy {
         await this.walletManager.importMasterWalletWithMnemonic(
             this.masterWalletId,
             this.walletCreateService.name,
-            this.inputStr,
+            this.inputStr.toLowerCase(),
             this.walletCreateService.mnemonicPassword,
             payPassword,
             this.walletCreateService.singleAddress
