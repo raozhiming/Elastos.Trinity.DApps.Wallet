@@ -20,7 +20,6 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 export class WalletCreatePage implements OnInit {
     @ViewChild('input', {static: false}) input: IonInput;
 
-    public showOptions: boolean = false;
     public wallet = {
         name: '',
         singleAddress: false,

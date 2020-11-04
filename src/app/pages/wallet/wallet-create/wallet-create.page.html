@@ -9,14 +9,7 @@
             </ion-input>
         </ion-row>
 
-        <ion-row class="advanced-row" (click)="showOptions = !showOptions">
-            <span>
-                {{ 'advanced-options' | translate }} &nbsp;
-                <img [class.rotate]="showOptions" src="assets/icons/darkmode/down-arrow.svg"/>
-            </span>
-        </ion-row>
-
-        <div class="options-container" *ngIf="showOptions">
+        <div class="options-container">
             <ion-row class="toggle-row">
                 <ion-col class="left-col" size="10">
                     <h1 *ngIf="wallet.singleAddress">{{ 'single-address' | translate }}</h1>
