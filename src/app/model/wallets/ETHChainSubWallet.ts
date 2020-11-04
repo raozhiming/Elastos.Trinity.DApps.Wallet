@@ -140,13 +140,15 @@ export class ETHChainSubWallet extends StandardSubWallet {
 
         const method = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE);
 
-        let gasLimit = 200000;
-        try {
-            // Estimate gas cost
-            gasLimit = await method.estimateGas();
-        } catch (error) {
-            console.log('estimateGas error:', error);
-        }
+        let gasLimit = 100000;
+        // TODO: The value from estimateGas is too small sometimes (eg 22384) for withdraw transaction.
+        // Maybe it is the bug of node?
+        // try {
+        //     // Estimate gas cost
+        //     gasLimit = await method.estimateGas();
+        // } catch (error) {
+        //     console.log('estimateGas error:', error);
+        // }
 
         const data = method.encodeABI();
         return this.masterWallet.walletManager.spvBridge.createTransferGeneric(

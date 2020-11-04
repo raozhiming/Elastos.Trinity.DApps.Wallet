@@ -205,7 +205,7 @@ export class ERC20SubWallet extends SubWallet {
         let web3BigNumber = this.web3.utils.toBN(amountWithDecimals.toString(10));
         let method = erc20Contract.methods.transfer(toAddress, web3BigNumber);
 
-        let gasLimit = 200000;
+        let gasLimit = 100000;
         try {
             // Estimate gas cost
             gasLimit = await method.estimateGas();
