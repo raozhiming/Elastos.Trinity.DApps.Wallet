@@ -95,8 +95,8 @@ export class WalletImportPage implements OnInit, OnDestroy {
         }
     } */
 
-    slideNext(slide) {
-        slide.slideNext();
+    slideNext(slider) {
+        slider.slideNext();
     }
 
     goToNextInput(event, nextInput?: any, slide?: any) {

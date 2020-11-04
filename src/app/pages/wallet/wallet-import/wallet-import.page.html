@@ -106,14 +106,14 @@
                             type="text"
                             autocapitalize='off'
                             #input4
-                            (keypress)="goToNextInput($event.keyCode, input5, slide)"
+                            (keypress)="goToNextInput($event.keyCode, input5, slider)"
                             [(ngModel)]="inputList[3].input"
                         >
                         </ion-input>
                     </ion-col>
                 </ion-row>
                 <ion-row class="btn-container">
-                    <ion-button color="secondary" (click)="slideNext(slide)">
+                    <ion-button color="secondary" (click)="slideNext(slider)">
                         <ion-label>{{ 'next-four-words' | translate }}</ion-label>
                     </ion-button>
                 </ion-row>
@@ -174,14 +174,14 @@
                             type="text"
                             autocapitalize='off'
                             #input8
-                            (keypress)="goToNextInput($event.keyCode, input9, slide)"
+                            (keypress)="goToNextInput($event.keyCode, input9, slider)"
                             [(ngModel)]="inputList[7].input"
                         >
                         </ion-input>
                     </ion-col>
                 </ion-row>
                 <ion-row class="btn-container">
-                    <ion-button color="secondary" (click)="slideNext(slide)">
+                    <ion-button color="secondary" (click)="slideNext(slider)">
                         <ion-label>{{ 'next-four-words' | translate }}</ion-label>
                     </ion-button>
                 </ion-row>
