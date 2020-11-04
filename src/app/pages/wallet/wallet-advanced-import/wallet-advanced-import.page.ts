@@ -33,7 +33,6 @@ export class WalletAdvancedImportPage implements OnInit {
   }
 
   onMnemonicSentenceChanged() {
-    this.mnemonicSentence = this.mnemonicSentence.toLowerCase();
     this.mnemonicWords = this.mnemonicSentence.trim().split(" ");
     this.mnemonicWords = this.mnemonicWords.filter(item => item !== '');
   }
