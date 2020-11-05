@@ -97,6 +97,8 @@ export class WalletCreatePage implements OnInit {
         this.walletCreationService.singleAddress = this.wallet.singleAddress;
         if (this.useMenmonicPassphrase) {
             this.walletCreationService.mnemonicPassword = this.wallet.mnemonicPassword;
+        } else {
+            this.walletCreationService.mnemonicPassword = '';
         }
 
         if (this.walletCreationService.type === 1) {
