@@ -42,7 +42,6 @@ export class BackupRestoreService {
 
     await this.loadActiveNetwork();
 
-
     // Check if we have a vault already configured or not
     let userDID = await this.storage.get("backup-user-with-vault-did");
     if (userDID) {
@@ -88,11 +87,15 @@ export class BackupRestoreService {
       this.logError("BackupRestoreService should be called only from the UI!");
     }
 
-    await this.setupBackupHelper();
+    const result = await this.setupBackupHelper();
+    if (!result) {
+        return false;
+    }
 
     // After a manual vault activation, we start a sync immediatelly, to be able to restore sync states
     // after a wallet reinstallation.
     await this.checkSync(WalletManager.instance.getWalletsList());
+    return true;
   }
 
   private ensureRunningInUI() {
@@ -106,19 +109,18 @@ export class BackupRestoreService {
 
     this.log("Backup helper setup starting");
 
-    let hiveAuthHelper = new TrinitySDK.Hive.AuthHelper();
-    let hiveClient = await hiveAuthHelper.getClientWithAuth();
+    const hiveAuthHelper = new TrinitySDK.Hive.AuthHelper();
+    const hiveClient = await hiveAuthHelper.getClientWithAuth();
     this.log("Got hive client. Resolving vault...", hiveClient);
 
-    let didHelper = new TrinitySDK.DID.DIDHelper();
-    let userDID = '';
-    try {
-        userDID = (await didHelper.getOrCreateAppIdentityCredential()).getIssuer();
-    } catch (e) {
+    const didHelper = new TrinitySDK.DID.DIDHelper();
+    const credential: DIDPlugin.VerifiableCredential = await didHelper.getOrCreateAppIdentityCredential();
+    if (!credential) {
         // maybe user cancelled this action.
         this.logDebug("Maybe cancelled or no credential?");
         return false;
     }
+    const userDID = credential.getIssuer();
     this.logDebug("Current user DID:", userDID);
 
     this.userVault = await hiveClient.getVault(userDID);
@@ -134,6 +136,7 @@ export class BackupRestoreService {
 
     this.backupRestoreHelper = new TrinitySDK.Backup.BackupRestoreHelper(this.userVault, true);
     this.log("Backup restore helper initialized", this.backupRestoreHelper);
+    return true;
   }
 
   /**

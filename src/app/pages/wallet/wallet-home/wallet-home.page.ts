@@ -204,9 +204,8 @@ export class WalletHomePage implements OnInit, OnDestroy {
         return subWallet instanceof StandardSubWallet;
     }
 
-    enableHiveBackup() {
-        this.resolvingBackupService = true;
-        this.backupService.activateVaultAccess();
+    async enableHiveBackup() {
+        this.resolvingBackupService = await this.backupService.activateVaultAccess();
     }
 
     shouldPromptToEnableHiveVaultForBackup(): boolean {
