@@ -209,6 +209,13 @@ export class WalletHomePage implements OnInit, OnDestroy {
     }
 
     shouldPromptToEnableHiveVaultForBackup(): boolean {
+        console.log(
+            'shouldPromptToEnableHiveVaultForBackup',
+            this.resolvingBackupService,
+            this.backupService.initialized(),
+            this.backupService.vaultIsConfigured()
+        );
+        // Note: Task #4zv1e5 - Issue leads to setupBackupHelper in backupService
         return !this.resolvingBackupService && this.backupService.initialized() && !this.backupService.vaultIsConfigured();
     }
 

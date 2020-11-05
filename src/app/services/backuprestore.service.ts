@@ -33,8 +33,13 @@ export class BackupRestoreService {
   private fullySuccessfulSyncExpected = true;
   private activeNetwork: string = null; // MainNet, TestNet, PrvNet
 
-  constructor(private http: HttpClient, private storage: LocalStorage, private appService: AppService,
-    private events: Events, private coinService: CoinService) {
+  constructor(
+    private http: HttpClient,
+    private storage: LocalStorage,
+    private appService: AppService,
+    private events: Events,
+    private coinService: CoinService
+  ) {
   }
 
   async init() {
@@ -58,7 +63,7 @@ export class BackupRestoreService {
   }
 
   public vaultIsConfigured(): boolean {
-    return (this.userVault != null);
+    return (this.userVault !== null);
   }
 
   /**
@@ -69,7 +74,7 @@ export class BackupRestoreService {
       appManager.getPreference("chain.network.type", (networkCode) => {
         this.activeNetwork = networkCode;
         resolve();
-      }, (err)=>{
+      }, (err) => {
         reject(err);
       });
     });
