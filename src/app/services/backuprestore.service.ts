@@ -38,9 +38,10 @@ export class BackupRestoreService {
   }
 
   async init() {
-    this.log("Initializing");
+    this.log("BackupRestoreService Initializing");
 
     await this.loadActiveNetwork();
+
 
     // Check if we have a vault already configured or not
     let userDID = await this.storage.get("backup-user-with-vault-did");
@@ -110,7 +111,14 @@ export class BackupRestoreService {
     this.log("Got hive client. Resolving vault...", hiveClient);
 
     let didHelper = new TrinitySDK.DID.DIDHelper();
-    let userDID = (await didHelper.getOrCreateAppIdentityCredential()).getIssuer();
+    let userDID = '';
+    try {
+        userDID = (await didHelper.getOrCreateAppIdentityCredential()).getIssuer();
+    } catch (e) {
+        // maybe user cancelled this action.
+        this.logDebug("Maybe cancelled or no credential?");
+        return false;
+    }
     this.logDebug("Current user DID:", userDID);
 
     this.userVault = await hiveClient.getVault(userDID);
