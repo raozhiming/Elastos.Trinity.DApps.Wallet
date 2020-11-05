@@ -16,10 +16,19 @@
                     <h1 *ngIf="!wallet.singleAddress">{{ 'multiple-address' | translate }}</h1>
                 </ion-col>
                 <ion-col class="right-col" size="2">
-                    <ion-toggle color="tertiary" [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
+                    <ion-toggle color="warning" [(ngModel)]="wallet.singleAddress" (ionChange)="updateSingleAddress($event)"></ion-toggle>
                 </ion-col>
             </ion-row>
-            <ion-row class="password-row">
+            <ion-row class="mnemonic-passphrase-row">
+                <ion-col class="left-col" size="10">
+                    <h1 *ngIf="useMenmonicPassphrase">{{ 'use-passphrase' | translate }}</h1>
+                    <h1 *ngIf="!useMenmonicPassphrase">{{ 'not-use-passphrase' | translate }}</h1>
+                </ion-col>
+                <ion-col class="right-col" size="2">
+                    <ion-toggle color="warning" [(ngModel)]="useMenmonicPassphrase"></ion-toggle>
+                </ion-col>
+            </ion-row>
+            <ion-row class="password-row" *ngIf="useMenmonicPassphrase">
                 <ion-col size="10">
                     <ion-input
                         type="text"
@@ -32,7 +41,7 @@
                     <ion-icon mode="ios" name="help"></ion-icon>
                 </ion-col>
             </ion-row>
-            <ion-row *ngIf="walletCreationService.type === 1">
+            <ion-row *ngIf="walletCreationService.type === 1 && useMenmonicPassphrase">
                 <ion-input
                     #input
                     type="text"

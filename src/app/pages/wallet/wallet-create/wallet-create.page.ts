@@ -20,6 +20,7 @@ declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 export class WalletCreatePage implements OnInit {
     @ViewChild('input', {static: false}) input: IonInput;
 
+    public useMenmonicPassphrase = true;
     public wallet = {
         name: '',
         singleAddress: false,
@@ -78,7 +79,7 @@ export class WalletCreatePage implements OnInit {
             this.native.toast_trans("text-wallet-name-validator-already-exists");
             return;
         }
-        if (this.wallet.mnemonicPassword) {
+        if (this.useMenmonicPassphrase) {
             if (this.wallet.mnemonicPassword.length < Config.MIN_PASSWORD_LENGTH) {
                 this.native.toast_trans("text-wallet-passphrase-validator-min-length");
                 return;
@@ -94,7 +95,9 @@ export class WalletCreatePage implements OnInit {
     createWallet() {
         this.walletCreationService.name = this.wallet.name;
         this.walletCreationService.singleAddress = this.wallet.singleAddress;
-        this.walletCreationService.mnemonicPassword = this.wallet.mnemonicPassword;
+        if (this.useMenmonicPassphrase) {
+            this.walletCreationService.mnemonicPassword = this.wallet.mnemonicPassword;
+        }
 
         if (this.walletCreationService.type === 1) {
             this.native.go("/mnemonic-create");

@@ -102,8 +102,8 @@ export class LocalStorage {
     }
 
     public setCurrency(value: string) {
-        return this.set("currency", JSON.stringify(value)).then((data) => {
-          console.log('Currency stored', data);
+        return this.set("currency", JSON.stringify(value)).then(() => {
+          console.log('Currency stored');
         });
     }
 
@@ -114,8 +114,8 @@ export class LocalStorage {
     }
 
     public setCurrencyDisplayPreference(useCurrency: boolean) {
-        return this.set('useCurrency', JSON.stringify(useCurrency)).then((data) => {
-            console.log('Currency display preference stored', data);
+        return this.set('useCurrency', JSON.stringify(useCurrency)).then(() => {
+            console.log('Currency display preference stored');
         });
     }
 
@@ -126,8 +126,8 @@ export class LocalStorage {
     }
 
     public setPrice(symbol: string, price: number) {
-        return this.set(symbol, JSON.stringify(price)).then((data) => {
-          console.log('Ela price stored', data);
+        return this.set(symbol, JSON.stringify(price)).then(() => {
+          console.log('Ela price stored');
         });
     }
 
@@ -138,8 +138,8 @@ export class LocalStorage {
     }
 
     public setVisit(visited: boolean) {
-        return this.set('visited', JSON.stringify(visited)).then((data) => {
-            console.log('Visit stored', data);
+        return this.set('visited', JSON.stringify(visited)).then(() => {
+            console.log('Visit stored');
         });
     }
 

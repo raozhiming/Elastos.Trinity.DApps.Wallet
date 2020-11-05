@@ -35,7 +35,7 @@
         }
     }
 
-    .advanced-row, .toggle-row {
+    .mnemonic-passphrase-row, .advanced-row, .toggle-row {
         flex-direction: row;
         justify-content: center;
         align-items: center;
@@ -43,22 +43,8 @@
         padding: 0 15px;
     }
 
-    .advanced-row {
-        span {
-            font-size: 13px;
-            font-weight: 400;
-            letter-spacing: 0.7px;
-            text-align: center;
-            color: #ffffff;
-
-            img {
-                margin-bottom: 1px;
-            }
-
-            .rotate {
-                transform: rotate(-180deg);
-            }
-        }
+    .mnemonic-passphrase-row {
+        margin-top: 5px;
     }
 
     .options-container {
@@ -67,7 +53,7 @@
         flex-direction: column;
         align-items: center;
 
-        .toggle-row {
+        .mnemonic-passphrase-row, .toggle-row {
             ion-col {
                 padding: 0;
                 display: flex;
@@ -92,11 +78,10 @@
 
                 ion-toggle {
                     zoom: 0.8;
-                    --background-checked: #803fd5;
                 }
             }
         }
-    
+
         .password-row {
             padding: 0;
             background: #803fd5;
