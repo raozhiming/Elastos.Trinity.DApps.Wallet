@@ -283,6 +283,8 @@ export const en = {
     'enter-wallet-name': 'Please enter a wallet name',
     'single-address': 'Single-Address Wallet',
     'multiple-address': 'Multi-Address Wallet',
+    'use-passphrase': 'Enable Mnemonic Passphrase',
+    'not-use-passphrase': 'Disable Mnemonic Passphrase',
     'launcher-backup-import': 'Import Wallet',
     "text-wallet-name-validator-enter-name": "Please enter a name for your wallet",
     "text-wallet-name-validator-not-valid-name": "Sorry, this is not a valid wallet name",

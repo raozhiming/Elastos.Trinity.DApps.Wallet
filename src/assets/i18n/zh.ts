@@ -261,7 +261,7 @@ export const zh = {
     "mnemonic-verify-fail": '助记词验证失败，请重新输入助记词',
     "mnemonic-input-passphrase": "输入助记词密码（最少8位）",
     "mnemonic-reinput-passphrase": "再次输入助记词密码",
-    "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码',
+    "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码！',
 
     // Advanced mnemonic import screen
     'advanced-import': '快速输入助记词',
@@ -284,6 +284,8 @@ export const zh = {
     'enter-wallet-name': '请输入钱包名称',
     'single-address': '单地址钱包',
     'multiple-address': '多地址钱包',
+    'use-passphrase': '使用助记词密码',
+    'not-use-passphrase': '不使用助记词密码',
     'launcher-backup-import': '导入钱包',
     "text-wallet-name-validator-enter-name": "请给您的钱包设置名称",
     "text-wallet-name-validator-not-valid-name": "抱歉，这个钱包名称无效",
