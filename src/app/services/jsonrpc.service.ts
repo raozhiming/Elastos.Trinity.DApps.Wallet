@@ -38,6 +38,7 @@ export class JsonRPCService {
 
     // return balance in SELA
     async getBalanceByAddress(chainID: StandardCoinName, addressArray: string[]): Promise<BigNumber> {
+        let balanceOfSELA = new BigNumber(0);
         const paramArray = [];
         let index = 0;
 
@@ -55,15 +56,23 @@ export class JsonRPCService {
 
         const rpcApiUrl = this.getRPCApiUrl(chainID);
         if (rpcApiUrl.length === 0) {
-            return;
+            return balanceOfSELA;
         }
 
-        let balanceOfSELA = new BigNumber(0);
-        const resultArray = await this.httpRequest(rpcApiUrl, paramArray);
-        for (const result of resultArray) {
-            balanceOfSELA = balanceOfSELA.plus(new BigNumber(result.result).multipliedBy(Config.SELAAsBigNumber));
-        }
-        console.log(' debug: getBalanceByAddress:', balanceOfSELA);
+        // httpRequest fail sometimes, retry 5 times.
+        let retryTimes = 0;
+        do {
+            try {
+                const resultArray = await this.httpRequest(rpcApiUrl, paramArray);
+                for (const result of resultArray) {
+                    balanceOfSELA = balanceOfSELA.plus(new BigNumber(result.result).multipliedBy(Config.SELAAsBigNumber));
+                }
+                break;
+            } catch (e) {
+                // wait 100ms?
+            }
+        } while (++retryTimes < 5);
+        console.log('debug: getBalanceByAddress:', balanceOfSELA);
         return balanceOfSELA;
     }
 
@@ -74,11 +83,16 @@ export class JsonRPCService {
 
         const rpcApiUrl = this.getRPCApiUrl(chainID);
         if (rpcApiUrl.length === 0) {
-            return;
+            return 0;
         }
 
-        const blockHeight = await this.httpRequest(rpcApiUrl, param);
-        return parseInt(blockHeight, 10);
+        let blockHeight = 0;
+        try {
+            const blockHeightStr = await this.httpRequest(rpcApiUrl, param);
+            blockHeight = parseInt(blockHeightStr, 10);
+        } catch (e) {
+        }
+        return blockHeight;
     }
 
     // Get the real target address for the send transaction from ethsc to mainchain.
@@ -90,13 +104,16 @@ export class JsonRPCService {
             },
         };
 
-        const result = await this.httpRequest(this.ethscOracleRPCApiUrl, param);
-        for (var i = 0; i < result.length; i++) {
-            if ('0x' + result[i].txid === txHash) {
-                // TODO: crosschainassets has multiple value?
-                // TODO: define the result type
-                return result[i].crosschainassets[0].crosschainaddress;
+        try {
+            const result = await this.httpRequest(this.ethscOracleRPCApiUrl, param);
+            for (var i = 0; i < result.length; i++) {
+                if ('0x' + result[i].txid === txHash) {
+                    // TODO: crosschainassets has multiple value?
+                    // TODO: define the result type
+                    return result[i].crosschainassets[0].crosschainaddress;
+                }
             }
+        } catch (e) {
         }
         return '';
     }
@@ -132,8 +149,8 @@ export class JsonRPCService {
                         resolve(res.result || '');
                     }
                 }, (err) => {
+                    console.log('JsonRPCService httpRequest error:', JSON.stringify(err));
                     reject(err);
-                    console.log('JsonRPCService httpRequest error:', err);
                 });
         });
     }
