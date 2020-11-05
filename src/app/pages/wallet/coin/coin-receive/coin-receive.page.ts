@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WalletManager } from '../../../../services/wallet.service';
 import { Native } from '../../../../services/native.service';
@@ -8,22 +8,26 @@ import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { StandardCoinName } from 'src/app/model/Coin';
+import { Events } from '@ionic/angular';
 
 @Component({
     selector: 'app-coin-receive',
     templateUrl: './coin-receive.page.html',
     styleUrls: ['./coin-receive.page.scss'],
 })
-export class CoinReceivePage implements OnInit {
+export class CoinReceivePage implements OnInit, OnDestroy {
 
     public masterWallet: MasterWallet = null;
     private masterWalletId = '1';
     public chainId: string;
     public qrcode: string = null;
     public isSingleAddress = false;
+    private eventId: string = null;
 
     constructor(
         public route: ActivatedRoute,
+        public zone: NgZone,
+        public events: Events,
         public walletManager: WalletManager,
         public native: Native,
         private coinTransferService: CoinTransferService,
@@ -41,12 +45,18 @@ export class CoinReceivePage implements OnInit {
         this.appService.setTitleBarTitle(this.translate.instant("coin-receive-title", { coinName: this.chainId}));
     }
 
+    ngOnDestroy() {
+        if (this.eventId) {
+            this.events.unsubscribe(this.eventId);
+        }
+    }
+
     init() {
         this.masterWalletId = this.coinTransferService.masterWalletId;
         this.chainId = this.coinTransferService.chainId;
         this.masterWallet = this.walletManager.getMasterWallet(this.masterWalletId);
 
-        this.createAddress();
+        this.getAddress();
         this.isSingleAddressSubwallet();
     }
 
@@ -63,12 +73,20 @@ export class CoinReceivePage implements OnInit {
         this.native.toast(this.translate.instant("coin-address-copied", { coinName: this.chainId}));
     }
 
-    async createAddress() {
+    async getAddress() {
         this.qrcode = await this.masterWallet.getSubWallet(this.chainId).createAddress();
         console.log('qrcode', this.qrcode);
     }
 
     showAddressList() {
+        this.eventId = 'selectaddress';
+        this.events.subscribe(this.eventId, (address) => {
+            this.zone.run(() => {
+                this.qrcode = address;
+            });
+            this.events.unsubscribe(this.eventId);
+            this.eventId = null;
+          });
         this.native.go('/coin-address', { masterWalletId: this.masterWalletId,
             chainId: this.chainId});
     }

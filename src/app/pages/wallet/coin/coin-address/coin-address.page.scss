@@ -10,7 +10,7 @@
         box-shadow: 0 3px 15px 0 #ededf0;
         background-color: #ffffff;
 
-        .left-col, .right-col {
+        .left-col {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -19,15 +19,11 @@
 
             p {
                 margin: 0;
-                font-size: 11px;
+                font-size: 13px;
                 font-weight: 400;
                 text-align: left;
                 padding-top: 3px;
             }
-        }
-
-        .right-col {
-            align-items: flex-end;
         }
     }
 

@@ -6,6 +6,7 @@ import { Util } from 'src/app/model/Util';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { ThemeService } from 'src/app/services/theme.service';
+import { Events, NavController } from '@ionic/angular';
 
 @Component({
     selector: 'app-coin-address',
@@ -24,7 +25,9 @@ export class CoinAddressPage {
         public walletManager: WalletManager,
         private appService: AppService,
         public native: Native,
+        private navCtrl: NavController,
         public router: Router,
+        public events: Events,
         public theme: ThemeService,
         private translate: TranslateService,
     ) {
@@ -72,9 +75,9 @@ export class CoinAddressPage {
         }
     }
 
-    copyToClipboard(address) {
-        this.native.copyClipboard(address);
-        this.native.toast_trans('copied');
+    selectAddress(address) {
+        this.events.publish('selectaddress', address);
+        this.navCtrl.back();
     }
 
     doInfinite(event) {

@@ -122,7 +122,7 @@ export const zh = {
     "coin-receive-ela-address": "您的{{coinName}}地址",
     "coin-receive-tap-to-copy": "点击地址即可复制",
     "coin-address-copied": "{{coinName}} 地址已复制!",
-    "coin-receive-address-list": "查看地址列表",
+    "coin-receive-address-list": "地址列表",
 
 
     // Coin address screen

@@ -5,16 +5,9 @@
                 class="item-row ripple ion-activatable"
                 *ngFor="let address of addressList"
             >
-                <ion-col class="left-col">
+                <ion-col class="left-col" (click)="selectAddress(address)">
                     <p> {{ address }} </p>
                 </ion-col>
-                <ion-col size="2" class="right-col">
-                    <img src="{{
-                        this.theme.darkMode
-                          ? '/assets/icons/icon-feather-dark.svg'
-                          : '/assets/icons/icon-feather.svg'
-                      }}" (click)="copyToClipboard(address)" />
-                  </ion-col>
                 <ion-ripple-effect></ion-ripple-effect>
             </ion-row>
         </div>
