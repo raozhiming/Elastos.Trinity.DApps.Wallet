@@ -42,7 +42,7 @@ export const fr = {
     "ela-erc20": "JETON ERC20 ELASTOS",
     "coin-list": "Liste des jetons",
     "activate-hive-vault": "Activate Hive Vault",   // TODO   need to translate
-    "pull-down-to-refresh": "Pull Down Screen to Refresh",
+    "pull-down-to-refresh": "Faire glisser l'écran pour rafraîchir",
 
     // Settings screen
     "settings-title": "Paramètres",
@@ -177,7 +177,7 @@ export const fr = {
     "coin-adderc20-name": 'Nom du jeton',
     "coin-adderc20-symbol": 'Symbole',
     "coin-adderc20-not-a-erc20-contract": "Le contenu scanné n'est pas une adresse de jeton ERC20 valide.",
-    'coin-adderc20-alreadyadded': 'Token already added',
+    'coin-adderc20-alreadyadded': 'Ce jeton est déjà dans la liste',
 
     // Delete wallet popup
     "delete-wallet-confirm-title": "Confirmer la suppression?",
@@ -256,18 +256,18 @@ export const fr = {
     "help:mnemonic-password": 'Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Ne l\'oubliez pas, il ne peut pas être retrouvé.',
 
     // Advanced mnemonic import screen
-    'advanced-import': 'Fast mnemonic input',
-    'advanced-import-intro': 'Vous pouvez coller votre 12 mnémonique entier sur une seule ligne ici.',
+    'advanced-import': 'Saisie rapide du mnémonique',
+    'advanced-import-intro': 'Vous pouvez coller vos 12 mots de mnémonique sur une seule ligne ici.',
     'advanced-import-msg': '*Espace requis entre chaque mot',
-    'paste-mnemonic': 'Coller ou saisir le 12 mnémonique',
+    'paste-mnemonic': 'Coller ou saisir les 12 mots du mnémonique',
 
     // Export mnemonic screen
     'text-export-mnemonic': 'Exporter le mnémonique',
 
     // Launcher screen
     'wallet': 'Portefeuille',
-    'wallet-prompt1': 'Portefeuille Sécurisé pour',
-    'wallet-prompt2': "L'écosystème Elastos",
+    'wallet-prompt1': 'Portefeuille sécurisé pour',
+    'wallet-prompt2': "l'écosystème Elastos",
     'get-started': 'Commencer',
     'import-wallet-msg': 'Vous avez déjà un portefeuille? Importez-le.',
 
@@ -276,14 +276,14 @@ export const fr = {
     'enter-wallet-name': 'Veuillez saisir un nom pour le portefeuille',
     'single-address': 'Portefeuille à adresse unique',
     'multiple-address': 'Portefeuille à adresses multiples',
-    'use-passphrase': 'Enable Passphrase',
-    'not-use-passphrase': 'Disable Passphrase',
+    'use-passphrase': 'Utiliser une phrase secrète',
+    'not-use-passphrase': 'Ne pas utiliser de phrase secrète',
     'launcher-backup-import': 'Importer le portefeuille',
     "text-wallet-name-validator-enter-name": "Veuillez saisir un nom pour votre portefeuille",
     "text-wallet-name-validator-not-valid-name": "Le nom saisi n'est pas valide",
     "text-wallet-name-validator-already-exists": "Ce nom est déjà utilisé par un autre portefeuille",
-    "text-wallet-passphrase-validator-repeat": "Les mots de passe des deux mnémoniques d'entrée ne sont pas cohérents",
-    "text-wallet-passphrase-validator-min-length": "Mot de passe associé au mnémonique au moins 8 caractères",
+    "text-wallet-passphrase-validator-repeat": "Les deux phrases secrètes saisies sont différentes",
+    "text-wallet-passphrase-validator-min-length": "La phrase secrète doit avoir au moins 8 caractères",
 
     // Consolidate
     'text-consolidate-prompt': 'Consolider?',
