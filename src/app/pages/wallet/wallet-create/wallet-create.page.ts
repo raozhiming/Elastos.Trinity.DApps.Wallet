@@ -28,8 +28,6 @@ export class WalletCreatePage implements OnInit {
     };
     public repeatMnemonicPassword: '';
 
-    public helpMessage = 'help:mnemonic-password';
-
     constructor(
         public route: ActivatedRoute,
         public native: Native,
@@ -120,5 +118,11 @@ export class WalletCreatePage implements OnInit {
             return;
         }
         nextInput.setFocus();
+    }
+
+    showHelp(event) {
+        this.walletCreationService.type === 1 ?
+            this.uiService.showHelp(event, 'help:create-password') :
+            this.uiService.showHelp(event, 'help:import-password');
     }
 }

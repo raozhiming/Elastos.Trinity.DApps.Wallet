@@ -205,7 +205,6 @@ export const zh = {
     'text-warning': '警告',
     'text-share-mnemonic-warning': '助记词是区块链资产的唯一凭证，分享前请确认不会有泄露风险！',
 
-
     // DID transaction intent screen
     "didtransaction-title": "发布身份",
     "didtransaction-publish-identity": "发布身份",
@@ -262,7 +261,9 @@ export const zh = {
     "mnemonic-verify-fail": '助记词验证失败，请重新输入助记词',
     "mnemonic-input-passphrase": "输入助记词密码（最少8位）",
     "mnemonic-reinput-passphrase": "再次输入助记词密码",
-    "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码！',
+    "help:create-password": "The mnemonic passphrase is optional but it gives an additional level of security to your wallet. You can consider it as a custom 13th mnemonic word. Please note that this passphrase can never be recovered if you forget it. Entering a wrong passphrase when restoring your wallet in the future will not generate any error, but will result in a wrong wallet address.",
+    "help:import-password": "A mnemonic passphrase is a custom password that's bound to your mnemonic words. If you did not create a mnemonic passphrase when you created your wallet, please disregard.",
+    // "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码！',
 
     // Advanced mnemonic import screen
     'advanced-import': '快速输入助记词',

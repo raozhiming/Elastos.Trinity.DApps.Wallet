@@ -20,7 +20,7 @@ export class HelpComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.message = this.navParams.get('message');
+    this.message = this.translate.instant(this.navParams.get('message'));
     console.log('Help', this.message);
   }
 }

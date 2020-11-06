@@ -260,7 +260,9 @@ export const en = {
     "mnemonic-verify-fail": "Mnemonic phrase verification failed, please re-enter the mnemonic phrase",
     "mnemonic-input-passphrase": "Enter mnemonic passphrase",
     "mnemonic-reinput-passphrase": "Repeat mnemonic passphrase",
-    "help:mnemonic-password": 'This is an optional password bound to your mnemonic words, to give your wallet extra security. Save it carefully, it is NOT recoverable if lost.',
+    "help:create-password": "The mnemonic passphrase is optional but it gives an additional level of security to your wallet. You can consider it as a custom 13th mnemonic word. Please note that this passphrase can never be recovered if you forget it. Entering a wrong passphrase when restoring your wallet in the future will not generate any error, but will result in a wrong wallet address.",
+    "help:import-password": "A mnemonic passphrase is a custom password that's bound to your mnemonic words. If you did not create a mnemonic passphrase when you created your wallet, please disregard.",
+    // "help:mnemonic-password": 'This is an optional password bound to your mnemonic words, to give your wallet extra security. Save it carefully, it is NOT recoverable if lost.',
 
     // Advanced mnemonic import screen
     'advanced-import': 'Fast mnemonic input',

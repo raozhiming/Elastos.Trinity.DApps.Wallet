@@ -39,7 +39,7 @@
                     (keypress)="goToNextInput($event.keyCode, input)">
                 </ion-input>
             </ion-col>
-            <ion-col *ngIf="walletCreationService.type === 1" size="2" (click)="uiService.showHelp($event, helpMessage)">
+            <ion-col size="2" (click)="showHelp($event)">
                 <ion-icon mode="ios" name="help"></ion-icon>
             </ion-col>
         </ion-row>

@@ -254,7 +254,9 @@ export const fr = {
     "mnemonic-verify-fail": "Le mnémonique est incorrect, veuillez le saisir à nouveau.",
     "mnemonic-input-passphrase": "Mot de passe associé au mnémonique",
     "mnemonic-reinput-passphrase": "Saisir le mot de passe à nouveau",
-    "help:mnemonic-password": 'Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Ne l\'oubliez pas, il ne peut pas être retrouvé.',
+    "help:create-password": "The mnemonic passphrase is optional but it gives an additional level of security to your wallet. You can consider it as a custom 13th mnemonic word. Please note that this passphrase can never be recovered if you forget it. Entering a wrong passphrase when restoring your wallet in the future will not generate any error, but will result in a wrong wallet address.",
+    "help:import-password": "A mnemonic passphrase is a custom password that's bound to your mnemonic words. If you did not create a mnemonic passphrase when you created your wallet, please disregard.",
+    // "help:mnemonic-password": 'Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Ne l\'oubliez pas, il ne peut pas être retrouvé.',
 
     // Advanced mnemonic import screen
     'advanced-import': 'Saisie rapide du mnémonique',
