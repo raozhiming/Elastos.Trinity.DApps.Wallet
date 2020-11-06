@@ -55,7 +55,9 @@ export class ETHChainSubWallet extends StandardSubWallet {
         let transactionInfo = await super.getTransactionInfo(transaction, translate);
         let direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
 
-        if (transaction.IsErrored || (transaction.BlockNumber === 0)) {
+        // TODO: Why BlockNumber is 0 sometimes? Need to check.
+        // if (transaction.IsErrored || (transaction.BlockNumber === 0)) {
+        if (transaction.IsErrored) {
             return null;
         }
 
