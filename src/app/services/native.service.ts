@@ -135,9 +135,10 @@ export class Native {
 
         this.loader = await this.loadingCtrl.create({
             mode: 'ios',
+            cssClass: 'loader',
             message: content
         });
-        this.loader.onWillDismiss().then(()=>{
+        this.loader.onWillDismiss().then(() => {
             this.loader = null;
         });
 

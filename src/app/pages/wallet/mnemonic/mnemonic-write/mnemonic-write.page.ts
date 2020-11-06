@@ -131,7 +131,7 @@ export class MnemonicWritePage implements OnInit {
 
                     const payPassword = await this.authService.createAndSaveWalletPassword(this.walletCreationService.masterId);
                     if (payPassword) {
-                        await this.native.showLoading();
+                        await this.native.showLoading(this.translate.instant('please-wait'));
                         await this.walletManager.createNewMasterWallet(
                                 this.walletCreationService.masterId,
                                 this.walletCreationService.name,

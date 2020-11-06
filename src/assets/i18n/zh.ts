@@ -32,6 +32,7 @@ export const zh = {
     "not-a-valid-address": "无效的地址",
     "no-ethereum-token": "没有以太坊币种",
     "please-add-ethereum-first": "请先将以太坊币种添加到您的钱包中",
+    "please-wait": "Please wait...",
 
     // Home screen
     "wallet-home-title": "钱包主页",

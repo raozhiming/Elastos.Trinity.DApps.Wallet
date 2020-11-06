@@ -50,7 +50,7 @@ export class WalletAdvancedImportPage implements OnInit {
 
         const payPassword = await this.authService.createAndSaveWalletPassword(this.masterWalletId);
         if (payPassword) {
-            await this.native.showLoading();
+            await this.native.showLoading(this.translate.instant('please-wait'));
             await this.importWalletWithMnemonic(payPassword);
         }
     } else {

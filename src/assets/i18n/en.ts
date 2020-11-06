@@ -32,6 +32,7 @@ export const en = {
     "not-a-valid-address": "Not a valid address",
     "no-ethereum-token": "No ethereum token",
     "please-add-ethereum-first": "Please add the ethereum token to your wallet first",
+    "please-wait": "Please wait...",
 
     // Home screen
     "wallet-home-title": "Wallet Home",

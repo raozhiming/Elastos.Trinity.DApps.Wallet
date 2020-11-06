@@ -32,6 +32,7 @@ export const fr = {
     "not-a-valid-address": "Adresse invalide",
     "no-ethereum-token": "Jeton Ethereum non activé",
     "please-add-ethereum-first": "Veuillez d'abord ajouter le jeton Ethereum à votre portefeuille.",
+    "please-wait": "S'il vous plaît, attendez...",
 
     // Home screen
     "wallet-home-title": "Accueil Portefeuille",
