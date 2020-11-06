@@ -100,6 +100,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
             console.log("masterwalletcount:changed event received result:", result);
             this.zone.run(() => {
                 this.updateWallet();
+                this.backupService.init();
             });
         });
     }
