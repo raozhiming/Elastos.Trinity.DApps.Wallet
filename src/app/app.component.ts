@@ -34,8 +34,8 @@ import { NavService } from './services/nav.service';
 import { IntentService } from './services/intent.service';
 import { CurrencyService } from './services/currency.service';
 import { CoinService } from './services/coin.service';
-import { BackupRestoreService } from './services/backuprestore.service';
 import { UiService } from './services/ui.service';
+import { ContactsService } from './services/contacts.service';
 
 @Component({
     selector: 'app-root',
@@ -60,7 +60,7 @@ export class AppComponent {
         public popupProvider: PopupProvider,
         public modalCtrl: ModalController,
         private coinService: CoinService,
-        private backupService: BackupRestoreService,
+        private contactsService: ContactsService,
         private uiService: UiService
     ) {
         this.initializeApp();
@@ -77,6 +77,7 @@ export class AppComponent {
             await this.appService.init();
             await this.coinService.init();
             await this.currencyService.init();
+            await this.contactsService.init();
             await this.uiService.init();
 
             // Wait until the wallet manager is ready before showing the first screen.

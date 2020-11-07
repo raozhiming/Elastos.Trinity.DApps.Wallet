@@ -22,7 +22,7 @@
 
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Events, PopoverController } from '@ionic/angular';
+import { Events, PopoverController, ModalController } from '@ionic/angular';
 import { AppService, ScanType } from '../../../../services/app.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
@@ -44,8 +44,10 @@ import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import BigNumber from 'bignumber.js';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { TxSuccessComponent } from 'src/app/components/tx-success/tx-success.component';
+import { ContactsService } from 'src/app/services/contacts.service';
+import { ContactsComponent } from 'src/app/components/contacts/contacts.component';
 
-
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 declare let appManager: AppManagerPlugin.AppManager;
 export let popover: any = null;
 
@@ -88,6 +90,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     public Config = Config;
     private SELA = Config.SELA;
 
+    // Titlebar
+    private onItemClickedListener: any;
+
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     suggestedAddresses: CryptoAddressResolvers.Address[] = [];
 
@@ -106,7 +111,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         public currencyService: CurrencyService,
         private intentService: IntentService,
         public uiService: UiService,
-        public keyboard: Keyboard
+        public keyboard: Keyboard,
+        private contactsService: ContactsService,
+        private modalCtrl: ModalController
     ) {
     }
 
@@ -124,6 +131,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     ionViewWillLeave() {
+        this.setContactKeyVisibility(false);
     }
 
     ngOnDestroy() {
@@ -132,6 +140,17 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         if (this.syncCompletionEventName)
             this.events.unsubscribe(this.syncCompletionEventName);
+    }
+
+    setContactKeyVisibility(showContactKey: boolean) {
+        if (showContactKey) {
+            titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, {
+                key: "contacts",
+                iconPath: TitleBarPlugin.BuiltInIcon.ADD
+            });
+        } else {
+            titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
+        }
     }
 
     async init() {
@@ -181,6 +200,17 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             case TransferType.SEND:
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
                 this.transaction = this.createSendTransaction;
+
+                if (this.contactsService.contacts.length) {
+                    this.setContactKeyVisibility(true);
+
+                    titleBarManager.addOnItemClickedListener(this.onItemClickedListener = (menuIcon: TitleBarPlugin.TitleBarIcon) => {
+                        if (menuIcon.key === "contacts") {
+                            this.showContacts();
+                        }
+                    });
+                }
+
                 break;
             // For Pay Intent
             case TransferType.PAY:
@@ -460,6 +490,18 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         // Hide/reset suggestions
         this.suggestedAddresses = [];
+
+        let targetContact = this.contactsService.contacts.find((contact) => contact.address === suggestedAddress.address);
+        if (!targetContact) {
+            this.contactsService.contacts.push({
+                cryptoname:  this.cryptoName,
+                address: this.toAddress
+            });
+
+            this.contactsService.setContacts();
+        }
+
+        this.setContactKeyVisibility(true);
     }
 
     isStandardSubwallet(subWallet: SubWallet) {
@@ -468,5 +510,29 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     convertAmountToBigNumber(amount: number) {
         return new BigNumber(amount);
+    }
+
+    async showContacts() {
+        this.appService.setBackKeyVisibility(false);
+        this.setContactKeyVisibility(false);
+        this.appService.setTitleBarTitle('select-address');
+
+        const modal = await this.modalCtrl.create({
+            component: ContactsComponent,
+            componentProps: {
+            },
+        });
+        modal.onWillDismiss().then((params) => {
+            console.log('Contact selected', params);
+            if (params.data && params.data.contact) {
+                this.cryptoName = params.data.contact.cryptoname;
+                this.toAddress = params.data.contact.address;
+            }
+
+            this.appService.setBackKeyVisibility(true);
+            this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
+            this.setContactKeyVisibility(true);
+        });
+        modal.present();
     }
 }

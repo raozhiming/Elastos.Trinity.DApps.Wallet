@@ -62,6 +62,10 @@ export const zh = {
     "chinese-yuan": "人民币",
     "bitcoin": "比特币",
 
+    // Contacts screen
+    "select-address": "Select Address",
+    "crypto-names": "Crypto Names",
+
     // Wallet settings screen
     "wallet-settings-title": "钱包设置",
     "wallet-settings-backup-wallet": "备份钱包",

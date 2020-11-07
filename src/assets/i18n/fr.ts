@@ -62,6 +62,10 @@ export const fr = {
     "chinese-yuan": "Yuan Chinois",
     "bitcoin": "Bitcoin",
 
+    // Contacts screen
+    "select-address": "Sélectionner une adresse",
+    "crypto-names": "Crypto Names",
+
     // Wallet settings screen
     "wallet-settings-title": "Paramètres Portefeuille",
     "wallet-settings-backup-wallet": "Sauvegarde",

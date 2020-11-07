@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WalletID, ExtendedWalletInfo } from '../model/wallets/MasterWallet';
+import { Contact } from './contacts.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -147,6 +148,18 @@ export class LocalStorage {
         let visited = await this.get("visited");
         console.log('User already visited?', visited);
         return visited;
+    }
+
+    public setContacts(contacts: Contact[]) {
+        return this.set('contacts', JSON.stringify(contacts)).then(() => {
+            console.log('Contacts stored');
+        });
+    }
+
+    public async getContacts(): Promise<Contact[]> {
+        let contacts = await this.get("contacts");
+        console.log('Found contacts', contacts);
+        return contacts;
     }
 }
 

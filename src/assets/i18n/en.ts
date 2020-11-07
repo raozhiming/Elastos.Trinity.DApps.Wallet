@@ -62,6 +62,10 @@ export const en = {
     "chinese-yuan": "Chinese Yuan",
     "bitcoin": "Bitcoin",
 
+    // Contacts screen
+    "select-address": "Select Address",
+    "crypto-names": "Crypto Names",
+
     // Wallet settings screen
     "wallet-settings-title": "Wallet Settings",
     "wallet-settings-backup-wallet": "Backup Wallet",

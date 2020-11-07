@@ -100,6 +100,16 @@
                 </ion-input>
             </ion-col>
             <ion-col size="2" class="right-col">
+          <!--       <ion-fab>
+                    <ion-fab-button>
+                        <ion-icon name="add"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-list>
+                        <ion-fab-button>
+                            <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
+                        </ion-fab-button>
+                    </ion-fab-list>
+                </ion-fab> -->
                 <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
             </ion-col>
         </ion-row>

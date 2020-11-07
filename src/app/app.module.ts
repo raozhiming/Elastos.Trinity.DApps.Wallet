@@ -100,6 +100,7 @@ import { HelpComponent } from './components/help/help.component';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
 import { RewriteFrames } from '@sentry/integrations';
+import { ContactsComponent } from './components/contacts/contacts.component';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741",
@@ -219,6 +220,7 @@ export function TranslateLoaderFactory() {
         TxConfirmComponent,
         TxSuccessComponent,
         HelpComponent,
+        ContactsComponent,
         EmptyPage
     ],
     entryComponents: [
@@ -227,7 +229,8 @@ export function TranslateLoaderFactory() {
         WalletCreatedComponent,
         TxConfirmComponent,
         TxSuccessComponent,
-        HelpComponent
+        HelpComponent,
+        ContactsComponent
     ],
     imports: [
         BrowserModule,
@@ -262,7 +265,6 @@ export function TranslateLoaderFactory() {
         Native,
         Logger,
         PopupProvider,
-        WalletManager,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         { provide: ErrorHandler, useClass: SentryErrorHandler }
     ],

@@ -82,9 +82,6 @@ export class AppService {
 
         // Listen to title bar events
         titleBarManager.addOnItemClickedListener((menuIcon) => {
-            /*if (popover) {
-                popover.dismiss();
-            }*/
             if (menuIcon.key === "back") {
               this.titlebarBackButtonHandle();
             }

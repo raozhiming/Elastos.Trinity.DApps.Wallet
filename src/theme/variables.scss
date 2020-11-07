@@ -157,8 +157,8 @@
   --ion-text-color: #ffffff;
   --ion-text-color-rgb: 255,255,255;
 
-  --ion-item-background: #272d41;
-  --ion-item-background-activated: #3d4254;
+  --ion-item-background: #191a2f;
+  --ion-item-background-activated: none;
 
   --ion-color-step-600: #fff;
 
@@ -176,37 +176,6 @@
       }
     }
   }
-}
-
-/*
- * iOS Dark Theme
- * -------------------------------------------
- */
-
-.ios body.dark {
-  --ion-background-color: #191a2f;
-  --ion-background-color-rgb: 0,0,0;
-
-  --ion-text-color: #ffffff;
-  --ion-text-color-rgb: 255,255,255;
-
-  --ion-item-background: #272d41;
-  --ion-item-background-activated: #3d4254;
-}
-
-/*
- * Material Design Dark Theme
- * -------------------------------------------
- */
-
-.md body.dark {
-  --ion-background-color: #191a2f;
-  --ion-background-color-rgb: 18,18,18;
-
-  --ion-text-color: #ffffff;
-  --ion-text-color-rgb: 255,255,255;
-
-  --ion-item-background: #272d41;
 }
 
 /************************************

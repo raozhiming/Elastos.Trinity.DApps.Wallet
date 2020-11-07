@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LocalStorage } from './storage.service';
 import BigNumber from 'bignumber.js';
-import { constants } from 'perf_hooks';
 
 type Currency = {
   symbol: string;
