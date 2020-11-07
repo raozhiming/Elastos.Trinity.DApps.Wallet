@@ -124,6 +124,11 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress = address;
             });
         });
+        titleBarManager.addOnItemClickedListener(this.onItemClickedListener = (menuIcon: TitleBarPlugin.TitleBarIcon) => {
+            if (menuIcon.key === "contacts") {
+                this.showContacts();
+            }
+        });
     }
 
     ionViewWillEnter() {
@@ -203,12 +208,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
                 if (this.contactsService.contacts.length) {
                     this.setContactKeyVisibility(true);
-
-                    titleBarManager.addOnItemClickedListener(this.onItemClickedListener = (menuIcon: TitleBarPlugin.TitleBarIcon) => {
-                        if (menuIcon.key === "contacts") {
-                            this.showContacts();
-                        }
-                    });
                 }
 
                 break;
