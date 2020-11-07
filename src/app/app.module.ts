@@ -1,59 +1,65 @@
 /*
- * Copyright (c) 2019 Elastos Foundation
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+* Copyright (c) 2019 Elastos Foundation
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
 
+/****************** Angular ******************/
 import { NgModule, Injectable, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-
-import { AlertController, IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { QRCodeModule } from 'angularx-qrcode';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
+/****************** Ionic ******************/
+import { AlertController, IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { IonicStorageModule } from '@ionic/storage';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
+
+/****************** Sentry ******************/
+import * as Sentry from "@sentry/browser";
+import { RewriteFrames } from '@sentry/integrations';
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule, EmptyPage } from './app-routing.module';
+import { Logger } from './model/Logger';
+import { ComponentsModule } from './components/components.module';
+
+/****************** Languages ******************/
 import { zh } from './../assets/i18n/zh';
 import { en } from './../assets/i18n/en';
 import { fr } from './../assets/i18n/fr';
 
-import { AppComponent } from './app.component';
-import { AppRoutingModule, EmptyPage } from './app-routing.module';
-
-import { IonicStorageModule } from '@ionic/storage';
-
-/**provider*/
-import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { QRCodeModule } from 'angularx-qrcode';
-
+/****************** Services ******************/
 import { LocalStorage } from './services/storage.service';
 import { Native } from './services/native.service';
-import { Logger } from './model/Logger';
 import { PopupProvider } from './services/popup.service';
-import { WalletManager } from './services/wallet.service';
 
+/****************** Pages ******************/
 import { WalletHomePage } from './pages/wallet/wallet-home/wallet-home.page';
 import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
 import { CRProposalVoteAgainstPage } from './pages/intents/crproposalvoteagainst/crproposalvoteagainst.page';
-
 import { LauncherPage } from './pages/launcher/launcher.page';
 import { WalletSettingsPage } from './pages/wallet/wallet-settings/wallet-settings.page';
 import { ContactCreatePage } from './pages/contacts/contact-create/contact-create.page';
@@ -83,23 +89,17 @@ import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnem
 import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
 import { ScanCodePage } from './pages/scancode/scancode.page';
 import { SettingsPage } from './pages/settings/settings.page';
-
-import { WalletCreatedComponent } from './components/wallet-created/wallet-created.component';
-
-import { ComponentsModule } from './components/components.module';
-
-import * as Sentry from "@sentry/browser";
-
-import { HttpClientModule } from '@angular/common/http';
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
-import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component';
-import { TxSuccessComponent } from './components/tx-success/tx-success.component';
 import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
-import { HelpComponent } from './components/help/help.component';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
-import { RewriteFrames } from '@sentry/integrations';
+
+/****************** Components ******************/
+import { WalletCreatedComponent } from './components/wallet-created/wallet-created.component';
+import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component';
+import { TxSuccessComponent } from './components/tx-success/tx-success.component';
+import { HelpComponent } from './components/help/help.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
 
 Sentry.init({
