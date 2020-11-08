@@ -130,7 +130,6 @@ export const zh = {
     "coin-receive-address-list": "地址列表",
 
     // Coin address screen
-    "coin-address-title": "Select Address",
     "coin-address-msg": "Available Addresses",
     'coin-address-load-more': '正在努力加载',
     "coin-address-load-finish": '已显示所有地址',

@@ -45,7 +45,7 @@ export class CoinAddressPage {
     }
 
     ionViewWillEnter() {
-        this.appService.setTitleBarTitle(this.translate.instant("coin-address-title"));
+        this.appService.setTitleBarTitle(this.translate.instant("select-address"));
     }
 
     async getAddressList(infiniteScroll: any) {
