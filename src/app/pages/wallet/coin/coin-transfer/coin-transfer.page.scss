@@ -251,20 +251,23 @@
             align-items: flex-end;
             overflow: hidden;
 
-            img {
-                width: 32px;
-                height: 32px;
-                object-fit: contain;
+            .scan-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 100%;
+                width: 45px;
+                height: 45px;
+
+                img {
+                    width: 80%;
+                    height: 80%;
+                    object-fit: contain;
+                }
             }
 
-          /*   ion-fab-button {
-                border-radius: 100%;
-                width: 32px;
-                height: 32px;
-                position: relative;
-                z-index: 10;
-            }
- */
+            
+
             .amount-input, p {
                 text-align: right;
             }

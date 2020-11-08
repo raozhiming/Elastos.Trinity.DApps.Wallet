@@ -129,9 +129,9 @@ export const zh = {
     "coin-address-copied": "{{coinName}} 地址已复制!",
     "coin-receive-address-list": "地址列表",
 
-
     // Coin address screen
-    "coin-address-title": "地址列表",
+    "coin-address-title": "Select Address",
+    "coin-address-msg": "Available Addresses",
     'coin-address-load-more': '正在努力加载',
     "coin-address-load-finish": '已显示所有地址',
 

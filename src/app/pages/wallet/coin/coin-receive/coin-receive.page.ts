@@ -87,7 +87,12 @@ export class CoinReceivePage implements OnInit, OnDestroy {
             this.events.unsubscribe(this.eventId);
             this.eventId = null;
           });
-        this.native.go('/coin-address', { masterWalletId: this.masterWalletId,
-            chainId: this.chainId});
+        this.native.go(
+            '/coin-address',
+            {
+                masterWalletId: this.masterWalletId,
+                chainId: this.chainId
+            }
+        );
     }
 }

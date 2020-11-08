@@ -130,7 +130,8 @@ export const en = {
     "coin-receive-address-list": "Enter Address List",
 
     // Coin address screen
-    "coin-address-title": "Address List",
+    "coin-address-title": "Select Address",
+    "coin-address-msg": "Available Addresses",
     'coin-address-load-more': 'Loading...',
     "coin-address-load-finish": 'All addresses listed',
 

@@ -94,23 +94,17 @@
             <ion-col size="10" class="left-col">
                 <ion-input
                     type="text"
+                    clearInput
                     placeholder="{{ 'transfer-receiver-address' | translate}}"
                     [(ngModel)]="toAddress"
                     (input)='onSendToAddressInput($event.target.value)'>
                 </ion-input>
             </ion-col>
             <ion-col size="2" class="right-col">
-          <!--       <ion-fab>
-                    <ion-fab-button>
-                        <ion-icon name="add"></ion-icon>
-                    </ion-fab-button>
-                    <ion-fab-list>
-                        <ion-fab-button>
-                            <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
-                        </ion-fab-button>
-                    </ion-fab-list>
-                </ion-fab> -->
-                <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
+                <div class="scan-btn ripple ion-activatable">
+                    <img (click)="goScan()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
+                    <ion-ripple-effect></ion-ripple-effect>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -129,9 +123,10 @@
             <img *ngIf="theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/darkmode/down-arrow.svg"/>
         </h1>
         <ion-row *ngIf="!hideMemo && suggestedAddresses.length === 0" class="item-row memo-row">
-            <ion-col size="10" class="left-col">
+            <ion-col size="12" class="left-col">
                 <ion-input
                     type="text"
+                    clearInput
                     placeholder="{{ 'tx-info-memo' | translate }}"
                     [(ngModel)]="memo"
                 >
