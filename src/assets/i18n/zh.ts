@@ -32,7 +32,7 @@ export const zh = {
     "not-a-valid-address": "无效的地址",
     "no-ethereum-token": "没有以太坊币种",
     "please-add-ethereum-first": "请先将以太坊币种添加到您的钱包中",
-    "please-wait": "Please wait...",
+    "please-wait": "请等待...",
 
     // Home screen
     "wallet-home-title": "钱包主页",
@@ -63,8 +63,8 @@ export const zh = {
     "bitcoin": "比特币",
 
     // Contacts screen
-    "select-address": "Select Address",
-    "crypto-names": "Crypto Names",
+    "select-address": "选择地址",
+    "crypto-names": "加密名称",
 
     // Wallet settings screen
     "wallet-settings-title": "钱包设置",
@@ -130,7 +130,7 @@ export const zh = {
     "coin-receive-address-list": "地址列表",
 
     // Coin address screen
-    "coin-address-msg": "Available Addresses",
+    "coin-address-msg": "可用地址",
     'coin-address-load-more': '正在努力加载',
     "coin-address-load-finish": '已显示所有地址',
 
@@ -264,9 +264,8 @@ export const zh = {
     "mnemonic-verify-fail": '助记词验证失败，请重新输入助记词',
     "mnemonic-input-passphrase": "输入助记词密码（最少8位）",
     "mnemonic-reinput-passphrase": "再次输入助记词密码",
-    "help:create-password": "The mnemonic passphrase is optional but it gives an additional level of security to your wallet. You can consider it as a custom 13th mnemonic word. Please note that this passphrase can never be recovered if you forget it. Entering a wrong passphrase when restoring your wallet in the future will not generate any error, but will result in a wrong wallet address.",
-    "help:import-password": "A mnemonic passphrase is a custom password that's bound to your mnemonic words. If you did not create a mnemonic passphrase when you created your wallet, please disregard.",
-    // "help:mnemonic-password": '这是一个可选密码，可为您的钱包提供额外的安全性。请务必保存好您的助记词及助记词密码！',
+    "help:create-password": "助记词密码是可选的，但它为您的钱包提供了更高的安全性。您可以将其视为自定义的第13个助记词。请注意，如果忘记了该密码，将永远无法恢复钱包。将来在恢复您的钱包时输入错误的密码短语不会产生任何错误，但是会导致错误的钱包地址。",
+    "help:import-password": "助记词密码是与助记词绑定的自定义密码。 如果您在创建钱包时未创建助记词密码，请忽略。",
 
     // Advanced mnemonic import screen
     'advanced-import': '快速输入助记词',
