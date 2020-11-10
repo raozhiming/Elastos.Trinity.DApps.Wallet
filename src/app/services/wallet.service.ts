@@ -808,11 +808,11 @@ export class WalletManager {
     public async openPayModal(transfer: Transfer): Promise<string> {
         const payPassword = await this.authService.getWalletPassword(transfer.masterWalletId, true, true);
         if (payPassword === null) {
-            return Promise.resolve(null);
+            return null;
         }
         transfer.payPassword = payPassword;
 
-        return Promise.resolve(payPassword);
+        return payPassword;
     }
 
     /**

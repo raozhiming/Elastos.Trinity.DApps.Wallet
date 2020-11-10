@@ -44,7 +44,6 @@ export class AuthService {
                     promptPasswordIfLocked: showMasterPromptIfDatabaseLocked,
                     forceMasterPasswordPrompt: forceShowMasterPrompt
                 };
-
                 let passwordInfo = await passwordManager.getPasswordInfo("wallet-"+walletId, options) as PasswordManagerPlugin.GenericPasswordInfo;
                 if (!passwordInfo) {
                     // Master password is right, but no data for the requested key...
@@ -60,7 +59,7 @@ export class AuthService {
             catch (e) {
                 console.error(e);
                 // TODO: better handle various kind of errors
-                reject();
+                resolve(null);
             }
         });
     }
