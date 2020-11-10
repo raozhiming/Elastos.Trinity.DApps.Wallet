@@ -21,22 +21,25 @@
  */
 
 import { Injectable, NgZone } from '@angular/core';
-import { ToastController, LoadingController, NavController } from '@ionic/angular';
+import { ToastController, LoadingController, NavController, PopoverController } from '@ionic/angular';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { Logger } from '../model/Logger';
+import { HelpComponent } from '../components/help/help.component';
 
 @Injectable()
 export class Native {
 
     private mnemonicLang: string = "english";
     private loader: HTMLIonLoadingElement = null;
+    public popup: any = null;
 
     constructor(
         public toastCtrl: ToastController,
         private clipboard: Clipboard,
         public translate: TranslateService,
         private loadingCtrl: LoadingController,
+        private popoverCtrl: PopoverController,
         private navCtrl: NavController,
         private zone: NgZone,
     ) {
@@ -150,6 +153,23 @@ export class Native {
             await this.loader.dismiss();
             this.loader = null;
         }
+    }
+
+    public async showHelp(ev: any, helpMessage: string) {
+        this.popup = await this.popoverCtrl.create({
+          mode: 'ios',
+          component: HelpComponent,
+          cssClass: 'helpComponent',
+          event: ev,
+          componentProps: {
+            message: helpMessage
+          },
+          translucent: false
+        });
+        this.popup.onWillDismiss().then(() => {
+            this.popup = null;
+        });
+        return await this.popup.present();
     }
 }
 

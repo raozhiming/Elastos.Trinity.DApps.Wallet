@@ -56,7 +56,10 @@ export class WalletCreatePage implements OnInit {
         }
     }
 
-    ionViewDidEnter() {
+    ionViewWillLeave() {
+        if (this.native.popup) {
+            this.native.popup.dismiss();
+        }
     }
 
     updateSingleAddress(event) {
@@ -122,7 +125,7 @@ export class WalletCreatePage implements OnInit {
 
     showHelp(event) {
         this.walletCreationService.type === 1 ?
-            this.uiService.showHelp(event, 'help:create-password') :
-            this.uiService.showHelp(event, 'help:import-password');
+            this.native.showHelp(event, 'help:create-password') :
+            this.native.showHelp(event, 'help:import-password');
     }
 }

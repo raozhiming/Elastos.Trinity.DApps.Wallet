@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { SubWallet } from '../model/wallets/SubWallet';
 import { StandardCoinName } from '../model/Coin';
 import * as moment from 'moment';
-import { PopoverController } from '@ionic/angular';
-import { HelpComponent } from '../components/help/help.component';
 import BigNumber from 'bignumber.js';
 import { LocalStorage } from './storage.service';
 
@@ -16,7 +14,6 @@ export class UiService {
   public returnedUser = true;
 
   constructor(
-    private popoverCtrl: PopoverController,
     private storage: LocalStorage
   ) { }
 
@@ -94,19 +91,5 @@ export class UiService {
 
   getSyncDate(timestamp) {
     return moment(new Date(timestamp)).format();
-  }
-
-  public async showHelp(ev: any, helpMessage: string) {
-    const popover = await this.popoverCtrl.create({
-      mode: 'ios',
-      component: HelpComponent,
-      cssClass: 'helpComponent',
-      event: ev,
-      componentProps: {
-        message: helpMessage
-      },
-      translucent: false
-    });
-    return await popover.present();
   }
 }
