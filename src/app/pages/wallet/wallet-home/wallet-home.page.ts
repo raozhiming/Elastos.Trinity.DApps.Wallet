@@ -141,6 +141,10 @@ export class WalletHomePage implements OnInit, OnDestroy {
 
     ionViewWillLeave() {
         titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
+
+        if (this.native.popup) {
+            this.native.popup.dismiss();
+        }
     }
 
     handleItem(key: string) {

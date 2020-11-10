@@ -10,7 +10,6 @@ import { LocalStorage } from './storage.service';
 })
 export class UiService {
 
-  public showPopover = false;
   public returnedUser = true;
 
   constructor(

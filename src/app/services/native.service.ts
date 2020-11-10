@@ -39,7 +39,7 @@ export class Native {
         private clipboard: Clipboard,
         public translate: TranslateService,
         private loadingCtrl: LoadingController,
-        private popoverCtrl: PopoverController,
+        public popoverCtrl: PopoverController,
         private navCtrl: NavController,
         private zone: NgZone,
     ) {

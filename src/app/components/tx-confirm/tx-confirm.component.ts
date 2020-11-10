@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
 import { ThemeService } from 'src/app/services/theme.service';
-import { popover } from 'src/app/pages/wallet/coin/coin-transfer/coin-transfer.page';
 import { TranslateService } from '@ngx-translate/core';
+import { Native } from 'src/app/services/native.service';
 
 @Component({
   selector: 'app-tx-confirm',
@@ -20,6 +20,7 @@ export class TxConfirmComponent implements OnInit {
     private navParams: NavParams,
     public theme: ThemeService,
     private translate: TranslateService,
+    private native: Native
   ) { }
 
   ngOnInit() {
@@ -36,11 +37,11 @@ export class TxConfirmComponent implements OnInit {
   }
 
   cancel() {
-    popover.dismiss();
+    this.native.popup.dismiss();
   }
 
   confirm() {
-    popover.dismiss({
+    this.native.popup.dismiss({
       confirm: true
     });
   }

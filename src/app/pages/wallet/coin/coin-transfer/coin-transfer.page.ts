@@ -49,7 +49,6 @@ import { ContactsComponent } from 'src/app/components/contacts/contacts.componen
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 declare let appManager: AppManagerPlugin.AppManager;
-export let popover: any = null;
 
 @Component({
     selector: 'app-coin-transfer',
@@ -136,6 +135,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     ionViewWillLeave() {
+        if (this.native.popup) {
+            this.native.popup.dismiss();
+        }
         this.setContactKeyVisibility(false);
     }
 
@@ -388,7 +390,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     async showConfirm() {
-        this.uiService.showPopover = true;
         const txInfo = {
             type: this.transferType,
             transferFrom: this.chainId,
@@ -397,7 +398,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             memo: this.memo ? this.memo : null,
         };
 
-        popover = await this.popoverCtrl.create({
+        this.native.popup = await this.native.popoverCtrl.create({
             mode: 'ios',
             cssClass: 'txPopup',
             component: TxConfirmComponent,
@@ -405,30 +406,26 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 txInfo: txInfo
             }
         });
-        popover.onWillDismiss().then((params) => {
-            this.uiService.showPopover = false;
-            popover = null;
+        this.native.popup.onWillDismiss().then((params) => {
+            this.native.popup = null;
             console.log('Confirm tx params', params);
             if (params.data && params.data.confirm) {
                 this.transaction();
             }
         });
-        return await popover.present();
+        return await this.native.popup.present();
     }
 
-
     async showSuccess() {
-        this.uiService.showPopover = true;
-        popover = await this.popoverCtrl.create({
+        this.native.popup = await this.native.popoverCtrl.create({
             mode: 'ios',
             cssClass: 'txPopup',
             component: TxSuccessComponent,
         });
-        popover.onWillDismiss().then(() => {
-            this.uiService.showPopover = false;
-            popover = null;
+        this.native.popup.onWillDismiss().then(() => {
+            this.native.popup = null;
         });
-        return await popover.present();
+        return await this.native.popup.present();
     }
 
     // Pay intent

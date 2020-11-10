@@ -232,13 +232,13 @@ export class CoinTxInfoPage implements OnInit {
                     type: 'fees',
                     title: 'tx-info-transaction-fees',
                     value: this.payFee,
-                    show: false,
+                    show: true,
                 },
                 {
                     type: 'cost',
                     title: 'tx-info-cost',
                     value: this.totalCost,
-                    show: false,
+                    show: true,
                 },
             );
         }
