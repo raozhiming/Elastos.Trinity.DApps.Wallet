@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LocalStorage } from './storage.service';
+import { HttpClient } from '@angular/common/http';
+import * as CryptoAddressResolvers from 'src/app/model/address-resolvers';
+import { StandardCoinName } from 'src/app/model/Coin';
 
 export type Contact = {
   cryptoname: string;
@@ -15,7 +18,8 @@ export class ContactsService {
   public contacts: Contact[] = [];
 
   constructor(
-    private storage: LocalStorage
+    private storage: LocalStorage,
+    private http: HttpClient
   ) { }
 
   async init() {
@@ -31,6 +35,19 @@ export class ContactsService {
       this.storage.getContacts().then((contacts) => {
         console.log("Fetched stored contacts", contacts);
         if (contacts) {
+          let contactsChecked = 0;
+          this.contacts.forEach(async (contact) => {
+            const cryptoNameResolver = new CryptoAddressResolvers.CryptoNameResolver(this.http);
+            const results: CryptoAddressResolvers.Address[] = await cryptoNameResolver.resolve(contact.cryptoname, StandardCoinName.ELA);
+            contactsChecked++;
+
+            if (results) {
+              contact.address = results[0].address;
+            }
+            if (contactsChecked === contacts.length) {
+              this.storage.setContacts(this.contacts);
+            }
+          });
           this.contacts = contacts;
         }
         resolve();
