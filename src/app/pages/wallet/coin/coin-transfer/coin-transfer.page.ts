@@ -94,7 +94,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     private onItemClickedListener: any;
 
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
-    suggestedAddresses: CryptoAddressResolvers.Address[] = [];
+    public suggestedAddresses: CryptoAddressResolvers.Address[] = [];
 
     constructor(
         public route: ActivatedRoute,
@@ -206,7 +206,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
                 this.transaction = this.createSendTransaction;
 
-                if (this.contactsService.contacts.length) {
+                if (this.chainId === StandardCoinName.ELA && this.contactsService.contacts.length) {
                     this.setContactKeyVisibility(true);
                 }
 
