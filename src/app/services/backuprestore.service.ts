@@ -210,6 +210,8 @@ export class BackupRestoreService {
 
     this.logDebug("Check sync is starting");
 
+    let syncResult = true;
+
     try {
       // Stop all on going wallets synchronization first
       this.logDebug("Stopping on going subwallets sync");
@@ -237,20 +239,20 @@ export class BackupRestoreService {
           }
         }
       }
-
-      // Restart all wallets synchronizations
-      this.logDebug("Restarting subwallets sync");
-      for (let wallet of wallets) {
-        await WalletManager.instance.startWalletSync(wallet.id);
-      }
     }
     catch (e) {
-      // Network error, etc
+      // Network error, provider is broken, etc
       console.error(e);
-      return false;
+      syncResult = false;
     }
 
-    return true;
+    // Restart all wallets synchronizations
+    this.logDebug("Restarting subwallets sync");
+    for (let wallet of wallets) {
+        await WalletManager.instance.startWalletSync(wallet.id);
+    }
+
+    return syncResult;
   }
 
   private async checkBackupSubWallet(masterWallet: MasterWallet, subWallet: SubWallet) {
