@@ -230,7 +230,7 @@ export class ERC20SubWallet extends SubWallet {
         return rawTx;
     }
 
-    public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void> {
+    public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<boolean> {
         console.log("ERC20 signAndSendRawTransaction transaction:", transaction, transfer);
 
         return new Promise(async (resolve)=>{
@@ -240,7 +240,7 @@ export class ERC20SubWallet extends SubWallet {
                 console.log("No password received. Cancelling");
                 await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
                     { txid: null, status: 'cancelled' }, transfer.intentId);
-                resolve(null);
+                resolve(false);
                 return;
             }
 
@@ -285,7 +285,7 @@ export class ERC20SubWallet extends SubWallet {
                         { txid: txId, status }, transfer.intentId);
                     appManager.close();
 
-                    resolve();
+                    resolve(true);
                 }, 5000); // wait for 5s for txPublished
             } else {
                 console.log("Published transaction id:", publishedTransaction.TxHash);
@@ -294,7 +294,7 @@ export class ERC20SubWallet extends SubWallet {
                 this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
                 await this.masterWallet.walletManager.native.setRootRouter('/wallet-home');
 
-                resolve();
+                resolve(true);
             }
         });
     }

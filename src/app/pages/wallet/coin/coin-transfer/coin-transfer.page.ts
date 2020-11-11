@@ -270,8 +270,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: this.transferType === TransferType.PAY ? this.coinTransferService.intentTransfer.intentId : null ,
         });
 
-        await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
-        this.showSuccess();
+        let result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        if (result) this.showSuccess();
     }
 
     /**
@@ -301,8 +301,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: null,
         });
 
-        await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
-        this.showSuccess();
+        let result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        if (result) this.showSuccess();
     }
 
     /**
@@ -332,8 +332,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: null,
         });
 
-        await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
-        this.showSuccess();
+        let result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        if (result) this.showSuccess();
     }
 
     goScan() {

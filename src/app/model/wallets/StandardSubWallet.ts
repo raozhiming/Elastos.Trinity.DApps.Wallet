@@ -222,15 +222,17 @@ export abstract class StandardSubWallet extends SubWallet {
     /**
      * Signs raw transaction and sends the signed transaction to the SPV SDK for publication.
      */
-    public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<void> {
+    public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<boolean> {
         return new Promise(async (resolve)=>{
             console.log('Received raw transaction', transaction);
             let password = await this.masterWallet.walletManager.openPayModal(transfer);
             if (!password) {
                 console.log("No password received. Cancelling");
-                await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
-                    { txid: null, status: 'cancelled' }, transfer.intentId);
-                resolve(null);
+                if (transfer.action) {
+                    await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
+                        { txid: null, status: 'cancelled' }, transfer.intentId);
+                }
+                resolve(false);
                 return;
             }
 
@@ -275,7 +277,7 @@ export abstract class StandardSubWallet extends SubWallet {
                         { txid: txId, status }, transfer.intentId);
                     appManager.close();
 
-                    resolve();
+                    resolve(true);
                 }, 5000); // wait for 5s for txPublished
             } else {
                 console.log("Published transaction id:", publishedTransaction.TxHash);
@@ -284,7 +286,7 @@ export abstract class StandardSubWallet extends SubWallet {
                 this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
                 await this.masterWallet.walletManager.native.setRootRouter('/wallet-home');
 
-                resolve();
+                resolve(true);
             }
         });
     }
