@@ -178,7 +178,8 @@ export abstract class SubWallet {
             memo: transaction.Memo,
             name: await this.getTransactionName(transaction, translate),
             payStatusIcon: await this.getTransactionIconPath(transaction),
-            status: this.getTransactionStatusName(transaction.Status, translate),
+            status: transaction.Status,
+            statusName: this.getTransactionStatusName(transaction.Status, translate),
             symbol: '', // Defined by inherited classes
             timestamp,
             txId: null, // Defined by inherited classes

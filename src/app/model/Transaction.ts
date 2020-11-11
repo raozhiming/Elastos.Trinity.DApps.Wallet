@@ -29,6 +29,7 @@ export type TransactionInfo = {
     name: string,
     payStatusIcon: string,
     status: string,
+    statusName: string,
     symbol: string,
     timestamp: number,
     txId: string,

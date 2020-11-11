@@ -15,7 +15,6 @@ import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import { ETHChainSubWallet } from 'src/app/model/wallets/ETHChainSubWallet';
-import { getHeapStatistics } from 'v8';
 
 class TransactionDetail {
     type: string;
@@ -46,6 +45,7 @@ export class CoinTxInfoPage implements OnInit {
     public symbol: string = '';
     public amount: BigNumber;
     public status: string = '';
+    public statusName: string = '';
 
     // Other Values
     public payFee: number = null;
@@ -104,15 +104,9 @@ export class CoinTxInfoPage implements OnInit {
             this.amount = this.transactionInfo.amount;
             this.symbol = this.transactionInfo.symbol;
             this.status = this.transactionInfo.status;
+            this.statusName = this.transactionInfo.statusName;
             this.payStatusIcon = this.transactionInfo.payStatusIcon;
-            const direction = this.transactionInfo.direction;
-            if (direction === TransactionDirection.RECEIVED) {
-                this.direction = this.translate.instant("tx-info-type-received");
-            } else if (direction === TransactionDirection.SENT) {
-                this.direction = this.translate.instant("tx-info-type-sent");
-            } else if (direction === TransactionDirection.MOVED) {
-                this.direction = this.translate.instant("tx-info-type-transferred");
-            }
+            this.direction = this.transactionInfo.direction;
 
             this.getTransactionDetails();
         }
