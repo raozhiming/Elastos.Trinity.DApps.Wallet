@@ -675,6 +675,9 @@ export class WalletManager {
                         if ('CONNECTED' === result.event.NewState) {
                             result.Progress =  100;
                             result.LastBlockTime = new Date().getTime() / 1000;
+                        } else {
+                            // DISCONNECTED
+                            result.Progress =  0;
                         }
                         break;
                     default:
