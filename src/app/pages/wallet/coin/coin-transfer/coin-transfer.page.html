@@ -138,7 +138,7 @@
 
 <!------------------ RECHARGE AND SEND FOOTER ------------------>
 <ion-footer
-    *ngIf="!uiService.showPopover && transferType !== 3 && waitingForSyncCompletion"
+    *ngIf="!native.popup && transferType !== 3 && waitingForSyncCompletion"
     class="footer"
     [class.dark-footer]="theme.darkMode"
 >
@@ -152,7 +152,7 @@
 </ion-footer>
 
 <ion-footer
-    *ngIf="!uiService.showPopover && transferType !== 3 && !waitingForSyncCompletion && amount && toAddress"
+    *ngIf="!native.popup && transferType !== 3 && !waitingForSyncCompletion && amount && toAddress"
     class="footer"
     [class.dark-footer]="theme.darkMode"
 >
