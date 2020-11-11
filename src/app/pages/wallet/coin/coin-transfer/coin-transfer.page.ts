@@ -92,6 +92,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     // Titlebar
     private onItemClickedListener: any;
 
+    // Modal
+    private modal: any = null;
+
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     public suggestedAddresses: CryptoAddressResolvers.Address[] = [];
 
@@ -127,6 +130,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             if (menuIcon.key === "contacts") {
                 this.showContacts();
             }
+            if (menuIcon.key === "friends") {
+                this.openContacts();
+            }
         });
     }
 
@@ -138,25 +144,39 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         if (this.native.popup) {
             this.native.popup.dismiss();
         }
-        this.setContactKeyVisibility(false);
+
+        this.setContactsKeyVisibility(false);
+        this.setCryptonamesKeyVisibility(false);
     }
 
     ngOnDestroy() {
         this.events.unsubscribe('address:update');
         this.events.unsubscribe('intent:pay');
 
-        if (this.syncCompletionEventName)
+        if (this.syncCompletionEventName) {
             this.events.unsubscribe(this.syncCompletionEventName);
+        }
     }
 
-    setContactKeyVisibility(showContactKey: boolean) {
-        if (showContactKey) {
+    setContactsKeyVisibility(showKey: boolean) {
+        if (showKey) {
             titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, {
-                key: "contacts",
-                iconPath: TitleBarPlugin.BuiltInIcon.ADD
+                key: "friends",
+                iconPath: "assets/icons/addfriend.png"
             });
         } else {
             titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
+        }
+    }
+
+    setCryptonamesKeyVisibility(showKey: boolean) {
+        if (showKey) {
+            titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_RIGHT, {
+                key: "contacts",
+                iconPath: "assets/logos/cryptoname.png"
+            });
+        } else {
+            titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_RIGHT, null);
         }
     }
 
@@ -208,8 +228,14 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
                 this.transaction = this.createSendTransaction;
 
-                if (this.chainId === StandardCoinName.ELA && this.contactsService.contacts.length) {
-                    this.setContactKeyVisibility(true);
+                if (this.chainId === StandardCoinName.ELA) {
+                    // Always show contacts app key
+                    this.setContactsKeyVisibility(true);
+
+                    // Only show cryptonames key if user has previously used crypto names
+                    if (this.contactsService.contacts.length) {
+                        this.setCryptonamesKeyVisibility(true);
+                    }
                 }
 
                 break;
@@ -497,7 +523,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.contactsService.setContacts();
         }
 
-        this.setContactKeyVisibility(true);
+        this.setCryptonamesKeyVisibility(true);
     }
 
     isStandardSubwallet(subWallet: SubWallet) {
@@ -510,25 +536,57 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     async showContacts() {
         this.appService.setBackKeyVisibility(false);
-        this.setContactKeyVisibility(false);
+        this.setContactsKeyVisibility(false);
+        this.setCryptonamesKeyVisibility(false);
         this.appService.setTitleBarTitle('select-address');
 
-        const modal = await this.modalCtrl.create({
+        this.modal = await this.modalCtrl.create({
             component: ContactsComponent,
             componentProps: {
             },
         });
-        modal.onWillDismiss().then((params) => {
+        this.modal.onWillDismiss().then((params) => {
             console.log('Contact selected', params);
             if (params.data && params.data.contact) {
                 this.cryptoName = params.data.contact.cryptoname;
                 this.toAddress = params.data.contact.address;
             }
 
+            this.modal = null;
             this.appService.setBackKeyVisibility(true);
             this.appService.setTitleBarTitle(this.translate.instant("coin-transfer-send-title", {coinName: this.chainId}));
-            this.setContactKeyVisibility(true);
+            this.setContactsKeyVisibility(true);
+            this.setCryptonamesKeyVisibility(true);
+
         });
-        modal.present();
+        this.modal.present();
+    }
+
+    // Intent response will return a contact's DID document under result.friends.document
+    openContacts() {
+        appManager.sendIntent(
+            "pickfriend",
+            {
+              singleSelection: true,
+              filter: {
+                credentialType: "elaWallet"
+              }
+            }, {},
+            (res) => {
+                console.log(res);
+                const walletCred = res.result.friends[0].document.verifiableCredential.find((key) =>
+                    key.credentialSubject.hasOwnProperty('elaWallet')
+                );
+
+                console.log('Wallet Credential', walletCred);
+                if (walletCred) {
+                    this.zone.run(() => {
+                        this.toAddress = walletCred.credentialSubject.elaWallet;
+                    });
+                }
+            }, (err) => {
+                console.error(err);
+            }
+        );
     }
 }
