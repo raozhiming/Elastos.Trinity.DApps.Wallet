@@ -18,13 +18,8 @@
     }
     
     .subwallet-row {    
-        .right-col {
-            justify-content: center;
-        
-            ion-icon {
-            width: 30px;
-            height: 30px;
-            }
+        .left-col {
+            align-items: center;
         }
     }
 }

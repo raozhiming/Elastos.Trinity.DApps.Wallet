@@ -81,9 +81,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     // Submit transaction
     public transaction: any;
 
-    // CryptoName
-    cryptoNameSelected = false;
-    cryptoName: string = null;
+    // CryptoName and Contacts
+    public addressName: string = null;
 
     // Helpers
     public Config = Config;
@@ -124,6 +123,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.events.subscribe('address:update', (address) => {
             this.zone.run(() => {
                 this.toAddress = address;
+                this.addressName = null;
             });
         });
         titleBarManager.addOnItemClickedListener(this.onItemClickedListener = (menuIcon: TitleBarPlugin.TitleBarIcon) => {
@@ -162,7 +162,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         if (showKey) {
             titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, {
                 key: "friends",
-                iconPath: "assets/icons/addfriend.png"
+                iconPath: "assets/icons/contacts.png"
             });
         } else {
             titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, null);
@@ -173,7 +173,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         if (showKey) {
             titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_RIGHT, {
                 key: "contacts",
-                iconPath: "assets/logos/cryptoname.png"
+                iconPath: "assets/icons/cryptoname.png"
             });
         } else {
             titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_RIGHT, null);
@@ -477,7 +477,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      */
     async onSendToAddressInput(enteredText: string) {
         this.suggestedAddresses = [];
-        this.cryptoName = null;
+        this.addressName = null;
 
         if (!enteredText) {
             return;
@@ -494,8 +494,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             if (this.chainId !== StandardCoinName.ELA)
                 return;
 
-            let cryptoNameResolver = new CryptoAddressResolvers.CryptoNameResolver(this.http);
-            let results = await cryptoNameResolver.resolve(enteredText, StandardCoinName.ELA);
+            const cryptoNameResolver = new CryptoAddressResolvers.CryptoNameResolver(this.http);
+            const results = await cryptoNameResolver.resolve(enteredText, StandardCoinName.ELA);
             console.log("cryptoname results", results);
 
             this.suggestedAddresses = this.suggestedAddresses.concat(results);
@@ -508,15 +508,15 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      */
     selectSuggestedAddress(suggestedAddress: CryptoAddressResolvers.CryptoNameAddress) {
         this.toAddress = suggestedAddress.address;
-        this.cryptoName = suggestedAddress.getDisplayName();
+        this.addressName = suggestedAddress.getDisplayName();
 
         // Hide/reset suggestions
         this.suggestedAddresses = [];
 
-        let targetContact = this.contactsService.contacts.find((contact) => contact.address === suggestedAddress.address);
+        const targetContact = this.contactsService.contacts.find((contact) => contact.address === suggestedAddress.address);
         if (!targetContact) {
             this.contactsService.contacts.push({
-                cryptoname:  this.cryptoName,
+                cryptoname:  this.addressName,
                 address: this.toAddress
             });
 
@@ -548,7 +548,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.modal.onWillDismiss().then((params) => {
             console.log('Contact selected', params);
             if (params.data && params.data.contact) {
-                this.cryptoName = params.data.contact.cryptoname;
+                this.addressName = params.data.contact.cryptoname;
                 this.toAddress = params.data.contact.address;
             }
 
@@ -574,14 +574,22 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             }, {},
             (res) => {
                 console.log(res);
+
                 const walletCred = res.result.friends[0].document.verifiableCredential.find((key) =>
                     key.credentialSubject.hasOwnProperty('elaWallet')
                 );
+                const nameCred = res.result.friends[0].document.verifiableCredential.find((key) =>
+                    key.credentialSubject.hasOwnProperty('name')
+                );
 
                 console.log('Wallet Credential', walletCred);
+                console.log('Name Credential', nameCred);
                 if (walletCred) {
                     this.zone.run(() => {
                         this.toAddress = walletCred.credentialSubject.elaWallet;
+                        nameCred ? this.addressName = nameCred.credentialSubject.name : this.addressName = null;
+
+                        console.log('ADDRESS NAME', this.addressName);
                     });
                 }
             }, (err) => {

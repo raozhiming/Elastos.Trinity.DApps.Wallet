@@ -31,7 +31,7 @@
         <ion-label>{{ 'activate-hive-vault' | translate }}</ion-label>
     </ion-button>
     
-    <ion-slides *ngIf="!isSingleWallet" [class.dark-slides]="theme.darkMode" [class.blur]="uiService.showPopover" [options]="slideOpts" #slider pager>
+    <ion-slides *ngIf="!isSingleWallet" [class.dark-slides]="theme.darkMode" [class.blur]="native.popup" [options]="slideOpts" #slider pager>
         <ion-slide *ngFor="let masterWallet of masterWalletList">
             <ion-row class="main-title-row">
                 <ion-col size="12">
@@ -114,7 +114,7 @@
         </ion-slide>
     </ion-slides>
 
-    <ion-grid class="single-slide" [class.dark-slide]="theme.darkMode" [class.blur]="uiService.showPopover" *ngIf="isSingleWallet">
+    <ion-grid class="single-slide" [class.dark-slide]="theme.darkMode" [class.blur]="native.popup" *ngIf="isSingleWallet">
         <ion-row class="main-title-row">
             <ion-col size="12">
                 <h1>{{ 'wallet-overview' | translate }}</h1>

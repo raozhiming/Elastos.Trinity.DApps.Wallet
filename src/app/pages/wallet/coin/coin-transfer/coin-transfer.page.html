@@ -1,6 +1,6 @@
 <!------------------ RECHARGE ------------------>
 <ion-content *ngIf="transferType === 1 || transferType === 4">
-    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="uiService.showPopover">
+    <ion-grid class="recharge-container" [class.recharge-dark-container]="theme.darkMode" [class.blur]="native.popup">
         <ion-row class="main-title-row">
             <ion-col size="12">
                 <p>{{ 'transfer-from' | translate }}</p>
@@ -63,7 +63,7 @@
 
 <!------------------ SEND ------------------>
 <ion-content *ngIf="transferType === 2">
-    <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="uiService.showPopover">
+    <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="native.popup">
         <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
 
         <h1>{{ 'enter-amount' | translate }}</h1>
@@ -108,7 +108,7 @@
             </ion-col>
         </ion-row>
 
-        <p [class.invisible]="!cryptoName">{{ cryptoName }}</p>
+        <p [class.invisible]="!addressName">{{ addressName }}</p>
 
         <ion-row *ngIf="suggestedAddresses.length > 0" class="cryptoname-row">
             <ion-col size="12" *ngFor="let suggestedAddress of suggestedAddresses" (click)="selectSuggestedAddress(suggestedAddress)">

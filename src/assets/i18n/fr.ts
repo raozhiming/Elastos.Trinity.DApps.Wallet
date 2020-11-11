@@ -64,7 +64,7 @@ export const fr = {
 
     // Contacts screen
     "select-address": "Sélectionner une adresse",
-    "crypto-names": "Crypto Names",
+    "cryptonames": "Cryptonames",
 
     // Wallet settings screen
     "wallet-settings-title": "Paramètres Portefeuille",

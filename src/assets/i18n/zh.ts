@@ -64,7 +64,7 @@ export const zh = {
 
     // Contacts screen
     "select-address": "选择地址",
-    "crypto-names": "加密名称",
+    "cryptonames": "加密名称",
 
     // Wallet settings screen
     "wallet-settings-title": "钱包设置",
