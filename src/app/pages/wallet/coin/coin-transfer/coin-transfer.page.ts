@@ -127,10 +127,10 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             });
         });
         titleBarManager.addOnItemClickedListener(this.onItemClickedListener = (menuIcon: TitleBarPlugin.TitleBarIcon) => {
-            if (menuIcon.key === "contacts") {
-                this.showContacts();
+            if (menuIcon.key === "cryptonames") {
+                this.showCryptonames();
             }
-            if (menuIcon.key === "friends") {
+            if (menuIcon.key === "contacts") {
                 this.openContacts();
             }
         });
@@ -161,7 +161,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     setContactsKeyVisibility(showKey: boolean) {
         if (showKey) {
             titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.OUTER_RIGHT, {
-                key: "friends",
+                key: "contacts",
                 iconPath: "assets/icons/contacts.png"
             });
         } else {
@@ -172,7 +172,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     setCryptonamesKeyVisibility(showKey: boolean) {
         if (showKey) {
             titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_RIGHT, {
-                key: "contacts",
+                key: "cryptonames",
                 iconPath: "assets/icons/cryptoname.png"
             });
         } else {
@@ -534,7 +534,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         return new BigNumber(amount);
     }
 
-    async showContacts() {
+    async showCryptonames() {
         this.appService.setBackKeyVisibility(false);
         this.setContactsKeyVisibility(false);
         this.setCryptonamesKeyVisibility(false);
