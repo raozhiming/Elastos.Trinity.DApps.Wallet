@@ -485,20 +485,22 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
         // Quick and dirty way to not try to resolve a name when it's actually an address already, not name.
         // Could be improved later.
-        if (enteredText.length > 20)
+        if (enteredText.length > 20) {
             return;
+        }
 
         // Cryptoname
         if (enteredText.length >= 3) {
             // For now, handle only ELA addresses for cryptoname
-            if (this.chainId !== StandardCoinName.ELA)
+            if (this.chainId !== StandardCoinName.ELA) {
                 return;
-
-            const cryptoNameResolver = new CryptoAddressResolvers.CryptoNameResolver(this.http);
-            const results = await cryptoNameResolver.resolve(enteredText, StandardCoinName.ELA);
-            console.log("cryptoname results", results);
-
-            this.suggestedAddresses = this.suggestedAddresses.concat(results);
+            } else {
+                const lowerCaseText = enteredText.toLowerCase();
+                const cryptoNameResolver = new CryptoAddressResolvers.CryptoNameResolver(this.http);
+                const results = await cryptoNameResolver.resolve(lowerCaseText, StandardCoinName.ELA);
+                console.log("cryptoname results", results);
+                this.suggestedAddresses = this.suggestedAddresses.concat(results);
+            }
         }
     }
 
