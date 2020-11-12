@@ -91,4 +91,16 @@ export class UiService {
   getSyncDate(timestamp) {
     return moment(new Date(timestamp)).format();
   }
+
+  getSyncTimeFromNow(timestamp) {
+    const today = moment();
+    const month = moment().subtract(30, 'days');
+    if (moment(timestamp).isSame(today, 'd')) {
+      return moment(timestamp).calendar();
+    } else if (moment(timestamp).isBetween(month, today)) {
+      return moment(timestamp).format('MMM Do, h:mm a');
+    } else {
+      return moment(timestamp).format('MMM Do YYYY');
+    }
+  }
 }

@@ -1,5 +1,7 @@
 export const zh = {
-    // Generic actions
+    /******************
+    * Generic Actions *
+    *******************/
     "send-to": "发送到",
     "enter-name": "输入名称",
     "enter-amount": "输入金额",
@@ -21,7 +23,9 @@ export const zh = {
     "refresh-refreshing-text": "正在更新...",
     "intent-select-wallet": "请选择钱包",
 
-    // Generic messages
+    /*******************
+    * Generic Messages *
+    ********************/
     "copied": "已复制到剪切板!",
     'text-did-balance-not-enough': '在链上写入DID信息需要少量的ELA来支付费用。请先从主钱包中将ELA（例如：0.1 ELA）充值到ID侧链!',
     'amount-null': "请输入交易金额",
@@ -34,10 +38,14 @@ export const zh = {
     "please-add-ethereum-first": "请先将以太坊币种添加到您的钱包中",
     "please-wait": "请等待...",
 
-    // Home screen
+    /************
+    * Home Page *
+    *************/
     "wallet-home-title": "钱包主页",
     "wallet-overview": "钱包总览",
     "you-have-n-wallets": "您有 {{walletsCount}} 个币种",
+    "synced": "Synced",
+    "syncing": "Syncing",
     "synchronized": "{{progress}}% 完成",
     "sync-progress": "同步中 {{progress}}%",
     "ela-erc20": "ELASTOS ERC20 币种",
@@ -45,7 +53,11 @@ export const zh = {
     "activate-hive-vault": "激活 Hive Vault",
     "pull-down-to-refresh": "下拉屏幕刷新",
 
-    // Settings screen
+    /********************************************** General Settings Screen ***********************************************/
+
+    /****************
+    * Settings Page *
+    *****************/
     "settings-title": "设置",
     "settings-general": "通用",
     "settings-add-wallet": "添加钱包",
@@ -55,31 +67,26 @@ export const zh = {
     "settings-currency": "货币",
     "settings-currency-subtitle": "选择默认的货币",
 
-    // Currencies screen
+    /***********************
+    * Select-Currency Page *
+    ************************/
     "select-currency-title": "选择货币",
     "available-currencies": "支持的货币",
     "united-states-dollar": "美元",
     "chinese-yuan": "人民币",
     "bitcoin": "比特币",
 
-    // Contacts screen
-    "select-address": "选择地址",
-    "cryptonames": "加密名称",
+    /**********************
+    * Wallet Manager Page *
+    ***********************/
+    "wallet-manager-intro": "每个钱包都有单独的设置，您可以检查每个钱包里的选项。",
+    "wallet-manager-add-wallet": "添加钱包",
 
-    // Wallet settings screen
-    "wallet-settings-title": "钱包设置",
-    "wallet-settings-backup-wallet": "备份钱包",
-    "wallet-settings-backup-wallet-subtitle": "查看要导出和备份的助记词",
-    "wallet-settings-change-name": "更改名称",
-    "wallet-settings-change-name-subtitle": "自定义钱包名称",
-    "wallet-settings-change-theme": "更换主题",
-    "wallet-settings-change-theme-subtitle": "自定义钱包主题风格",
-    "wallet-settings-manage-coin-list": "管理币种",
-    "wallet-settings-manage-coin-list-subtitle": "设置要显示的币种",
-    "wallet-settings-delete-wallet": "删除钱包",
-    "wallet-settings-delete-wallet-subtitle": "此操作不会删除您的资产，您可以随时再次导入此钱包",
+    /********************************************** Coin Screens ***********************************************/
 
-    // Coin home screen
+    /*****************
+    * Coin Home Page *
+    ******************/
     "coin-overview": "{{coinName}} 概述",
     "coin-new-transactions-today": "今天有 {{ todaysTransactions }} 笔交易",
     "coin-balance": "金额",
@@ -105,13 +112,14 @@ export const zh = {
     "coin-transaction-status-unconfirmed": "未确认",
     "text-coin-close-warning": "此币种将从列表中删除",
 
-    // Coin select screen
+    /*******************
+    * Coin Select Page *
+    ********************/
     "coin-select-title": "选择币种",
 
-    // Coin payment
-    "payment-title": "支付",
-
-    // Coin transfer screen
+    /*********************
+    * Coin Transfer Page *
+    **********************/
     "coin-transfer-send-title": "从 {{coinName}} 发送",
     "coin-transfer-recharge-title": "{{coinName}} 充值",
     "coin-transfer-withdraw-title": "{{coinName}} 提现",
@@ -122,28 +130,44 @@ export const zh = {
     "transfer-send-ela": "发送ELA",
     "transfer-remain-balance": "余额 {{amount}}",
 
-    // Coin receive screen
+    /********************
+    * Coin Receive Page *
+    *********************/
     "coin-receive-title": "接收 {{coinName}}",
     "coin-receive-ela-address": "您的{{coinName}}地址",
     "coin-receive-tap-to-copy": "点击地址即可复制",
     "coin-address-copied": "{{coinName}} 地址已复制!",
     "coin-receive-address-list": "地址列表",
 
-    // Coin address screen
+    /********************
+    * Coin Address Page *
+    *********************/
     "coin-address-msg": "可用地址",
     'coin-address-load-more': '正在努力加载',
     "coin-address-load-finish": '已显示所有地址',
 
-    // Confirm transaction component
+    /*********************
+    * Contacts Component *
+    **********************/
+    "select-address": "选择地址",
+    "cryptonames": "加密名称",
+
+    /*******************************
+    * Confirm Transaction Component *
+    ********************************/
     "confirm-transaction-title": "确认交易",
     "transfer-transaction-type": "充值交易",
     "send-transaction-type": "转账交易",
 
-    // Tx successful component (tx-success),
+    /***********************************
+    * Transaction Successful Component *
+    ************************************/
     'tx-success': "交易成功",
     'continue': '继续',
 
-    // Transaction details screen (coin-tx-info)
+    /************************
+    * Transaction Info Page *
+    *************************/
     "tx-info-title": "交易详情",
     "tx-info-confirmations": "确认数",
     "tx-info-transaction-time": "交易时间",
@@ -157,14 +181,39 @@ export const zh = {
     "tx-info-type-sent": "发送",
     "tx-info-type-transferred": "转移",
 
-    // Wallet edit name screen
+    /********************************************** Wallet Settings Screens ***********************************************/
+
+    /***********************
+    * Wallet Settings Page *
+    ************************/
+    "wallet-settings-title": "钱包设置",
+    "wallet-settings-backup-wallet": "备份钱包",
+    "wallet-settings-backup-wallet-subtitle": "查看要导出和备份的助记词",
+    "wallet-settings-change-name": "更改名称",
+    "wallet-settings-change-name-subtitle": "自定义钱包名称",
+    "wallet-settings-change-theme": "更换主题",
+    "wallet-settings-change-theme-subtitle": "自定义钱包主题风格",
+    "wallet-settings-manage-coin-list": "管理币种",
+    "wallet-settings-manage-coin-list-subtitle": "设置要显示的币种",
+    "wallet-settings-delete-wallet": "删除钱包",
+    "wallet-settings-delete-wallet-subtitle": "此操作不会删除您的资产，您可以随时再次导入此钱包",
+    "delete-wallet-confirm-title": "确定删除?",
+    "delete-wallet-confirm-subtitle": "您的钱包将从此设备上删除。 您可以重新导入此钱包，请确保已经备份好钱包助记词。",
+
+    /************************
+    * Wallet Edit Name Page *
+    *************************/
     "wallet-edit-name-title": "更改钱包名称",
     "wallet-edit-name-new-name": "输入新的名称",
 
-    // Change theme screen
+    /***************************
+    * Wallet Change Theme Page *
+    ****************************/
     "change-wallet-theme-title": "更换钱包主题",
 
-    // Coin list screen
+    /************************
+    * Wallet Coin List Page *
+    *************************/
     "coin-list-title": "管理币种",
     "coin-list-enable-disable-coins": "开启/关闭 币种",
     "coin-list-enable-disable-coins-intro": "选择要在钱包主页面显示的币种。 ELA的主链和侧链会一直显示",
@@ -173,7 +222,14 @@ export const zh = {
     "ela-ethchain": "Elastos ETH 侧链",
     "erc-20-token": "ERC20 币种",
 
-    // Coin add erc20 screen
+    /***********************
+    * Export Mnemonic Page *
+    ************************/
+   'text-export-mnemonic': '导出助记词',
+
+    /*****************
+    * Add ERC20 Page *
+    ******************/
     "coin-adderc20-title": "添加 ERC20 币种",
     "coin-adderc20-intro": '手动输入币种地址或扫描其QR码。',
     "coin-adderc20-intro2": '验证后，币种将自动添加到您的钱包中。',
@@ -184,15 +240,18 @@ export const zh = {
     "coin-adderc20-not-a-erc20-contract": "扫描的内容不是有效的 ERC20 币种地址",
     'coin-adderc20-alreadyadded': '币种已经添加',
 
-    // Delete wallet popup
-    "delete-wallet-confirm-title": "确定删除?",
-    "delete-wallet-confirm-subtitle": "您的钱包将从此设备上删除。 您可以重新导入此钱包，请确保已经备份好钱包助记词。",
+    /********************************************** Intent Screens ***********************************************/
 
-    // Wallet manager screen
-    "wallet-manager-intro": "每个钱包都有单独的设置，您可以检查每个钱包里的选项。",
-    "wallet-manager-add-wallet": "添加钱包",
+    /*********************
+    * Wait For Sync Page *
+    **********************/
+    "waitforsync-syncing": "正在同步",
+    "waitforsync-loading": "加载中...",
+    "waitforsync-intro": "链的数据同步完成后才能执行相关操作，请耐心等待！",
 
-    // Access intent screen
+    /**************
+    * Access Page *
+    ***************/
     "access-title": "钱包访问请求",
     "access-subtitle-wallet-access-from": "数据请求来自于:",
     "access-subtitle-access-mnemonic-from": "索取助记词来自于:",
@@ -208,13 +267,17 @@ export const zh = {
     'text-warning': '警告',
     'text-share-mnemonic-warning': '助记词是区块链资产的唯一凭证，分享前请确认不会有泄露风险！',
 
-    // DID transaction intent screen
+    /***********************
+    * DID Transaction Page *
+    ************************/
     "didtransaction-title": "发布身份",
     "didtransaction-publish-identity": "发布身份",
     "didtransaction-transaction-fee": "只需要花费很少的交易费",
     "didtransaction-intro": "您正在将最新的身份更改发布到DID侧链",
 
-    // DPos voting intent screen
+    /*******************
+    * DPoS Voting Page *
+    ********************/
     "dposvote-title": "超级节点投票",
     "dposvote-you-are-voting": "正在投票!",
     "dposvote-transaction-fees": "大约需要0.0001 ELA的交易费",
@@ -222,7 +285,9 @@ export const zh = {
     "dposvote-with": "使用:",
     "dposvote-revote": "当您从ELA钱包中消费任意ELA后，请记得重新投票",
 
-    // ESC transaction intent screen
+    /***********************
+    * ESC Transaction Page *
+    ************************/
     "esctransaction-title": "ETHSC 交易",
     "esctransaction-smart-contract": "智能合约",
     "esctransaction-intro": "您将在以太坊侧链上签名并运行一个智能合约",
@@ -230,18 +295,36 @@ export const zh = {
     "esctransaction-value": "金额:",
     "esctransaction-fees": "手续费:",
 
-    // Wait for sync
-    "waitforsync-syncing": "正在同步",
-    "waitforsync-loading": "加载中...",
-    "waitforsync-intro": "链的数据同步完成后才能执行相关操作，请耐心等待！",
+    /********************************************** Create Wallet Screens ***********************************************/
 
-    //my-qrcode
-    'qrcode': "的二维码",
-    'copy': '复制',
-    'my-qrcode': "我的二维码",
-    'scanning': '扫描二维码',
+    /****************
+    * Launcher Page *
+    *****************/
+    'wallet': '钱包',
+    'wallet-prompt1': 'Elastos 生态系统的',
+    'wallet-prompt2': '安全钱包',
+    'get-started': '开始',
+    'import-wallet-msg': '已经有钱包? 点击这里导入钱包',
+    'launcher-create-wallet': '创建钱包',
 
-    // Mnemonic
+    /*********************
+    * Wallet Create Page *
+    **********************/
+   'enter-wallet-name': '请输入钱包名称',
+   'single-address': '单地址钱包',
+   'multiple-address': '多地址钱包',
+   'use-passphrase': '使用助记词密码',
+   'not-use-passphrase': '不使用助记词密码',
+   'launcher-backup-import': '导入钱包',
+   "text-wallet-name-validator-enter-name": "请给您的钱包设置名称",
+   "text-wallet-name-validator-not-valid-name": "抱歉，这个钱包名称无效",
+   "text-wallet-name-validator-already-exists": "此钱包名称已经存在",
+   "text-wallet-passphrase-validator-repeat": "两次输入的助记词密码不一致",
+   "text-wallet-passphrase-validator-min-length": "助记词密码最少8位",
+
+    /*****************
+    * Mnemonic Pages *
+    *****************/
     'mnemonic': '助记词',
     'mnemonic-prompt1': '这是您的12个安全字（助记词）。丢失这些，您将丢失钱包，因此必须将它们',
     'mnemonic-prompt2': '按顺序',
@@ -267,35 +350,15 @@ export const zh = {
     "help:create-password": "助记词密码是可选的，但它为您的钱包提供了更高的安全性。您可以将其视为自定义的第13个助记词。请注意，如果忘记了该密码，将永远无法恢复钱包。将来在恢复您的钱包时输入错误的密码短语不会产生任何错误，但是会导致错误的钱包地址。",
     "help:import-password": "助记词密码是与助记词绑定的自定义密码。 如果您在创建钱包时未创建助记词密码，请忽略。",
 
-    // Advanced mnemonic import screen
+    /********************************
+    * Advanced Mnemonic Import Page *
+    *********************************/
     'advanced-import': '快速输入助记词',
     'advanced-import-intro': '您可以直接粘贴或输入您的12个助记词',
     'advanced-import-msg': '*助记词之间需要空格',
     'paste-mnemonic': '粘贴或输入12个助记词',
 
-    // Export mnemonic screen
-    'text-export-mnemonic': '导出助记词',
-
-    // Launcher screen
-    'wallet': '钱包',
-    'wallet-prompt1': 'Elastos 生态系统的',
-    'wallet-prompt2': '安全钱包',
-    'get-started': '开始',
-    'import-wallet-msg': '已经有钱包? 点击这里导入钱包',
-
-    // Wallet creation screen
-    'launcher-create-wallet': '创建钱包',
-    'enter-wallet-name': '请输入钱包名称',
-    'single-address': '单地址钱包',
-    'multiple-address': '多地址钱包',
-    'use-passphrase': '使用助记词密码',
-    'not-use-passphrase': '不使用助记词密码',
-    'launcher-backup-import': '导入钱包',
-    "text-wallet-name-validator-enter-name": "请给您的钱包设置名称",
-    "text-wallet-name-validator-not-valid-name": "抱歉，这个钱包名称无效",
-    "text-wallet-name-validator-already-exists": "此钱包名称已经存在",
-    "text-wallet-passphrase-validator-repeat": "两次输入的助记词密码不一致",
-    "text-wallet-passphrase-validator-min-length": "助记词密码最少8位",
+    /********************************************** Error ***********************************************/
 
     // Consolidate
     'text-consolidate-prompt': '是否零钱换整？',

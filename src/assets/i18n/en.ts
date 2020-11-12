@@ -1,5 +1,8 @@
 export const en = {
-    // Generic actions
+
+    /******************
+    * Generic Actions *
+    *******************/
     "send-to": "Send to",
     "enter-name": "Enter name",
     "enter-amount": "Enter amount",
@@ -21,7 +24,9 @@ export const en = {
     "refresh-refreshing-text": "Updating Wallet...",
     "intent-select-wallet": "Select Wallet",
 
-    // Generic messages
+    /*******************
+    * Generic Messages *
+    ********************/
     "copied": "Copied to clipboard!",
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
     'amount-null': "Please set the transaction amount",
@@ -34,10 +39,14 @@ export const en = {
     "please-add-ethereum-first": "Please add the ethereum token to your wallet first",
     "please-wait": "Please wait...",
 
-    // Home screen
+    /************
+    * Home Page *
+    *************/
     "wallet-home-title": "Wallet Home",
     "wallet-overview": "Wallet Overview",
     "you-have-n-wallets": "YOU HAVE {{walletsCount}} TOKENS",
+    "synced": "Synced",
+    "syncing": "Syncing",
     "synchronized": "{{progress}}% synced",
     "sync-progress": "Synchronization {{progress}}%",
     "ela-erc20": "ELASTOS ERC20 TOKEN",
@@ -45,7 +54,11 @@ export const en = {
     "activate-hive-vault": "Activate Hive Vault",
     "pull-down-to-refresh": "Pull Down Screen to Refresh",
 
-    // Wallet Settings screen
+    /********************************************** General Settings Screen ***********************************************/
+
+    /****************
+    * Settings Page *
+    *****************/
     'settings-title': 'Settings',
     "settings-general": "General",
     "settings-add-wallet": "New Wallet",
@@ -55,31 +68,26 @@ export const en = {
     "settings-currency": "Currency",
     "settings-currency-subtitle": "Select the default currency",
 
-    // Currencies screen
+    /***********************
+    * Select-Currency Page *
+    ************************/
     "select-currency-title": "Select Currency",
     "available-currencies": "Available Currencies",
     "united-states-dollar": "United States Dollar",
     "chinese-yuan": "Chinese Yuan",
     "bitcoin": "Bitcoin",
 
-    // Contacts screen
-    "select-address": "Select Address",
-    "cryptonames": "Cryptonames",
+    /**********************
+    * Wallet Manager Page *
+    ***********************/
+    "wallet-manager-intro": "Wallets will have individual settings, you can check the options of each wallet below.",
+    "wallet-manager-add-wallet": "Add Wallet",
 
-    // Wallet settings screen
-    "wallet-settings-title": "Wallet Settings",
-    "wallet-settings-backup-wallet": "Backup Wallet",
-    "wallet-settings-backup-wallet-subtitle": "View mnemonics to export and backup",
-    "wallet-settings-change-name": "Change Name",
-    "wallet-settings-change-name-subtitle": "Organize your wallet with a custom name",
-    "wallet-settings-change-theme": "Change Theme",
-    "wallet-settings-change-theme-subtitle": "Organize your wallet with a custom color",
-    "wallet-settings-manage-coin-list": "Manage Coin List",
-    "wallet-settings-manage-coin-list-subtitle": "Check which coins to display",
-    "wallet-settings-delete-wallet": "Delete Wallet",
-    "wallet-settings-delete-wallet-subtitle": "This will not delete your assets, you can always import this wallet again",
+    /********************************************** Coin Screens ***********************************************/
 
-    // Coin home screen
+    /*****************
+    * Coin Home Page *
+    ******************/
     "coin-overview": "{{coinName}} Overview",
     "coin-new-transactions-today": "{{ todaysTransactions }} NEW TRANSACTIONS TODAY",
     "coin-balance": "Balance",
@@ -105,13 +113,14 @@ export const en = {
     "coin-transaction-status-unconfirmed": "Unconfirmed",
     "text-coin-close-warning": "Token will be removed from the list",
 
-    // Coin select screen
+    /*******************
+    * Coin Select Page *
+    ********************/
     "coin-select-title": "Select Coin",
 
-    // Coin payment
-    "payment-title": "Payment",
-
-    // Coin transfer screen
+    /*********************
+    * Coin Transfer Page *
+    **********************/
     "coin-transfer-send-title": "Send from {{coinName}}",
     "coin-transfer-recharge-title": "Recharge to {{coinName}}",
     "coin-transfer-withdraw-title": "Withdraw from {{coinName}}",
@@ -122,28 +131,44 @@ export const en = {
     "transfer-send-ela": "Send ELA",
     "transfer-remain-balance": "Balance Remaining {{amount}}",
 
-    // Coin receive screen
+    /********************
+    * Coin Receive Page *
+    *********************/
     "coin-receive-title": "Receive {{coinName}}",
     "coin-receive-ela-address": "Your {{coinName}} Address",
     "coin-receive-tap-to-copy": "Tap address to copy",
     "coin-address-copied": "{{coinName}} address copied!",
     "coin-receive-address-list": "Enter Address List",
 
-    // Coin address screen
+    /********************
+    * Coin Address Page *
+    *********************/
     "coin-address-msg": "Available Addresses",
     'coin-address-load-more': 'Loading...',
     "coin-address-load-finish": 'All addresses listed',
 
-    // Confirm transaction component
+    /*********************
+    * Contacts Component *
+    **********************/
+   "select-address": "Select Address",
+   "cryptonames": "Cryptonames",
+
+    /*******************************
+    * Confirm Transaction Component *
+    ********************************/
     "confirm-transaction-title": "Confirm Transaction",
     "transfer-transaction-type": "Transfer Transaction",
     "send-transaction-type": "Send Transaction",
 
-    // Tx successful component (tx-success),
+    /***********************************
+    * Transaction Successful Component *
+    ************************************/
     'tx-success': "Transaction Successful",
     'continue': 'Continue',
 
-    // Transaction details screen (coin-tx-info)
+    /************************
+    * Transaction Info Page *
+    *************************/
     "tx-info-title": "Transaction Details",
     "tx-info-confirmations": "Confirmations",
     "tx-info-transaction-time": "Transaction time",
@@ -157,14 +182,39 @@ export const en = {
     "tx-info-type-sent": "Sent",
     "tx-info-type-transferred": "Transferred",
 
-    // Wallet edit name screen
+    /********************************************** Wallet Settings Screens ***********************************************/
+
+    /***********************
+    * Wallet Settings Page *
+    ************************/
+    "wallet-settings-title": "Wallet Settings",
+    "wallet-settings-backup-wallet": "Backup Wallet",
+    "wallet-settings-backup-wallet-subtitle": "View mnemonics to export and backup",
+    "wallet-settings-change-name": "Change Name",
+    "wallet-settings-change-name-subtitle": "Organize your wallet with a custom name",
+    "wallet-settings-change-theme": "Change Theme",
+    "wallet-settings-change-theme-subtitle": "Organize your wallet with a custom color",
+    "wallet-settings-manage-coin-list": "Manage Coin List",
+    "wallet-settings-manage-coin-list-subtitle": "Check which coins to display",
+    "wallet-settings-delete-wallet": "Delete Wallet",
+    "wallet-settings-delete-wallet-subtitle": "This will not delete your assets, you can always import this wallet again",
+    "delete-wallet-confirm-title": "Confirm deletion?",
+    "delete-wallet-confirm-subtitle": "Your wallet will be deleted from this device. You can re-import it later but make sure to backup your mnemonics first.",
+
+    /************************
+    * Wallet Edit Name Page *
+    *************************/
     "wallet-edit-name-title": "Change Wallet Name",
     "wallet-edit-name-new-name": "Enter new name",
 
-    // Change theme screen
+    /***************************
+    * Wallet Change Theme Page *
+    ****************************/
     "change-wallet-theme-title": "Change Wallet Theme",
 
-    // Coin list screen
+    /************************
+    * Wallet Coin List Page *
+    *************************/
     "coin-list-title": "Manage Coin List",
     "coin-list-enable-disable-coins": "Enable/Disable Coins",
     "coin-list-enable-disable-coins-intro": "Toggle what coins you would like to display on your wallet home screen. ELA Mainchain and Sidechains are always shown.",
@@ -173,7 +223,14 @@ export const en = {
     "ela-ethchain": "Elastos ETH SideChain",
     "erc-20-token": "ERC20 Token",
 
-    // Coin add erc20 screen
+    /***********************
+    * Export Mnemonic Page *
+    ************************/
+   'text-export-mnemonic': 'Export Mnemonic',
+
+    /*****************
+    * Add ERC20 Page *
+    ******************/
     "coin-adderc20-title": "Add ERC20 Token",
     "coin-adderc20-intro": 'Manually enter the token address or scan its QR code.',
     "coin-adderc20-intro2": 'After validation, the token will be added to your wallet automatically.',
@@ -184,15 +241,18 @@ export const en = {
     "coin-adderc20-not-a-erc20-contract": "The scanned content is not a valid ERC20 coin address",
     'coin-adderc20-alreadyadded': 'Token already added',
 
-    // Delete wallet popup
-    "delete-wallet-confirm-title": "Confirm deletion?",
-    "delete-wallet-confirm-subtitle": "Your wallet will be deleted from this device. You can re-import it later but make sure to backup your mnemonics first.",
+    /********************************************** Intent Screens ***********************************************/
 
-    // Wallet manager screen
-    "wallet-manager-intro": "Wallets will have individual settings, you can check the options of each wallet below.",
-    "wallet-manager-add-wallet": "Add Wallet",
+    /*********************
+    * Wait For Sync Page *
+    **********************/
+    "waitforsync-syncing": "Syncing",
+    "waitforsync-loading": "Loading...",
+    "waitforsync-intro": "Operation can only be performed after data has synced from chain.",
 
-    // Access intent screen
+    /**************
+    * Access Page *
+    ***************/
     "access-title": "Wallet Access",
     "access-subtitle-wallet-access-from": "Wallet Access from:",
     "access-subtitle-access-mnemonic-from": "Access Mnemonic from:",
@@ -208,13 +268,17 @@ export const en = {
     'text-warning': 'Warning',
     'text-share-mnemonic-warning': 'Mnemonic is the only proof of blockchain assets. Please confirm that there is no risk of leakage before sharing!',
 
-    // DID transaction intent screen
+    /***********************
+    * DID Transaction Page *
+    ************************/
     "didtransaction-title": "Publish Identity",
     "didtransaction-publish-identity": "Publish Identity",
     "didtransaction-transaction-fee": "This will cost a minor transaction fee",
     "didtransaction-intro": "You are publishing your latest identity changes to the public DID Sidechain.",
 
-    // DPos voting intent screen
+    /*******************
+    * DPoS Voting Page *
+    ********************/
     "dposvote-title": "Vote for Supernodes",
     "dposvote-you-are-voting": "You are Voting!",
     "dposvote-transaction-fees": "0.0001 ELA transfaction fee will be charged",
@@ -222,7 +286,9 @@ export const en = {
     "dposvote-with": "With:",
     "dposvote-revote": "Don't forget to re-vote when you spend any ELA from your main ELA wallet",
 
-    // ESC transaction intent screen
+    /***********************
+    * ESC Transaction Page *
+    ************************/
     "esctransaction-title": "ETHSC Transaction",
     "esctransaction-smart-contract": "Smart Contract",
     "esctransaction-intro": "You are going to sign and run a smart contract on the Ethereum Sidechain.",
@@ -230,18 +296,36 @@ export const en = {
     "esctransaction-value": "Value:",
     "esctransaction-fees": "Fees:",
 
-    // Wait for sync
-    "waitforsync-syncing": "Syncing",
-    "waitforsync-loading": "Loading...",
-    "waitforsync-intro": "Operation can only be performed after data has synced from chain.",
+    /********************************************** Create Wallet Screens ***********************************************/
 
-    //my-qrcode
-    'qrcode': "'s qrcode",
-    'copy': 'Copy',
-    'my-qrcode': "My qrcode",
-    'scanning': 'Scan qrcode',
+    /****************
+    * Launcher Page *
+    *****************/
+    'wallet': 'Wallet',
+    'wallet-prompt1': 'Secure Wallet for',
+    'wallet-prompt2': 'The Elastos Ecosystem',
+    'get-started': 'Get Started',
+    'import-wallet-msg': 'Already got a Wallet? Import it.',
+    'launcher-create-wallet': 'Create Wallet',
 
-    // Mnemonic
+    /*********************
+    * Wallet Create Page *
+    **********************/
+    'enter-wallet-name': 'Please enter a wallet name',
+    'single-address': 'Single-Address Wallet',
+    'multiple-address': 'Multi-Address Wallet',
+    'use-passphrase': 'Enable Passphrase',
+    'not-use-passphrase': 'Disable Passphrase',
+    'launcher-backup-import': 'Import Wallet',
+    "text-wallet-name-validator-enter-name": "Please enter a name for your wallet",
+    "text-wallet-name-validator-not-valid-name": "Sorry, this is not a valid wallet name",
+    "text-wallet-name-validator-already-exists": "This wallet name is already in use",
+    "text-wallet-passphrase-validator-repeat": "The two input mnemonic passphrases are inconsistent",
+    "text-wallet-passphrase-validator-min-length": "The mnemonic passphrase must be at least 8 characters",
+
+    /*****************
+    * Mnemonic Pages *
+    *****************/
     'mnemonic': 'Mnemonic',
     'mnemonic-prompt1': 'These are your 12 security words (mnemonic phrase). Lose these and you will lose the wallet, so you must keep them written down ',
     'mnemonic-prompt2': 'in order',
@@ -268,35 +352,15 @@ export const en = {
     "help:import-password": "A mnemonic passphrase is a custom password that's bound to your mnemonic words. If you did not create a mnemonic passphrase when you created your wallet, then please disregard.",
     // "help:mnemonic-password": 'This is an optional password bound to your mnemonic words, to give your wallet extra security. Save it carefully, it is NOT recoverable if lost.',
 
-    // Advanced mnemonic import screen
+    /********************************
+    * Advanced Mnemonic Import Page *
+    *********************************/
     'advanced-import': 'Fast mnemonic input',
     'advanced-import-intro': 'You can paste and enter your 12 mnemonic phrases in one line.',
     'advanced-import-msg': '*Spaces are required between words',
     'paste-mnemonic': 'Paste or Enter 12 Mnemonics',
 
-    // Export mnemonic screen
-    'text-export-mnemonic': 'Export Mnemonic',
-
-    // Launcher screen
-    'wallet': 'Wallet',
-    'wallet-prompt1': 'Secure Wallet for',
-    'wallet-prompt2': 'The Elastos Ecosystem',
-    'get-started': 'Get Started',
-    'import-wallet-msg': 'Already got a Wallet? Import it.',
-
-    // Wallet creation screen
-    'launcher-create-wallet': 'Create Wallet',
-    'enter-wallet-name': 'Please enter a wallet name',
-    'single-address': 'Single-Address Wallet',
-    'multiple-address': 'Multi-Address Wallet',
-    'use-passphrase': 'Enable Passphrase',
-    'not-use-passphrase': 'Disable Passphrase',
-    'launcher-backup-import': 'Import Wallet',
-    "text-wallet-name-validator-enter-name": "Please enter a name for your wallet",
-    "text-wallet-name-validator-not-valid-name": "Sorry, this is not a valid wallet name",
-    "text-wallet-name-validator-already-exists": "This wallet name is already in use",
-    "text-wallet-passphrase-validator-repeat": "The two input mnemonic passphrases are inconsistent",
-    "text-wallet-passphrase-validator-min-length": "The mnemonic passphrase must be at least 8 characters",
+    /********************************************** Error ***********************************************/
 
     // Consolidate
     'text-consolidate-prompt': 'Consolidate?',

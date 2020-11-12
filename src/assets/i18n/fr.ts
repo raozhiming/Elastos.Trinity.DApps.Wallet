@@ -1,5 +1,7 @@
 export const fr = {
-    // Generic actions
+    /******************
+    * Generic Actions *
+    *******************/
     "send-to": "Envoyer à",
     "enter-name": "Saisir un nom",
     "enter-amount": "Saisie du montant",
@@ -21,7 +23,9 @@ export const fr = {
     "refresh-refreshing-text": "Mise à jour du portefeuille...",
     "intent-select-wallet": "Sélect. du portefeuille",
 
-    // Generic messages
+    /*******************
+    * Generic Messages *
+    ********************/
     "copied": "Copié dans le presse-papier!",
     'text-did-balance-not-enough': "Enregistrer des informations sur la châine d'identité requièrt une faible somme d'ELA pour les frais de transactions. Veuillez d'abord transférer un petit montant (ex: 0,1 ELA) depuis votre portefeuille principal vers le portefeuille DID!",
     'amount-null': "Veuillez saisir un montant pour la transaction",
@@ -34,10 +38,14 @@ export const fr = {
     "please-add-ethereum-first": "Veuillez d'abord ajouter le jeton Ethereum à votre portefeuille.",
     "please-wait": "Veuillez patienter...",
 
-    // Home screen
+    /************
+    * Home Page *
+    *************/
     "wallet-home-title": "Accueil Portefeuille",
     "wallet-overview": "Aperçu du Portefeuille",
     "you-have-n-wallets": "VOUS AVEZ {{walletsCount}} JETONS",
+    "synced": "Synced",
+    "syncing": "Syncing",
     "synchronized": "Synchronisé {{progress}}%",
     "sync-progress": "Synchronisation {{progress}}%",
     "ela-erc20": "JETON ERC20 ELASTOS",
@@ -45,7 +53,11 @@ export const fr = {
     "activate-hive-vault": "Activate Hive Vault",   // TODO   need to translate
     "pull-down-to-refresh": "Faire glisser l'écran pour rafraîchir",
 
-    // Settings screen
+    /********************************************** General Settings Screen ***********************************************/
+
+    /****************
+    * Settings Page *
+    *****************/
     "settings-title": "Paramètres",
     "settings-general": "Général",
     "settings-add-wallet": "Nouveau portefeuille",
@@ -55,31 +67,26 @@ export const fr = {
     "settings-currency": "Devise",
     "settings-currency-subtitle": "Selectionnez la devise à afficher",
 
-    // Currencies screen
+    /***********************
+    * Select-Currency Page *
+    ************************/
     "select-currency-title": "Sélectionner la devise",
     "available-currencies": "Devises affichables",
     "united-states-dollar": "Dollar Américain",
     "chinese-yuan": "Yuan Chinois",
     "bitcoin": "Bitcoin",
 
-    // Contacts screen
-    "select-address": "Sélectionner une adresse",
-    "cryptonames": "Cryptonames",
+    /**********************
+    * Wallet Manager Page *
+    ***********************/
+   "wallet-manager-intro": "Les portefeuilles ont leurs propres paramètres. Vous pouvez configurer ces paramètres ci-dessous.",
+   "wallet-manager-add-wallet": "Ajouter un portefeuille",
 
-    // Wallet settings screen
-    "wallet-settings-title": "Paramètres Portefeuille",
-    "wallet-settings-backup-wallet": "Sauvegarde",
-    "wallet-settings-backup-wallet-subtitle": "Visualisez votre mnémonique pour le sauvegarder en lieu sûr.",
-    "wallet-settings-change-name": "Renommer",
-    "wallet-settings-change-name-subtitle": "Organisez vos portefeuilles en leur donnant un nom personnalisé.",
-    "wallet-settings-change-theme": "Modifier le thème",
-    "wallet-settings-change-theme-subtitle": "Organisez vos portefeuilles avec des couleurs personnalisées.",
-    "wallet-settings-manage-coin-list": "Gérer la Liste des Jetons",
-    "wallet-settings-manage-coin-list-subtitle": "Sélectionnez les jetons à gérer dans votre portefeuille.",
-    "wallet-settings-delete-wallet": "Supprimer le Portefeuille",
-    "wallet-settings-delete-wallet-subtitle": "Votre argent ne sera pas supprimé. Vous pourrez réimporter votre portefeuille plus tard.",
+    /********************************************** Coin Screens ***********************************************/
 
-    // Coin home screen
+    /*****************
+    * Coin Home Page *
+    ******************/
     "coin-overview": "Jeton {{coinName}} - Aperçu",
     "coin-new-transactions-today": "{{ todaysTransactions }} NOUVELLE(S) TRANSACTION(S) AUJOURD'HUI",
     "coin-balance": "Solde",
@@ -105,13 +112,14 @@ export const fr = {
     "coin-transaction-status-unconfirmed": "Non confirmé",
     "text-coin-close-warning": "Le jeton sera supprimé de la liste",
 
-    // Coin select screen
+    /*******************
+    * Coin Select Page *
+    ********************/
     "coin-select-title": "Sélection du Jeton",
 
-    // Coin payment
-    "payment-title": "Paiement",
-
-    // Coin transfer screen
+    /*********************
+    * Coin Transfer Page *
+    **********************/
     "coin-transfer-send-title": "Envoi depuis {{coinName}}",
     "coin-transfer-recharge-title": "Transfert d'{{coinName}}",
     "coin-transfer-withdraw-title": "Transfert d'{{coinName}}",
@@ -122,28 +130,44 @@ export const fr = {
     "transfer-send-ela": "Envoi d'ELA",
     "transfer-remain-balance": "Solde restant {{amount}}",
 
-    // Coin receive screen
+    /********************
+    * Coin Receive Page *
+    *********************/
     "coin-receive-title": "Réception de {{coinName}}",
     "coin-receive-ela-address": "Votre adresse de réception {{coinName}}",
     "coin-receive-tap-to-copy": "Touchez l'adresse pour la copier",
     "coin-address-copied": "Adresse de votre portefeuille {{coinName}} copiée!",
     "coin-receive-address-list": "Voir la liste des adresses",
 
-    // Coin address screen
+    /********************
+    * Coin Address Page *
+    *********************/
     "coin-address-msg": "Adresses disponibles",
     'coin-address-load-more': 'Chargement...',
     "coin-address-load-finish": 'Toutes les adresses sont affichées',
 
-    // Confirm transaction component
+    /*********************
+    * Contacts Component *
+    **********************/
+    "select-address": "Sélectionner une adresse",
+    "cryptonames": "Cryptonames",
+
+    /*******************************
+    * Confirm Transaction Component *
+    ********************************/
     "confirm-transaction-title": "Confirmer la Transaction",
     "transfer-transaction-type": "Transfert d'argent",
     "send-transaction-type": "Envoi d'argent",
 
-    // Tx successful component (tx-success),
+    /***********************************
+    * Transaction Successful Component *
+    ************************************/
     'tx-success': "Transaction réussie",
     'continue': 'Continuer',
 
-    // Transaction details screen (coin-tx-info)
+    /************************
+    * Transaction Info Page *
+    *************************/
     "tx-info-title": "Détails sur la transaction",
     "tx-info-confirmations": "Confirmations",
     "tx-info-transaction-time": "Date de la transaction",
@@ -157,14 +181,39 @@ export const fr = {
     "tx-info-type-sent": "Envoyé",
     "tx-info-type-transferred": "Transféré",
 
-    // Wallet edit name screen
+    /********************************************** Wallet Settings Screens ***********************************************/
+
+    /***********************
+    * Wallet Settings Page *
+    ************************/
+    "wallet-settings-title": "Paramètres Portefeuille",
+    "wallet-settings-backup-wallet": "Sauvegarde",
+    "wallet-settings-backup-wallet-subtitle": "Visualisez votre mnémonique pour le sauvegarder en lieu sûr.",
+    "wallet-settings-change-name": "Renommer",
+    "wallet-settings-change-name-subtitle": "Organisez vos portefeuilles en leur donnant un nom personnalisé.",
+    "wallet-settings-change-theme": "Modifier le thème",
+    "wallet-settings-change-theme-subtitle": "Organisez vos portefeuilles avec des couleurs personnalisées.",
+    "wallet-settings-manage-coin-list": "Gérer la Liste des Jetons",
+    "wallet-settings-manage-coin-list-subtitle": "Sélectionnez les jetons à gérer dans votre portefeuille.",
+    "wallet-settings-delete-wallet": "Supprimer le Portefeuille",
+    "wallet-settings-delete-wallet-subtitle": "Votre argent ne sera pas supprimé. Vous pourrez réimporter votre portefeuille plus tard.",
+    "delete-wallet-confirm-title": "Confirmer la suppression?",
+    "delete-wallet-confirm-subtitle": "Votre portefeuille sera supprimé de cet appareil. Vous pourrez le réimporter plus tard mais veillez à enregistrer votre mnémonique avant la suppression.",
+
+    /************************
+    * Wallet Edit Name Page *
+    *************************/
     "wallet-edit-name-title": "Modification du nom",
     "wallet-edit-name-new-name": "Nouveau nom pour ce portefeuille",
 
-    // Change theme screen
+    /***************************
+    * Wallet Change Theme Page *
+    ****************************/
     "change-wallet-theme-title": "Changement du thème",
 
-    // Coin list screen
+    /************************
+    * Wallet Coin List Page *
+    *************************/
     "coin-list-title": "Gestion des Jetons",
     "coin-list-enable-disable-coins": "Activer/Désactiver des Jetons",
     "coin-list-enable-disable-coins-intro": "Sélectionnez les jetons que vous souhaitez afficher dans le portefeuille actuel. Le jeton principal ELA et les chaînes principales Elastos sont toujours actives.",
@@ -173,7 +222,14 @@ export const fr = {
     "ela-ethchain": "Elastos ETH SideChain",
     "erc-20-token": "Jeton ERC20",
 
-    // Coin add erc20 screen
+    /***********************
+    * Export Mnemonic Page *
+    ************************/
+   'text-export-mnemonic': 'Exporter le mnémonique',
+
+    /*****************
+    * Add ERC20 Page *
+    ******************/
     "coin-adderc20-title": "Ajout de jeton ERC20",
     "coin-adderc20-intro": 'Saisir l\'adresse du jeton, ou scanner son QR code.',
     "coin-adderc20-intro2": 'Après confirmation, le jeton sera ajouté à votre portefeuille automatiquement.',
@@ -184,15 +240,18 @@ export const fr = {
     "coin-adderc20-not-a-erc20-contract": "Le contenu scanné n'est pas une adresse de jeton ERC20 valide.",
     'coin-adderc20-alreadyadded': 'Ce jeton est déjà dans la liste',
 
-    // Delete wallet popup
-    "delete-wallet-confirm-title": "Confirmer la suppression?",
-    "delete-wallet-confirm-subtitle": "Votre portefeuille sera supprimé de cet appareil. Vous pourrez le réimporter plus tard mais veillez à enregistrer votre mnémonique avant la suppression.",
+    /********************************************** Intent Screens ***********************************************/
 
-    // Wallet manager screen
-    "wallet-manager-intro": "Les portefeuilles ont leurs propres paramètres. Vous pouvez configurer ces paramètres ci-dessous.",
-    "wallet-manager-add-wallet": "Ajouter un portefeuille",
+    /*********************
+    * Wait For Sync Page *
+    **********************/
+    "waitforsync-syncing": "Synchronisation",
+    "waitforsync-loading": "En attente...",
+    "waitforsync-intro": "Cette opération pourra continuer une fois toutes vos données synchronisées depuis la châine publique.",
 
-    // Access intent screen
+    /**************
+    * Access Page *
+    ***************/
     "access-title": "Accès portefeuille",
     "access-subtitle-wallet-access-from": "Demande d'informations:",
     "access-subtitle-access-mnemonic-from": "Accès au Mnémonique (!):",
@@ -208,13 +267,17 @@ export const fr = {
     'text-warning': 'Attention',
     'text-share-mnemonic-warning': 'Le mnémonique donne un accès total à tous vos actifs numériques. Veuillez confirmez que vous le partagez avec un tiers de confiance!',
 
-    // DID transaction intent screen
+    /***********************
+    * DID Transaction Page *
+    ************************/
     "didtransaction-title": "Publication d'identité",
     "didtransaction-publish-identity": "Publication d'identité",
     "didtransaction-transaction-fee": "Des frais de transaction mineurs s'appliquent",
     "didtransaction-intro": "Vous vous apprêtez à publier votre identité sur la châine publique.",
 
-    // DPos voting intent screen
+    /*******************
+    * DPoS Voting Page *
+    ********************/
     "dposvote-title": "Vote pour les Supernodes",
     "dposvote-you-are-voting": "Vous votez!",
     "dposvote-transaction-fees": "Des frais de transaction de 0.0001 ELA seront prélevés",
@@ -222,7 +285,9 @@ export const fr = {
     "dposvote-with": "Avec:",
     "dposvote-revote": "Pensez à voter à nouveau après avoir utilisé des ELA de votre portefeuille principal.",
 
-    // ESC transaction intent screen
+    /***********************
+    * ESC Transaction Page *
+    ************************/
     "esctransaction-title": "Transaction Ethereum",
     "esctransaction-smart-contract": "Smart Contract",
     "esctransaction-intro": "Vous allez signer et éxécuter une action sur la châine publique Elastos Ethereum.",
@@ -230,12 +295,36 @@ export const fr = {
     "esctransaction-value": "Montant:",
     "esctransaction-fees": "Frais:",
 
-    // Wait for sync
-    "waitforsync-syncing": "Synchronisation",
-    "waitforsync-loading": "En attente...",
-    "waitforsync-intro": "Cette opération pourra continuer une fois toutes vos données synchronisées depuis la châine publique.",
+    /********************************************** Create Wallet Screens ***********************************************/
 
-    // Mnemonic
+    /****************
+    * Launcher Page *
+    *****************/
+    'wallet': 'Portefeuille',
+    'wallet-prompt1': 'Portefeuille sécurisé pour',
+    'wallet-prompt2': "l'écosystème Elastos",
+    'get-started': 'Commencer',
+    'import-wallet-msg': 'Vous avez déjà un portefeuille? Importez-le.',
+    'launcher-create-wallet': 'Créer le portefeuille',
+
+    /*********************
+    * Wallet Create Page *
+    **********************/
+   'enter-wallet-name': 'Veuillez saisir un nom pour le portefeuille',
+   'single-address': 'Portefeuille à adresse unique',
+   'multiple-address': 'Portefeuille à adresses multiples',
+   'use-passphrase': 'Utiliser une phrase secrète',
+   'not-use-passphrase': 'Ne pas utiliser de phrase secrète',
+   'launcher-backup-import': 'Importer le portefeuille',
+   "text-wallet-name-validator-enter-name": "Veuillez saisir un nom pour votre portefeuille",
+   "text-wallet-name-validator-not-valid-name": "Le nom saisi n'est pas valide",
+   "text-wallet-name-validator-already-exists": "Ce nom est déjà utilisé par un autre portefeuille",
+   "text-wallet-passphrase-validator-repeat": "Les deux phrases secrètes saisies sont différentes",
+   "text-wallet-passphrase-validator-min-length": "La phrase secrète doit avoir au moins 8 caractères",
+
+    /*****************
+    * Mnemonic Pages *
+    *****************/
     'mnemonic': 'Mnémonique',
     'mnemonic-prompt1': 'Voici vos 12 mots secrets (mnémonique). Si vous les perdez, vous perdez votre portefeuille, alors notez-les quelque part ',
     'mnemonic-prompt2': 'dans le bon ordre',
@@ -261,35 +350,15 @@ export const fr = {
     "help:create-password": "Il s\'agit d\'un mot de passe optionnel qui augmente la sécurité du mnémonique. Considérez-le comme un 13e mot du mnémonique. Notez bien que ce mot de passe ne pas pas être retrouvé si vous l\'oubliez. Saisir un mauvais mot de passe de mnémonique dans l\'avenir lorsque vous importerez votre portefeuille ne génèrera pas d\'erreur mais créera une adresse de portefeuille différente, et vous ne verrez pas vos fonds.",
     "help:import-password": "Le mot de passe du mnémonique est un mot de votre choix qui est fortement associé à votre mnémonique. Ne tenez pas compte de cette option si vous n\'avez pas utilisé de mot de passe de mnémonique lors de la création de votre portefeuille.",
 
-    // Advanced mnemonic import screen
+    /********************************
+    * Advanced Mnemonic Import Page *
+    *********************************/
     'advanced-import': 'Saisie rapide du mnémonique',
     'advanced-import-intro': 'Vous pouvez coller vos 12 mots de mnémonique sur une seule ligne ici.',
     'advanced-import-msg': '*Espace requis entre chaque mot',
     'paste-mnemonic': 'Coller ou saisir les 12 mots du mnémonique',
 
-    // Export mnemonic screen
-    'text-export-mnemonic': 'Exporter le mnémonique',
-
-    // Launcher screen
-    'wallet': 'Portefeuille',
-    'wallet-prompt1': 'Portefeuille sécurisé pour',
-    'wallet-prompt2': "l'écosystème Elastos",
-    'get-started': 'Commencer',
-    'import-wallet-msg': 'Vous avez déjà un portefeuille? Importez-le.',
-
-    // Wallet creation screen
-    'launcher-create-wallet': 'Créer le portefeuille',
-    'enter-wallet-name': 'Veuillez saisir un nom pour le portefeuille',
-    'single-address': 'Portefeuille à adresse unique',
-    'multiple-address': 'Portefeuille à adresses multiples',
-    'use-passphrase': 'Utiliser une phrase secrète',
-    'not-use-passphrase': 'Ne pas utiliser de phrase secrète',
-    'launcher-backup-import': 'Importer le portefeuille',
-    "text-wallet-name-validator-enter-name": "Veuillez saisir un nom pour votre portefeuille",
-    "text-wallet-name-validator-not-valid-name": "Le nom saisi n'est pas valide",
-    "text-wallet-name-validator-already-exists": "Ce nom est déjà utilisé par un autre portefeuille",
-    "text-wallet-passphrase-validator-repeat": "Les deux phrases secrètes saisies sont différentes",
-    "text-wallet-passphrase-validator-min-length": "La phrase secrète doit avoir au moins 8 caractères",
+    /********************************************** Error ***********************************************/
 
     // Consolidate
     'text-consolidate-prompt': 'Consolider?',
