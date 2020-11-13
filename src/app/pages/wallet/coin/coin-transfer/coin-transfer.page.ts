@@ -571,14 +571,14 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             {
               singleSelection: true,
               filter: {
-                credentialType: "elaWallet"
+                credentialType: "elaAddress"
               }
             }, {},
             (res) => {
                 console.log(res);
 
                 const walletCred = res.result.friends[0].document.verifiableCredential.find((key) =>
-                    key.credentialSubject.hasOwnProperty('elaWallet')
+                    key.credentialSubject.hasOwnProperty('elaAddress')
                 );
                 const nameCred = res.result.friends[0].document.verifiableCredential.find((key) =>
                     key.credentialSubject.hasOwnProperty('name')
@@ -588,7 +588,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 console.log('Name Credential', nameCred);
                 if (walletCred) {
                     this.zone.run(() => {
-                        this.toAddress = walletCred.credentialSubject.elaWallet;
+                        this.toAddress = walletCred.credentialSubject.elaAddress;
                         nameCred ? this.addressName = nameCred.credentialSubject.name : this.addressName = null;
 
                         console.log('ADDRESS NAME', this.addressName);
