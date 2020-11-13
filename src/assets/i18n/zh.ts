@@ -128,7 +128,8 @@ export const zh = {
     "transfer-amount": "转移金额",
     "transfer-receiver-address": "接收地址",
     "transfer-send-ela": "发送ELA",
-    "transfer-remain-balance": "余额 {{amount}}",
+    "balance-remaining": "余额 ",
+    "insufficient-balance": "Insufficient Balance",
 
     /********************
     * Coin Receive Page *

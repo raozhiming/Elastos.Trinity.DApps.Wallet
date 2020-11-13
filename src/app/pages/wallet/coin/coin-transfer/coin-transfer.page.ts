@@ -599,4 +599,25 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             }
         );
     }
+
+    getResidual(balance: BigNumber) {
+        if (this.amount) {
+            return balance.minus(this.amount);
+        } else {
+            return balance;
+        }
+    }
+
+    isPositiveResidual(balance: BigNumber) {
+        if (this.amount) {
+            const residual = balance.minus(this.amount);
+            if (residual.isGreaterThanOrEqualTo(0)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
 }

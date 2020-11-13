@@ -86,10 +86,15 @@
             </ion-col>
         </ion-row>
 
-        <p *ngIf='amount'>{{ 'transfer-remain-balance' | translate: { amount: masterWallet.subWallets[chainId].getDisplayBalance() - amount } }}</p>
-        <p *ngIf='!amount'>{{ 'transfer-remain-balance' | translate: { amount: masterWallet.subWallets[chainId].getDisplayBalance() } }}</p>
-        <h1>{{ 'send-to' | translate }}</h1>
+        <p *ngIf='isPositiveResidual(masterWallet.subWallets[chainId].getDisplayBalance())'>
+            {{ 'balance-remaining' | translate }} 
+            {{ getResidual(masterWallet.subWallets[chainId].getDisplayBalance()) }}
+        </p>
+        <p *ngIf='!isPositiveResidual(masterWallet.subWallets[chainId].getDisplayBalance())' class="warning-text">
+            {{ 'insufficient-balance' | translate }}
+        </p>
 
+        <h1>{{ 'send-to' | translate }}</h1>
         <ion-row class="item-row">
             <ion-col size="10" class="left-col">
                 <ion-input
@@ -107,7 +112,6 @@
                 </div>
             </ion-col>
         </ion-row>
-
         <p [class.invisible]="!addressName">{{ addressName }}</p>
 
         <ion-row *ngIf="suggestedAddresses.length > 0" class="cryptoname-row">
