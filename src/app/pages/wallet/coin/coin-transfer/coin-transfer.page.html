@@ -87,7 +87,7 @@
         </ion-row>
 
         <p *ngIf='isPositiveResidual(masterWallet.subWallets[chainId].getDisplayBalance())'>
-            {{ 'balance-remaining' | translate }} 
+            {{ 'balance-remaining' | translate }}: 
             {{ getResidual(masterWallet.subWallets[chainId].getDisplayBalance()) }}
         </p>
         <p *ngIf='!isPositiveResidual(masterWallet.subWallets[chainId].getDisplayBalance())' class="warning-text">
