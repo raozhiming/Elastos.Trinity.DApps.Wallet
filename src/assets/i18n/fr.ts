@@ -44,13 +44,13 @@ export const fr = {
     "wallet-home-title": "Accueil Portefeuille",
     "wallet-overview": "Aperçu du Portefeuille",
     "you-have-n-wallets": "VOUS AVEZ {{walletsCount}} JETONS",
-    "synced": "Synced",
-    "syncing": "Syncing",
+    "synced": "Synchronisé",
+    "syncing": "Synchronisation",
     "synchronized": "Synchronisé {{progress}}%",
     "sync-progress": "Synchronisation {{progress}}%",
     "ela-erc20": "JETON ERC20 ELASTOS",
     "coin-list": "Liste des jetons",
-    "activate-hive-vault": "Activate Hive Vault",   // TODO   need to translate
+    "activate-hive-vault": "Activer le stockage Hive",
     "pull-down-to-refresh": "Faire glisser l'écran pour rafraîchir",
 
     /********************************************** General Settings Screen ***********************************************/
