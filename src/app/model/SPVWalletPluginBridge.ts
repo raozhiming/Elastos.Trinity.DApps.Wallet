@@ -15,11 +15,23 @@ export type SignedTransaction = string;
 export type AllUTXOs = {
     MaxCount: number
     // TODO: utxos
-}
+};
+
+export type AssetSummary = {
+    Address: {
+        [address: string]: string // "address": "sELAAmount"
+    }
+    Balance: string;
+    DepositBalance: string;
+    LockedBalance: string;
+    PendingBalance: string;
+    SpendingBalance: string;
+    VotedBalance: string;
+};
 
 export type PublishedTransaction = {
     TxHash: string;
-}
+};
 
 export type SPVWalletMessage = {
     MasterWalletID: string;
@@ -38,7 +50,7 @@ export type SPVWalletMessage = {
 
     // ETHSC
     event: ETHSCEvent;
-}
+};
 
 export type ETHSCEvent = {
     ErrorDescription: string;
@@ -72,7 +84,7 @@ export enum ETHSCEventAction {
 export type TxPublishedResult = {
     Code: number;
     Reason: string;
-}
+};
 
 export type BlockInfo = {
     Hash: string,

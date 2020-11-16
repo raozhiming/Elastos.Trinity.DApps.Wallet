@@ -37,6 +37,7 @@ export const fr = {
     "no-ethereum-token": "Jeton Ethereum non activé",
     "please-add-ethereum-first": "Veuillez d'abord ajouter le jeton Ethereum à votre portefeuille.",
     "please-wait": "Veuillez patienter...",
+    "transaction-pending" : "There is already an on going transaction. Please wait for the transaction to be confirmed.",
 
     /************
     * Home Page *

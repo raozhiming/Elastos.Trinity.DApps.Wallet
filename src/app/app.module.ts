@@ -115,10 +115,6 @@ export class SentryErrorHandler implements ErrorHandler {
   constructor(public alertCtrl: AlertController, public translate: TranslateService) {}
 
   handleError(error) {
-    if (error.promise && error.promise.__zone_symbol__value && 'skipsentry' === error.promise.__zone_symbol__value.type) {
-        console.log('This exception has been handled:', error);
-        return;
-    }
     console.error("Globally catched exception:", error);
 
     console.log(document.URL);
@@ -127,9 +123,15 @@ export class SentryErrorHandler implements ErrorHandler {
         /*const eventId = */ Sentry.captureException(error.originalError || error);
         //Sentry.showReportDialog({ eventId });
     }
-    // TODO: Build error if use this.popup, why?
-    // this.popup.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
-    this.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
+
+    if (error.promise && error.promise.__zone_symbol__value && 'skipsentry' === error.promise.__zone_symbol__value.type) {
+        // Do not popop error dialog, but still send to sentry for debug.
+        console.log('This exception has been handled:', error);
+    } else {
+        // TODO: Build error if use this.popup, why?
+        // this.popup.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
+        this.ionicAlert("Error", "Sorry, the application encountered an error. This has been reported to the team.", "Close");
+    }
 }
 
 public ionicAlert(title: string, subTitle?: string, okText?: string): Promise<any> {

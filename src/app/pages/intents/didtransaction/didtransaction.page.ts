@@ -31,6 +31,8 @@ import { StandardCoinName } from 'src/app/model/Coin';
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MainAndIDChainSubWallet } from 'src/app/model/wallets/MainAndIDChainSubWallet';
+import BigNumber from 'bignumber.js';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -42,6 +44,7 @@ declare let appManager: AppManagerPlugin.AppManager;
 export class DidTransactionPage implements OnInit {
 
     private masterWallet: MasterWallet;
+    private sourceSubwallet: MainAndIDChainSubWallet;
     private intentTransfer: IntentTransfer;
     private balance: number; // ELA
     private chainId: string; // IDChain
@@ -87,6 +90,8 @@ export class DidTransactionPage implements OnInit {
             this.cancelOperation();
             return;
         }
+
+        this.sourceSubwallet = this.masterWallet.getSubWallet(this.chainId) as MainAndIDChainSubWallet;
     }
 
     /**
@@ -109,12 +114,17 @@ export class DidTransactionPage implements OnInit {
         return this.popupProvider.ionicAlert('confirmTitle', 'no-open-side-chain');
     }
 
-    checkValue() {
+    async checkValue() {
         if (this.balance < 0.0002) {
             this.popupProvider.ionicAlert('confirmTitle', 'text-did-balance-not-enough');
             return;
         }
-
+        const isAvailableBalanceEnough = await this.sourceSubwallet.isAvailableBalanceEnough(new BigNumber(20000));
+        if (!isAvailableBalanceEnough) {
+            await this.popupProvider.ionicAlert('confirmTitle', 'transaction-pending');
+            this.cancelOperation();
+            return;
+        }
         this.createIDTransaction();
     }
 

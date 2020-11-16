@@ -38,6 +38,7 @@ export const en = {
     "no-ethereum-token": "No ethereum token",
     "please-add-ethereum-first": "Please add the ethereum token to your wallet first",
     "please-wait": "Please wait...",
+    "transaction-pending" : "There is already an on going transaction. Please wait for the transaction to be confirmed.",
 
     /************
     * Home Page *

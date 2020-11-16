@@ -37,6 +37,7 @@ export const zh = {
     "no-ethereum-token": "没有以太坊币种",
     "please-add-ethereum-first": "请先将以太坊币种添加到您的钱包中",
     "please-wait": "请等待...",
+    "transaction-pending" : "前一个交易正在确认中，请等待此交易确认后再执行",
 
     /************
     * Home Page *

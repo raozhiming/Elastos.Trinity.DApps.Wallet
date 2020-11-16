@@ -30,6 +30,8 @@ import { CoinTransferService, IntentTransfer, Transfer } from 'src/app/services/
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MainAndIDChainSubWallet } from 'src/app/model/wallets/MainAndIDChainSubWallet';
+import { MainchainSubWallet } from 'src/app/model/wallets/MainchainSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -41,6 +43,7 @@ declare let appManager: AppManagerPlugin.AppManager;
 export class DPoSVotePage implements OnInit {
 
     private masterWalletId: string;
+    private sourceSubwallet: MainchainSubWallet = null;
     public balance: string; // Balance in SELA
     public chainId: string;
     private walletInfo = {};
@@ -80,26 +83,15 @@ export class DPoSVotePage implements OnInit {
         this.intentTransfer = this.coinTransferService.intentTransfer;
         this.walletInfo = this.coinTransferService.walletInfo;
         this.masterWalletId = this.coinTransferService.masterWalletId;
-        this.fetchBalance();
 
+        this.sourceSubwallet = this.walletManager.getMasterWallet(this.masterWalletId).getSubWallet(this.chainId) as MainchainSubWallet;
+        this.balance = this.sourceSubwallet.balance.toString();
         this.hasPendingVoteTransaction();
     }
 
-    async fetchBalance() {
-        const balance = await this.walletManager.spvBridge.getBalance(this.masterWalletId, this.chainId);
-        this.zone.run(() => {
-            console.log("Received balance:", balance);
-            this.balance = balance;
-        });
-    }
-
     async hasPendingVoteTransaction() {
-        const jsonInfo = await this.walletManager.spvBridge.getBalanceInfo(this.masterWalletId, this.chainId);
-        const balanceInfo = JSON.parse(jsonInfo);
-
-        // TODO: replace line below with a real BalanceInfo type (to be descypted manually, doesn't exist)
-        if (balanceInfo[0]['Summary']['SpendingBalance'] !== '0') {
-            await this.popupProvider.ionicAlert('confirmTitle', 'test-vote-pending');
+        if (await this.sourceSubwallet.hasPendingBalance()) {
+            await this.popupProvider.ionicAlert('confirmTitle', 'transaction-pending');
             this.cancelOperation();
         }
     }
@@ -189,8 +181,8 @@ export class DPoSVotePage implements OnInit {
             intentId: this.intentTransfer.intentId,
         });
 
-        let sourceSubwallet = this.walletManager.getMasterWallet(this.masterWalletId).getSubWallet(this.chainId);
-        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
+        await this.sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
+
     }
 }
 

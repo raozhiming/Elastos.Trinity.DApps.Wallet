@@ -1,7 +1,7 @@
 import { StandardSubWallet } from './StandardSubWallet';
 import moment from 'moment';
 import BigNumber from 'bignumber.js';
-import { EthTransaction, RawTransactionType, Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
+import { Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
 import { Config } from 'src/app/config/Config';
 import { TranslateService } from '@ngx-translate/core';
 import { StandardCoinName } from '../Coin';
@@ -47,6 +47,53 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
             // Balance in SELA
             this.balance = new BigNumber(balanceStr, 10);
         }
+    }
+
+    /**
+     * Check whether there are any unconfirmed transactions
+     * For dpos vote transaction
+     */
+    public async hasPendingBalance() {
+        const jsonInfo = await this.masterWallet.walletManager.spvBridge.getBalanceInfo(this.masterWallet.id, this.id);
+        const balanceInfoArray = JSON.parse(jsonInfo);
+        for (const balanceInfo of balanceInfoArray) {
+            if ((balanceInfo.Summary.SpendingBalance !== '0') ||
+                (balanceInfo.Summary.PendingBalance !== '0')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check whether the available balance is enough.
+     * @param amount unit is SELA
+     */
+    public async isAvailableBalanceEnough(amount: BigNumber) {
+        const jsonInfo = await this.masterWallet.walletManager.spvBridge.getBalanceInfo(this.masterWallet.id, this.id);
+        const balanceInfoArray = JSON.parse(jsonInfo);
+        let availableBalance = new BigNumber(0);
+        for (const balanceInfo of balanceInfoArray) {
+            if (balanceInfo.Summary.Balance !== '0') {
+                let balanceOfasset = new BigNumber(balanceInfo.Summary.Balance);
+                if (balanceInfo.Summary.SpendingBalance !== '0') {
+                    balanceOfasset = balanceOfasset.minus(new BigNumber(balanceInfo.Summary.SpendingBalance));
+                }
+                if (balanceInfo.Summary.PendingBalance !== '0') {
+                    balanceOfasset = balanceOfasset.minus(new BigNumber(balanceInfo.Summary.PendingBalance));
+                }
+                if (balanceInfo.Summary.LockedBalance !== '0') {
+                    balanceOfasset = balanceOfasset.minus(new BigNumber(balanceInfo.Summary.LockedBalance));
+                }
+                // DepositBalance
+
+                availableBalance = availableBalance.plus(balanceOfasset);
+                if (availableBalance.gt(amount)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string> {
