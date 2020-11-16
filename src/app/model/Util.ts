@@ -232,7 +232,7 @@ export class Util {
 
         // const decimalBalance = new BigNumber('4.999999');
         const decimalBalance = balance.modulo(1);
-        const fixedDecimalBalance = decimalBalance.toNumber().toLocaleString().slice(2, 5);
+        const fixedDecimalBalance = decimalBalance.toNumber().toString().slice(2, 5);
         return fixedDecimalBalance;
     }
 
