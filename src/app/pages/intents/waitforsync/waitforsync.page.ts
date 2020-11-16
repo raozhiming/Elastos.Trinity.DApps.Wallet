@@ -161,8 +161,6 @@ export class WaitForSyncPage implements OnInit {
             {txid: null, status: 'cancelled'},
             this.coinTransferService.intentTransfer.intentId
         );
-
-        this.appService.close();
     }
 
     getLoadingDots(): string {

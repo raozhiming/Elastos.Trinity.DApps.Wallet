@@ -72,7 +72,7 @@ export class DidTransactionPage implements OnInit {
     ionViewDidEnter() {
       if (this.walletInfo["Type"] === "Multi-Sign") {
           // TODO: reject didtransaction if multi sign (show error popup)
-          this.appService.close();
+          this.cancelOperation();
       }
     }
 
@@ -99,8 +99,6 @@ export class DidTransactionPage implements OnInit {
             { txid: null, status: 'cancelled' },
             this.intentTransfer.intentId
         );
-
-        this.appService.close();
     }
 
     goTransaction() {

@@ -148,7 +148,6 @@ export class AccessPage implements OnInit {
             { walletinfo: null, status: 'cancelled' },
             this.intentTransfer.intentId
         );
-        this.appService.close();
     }
 
     async onShare() {
@@ -158,7 +157,6 @@ export class AccessPage implements OnInit {
             const selectedClaim = this.buildDeliverableList();
             await this.intentService.sendIntentResponse(this.intentTransfer.action,
                     {walletinfo: selectedClaim}, this.intentTransfer.intentId);
-            this.appService.close();
         }
     }
 }

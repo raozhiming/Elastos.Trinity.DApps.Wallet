@@ -75,7 +75,7 @@ export class CRMemberRegisterPage implements OnInit {
     ionViewDidEnter() {
         if (this.walletInfo.Type === WalletAccountType.MULTI_SIGN) {
             // TODO: reject didtransaction if multi sign (show error popup)
-            this.appService.close();
+            this.cancelOperation();
         }
 
         appManager.setVisible("show");
@@ -133,8 +133,6 @@ export class CRMemberRegisterPage implements OnInit {
             { txid: null, status: 'cancelled' },
             this.intentTransfer.intentId
         );
-
-        this.appService.close();
     }
 
     goTransaction() {

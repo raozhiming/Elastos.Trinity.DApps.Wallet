@@ -71,7 +71,7 @@ export class DPoSVotePage implements OnInit {
     ionViewDidEnter() {
         if (this.walletInfo["Type"] === "Multi-Sign") {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
-            this.appService.close();
+            this.cancelOperation();
         }
     }
 
@@ -113,8 +113,6 @@ export class DPoSVotePage implements OnInit {
             this.intentTransfer.action,
             { txid: null, status: 'cancelled' },
             this.intentTransfer.intentId);
-
-        this.appService.close();
     }
 
     goTransaction() {

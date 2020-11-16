@@ -78,7 +78,7 @@ export class EscTransactionPage implements OnInit {
     ionViewDidEnter() {
       if (this.walletInfo["Type"] === "Multi-Sign") {
           // TODO: reject esctransaction if multi sign (show error popup)
-          this.appService.close();
+          this.cancelOperation();
       }
     }
 
@@ -108,7 +108,6 @@ export class EscTransactionPage implements OnInit {
             { txid: null, status: 'cancelled' },
             this.intentTransfer.intentId
         );
-        this.appService.close();
     }
 
     goTransaction() {

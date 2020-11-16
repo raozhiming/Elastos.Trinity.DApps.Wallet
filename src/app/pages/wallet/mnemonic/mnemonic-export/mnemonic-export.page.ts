@@ -111,6 +111,11 @@ export class MnemonicExportPage implements OnInit {
         } else {
             // User cancel
             console.log('MnemonicExportPage user cancel');
+            await this.intentService.sendIntentResponse(
+                this.intentTransfer.action,
+                { txid: null, status: 'cancelled' },
+                this.intentTransfer.intentId
+            );
         }
     }
 
@@ -136,7 +141,6 @@ export class MnemonicExportPage implements OnInit {
             { mnemonic: this.mnemonicStr },
             this.intentTransfer.intentId
         );
-        this.appService.close();
     }
 
     return() {

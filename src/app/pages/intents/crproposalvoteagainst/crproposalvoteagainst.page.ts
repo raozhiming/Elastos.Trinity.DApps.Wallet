@@ -62,7 +62,7 @@ export class CRProposalVoteAgainstPage implements OnInit {
     async ionViewDidEnter() {
         if (this.coinTransferService.walletInfo.Type === WalletAccountType.MULTI_SIGN) {
             // TODO: reject voting if multi sign (show error popup), as multi sign wallets cannot vote.
-            this.appService.close();
+            this.cancelOperation();
         }
 
         appManager.setVisible("show");
@@ -113,8 +113,6 @@ export class CRProposalVoteAgainstPage implements OnInit {
             { txid: null, status: 'cancelled' },
             this.intentTransfer.intentId
         );
-
-        this.appService.close();
     }
 
     goTransaction() {

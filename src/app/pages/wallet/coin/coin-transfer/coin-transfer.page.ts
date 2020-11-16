@@ -458,10 +458,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async cancelPayment() {
         await this.intentService.sendIntentResponse(
             this.coinTransferService.intentTransfer.action,
-            { txid: null },
+            { txid: null, status: 'cancelled' },
             this.coinTransferService.intentTransfer.intentId
         );
-        this.appService.close();
     }
 
     accMul(arg1, arg2) {
