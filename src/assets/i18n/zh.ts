@@ -44,8 +44,8 @@ export const zh = {
     "wallet-home-title": "钱包主页",
     "wallet-overview": "钱包总览",
     "you-have-n-wallets": "您有 {{walletsCount}} 个币种",
-    "synced": "Synced",
-    "syncing": "Syncing",
+    "synced": "已同步",
+    "syncing": "同步中",
     "synchronized": "{{progress}}% 完成",
     "sync-progress": "同步中 {{progress}}%",
     "ela-erc20": "ELASTOS ERC20 币种",
@@ -129,7 +129,7 @@ export const zh = {
     "transfer-receiver-address": "接收地址",
     "transfer-send-ela": "发送ELA",
     "balance-remaining": "余额 ",
-    "insufficient-balance": "Insufficient Balance",
+    "insufficient-balance": "余额不足",
 
     /********************
     * Coin Receive Page *

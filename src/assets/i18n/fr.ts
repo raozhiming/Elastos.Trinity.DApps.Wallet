@@ -129,7 +129,7 @@ export const fr = {
     "transfer-receiver-address": "Adresse de destination",
     "transfer-send-ela": "Envoi d'ELA",
     "balance-remaining": "Solde restant",
-    "insufficient-balance": "Insufficient Balance",
+    "insufficient-balance": "Solde insuffisant",
 
     /********************
     * Coin Receive Page *
