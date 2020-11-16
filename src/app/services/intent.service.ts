@@ -12,6 +12,7 @@ import { WalletManager } from './wallet.service';
 import { MasterWallet } from '../model/wallets/MasterWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
 @Injectable({
     providedIn: 'root'
@@ -56,6 +57,8 @@ export class IntentService {
             await this.sendIntentResponse(intent.action, {message: 'No active master wallet!', status: 'error'}, intent.intentId);
             return false;
         }
+
+        titleBarManager.setNavigationMode(TitleBarPlugin.TitleBarNavigationMode.CLOSE);
 
         switch (intent.action) {
             case 'elawalletmnemonicaccess':
@@ -164,9 +167,9 @@ export class IntentService {
             const masterWallet = this.walletList[0];
             this.coinTransferService.masterWalletId = masterWallet.id;
             this.coinTransferService.walletInfo = masterWallet.account;
-            this.native.go("/waitforsync");
+            this.native.setRootRouter("/waitforsync");
         } else {
-            this.native.go('wallet-manager', { forIntent: true, forWalletAccess: false });
+            this.native.setRootRouter('wallet-manager', { forIntent: true, forWalletAccess: false });
         }
     }
 
@@ -181,9 +184,9 @@ export class IntentService {
         if (this.walletList.length === 1) {
             const masterWallet = this.walletList[0];
             this.walletAccessService.masterWalletId = masterWallet.id;
-            this.native.go("/access");
+            this.native.setRootRouter("/access");
         } else {
-            this.native.go('wallet-manager', { forIntent: true, forWalletAccess: true });
+            this.native.setRootRouter('wallet-manager', { forIntent: true, forWalletAccess: true });
         }
     }
 
