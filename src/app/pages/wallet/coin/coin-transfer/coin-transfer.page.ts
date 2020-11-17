@@ -415,12 +415,12 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.native.toast_trans('correct-address');
                 return;
             }
-console.log('----do transaction----')
-            // if (this.transferType === TransferType.PAY) {
-            //     this.transaction();
-            // } else {
-            //     this.showConfirm();
-            // }
+
+            if (this.transferType === TransferType.PAY) {
+                this.transaction();
+            } else {
+                this.showConfirm();
+            }
         } catch (error) {
             this.native.toast_trans('contact-address-digits');
         }
