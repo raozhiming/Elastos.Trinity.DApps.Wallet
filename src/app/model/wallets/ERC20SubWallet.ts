@@ -283,7 +283,6 @@ export class ERC20SubWallet extends SubWallet {
                     console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
                     await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
                         { txid: txId, status }, transfer.intentId);
-                    appManager.close();
 
                     resolve(true);
                 }, 5000); // wait for 5s for txPublished

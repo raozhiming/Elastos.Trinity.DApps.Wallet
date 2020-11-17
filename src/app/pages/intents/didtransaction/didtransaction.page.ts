@@ -151,8 +151,7 @@ export class DidTransactionPage implements OnInit {
             intentId: this.intentTransfer.intentId,
         });
 
-        let sourceSubwallet = this.masterWallet.getSubWallet(this.chainId);
-        await sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
+        await this.sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
     }
 }
 

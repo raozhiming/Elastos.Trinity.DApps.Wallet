@@ -46,6 +46,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { TxSuccessComponent } from 'src/app/components/tx-success/tx-success.component';
 import { ContactsService } from 'src/app/services/contacts.service';
 import { ContactsComponent } from 'src/app/components/contacts/contacts.component';
+import { MainAndIDChainSubWallet } from 'src/app/model/wallets/MainAndIDChainSubWallet';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 declare let appManager: AppManagerPlugin.AppManager;
@@ -389,6 +390,16 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.native.toast_trans('insuff-balance');
             return;
         }
+
+        if (this.chainId === 'ELA' || this.chainId === 'IDChain') {
+            let mainAndIDChainSubWallet = this.masterWallet.subWallets[this.chainId] as MainAndIDChainSubWallet;
+            let isAvailableBalanceEnough = await mainAndIDChainSubWallet.isAvailableBalanceEnough(new BigNumber(this.amount).multipliedBy(Config.SELAAsBigNumber));
+            if (!isAvailableBalanceEnough) {
+                await this.native.toast_trans('transaction-pending');
+                return;
+            }
+        }
+
         // TODO: not 8, should use tokenDecimals for ETHSC and ERC20 Token
         if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
             this.native.toast_trans('amount-invalid');
@@ -404,12 +415,12 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.native.toast_trans('correct-address');
                 return;
             }
-
-            if (this.transferType === TransferType.PAY) {
-                this.transaction();
-            } else {
-                this.showConfirm();
-            }
+console.log('----do transaction----')
+            // if (this.transferType === TransferType.PAY) {
+            //     this.transaction();
+            // } else {
+            //     this.showConfirm();
+            // }
         } catch (error) {
             this.native.toast_trans('contact-address-digits');
         }
