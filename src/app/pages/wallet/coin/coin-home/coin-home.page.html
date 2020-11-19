@@ -33,10 +33,10 @@
             <ion-row class="card-label-row">
                 <h1>
                     <span>{{ getSubwalletTitle() }}</span>
-                    {{ 'coin-balance' | translate }}</h1>
-                <h2>
-                    {{ 'synchronized' | translate : {progress: masterWallet.subWallets[chainId].progress} }} - {{ masterWallet.subWallets[chainId].lastBlockTime }}
-                </h2>
+                    {{ 'coin-balance' | translate }}
+                </h1>
+                <h2 *ngIf="subWallet.progress === 100" class="synced">{{ 'synced' | translate }} &#8226; {{ uiService.getSyncTimeFromNow(subWallet.syncTimestamp) }}</h2>
+                <h2 *ngIf="subWallet.progress !== 100" class="syncing">{{ 'syncing' | translate }} <span *ngIf="subWallet.syncTimestamp">&#8226; {{ uiService.getSyncTimeFromNow(subWallet.syncTimestamp) }}</span></h2>
                 <h3>{{ 'total-amount' | translate }}</h3>
                 <div (click)="currencyService.toggleCurrencyDisplay()">
                     <h4 *ngIf="!currencyService.useCurrency">{{ Util.getWholeBalance(masterWallet.subWallets[chainId].getDisplayBalance()) }}<span class="dot" *ngIf="!masterWallet.subWallets[chainId].getDisplayBalance().isZero() && !masterWallet.subWallets[chainId].getDisplayBalance().isNaN() && Util.getDecimalBalance(masterWallet.subWallets[chainId].getDisplayBalance())">.</span>
