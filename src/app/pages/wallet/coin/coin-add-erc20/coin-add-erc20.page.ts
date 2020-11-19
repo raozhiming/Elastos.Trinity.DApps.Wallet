@@ -141,16 +141,15 @@ export class CoinAddERC20Page implements OnInit {
             let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, address, { from: ethAccountAddress });
             console.log("erc20Contract", erc20Contract);
 
-            let contractCode = await this.web3.eth.getCode(address);
+            try {
+                let contractCode = await this.web3.eth.getCode(address);
+                if (contractCode === "0x") {
+                    console.log("Contract at "+address+" does not exist");
+                    this.fetchingCoinInfo = false;
+                    // TODO: Show feedback to user on screen such as "no coin found at this address"
+                } else {
+                    console.log("Found contract at address " + address);
 
-            if (contractCode === "0x") {
-                console.log("Contract at "+address+" does not exist");
-                this.fetchingCoinInfo = false;
-                // TODO: Show feedback to user on screen such as "no coin found at this address"
-            } else {
-                console.log("Found contract at address " + address);
-
-                try {
                     this.coinName = await erc20Contract.methods.name().call();
                     console.log("Coin name", this.coinName);
 
@@ -159,10 +158,11 @@ export class CoinAddERC20Page implements OnInit {
 
                     this.coinInfoFetched = true;
                     this.fetchingCoinInfo = false;
-                } catch (e) {
-                    this.fetchingCoinInfo = false;
-                    console.log("Contract call exception - invalid contract? Not ERC20?");
                 }
+            } catch (e) {
+                this.fetchingCoinInfo = false;
+                console.log("Contract call exception - invalid contract? Not ERC20?");
+                this.popup.ionicAlert("error", "coin-adderc20-invalid-contract-or-network-error", "Ok");
             }
         }
     }
