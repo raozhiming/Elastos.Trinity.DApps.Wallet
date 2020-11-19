@@ -189,7 +189,13 @@ export class AppService {
 
     scan(type: ScanType) {
         appManager.sendIntent('scanqrcode', {}, {}, (res) => {
-            const content = res.result.scannedContent;
+            let content: string = res.result.scannedContent;
+
+            // Some address star with "xxx:", eg "etherum:"
+            const index = content.indexOf(':');
+            if (index !== -1) {
+                content = content.substring(index + 1);
+            }
             console.log('Got scan result:', content);
 
             switch (type) {

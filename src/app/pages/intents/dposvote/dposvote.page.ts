@@ -118,10 +118,9 @@ export class DPoSVotePage implements OnInit {
         }
 
         try {
-            await this.walletManager.spvBridge.isAddressValid(this.masterWalletId, 'default');
             this.createVoteProducerTransaction();
         } catch (error) {
-            this.native.toast_trans('contact-address-digits');
+            console.log('dposvote createVoteProducerTransaction error:', error);
         }
     }
 
@@ -182,7 +181,6 @@ export class DPoSVotePage implements OnInit {
         });
 
         await this.sourceSubwallet.signAndSendRawTransaction(rawTx, transfer);
-
     }
 }
 

@@ -367,10 +367,10 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.appService.scan(ScanType.Address);
     }
 
-    goTransaction() {
+    async goTransaction() {
         // this.showConfirm();
         // this.showSuccess();
-        this.checkValue();
+        await this.checkValue();
     }
 
     async checkValue() {
@@ -406,8 +406,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             return;
         }
         try {
-            let isAddressValid = await this.walletManager.spvBridge.isAddressValid(
+            let isAddressValid = await this.walletManager.spvBridge.isSubWalletAddressValid(
                 this.masterWallet.id,
+                this.chainId,
                 this.toAddress
             );
 
@@ -422,7 +423,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.showConfirm();
             }
         } catch (error) {
-            this.native.toast_trans('contact-address-digits');
+            this.native.toast_trans('not-a-valid-address');
         }
     }
 

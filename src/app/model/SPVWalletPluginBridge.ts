@@ -350,6 +350,14 @@ export class SPVWalletPluginBridge {
         });
     }
 
+    isSubWalletAddressValid(masterWalletId: string, chainID: string, address: string): Promise<boolean> {
+        return new Promise((resolve, reject)=>{
+            walletManager.isSubWalletAddressValid([masterWalletId, chainID, address],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject);  });
+        });
+    }
+
     getSupportedChains(masterWalletId: string): Promise<string[]> {
         return new Promise((resolve, reject)=>{
             walletManager.getSupportedChains([masterWalletId],

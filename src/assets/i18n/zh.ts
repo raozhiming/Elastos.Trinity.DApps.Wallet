@@ -33,7 +33,7 @@ export const zh = {
     "insuff-balance": "余额不足",
     'transaction-has-been-published': "交易已经发布，请稍后",
     "sync-completed": "已完成同步",
-    "not-a-valid-address": "无效的地址",
+    "not-a-valid-address": "地址无效",
     "no-ethereum-token": "没有以太坊币种",
     "please-add-ethereum-first": "请先将以太坊币种添加到您的钱包中",
     "please-wait": "请等待...",
