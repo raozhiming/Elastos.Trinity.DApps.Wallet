@@ -143,8 +143,7 @@
 <!------------------ RECHARGE AND SEND FOOTER ------------------>
 <ion-footer
     *ngIf="!native.popup && transferType !== 3 && waitingForSyncCompletion"
-    class="footer"
-    [class.dark-footer]="theme.darkMode"
+    class="footer" [class.dark-footer]="theme.darkMode"
 >
     <ion-row class="btn-container">
         <ion-card-title>{{ 'waitforsync-loading' | translate }}</ion-card-title>
@@ -156,9 +155,8 @@
 </ion-footer>
 
 <ion-footer
-    *ngIf="!native.popup && transferType !== 3 && !waitingForSyncCompletion && valuesValid()"
-    class="footer"
-    [class.dark-footer]="theme.darkMode"
+    *ngIf="!native.popup && transferType !== 3 && !waitingForSyncCompletion"
+    class="footer" [class.dark-footer]="theme.darkMode"
 >
     <ion-row class="btn-container">
         <ion-button color="primary" (click)="goTransaction()">
@@ -213,8 +211,7 @@
 <!------------------ PAY INTENT FOOTER ------------------>
 <ion-footer
     *ngIf="transferType === 3"
-    class="pay-footer"
-    [class.dark-pay-footer]="theme.darkMode"
+    class="pay-footer" [class.dark-pay-footer]="theme.darkMode"
 >
     <ion-row class="btn-row">
         <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelPayment()">

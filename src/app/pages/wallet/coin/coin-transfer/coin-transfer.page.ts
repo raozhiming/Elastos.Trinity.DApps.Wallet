@@ -377,30 +377,22 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     valuesValid(): boolean {
+        let valuesValid = false;
         if (Util.isNull(this.amount)) {
             this.native.toast_trans('amount-null');
-            return false;
-        }
-        if (!Util.number(this.amount)) {
+        } else if (!Util.number(this.amount)) {
             this.native.toast_trans('amount-invalid');
-            return false;
-        }
-        if (this.amount <= 0) {
+        } else if (this.amount <= 0) {
             this.native.toast_trans('amount-invalid');
-            return false;
-        }
-        if (!this.masterWallet.subWallets[this.chainId].isBalanceEnough(new BigNumber(this.amount))) {
+        } else if (!this.masterWallet.subWallets[this.chainId].isBalanceEnough(new BigNumber(this.amount))) {
             this.native.toast_trans('insuff-balance');
-            return false;
-        }
-
-        // TODO: not 8, should use tokenDecimals for ETHSC and ERC20 Token
-        if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
+        } else if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
             this.native.toast_trans('amount-invalid');
-            return false;
+        } else {
+            valuesValid = true;
         }
 
-        return true;
+        return valuesValid;
     }
 
     async startTransaction() {
