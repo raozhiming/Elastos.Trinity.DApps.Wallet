@@ -12,7 +12,7 @@ import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
 import Web3 from 'web3';
 import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk';
-import { StandardCoinName, ERC20Coin } from 'src/app/model/Coin';
+import { StandardCoinName, ERC20Coin, Coin, CoinType } from 'src/app/model/Coin';
 import { PopupProvider } from 'src/app/services/popup.service';
 import { CoinService } from 'src/app/services/coin.service';
 import { PrefsService } from 'src/app/services/prefs.service';
@@ -78,7 +78,10 @@ export class CoinAddERC20Page implements OnInit {
     }
 
     async getAllCustomERC20Coins() {
-        this.allCustomERC20Coins = await this.coinService.getCustomERC20Coins();
+        const availableCoins: Coin[] = await this.coinService.getAvailableCoins();
+        this.allCustomERC20Coins = availableCoins.filter(c => {
+            return c.getType() === CoinType.ERC20;
+        }) as ERC20Coin[];
         console.log('all erc20 coins', this.allCustomERC20Coins);
     }
 
