@@ -156,15 +156,13 @@
 </ion-footer>
 
 <ion-footer
-    *ngIf="!native.popup && transferType !== 3 && !waitingForSyncCompletion && amount && toAddress"
+    *ngIf="!native.popup && transferType !== 3 && !waitingForSyncCompletion && valuesValid()"
     class="footer"
     [class.dark-footer]="theme.darkMode"
 >
     <ion-row class="btn-container">
         <ion-button color="primary" (click)="goTransaction()">
-            <ion-label *ngIf="transferType === 1">{{ 'recharge' | translate}}</ion-label>
-            <ion-label *ngIf="transferType === 4">{{ 'withdraw' | translate}}</ion-label>
-            <ion-label *ngIf="transferType === 2">{{ 'send' | translate}}</ion-label>
+            <ion-label>{{ getButtonLabel() | translate }}</ion-label>
         </ion-button>
     </ion-row>
 </ion-footer>

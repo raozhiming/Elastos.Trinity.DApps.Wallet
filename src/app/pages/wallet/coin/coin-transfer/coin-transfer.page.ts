@@ -370,40 +370,49 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     async goTransaction() {
         // this.showConfirm();
         // this.showSuccess();
-        await this.checkValue();
+
+        if (this.valuesValid()) {
+            await this.startTransaction();
+        }
     }
 
-    async checkValue() {
+    valuesValid(): boolean {
         if (Util.isNull(this.amount)) {
             this.native.toast_trans('amount-null');
-            return;
+            return false;
         }
         if (!Util.number(this.amount)) {
             this.native.toast_trans('amount-invalid');
-            return;
+            return false;
         }
         if (this.amount <= 0) {
             this.native.toast_trans('amount-invalid');
-            return;
+            return false;
         }
         if (!this.masterWallet.subWallets[this.chainId].isBalanceEnough(new BigNumber(this.amount))) {
             this.native.toast_trans('insuff-balance');
-            return;
-        }
-
-        if (this.chainId === 'ELA' || this.chainId === 'IDChain') {
-            let mainAndIDChainSubWallet = this.masterWallet.subWallets[this.chainId] as MainAndIDChainSubWallet;
-            let isAvailableBalanceEnough = await mainAndIDChainSubWallet.isAvailableBalanceEnough(new BigNumber(this.amount).multipliedBy(Config.SELAAsBigNumber));
-            if (!isAvailableBalanceEnough) {
-                await this.native.toast_trans('transaction-pending');
-                return;
-            }
+            return false;
         }
 
         // TODO: not 8, should use tokenDecimals for ETHSC and ERC20 Token
         if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
             this.native.toast_trans('amount-invalid');
-            return;
+            return false;
+        }
+
+        return true;
+    }
+
+    async startTransaction() {
+        if (this.chainId === 'ELA' || this.chainId === 'IDChain') {
+            const mainAndIDChainSubWallet = this.masterWallet.subWallets[this.chainId] as MainAndIDChainSubWallet;
+            const isAvailableBalanceEnough =
+                await mainAndIDChainSubWallet.isAvailableBalanceEnough(new BigNumber(this.amount).multipliedBy(Config.SELAAsBigNumber));
+
+            if (!isAvailableBalanceEnough) {
+                await this.native.toast_trans('transaction-pending');
+                return;
+            }
         }
 
         try {
@@ -412,7 +421,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress = this.toAddress.substring(index + 1);
             }
 
-            let isAddressValid = await this.walletManager.spvBridge.isSubWalletAddressValid(
+            const isAddressValid = await this.walletManager.spvBridge.isSubWalletAddressValid(
                 this.masterWallet.id,
                 this.chainId,
                 this.toAddress
@@ -641,6 +650,21 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             }
         } else {
             return true;
+        }
+    }
+
+    getButtonLabel(): string {
+        switch (this.transferType) {
+            case TransferType.RECHARGE:
+                return 'recharge';
+            case TransferType.SEND:
+                return 'send';
+            case TransferType.PAY:
+                return 'pay';
+            case TransferType.WITHDRAW:
+                return 'withdraw';
+            default:
+                return 'send';
         }
     }
 }
