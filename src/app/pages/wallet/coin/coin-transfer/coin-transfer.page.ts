@@ -405,7 +405,13 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             this.native.toast_trans('amount-invalid');
             return;
         }
+
         try {
+            const index = this.toAddress.indexOf(':');
+            if (index !== -1) {
+                this.toAddress = this.toAddress.substring(index + 1);
+            }
+
             let isAddressValid = await this.walletManager.spvBridge.isSubWalletAddressValid(
                 this.masterWallet.id,
                 this.chainId,
