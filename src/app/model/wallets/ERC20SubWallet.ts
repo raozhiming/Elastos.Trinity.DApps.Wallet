@@ -1,6 +1,5 @@
 import Web3 from 'web3';
 import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk'
-// import { TrinitySDK } from "../../../../../../../Elastos.Trinity.DAppSDK/dist"
 
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
@@ -9,10 +8,8 @@ import { Util } from '../Util';
 import { Transfer } from '../../services/cointransfer.service';
 import BigNumber from 'bignumber.js';
 import { TranslateService } from '@ngx-translate/core';
-import { Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
-import moment from 'moment';
+import { AllTransactions, EthTransaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
 
-declare let appManager: AppManagerPlugin.AppManager;
 
 export class ERC20SubWallet extends SubWallet {
     /** Coin related to this wallet */
@@ -21,6 +18,8 @@ export class ERC20SubWallet extends SubWallet {
     private web3: Web3;
     private erc20ABI: any;
     private tokenDecimals: number;
+
+    private tokenAddress = '';
 
     constructor(masterWallet: MasterWallet, id: CoinID) {
         super(masterWallet, id, CoinType.ERC20);
@@ -31,8 +30,7 @@ export class ERC20SubWallet extends SubWallet {
     private async initialize() {
         this.coin = this.masterWallet.coinService.getCoinByID(this.id) as ERC20Coin;
         // Get Web3 and the ERC20 contract ready
-        // let trinityWeb3Provider = new Ethereum.TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
-        let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
+        const trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
         this.web3 = new Web3(trinityWeb3Provider);
 
         // Standard ERC20 contract ABI
@@ -66,12 +64,18 @@ export class ERC20SubWallet extends SubWallet {
         return await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, StandardCoinName.ETHSC);
     }
 
+    private async getTokenAccountAddress(): Promise<string> {
+        if (!this.tokenAddress) {
+            this.tokenAddress = await this.createAddress();
+        }
+        return this.tokenAddress;
+    }
+
     public getFriendlyName(): string {
         const coin = this.masterWallet.coinService.getCoinByID(this.id);
         if (!coin) {
             return ''; // Just in case
         }
-
         return coin.getDescription();
     }
 
@@ -80,15 +84,14 @@ export class ERC20SubWallet extends SubWallet {
         if (!coin) {
             return ''; // Just in case
         }
-
         return coin.getName();
     }
 
     private async fetchTokenDecimals(): Promise<void> {
         try {
-            let ethAccountAddress = await this.getEthAccountAddress();
-            var contractAddress = this.coin.getContractAddress();
-            let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
+            const tokenAccountAddress = await this.getTokenAccountAddress();
+            const contractAddress = this.coin.getContractAddress();
+            const erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: tokenAccountAddress });
             this.tokenDecimals = await erc20Contract.methods.decimals().call();
 
             console.log(this.id+" decimals: ", this.tokenDecimals);
@@ -119,6 +122,15 @@ export class ERC20SubWallet extends SubWallet {
         return this.balance.gt(amount);
     }
 
+    private async getERC20TransactionDirection(targetAddress: string): Promise<TransactionDirection> {
+        const address = await this.getTokenAccountAddress();
+        if (address === targetAddress) {
+            return TransactionDirection.RECEIVED;
+        } else {
+            return TransactionDirection.SENT;
+        }
+    }
+
     public async updateBalance() {
         console.log("Updating ERC20 token balance for token: ", this.id);
         if (!this.tokenDecimals) {
@@ -126,12 +138,12 @@ export class ERC20SubWallet extends SubWallet {
         }
 
         try {
-            let ethAccountAddress = await this.getEthAccountAddress();
-            var contractAddress = this.coin.getContractAddress();
-            let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
+            const tokenAccountAddress = await this.getTokenAccountAddress();
+            const contractAddress = this.coin.getContractAddress();
+            const erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: tokenAccountAddress });
 
             // TODO: what's the integer type returned by web3? Are we sure we can directly convert it to BigNumber like this? To be tested
-            let balanceEla = await erc20Contract.methods.balanceOf(ethAccountAddress).call();
+            const balanceEla = await erc20Contract.methods.balanceOf(tokenAccountAddress).call();
             // The returned balance is an int. Need to devide by the number of decimals used by the token.
             this.balance = new BigNumber(balanceEla).dividedBy(new BigNumber(10).pow(this.tokenDecimals));
             console.log(this.id+": raw balance:", balanceEla, " Converted balance: ", this.balance);
@@ -149,16 +161,52 @@ export class ERC20SubWallet extends SubWallet {
         }
     }
 
-    public async getTransactions(startIndex: number): Promise<any> {
-        // let allTransactions = await this.masterWallet.walletManager.spvBridge.getTokenTransactions(this.masterWallet.id, startIndex, '', this.id);
-        // console.log("Get all transaction count for coin "+this.id+": ", allTransactions && allTransactions.Transactions ? allTransactions.Transactions.length : -1, "startIndex: ", startIndex);
-        // return allTransactions;
-        return Promise.resolve([]);
+    public async getTransactions(startIndex: number): Promise<AllTransactions> {
+        const allTransactions = await this.masterWallet.walletManager.spvBridge.getTokenTransactions(this.masterWallet.id, startIndex, '', this.id);
+        console.log("Get all transaction count for coin "+this.id+": ", allTransactions && allTransactions.Transactions ? allTransactions.Transactions.length : -1, "startIndex: ", startIndex);
+        return allTransactions;
+    }
+
+    public async getTransactionDetails(txId: string): Promise<AllTransactions> {
+        const transactionDetails = await this.masterWallet.walletManager.spvBridge.getTokenTransactions(this.masterWallet.id, 0, txId, this.id);
+        return transactionDetails;
+    }
+
+    public async getTransactionInfo(transaction: EthTransaction, translate: TranslateService): Promise<TransactionInfo> {
+        const transactionInfo = await super.getTransactionInfo(transaction, translate);
+        const direction = await this.getERC20TransactionDirection(transaction.TargetAddress);
+
+        // TODO: Why BlockNumber is 0 sometimes? Need to check.
+        // if (transaction.IsErrored || (transaction.BlockNumber === 0)) {
+        if (transaction.IsErrored) {
+            return null;
+        }
+
+        transactionInfo.amount = this.tokenDecimals > 0 ? new BigNumber(transaction.Amount).dividedBy(this.tokenDecimals) : new BigNumber(transaction.Amount);
+        transactionInfo.fee = this.tokenDecimals > 0 ? transaction.Fee / this.tokenDecimals : transaction.Fee;
+        transactionInfo.txId = transaction.TxHash || transaction.Hash; // ETHSC use TD or Hash
+        // ETHSC use Confirmations - TODO: FIX THIS - SHOULD BE EITHER CONFIRMSTATUS (mainchain) or CONFIRMATIONS BUT NOT BOTH
+        transactionInfo.confirmStatus = transaction.Confirmations;
+
+        // MESSY again - No "Direction" field in ETH transactions (contrary to other chains). Calling a private method to determine this.
+        if (direction === TransactionDirection.RECEIVED) {
+            transactionInfo.type = TransactionType.RECEIVED;
+            transactionInfo.symbol = '+';
+        } else if (direction === TransactionDirection.SENT) {
+            transactionInfo.type = TransactionType.SENT;
+            transactionInfo.symbol = '-';
+        } else if (direction === TransactionDirection.MOVED) {
+            transactionInfo.type = TransactionType.TRANSFER;
+            transactionInfo.symbol = '';
+        }
+
+        return transactionInfo;
     }
 
     // TODO: Refine / translate with more detailed info: smart contract run, cross chain transfer or ERC payment, etc
-    protected async getTransactionName(transaction: Transaction, translate: TranslateService): Promise<string> {
-        switch (transaction.Direction) {
+    protected async getTransactionName(transaction: EthTransaction, translate: TranslateService): Promise<string> {
+        const direction = await this.getERC20TransactionDirection(transaction.TargetAddress);
+        switch (direction) {
             case TransactionDirection.RECEIVED:
                 return translate.instant("coin-action-receive") + ' ' + this.coin.getName();
             case TransactionDirection.SENT:
@@ -169,21 +217,17 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     // TODO: Refine with more detailed info: smart contract run, cross chain transfer or ERC payment, etc
-    protected async getTransactionIconPath(transaction: Transaction): Promise<string> {
-        if (transaction.Direction === TransactionDirection.RECEIVED) {
+    protected async getTransactionIconPath(transaction: EthTransaction): Promise<string> {
+        const direction = await this.getERC20TransactionDirection(transaction.TargetAddress);
+        if (direction === TransactionDirection.RECEIVED) {
             return './assets/buttons/receive.png';
-        } else if (transaction.Direction === TransactionDirection.SENT) {
+        } else if (direction === TransactionDirection.SENT) {
             return './assets/buttons/send.png';
-        } else if (transaction.Direction === TransactionDirection.MOVED) {
+        } else if (direction === TransactionDirection.MOVED) {
             return './assets/buttons/transfer.png';
         }
 
         return null;
-    }
-
-    async getEthAccountAddress(): Promise<string> {
-        // "Create" actually always returns the same address because ETH sidechain accounts have only one address.
-        return await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, StandardCoinName.ETHSC);
     }
 
     public async createWithdrawTransaction(toAddress: string, amount: number, memo: string): Promise<any> {
@@ -191,19 +235,19 @@ export class ERC20SubWallet extends SubWallet {
     }
 
     public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<any> {
-        let ethAccountAddress = await this.getEthAccountAddress();
-        var contractAddress = this.coin.getContractAddress();
-        let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: ethAccountAddress });
-        let gasPrice = await this.web3.eth.getGasPrice();
+        const tokenAccountAddress = await this.getTokenAccountAddress();
+        const contractAddress = this.coin.getContractAddress();
+        const erc20Contract = new this.web3.eth.Contract(this.erc20ABI, contractAddress, { from: tokenAccountAddress });
+        const gasPrice = await this.web3.eth.getGasPrice();
 
         console.log('createPaymentTransaction toAddress:', toAddress, ' amount:', amount, 'gasPrice:', gasPrice);
 
         // Convert the Token amount (ex: 20 TTECH) to contract amount (=token amount (20) * 10^decimals)
-        let amountWithDecimals = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(this.tokenDecimals));
+        const amountWithDecimals = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(this.tokenDecimals));
 
         // Incompatibility between our bignumber lib and web3's BN lib. So we must convert by using intermediate strings
-        let web3BigNumber = this.web3.utils.toBN(amountWithDecimals.toString(10));
-        let method = erc20Contract.methods.transfer(toAddress, web3BigNumber);
+        const web3BigNumber = this.web3.utils.toBN(amountWithDecimals.toString(10));
+        const method = erc20Contract.methods.transfer(toAddress, web3BigNumber);
 
         let gasLimit = 100000;
         try {
@@ -235,7 +279,7 @@ export class ERC20SubWallet extends SubWallet {
 
         return new Promise(async (resolve)=>{
             console.log('Received raw transaction', transaction);
-            let password = await this.masterWallet.walletManager.openPayModal(transfer);
+            const password = await this.masterWallet.walletManager.openPayModal(transfer);
             if (!password) {
                 console.log("No password received. Cancelling");
                 await this.masterWallet.walletManager.sendIntentResponse(transfer.action,

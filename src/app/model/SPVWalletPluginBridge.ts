@@ -646,26 +646,26 @@ export class SPVWalletPluginBridge {
         });
     }
 
-    // getTokenTransactions(
-    //     masterWalletId: string,
-    //     start: number,
-    //     txid: string,
-    //     tokenSymbol: string
-    // ): Promise<any> {
-    //     return new Promise(async (resolve, reject) => {
-    //         const maxNumberOfTransactionsToReturn = 20;
-    //         walletManager.getTokenTransactions(
-    //             [
-    //                 masterWalletId,
-    //                 start,
-    //                 maxNumberOfTransactionsToReturn,
-    //                 txid,
-    //                 tokenSymbol
-    //             ],
-    //             (ret) => { resolve(ret); },
-    //             (err) => { this.handleError(err, reject); });
-    //     });
-    // }
+    getTokenTransactions(
+        masterWalletId: string,
+        start: number,
+        txid: string,
+        tokenSymbol: string
+    ): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            const maxNumberOfTransactionsToReturn = 20;
+            walletManager.getTokenTransactions(
+                [
+                    masterWalletId,
+                    start,
+                    maxNumberOfTransactionsToReturn,
+                    txid,
+                    tokenSymbol
+                ],
+                (ret) => { resolve(ret); },
+                (err) => { this.handleError(err, reject); });
+        });
+    }
 
     createDepositTransaction(
         masterWalletId: string,

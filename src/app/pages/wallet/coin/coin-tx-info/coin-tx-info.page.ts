@@ -113,12 +113,7 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     async getTransactionDetails() {
-        let allTransactions = await this.walletManager.spvBridge.getAllTransactions(
-            this.masterWallet.id,
-            this.chainId,
-            0,
-            this.transactionInfo.txId
-        );
+        const allTransactions = await this.subWallet.getTransactionDetails(this.transactionInfo.txId);
 
         const transaction = allTransactions.Transactions[0];
         console.log('More tx info', transaction);
@@ -149,7 +144,11 @@ export class CoinTxInfoPage implements OnInit {
             // Total Cost
             this.totalCost = newPayFee ? transactionInfo.amount.plus(newPayFee) : null;
             // Address
-            this.targetAddress = await this.getETHSCWithdrawTransactionTargetAddres(transaction as EthTransaction);
+            if (this.chainId === StandardCoinName.ETHSC) {
+                this.targetAddress = await this.getETHSCWithdrawTransactionTargetAddres(transaction as EthTransaction);
+            } else {
+                this.targetAddress = (transaction as EthTransaction).TargetAddress;
+            }
         }
 
         this.inputs = this.objtoarr(transaction.Inputs);

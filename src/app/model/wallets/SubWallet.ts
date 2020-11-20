@@ -188,6 +188,8 @@ export abstract class SubWallet {
         return transactionInfo;
     }
 
+    public abstract getTransactionDetails(txId: string): Promise<AllTransactions>;
+
     public abstract createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string>;
     public abstract createWithdrawTransaction(toAddress: string, amount: number, memo: string): Promise<string>;
     public abstract signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<boolean>;

@@ -21,7 +21,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
         super(masterWallet, StandardCoinName.ETHSC);
     }
 
-    private async getAddress(): Promise<string> {
+    private async getTokenAddress(): Promise<string> {
         if (!this.ethscAddress) {
             this.ethscAddress = await this.createAddress();
         }
@@ -52,8 +52,8 @@ export class ETHChainSubWallet extends StandardSubWallet {
     }
 
     public async getTransactionInfo(transaction: EthTransaction, translate: TranslateService): Promise<TransactionInfo> {
-        let transactionInfo = await super.getTransactionInfo(transaction, translate);
-        let direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
+        const transactionInfo = await super.getTransactionInfo(transaction, translate);
+        const direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
 
         // TODO: Why BlockNumber is 0 sometimes? Need to check.
         // if (transaction.IsErrored || (transaction.BlockNumber === 0)) {
@@ -63,7 +63,6 @@ export class ETHChainSubWallet extends StandardSubWallet {
 
         transactionInfo.amount = new BigNumber(transaction.Amount).dividedBy(Config.WEI);
         transactionInfo.fee = transaction.Fee / Config.WEI;
-        transactionInfo.direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
         transactionInfo.txId = transaction.TxHash || transaction.Hash; // ETHSC use TD or Hash
 
         // ETHSC use Confirmations - TODO: FIX THIS - SHOULD BE EITHER CONFIRMSTATUS (mainchain) or CONFIRMATIONS BUT NOT BOTH
@@ -86,7 +85,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
 
     // TODO: https://app.clickup.com/t/4fu5cw - "Get the transaction type from ETHSC  transaction"
     protected async getTransactionName(transaction: EthTransaction, translate: TranslateService): Promise<string> {
-        let direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
+        const direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
         switch (direction) {
             case TransactionDirection.RECEIVED:
                 return translate.instant("coin-op-received-ela");
@@ -97,7 +96,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
     }
 
     protected async getTransactionIconPath(transaction: EthTransaction): Promise<string> {
-        let direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
+        const direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
         switch (direction) {
             case TransactionDirection.RECEIVED:
                 return './assets/buttons/receive.png';
@@ -107,7 +106,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
     }
 
     private async getETHSCTransactionDirection(targetAddress: string): Promise<TransactionDirection> {
-        let address = await this.getAddress();
+        const address = await this.getTokenAddress();
         if (address === targetAddress) {
             return TransactionDirection.RECEIVED;
         } else {
@@ -116,7 +115,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
     }
 
     public async updateBalance(): Promise<void> {
-        let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
+        const balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
         // TODO: use Ether? Gwei? Wei?
         this.balance = new BigNumber(balanceStr).multipliedBy(Config.SELAAsBigNumber);
     }
@@ -142,7 +141,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
 
         const method = ethscWithdrawContract.methods.receivePayload(toAddress, toAmountSend, Config.ETHSC_WITHDRAW_GASPRICE);
 
-        let gasLimit = 100000;
+        const gasLimit = 100000;
         // TODO: The value from estimateGas is too small sometimes (eg 22384) for withdraw transaction.
         // Maybe it is the bug of node?
         // try {

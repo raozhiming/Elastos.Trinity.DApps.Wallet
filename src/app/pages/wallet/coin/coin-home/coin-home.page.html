@@ -21,7 +21,7 @@
             <ion-icon name="close"></ion-icon>
         </ion-col>
     </ion-row>
-    
+
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-row class="main-title-row">
             <ion-col size="12">
@@ -102,7 +102,7 @@
                     <p>{{ item.datetime }}</p>
                 </ion-col>
                 <ion-col [size]="item.amount.isZero() ? 3 : 5" class="right-col">
-                    <h1 *ngIf="subWallet.getAmountInExternalCurrency(item.amount)">{{ item.symbol }}{{ uiService.getFixedBalance(item.amount) }}</h1>
+                    <h1>{{ item.symbol }}{{ uiService.getFixedBalance(item.amount) }}</h1>
                     <p *ngIf="subWallet.getAmountInExternalCurrency(item.amount)">
                         {{ item.symbol }}{{ subWallet.getAmountInExternalCurrency(item.amount) }}
                         {{ currencyService.selectedCurrency.symbol }}

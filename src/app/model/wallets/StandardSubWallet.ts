@@ -140,6 +140,11 @@ export abstract class StandardSubWallet extends SubWallet {
         return transactionName;
     }
 
+    public async getTransactionDetails(txId: string): Promise<AllTransactions> {
+        const transactionDetails = await this.masterWallet.walletManager.spvBridge.getAllTransactions(this.masterWallet.id, this.id, 0, txId);
+        return transactionDetails;
+    }
+
     protected async getTransactionIconPath(transaction: Transaction): Promise<string> {
         if (transaction.Direction === TransactionDirection.RECEIVED) {
             switch (transaction.Type) {
