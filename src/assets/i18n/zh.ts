@@ -239,9 +239,10 @@ export const zh = {
     "coin-adderc20-add": '添加币种',
     "coin-adderc20-name": '币种名称',
     "coin-adderc20-symbol": '币种符号',
-    "coin-adderc20-not-a-erc20-contract": "扫描的内容不是有效的 ERC20 币种地址",
-    "coin-adderc20-invalid-contract-or-network-error" : "扫描的内容不是有效的 ERC20 币种地址 或 网络错误",
+    "coin-adderc20-not-a-erc20-contract": "不是有效的 ERC20 币种地址",
+    "coin-adderc20-invalid-contract-or-network-error" : "不是有效的 ERC20 币种地址 或 网络错误",
     'coin-adderc20-alreadyadded': '币种已经添加',
+    'coin-adderc20-not-found': '此币种地址未注册，请检查您输入的币种地址',
 
     /********************************************** Intent Screens ***********************************************/
 

@@ -239,9 +239,10 @@ export const fr = {
     "coin-adderc20-add": 'Ajouter le jeton',
     "coin-adderc20-name": 'Nom du jeton',
     "coin-adderc20-symbol": 'Symbole',
-    "coin-adderc20-not-a-erc20-contract": "Le contenu scanné n'est pas une adresse de jeton ERC20 valide.",
-    "coin-adderc20-invalid-contract-or-network-error" : "Le contenu scanné n'est pas une adresse de jeton ERC20 valide, ou erreur réseau.",
+    "coin-adderc20-not-a-erc20-contract": "Le contenu n'est pas une adresse de jeton ERC20 valide.",
+    "coin-adderc20-invalid-contract-or-network-error" : "Le contenu n'est pas une adresse de jeton ERC20 valide, ou erreur réseau.",
     'coin-adderc20-alreadyadded': 'Ce jeton est déjà dans la liste',
+    'coin-adderc20-not-found': 'Impossible de trouver l\'adresse du jeton.',
 
     /********************************************** Intent Screens ***********************************************/
 

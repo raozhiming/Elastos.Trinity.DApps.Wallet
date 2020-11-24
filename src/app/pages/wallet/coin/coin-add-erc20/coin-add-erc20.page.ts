@@ -149,7 +149,7 @@ export class CoinAddERC20Page implements OnInit {
                 if (contractCode === "0x") {
                     console.log("Contract at "+address+" does not exist");
                     this.fetchingCoinInfo = false;
-                    // TODO: Show feedback to user on screen such as "no coin found at this address"
+                    this.native.toast_trans('coin-adderc20-not-found');
                 } else {
                     console.log("Found contract at address " + address);
 
