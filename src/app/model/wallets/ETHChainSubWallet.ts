@@ -88,9 +88,9 @@ export class ETHChainSubWallet extends StandardSubWallet {
         const direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
         switch (direction) {
             case TransactionDirection.RECEIVED:
-                return translate.instant("coin-op-received-ela");
+                return translate.instant("coin-op-received-token");
             case TransactionDirection.SENT:
-                return translate.instant("coin-op-sent-ela");
+                return translate.instant("coin-op-sent-token");
         }
         return null;
     }

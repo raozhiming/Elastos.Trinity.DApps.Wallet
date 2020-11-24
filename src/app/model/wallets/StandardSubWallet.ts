@@ -96,7 +96,7 @@ export abstract class StandardSubWallet extends SubWallet {
 
         switch (transaction.Direction) {
             case TransactionDirection.RECEIVED:
-                transactionName = translate.instant('coin-op-received-ela');
+                transactionName = translate.instant('coin-op-received-token');
                 // TODO: upgrade spvsdk, check the ETHSC
                 switch (transaction.Type) {
                     case RawTransactionType.RechargeToSideChain:
@@ -111,13 +111,13 @@ export abstract class StandardSubWallet extends SubWallet {
                                 transactionName = translate.instant("coin-dir-from-ethsc");
                                 break;
                             default:
-                                transactionName = translate.instant('coin-op-received-ela');
+                                transactionName = translate.instant('coin-op-received-token');
                         }
                         break;
                 }
                 break;
             case TransactionDirection.SENT:
-                transactionName = translate.instant("coin-op-sent-ela");
+                transactionName = translate.instant("coin-op-sent-token");
 
                 if (transaction.Type === RawTransactionType.TransferCrossChainAsset) {
                     switch (transaction.TopUpSidechain) {
@@ -134,7 +134,7 @@ export abstract class StandardSubWallet extends SubWallet {
                 }
                 break;
             case TransactionDirection.MOVED:
-                transactionName = translate.instant("coin-op-transfered-ela");
+                transactionName = translate.instant("coin-op-transfered-token");
                 break;
         }
         return transactionName;
