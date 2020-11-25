@@ -413,14 +413,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress = this.toAddress.substring(index + 1);
             }
 
-            const isAddressValid = await this.walletManager.spvBridge.isSubWalletAddressValid(
-                this.masterWallet.id,
-                this.chainId,
-                this.toAddress
-            );
-
+            const isAddressValid = await this.isSubWalletAddressValid(this.masterWallet.id, this.chainId, this.toAddress);
             if (!isAddressValid) {
-                this.native.toast_trans('correct-address');
+                this.native.toast_trans('not-a-valid-address');
                 return;
             }
 
@@ -432,6 +427,26 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         } catch (error) {
             this.native.toast_trans('not-a-valid-address');
         }
+    }
+
+    private async isSubWalletAddressValid(masterWalletId: string, chainId: string, address: string) {
+        let chainIDTemp = chainId;
+        switch (chainIDTemp) {
+            case StandardCoinName.ELA:
+            case StandardCoinName.IDChain:
+            case StandardCoinName.ETHSC:
+                break;
+            default:
+                chainIDTemp = StandardCoinName.ETHSC;
+                break;
+        }
+
+        const isAddressValid = await this.walletManager.spvBridge.isSubWalletAddressValid(
+            masterWalletId,
+            chainIDTemp,
+            address
+        );
+        return isAddressValid;
     }
 
     async showConfirm() {
