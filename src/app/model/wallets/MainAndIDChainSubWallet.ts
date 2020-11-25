@@ -96,7 +96,7 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
         return false;
     }
 
-    public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string> {
+    public async createPaymentTransaction(toAddress: string, amount: string, memo: string = ""): Promise<string> {
         return this.masterWallet.walletManager.spvBridge.createTransaction(
             this.masterWallet.id,
             this.id, // From subwallet id
