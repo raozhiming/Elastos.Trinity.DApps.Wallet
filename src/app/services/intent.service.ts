@@ -147,7 +147,7 @@ export class IntentService {
                 this.coinTransferService.payTransfer = {
                     toAddress: intent.params.receiver,
                     amount: intent.params.amount,
-                    memo: intent.params.memo
+                    memo: intent.params.memo || ""
                 };
                 break;
 
