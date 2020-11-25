@@ -212,7 +212,7 @@ export class SPVSyncService {
                 this.walletsSyncProgress[masterId][chainId] = {progress: Math.round(event.event.PercentComplete), lastBlockTime: event.event.Timestamp};
                 break;
             case ETHSCEventAction.CHANGED:
-                if ('CONNECTED' === event.event.NewState) {
+                if (('CONNECTED' === event.event.NewState) && ('CONNECTED' === event.event.OldState)) {
                     this.walletsSyncProgress[masterId][chainId] = {progress: 100, lastBlockTime: new Date().getTime() / 1000};
                 }
                 break;

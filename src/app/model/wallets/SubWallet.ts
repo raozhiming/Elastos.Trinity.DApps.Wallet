@@ -136,6 +136,11 @@ export abstract class SubWallet {
     public abstract updateBalance();
 
     /**
+     * Updates current SPV synchonization progress information.
+     */
+    public abstract updateSyncProgress(progress: number, lastBlockTime: number);
+
+    /**
      * Shortcut for getDisplayAmount(balance)
      */
     public abstract getDisplayBalance(): BigNumber;

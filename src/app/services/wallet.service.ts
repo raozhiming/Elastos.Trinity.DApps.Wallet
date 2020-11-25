@@ -28,7 +28,7 @@ import moment from 'moment';
 
 import { SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
 import { MasterWallet, WalletID } from '../model/wallets/MasterWallet';
-import { StandardCoinName, CoinType, StandardCoin } from '../model/Coin';
+import { StandardCoinName, CoinType } from '../model/Coin';
 import { WalletAccountType, WalletAccount } from '../model/WalletAccount';
 import { AppService } from './app.service';
 import { SubWallet, SerializedSubWallet } from '../model/wallets/SubWallet';
@@ -50,7 +50,6 @@ import { BackupRestoreService } from './backuprestore.service';
 import { StandardSubWallet } from '../model/wallets/StandardSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
-declare let walletManager: WalletPlugin.WalletManager;
 
 class TransactionMapEntry {
     Code: number = null;
@@ -450,6 +449,12 @@ export class WalletManager {
     public async startWalletSync(masterId: WalletID): Promise<void> {
         console.log("Requesting sync service to start syncing wallet " + masterId);
 
+        if (!this.getMasterWallet(masterId)) {
+            // The master wallet is destroyed.
+            console.log('startWalletSync error, the master wallet does not exist!');
+            return;
+        }
+
         // Add only standard subwallets to SPV sync request
         let chainIds: StandardCoinName[] = [];
         for (let subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
@@ -475,7 +480,8 @@ export class WalletManager {
     }
 
     private startSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]): Promise<void> {
-        return new Promise(async (resolve, reject)=>{
+        return new Promise(async (resolve, reject) => {
+            console.log("Requesting sync service to start syncing some subwallets for wallet " + masterId);
             let messageParams: RPCStartWalletSyncParams = {
                 masterId: masterId,
                 chainIds: subWalletIds
@@ -664,6 +670,7 @@ export class WalletManager {
 
     // ETHSC has different event
     private updateETHSCEventFromCallback(masterId: WalletID, chainId: StandardCoinName, result: SPVWalletMessage) {
+        // console.log('----updateETHSCEventFromCallback chainId:', chainId, ' result:', result);
         switch (result.event.Type) {
             case ETHSCEventType.EWMEvent: // update progress
                 switch (result.event.Event) {
@@ -672,7 +679,7 @@ export class WalletManager {
                         result.LastBlockTime = result.event.Timestamp;
                         break;
                     case ETHSCEventAction.CHANGED:
-                        if ('CONNECTED' === result.event.NewState) {
+                        if (('CONNECTED' === result.event.NewState) && ('CONNECTED' === result.event.OldState)) {
                             result.Progress =  100;
                             result.LastBlockTime = new Date().getTime() / 1000;
                         } else {
@@ -685,16 +692,19 @@ export class WalletManager {
                         break;
                 }
                 this.updateSyncProgress(masterId, chainId, result.Progress, result.LastBlockTime);
+                const erc20SubWallets = this.getMasterWallet(masterId).getSubWalletsByType(CoinType.ERC20);
+                for (const subWallet of erc20SubWallets) {
+                    subWallet.updateSyncProgress(result.Progress, result.LastBlockTime);
+                }
                 break;
             case ETHSCEventType.WalletEvent: // update balance
                 if (result.event.Event === ETHSCEventAction.BALANCE_UPDATED) {
                     this.getMasterWallet(masterId).getSubWallet(chainId).updateBalance();
-
-                    const erc20SubWallets = this.getMasterWallet(masterId).getSubWalletsByType(CoinType.ERC20);
-                    for (let subWallet of erc20SubWallets) {
-                        subWallet.updateBalance();
-                    }
                 }
+                break;
+            case ETHSCEventType.TransferEvent:
+                // ERC20 Token transfer
+                // TODO: update the balance
                 break;
             default:
                 // TODO: check other event

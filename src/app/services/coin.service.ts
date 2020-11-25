@@ -21,7 +21,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Coin, CoinID, ERC20Coin, StandardCoin } from '../model/Coin';
+import { Coin, CoinID, CoinType, ERC20Coin, StandardCoin } from '../model/Coin';
 import { StandardCoinName } from '../model/Coin';
 import { LocalStorage } from './storage.service';
 import { Events } from '@ionic/angular';
@@ -71,8 +71,15 @@ export class CoinService {
     public getAvailableCoins(): Coin[] {
         // Return only coins that are usable on the active network.
         return this.availableCoins.filter(c => {
-            return c.network == null || c.network == this.activeNetwork;
+            return c.network == null || c.network === this.activeNetwork;
         });
+    }
+
+    public getAvailableERC20Coins(): ERC20Coin[] {
+        // Return only ERC20 coins that are usable on the active network.
+        return this.availableCoins.filter(c => {
+            return (c.network == null || c.network === this.activeNetwork) && (c.getType() === CoinType.ERC20);
+        }) as ERC20Coin[];
     }
 
     public getCoinByID(id: CoinID): Coin {

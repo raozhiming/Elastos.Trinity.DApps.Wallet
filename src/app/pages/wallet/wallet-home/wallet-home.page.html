@@ -3,7 +3,7 @@
     <!-- <ion-button (click)="native.showLoading('Please wait...')">
         <ion-label>Test loader</ion-label>
     </ion-button> -->
-            
+
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content
             class="refresh"
@@ -30,7 +30,7 @@
     <ion-button *ngIf="shouldPromptToEnableHiveVaultForBackup()" class="sticky-btn" (click)="enableHiveBackup()">
         <ion-label>{{ 'activate-hive-vault' | translate }}</ion-label>
     </ion-button>
-    
+
     <ion-slides *ngIf="!isSingleWallet" [class.dark-slides]="theme.darkMode" [class.blur]="native.popup" [options]="slideOpts" #slider pager>
         <ion-slide *ngFor="let masterWallet of masterWalletList">
             <ion-row class="main-title-row">
@@ -106,7 +106,7 @@
                 </ion-col>
                 <ion-col offset="2" size="10" class="bottom-col">
                     <span *ngIf="subWallet.progress === 100 && subWallet.type !== CoinType.ERC20" class="synced">{{ 'synced' | translate }} &#8226; {{ uiService.getSyncTimeFromNow(subWallet.syncTimestamp) }}</span>
-                    <span *ngIf="subWallet.progress !== 100 && subWallet.type !== CoinType.ERC20" class="syncing">{{ 'syncing' | translate }} <span *ngIf="subWallet.syncTimestamp">&#8226; {{ uiService.getSyncTimeFromNow(subWallet.syncTimestamp) }}</span></span>
+                    <span *ngIf="subWallet.progress !== 100 && subWallet.type !== CoinType.ERC20" class="syncing">{{ 'syncing' | translate }} <span *ngIf="subWallet.syncTimestamp>0">&#8226; {{ uiService.getSyncTimeFromNow(subWallet.syncTimestamp) }}</span></span>
                     <span *ngIf="subWallet.type === CoinType.ERC20" class="synced">{{ 'ela-erc20' | translate }}</span>
                 </ion-col>
                 <ion-ripple-effect></ion-ripple-effect>
@@ -193,7 +193,7 @@
             </ion-col>
             <ion-col offset="2" size="10" class="bottom-col">
                 <span *ngIf="subWallet.progress === 100 && subWallet.type !== CoinType.ERC20" class="synced">{{ 'synced' | translate }} &#8226; {{ uiService.getSyncTimeFromNow(subWallet.syncTimestamp) }}</span>
-                <span *ngIf="subWallet.progress !== 100 && subWallet.type !== CoinType.ERC20" class="syncing">{{ 'syncing' | translate }} <span *ngIf="subWallet.syncTimestamp">&#8226; {{ uiService.getSyncTimeFromNow(subWallet.syncTimestamp) }}</span></span>
+                <span *ngIf="subWallet.progress !== 100 && subWallet.type !== CoinType.ERC20" class="syncing">{{ 'syncing' | translate }} <span *ngIf="subWallet.syncTimestamp>0">&#8226; {{ uiService.getSyncTimeFromNow(subWallet.syncTimestamp) }}</span></span>
                 <span *ngIf="subWallet.progress === 100 && subWallet.type === CoinType.ERC20" class="synced">{{ 'ela-erc20' | translate }}</span>
             </ion-col>
             <ion-ripple-effect></ion-ripple-effect>

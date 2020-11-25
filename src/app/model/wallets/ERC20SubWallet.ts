@@ -148,17 +148,19 @@ export class ERC20SubWallet extends SubWallet {
             this.balance = new BigNumber(balanceEla).dividedBy(new BigNumber(10).pow(this.tokenDecimals));
             console.log(this.id+": raw balance:", balanceEla, " Converted balance: ", this.balance);
 
-            // Update the "last sync" date. Just consider this http call date as the sync date for now
-            this.timestamp = new Date().getTime();
-            this.syncTimestamp = this.timestamp;
-            this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
-            this.progress = 100;
-
             const eventId = this.masterWallet.id + ':' + this.id + ':synccompleted';
             this.masterWallet.walletManager.events.publish(eventId, this.id);
         } catch (error) {
             console.log('ERC20 Token (', this.id, ') updateBalance error:', error);
         }
+    }
+
+    // It will be called When the ETHSC update the sync progress.
+    public updateSyncProgress(progress: number, lastBlockTime: number) {
+        this.timestamp = lastBlockTime*1000;
+        this.syncTimestamp = this.timestamp;
+        this.lastBlockTime = Util.dateFormat(new Date(this.timestamp), 'YYYY-MM-DD HH:mm:ss');
+        this.progress = progress;
     }
 
     public async getTransactions(startIndex: number): Promise<AllTransactions> {
@@ -208,9 +210,9 @@ export class ERC20SubWallet extends SubWallet {
         const direction = await this.getERC20TransactionDirection(transaction.TargetAddress);
         switch (direction) {
             case TransactionDirection.RECEIVED:
-                return translate.instant("coin-action-receive") + ' ' + this.coin.getName();
+                return translate.instant("coin-action-receive");
             case TransactionDirection.SENT:
-                return translate.instant("coin-action-send") + ' ' + this.coin.getName();
+                return translate.instant("coin-action-send");
             default:
                 return "Invalid";
         }

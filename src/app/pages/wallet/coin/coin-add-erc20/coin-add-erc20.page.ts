@@ -77,11 +77,8 @@ export class CoinAddERC20Page implements OnInit {
         this.appService.setTitleBarTitle(this.translate.instant("coin-adderc20-title"));
     }
 
-    async getAllCustomERC20Coins() {
-        const availableCoins: Coin[] = await this.coinService.getAvailableCoins();
-        this.allCustomERC20Coins = availableCoins.filter(c => {
-            return c.getType() === CoinType.ERC20;
-        }) as ERC20Coin[];
+    getAllCustomERC20Coins() {
+        this.allCustomERC20Coins = this.coinService.getAvailableERC20Coins();
         console.log('all erc20 coins', this.allCustomERC20Coins);
     }
 
