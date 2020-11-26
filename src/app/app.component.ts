@@ -86,6 +86,13 @@ export class AppComponent {
 
                 if (!this.appService.runningAsAService()) {
                     this.navService.showStartupScreen();
+
+                    // Friendlier webview debugging
+                    document.title = "Wallet capsule - App/Intent";
+                }
+                else {
+                    // Friendlier webview debugging
+                    document.title = "Wallet capsule - Service";
                 }
             });
 

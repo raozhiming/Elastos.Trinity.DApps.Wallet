@@ -47,45 +47,43 @@
         "android",
         "ios"
     ],
-    "intent_domain": "wallet.elastos.org",
     "intent_filters": [
         {
-            "domain": "wallet.elastos.org",
-            "action": "pay"
+            "action": "https://wallet.elastos.net/pay"
         },
         {
-            "action": "crmemberregister"
+            "action": "https://wallet.elastos.net/crmemberregister"
         },
         {
-            "action": "crmemberunregister"
+            "action": "https://wallet.elastos.net/crmemberunregister"
         },
         {
-            "action": "crmemberretrieve"
+            "action": "https://wallet.elastos.net/crmemberretrieve"
         },
         {
-            "action": "crmembervote"
+            "action": "https://wallet.elastos.net/crmembervote"
         },
         {
-            "action": "didtransaction"
+            "action": "https://wallet.elastos.net/didtransaction"
         },
         {
-            "action": "esctransaction"
+            "action": "https://wallet.elastos.net/esctransaction"
         },
         {
-            "action": "dposvotetransaction"
+            "action": "https://wallet.elastos.net/dposvotetransaction"
         },
         {
-            "action": "elawalletmnemonicaccess"
+            "action": "https://wallet.elastos.net/elawalletmnemonicaccess"
         },
         {
-            "action": "walletaccess"
+            "action": "https://wallet.elastos.net/walletaccess"
         },
         {
-            "action": "crproposalcreatedigest",
+            "action": "https://wallet.elastos.net/crproposalcreatedigest",
             "startup_mode": "silence"
         },
         {
-            "action": "crproposalvoteagainst"
+            "action": "https://wallet.elastos.net/crproposalvoteagainst"
         }
     ],
     "startup_service": [

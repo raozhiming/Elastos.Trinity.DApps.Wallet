@@ -47,7 +47,7 @@ export class IntentService {
 
     async onReceiveIntent(intent: AppManagerPlugin.ReceivedIntent) {
         console.log(
-            "Intent message receive:", intent.action,
+            "Intent message received:", intent.action,
             ". params: ", intent.params,
             ". from: ", intent.from
         );
@@ -60,7 +60,7 @@ export class IntentService {
 
         titleBarManager.setNavigationMode(TitleBarPlugin.TitleBarNavigationMode.CLOSE);
 
-        switch (intent.action) {
+        switch (this.getShortAction(intent.action)) {
             case 'elawalletmnemonicaccess':
             case 'walletaccess':
                 this.handleAccessIntent(intent);
@@ -69,6 +69,15 @@ export class IntentService {
                 this.handleTransactionIntent(intent);
                 break;
         }
+    }
+
+    /**
+     * From a full new-style action string such as https://wallet.elastos.net/pay,
+     * returns the short old-style action "pay" for convenience.
+     */
+    private getShortAction(fullAction: string): string {
+        let intentDomainRoot = "https://wallet.elastos.net/";
+        return fullAction.replace(intentDomainRoot, "");
     }
 
     async handleTransactionIntent(intent: AppManagerPlugin.ReceivedIntent) {
@@ -80,13 +89,13 @@ export class IntentService {
             this.coinTransferService.reset();
             this.coinTransferService.chainId = StandardCoinName.ELA;
             this.coinTransferService.intentTransfer = {
-                action: intent.action,
+                action: this.getShortAction(intent.action),
                 intentId: intent.intentId,
                 from: intent.from,
             };
         }
 
-        switch (intent.action) {
+        switch (this.getShortAction(intent.action)) {
             case 'crmembervote':
                 console.log('CR member vote Transaction intent content:', intent.params);
                 this.coinTransferService.transfer.votes = intent.params.votes;
@@ -176,7 +185,7 @@ export class IntentService {
     handleAccessIntent(intent: AppManagerPlugin.ReceivedIntent) {
         this.walletAccessService.reset();
         this.walletAccessService.intentTransfer = {
-            action: intent.action,
+            action: this.getShortAction(intent.action),
             intentId: intent.intentId,
             from: intent.from,
         };
