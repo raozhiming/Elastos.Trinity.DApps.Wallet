@@ -320,6 +320,9 @@ export class BackupRestoreService {
   }
 
   public async onSyncProgress(masterWallet: MasterWallet, subWallet: StandardSubWallet) {
+    if (!this.vaultIsConfigured()) {
+      return;
+    }
     this.ensureRunningInUI();
     await this.checkBackupSubWallet(masterWallet, subWallet);
   }
