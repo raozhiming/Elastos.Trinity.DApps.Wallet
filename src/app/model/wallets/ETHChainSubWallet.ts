@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { Config } from '../../config/Config';
 import Web3 from 'web3';
 import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk';
-import { EthTransaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
+import { ContractType, EthTransaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
 import { StandardCoinName } from '../Coin';
 import { MasterWallet } from './MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
@@ -83,14 +83,18 @@ export class ETHChainSubWallet extends StandardSubWallet {
         return transactionInfo;
     }
 
-    // TODO: https://app.clickup.com/t/4fu5cw - "Get the transaction type from ETHSC  transaction"
     protected async getTransactionName(transaction: EthTransaction, translate: TranslateService): Promise<string> {
         const direction = await this.getETHSCTransactionDirection(transaction.TargetAddress);
         switch (direction) {
             case TransactionDirection.RECEIVED:
                 return translate.instant("coin-op-received-token");
             case TransactionDirection.SENT:
-                return translate.instant("coin-op-sent-token");
+                if (transaction.Amount !== '0') {
+                    return translate.instant("coin-op-sent-token");
+                } else {
+                    // Contract
+                    return this.getETHSCTransactionContractType(transaction, translate);
+                }
         }
         return null;
     }
@@ -111,6 +115,18 @@ export class ETHChainSubWallet extends StandardSubWallet {
             return TransactionDirection.RECEIVED;
         } else {
             return TransactionDirection.SENT;
+        }
+    }
+
+    private getETHSCTransactionContractType(transaction: EthTransaction, translate: TranslateService): string {
+        if (transaction.Token) {
+            return translate.instant("coin-op-contract-token-transfer");
+        } else if (transaction.TargetAddress === '') {
+            return translate.instant("coin-op-contract-create");
+        } else if (transaction.TargetAddress === '0x0000000000000000000000000000000000000000') {
+            return translate.instant("coin-op-contract-destroy");
+        } else {
+            return translate.instant("coin-op-contract-call");
         }
     }
 

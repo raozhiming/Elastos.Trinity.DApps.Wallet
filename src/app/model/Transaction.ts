@@ -19,6 +19,14 @@ export enum TransactionType {
     TRANSFER = 3
 }
 
+export enum ContractType {
+    Create = 1,
+    Call = 2,
+    ToeknTransfer = 3,
+    Destroy = 4,
+    NotContract = 5
+}
+
 export type TransactionInfo = {
     amount: BigNumber,
     confirmStatus: number,
@@ -114,7 +122,11 @@ export type EthTransaction = Transaction & {
     OriginTxHash: string;
     SourceAddress: string;
     TargetAddress: string;
-}
+    Token: string;
+    TokenAddress: string;
+    TokenAmount: string;
+    TokenFunction: string;
+};
 
 /**
  * Raw list of transactions as received from the SPVSDK.
