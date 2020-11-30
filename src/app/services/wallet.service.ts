@@ -682,8 +682,10 @@ export class WalletManager {
                         if (('CONNECTED' === result.event.NewState) && ('CONNECTED' === result.event.OldState)) {
                             result.Progress =  100;
                             result.LastBlockTime = new Date().getTime() / 1000;
+                        } else if ('DISCONNECTED' === result.event.NewState) {
+                            result.Progress =  0;
                         } else {
-                            // DISCONNECTED
+                            // TODO
                             result.Progress =  0;
                         }
                         break;

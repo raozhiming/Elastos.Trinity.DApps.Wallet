@@ -107,12 +107,12 @@ export const en = {
     "coin-op-contract-token-transfer": "ERC20 Token Transfer",
     "coin-op-contract-call": "Contract Call",
     "coin-op-contract-destroy": "Invalid Transaction",
-    "coin-dir-from-mainchain": "From ELA mainchain",
-    "coin-dir-from-idchain": "From ID sidechain",
-    "coin-dir-from-ethsc": "From ETH sidechain",
-    "coin-dir-to-mainchain": "To ELA mainchain",
-    "coin-dir-to-idchain": "To ID sidechain",
-    "coin-dir-to-ethsc": "To ETH sidechain",
+    "coin-dir-from-mainchain": "From ELA Mainchain",
+    "coin-dir-from-idchain": "From ID Sidechain",
+    "coin-dir-from-ethsc": "From ETH Sidechain",
+    "coin-dir-to-mainchain": "To ELA Mainchain",
+    "coin-dir-to-idchain": "To ID Sidechain",
+    "coin-dir-to-ethsc": "To ETH Sidechain",
     "coin-transaction-status-confirmed": "Confirmed",
     "coin-transaction-status-pending": "Pending",
     "coin-transaction-status-unconfirmed": "Unconfirmed",
@@ -187,6 +187,8 @@ export const en = {
     "tx-info-type-received": "Received",
     "tx-info-type-sent": "Sent",
     "tx-info-type-transferred": "Transferred",
+    "tx-info-token-address": "ERC20 Token Address",
+    "tx-info-erc20-amount": "ERC20 Token Amount",
 
     /********************************************** Wallet Settings Screens ***********************************************/
 

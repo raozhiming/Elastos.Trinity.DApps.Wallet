@@ -186,6 +186,8 @@ export const zh = {
     "tx-info-type-received": "收到",
     "tx-info-type-sent": "发送",
     "tx-info-type-transferred": "转移",
+    "tx-info-token-address": "币种地址",
+    "tx-info-erc20-amount": "ERC20转账金额",
 
     /********************************************** Wallet Settings Screens ***********************************************/
 

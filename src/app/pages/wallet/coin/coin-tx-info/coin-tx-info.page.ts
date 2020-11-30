@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import { ETHChainSubWallet } from 'src/app/model/wallets/ETHChainSubWallet';
+import { CoinService } from 'src/app/services/coin.service';
 
 class TransactionDetail {
     type: string;
@@ -55,6 +56,12 @@ export class CoinTxInfoPage implements OnInit {
     public outputs = [];
     public targetAddress = '';
 
+    // Show the ERC20 Token detail in ETHSC transaction.
+    public isERC20TokenTransactionInETHSC = false;
+    public tokenName = '';
+    public contractAddress = '';
+    public tokenAmount = '';
+
     // List of displayable transaction details
     public txDetails: TransactionDetail[] = [];
 
@@ -68,6 +75,7 @@ export class CoinTxInfoPage implements OnInit {
         public walletManager: WalletManager,
         public native: Native,
         private appService: AppService,
+        private coinService: CoinService,
         public jsonRPCService: JsonRPCService,
         private translate: TranslateService,
         public theme: ThemeService
@@ -145,7 +153,8 @@ export class CoinTxInfoPage implements OnInit {
             this.totalCost = newPayFee ? transactionInfo.amount.plus(newPayFee) : null;
             // Address
             if (this.chainId === StandardCoinName.ETHSC) {
-                this.targetAddress = await this.getETHSCWithdrawTransactionTargetAddres(transaction as EthTransaction);
+                this.targetAddress = await this.getETHSCTransactionTargetAddres(transaction as EthTransaction);
+                this.getERC20TokenTransactionInfo(transaction as EthTransaction);
             } else {
                 this.targetAddress = (transaction as EthTransaction).TargetAddress;
             }
@@ -214,6 +223,30 @@ export class CoinTxInfoPage implements OnInit {
 
         // Only show receiving address, total cost and fees if tx was not received
         if (this.direction !== TransactionDirection.RECEIVED) {
+            // For ERC20 Token Transfer
+            if ((this.chainId === StandardCoinName.ETHSC) && ('ERC20Transfer' === (transaction as EthTransaction).TokenFunction)) {
+                this.txDetails.unshift(
+                    {
+                        type: 'contractAddress',
+                        title: 'tx-info-token-address',
+                        value: this.tokenName ? 0 : this.contractAddress,
+                        show: true,
+                    },
+                    {
+                        type: 'tokenSymbol',
+                        title: 'erc-20-token',
+                        value: this.tokenName,
+                        show: true,
+                    },
+                    {
+                        type: 'tokenAmount',
+                        title: 'tx-info-erc20-amount',
+                        value: this.tokenAmount,
+                        show: true,
+                    },
+                );
+            }
+
             this.txDetails.unshift(
                 {
                     type: 'address',
@@ -304,15 +337,30 @@ export class CoinTxInfoPage implements OnInit {
     /**
      * Get the real targeAddress by rpc
      */
-    async getETHSCWithdrawTransactionTargetAddres(transaction: EthTransaction) {
+    async getETHSCTransactionTargetAddres(transaction: EthTransaction) {
         let targetAddress = transaction.TargetAddress;
         const withdrawContractAddress = await (this.subWallet as ETHChainSubWallet).getWithdrawContractAddress();
         if (transaction.TargetAddress === withdrawContractAddress) {
             targetAddress = await this.jsonRPCService.getETHSCWithdrawTargetAddress(transaction.BlockNumber + 6, transaction.Hash);
             // If the targetAddress is empty, then this transaction is error.
             // TODO: But now, the spvsdk does not set any flag to this transaction. 2020.9.29
+        } else if ('ERC20Transfer' === transaction.TokenFunction) {
+            // ERC20 Token transfer
+            targetAddress = transaction.TokenAddress;
         }
         return targetAddress;
+    }
+
+    private getERC20TokenTransactionInfo(transaction: EthTransaction) {
+        if ('ERC20Transfer' === transaction.TokenFunction) {
+            this.isERC20TokenTransactionInETHSC = true;
+            this.contractAddress = transaction.Token;
+            this.tokenAmount = transaction.TokenAmount;
+            const erc20Coin = this.coinService.getERC20CoinByContracAddress(this.contractAddress);
+            if (erc20Coin) {
+                this.tokenName = erc20Coin.getName();
+            }
+        }
     }
 
     getDisplayableName(): string {
@@ -335,7 +383,7 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     worthCopying(item: TransactionDetail) {
-        if (item.type === 'blockId' || item.type === 'txId' || item.type === 'address') {
+        if (item.type === 'blockId' || item.type === 'txId' || item.type === 'address' || item.type === 'contractAddress') {
             return true;
         } else {
             return false;

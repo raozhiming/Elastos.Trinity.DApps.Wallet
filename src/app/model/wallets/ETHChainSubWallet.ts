@@ -19,6 +19,8 @@ export class ETHChainSubWallet extends StandardSubWallet {
 
     constructor(masterWallet: MasterWallet) {
         super(masterWallet, StandardCoinName.ETHSC);
+
+        this.getWithdrawContractAddress();
     }
 
     private async getTokenAddress(): Promise<string> {
@@ -41,7 +43,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
                         this.withdrawContractAddress = Config.CONTRACT_ADDRESS_MAINNET;
                         resolve(this.withdrawContractAddress);
                     } else if (value === 'TestNet') {
-                        this.withdrawContractAddress = Config.CONTRACT_ADDRESS_MAINNET;
+                        this.withdrawContractAddress = Config.CONTRACT_ADDRESS_TESTNET;
                         resolve(this.withdrawContractAddress);
                     } else {
                         resolve(null);
@@ -67,6 +69,14 @@ export class ETHChainSubWallet extends StandardSubWallet {
 
         // ETHSC use Confirmations - TODO: FIX THIS - SHOULD BE EITHER CONFIRMSTATUS (mainchain) or CONFIRMATIONS BUT NOT BOTH
         transactionInfo.confirmStatus = transaction.Confirmations;
+
+        if (transactionInfo.confirmStatus !== 0) {
+            transactionInfo.status = 'Confirmed';
+            transactionInfo.statusName = translate.instant("coin-transaction-status-confirmed");
+        } else {
+            transactionInfo.status = 'Pending';
+            transactionInfo.statusName = translate.instant("coin-transaction-status-pending");
+        }
 
         // MESSY again - No "Direction" field in ETH transactions (contrary to other chains). Calling a private method to determine this.
         if (direction === TransactionDirection.RECEIVED) {
@@ -119,12 +129,16 @@ export class ETHChainSubWallet extends StandardSubWallet {
     }
 
     private getETHSCTransactionContractType(transaction: EthTransaction, translate: TranslateService): string {
-        if (transaction.Token) {
+        if ('ERC20Transfer' === transaction.TokenFunction) {
             return translate.instant("coin-op-contract-token-transfer");
         } else if (transaction.TargetAddress === '') {
             return translate.instant("coin-op-contract-create");
         } else if (transaction.TargetAddress === '0x0000000000000000000000000000000000000000') {
             return translate.instant("coin-op-contract-destroy");
+        } else if (transaction.TargetAddress === this.withdrawContractAddress) {
+            // withdraw to MainChain
+            // no TokenFunction
+            return translate.instant("coin-dir-to-mainchain");
         } else {
             return translate.instant("coin-op-contract-call");
         }

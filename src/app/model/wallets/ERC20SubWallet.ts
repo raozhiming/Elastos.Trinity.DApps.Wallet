@@ -190,6 +190,14 @@ export class ERC20SubWallet extends SubWallet {
         // ETHSC use Confirmations - TODO: FIX THIS - SHOULD BE EITHER CONFIRMSTATUS (mainchain) or CONFIRMATIONS BUT NOT BOTH
         transactionInfo.confirmStatus = transaction.Confirmations;
 
+        if (transactionInfo.confirmStatus !== 0) {
+            transactionInfo.status = 'Confirmed';
+            transactionInfo.statusName = translate.instant("coin-transaction-status-confirmed");
+        } else {
+            transactionInfo.status = 'Pending';
+            transactionInfo.statusName = translate.instant("coin-transaction-status-pending");
+        }
+
         // MESSY again - No "Direction" field in ETH transactions (contrary to other chains). Calling a private method to determine this.
         if (direction === TransactionDirection.RECEIVED) {
             transactionInfo.type = TransactionType.RECEIVED;

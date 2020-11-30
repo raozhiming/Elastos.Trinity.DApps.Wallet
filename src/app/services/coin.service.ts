@@ -51,7 +51,7 @@ export class CoinService {
 
         // ERC20 tokens
         this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xfdce7fb4050cd43c654c6cecead950343990ce75", NetworkType.TestNet));
+        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xFDce7FB4050CD43C654C6ceCeAd950343990cE75", NetworkType.TestNet));
 
         // Community ERC20 tokens - could be removed in the future - for now only to create some synergy
         this.availableCoins.push(new ERC20Coin("APL", "APL", "Apple Token", "0x09046e26d8b4cf640323850786455cec8e6f665e", NetworkType.MainNet));
@@ -83,8 +83,14 @@ export class CoinService {
     }
 
     public getCoinByID(id: CoinID): Coin {
-        return this.getAvailableCoins().find((c)=>{
-            return c.getID() == id;
+        return this.getAvailableCoins().find((c) => {
+            return c.getID() === id;
+        });
+    }
+
+    public getERC20CoinByContracAddress(address: string) {
+        return this.getAvailableERC20Coins().find((c) => {
+            return c.getContractAddress() === address;
         });
     }
 

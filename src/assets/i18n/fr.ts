@@ -186,6 +186,8 @@ export const fr = {
     "tx-info-type-received": "Reçu",
     "tx-info-type-sent": "Envoyé",
     "tx-info-type-transferred": "Transféré",
+    "tx-info-token-address": "ERC20 Token Address",
+    "tx-info-erc20-amount": "ERC20 Token Amount",
 
     /********************************************** Wallet Settings Screens ***********************************************/
 
