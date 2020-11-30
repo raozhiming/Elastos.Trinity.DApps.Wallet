@@ -101,6 +101,15 @@ export class WalletHomePage implements OnInit, OnDestroy {
             this.zone.run(() => {
                 this.updateWallet();
                 this.backupService.init();
+
+                if (result.action === 'add') {
+                    const index = this.masterWalletList.findIndex(e => e.id === result.walletId);
+                    if (index) {
+                        setTimeout(async () => {
+                            this.slider.slideTo(index);
+                        }, 1000);
+                    }
+                }
             });
         });
     }

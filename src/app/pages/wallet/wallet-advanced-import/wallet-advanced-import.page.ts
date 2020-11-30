@@ -73,6 +73,7 @@ export class WalletAdvancedImportPage implements OnInit {
 
     this.events.publish("masterwalletcount:changed", {
         action: 'add',
+        walletId: this.masterWalletId
     });
 
     this.native.toast_trans('import-text-word-sucess');
