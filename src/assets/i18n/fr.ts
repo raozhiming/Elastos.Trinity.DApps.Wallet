@@ -37,7 +37,7 @@ export const fr = {
     "no-ethereum-token": "Jeton Ethereum non activé",
     "please-add-ethereum-first": "Veuillez d'abord ajouter le jeton Ethereum à votre portefeuille.",
     "please-wait": "Veuillez patienter...",
-    "transaction-pending" : "There is already an on going transaction. Please wait for the transaction to be confirmed.",
+    "transaction-pending" : "Une transaction est déjà en cours. Veuillez attendre la confirmation de la première transaction.",
 
     /************
     * Home Page *
@@ -102,10 +102,10 @@ export const fr = {
     "coin-op-transfered-token": "Transféré",
     "coin-op-vote": "Vote",
     "coin-op-identity": "Publication d'identité",
-    "coin-op-contract-create": "Contract Creation",
-    "coin-op-contract-token-transfer": "ERC20 Token Transfer",
-    "coin-op-contract-call": "Contract Call",
-    "coin-op-contract-destroy": "Invalid Transaction",
+    "coin-op-contract-create": "Création de contrat",
+    "coin-op-contract-token-transfer": "Transfert de jeton ERC20",
+    "coin-op-contract-call": "Execution de contrat",
+    "coin-op-contract-destroy": "Transaction invalide",
     "coin-dir-from-mainchain": "Depuis ELA mainchain",
     "coin-dir-from-idchain": "Depuis la chaîne Identité",
     "coin-dir-from-ethsc": "Depuis la chaîne ETH",
