@@ -221,8 +221,11 @@ export class Util {
         return uuid.join('');
     }
 
-    public static getWholeBalance(balance: BigNumber): BigNumber {
-        return balance.dividedToIntegerBy(1);
+    public static getWholeBalance(balance: BigNumber): string {
+        if (balance.isNaN()) {
+            return '...';
+        }
+        return balance.dividedToIntegerBy(1).toString();
     }
 
     public static getDecimalBalance(balance: BigNumber): string {
