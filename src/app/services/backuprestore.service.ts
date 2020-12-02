@@ -18,6 +18,7 @@ import { ResolveEnd } from '@angular/router';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let walletManager: WalletPlugin.WalletManager;
+declare let hiveManager: HivePlugin.HiveManager;
 
 @Injectable({
   providedIn: 'root'
@@ -133,6 +134,10 @@ export class BackupRestoreService {
       this.log("No vault activated, not doing any backup");
       return false;
     }
+
+    // TMP TEST
+    //this.fetchAndPrintFilesRec("/");
+    // TMP TEST END
 
     // Save the fact that we now have a configured vault info to use for backups
     await this.storage.set("backup-user-with-vault-did", userDID);
@@ -353,8 +358,8 @@ export class BackupRestoreService {
         else
           break; // No more content to read, stop looping.
       }
-      await reader.close();
       await vaultWriter.close();
+      await reader.close();
 
       this.logDebug("File " + backupFileName + " successfully uploaded to the vault");
       return true;
@@ -365,13 +370,34 @@ export class BackupRestoreService {
     }
   }
 
-  private async downloadAndSaveSPVSyncStateFile(masterWallet: MasterWallet, subWallet: SubWallet, backupFileName: string): Promise<boolean> {
+  private async downloadAndSaveSPVSyncStateFile(masterWallet: MasterWallet, subWallet: SubWallet, backupFileName: string): Promise<{wasRestored:boolean, fileNotFound?: boolean}> {
     this.logDebug("Downloading vault file", backupFileName, masterWallet);
 
-     try {
-      let walletContextKey = await this.getWalletSyncContextName(masterWallet);
-      let vaultFilePath = "sync/" + walletContextKey + "/" + backupFileName;
-      let vaultReader = await this.userVault.getFiles().download(vaultFilePath);
+    let walletContextKey = await this.getWalletSyncContextName(masterWallet);
+    let vaultFilePath = "sync/" + walletContextKey + "/" + backupFileName;
+
+    let vaultReader: HivePlugin.Files.Reader = null;
+    try {
+      vaultReader = await this.userVault.getFiles().download(vaultFilePath);
+    }
+    catch (err) {
+      if (hiveManager.errorOfType(err, HivePlugin.EnhancedErrorType.FILE_NOT_FOUND)) {
+        this.logWarn("The target file was not found on the vault, this is strange but as we don't want to remain blocked by this, we just don't restore this wallet state and we continue.");
+        return {
+          wasRestored: false,
+          fileNotFound: true
+        }
+      }
+      else {
+        console.log("File download failed", err);
+        return {
+          wasRestored: false,
+          fileNotFound: false
+        }
+      }
+    }
+
+    try {
       let writer = await walletManager.restoreBackupFile(masterWallet.id, backupFileName);
 
       // Before restoring the sync file, we must destroy the subwallet and we'll re-add it later.
@@ -393,12 +419,16 @@ export class BackupRestoreService {
       await masterWallet.createSubWallet(this.coinService.getCoinByID(subWallet.id));
 
       this.logDebug("File downloaded and saved successfully");
-      return true;
+      return {
+        wasRestored: true
+      };
     }
     catch (e) {
       console.error(e);
       this.logError("Exception while downloading sync state file from vault: "+e);
-      return false;
+      return {
+        wasRestored: false, fileNotFound: false
+      };
     }
   }
 
@@ -431,13 +461,20 @@ export class BackupRestoreService {
         // If remote last sync date is more recent, download and restore files
         if (remoteLastSyncDate > localLastSyncDate) {
           this.logDebug("Remote sync date is more recent than local. We have to download the latest file version from the vault");
-          if (await this.downloadAndSaveSPVSyncStateFile(wallet, subWallet, this.getSubwalletBackupFileName(subWallet))) {
-            this.logDebug("Local sync file updated successfully with the more recent vault version");
+          let restoreResult = await this.downloadAndSaveSPVSyncStateFile(wallet, subWallet, this.getSubwalletBackupFileName(subWallet));
+          if (restoreResult.wasRestored) {
+            this.logDebug("Local sync file updated successfully with the most recent vault version");
             return true;
           }
           else {
-            this.logWarn("Failed to download vault sync file");
-            return false;
+            if (restoreResult.fileNotFound) {
+              this.logWarn("SPV state sync failed, but continuing the synchronization with success.");
+              return true;
+            }
+            else {
+              this.logWarn("Failed to download vault sync file");
+              return false;
+            }
           }
         }
         else {
@@ -476,6 +513,7 @@ export class BackupRestoreService {
     let backupEntryDate = moment(localBackupEntry.data.lastSyncDate);
     this.logDebug("Good time to backup wallet?", walletSyncDate, backupEntryDate);
     if (walletSyncDate.isAfter(backupEntryDate.add(30, "days"))) {
+    //if (walletSyncDate.isAfter(backupEntryDate.add(1, "minutes"))) { // TMP
       return true;
     }
     else {
@@ -518,5 +556,26 @@ export class BackupRestoreService {
 
   private logError(message: any, ...params: any) {
     console.error("BackupRestoreService: ", message, ...params);
+  }
+
+  private fetchAndPrintFilesRec(path: string): Promise<void> {
+    this.logDebug("Fetching files list at: "+path);
+    return new Promise((resolve)=>{
+      this.userVault.getFiles().list(path).then(async (files)=>{
+        this.logDebug("GOT FILES LIST AT: "+path);
+        for (let file of files) {
+          this.logDebug("FILE "+path+"/"+file.name,": size= "+file.size);
+
+          if (file.type == HivePlugin.Files.FileType.FOLDER) {
+            let subPath = path;
+            if (!subPath.endsWith("/"))
+              subPath = subPath + "/";
+            subPath = subPath + file.name;
+
+            await this.fetchAndPrintFilesRec(subPath);
+          }
+        }
+      });
+    });
   }
 }
