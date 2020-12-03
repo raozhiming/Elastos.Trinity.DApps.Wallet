@@ -49,7 +49,6 @@ import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wa
 import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
 import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
 import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
-import { ScanCodePage } from './pages/scancode/scancode.page';
 import { SettingsPage } from './pages/settings/settings.page';
 import { WalletHomePage } from './pages/wallet/wallet-home/wallet-home.page';
 import { WalletManagerPage } from './pages/wallet/wallet-manager/wallet-manager.page';
@@ -76,7 +75,6 @@ const routes: Routes = [
     { path: 'wallet-manager', component: WalletManagerPage },
     { path: 'mnemonic-create', component: MnemonicCreatePage },
     { path: 'wallet-create-name', component: WalletCreateNamePage },
-    { path: 'scancode', component: ScanCodePage },
     { path: 'mnemonic-write', component: MnemonicWritePage },
     { path: 'wallet-password-reset', component: WalletPasswordResetPage },
     { path: 'wallet-edit-name', component: WalletEditNamePage },

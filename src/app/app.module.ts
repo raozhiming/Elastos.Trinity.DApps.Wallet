@@ -87,7 +87,6 @@ import { WalletPasswordResetPage } from './pages/wallet/wallet-password-reset/wa
 import { WalletEditNamePage } from './pages/wallet/wallet-edit-name/wallet-edit-name.page';
 import { MnemonicExportPage } from './pages/wallet/mnemonic/mnemonic-export/mnemonic-export.page';
 import { MnemonicCreatePage } from './pages/wallet/mnemonic/mnemonic-create/mnemonic-create.page';
-import { ScanCodePage } from './pages/scancode/scancode.page';
 import { SettingsPage } from './pages/settings/settings.page';
 import { EscTransactionPage } from './pages/intents/esctransaction/esctransaction.page';
 import { CurrencySelectPage } from './pages/settings/currency-select/currency-select.page';
@@ -210,7 +209,6 @@ export function TranslateLoaderFactory() {
         WalletCreateNamePage,
         CRMemberRegisterPage,
         WalletCreatePage,
-        ScanCodePage,
         WaitForSyncPage,
         MnemonicWritePage,
         MnemonicExportPage,
