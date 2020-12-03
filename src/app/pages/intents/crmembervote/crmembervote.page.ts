@@ -27,8 +27,8 @@ import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
 import { CoinTransferService, Transfer, IntentTransfer } from 'src/app/services/cointransfer.service';
-import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { IntentService } from 'src/app/services/intent.service';
+import { MainchainSubWallet } from 'src/app/model/wallets/MainchainSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -38,7 +38,8 @@ declare let appManager: AppManagerPlugin.AppManager;
   styleUrls: ['./crmembervote.page.scss'],
 })
 export class CRmembervotePage implements OnInit {
-    masterWallet: MasterWallet = null;
+    masterWalletId: string;
+    sourceSubwallet: MainchainSubWallet = null;
     chainId: string; // ELA
     intentTransfer: IntentTransfer;
     transfer: Transfer = null;
@@ -70,11 +71,20 @@ export class CRmembervotePage implements OnInit {
         this.transfer = this.coinTransferService.transfer;
         this.intentTransfer = this.coinTransferService.intentTransfer;
         this.chainId = this.coinTransferService.chainId;
-        this.masterWallet = this.walletManager.getMasterWallet(this.coinTransferService.masterWalletId);
+        this.masterWalletId = this.coinTransferService.masterWalletId;
+        this.sourceSubwallet = this.walletManager.getMasterWallet(this.masterWalletId).getSubWallet(this.chainId) as MainchainSubWallet;
+        this.balance = this.sourceSubwallet.getDisplayBalance().toString();
 
         this.parseVotes();
 
         this.hasPendingVoteTransaction();
+    }
+
+    async hasPendingVoteTransaction() {
+        if (await this.sourceSubwallet.hasPendingBalance()) {
+            await this.popupProvider.ionicAlert('confirmTitle', 'transaction-pending');
+            this.cancelOperation();
+        }
     }
 
     parseVotes() {
@@ -88,17 +98,6 @@ export class CRmembervotePage implements OnInit {
         }
         this.voteBalanceELA = voteBalanceSela / Config.SELA;
         console.log('totalVotes:', this.voteBalanceELA);
-    }
-
-    async hasPendingVoteTransaction() {
-        let info = await this.walletManager.spvBridge.getBalanceInfo(this.masterWallet.id, this.chainId);
-
-        let balanceInfo = JSON.parse(info);
-        // console.log('balanceInfo ', balanceInfo);
-        if (balanceInfo[0]['Summary']['SpendingBalance'] !== '0') {
-            await this.popupProvider.ionicAlert('confirmTitle', 'test-vote-pending');
-            this.cancelOperation();
-        }
     }
 
     /**
@@ -126,7 +125,7 @@ export class CRmembervotePage implements OnInit {
 
     async createVoteCRTransaction() {
         console.log('Creating vote CR transaction');
-        this.transfer.rawTransaction =  await this.walletManager.spvBridge.createVoteCRTransaction(this.masterWallet.id, this.chainId,
+        this.transfer.rawTransaction =  await this.walletManager.spvBridge.createVoteCRTransaction(this.masterWalletId, this.chainId,
                 '', this.transfer.votes, this.transfer.memo, '[]');
         // TODO need to check DropVotes
         this.walletManager.openPayModal(this.transfer);

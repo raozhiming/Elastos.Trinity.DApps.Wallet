@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Elastos Foundation
+ * Copyright (c) 2020 Elastos Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@
 
 import { Component, OnInit, NgZone } from '@angular/core';
 import { AppService } from '../../../services/app.service';
-import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletManager } from '../../../services/wallet.service';
@@ -30,7 +29,6 @@ import { CoinTransferService, IntentTransfer, Transfer } from 'src/app/services/
 import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
-import { MainAndIDChainSubWallet } from 'src/app/model/wallets/MainAndIDChainSubWallet';
 import { MainchainSubWallet } from 'src/app/model/wallets/MainchainSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
@@ -85,7 +83,7 @@ export class DPoSVotePage implements OnInit {
         this.masterWalletId = this.coinTransferService.masterWalletId;
 
         this.sourceSubwallet = this.walletManager.getMasterWallet(this.masterWalletId).getSubWallet(this.chainId) as MainchainSubWallet;
-        this.balance = this.sourceSubwallet.balance.toString();
+        this.balance = this.sourceSubwallet.getDisplayBalance().toString();
         this.hasPendingVoteTransaction();
     }
 
@@ -112,41 +110,18 @@ export class DPoSVotePage implements OnInit {
     }
 
     async checkValue() {
-        if (this.getBalanceInELA() === 0) {
+        const stakeAmount = this.sourceSubwallet.balance.minus(this.votingFees());
+        if (stakeAmount.isNegative()) {
+            console.log('DPoSVotePage: Not enough balance:', stakeAmount.toString());
             this.native.toast_trans('amount-null');
             return;
         }
 
         try {
-            this.createVoteProducerTransaction();
+            this.createVoteProducerTransaction(stakeAmount.toString());
         } catch (error) {
             console.log('dposvote createVoteProducerTransaction error:', error);
         }
-    }
-
-    elaToSELAString(elaAmount: number) {
-        const integerPart = Math.trunc(elaAmount);
-        const fracPart = elaAmount - integerPart;
-        const integerPartString = integerPart.toString();
-        const fracPartString = Math.trunc(fracPart * Config.SELA).toString();
-
-        return integerPartString + fracPartString;
-    }
-
-    // 15950000000 SELA will give 159.5 ELA
-    // We need to use this trick because JS is limited to 2^53 bits numbers and this could create
-    // problems with big ELA amounts.
-    getBalanceInELA(): number {
-        if (!this.balance) {
-            return 0;
-        }
-
-        const strSizeOfSELA = 8;
-        const leftPart = this.balance.substr(0, this.balance.length - strSizeOfSELA);
-        const rightPart = this.balance.substr(this.balance.length - strSizeOfSELA);
-        const elaAmount = Number(leftPart) + Number(rightPart) / Config.SELA;
-
-        return elaAmount;
     }
 
     /**
@@ -154,11 +129,13 @@ export class DPoSVotePage implements OnInit {
      * funds won't be enough to vote.
      */
     votingFees(): number {
-        return 0.001; // ELA
+        return 100000; // SELA: 0.001ELA
     }
 
-    async createVoteProducerTransaction() {
-        const stakeAmount = this.elaToSELAString(this.getBalanceInELA() - this.votingFees());
+    /**
+     * stakeAmount: SELA
+     */
+    async createVoteProducerTransaction(stakeAmount) {
         console.log('Creating vote transaction with amount', stakeAmount);
 
         const rawTx =
