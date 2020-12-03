@@ -8,7 +8,7 @@ import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { AppService } from 'src/app/services/app.service';
-import { StandardCoinName } from 'src/app/model/Coin';
+import { ERC20Coin, StandardCoinName } from 'src/app/model/Coin';
 import { TransactionStatus, TransactionDirection, TransactionType, TransactionInfo, Transaction, EthTransaction } from 'src/app/model/Transaction';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,6 +16,8 @@ import BigNumber from 'bignumber.js';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import { ETHChainSubWallet } from 'src/app/model/wallets/ETHChainSubWallet';
 import { CoinService } from 'src/app/services/coin.service';
+import { ERC20CoinService } from 'src/app/services/erc20coin.service';
+import { PrefsService } from 'src/app/services/prefs.service';
 
 class TransactionDetail {
     type: string;
@@ -52,8 +54,6 @@ export class CoinTxInfoPage implements OnInit {
     public payFee: number = null;
     public totalCost: BigNumber = null;
     public payType: string = '';
-    public inputs = [];
-    public outputs = [];
     public targetAddress = '';
 
     // Show the ERC20 Token detail in ETHSC transaction.
@@ -76,7 +76,9 @@ export class CoinTxInfoPage implements OnInit {
         public native: Native,
         private appService: AppService,
         private coinService: CoinService,
+        private erc20CoinService: ERC20CoinService,
         public jsonRPCService: JsonRPCService,
+        private prefs: PrefsService,
         private translate: TranslateService,
         public theme: ThemeService
     ) {
@@ -154,14 +156,11 @@ export class CoinTxInfoPage implements OnInit {
             // Address
             if (this.chainId === StandardCoinName.ETHSC) {
                 this.targetAddress = await this.getETHSCTransactionTargetAddres(transaction as EthTransaction);
-                this.getERC20TokenTransactionInfo(transaction as EthTransaction);
+                await this.getERC20TokenTransactionInfo(transaction as EthTransaction);
             } else {
                 this.targetAddress = (transaction as EthTransaction).TargetAddress;
             }
         }
-
-        this.inputs = this.objtoarr(transaction.Inputs);
-        this.outputs = this.objtoarr(transaction.Outputs);
 
         this.payType = "transaction-type-13";
         if ((this.type >= 0) && this.type <= 12) {
@@ -302,22 +301,6 @@ export class CoinTxInfoPage implements OnInit {
         }, 1000);
     }
 
-    objtoarr(obj) {
-        let arr = []
-        if (obj) {
-            for (let i in obj) {
-                if (arr.length < 3)
-                    arr.push({ "address": i, "balance": obj[i] / Config.SELA });
-            }
-
-            if (arr.length > 2) {
-                arr.push({ "address": "...........", "balance": "............." });
-                return arr;
-            }
-        }
-        return arr;
-    }
-
     /**
      * Get target address
      */
@@ -351,7 +334,7 @@ export class CoinTxInfoPage implements OnInit {
         return targetAddress;
     }
 
-    private getERC20TokenTransactionInfo(transaction: EthTransaction) {
+    private async getERC20TokenTransactionInfo(transaction: EthTransaction) {
         if ('ERC20Transfer' === transaction.TokenFunction) {
             this.isERC20TokenTransactionInETHSC = true;
             this.contractAddress = transaction.Token;
@@ -359,6 +342,26 @@ export class CoinTxInfoPage implements OnInit {
             const erc20Coin = this.coinService.getERC20CoinByContracAddress(this.contractAddress);
             if (erc20Coin) {
                 this.tokenName = erc20Coin.getName();
+            } else {
+                try {
+                    // Add coin
+                    const isContract = await this.erc20CoinService.isContractAddress(this.contractAddress);
+                    if (isContract) {
+                        const ethAccountAddress = await (this.subWallet as ETHChainSubWallet).getTokenAddress();
+                        const activeNetwork = await this.prefs.getActiveNetworkType();
+                        const coinInfo = await this.erc20CoinService.getCoinInfo(this.contractAddress, ethAccountAddress);
+                        const newCoin = new ERC20Coin(coinInfo.coinSymbol, coinInfo.coinSymbol, coinInfo.coinName, this.contractAddress, activeNetwork);
+                        await this.coinService.addCustomERC20Coin(newCoin, this.masterWallet);
+                        this.tokenName = coinInfo.coinName;
+
+                        // Create subwallet automatic?
+                        await this.masterWallet.createSubWallet(newCoin);
+                    } else {
+                        console.log('It is not contract address:', this.contractAddress);
+                    }
+                } catch (e) {
+                    console.error('getERC20TokenTransactionInfo fail to add coin:', e);
+                }
             }
         }
     }

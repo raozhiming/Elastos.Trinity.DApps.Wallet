@@ -1,6 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Events } from '@ionic/angular';
-import { Util } from '../../../../model/Util';
 import { Native } from '../../../../services/native.service';
 import { LocalStorage } from '../../../../services/storage.service';
 import { ActivatedRoute } from '@angular/router';
@@ -10,12 +9,11 @@ import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
-import Web3 from 'web3';
-import * as TrinitySDK from '@elastosfoundation/trinity-dapp-sdk';
-import { StandardCoinName, ERC20Coin, Coin, CoinType } from 'src/app/model/Coin';
+import { StandardCoinName, ERC20Coin } from 'src/app/model/Coin';
 import { PopupProvider } from 'src/app/services/popup.service';
 import { CoinService } from 'src/app/services/coin.service';
 import { PrefsService } from 'src/app/services/prefs.service';
+import { ERC20CoinService } from 'src/app/services/erc20coin.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -37,10 +35,6 @@ export class CoinAddERC20Page implements OnInit {
     public coinInfoFetched: boolean = false;
     public fetchingCoinInfo: boolean = false;
 
-    /** Web3 variables to call smart contracts */
-    private web3: Web3;
-    private erc20ABI: any;
-
     constructor(
         public route: ActivatedRoute,
         public native: Native,
@@ -50,6 +44,7 @@ export class CoinAddERC20Page implements OnInit {
         private walletEditionService: WalletEditionService,
         private appService: AppService,
         private coinService: CoinService,
+        private erc20CoinService: ERC20CoinService,
         private translate: TranslateService,
         public theme: ThemeService,
         private popup: PopupProvider,
@@ -61,12 +56,6 @@ export class CoinAddERC20Page implements OnInit {
         this.getAllCustomERC20Coins();
 
         console.log('All available erc20tokens', this.allCustomERC20Coins);
-
-        let trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
-        this.web3 = new Web3(trinityWeb3Provider);
-
-        // Standard ERC20 contract ABI
-        this.erc20ABI = require("../../../../../assets/ethereum/StandardErc20ABI.json");
     }
 
     ngOnInit() {
@@ -86,7 +75,7 @@ export class CoinAddERC20Page implements OnInit {
      * Opens the scanner to get the coin address
      */
     scanCoinAddress() {
-        appManager.sendIntent('scanqrcode', {}, {}, (res: { result : { scannedContent: string }}) => {
+        appManager.sendIntent('scanqrcode', {}, {}, (res: { result: { scannedContent: string }}) => {
             if (res && res.result && res.result.scannedContent) {
                 this.coinAddress = res.result.scannedContent;
                 console.log('Got scanned content:', this.coinAddress);
@@ -100,7 +89,7 @@ export class CoinAddERC20Page implements OnInit {
     checkCoinAddress() {
         this.zone.run(() => {
             // Check if this looks like a valid address. If not, give feedback to user.
-            if (!this.web3.utils.isAddress(this.coinAddress)) {
+            if (!this.erc20CoinService.isAddress(this.coinAddress)) {
                 this.popup.ionicAlert("not-a-valid-address", "coin-adderc20-not-a-erc20-contract", "Ok");
                 this.coinAddress = '';
             } else {
@@ -125,7 +114,7 @@ export class CoinAddERC20Page implements OnInit {
     }
 
     private async tryFetchingCoinByAddress(address: string) {
-        if (address !== "" && this.web3.utils.isAddress(address)) {
+        if (address !== '' && this.erc20CoinService.isAddress(address)) {
             // Coin address entered/changed: fetch its info.
             this.fetchingCoinInfo = true;
             this.coinInfoFetched = false;
@@ -137,23 +126,22 @@ export class CoinAddERC20Page implements OnInit {
                 return;
             }
 
-            let ethAccountAddress = await this.getEthAccountAddress();
-            let erc20Contract = new this.web3.eth.Contract(this.erc20ABI, address, { from: ethAccountAddress });
-            console.log("erc20Contract", erc20Contract);
+            const ethAccountAddress = await this.getEthAccountAddress();
 
             try {
-                let contractCode = await this.web3.eth.getCode(address);
-                if (contractCode === "0x") {
+                const contractCode = await this.erc20CoinService.isContractAddress(address);
+                if (!contractCode) {
                     console.log("Contract at "+address+" does not exist");
                     this.fetchingCoinInfo = false;
                     this.native.toast_trans('coin-adderc20-not-found');
                 } else {
                     console.log("Found contract at address " + address);
+                    const coinInfo = await this.erc20CoinService.getCoinInfo(address, ethAccountAddress);
 
-                    this.coinName = await erc20Contract.methods.name().call();
+                    this.coinName = coinInfo.coinName;
                     console.log("Coin name", this.coinName);
 
-                    this.coinSymbol = await erc20Contract.methods.symbol().call();
+                    this.coinSymbol = coinInfo.coinSymbol;
                     console.log("Coin symbol", this.coinSymbol);
 
                     this.coinInfoFetched = true;
@@ -178,8 +166,8 @@ export class CoinAddERC20Page implements OnInit {
     }
 
     async addCoin() {
-        let activeNetwork = await this.prefs.getActiveNetworkType();
-        let newCoin = new ERC20Coin(this.coinSymbol, this.coinSymbol, this.coinName, this.coinAddress, activeNetwork);
+        const activeNetwork = await this.prefs.getActiveNetworkType();
+        const newCoin = new ERC20Coin(this.coinSymbol, this.coinSymbol, this.coinName, this.coinAddress, activeNetwork);
         await this.coinService.addCustomERC20Coin(newCoin, this.masterWallet);
 
         // Coin added - go back to the previous screen

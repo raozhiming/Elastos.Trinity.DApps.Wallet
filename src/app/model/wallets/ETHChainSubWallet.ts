@@ -23,7 +23,7 @@ export class ETHChainSubWallet extends StandardSubWallet {
         this.getWithdrawContractAddress();
     }
 
-    private async getTokenAddress(): Promise<string> {
+    public async getTokenAddress(): Promise<string> {
         if (!this.ethscAddress) {
             this.ethscAddress = await this.createAddress();
         }

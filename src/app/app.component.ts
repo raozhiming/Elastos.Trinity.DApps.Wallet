@@ -36,6 +36,7 @@ import { CurrencyService } from './services/currency.service';
 import { CoinService } from './services/coin.service';
 import { UiService } from './services/ui.service';
 import { ContactsService } from './services/contacts.service';
+import { ERC20CoinService } from './services/erc20coin.service';
 
 @Component({
     selector: 'app-root',
@@ -61,6 +62,7 @@ export class AppComponent {
         public modalCtrl: ModalController,
         private coinService: CoinService,
         private contactsService: ContactsService,
+        private erc20CoinService: ERC20CoinService,
         private uiService: UiService
     ) {
         this.initializeApp();
@@ -98,6 +100,7 @@ export class AppComponent {
 
             await this.walletManager.init();
             await this.intentService.init();
+            this.erc20CoinService.init();
         });
     }
 
