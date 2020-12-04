@@ -16,11 +16,14 @@ declare let appManager: AppManagerPlugin.AppManager;
 export class ETHChainSubWallet extends StandardSubWallet {
     private ethscAddress: string = null;
     private withdrawContractAddress: string = null;
+    private web3 = null;
+    private timestampGetBalance = 0;
 
     constructor(masterWallet: MasterWallet) {
         super(masterWallet, StandardCoinName.ETHSC);
 
         this.getWithdrawContractAddress();
+        this.initWeb3();
     }
 
     public async getTokenAddress(): Promise<string> {
@@ -144,10 +147,30 @@ export class ETHChainSubWallet extends StandardSubWallet {
         }
     }
 
+    private initWeb3() {
+        const trinityWeb3Provider = new TrinitySDK.Ethereum.Web3.Providers.TrinityWeb3Provider();
+        this.web3 = new Web3(trinityWeb3Provider);
+    }
+
+    private async getBalanceByWeb3() {
+        const address = await this.getTokenAddress();
+        const balanceString = await this.web3.eth.getBalance(address);
+        return new BigNumber(balanceString).dividedBy(10000000000); // WEI to SELA;
+    }
+
     public async updateBalance(): Promise<void> {
-        const balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
-        // TODO: use Ether? Gwei? Wei?
-        this.balance = new BigNumber(balanceStr).multipliedBy(Config.SELAAsBigNumber);
+        // TODO: the ethsc has no lastBlockTime, and there is a bug for ethsc sync progress.
+        // so get balance by web3
+        // if we can get the lastBlockTime from spvsdk, then we can get balance by spvsdk.
+        const curTimestampMs = (new Date()).getTime();
+        const timeInverval = curTimestampMs - this.timestamp;
+        if (timeInverval > 60000) { // 60s
+            this.balance = await this.getBalanceByWeb3();
+            this.timestampGetBalance = (new Date()).getTime();
+        }
+        // const balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
+        // // TODO: use Ether? Gwei? Wei?
+        // this.balance = new BigNumber(balanceStr).multipliedBy(Config.SELAAsBigNumber);
     }
 
     public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string> {

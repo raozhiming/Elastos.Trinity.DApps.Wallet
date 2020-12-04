@@ -6,6 +6,7 @@ import { Config } from 'src/app/config/Config';
 import { TranslateService } from '@ngx-translate/core';
 import { StandardCoinName } from '../Coin';
 import { MasterWallet } from './MasterWallet';
+import { JsonRPCService } from 'src/app/services/jsonrpc.service';
 
 /**
  * Specialized standard sub wallet that shares Mainchain (ELA) and ID chain code.
@@ -116,5 +117,110 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
             toAddress,
             memo
         );
+    }
+
+    async getBalanceByRPC(jsonRPCService: JsonRPCService): Promise<BigNumber> {
+        console.log('TIMETEST getBalanceByRPC start:', this.id);
+
+        // If the balance of 5 consecutive request is 0, then end the query.(100 addresses)
+        let maxRequestTimesOfGetEmptyBalance = 5;
+        let requestTimesOfGetEmptyBalance = 0;
+        // In order to calculate blanks
+        let requestAddressCountOfInternal = 1;
+        let requestAddressCountOfExternal = 1;
+
+        let startIndex = 0;
+        let totalBalance = new BigNumber(0);
+        let totalRequestCount = 0;
+
+        console.log('Internal address');
+
+        // internal address
+        let addressArray = null;
+        do {
+            addressArray = await this.masterWallet.walletManager.spvBridge.getAllAddresses(this.masterWallet.id, this.id, startIndex, true);
+            if (addressArray.Addresses.length === 0) {
+                requestAddressCountOfInternal = startIndex;
+                totalRequestCount = startIndex;
+                break;
+            }
+            startIndex += addressArray.Addresses.length;
+
+            try {
+                const balance = await jsonRPCService.getBalanceByAddress(this.id as StandardCoinName, addressArray.Addresses);
+                totalBalance = totalBalance.plus(balance);
+
+                if (balance.lte(0)) {
+                    requestTimesOfGetEmptyBalance++;
+                    if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
+                        requestAddressCountOfInternal = startIndex;
+                        totalRequestCount = startIndex;
+                        break;
+                    }
+                } else {
+                    requestTimesOfGetEmptyBalance = 0;
+                }
+            } catch (e) {
+                console.log('jsonRPCService.getBalanceByAddress exception:', e);
+                throw e;
+            }
+        } while (!this.masterWallet.account.SingleAddress);
+
+        console.log('External address');
+
+        if (!this.masterWallet.account.SingleAddress) {
+            // external address for user
+            const currentReceiveAddress = await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, this.id);
+            let currentReceiveAddressIndex = -1;
+            let startCheckBlanks = false;
+
+            maxRequestTimesOfGetEmptyBalance = 1; // is 1 ok for external?
+            startIndex = 0;
+            while (true) {
+                const addressArray = await this.masterWallet.walletManager.spvBridge.getAllAddresses(this.masterWallet.id, this.id, startIndex, false);
+                if (addressArray.Addresses.length === 0) {
+                    requestAddressCountOfExternal = startIndex;
+                    totalRequestCount += startIndex;
+                    break;
+                }
+                startIndex += addressArray.Addresses.length;
+                if (currentReceiveAddressIndex === -1) {
+                    currentReceiveAddressIndex = addressArray.Addresses.findIndex((address) => (address === currentReceiveAddress));
+                    if (currentReceiveAddressIndex !== -1) {
+                        currentReceiveAddressIndex += startIndex;
+                        startCheckBlanks = true;
+                    }
+                }
+
+                try {
+                    const balance = await jsonRPCService.getBalanceByAddress(this.id as StandardCoinName, addressArray.Addresses);
+                    totalBalance = totalBalance.plus(balance);
+
+                    if (startCheckBlanks) {
+                        if (balance.lte(0)) {
+                            requestTimesOfGetEmptyBalance++;
+                            if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
+                                requestAddressCountOfExternal = startIndex;
+                                totalRequestCount += startIndex;
+                                break;
+                            }
+                        } else {
+                            requestTimesOfGetEmptyBalance = 0;
+                        }
+                    }
+                } catch (e) {
+                    console.log('jsonRPCService.getBalanceByAddress exception:', e);
+                    throw e;
+                }
+            }
+        }
+
+        console.log('TIMETEST getBalanceByRPC ', this.id, ' end');
+        console.log('getBalanceByRPC totalBalance:', totalBalance,
+                ' totalRequestCount:', totalRequestCount,
+                ' requestAddressCountOfInternal:', requestAddressCountOfInternal,
+                ' requestAddressCountOfExternal:', requestAddressCountOfExternal);
+
+        return totalBalance;
     }
 }

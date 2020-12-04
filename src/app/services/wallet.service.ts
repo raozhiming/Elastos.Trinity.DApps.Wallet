@@ -35,7 +35,6 @@ import { SubWallet, SerializedSubWallet } from '../model/wallets/SubWallet';
 import { InvalidVoteCandidatesHelper, InvalidCandidateForVote } from '../model/InvalidVoteCandidatesHelper';
 import { CoinService } from './coin.service';
 import { JsonRPCService } from './jsonrpc.service';
-import { EthJsonRPCService } from './ethjsonrpc.service';
 import { PopupProvider } from './popup.service';
 import { Native } from './native.service';
 import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
@@ -43,11 +42,11 @@ import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
 import { Transfer } from './cointransfer.service';
 import { PrefsService } from './prefs.service';
-import BigNumber from 'bignumber.js';
 import { IDChainSubWallet } from '../model/wallets/IDChainSubWallet';
 import { MainchainSubWallet } from '../model/wallets/MainchainSubWallet';
 import { BackupRestoreService } from './backuprestore.service';
 import { StandardSubWallet } from '../model/wallets/StandardSubWallet';
+import { MainAndIDChainSubWallet } from '../model/wallets/MainAndIDChainSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -106,7 +105,6 @@ export class WalletManager {
         public popupProvider: PopupProvider,
         private http: HttpClient,
         public jsonRPCService: JsonRPCService,
-        public ethJsonRPCService: EthJsonRPCService,
         private prefs: PrefsService,
         private backupService: BackupRestoreService
     ) {
@@ -675,6 +673,7 @@ export class WalletManager {
             case ETHSCEventType.EWMEvent: // update progress
                 switch (result.event.Event) {
                     case ETHSCEventAction.PROGRESS:
+                        // console.log('----updateETHSCEventFromCallback chainId:', chainId, ' result.event:', result.event);
                         result.Progress =  Math.round(result.event.PercentComplete);
                         result.LastBlockTime = result.event.Timestamp;
                         break;
@@ -682,6 +681,7 @@ export class WalletManager {
                         if (('CONNECTED' === result.event.NewState) && ('CONNECTED' === result.event.OldState)) {
                             result.Progress =  100;
                             result.LastBlockTime = new Date().getTime() / 1000;
+                            // console.log('----updateETHSCEventFromCallback set 100 result.event:', result.event);
                         } else if ('DISCONNECTED' === result.event.NewState) {
                             result.Progress =  0;
                         } else {
@@ -701,12 +701,17 @@ export class WalletManager {
                 break;
             case ETHSCEventType.WalletEvent: // update balance
                 if (result.event.Event === ETHSCEventAction.BALANCE_UPDATED) {
+                    // console.log('----updateETHSCEventFromCallback BALANCE_UPDATED:', result, ' masterId:', masterId, ' chainId:', chainId);
                     this.getMasterWallet(masterId).getSubWallet(chainId).updateBalance();
                 }
                 break;
             case ETHSCEventType.TransferEvent:
+                // console.log('----updateETHSCEventFromCallback BALANCE_UPDATED:', result, ' masterId:', masterId, ' chainId:', chainId);
                 // ERC20 Token transfer
                 // TODO: update the balance
+                break;
+            case ETHSCEventType.TokenEvent:
+                // TODO
                 break;
             default:
                 // TODO: check other event
@@ -869,7 +874,8 @@ export class WalletManager {
             // Get balance by RPC if the last block time is one day ago.
             if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
                 try {
-                    const balance = await this.getBalanceByRPC(masterWalletId, subWallet.id as StandardCoinName, masterWallet.account.SingleAddress);
+                    const balance = await (subWallet as MainAndIDChainSubWallet).getBalanceByRPC(this.jsonRPCService);
+
                     subWallet.balanceByRPC = balance;
                     subWallet.balance = balance;
                     subWallet.timestampRPC = currentTimestamp;
@@ -878,112 +884,6 @@ export class WalletManager {
                 }
             }
         }
-    }
-
-    //
-    async getBalanceByRPC(masterWalletID: string, chainID: StandardCoinName, singleAddress: boolean): Promise<BigNumber> {
-        console.log('TIMETEST getBalanceByRPC start:', chainID);
-
-        // If the balance of 5 consecutive request is 0, then end the query.(100 addresses)
-        let maxRequestTimesOfGetEmptyBalance = 5;
-        let requestTimesOfGetEmptyBalance = 0;
-        // In order to calculate blanks
-        let requestAddressCountOfInternal = 1;
-        let requestAddressCountOfExternal = 1;
-
-        let startIndex = 0;
-        let totalBalance = new BigNumber(0);
-        let totalRequestCount = 0;
-
-        console.log('Internal address');
-
-        // internal address
-        let addressArray = null;
-        do {
-            addressArray = await this.spvBridge.getAllAddresses(masterWalletID, chainID, startIndex, true);
-            if (addressArray.Addresses.length === 0) {
-                requestAddressCountOfInternal = startIndex;
-                totalRequestCount = startIndex;
-                break;
-            }
-            startIndex += addressArray.Addresses.length;
-
-            try {
-                const balance = await this.jsonRPCService.getBalanceByAddress(chainID, addressArray.Addresses);
-                totalBalance = totalBalance.plus(balance);
-
-                if (balance.lte(0)) {
-                    requestTimesOfGetEmptyBalance++;
-                    if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
-                        requestAddressCountOfInternal = startIndex;
-                        totalRequestCount = startIndex;
-                        break;
-                    }
-                } else {
-                    requestTimesOfGetEmptyBalance = 0;
-                }
-            } catch (e) {
-                console.log('jsonRPCService.getBalanceByAddress exception:', e);
-                throw e;
-            }
-        } while (!singleAddress);
-
-        console.log('External address');
-
-        if (!singleAddress) {
-            // external address for user
-            const currentReceiveAddress = await this.spvBridge.createAddress(masterWalletID, chainID);
-            let currentReceiveAddressIndex = -1;
-            let startCheckBlanks = false;
-
-            maxRequestTimesOfGetEmptyBalance = 1; // is 1 ok for external?
-            startIndex = 0;
-            while (true) {
-                const addressArray = await this.spvBridge.getAllAddresses(masterWalletID, chainID, startIndex, false);
-                if (addressArray.Addresses.length === 0) {
-                    requestAddressCountOfExternal = startIndex;
-                    totalRequestCount += startIndex;
-                    break;
-                }
-                startIndex += addressArray.Addresses.length;
-                if (currentReceiveAddressIndex === -1) {
-                    currentReceiveAddressIndex = addressArray.Addresses.findIndex((address) => (address === currentReceiveAddress));
-                    if (currentReceiveAddressIndex !== -1) {
-                        currentReceiveAddressIndex += startIndex;
-                        startCheckBlanks = true;
-                    }
-                }
-
-                try {
-                    const balance = await this.jsonRPCService.getBalanceByAddress(chainID, addressArray.Addresses);
-                    totalBalance = totalBalance.plus(balance);
-
-                    if (startCheckBlanks) {
-                        if (balance.lte(0)) {
-                            requestTimesOfGetEmptyBalance++;
-                            if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
-                                requestAddressCountOfExternal = startIndex;
-                                totalRequestCount += startIndex;
-                                break;
-                            }
-                        } else {
-                            requestTimesOfGetEmptyBalance = 0;
-                        }
-                    }
-                } catch (e) {
-                    console.log('jsonRPCService.getBalanceByAddress exception:', e);
-                    throw e;
-                }
-            }
-        }
-
-        console.log('TIMETEST getBalanceByRPC ', chainID, ' end');
-        console.log('getBalanceByRPC totalBalance:', totalBalance,
-                ' totalRequestCount:', totalRequestCount,
-                ' requestAddressCountOfInternal:', requestAddressCountOfInternal,
-                ' requestAddressCountOfExternal:', requestAddressCountOfExternal);
-
-        return totalBalance;
     }
 
     sendIntentResponse(action, result, intentId): Promise<void> {
