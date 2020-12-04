@@ -217,6 +217,8 @@ export class PopupProvider {
     okText?: string,
     cancelText?: string
   ): Promise<any> {
+    opts = opts || {};
+
     return new Promise((resolve, reject) => {
       let defaultText = opts && opts.defaultText ? opts.defaultText : null;
       let placeholder = opts && opts.placeholder ? opts.placeholder : null;
@@ -227,7 +229,7 @@ export class PopupProvider {
       this.alertPopup = this.alertCtrl.create({
         header: title,
         message,
-        cssClass,
+        /*cssClass,
         backdropDismiss,
         inputs: [
           {
@@ -235,7 +237,7 @@ export class PopupProvider {
             placeholder,
             type: inputType
           },
-        ],
+        ],*/
         buttons: [
           {
             text: cancelText ? cancelText : this.translate.instant('Cancel'),
@@ -254,7 +256,9 @@ export class PopupProvider {
             }
           }
         ]
-      }).then(prompt => prompt.present());
+      }).then(prompt => {
+        prompt.present();
+      });
     });
   }
 }

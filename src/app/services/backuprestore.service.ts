@@ -15,6 +15,7 @@ import { WalletManager } from './wallet.service';
 import { Events } from '@ionic/angular';
 import { CoinService } from './coin.service';
 import { ResolveEnd } from '@angular/router';
+import { PopupProvider } from './popup.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let walletManager: WalletPlugin.WalletManager;
@@ -39,7 +40,8 @@ export class BackupRestoreService {
     private storage: LocalStorage,
     private appService: AppService,
     private events: Events,
-    private coinService: CoinService
+    private coinService: CoinService,
+    private popup: PopupProvider
   ) {
   }
 
@@ -129,7 +131,31 @@ export class BackupRestoreService {
     const userDID = credential.getIssuer();
     this.logDebug("Current user DID:", userDID);
 
-    this.userVault = await hiveClient.getVault(userDID);
+    this.userVault = null;
+    try {
+      this.userVault = await hiveClient.getVault(userDID);
+    }
+    catch (e) {
+      if (hiveManager.errorOfType(e, HivePlugin.EnhancedErrorType.PROVIDER_NOT_PUBLISHED)) {
+        this.logWarn("No hive vault provider information in user's DID document. Asking to configure.");
+        // PROBLEM HERE? On IOS, ionicPrompt() call seems to print error: {} and block the whole app...
+        let shouldConfigure = await this.popup.ionicPrompt("Hive not configured", "Your hive storage is not configured. Would you like to configure it now?", null, "Configure", "Not now");
+        if (shouldConfigure) {
+          this.logDebug("User wants to configure his vault");
+          // User wants to configure his hive vault, redirect him
+          await TrinitySDK.Hive.HiveHelper.suggestUserToSetupVault();
+        }
+        else {
+          this.logDebug("User does not want to configure his vault");
+          // User doesn't want to configure hive now.
+        }
+      }
+      else {
+        this.logWarn(e);
+        await this.popup.ionicAlert("Error", "Sorry, something wrong happened while trying to activate your vault: "+e);
+      }
+    }
+
     if (!this.userVault) {
       this.log("No vault activated, not doing any backup");
       return false;
