@@ -129,6 +129,7 @@ export const en = {
     "coin-transfer-send-title": "Send from {{coinName}}",
     "coin-transfer-recharge-title": "Recharge to {{coinName}}",
     "coin-transfer-withdraw-title": "Withdraw from {{coinName}}",
+    "payment-title": 'Payment',
     "transfer-from": "Transfer from",
     "transfer-to": "Transfer to",
     "transfer-amount": "Transfer amount",
