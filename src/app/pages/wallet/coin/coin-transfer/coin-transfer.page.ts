@@ -599,9 +599,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // Intent response will return a contact's DID document under result.friends.document
     openContacts() {
-        console.log("Sending intent 'pickfriend', requesting credentialType: 'elaAddress'");
+        console.log("Sending intent 'https://contact.elastos.net/pickfriend', requesting credentialType: 'elaAddress'");
         appManager.sendIntent(
-            "pickfriend",
+            "https://contact.elastos.net/pickfriend",
             {
               singleSelection: true,
               filter: {
@@ -614,25 +614,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                     this.toAddress = res.result.friends[0].credentials.elaAddress;
                     this.addressName = res.result.friends[0].credentials.name;
                 });
-
-             /*    const walletCred = res.result.friends[0].document.verifiableCredential.find((key) =>
-                    key.credentialSubject.hasOwnProperty('elaAddress')
-                );
-                const nameCred = res.result.friends[0].document.verifiableCredential.find((key) =>
-                    key.credentialSubject.hasOwnProperty('name')
-                );
-
-                console.log('Wallet Credential', walletCred);
-                console.log('Name Credential', nameCred);
-                if (walletCred) {
-                    this.zone.run(() => {
-                        this.toAddress = walletCred.credentialSubject.elaAddress;
-                        nameCred ? this.addressName = nameCred.credentialSubject.name : this.addressName = null;
-
-                        console.log('ADDRESS NAME', this.addressName);
-                    });
-                } */
-
             }, (err) => {
                 console.error(err);
             }
