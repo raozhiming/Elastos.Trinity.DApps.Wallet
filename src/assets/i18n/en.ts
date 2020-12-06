@@ -135,6 +135,7 @@ export const en = {
     "transfer-amount": "Transfer amount",
     "transfer-receiver-address": "Receiver address",
     "transfer-send-ela": "Send ELA",
+    "balance": "Balance",
     "balance-remaining": "Balance Remaining",
     "insufficient-balance": "Insufficient Balance",
 

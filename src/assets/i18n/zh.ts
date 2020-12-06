@@ -134,6 +134,7 @@ export const zh = {
     "transfer-amount": "转移金额",
     "transfer-receiver-address": "接收地址",
     "transfer-send-ela": "发送ELA",
+    "balance": "Balance",
     "balance-remaining": "余额 ",
     "insufficient-balance": "余额不足",
 
