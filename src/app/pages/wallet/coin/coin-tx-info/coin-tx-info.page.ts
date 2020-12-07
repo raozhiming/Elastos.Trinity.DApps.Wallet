@@ -338,20 +338,22 @@ export class CoinTxInfoPage implements OnInit {
         if ('ERC20Transfer' === transaction.TokenFunction) {
             this.isERC20TokenTransactionInETHSC = true;
             this.contractAddress = transaction.Token;
-            this.tokenAmount = transaction.TokenAmount;
+            let coinDecimals = 0;
+            const ethAccountAddress = await (this.subWallet as ETHChainSubWallet).getTokenAddress();
             const erc20Coin = this.coinService.getERC20CoinByContracAddress(this.contractAddress);
             if (erc20Coin) {
                 this.tokenName = erc20Coin.getName();
+                coinDecimals = await this.erc20CoinService.getCoinDecimals(this.contractAddress, ethAccountAddress);
             } else {
                 try {
                     // Add coin
                     const isContract = await this.erc20CoinService.isContractAddress(this.contractAddress);
                     if (isContract) {
-                        const ethAccountAddress = await (this.subWallet as ETHChainSubWallet).getTokenAddress();
                         const activeNetwork = await this.prefs.getActiveNetworkType();
                         const coinInfo = await this.erc20CoinService.getCoinInfo(this.contractAddress, ethAccountAddress);
                         const newCoin = new ERC20Coin(coinInfo.coinSymbol, coinInfo.coinSymbol, coinInfo.coinName, this.contractAddress, activeNetwork);
                         await this.coinService.addCustomERC20Coin(newCoin, this.masterWallet);
+                        coinDecimals = coinInfo.coinDecimals;
                         this.tokenName = coinInfo.coinName;
 
                         // Create subwallet automatic?
@@ -363,6 +365,7 @@ export class CoinTxInfoPage implements OnInit {
                     console.error('getERC20TokenTransactionInfo fail to add coin:', e);
                 }
             }
+            this.tokenAmount = (new BigNumber(transaction.TokenAmount).dividedBy(new BigNumber(10).pow(coinDecimals))).toString();
         }
     }
 

@@ -2,7 +2,7 @@
  * Copyright (c) 2020 Elastos Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software and associated documentation files (the 'Software'), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -47,7 +47,7 @@ export class ERC20CoinService {
         this.web3 = new Web3(trinityWeb3Provider);
 
         // Standard ERC20 contract ABI
-        this.erc20ABI = require("../../assets/ethereum/StandardErc20ABI.json");
+        this.erc20ABI = require('../../assets/ethereum/StandardErc20ABI.json');
     }
 
     public isAddress(address: string) {
@@ -59,18 +59,28 @@ export class ERC20CoinService {
         return contractCode === '0x' ? false : true;
     }
 
+    public async getCoinDecimals(address: string, ethAccountAddress: string) {
+        let coinDecimals = 0;
+        const erc20Contract = new this.web3.eth.Contract(this.erc20ABI, address, { from: ethAccountAddress });
+        if (erc20Contract) {
+            coinDecimals = await erc20Contract.methods.decimals().call();
+            console.log('Coin decimals:', coinDecimals);
+        }
+        return coinDecimals;
+    }
+
     public async getCoinInfo(address: string, ethAccountAddress: string) {
         const erc20Contract = new this.web3.eth.Contract(this.erc20ABI, address, { from: ethAccountAddress });
-        console.log("erc20Contract", erc20Contract);
+        console.log('erc20Contract', erc20Contract);
 
         const coinName = await erc20Contract.methods.name().call();
-        console.log("Coin name:", coinName);
+        console.log('Coin name:', coinName);
 
         const coinSymbol = await erc20Contract.methods.symbol().call();
-        console.log("Coin symbol:", coinSymbol);
+        console.log('Coin symbol:', coinSymbol);
 
         const coinDecimals = await erc20Contract.methods.decimals().call();
-        console.log("Coin decimals:", coinDecimals);
+        console.log('Coin decimals:', coinDecimals);
 
         return { coinName, coinSymbol, coinDecimals};
     }
