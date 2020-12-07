@@ -119,6 +119,8 @@ export class WalletManager {
         let hasWallet = await this.initWallets();
 
         if (!this.appService.runningAsAService()) {
+            this.jsonRPCService.init();
+
             if (!hasWallet) {
                 this.goToLauncherScreen();
                 return;
@@ -130,7 +132,6 @@ export class WalletManager {
                 this.handleAppManagerMessage(message);
                 this.appService.onMessageReceived(message);
             });
-            this.jsonRPCService.init();
 
             await this.startSyncAllWallet();
 
@@ -646,7 +647,7 @@ export class WalletManager {
         masterWallet.updateSyncProgress(chainId, progress, lastBlockTime);
 
         let subWallet = masterWallet.getSubWallet(chainId) as StandardSubWallet;
-        console.log("DEBUG updateSyncProgress", masterId, chainId, masterWallet.getSubWallets())
+        // console.log("DEBUG updateSyncProgress", masterId, chainId, masterWallet.getSubWallets())
         // Seems like we can sometimes receive an update progress about a subwallet not yet added. Reason unknown for now.
         if (!subWallet) {
             console.warn("updateSyncProgress() called but subwallet with ID", chainId, "does not exist in wallet!", masterWallet);
@@ -673,7 +674,7 @@ export class WalletManager {
             case ETHSCEventType.EWMEvent: // update progress
                 switch (result.event.Event) {
                     case ETHSCEventAction.PROGRESS:
-                        // console.log('----updateETHSCEventFromCallback chainId:', chainId, ' result.event:', result.event);
+                        // console.log('----updateETHSCEventFromCallback masterId:', masterId, ' result.event:', result.event);
                         result.Progress =  Math.round(result.event.PercentComplete);
                         result.LastBlockTime = result.event.Timestamp;
                         break;
@@ -681,7 +682,7 @@ export class WalletManager {
                         if (('CONNECTED' === result.event.NewState) && ('CONNECTED' === result.event.OldState)) {
                             result.Progress =  100;
                             result.LastBlockTime = new Date().getTime() / 1000;
-                            // console.log('----updateETHSCEventFromCallback set 100 result.event:', result.event);
+                            // console.log('----updateETHSCEventFromCallback set 100 masterId:', masterId, ' result.event:', result.event);
                         } else if ('DISCONNECTED' === result.event.NewState) {
                             result.Progress =  0;
                         } else {
@@ -706,11 +707,12 @@ export class WalletManager {
                 }
                 break;
             case ETHSCEventType.TransferEvent:
-                // console.log('----updateETHSCEventFromCallback BALANCE_UPDATED:', result, ' masterId:', masterId, ' chainId:', chainId);
+                // console.log('----updateETHSCEventFromCallback TransferEvent:', result, ' masterId:', masterId, ' chainId:', chainId);
                 // ERC20 Token transfer
                 // TODO: update the balance
                 break;
             case ETHSCEventType.TokenEvent:
+                // console.log('----updateETHSCEventFromCallback TokenEvent:', result, ' masterId:', masterId, ' chainId:', chainId);
                 // TODO
                 break;
             default:
