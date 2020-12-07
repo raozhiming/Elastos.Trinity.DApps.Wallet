@@ -119,8 +119,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     ) {
     }
 
-    ngOnInit() {
-        this.init();
+    async ngOnInit() {
+        await this.init();
         this.events.subscribe('address:update', (address) => {
             this.zone.run(() => {
                 this.toAddress = address;
