@@ -117,10 +117,6 @@ export class BackupRestoreService {
 
     this.log("Backup helper setup starting");
 
-    const hiveAuthHelper = new TrinitySDK.Hive.AuthHelper();
-    const hiveClient = await hiveAuthHelper.getClientWithAuth();
-    this.log("Got hive client. Resolving vault...", hiveClient);
-
     const didHelper = new TrinitySDK.DID.DIDHelper();
     const credential: DIDPlugin.VerifiableCredential = await didHelper.getOrCreateAppIdentityCredential();
     if (!credential) {
@@ -132,28 +128,36 @@ export class BackupRestoreService {
     this.logDebug("Current user DID:", userDID);
 
     this.userVault = null;
+
+    // Check if user has a vault
+    let vaultAddress = await TrinitySDK.Hive.HiveHelper.getVaultProviderAddress(userDID);
+    if (!vaultAddress) {
+      this.logWarn("No hive vault provider for for current DID. Asking to configure.");
+      // PROBLEM HERE? On IOS, ionicPrompt() call seems to print error: {} and block the whole app...
+      let shouldConfigure = await this.popup.ionicPrompt("Hive not configured", "Your hive storage is not configured. Would you like to configure it now?", null, "Configure", "Not now");
+      if (shouldConfigure) {
+        this.logDebug("User wants to configure his vault");
+        // User wants to configure his hive vault, redirect him
+        await TrinitySDK.Hive.HiveHelper.suggestUserToSetupVault();
+        return false; // Vault activation cannot be immediate. Don't start the backup service for now.
+      }
+      else {
+        this.logDebug("User does not want to configure his vault");
+        // User doesn't want to configure hive now.
+        return false;
+      }
+    }
+
+    const hiveAuthHelper = new TrinitySDK.Hive.AuthHelper();
+    const hiveClient = await hiveAuthHelper.getClientWithAuth();
+    this.log("Got hive client. Resolving vault...", hiveClient);
+
     try {
       this.userVault = await hiveClient.getVault(userDID);
     }
     catch (e) {
-      if (hiveManager.errorOfType(e, HivePlugin.EnhancedErrorType.PROVIDER_NOT_PUBLISHED)) {
-        this.logWarn("No hive vault provider information in user's DID document. Asking to configure.");
-        // PROBLEM HERE? On IOS, ionicPrompt() call seems to print error: {} and block the whole app...
-        let shouldConfigure = await this.popup.ionicPrompt("Hive not configured", "Your hive storage is not configured. Would you like to configure it now?", null, "Configure", "Not now");
-        if (shouldConfigure) {
-          this.logDebug("User wants to configure his vault");
-          // User wants to configure his hive vault, redirect him
-          await TrinitySDK.Hive.HiveHelper.suggestUserToSetupVault();
-        }
-        else {
-          this.logDebug("User does not want to configure his vault");
-          // User doesn't want to configure hive now.
-        }
-      }
-      else {
-        this.logWarn(e);
-        await this.popup.ionicAlert("Error", "Sorry, something wrong happened while trying to activate your vault: "+e);
-      }
+      this.logWarn("getVault() exception", e);
+      return false;
     }
 
     if (!this.userVault) {

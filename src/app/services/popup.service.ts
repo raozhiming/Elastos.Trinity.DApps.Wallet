@@ -216,7 +216,7 @@ export class PopupProvider {
     opts?: any,
     okText?: string,
     cancelText?: string
-  ): Promise<any> {
+  ): Promise<boolean> {
     opts = opts || {};
 
     return new Promise((resolve, reject) => {
@@ -244,15 +244,15 @@ export class PopupProvider {
             handler: data => {
               console.log('Cancel clicked');
               this.alertPopup = null;
-              resolve(null);
+              resolve(false);
             }
           },
           {
             text: okText ? okText : this.translate.instant('Ok'),
             handler: data => {
-              console.log('Saved clicked');
+              console.log('Ok clicked');
               this.alertPopup = null;
-              resolve(data[0]);
+              resolve(true);
             }
           }
         ]
