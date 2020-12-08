@@ -116,7 +116,7 @@ export class WalletManager {
 
         this.spvBridge = new SPVWalletPluginBridge(this.native, this.events, this.popupProvider);
 
-        let hasWallet = await this.initWallets();
+        const hasWallet = await this.initWallets();
 
         if (!this.appService.runningAsAService()) {
             this.jsonRPCService.init();
@@ -139,7 +139,7 @@ export class WalletManager {
                 this.hasPromptTransfer2IDChain = val ? val : false;
             });
 
-            let publishTxList = await this.localStorage.getPublishTxList();
+            const publishTxList = await this.localStorage.getPublishTxList();
             if (publishTxList) {
                 this.transactionMap = publishTxList;
             }
@@ -187,13 +187,13 @@ export class WalletManager {
             console.log("Got "+idList.length+" wallets from the SPVSDK");
 
             // Rebuild our local model for all wallets returned by the SPV SDK.
-            for (var i = 0; i < idList.length; i++) {
-                let masterId = idList[i];
+            for (let i = 0; i < idList.length; i++) {
+                const masterId = idList[i];
 
                 console.log("Rebuilding local model for subwallet id "+masterId);
 
                 // Try to retrieve locally storage extended info about this wallet
-                let extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
+                const extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
                 if (!extendedInfo) {
                     // No backward compatibility support: old wallets are just destroyed.
                     await this.spvBridge.destroyWallet(masterId);
@@ -223,12 +223,47 @@ export class WalletManager {
 
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
             return false;
         }
         return true;
+    }
+
+    // For background service
+    public async updateMasterWallets(masterId: string, action: string) {
+        if (this.appService.runningAsAService()) {
+            if (action === 'remove') {
+                // Delete wallet
+                delete this.masterWallets[masterId];
+            } else {
+                // Try to retrieve locally storage extended info about this wallet
+                const extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
+                if (extendedInfo) {
+                    // Create a model instance for each master wallet returned by the SPV SDK.
+                    this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
+                    await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
+                }
+            }
+        }
+    }
+
+    private sendUpdateWalletInfo2Service(masterId: string, action: string) {
+        const rpcMessage: InAppRPCMessage = {
+            method: RPCMethod.UPDAET_MASTER_WALLET,
+            params: {
+                masterId,
+                action
+            },
+            startupMode: this.appService.getStartupMode()
+        };
+        appManager.sendMessage('#service:walletservice',
+                                AppManagerPlugin.MessageType.INTERNAL,
+                                JSON.stringify(rpcMessage), () => {
+            // Nothing to do
+        }, (err) => {
+            console.log("Failed to send start RPC message to the sync service", err);
+        });
     }
 
     // Backup service runs only in the UI because it requires user interaction sometimes, and we don't
@@ -239,10 +274,10 @@ export class WalletManager {
 
         // Give some fresh air to the wallet while starting, to show the UI first without overloading the CPU.
         // There is no hurry to start the backup service.
-        setTimeout(async ()=>{
+        setTimeout(async () => {
             await this.backupService.init();
 
-            for (let wallet of this.getWalletsList()) {
+            for (const wallet of this.getWalletsList()) {
                 await this.backupService.setupBackupForWallet(wallet);
             }
 
@@ -268,7 +303,7 @@ export class WalletManager {
     }
 
     public walletNameExists(name: string): boolean {
-        let existingWallet = Object.values(this.masterWallets).find((wallet) => {
+        const existingWallet = Object.values(this.masterWallets).find((wallet) => {
             return wallet.name === name;
         });
         return existingWallet != null;
@@ -279,8 +314,7 @@ export class WalletManager {
     }
 
     public async getCurrentMasterIdFromStorage(): Promise<string> {
-        let data = await this.localStorage.getCurMasterId();
-
+        const data = await this.localStorage.getCurMasterId();
         if (data && data["masterId"]) {
             return data["masterId"];
         } else {
@@ -309,7 +343,7 @@ export class WalletManager {
             singleAddress
         );
 
-        let account: WalletAccount = {
+        const account: WalletAccount = {
             SingleAddress: singleAddress,
             Type: WalletAccountType.STANDARD
         };
@@ -332,7 +366,7 @@ export class WalletManager {
 
         await this.spvBridge.importWalletWithMnemonic(masterId, mnemonicStr, mnemonicPassword, payPassword, singleAddress);
 
-        let account: WalletAccount = {
+        const account: WalletAccount = {
             SingleAddress: singleAddress,
             Type: WalletAccountType.STANDARD
         };
@@ -363,6 +397,9 @@ export class WalletManager {
 
         // Save state to local storage
         await this.saveMasterWallet(this.masterWallets[id]);
+
+        // To service
+        this.sendUpdateWalletInfo2Service(id, 'add');
 
         this.setRecentWalletId(id);
 
@@ -402,6 +439,8 @@ export class WalletManager {
 
         // Notify some listeners
         this.events.publish("masterwallet:destroyed", id);
+
+        this.sendUpdateWalletInfo2Service(id, 'remove');
 
         if (Object.values(this.masterWallets).length > 0) {
 
@@ -455,10 +494,11 @@ export class WalletManager {
         }
 
         // Add only standard subwallets to SPV sync request
-        let chainIds: StandardCoinName[] = [];
-        for (let subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
-            if (subWallet.type == CoinType.STANDARD)
+        const chainIds: StandardCoinName[] = [];
+        for (const subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
+            if (subWallet.type === CoinType.STANDARD) {
                 chainIds.push(subWallet.id as StandardCoinName);
+            }
         }
 
         await this.startSubWalletsSync(masterId, chainIds);
@@ -469,10 +509,11 @@ export class WalletManager {
         console.log("Requesting sync service to stop syncing wallet " + masterId);
 
         // Add only standard subwallets to SPV stop sync request
-        let chainIds: StandardCoinName[] = [];
-        for (let subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
-            if (subWallet.type == CoinType.STANDARD)
+        const chainIds: StandardCoinName[] = [];
+        for (const subWallet of Object.values(this.getMasterWallet(masterId).subWallets)) {
+            if (subWallet.type === CoinType.STANDARD) {
                 chainIds.push(subWallet.id as StandardCoinName);
+            }
         }
 
         await this.stopSubWalletsSync(masterId, chainIds);
@@ -481,12 +522,12 @@ export class WalletManager {
     private startSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]): Promise<void> {
         return new Promise(async (resolve, reject) => {
             console.log("Requesting sync service to start syncing some subwallets for wallet " + masterId);
-            let messageParams: RPCStartWalletSyncParams = {
-                masterId: masterId,
+            const messageParams: RPCStartWalletSyncParams = {
+                masterId,
                 chainIds: subWalletIds
             };
 
-            let rpcMessage: InAppRPCMessage = {
+            const rpcMessage: InAppRPCMessage = {
                 method: RPCMethod.START_WALLET_SYNC,
                 params: messageParams,
                 startupMode: this.appService.getStartupMode()
@@ -511,12 +552,12 @@ export class WalletManager {
         return new Promise(async (resolve, reject)=>{
             console.log("Requesting sync service to stop syncing some subwallets for wallet " + masterId);
 
-            let messageParams: RPCStopWalletSyncParams = {
-                masterId: masterId,
+            const messageParams: RPCStopWalletSyncParams = {
+                masterId,
                 chainIds: subWalletIds
             };
 
-            let rpcMessage: InAppRPCMessage = {
+            const rpcMessage: InAppRPCMessage = {
                 method: RPCMethod.STOP_WALLET_SYNC,
                 params: messageParams,
                 startupMode: this.appService.getStartupMode()
@@ -595,10 +636,10 @@ export class WalletManager {
      * Handler for all SPV wallet events.
      */
     public handleSubWalletEvent(event: SPVWalletMessage) {
-        let masterId = event.MasterWalletID;
-        let chainId = event.ChainID;
+        const masterId = event.MasterWalletID;
+        const chainId = event.ChainID;
 
-        console.log("SubWallet message: ", masterId, chainId, event);
+        // console.log("SubWallet message: ", masterId, chainId, event);
         //console.log(event.Action, event.result);
 
         switch (event.Action) {
@@ -638,7 +679,7 @@ export class WalletManager {
     }
 
     private async updateSyncProgress(masterId: WalletID, chainId: StandardCoinName, progress: number, lastBlockTime: number) {
-        let masterWallet = this.getMasterWallet(masterId);
+        const masterWallet = this.getMasterWallet(masterId);
         if (!masterWallet) {
             console.warn("updateSyncProgress() called but wallet with ID", masterId, "does not exist!");
             return;
@@ -646,7 +687,7 @@ export class WalletManager {
 
         masterWallet.updateSyncProgress(chainId, progress, lastBlockTime);
 
-        let subWallet = masterWallet.getSubWallet(chainId) as StandardSubWallet;
+        const subWallet = masterWallet.getSubWallet(chainId) as StandardSubWallet;
         // console.log("DEBUG updateSyncProgress", masterId, chainId, masterWallet.getSubWallets())
         // Seems like we can sometimes receive an update progress about a subwallet not yet added. Reason unknown for now.
         if (!subWallet) {
@@ -657,11 +698,11 @@ export class WalletManager {
         await this.backupService.onSyncProgress(masterWallet, subWallet);
 
         if (!this.hasPromptTransfer2IDChain && (chainId === StandardCoinName.IDChain)) {
-            let elaProgress = this.masterWallets[masterId].subWallets[StandardCoinName.ELA].progress;
-            let idChainProgress = this.masterWallets[masterId].subWallets[StandardCoinName.IDChain].progress;
+            const elaProgress = this.masterWallets[masterId].subWallets[StandardCoinName.ELA].progress;
+            const idChainProgress = this.masterWallets[masterId].subWallets[StandardCoinName.IDChain].progress;
 
             // Check if it's a right time to prompt user for ID chain transfers, but only if we are fully synced.
-            if (elaProgress == 100 && idChainProgress == 100) {
+            if (elaProgress === 100 && idChainProgress === 100) {
                 this.checkIDChainBalance(masterId);
             }
         }
@@ -856,7 +897,7 @@ export class WalletManager {
      * 4) check whether it is in the election period. If it's not in the election period, we need to put C1 and C2 in invalidCandidates.
      */
     public async computeVoteInvalidCandidates(masterWalletId: string): Promise<InvalidCandidateForVote[]> {
-        let helper = new InvalidVoteCandidatesHelper(this.http, this, masterWalletId, this.prefs);
+        const helper = new InvalidVoteCandidatesHelper(this.http, this, masterWalletId, this.prefs);
         return await helper.computeInvalidCandidates();
     }
 
@@ -871,8 +912,8 @@ export class WalletManager {
         const onedayago = moment().add(-1, 'days').valueOf();
         const masterWallet = this.getMasterWallet(masterWalletId);
 
-        let subwallets = masterWallet.subWalletsWithExcludedCoin(StandardCoinName.ETHSC, CoinType.STANDARD);
-        for (let subWallet of subwallets) {
+        const subwallets = masterWallet.subWalletsWithExcludedCoin(StandardCoinName.ETHSC, CoinType.STANDARD);
+        for (const subWallet of subwallets) {
             // Get balance by RPC if the last block time is one day ago.
             if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
                 try {
@@ -889,7 +930,7 @@ export class WalletManager {
     }
 
     sendIntentResponse(action, result, intentId): Promise<void> {
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             appManager.sendIntentResponse(action, result, intentId, () => {
                 resolve();
             }, (err) => {

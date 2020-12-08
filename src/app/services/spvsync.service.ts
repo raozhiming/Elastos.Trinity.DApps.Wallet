@@ -30,8 +30,6 @@ import { PopupProvider } from './popup.service';
 import { WalletManager } from './wallet.service';
 import { LocalStorage } from './storage.service';
 import { TranslateService } from '@ngx-translate/core';
-import { BackupRestoreService } from './backuprestore.service';
-import { StandardSubWallet } from '../model/wallets/StandardSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let notificationManager: NotificationManagerPlugin.NotificationManager;
@@ -47,6 +45,7 @@ export enum RPCMethod {
     STOP_WALLET_SYNC,
     GET_WALLET_SYNC_PROGRESS,
     SEND_WALLET_SYNC_PROGRESS,
+    UPDAET_MASTER_WALLET
 }
 
 export type RPCStartWalletSyncParams = {
@@ -64,6 +63,11 @@ export type ChainSyncProgress = {
 export type WalletSyncProgress = {
   [index: string]: ChainSyncProgress
 };
+
+export interface RPCUpdateWalletInfoParams {
+    masterId: WalletID;
+    action: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -106,20 +110,20 @@ export class SPVSyncService {
      * Handler for all SPV wallet events received by the background service.
      */
     private handleSubWalletEvent(event: SPVWalletMessage) {
-        let masterId = event.MasterWalletID;
-        let chainId = event.ChainID;
+        const masterId = event.MasterWalletID;
+        const chainId = event.ChainID;
 
         console.log("SubWallet message: ", masterId, chainId, event);
-        //console.log(event.Action, event.result);
+        // console.log(event.Action, event.result);
 
         switch (event.Action) {
-            case "OnBlockSyncProgress":
+            case 'OnBlockSyncProgress':
                 this.handleBlockSyncProgressEvent(masterId, chainId, event);
                 break;
-            case "OnBalanceChanged":
+            case 'OnBalanceChanged':
                 // Nothing to do for now
                 break;
-            case "OnETHSCEventHandled":
+            case 'OnETHSCEventHandled':
                 this.handleETHSCBlockSyncProgressEvent(masterId, chainId, event);
                 break;
         }
@@ -128,7 +132,7 @@ export class SPVSyncService {
     public async syncStartSubWallets(masterId: WalletID, chainIds: StandardCoinName[]): Promise<void> {
         console.log("SubWallets sync is starting:", masterId);
 
-        for (let chainId of chainIds) {
+        for (const chainId of chainIds) {
             await this.spvBridge.syncStart(masterId, chainId);
         }
     }
@@ -136,20 +140,21 @@ export class SPVSyncService {
     public async syncStopSubWallets(masterId: WalletID, chainIds: StandardCoinName[]): Promise<void> {
         console.log("SubWallets sync is stopping:", masterId);
 
-        for (let chainId of chainIds) {
+        for (const chainId of chainIds) {
             await this.spvBridge.syncStop(masterId, chainId);
         }
     }
 
     private async handleAppManagerMessage(message: AppManagerPlugin.ReceivedMessage) {
-        if (!message || !message.message)
+        if (!message || !message.message) {
             return;
+        }
 
-        let rpcMessage = JSON.parse(message.message) as InAppRPCMessage;
+        const rpcMessage = JSON.parse(message.message) as InAppRPCMessage;
         switch (rpcMessage.method) {
             case RPCMethod.GET_WALLET_SYNC_PROGRESS:
                 // TODO: upgraded spvsdk -- Get sync progress by api when it doesn't connect to node.
-                let sendRPCMessage: InAppRPCMessage = {
+                const sendRPCMessage: InAppRPCMessage = {
                   method: RPCMethod.SEND_WALLET_SYNC_PROGRESS,
                   params: this.walletsSyncProgress,
                   startupMode: 'service'
@@ -162,17 +167,21 @@ export class SPVSyncService {
 
                 appManager.sendMessage(appId, AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(sendRPCMessage), ()=>{
                   // Nothing to do
-                }, (err)=>{
+                }, (err) => {
                     console.log("Failed to send start RPC message to the sync service", err);
                 });
                 break;
             case RPCMethod.START_WALLET_SYNC:
-                let startWalletSyncParams = rpcMessage.params as RPCStartWalletSyncParams;
+                const startWalletSyncParams = rpcMessage.params as RPCStartWalletSyncParams;
                 await this.syncStartSubWallets(startWalletSyncParams.masterId, startWalletSyncParams.chainIds);
                 break;
             case RPCMethod.STOP_WALLET_SYNC:
-                let stopWalletSyncParams = rpcMessage.params as RPCStopWalletSyncParams;
+                const stopWalletSyncParams = rpcMessage.params as RPCStopWalletSyncParams;
                 await this.syncStopSubWallets(stopWalletSyncParams.masterId, stopWalletSyncParams.chainIds);
+                break;
+            case RPCMethod.UPDAET_MASTER_WALLET:
+                const updateWalletInfoParams = rpcMessage.params as RPCUpdateWalletInfoParams;
+                this.walletManager.updateMasterWallets(updateWalletInfoParams.masterId, updateWalletInfoParams.action);
                 break;
             default:
                 break;
@@ -180,6 +189,9 @@ export class SPVSyncService {
     }
 
     private async handleBlockSyncProgressEvent(masterId: WalletID, chainId: StandardCoinName, event: SPVWalletMessage) {
+        if (!this.walletManager.masterWallets[masterId]) {
+            return;
+        }
         this.walletManager.masterWallets[masterId].updateSyncProgress(chainId, event.Progress, event.LastBlockTime);
 
         if (!this.walletsSyncProgress[masterId]) {
@@ -189,8 +201,8 @@ export class SPVSyncService {
 
         // If we are reaching 100% sync and this is the first time we reach it, we show a notification
         // to the user.
-        if (event.Progress == 100) {
-            let notificationSent = await this.syncCompletedNotificationSent(chainId);
+        if (event.Progress === 100) {
+            const notificationSent = await this.syncCompletedNotificationSent(chainId);
             if (!notificationSent) {
                 await this.sendSyncCompletedNotification(chainId);
             }
@@ -226,7 +238,7 @@ export class SPVSyncService {
      * Tells if the "sync completed" notification has already been sent earlier for a given chain id or not.
      */
     private async syncCompletedNotificationSent(chainId: StandardCoinName): Promise<boolean> {
-        let notificationSent = await this.localStorage.get("sync-completed-notification-sent-"+chainId) || false;
+        const notificationSent = await this.localStorage.get("sync-completed-notification-sent-"+chainId) || false;
         return notificationSent;
     }
 
