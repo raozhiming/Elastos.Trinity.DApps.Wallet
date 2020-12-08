@@ -720,7 +720,8 @@ export class WalletManager {
                         result.LastBlockTime = result.event.Timestamp;
                         break;
                     case ETHSCEventAction.CHANGED:
-                        if (('CONNECTED' === result.event.NewState) && ('CONNECTED' === result.event.OldState)) {
+                        // if (('CONNECTED' === result.event.NewState) && ('CONNECTED' === result.event.OldState)) {
+                        if ('CONNECTED' === result.event.NewState) {
                             result.Progress =  100;
                             result.LastBlockTime = new Date().getTime() / 1000;
                             // console.log('----updateETHSCEventFromCallback set 100 masterId:', masterId, ' result.event:', result.event);
