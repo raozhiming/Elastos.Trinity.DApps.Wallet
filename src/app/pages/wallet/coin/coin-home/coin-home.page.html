@@ -25,8 +25,9 @@
     <ion-grid class="container" [class.dark-container]="theme.darkMode">
         <ion-row class="main-title-row">
             <ion-col size="12">
-                <h1>{{ 'coin-overview' | translate: {coinName: getCoinBalanceCurrency() } }}</h1>
-                <p>{{ 'coin-new-transactions-today' | translate:{todaysTransactions: todaysTransactions} }}</p>
+                <h1>{{ 'coin-overview' | translate: { coinName: getCoinBalanceCurrency() } }}</h1>
+                <p *ngIf="todaysTransactions > 20">20+ {{ 'coin-new-transactions-today' | translate }}</p>
+                <p *ngIf="todaysTransactions <= 20">{{ todaysTransactions }} {{ 'coin-new-transactions-today' | translate }}</p>
             </ion-col>
         </ion-row>
         <ion-row [class]="getSubwalletClass()">

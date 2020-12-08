@@ -327,7 +327,7 @@ export class CoinHomePage implements OnInit {
     }
 
     countAsDailyTransactionIfNeeded(timestamp: number) {
-        let today = moment(new Date());
+        const today = moment(new Date());
         if (today.startOf('day').isSame(moment(timestamp).startOf('day'))) {
             this.todaysTransactions++;
         }

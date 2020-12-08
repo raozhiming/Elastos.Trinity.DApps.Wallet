@@ -89,7 +89,7 @@ export const fr = {
     * Coin Home Page *
     ******************/
     "coin-overview": "Jeton {{coinName}} - Aperçu",
-    "coin-new-transactions-today": "{{ todaysTransactions }} NOUVELLE(S) TRANSACTION(S) AUJOURD'HUI",
+    "coin-new-transactions-today": "NOUVELLE(S) TRANSACTION(S) AUJOURD'HUI",
     "coin-balance": "Solde",
     "coin-action-recharge": "TRANSFERER",
     "coin-action-withdraw": "TRANSFERER",
