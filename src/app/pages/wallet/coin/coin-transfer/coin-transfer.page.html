@@ -161,7 +161,7 @@
     class="footer" [class.dark-footer]="theme.darkMode"
 >
     <ion-row class="btn-container">
-        <ion-button color="primary" (click)="goTransaction()">
+        <ion-button color="primary" [disabled]="!valuesValid()" (click)="goTransaction()">
             <ion-label>{{ getButtonLabel() | translate }}</ion-label>
         </ion-button>
     </ion-row>

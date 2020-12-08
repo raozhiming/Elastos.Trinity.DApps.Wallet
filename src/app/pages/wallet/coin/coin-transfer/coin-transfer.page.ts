@@ -371,12 +371,30 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         // this.showConfirm();
         // this.showSuccess();
 
-        if (this.valuesValid()) {
+        if (this.valuesReady()) {
             await this.startTransaction();
         }
     }
 
+    // For revealing button
     valuesValid(): boolean {
+        if (Util.isNull(this.amount)) {
+            return false;
+        } else if (!Util.number(this.amount)) {
+            return false;
+        } else if (this.amount <= 0) {
+            return false;
+        } else if (!this.masterWallet.subWallets[this.chainId].isBalanceEnough(new BigNumber(this.amount))) {
+            return false;
+        } else if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // For starting tx
+    valuesReady(): boolean {
         let valuesValid = false;
         if (Util.isNull(this.amount)) {
             this.native.toast_trans('amount-null');
