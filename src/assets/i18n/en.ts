@@ -31,6 +31,7 @@ export const en = {
     'text-did-balance-not-enough': 'Writing DID information on chain requires small amounts of ELA to pay the fees. Please transfer a few ELA (ex: 0.1 ELA) from your main wallet to the DID sidechain first!',
     'amount-null': "Please set the transaction amount",
     "amount-invalid": "Please enter the correct amount",
+    'eth-insuff-balance': 'You must have enough ETHSC for gas fees in order to send Elastos ERC20 tokens',
     "insuff-balance": "Insufficient balance",
     'transaction-has-been-published': "Transaction has been published! Please wait a moment",
     "sync-completed": "Sync completed",

@@ -74,7 +74,7 @@ export class Native {
             color: 'primary',
             position: 'top',
             header: message,
-            duration: 2000,
+            duration: duration,
         }).then(toast => toast.present());
     }
 

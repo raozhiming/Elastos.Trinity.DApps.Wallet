@@ -178,7 +178,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
     }
 
     goCoinHome(masterWalletId: string, chainId: string) {
-        this.native.go("/coin", { masterWalletId, chainId});
+        this.native.go("/coin", { masterWalletId, chainId });
     }
 
     async doRefresh(event) {

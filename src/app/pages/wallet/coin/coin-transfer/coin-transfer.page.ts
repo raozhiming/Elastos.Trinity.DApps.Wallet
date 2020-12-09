@@ -30,7 +30,7 @@ import { Util } from '../../../../model/Util';
 import { WalletManager } from '../../../../services/wallet.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { CoinTransferService, TransferType, Transfer } from 'src/app/services/cointransfer.service';
-import { StandardCoinName } from 'src/app/model/Coin';
+import { StandardCoinName, CoinType } from 'src/app/model/Coin';
 import { ThemeService } from 'src/app/services/theme.service';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import * as CryptoAddressResolvers from 'src/app/model/address-resolvers';
@@ -407,7 +407,15 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         } else if (this.amount.toString().indexOf('.') > -1 && this.amount.toString().split(".")[1].length > 8) {
             this.native.toast_trans('amount-invalid');
         } else {
-            valuesValid = true;
+            if (this.fromSubWallet.type === CoinType.ERC20) {
+                if (this.masterWallet.getSubWallet(StandardCoinName.ETHSC).balance.isLessThan(0.001)) {
+                    this.native.toast_trans('eth-insuff-balance', 4000);
+                } else {
+                    valuesValid = true;
+                }
+            } else {
+                valuesValid = true;
+            }
         }
 
         return valuesValid;
