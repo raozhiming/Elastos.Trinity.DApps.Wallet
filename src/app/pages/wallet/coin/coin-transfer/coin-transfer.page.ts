@@ -282,13 +282,13 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         // Call dedicated api to the source subwallet to generate the appropriate transaction type.
         // For example, ERC20 token transactions are different from standard coin transactions (for now - as
         // the spv sdk doesn't support ERC20 yet).
-        let rawTx = await this.fromSubWallet.createPaymentTransaction(
+        const rawTx = await this.fromSubWallet.createPaymentTransaction(
             this.toAddress, // User input address
             toAmount.toString(), // User input amount
             this.memo // User input memo
         );
 
-        let transfer = new Transfer();
+        const transfer = new Transfer();
         Object.assign(transfer, {
             masterWalletId: this.masterWallet.id,
             chainId: this.chainId,
@@ -297,7 +297,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: this.transferType === TransferType.PAY ? this.coinTransferService.intentTransfer.intentId : null ,
         });
 
-        let result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        const result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
         if (result) this.showSuccess();
     }
 
@@ -328,7 +328,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: null,
         });
 
-        let result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        const result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
         if (result) this.showSuccess();
     }
 
@@ -359,7 +359,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
             intentId: null,
         });
 
-        let result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
+        const result = await this.fromSubWallet.signAndSendRawTransaction(rawTx, transfer);
         if (result) this.showSuccess();
     }
 
