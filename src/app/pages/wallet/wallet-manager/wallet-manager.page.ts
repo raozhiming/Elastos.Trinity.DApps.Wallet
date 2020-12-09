@@ -9,7 +9,6 @@ import { Util } from 'src/app/model/Util';
 import { Config } from 'src/app/config/Config';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
-import { CoinTransferService } from 'src/app/services/cointransfer.service';
 import { WalletAccessService } from 'src/app/services/walletaccess.service';
 import { Router } from '@angular/router';
 import { CurrencyService } from 'src/app/services/currency.service';
@@ -25,8 +24,7 @@ export class WalletManagerPage implements OnInit {
 
     public Util = Util;
     public SELA = Config.SELA;
-    public forIntent = false;
-    private forWalletAccess = false;
+    public forWalletAccess = false;
 
     constructor(
         public events: Events,
@@ -37,7 +35,6 @@ export class WalletManagerPage implements OnInit {
         private walletEditionService: WalletEditionService,
         public walletManager: WalletManager,
         private translate: TranslateService,
-        private coinTransferService: CoinTransferService,
         private walletAccessService: WalletAccessService,
         public currencyService: CurrencyService
     ) {
@@ -46,31 +43,22 @@ export class WalletManagerPage implements OnInit {
     ngOnInit() {
         const navigation = this.router.getCurrentNavigation();
         if (!Util.isEmptyObject(navigation.extras.state)) {
-            this.forIntent = navigation.extras.state.forIntent;
             this.forWalletAccess = navigation.extras.state.forWalletAccess;
-
-            console.log('For intent?', this.forIntent);
             console.log('For wallet access?', this.forWalletAccess);
         }
     }
 
     ionViewWillEnter() {
         appManager.setVisible("show", () => {}, (err) => {});
-        this.forIntent ?
+        this.forWalletAccess ?
             this.appService.setTitleBarTitle(this.translate.instant('intent-select-wallet')) :
             this.appService.setTitleBarTitle(this.translate.instant('settings-my-wallets'));
     }
 
     walletSelected(masterWallet: MasterWallet) {
-        if (this.forIntent) {
-            if (this.forWalletAccess) {
-                this.walletAccessService.masterWalletId = masterWallet.id;
-                this.native.go('/access');
-            } else {
-                this.coinTransferService.masterWalletId = masterWallet.id;
-                this.coinTransferService.walletInfo = masterWallet.account;
-                this.native.go("/waitforsync");
-            }
+        if (this.forWalletAccess) {
+            this.walletAccessService.masterWalletId = masterWallet.id;
+            this.native.go('/access');
         } else {
             this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
             this.native.go("/wallet-settings");

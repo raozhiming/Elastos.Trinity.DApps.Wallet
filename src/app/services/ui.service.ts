@@ -33,9 +33,10 @@ export class UiService {
     });
   }
 
-  getSubWalletIcon(subwallet: SubWallet): string {
-    if (!subwallet)
-      return "";
+  getSubWalletIcon = (subwallet: SubWallet): string => {
+    if (!subwallet) {
+      return '';
+    }
 
     switch (subwallet.id) {
         case StandardCoinName.ELA:
@@ -50,14 +51,17 @@ export class UiService {
   }
 
   getSubwalletTitle(subwallet: SubWallet): string {
-    if (!subwallet)
-      return "";
+    if (!subwallet) {
+      return '';
+    }
+
     return subwallet.getFriendlyName();
   }
 
   getSubwalletSubtitle(subwallet: SubWallet): string {
-    if (!subwallet)
-      return "";
+    if (!subwallet) {
+      return '';
+    }
     return subwallet.getDisplayTokenName();
   }
 

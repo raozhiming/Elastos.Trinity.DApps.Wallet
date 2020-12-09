@@ -93,6 +93,7 @@ import { CurrencySelectPage } from './pages/settings/currency-select/currency-se
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
+import { SelectSubwalletPage } from './pages/intents/select-subwallet/select-subwallet.page';
 
 /****************** Components ******************/
 import { WalletCreatedComponent } from './components/wallet-created/wallet-created.component';
@@ -216,6 +217,7 @@ export function TranslateLoaderFactory() {
         MnemonicCreatePage,
         CurrencySelectPage,
         WalletColorPage,
+        SelectSubwalletPage,
         WalletCreatedComponent,
         TxConfirmComponent,
         TxSuccessComponent,

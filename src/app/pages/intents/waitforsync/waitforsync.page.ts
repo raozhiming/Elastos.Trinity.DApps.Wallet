@@ -60,7 +60,6 @@ export class WaitForSyncPage implements OnInit {
     ngOnInit() {
         this.zone.run(() => {
             this.init();
-            // this.native.setRootRouter('/didtransaction');
         });
     }
 
@@ -156,10 +155,11 @@ export class WaitForSyncPage implements OnInit {
     }
 
     async cancelOperation() {
+        const intentParams =  this.coinTransferService.intentTransfer;
         await this.intentService.sendIntentResponse(
-            this.coinTransferService.intentTransfer.action,
+            intentParams.action,
             {txid: null, status: 'cancelled'},
-            this.coinTransferService.intentTransfer.intentId
+            intentParams.intentId
         );
     }
 
@@ -169,18 +169,5 @@ export class WaitForSyncPage implements OnInit {
             dots += '.';
         }, 100);
         return dots;
-    }
-
-    getSubWalletIcon(): string {
-        switch (this.chainId) {
-            case 'ELA':
-                return "assets/coins/ela-black.svg";
-            case 'IDChain':
-                return "assets/coins/ela-turquoise.svg";
-            case 'ETHSC':
-                return "assets/coins/ela-gray.svg";
-            default:
-                return "assets/coins/eth.svg";
-        }
     }
 }

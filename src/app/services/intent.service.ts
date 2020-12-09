@@ -76,7 +76,7 @@ export class IntentService {
      * returns the short old-style action "pay" for convenience.
      */
     private getShortAction(fullAction: string): string {
-        let intentDomainRoot = "https://wallet.elastos.net/";
+        const intentDomainRoot = "https://wallet.elastos.net/";
         return fullAction.replace(intentDomainRoot, "");
     }
 
@@ -145,14 +145,20 @@ export class IntentService {
                 break;
 
             case 'pay':
-                this.coinTransferService.chainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
-                if (this.coinTransferService.chainId === null) {
-                    await this.sendIntentResponse('pay', {message: 'Not support Token:' + intent.params.currency, status: 'error'}, intent.intentId);
+                const intentChainId = this.getChainIDByCurrency(intent.params.currency || 'ELA');
+                if (intentChainId) {
+                    this.coinTransferService.chainId = intentChainId;
+                } else {
+                    await this.sendIntentResponse(
+                        'pay',
+                        { message: 'Not support Token:' + intent.params.currency, status: 'error' },
+                        intent.intentId
+                    );
+
                     return;
                 }
 
                 this.coinTransferService.transferType = TransferType.PAY;
-
                 this.coinTransferService.payTransfer = {
                     toAddress: intent.params.receiver,
                     amount: intent.params.amount,
@@ -178,7 +184,7 @@ export class IntentService {
             this.coinTransferService.walletInfo = masterWallet.account;
             this.native.setRootRouter("/waitforsync");
         } else {
-            this.native.setRootRouter('wallet-manager', { forIntent: true, forWalletAccess: false });
+            this.native.setRootRouter('select-subwallet');
         }
     }
 
@@ -195,7 +201,7 @@ export class IntentService {
             this.walletAccessService.masterWalletId = masterWallet.id;
             this.native.setRootRouter("/access");
         } else {
-            this.native.setRootRouter('wallet-manager', { forIntent: true, forWalletAccess: true });
+            this.native.setRootRouter('wallet-manager', { forWalletAccess: true });
         }
     }
 
@@ -244,6 +250,7 @@ export class IntentService {
         let chainID = StandardCoinName.ELA;
         switch (currency) {
             case 'ELA':
+                chainID = StandardCoinName.ELA;
                 break;
             case 'IDChain':
             case 'ELA/ID':

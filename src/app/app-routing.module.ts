@@ -58,6 +58,7 @@ import { CurrencySelectPage } from './pages/settings/currency-select/currency-se
 import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
+import { SelectSubwalletPage } from './pages/intents/select-subwallet/select-subwallet.page';
 
 @Component({ template: "<div></div>" })
 export class EmptyPage  {}
@@ -101,16 +102,18 @@ const routes: Routes = [
     { path: 'contact-create', component: ContactCreatePage},
 
     // Intents
+    { path: 'select-subwallet', component: SelectSubwalletPage },
+    { path: 'waitforsync', component: WaitForSyncPage },
     { path: 'access', component: AccessPage },
     { path: 'didtransaction', component: DidTransactionPage },
     { path: 'esctransaction', component: EscTransactionPage },
-    { path: 'waitforsync', component: WaitForSyncPage },
     { path: 'crmembervote', component: CRmembervotePage },
     { path: 'dposvote', component: DPoSVotePage },
     { path: 'crmemberregister', component: CRMemberRegisterPage },
     { path: 'crproposalvoteagainst', component: CRProposalVoteAgainstPage },
 
-    { path: '**', component: EmptyPage }, // Prevent angular from calling a random default route sometimes when starting, leading to crashes if platform is not ready yet
+    { path: '**', component: EmptyPage },
+    // Prevent angular from calling a random default route sometimes when starting, leading to crashes if platform is not ready yet
 ];
 @NgModule({
     imports: [
