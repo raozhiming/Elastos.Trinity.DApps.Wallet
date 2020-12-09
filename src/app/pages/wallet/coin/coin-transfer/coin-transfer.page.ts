@@ -74,7 +74,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     // Display recharge wallets
     public fromSubWallet: SubWallet;
-    public toSubWallet: SubWallet;
+    public toSubWallet: SubWallet = null;
 
     // Display memo
     public hideMemo = true;
@@ -439,7 +439,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress = this.toAddress.substring(index + 1);
             }
 
-            const isAddressValid = await this.isSubWalletAddressValid(this.masterWallet.id, this.chainId, this.toAddress);
+            const toChainId = this.toSubWallet ? this.toSubWallet.id : this.chainId;
+            const isAddressValid = await this.isSubWalletAddressValid(this.masterWallet.id, toChainId, this.toAddress);
             if (!isAddressValid) {
                 this.native.toast_trans('not-a-valid-address');
                 return;
