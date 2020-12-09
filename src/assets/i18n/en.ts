@@ -91,7 +91,7 @@ export const en = {
     * Coin Home Page *
     ******************/
     "coin-overview": "{{coinName}} Overview",
-    "coin-new-transactions-today": "NEW TRANSACTIONS TODAY",
+    "coin-new-transactions-today": "{{ todaysTransactions }} NEW TRANSACTIONS TODAY",
     "coin-balance": "Balance",
     "coin-action-recharge": "TRANSFER",
     "coin-action-withdraw": "TRANSFER",

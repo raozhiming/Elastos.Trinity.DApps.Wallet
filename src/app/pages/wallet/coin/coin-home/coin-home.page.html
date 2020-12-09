@@ -26,8 +26,8 @@
         <ion-row class="main-title-row">
             <ion-col size="12">
                 <h1>{{ 'coin-overview' | translate: { coinName: getCoinBalanceCurrency() } }}</h1>
-                <p *ngIf="todaysTransactions > 20">20+ {{ 'coin-new-transactions-today' | translate }}</p>
-                <p *ngIf="todaysTransactions <= 20">{{ todaysTransactions }} {{ 'coin-new-transactions-today' | translate }}</p>
+                <p *ngIf="todaysTransactions > 20">{{ 'coin-new-transactions-today' | translate:{ '20+': todaysTransactions} }}}</p>
+                <p *ngIf="todaysTransactions <= 20">{{ 'coin-new-transactions-today' | translate:{todaysTransactions: todaysTransactions} }}</p>
             </ion-col>
         </ion-row>
         <ion-row [class]="getSubwalletClass()">
