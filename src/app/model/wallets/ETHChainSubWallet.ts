@@ -163,8 +163,8 @@ export class ETHChainSubWallet extends StandardSubWallet {
         // so get balance by web3
         // if we can get the lastBlockTime from spvsdk, then we can get balance by spvsdk.
         const curTimestampMs = (new Date()).getTime();
-        const timeInverval = curTimestampMs - this.timestamp;
-        if (timeInverval > 60000) { // 60s
+        const timeInverval = curTimestampMs - this.timestampGetBalance;
+        if (timeInverval > 30000) { // 30s
             this.balance = await this.getBalanceByWeb3();
             this.timestampGetBalance = (new Date()).getTime();
         }
