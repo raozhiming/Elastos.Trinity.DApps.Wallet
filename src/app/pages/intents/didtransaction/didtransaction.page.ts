@@ -121,7 +121,7 @@ export class DidTransactionPage implements OnInit {
         }
         const isAvailableBalanceEnough = await this.sourceSubwallet.isAvailableBalanceEnough(new BigNumber(20000));
         if (!isAvailableBalanceEnough) {
-            await this.popupProvider.ionicAlert('confirmTitle', 'transaction-pending');
+            await this.popupProvider.ionicAlert('confirmTitle', 'text-did-balance-not-enough');
             this.cancelOperation();
             return;
         }
