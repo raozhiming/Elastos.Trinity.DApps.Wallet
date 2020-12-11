@@ -177,36 +177,34 @@
             <h3>{{ 'from' | translate }}:</h3>
             <h4>{{ chainId }}</h4>
         </div>
-       <div>
+        <div>
             <h3>{{ 'to' | translate }}:</h3>
             <h4>{{ toAddress }}</h4>
-       </div>
-       <div>
-            <h3>{{ 'amount' | translate}}:</h3>
-            <h4>{{ amount }}</h4>
-       </div>
+        </div>
         <div *ngIf="memo">
             <h3>{{ 'tx-info-memo' | translate }}:</h3>
             <h4>{{ memo }}</h4>
         </div>
-        <ion-row class="item-row">
-            <ion-col size="6" class="left-col">
-                <h4>{{ chainId }}</h4>
-                <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.selectedCurrency.symbol }}</p>
-            </ion-col>
-            <ion-col size="6" class="right-col">
-                <ion-input
-                    class="amount-input"
-                    type="number"
-                    placeholder="0"
-                    [(ngModel)]="amount"
-                >
-                </ion-input>
-                <p *ngIf="amount">
-                    {{ fromSubWallet.getAmountInExternalCurrency(convertAmountToBigNumber(amount)) }}
-                </p>
-            </ion-col>
-        </ion-row>
+        <div class="amount-container">
+            <ion-row class="item-row">
+                <ion-col size="6" class="left-col">
+                    <h4>{{ chainId }}</h4>
+                    <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.selectedCurrency.symbol }}</p>
+                </ion-col>
+                <ion-col size="6" class="right-col">
+                    <ion-input
+                        class="amount-input"
+                        type="number"
+                        placeholder="0"
+                        [(ngModel)]="amount"
+                    >
+                    </ion-input>
+                    <p *ngIf="amount">
+                        {{ fromSubWallet.getAmountInExternalCurrency(convertAmountToBigNumber(amount)) }}
+                    </p>
+                </ion-col>
+            </ion-row>
+        </div>
     </div>
 </ion-content>
 
@@ -226,39 +224,3 @@
         </ion-col>
     </ion-row>
 </ion-footer>
-
-<!--
-transferType.PAY Draft
-
-<ion-content>
-    <div class="pay-container" [class.dark-pay-container]="theme.darkMode">
-        <ion-img src="./assets/tx/send.svg"></ion-img>
-        <h1>Send ELA</h1>
-        <h2>{{ 'confirm-transaction-title' | translate }}</h2>
-        <h3>{{ 'from' | translate }}:</h3>
-        <h4>EKA</h4>
-        <h3>{{ 'to' | translate }}:</h3>
-        <h4>efsewtwsed3edw3r3</h4>
-        <h3>{{ 'amount' | translate}}:</h3>
-        <h4>100</h4>
-        <div>
-            <h3>Memo:</h3>
-            <h4>Hello!</h4>
-        </div>
-    </div>
-</ion-content>
-<ion-footer
-    class="pay-footer"
-    [class.dark-pay-footer]="theme.darkMode"
->
-    <ion-row class="btn-row">
-        <ion-col class="btn cancel ion-activatable ripple" size="5.6" (click)="cancelPayment()">
-            <ion-label>{{ 'cancel' | translate}}</ion-label>
-            <ion-ripple-effect></ion-ripple-effect>
-        </ion-col>
-        <ion-col class="btn confirm ion-activatable ripple" size="5.6">
-            <ion-label>{{ 'confirm' | translate}}</ion-label>
-            <ion-ripple-effect></ion-ripple-effect>
-        </ion-col>
-    </ion-row>
-</ion-footer> -->

@@ -364,7 +364,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 40px 5px;
+    padding: 40px 0px;
 
     ion-img {
       width: 67.2px;
@@ -374,12 +374,16 @@
 
     div {
       text-align: left;
+      padding: 0 40px;
       width: 100%;
+    }
+
+    .amount-container {
+        padding: 0 20px;
     }
 
     h1, h2, h3, h4 {
       margin: 0;
-      padding: 0 40px;
       width: 100%;
     }
 
@@ -419,8 +423,6 @@
     }
 
     .item-row {
-        margin-left: 25px;
-        margin-right: 25px;
         border-radius: 16px;
         padding: 10px 10px 10px 10px;
         box-shadow: 0 3px 15px 0 #ededf0;
@@ -508,7 +510,7 @@
 
 /********************** Pay Intent Footer **********************/
 .pay-footer {
-    padding: 10px 10px 40px;
+    padding: 20px 10px;
 
     .btn-row {
         width: 100%;
