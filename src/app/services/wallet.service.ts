@@ -47,6 +47,7 @@ import { MainchainSubWallet } from '../model/wallets/MainchainSubWallet';
 import { BackupRestoreService } from './backuprestore.service';
 import { StandardSubWallet } from '../model/wallets/StandardSubWallet';
 import { MainAndIDChainSubWallet } from '../model/wallets/MainAndIDChainSubWallet';
+import { identifierName } from '@angular/compiler';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -222,6 +223,7 @@ export class WalletManager {
                 }
 
                 await this.masterWallets[masterId].populateWithExtendedInfo(extendedInfo);
+                await this.masterWallets[masterId].updateERC20TokenList(this.prefs);
             }
         } catch (error) {
             console.error(error);
@@ -392,6 +394,9 @@ export class WalletManager {
         // Even if not mandatory to have, we open the main sub wallets for convenience as well.
         await this.masterWallets[id].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
         await this.masterWallets[id].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
+
+        // Get all tokens and create subwallet
+        await this.masterWallets[id].updateERC20TokenList(this.prefs);
 
         this.registerSubWalletListener();
 

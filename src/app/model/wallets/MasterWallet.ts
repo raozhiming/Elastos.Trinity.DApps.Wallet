@@ -3,11 +3,13 @@ import { WalletAccount, WalletAccountType } from '../WalletAccount';
 import { WalletManager } from '../../services/wallet.service';
 import { StandardSubWallet } from './StandardSubWallet';
 import { ERC20SubWallet } from './ERC20SubWallet';
-import { Coin, CoinID, CoinType, StandardCoinName } from '../Coin';
+import { Coin, CoinID, CoinType, ERC20Coin, StandardCoinName } from '../Coin';
 import { CoinService } from '../../services/coin.service';
 import BigNumber from 'bignumber.js';
 import { Config } from '../../config/Config';
 import { StandardSubWalletBuilder } from './StandardSubWalletBuilder';
+import { ETHChainSubWallet } from './ETHChainSubWallet';
+import { PrefsService } from 'src/app/services/prefs.service';
 
 export type WalletID = string;
 
@@ -181,6 +183,34 @@ export class MasterWallet {
     public getSubWalletsByType(type: CoinType): SubWallet[] {
         return Object.values(this.subWallets).filter((sw)=>{
             return (sw.type === type);
+        });
+    }
+
+    /**
+     * Get all the tokens, and create the subwallet.
+     */
+    public async updateERC20TokenList(prefs: PrefsService) {
+        if (!this.subWallets[StandardCoinName.ETHSC]) {
+            console.log('updateERC20TokenList no ETHSC');
+            return;
+        }
+
+        const activeNetwork = await prefs.getActiveNetworkType();
+        const erc20TokenList = await (this.subWallets[StandardCoinName.ETHSC] as ETHChainSubWallet).getERC20TokenList();
+        erc20TokenList.forEach( async (token: WalletPlugin.ERC20TokenInfo) => {
+            if (!this.subWallets[token.symbol]) {
+                try {
+                    const erc20Coin = this.coinService.getERC20CoinByContracAddress(token.contractAddress);
+                    if (erc20Coin) {
+                        await this.createSubWallet(erc20Coin);
+                    } else {
+                        const newCoin = new ERC20Coin(token.symbol, token.symbol, token.name, token.contractAddress, activeNetwork);
+                        await this.coinService.addCustomERC20Coin(newCoin, this);
+                    }
+                } catch (e) {
+                    console.log('updateERC20TokenList exception:', e);
+                }
+            }
         });
     }
 }

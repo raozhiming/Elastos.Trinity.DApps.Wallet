@@ -9,6 +9,7 @@ import { MasterWallet } from './MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
+declare let walletManager: WalletPlugin.WalletManager;
 
 /**
  * Specialized standard sub wallet for the ETH sidechain.
@@ -171,6 +172,13 @@ export class ETHChainSubWallet extends StandardSubWallet {
         // const balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
         // // TODO: use Ether? Gwei? Wei?
         // this.balance = new BigNumber(balanceStr).multipliedBy(Config.SELAAsBigNumber);
+    }
+
+    public async getERC20TokenList(): Promise<WalletPlugin.ERC20TokenInfo[]> {
+        const address = await this.getTokenAddress();
+        const tokenlist = await walletManager.getERC20TokenList(address);
+        console.log('getERC20TokenList:', tokenlist);
+        return tokenlist;
     }
 
     public async createPaymentTransaction(toAddress: string, amount: string, memo: string): Promise<string> {

@@ -40,6 +40,7 @@ import { IonSlides, Events } from '@ionic/angular';
 import { ERC20SubWallet } from 'src/app/model/wallets/ERC20SubWallet';
 import { BackupRestoreService } from 'src/app/services/backuprestore.service';
 import { LocalStorage } from 'src/app/services/storage.service';
+import { PrefsService } from 'src/app/services/prefs.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -81,6 +82,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
         private walletEditionService: WalletEditionService,
         private translate: TranslateService,
         public currencyService: CurrencyService,
+        private prefs: PrefsService,
         public theme: ThemeService,
         public uiService: UiService,
         private zone: NgZone,
@@ -187,7 +189,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
             this.storage.setVisit(true);
         }
 
-        let curMasterWallet = null;
+        let curMasterWallet: MasterWallet = null;
         if (this.isSingleWallet) {
             curMasterWallet = this.masterWallet;
         } else {
@@ -196,6 +198,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
         }
 
         await curMasterWallet.updateBalance();
+        await curMasterWallet.updateERC20TokenList(this.prefs);
         curMasterWallet.getSubWalletBalance(StandardCoinName.ELA);
         this.currencyService.fetch();
         setTimeout(() => {
