@@ -4,7 +4,7 @@
 
         <!-- CARD HEADER -->
         <ion-card>
-            <ion-img [src]="!theme.darkMode ? 'assets/intents/smartcontracts.svg' : 'assets/intents/darkmode/smartcontracts.svg'"></ion-img>
+            <img-loader [src]="!theme.darkMode ? 'assets/intents/smartcontracts.svg' : 'assets/intents/darkmode/smartcontracts.svg'" useImg></img-loader>
             <ion-card-title>{{ 'esctransaction-smart-contract' | translate }}</ion-card-title>
             <ion-card-subtitle>
                 {{ 'esctransaction-intro' | translate }}

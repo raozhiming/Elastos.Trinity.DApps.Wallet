@@ -1,7 +1,7 @@
 <ion-content>
     <ion-grid class="container" [class.dark-container]="theme.darkMode" *ngIf="masterWallet && masterWallet.subWallets[chainId]">
         <ion-card>
-            <ion-img [src]="!theme.darkMode ? 'assets/intents/syncing.svg' : 'assets/intents/darkmode/syncing.svg'"></ion-img>
+            <img-loader [src]="!theme.darkMode ? 'assets/intents/syncing.svg' : 'assets/intents/darkmode/syncing.svg'" useImg></img-loader>
             <ion-card-title>{{ 'waitforsync-loading' | translate }}</ion-card-title>
             <ion-card-subtitle>
                 {{ 'waitforsync-intro' | translate }}

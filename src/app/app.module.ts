@@ -36,6 +36,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { IonicImageLoaderModule } from 'ionic-image-loader-v5';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 /****************** Sentry ******************/
 import * as Sentry from "@sentry/browser";
@@ -244,6 +246,7 @@ export function TranslateLoaderFactory() {
         }),
         AppRoutingModule,
         IonicStorageModule,
+        IonicImageLoaderModule,
         FormsModule,
         ComponentsModule,
         HttpClientModule,
@@ -267,6 +270,7 @@ export function TranslateLoaderFactory() {
         Native,
         Logger,
         PopupProvider,
+        WebView,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         { provide: ErrorHandler, useClass: SentryErrorHandler }
     ],

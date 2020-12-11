@@ -37,6 +37,7 @@ import { CoinService } from './services/coin.service';
 import { UiService } from './services/ui.service';
 import { ContactsService } from './services/contacts.service';
 import { ERC20CoinService } from './services/erc20coin.service';
+import { ImageLoaderConfigService } from 'ionic-image-loader-v5';
 
 @Component({
     selector: 'app-root',
@@ -63,7 +64,8 @@ export class AppComponent {
         private coinService: CoinService,
         private contactsService: ContactsService,
         private erc20CoinService: ERC20CoinService,
-        private uiService: UiService
+        private uiService: UiService,
+        private imageLoaderConfig: ImageLoaderConfigService
     ) {
         this.initializeApp();
     }
@@ -73,6 +75,7 @@ export class AppComponent {
         this.platform.ready().then(async () => {
             console.log("Platform is ready");
             this.statusBar.styleDefault();
+            this.imageLoaderConfig.useImageTag(true);
 
             this.setupBackKeyNavigation();
 
