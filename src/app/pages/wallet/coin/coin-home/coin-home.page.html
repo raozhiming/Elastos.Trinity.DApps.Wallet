@@ -54,7 +54,7 @@
                 <ion-col size="3" *ngIf="!coinCanBeTransferred()"></ion-col>
                 <ion-col size="3" *ngIf="coinCanBeTransferred()">
                     <div class="ion-activatable btn-box" (click)="transferFunds()">
-                        <ion-img class="transfer" src="assets/buttons/transfer.png"></ion-img>
+                        <img class="transfer" src="assets/buttons/transfer.png">
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>
                     <p *ngIf="chainIsELA()" class="btn-label">{{ 'coin-action-recharge' | translate }}</p>
@@ -62,14 +62,14 @@
                 </ion-col>
                 <ion-col offset="0.25" size="3" (click)="sendFunds()">
                     <div class="ion-activatable btn-box">
-                        <ion-img class="send" src="assets/buttons/send.png"></ion-img>
+                        <img class="send" src="assets/buttons/send.png">
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>
                     <p class="btn-label">{{ 'coin-action-send' | translate }}</p>
                 </ion-col>
                 <ion-col offset="0.25" size="3">
                     <div class="ion-activatable btn-box" (click)="receiveFunds()">
-                        <ion-img class="receive" src="assets/buttons/receive.png"></ion-img>
+                        <img class="receive" src="assets/buttons/receive.png">
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>
                     <p class="btn-label">{{ 'coin-action-receive' | translate }}</p>
@@ -95,7 +95,7 @@
                         [class.black]="item.type === 2"
                         [class.orange]="item.type === 3"
                     >
-                        <ion-img [src]="item.payStatusIcon"></ion-img>
+                        <img [src]="item.payStatusIcon">
                     </div>
                 </ion-col>
                 <ion-col [size]="item.amount.isZero() ? 7 : 5" class="middle-col">
