@@ -1,7 +1,7 @@
 import { MasterWallet } from './MasterWallet';
 import { Events } from '@ionic/angular';
 import { CoinType, CoinID, StandardCoinName } from '../Coin';
-import { AllTransactions, RawTransactionType, Transaction, TransactionDirection, TransactionInfo, TransactionStatus, TransactionType } from '../Transaction';
+import { AllTransactions, Transaction, TransactionInfo, TransactionStatus, TransactionType } from '../Transaction';
 import { Transfer } from '../../services/cointransfer.service';
 import BigNumber from 'bignumber.js';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,6 +17,7 @@ export class SerializedSubWallet {
     public lastBlockTime: string = null;
     public timestamp: number = -1;
     public progress: number = 0;
+    public timestampRPC: number = 0;
 
     /**
      * Serialize only fields that we are willing to have in the serialized output.
@@ -31,6 +32,7 @@ export class SerializedSubWallet {
         serializedSubWallet.lastBlockTime = subWallet.lastBlockTime;
         serializedSubWallet.timestamp = subWallet.timestamp;
         serializedSubWallet.progress = subWallet.progress;
+        serializedSubWallet.timestampRPC = subWallet.timestampRPC;
         return serializedSubWallet;
     }
 }
@@ -64,6 +66,7 @@ export abstract class SubWallet {
         this.balance = new BigNumber(serializedSubWallet.balance);
         this.lastBlockTime = serializedSubWallet.lastBlockTime;
         this.timestamp = serializedSubWallet.timestamp;
+        this.timestampRPC = serializedSubWallet.timestampRPC;
         // This progress does not start with Block 0, but start with last synchronized blocks
         // So do not get progress from local storage
         // this.progress = serializedSubWallet.progress;

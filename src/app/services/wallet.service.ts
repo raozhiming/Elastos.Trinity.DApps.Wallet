@@ -711,6 +711,10 @@ export class WalletManager {
                 this.checkIDChainBalance(masterId);
             }
         }
+
+        if (progress === 100) {
+            await this.saveMasterWallet(masterWallet);
+        }
     }
 
     // ETHSC has different event
@@ -914,24 +918,18 @@ export class WalletManager {
     }
 
     async getAllSubwalletsBalanceByRPC(masterWalletId) {
-        const currentTimestamp = moment().valueOf();
-        const onedayago = moment().add(-1, 'days').valueOf();
         const masterWallet = this.getMasterWallet(masterWalletId);
-
         const subwallets = masterWallet.subWalletsWithExcludedCoin(StandardCoinName.ETHSC, CoinType.STANDARD);
+        let updatedByRPC = false;
         for (const subWallet of subwallets) {
-            // Get balance by RPC if the last block time is one day ago.
-            if (!subWallet.lastBlockTime || (moment(subWallet.lastBlockTime).valueOf() < onedayago)) {
-                try {
-                    const balance = await (subWallet as MainAndIDChainSubWallet).getBalanceByRPC(this.jsonRPCService);
-
-                    subWallet.balanceByRPC = balance;
-                    subWallet.balance = balance;
-                    subWallet.timestampRPC = currentTimestamp;
-                } catch (e) {
-                    console.log('getBalanceByRPC exception:', e);
-                }
+            const updated = await (subWallet as MainAndIDChainSubWallet).getBalanceByRPC(this.jsonRPCService);
+            if (updated) {
+                updatedByRPC = true;
             }
+        }
+
+        if (updatedByRPC) {
+            await this.saveMasterWallet(masterWallet);
         }
     }
 

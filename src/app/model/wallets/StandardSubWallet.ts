@@ -1,6 +1,6 @@
 import { MasterWallet } from './MasterWallet';
 import { SubWallet, SerializedSubWallet } from './SubWallet';
-import { CoinType, Coin, StandardCoinName } from '../Coin';
+import { CoinType, Coin, StandardCoinName, ERC20Coin } from '../Coin';
 import { Util } from '../Util';
 import { AllTransactions, RawTransactionType, Transaction, TransactionDirection, TransactionInfo, TransactionType } from '../Transaction';
 import { Transfer } from '../../services/cointransfer.service';
@@ -19,9 +19,9 @@ export abstract class StandardSubWallet extends SubWallet {
         this.initialize();
     }
 
-    protected initialize() {
+    protected async initialize() {
         // this.masterWallet.walletManager.registerSubWalletListener();
-        this.initLastBlockInfo();
+        await this.initLastBlockInfo();
         this.updateBalance();
     }
 
@@ -92,7 +92,7 @@ export abstract class StandardSubWallet extends SubWallet {
 
     protected async getTransactionName(transaction: Transaction, translate: TranslateService): Promise<string> {
         let transactionName: string = '';
-        console.log("getTransactionName std subwallet", transaction);
+        // console.log("getTransactionName std subwallet", transaction);
 
         switch (transaction.Direction) {
             case TransactionDirection.RECEIVED:
@@ -193,12 +193,12 @@ export abstract class StandardSubWallet extends SubWallet {
     * Updates current SPV synchonization progress information for this coin.
     */
    public updateSyncProgress(progress: number, lastBlockTime: number) {
-        this.syncTimestamp = lastBlockTime*1000;
+        this.syncTimestamp = lastBlockTime * 1000;
 
         if (lastBlockTime) {
             const userReadableDateTime = Util.dateFormat(new Date(this.syncTimestamp), 'YYYY-MM-DD HH:mm:ss');
             this.lastBlockTime = userReadableDateTime;
-        } else { // for ETHSC, no lastBlockTime
+        } else { // TODO  for ETHSC, no lastBlockTime
             this.lastBlockTime = '';
         }
         this.progress = progress;
@@ -228,9 +228,9 @@ export abstract class StandardSubWallet extends SubWallet {
      * Signs raw transaction and sends the signed transaction to the SPV SDK for publication.
      */
     public async signAndSendRawTransaction(transaction: string, transfer: Transfer): Promise<boolean> {
-        return new Promise(async (resolve)=>{
+        return new Promise(async (resolve) => {
             console.log('Received raw transaction', transaction);
-            let password = await this.masterWallet.walletManager.openPayModal(transfer);
+            const password = await this.masterWallet.walletManager.openPayModal(transfer);
             if (!password) {
                 console.log("No password received. Cancelling");
                 if (transfer.action) {

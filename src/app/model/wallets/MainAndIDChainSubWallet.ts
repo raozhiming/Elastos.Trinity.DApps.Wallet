@@ -19,7 +19,7 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
     }
 
     public async getTransactionInfo(transaction: Transaction, translate: TranslateService): Promise<TransactionInfo> {
-        let transactionInfo = await super.getTransactionInfo(transaction, translate);
+        const transactionInfo = await super.getTransactionInfo(transaction, translate);
 
         transactionInfo.amount = new BigNumber(transaction.Amount, 10).dividedBy(Config.SELAAsBigNumber);
         transactionInfo.txId = transaction.TxHash;
@@ -41,12 +41,13 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
 
     public async updateBalance() {
         // if the balance form spvsdk is newer, then use it.
-        if (!this.lastBlockTime || (moment(this.lastBlockTime).valueOf() > this.timestampRPC)) {
+        if (this.syncTimestamp > this.timestampRPC) {
             // Get the current balance from the wallet plugin.
             let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
-
             // Balance in SELA
             this.balance = new BigNumber(balanceStr, 10);
+        } else {
+            // TODO: update balance by rpc?
         }
     }
 
@@ -119,9 +120,21 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
         );
     }
 
-    async getBalanceByRPC(jsonRPCService: JsonRPCService): Promise<BigNumber> {
+    /**
+     * Get balance by RPC if the last block time of spvsdk is one day ago.
+     */
+    async getBalanceByRPC(jsonRPCService: JsonRPCService) {
         console.log('TIMETEST getBalanceByRPC start:', this.id);
+        const currentTimestamp = moment().valueOf();
+        const onedayago = moment().add(-1, 'days').valueOf();
+        const oneHourago = moment().add(-1, 'hours').valueOf();
 
+        if (this.lastBlockTime
+                && ((this.syncTimestamp > onedayago)
+                || ((this.timestampRPC > oneHourago)))) {
+            console.log('Do not need to get balance by rpc');
+            return false;
+        }
         // If the balance of 5 consecutive request is 0, then end the query.(100 addresses)
         let maxRequestTimesOfGetEmptyBalance = 5;
         let requestTimesOfGetEmptyBalance = 0;
@@ -215,12 +228,16 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
             }
         }
 
+        this.balanceByRPC = totalBalance;
+        this.balance = totalBalance;
+        this.timestampRPC = currentTimestamp;
+
         console.log('TIMETEST getBalanceByRPC ', this.id, ' end');
         console.log('getBalanceByRPC totalBalance:', totalBalance,
                 ' totalRequestCount:', totalRequestCount,
                 ' requestAddressCountOfInternal:', requestAddressCountOfInternal,
                 ' requestAddressCountOfExternal:', requestAddressCountOfExternal);
 
-        return totalBalance;
+        return true;
     }
 }
