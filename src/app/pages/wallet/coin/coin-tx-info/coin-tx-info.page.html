@@ -8,7 +8,7 @@
             [class.transferred]="type === 3"
         >
             <div class="icon-container">
-                <ion-img [src]="payStatusIcon"></ion-img>
+                <img [src]="payStatusIcon">
             </div>
             <ion-card-title>{{ transactionInfo.name | translate }}</ion-card-title>
             <ion-card-subtitle>{{ symbol }}{{ amount }}</ion-card-subtitle>

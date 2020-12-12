@@ -12,7 +12,7 @@
             (click)="currencyService.saveCurrency(currency)"
         >
             <ion-col size="2" class="left-col">
-                <ion-img [src]="currency.icon"></ion-img>
+                <img [src]="currency.icon">
             </ion-col>
             <ion-col size="8" class="middle-col">
                 <h1>{{ currency.symbol }}</h1>

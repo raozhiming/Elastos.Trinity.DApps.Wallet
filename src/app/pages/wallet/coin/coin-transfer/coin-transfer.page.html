@@ -8,7 +8,7 @@
         </ion-row>
         <ion-row class="item-row">
             <ion-col size="2.3" class="left-col">
-                <ion-img [src]="uiService.getSubWalletIcon(fromSubWallet)"></ion-img>
+                <img [src]="uiService.getSubWalletIcon(fromSubWallet)">
             </ion-col>
             <ion-col size="5.5" class="middle-col">
                 <h1>{{ uiService.getSubwalletTitle(fromSubWallet) }}</h1>
@@ -30,7 +30,7 @@
         </ion-row>
         <ion-row class="item-row">
             <ion-col size="2.3" class="left-col">
-                <ion-img [src]="uiService.getSubWalletIcon(toSubWallet)"></ion-img>
+                <img [src]="uiService.getSubWalletIcon(toSubWallet)">
             </ion-col>
             <ion-col size="5.5" class="middle-col">
                 <h1>{{ uiService.getSubwalletTitle(toSubWallet) }}</h1>
@@ -64,8 +64,8 @@
 <!------------------ SEND ------------------>
 <ion-content *ngIf="transferType === 2">
     <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="native.popup">
-        <img [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
-
+        <img class="header-img" [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
+    
         <h1>{{ 'enter-amount' | translate }}</h1>
         <ion-row class="item-row">
             <ion-col size="6" class="left-col">
@@ -125,8 +125,7 @@
 
         <h1 *ngIf="suggestedAddresses.length === 0" (click)="hideMemo = !hideMemo">
             {{ 'advanced-options' | translate }}
-            <img *ngIf="!theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/down-arrow.svg"/>
-            <img *ngIf="theme.darkMode" [class.rotate]="!hideMemo" src="assets/icons/darkmode/down-arrow.svg"/>
+            <img [src]="!theme.darkMode ? '/icons/down-arrow.svg' : 'assets/icons/darkmode/down-arrow.svg'" [class.rotate]="!hideMemo">
         </h1>
         <ion-row *ngIf="!hideMemo && suggestedAddresses.length === 0" class="item-row memo-row">
             <ion-col size="12" class="left-col">
@@ -170,7 +169,7 @@
 <!------------------ PAY INTENT ------------------>
 <ion-content *ngIf="transferType === 3">
     <div class="pay-container" [class.dark-pay-container]="theme.darkMode">
-        <ion-img src="./assets/tx/send.svg"></ion-img>
+        <img class="header-img" src="./assets/tx/send.svg">
         <h1>{{ 'coin-transfer-send-title' | translate: { coinName: fromSubWallet.getDisplayTokenName() } }}</h1>
         <h2>{{ 'confirm-transaction-title' | translate }}</h2>
         <div>
