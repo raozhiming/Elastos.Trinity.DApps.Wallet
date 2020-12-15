@@ -75,7 +75,7 @@ export class CoinAddERC20Page implements OnInit {
      * Opens the scanner to get the coin address
      */
     scanCoinAddress() {
-        appManager.sendIntent('scanqrcode', {}, {}, (res: { result: { scannedContent: string }}) => {
+        appManager.sendIntent('https://scanner.elastos.net/scanqrcode', {}, {}, (res: { result: { scannedContent: string }}) => {
             if (res && res.result && res.result.scannedContent) {
                 this.coinAddress = res.result.scannedContent;
                 console.log('Got scanned content:', this.coinAddress);

@@ -188,7 +188,7 @@ export class AppService {
     }
 
     scan(type: ScanType) {
-        appManager.sendIntent('scanqrcode', {}, {}, (res) => {
+        appManager.sendIntent('https://scanner.elastos.net/scanqrcode', {}, {}, (res) => {
             let content: string = res.result.scannedContent;
 
             // Some address star with "xxx:", eg "etherum:"
