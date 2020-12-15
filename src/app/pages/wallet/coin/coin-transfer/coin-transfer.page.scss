@@ -200,24 +200,53 @@
         justify-content: space-between;
         align-items: center;
 
-        h2, .amount-input {
-            width: 100%;
-            margin: 0;
-            font-size: 19px;
-            font-weight: 600;
-            letter-spacing: 0.95px;
-        }
+        ion-col {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-        p {
-            margin: 0;
-            padding-top: 4px;
-            font-size: 12px;
-            font-weight: 400;
-            color: #8888b0;
+            ion-input {
+                background-color: #ffffff;
+                font-size: 14px;
+                font-weight: 400;
+                letter-spacing: -0.34px;
+                text-align: left;
+                color: #8888b0;
+            }
+
+            .scan-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 100%;
+                width: 45px;
+                height: 45px;
+
+                img {
+                    width: 60%;
+                    height: 60%;
+                    object-fit: contain;
+                }
+            }
+
+            h2, .amount-input {
+                width: 100%;
+                margin: 0;
+                font-size: 19px;
+                font-weight: 600;
+                letter-spacing: 0.95px;
+            }
+    
+            p {
+                margin: 0;
+                padding-top: 4px;
+                font-size: 12px;
+                font-weight: 400;
+                color: #8888b0;
+            }
         }
 
         .left-col {
-            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
@@ -230,38 +259,13 @@
             p {
                 text-align: left;
             }
-
-            ion-input {
-                background-color: #ffffff;
-                font-size: 14px;
-                font-weight: 400;
-                letter-spacing: -0.34px;
-                text-align: left;
-                color: #8888b0;
-            }
         }
 
         .right-col {
-            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-end;
             overflow: hidden;
-
-            .scan-btn {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border-radius: 100%;
-                width: 45px;
-                height: 45px;
-
-                img {
-                    width: 80%;
-                    height: 80%;
-                    object-fit: contain;
-                }
-            }
 
             .amount-input, p {
                 text-align: right;
@@ -330,11 +334,11 @@
         box-shadow: 0 3px 15px 0 #151626;
         background-color: #2b2c49;
 
-        .amount-input {
-            color: #ffffff;
-        }
-
-        .left-col {
+        ion-col {
+            .amount-input {
+                color: #ffffff;
+            }
+    
             ion-input {
                 background-color: #2b2c49;
             }
