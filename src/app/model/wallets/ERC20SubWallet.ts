@@ -21,6 +21,24 @@ export class ERC20SubWallet extends SubWallet {
 
     private tokenAddress = '';
 
+    public static newFromCoin(masterWallet: MasterWallet, coin: Coin): Promise<ERC20SubWallet> {
+        const subWallet = new ERC20SubWallet(masterWallet, coin.getID());
+        return Promise.resolve(subWallet);
+    }
+
+    public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): ERC20SubWallet {
+        console.log("Initializing ERC20 subwallet from serialized sub wallet", serializedSubWallet);
+        const coin = masterWallet.coinService.getCoinByID(serializedSubWallet.id) as ERC20Coin;
+        if (coin) {
+            const subWallet = new ERC20SubWallet(masterWallet, serializedSubWallet.id);
+            // Get info by web3, don't use the data in local storage.
+            // subWallet.initFromSerializedSubWallet(serializedSubWallet);
+            return subWallet;
+        } else {
+            console.error('newFromSerializedSubWallet error, this coin is not in coinService');
+        }
+    }
+
     constructor(masterWallet: MasterWallet, id: CoinID) {
         super(masterWallet, id, CoinType.ERC20);
 
@@ -43,20 +61,6 @@ export class ERC20SubWallet extends SubWallet {
         // as we need to convert the balance integer using the number of decimals.
         await this.fetchTokenDecimals();
         await this.updateBalance();
-    }
-
-    public static newFromCoin(masterWallet: MasterWallet, coin: Coin): Promise<ERC20SubWallet> {
-        let subWallet = new ERC20SubWallet(masterWallet, coin.getID());
-        return Promise.resolve(subWallet);
-    }
-
-    public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): ERC20SubWallet {
-        console.log("Initializing ERC20 subwallet from serialized sub wallet", serializedSubWallet);
-
-        let subWallet = new ERC20SubWallet(masterWallet, serializedSubWallet.id);
-        // Get info by web3, don't use the data in local storage.
-        // subWallet.initFromSerializedSubWallet(serializedSubWallet);
-        return subWallet;
     }
 
     public async createAddress(): Promise<string> {
