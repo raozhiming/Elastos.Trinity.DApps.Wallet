@@ -198,18 +198,22 @@ export class MasterWallet {
         const activeNetwork = await prefs.getActiveNetworkType();
         const erc20TokenList = await (this.subWallets[StandardCoinName.ETHSC] as ETHChainSubWallet).getERC20TokenList();
         erc20TokenList.forEach( async (token: WalletPlugin.ERC20TokenInfo) => {
-            if (!this.subWallets[token.symbol]) {
-                try {
-                    const erc20Coin = this.coinService.getERC20CoinByContracAddress(token.contractAddress);
-                    if (erc20Coin) {
-                        await this.createSubWallet(erc20Coin);
-                    } else {
-                        const newCoin = new ERC20Coin(token.symbol, token.symbol, token.name, token.contractAddress, activeNetwork);
-                        await this.coinService.addCustomERC20Coin(newCoin, this);
+            if (token.symbol && token.name) {
+                if (!this.subWallets[token.symbol]) {
+                    try {
+                        const erc20Coin = this.coinService.getERC20CoinByContracAddress(token.contractAddress);
+                        if (erc20Coin) {
+                            await this.createSubWallet(erc20Coin);
+                        } else {
+                            const newCoin = new ERC20Coin(token.symbol, token.symbol, token.name, token.contractAddress, activeNetwork);
+                            await this.coinService.addCustomERC20Coin(newCoin, this);
+                        }
+                    } catch (e) {
+                        console.log('updateERC20TokenList exception:', e);
                     }
-                } catch (e) {
-                    console.log('updateERC20TokenList exception:', e);
                 }
+            } else {
+                console.error('Token has no name or symbol:', token);
             }
         });
     }

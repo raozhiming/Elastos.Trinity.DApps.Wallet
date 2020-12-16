@@ -28,6 +28,10 @@ export class ERC20SubWallet extends SubWallet {
 
     public static newFromSerializedSubWallet(masterWallet: MasterWallet, serializedSubWallet: SerializedSubWallet): ERC20SubWallet {
         console.log("Initializing ERC20 subwallet from serialized sub wallet", serializedSubWallet);
+        if (!serializedSubWallet.id) {
+            console.log('newFromSerializedSubWallet id is null');
+            return null;
+        }
         const coin = masterWallet.coinService.getCoinByID(serializedSubWallet.id) as ERC20Coin;
         if (coin) {
             const subWallet = new ERC20SubWallet(masterWallet, serializedSubWallet.id);
@@ -36,6 +40,7 @@ export class ERC20SubWallet extends SubWallet {
             return subWallet;
         } else {
             console.error('newFromSerializedSubWallet error, this coin is not in coinService');
+            return null;
         }
     }
 
