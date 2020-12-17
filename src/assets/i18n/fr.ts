@@ -15,7 +15,7 @@ export const fr = {
     "amount": "Montant",
     "cancel": "Annuler",
     "confirm": "Confirmer",
-    "error": "Error",
+    "error": "Erreur",
     'click-to-load-more': "Toucher pour voir davantage",
     'transaction-fail': 'Erreur de transaction',
     "confirmTitle": "Confirmez-vous?",
@@ -30,7 +30,7 @@ export const fr = {
     'text-did-balance-not-enough': "Enregistrer des informations sur la châine d'identité requièrt une faible somme d'ELA pour les frais de transactions. Veuillez d'abord transférer un petit montant (ex: 0,1 ELA) depuis votre portefeuille principal vers le portefeuille DID!",
     'amount-null': "Veuillez saisir un montant pour la transaction",
     "amount-invalid": "Veuillez saisir un montant valide",
-    'eth-insuff-balance': 'You must have enough ETHSC for gas fees in order to send Elastos ERC20 tokens',
+    'eth-insuff-balance': 'Vous n\'avez pas suffisamment d\'ELA/ETHSC pour payer cette transaction de jetons ERC20',
     "insuff-balance": "Solde insuffisant",
     'transaction-has-been-published': "La transaction est publiée! Veuillez patienter un moment",
     "sync-completed": "Synchr. terminée",
@@ -193,8 +193,8 @@ export const fr = {
     "tx-info-type-received": "Reçu",
     "tx-info-type-sent": "Envoyé",
     "tx-info-type-transferred": "Transféré",
-    "tx-info-token-address": "ERC20 Token Address",
-    "tx-info-erc20-amount": "ERC20 Token Amount",
+    "tx-info-token-address": "Adresse du jeton ERC20",
+    "tx-info-erc20-amount": "Montant du jeton ERC20",
 
     /********************************************** Wallet Settings Screens ***********************************************/
 
@@ -262,7 +262,7 @@ export const fr = {
     /************************
     * Select Subwallet Page *
     *************************/
-    'select-subwallet': 'Select Subwallet',
+    'select-subwallet': 'Selectionner le portefeuille',
 
     /*********************
     * Wait For Sync Page *
@@ -377,7 +377,7 @@ export const fr = {
     *********************************/
     'advanced-import': 'Saisie rapide du mnémonique',
     'advanced-import-intro': 'Vous pouvez coller vos 12 mots de mnémonique sur une seule ligne ici.',
-    'advanced-import-msg': '*Espace requis entre chaque mot',
+    'advanced-import-msg': '* Espace requis entre chaque mot',
     'paste-mnemonic': 'Coller ou saisir les 12 mots du mnémonique',
 
     /********************************************** Error ***********************************************/
