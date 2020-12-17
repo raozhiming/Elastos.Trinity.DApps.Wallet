@@ -382,6 +382,7 @@ export const zh = {
     'text-consolidate-prompt': '是否零钱换整？',
     'text-consolidate-UTXO-counts': 'UTXO 个数已达到：{{ count }}',
     'text-consolidate-note': 'UTXO 数量过多可能会导致一些交易失败，执行零钱换整后不影响已有的超级节点投票',
+    'reasons-failure': '失败原因',
 
     // Error codes
     'Error-10000': 'Action参数JSON格式错误',

@@ -382,6 +382,7 @@ export const fr = {
     'text-consolidate-prompt': 'Consolider?',
     'text-consolidate-UTXO-counts': 'Nombre d\'UTXOs: {{ count }}',
     'text-consolidate-note': 'Trop d\'UTXO peuvent provoquer l\'échec de certaines transactions, il est recommandé de consolider. La consolidation n\'affecte pas les votes en cours',
+    'reasons-failure': 'Reason for failure',
 
     // Error codes
     'Error-10000': 'Json parse error of action parameters',
