@@ -54,6 +54,10 @@ export const zh = {
     "coin-list": "币列表",
     "activate-hive-vault": "激活 Hive Vault",
     "pull-down-to-refresh": "下拉屏幕刷新",
+    "hive-not-configured-title": "Hive未配置",
+    "hive-not-configured-text": "您的Hive存储空间未配置。 您现在要配置吗？",
+    "hive-not-configured-not-now": "暂不",
+    "hive-not-configured-configure": "配置",
 
     /********************************************** General Settings Screen ***********************************************/
 

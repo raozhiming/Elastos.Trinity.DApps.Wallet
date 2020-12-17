@@ -55,6 +55,10 @@ export const en = {
     "coin-list": "Token List",
     "activate-hive-vault": "Activate Hive Vault",
     "pull-down-to-refresh": "Pull Down Screen to Refresh",
+    "hive-not-configured-title": "Hive not configured",
+    "hive-not-configured-text": "Your hive storage is not configured. Would you like to configure it now?",
+    "hive-not-configured-not-now": "Not now",
+    "hive-not-configured-configure": "Configure",
 
     /********************************************** General Settings Screen ***********************************************/
 

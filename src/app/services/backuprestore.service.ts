@@ -16,6 +16,7 @@ import { Events } from '@ionic/angular';
 import { CoinService } from './coin.service';
 import { ResolveEnd } from '@angular/router';
 import { PopupProvider } from './popup.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let walletManager: WalletPlugin.WalletManager;
@@ -41,7 +42,8 @@ export class BackupRestoreService {
     private appService: AppService,
     private events: Events,
     private coinService: CoinService,
-    private popup: PopupProvider
+    private popup: PopupProvider,
+    public translate: TranslateService
   ) {
   }
 
@@ -134,7 +136,7 @@ export class BackupRestoreService {
     if (!vaultAddress) {
       this.logWarn("No hive vault provider for for current DID. Asking to configure.");
       // PROBLEM HERE? On IOS, ionicPrompt() call seems to print error: {} and block the whole app...
-      let shouldConfigure = await this.popup.ionicPrompt("Hive not configured", "Your hive storage is not configured. Would you like to configure it now?", null, "Configure", "Not now");
+      let shouldConfigure = await this.popup.ionicPrompt(this.translate.instant('hive-not-configured-title'), this.translate.instant('hive-not-configured-text'), null, this.translate.instant('hive-not-configured-configure'), this.translate.instant('hive-not-configured-not-now'));
       if (shouldConfigure) {
         this.logDebug("User wants to configure his vault");
         // User wants to configure his hive vault, redirect him

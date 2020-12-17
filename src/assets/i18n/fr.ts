@@ -54,6 +54,10 @@ export const fr = {
     "coin-list": "Liste des jetons",
     "activate-hive-vault": "Activer le stockage Hive",
     "pull-down-to-refresh": "Faire glisser l'écran pour rafraîchir",
+    "hive-not-configured-title": "Hive not configured",
+    "hive-not-configured-text": "Your hive storage is not configured. Would you like to configure it now?",
+    "hive-not-configured-not-now": "Not now",
+    "hive-not-configured-configure": "Configure",
 
     /********************************************** General Settings Screen ***********************************************/
 
