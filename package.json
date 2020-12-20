@@ -75,6 +75,13 @@
     "tslint-eslint-rules": "^5.4.0",
     "typescript": "3.4.1"
   },
+  "browser": {
+    "crypto": false,
+    "http": false,
+    "https": false,
+    "os": false,
+    "stream": false
+  },
   "description": "An Ionic project",
   "cordova": {
     "plugins": {

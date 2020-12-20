@@ -1,0 +1,18 @@
+language: node_js
+sudo: true
+
+matrix:
+  include:
+    - env: NODEJS_VERSION=12
+      dist: xenial
+
+install:
+  - nvm install ${NODEJS_VERSION}
+  - npm install -g cordova @ionic/cli
+
+script:
+  - npm install
+  - ionic build --prod
+
+after_failure:
+  - ./node_modules/@angular/cli/bin/ng version
