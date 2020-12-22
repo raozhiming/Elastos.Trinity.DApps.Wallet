@@ -233,6 +233,14 @@ export class BackupRestoreService {
     this.fullySuccessfulSyncExpected = true;
   }
 
+  private async sleep(durationMs: number): Promise<void> {
+    return new Promise((resolve)=>{
+      setTimeout(()=>{
+        resolve();
+      }, durationMs)
+    })
+  }
+
   /**
    * Main entry point to initiate a backup synchronization
    */
@@ -254,6 +262,7 @@ export class BackupRestoreService {
       this.logDebug("Stopping on going subwallets sync");
       for (let wallet of wallets) {
         await WalletManager.instance.stopWalletSync(wallet.id);
+        await this.sleep(5000);
       }
 
       // Start the remote sync process
@@ -331,6 +340,7 @@ export class BackupRestoreService {
       if (await this.getAndUploadSPVSyncStateFile(masterWallet, fileName)) {
         this.logDebug("File successfully uploaded. Upserting database entry", entryData);
         await this.backupRestoreHelper.upsertDatabaseEntry(walletContextName, subWallet.id, entryData);
+        this.markSubwalletAlreadyBackupDuringThisSession(masterWallet, subWallet);
       }
       else {
         this.logError("Failed to upload file "+fileName+" to the vault");
@@ -528,6 +538,17 @@ export class BackupRestoreService {
     }
   }
 
+  private subwalletsBackedUpDuringCurrentSession = {}; // Subwallet ids
+  private subwalletAlreadyBackupDuringThisSession(masterWallet: MasterWallet, subwallet: SubWallet): boolean {
+    let key = masterWallet.id+subwallet.id;
+    return key in this.subwalletsBackedUpDuringCurrentSession;
+  }
+
+  private markSubwalletAlreadyBackupDuringThisSession(masterWallet: MasterWallet, subwallet: SubWallet) {
+    let key = masterWallet.id+subwallet.id;
+    this.subwalletsBackedUpDuringCurrentSession[key] = true;
+  }
+
   private async goodTimeToBackupWallet(wallet: MasterWallet, subWallet: SubWallet): Promise<boolean> {
     let walletContextName = await this.getWalletSyncContextName(wallet);
     let localBackupEntry = await this.backupRestoreHelper.getDatabaseEntry(walletContextName, subWallet.id);
@@ -543,9 +564,11 @@ export class BackupRestoreService {
     let stdSubWallet = subWallet as StandardSubWallet;
     let walletSyncDate = moment(stdSubWallet.syncTimestamp);
     let backupEntryDate = moment(localBackupEntry.data.lastSyncDate);
-    this.logDebug("Good time to backup wallet?", walletSyncDate, backupEntryDate);
-    if (walletSyncDate.isAfter(backupEntryDate.add(30, "days"))) {
-    //if (walletSyncDate.isAfter(backupEntryDate.add(1, "minutes"))) { // TMP
+
+    // Backup max once every 2 days (sync date), and only if not backup yet during a elastOS session (to save bandwidth during the initial sync)
+    let subwalletAlreadyBackedUp = this.subwalletAlreadyBackupDuringThisSession(wallet, stdSubWallet);
+    this.logDebug("Good time to backup wallet?", walletSyncDate, backupEntryDate, "Subwallet already backed up ?", subwalletAlreadyBackedUp);
+    if (walletSyncDate.isAfter(backupEntryDate.add(2, "days")) && !subwalletAlreadyBackedUp) {
       return true;
     }
     else {
