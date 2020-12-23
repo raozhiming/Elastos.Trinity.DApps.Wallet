@@ -449,15 +449,6 @@ export class WalletManager {
 
         if (Object.values(this.masterWallets).length > 0) {
 
-        /** Causes bug with deleting wallets that are not active, works ok without this code but kept for reference **/
-         /*    // Get active wallet
-            const recentWalletId = await this.getCurrentMasterIdFromStorage();
-            // If active wallet was deleted wallet, set new active wallet to first wallet in master wallet list
-            if (recentWalletId && recentWalletId === id) {
-                this.setRecentWalletId(this.masterWallets[0].id);
-            }
-        */
-
             this.native.setRootRouter("/wallet-home");
         } else {
             this.goToLauncherScreen();

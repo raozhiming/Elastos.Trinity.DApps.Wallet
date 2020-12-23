@@ -59,6 +59,7 @@ import { WalletColorPage } from './pages/wallet/wallet-color/wallet-color.page';
 import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-erc20.page';
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
 import { SelectSubwalletPage } from './pages/intents/select-subwallet/select-subwallet.page';
+import { CoinErc20DetailsPage } from './pages/wallet/coin/coin-erc20-details/coin-erc20-details.page';
 
 @Component({ template: "<div></div>" })
 export class EmptyPage  {}
@@ -95,6 +96,7 @@ const routes: Routes = [
     { path: 'coin-tx-info', component: CoinTxInfoPage },
     { path: 'coin-transfer', component: CoinTransferPage },
     { path: 'coin-add-erc20', component: CoinAddERC20Page },
+    { path: 'coin-erc20-details', component: CoinErc20DetailsPage },
 
     // Contacts
     { path: 'contacts', component: ContactsPage },

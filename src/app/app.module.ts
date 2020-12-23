@@ -103,6 +103,7 @@ import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component
 import { TxSuccessComponent } from './components/tx-success/tx-success.component';
 import { HelpComponent } from './components/help/help.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
+import { CoinErc20DetailsPage } from './pages/wallet/coin/coin-erc20-details/coin-erc20-details.page';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741",
@@ -207,6 +208,7 @@ export function TranslateLoaderFactory() {
         CoinReceivePage,
         CoinTransferPage,
         CoinAddERC20Page,
+        CoinErc20DetailsPage,
         AboutPage,
         AccessPage,
         WalletCreateNamePage,
