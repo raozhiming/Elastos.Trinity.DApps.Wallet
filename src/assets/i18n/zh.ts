@@ -39,6 +39,7 @@ export const zh = {
     "please-add-ethereum-first": "请先将以太坊币种添加到您的钱包中",
     "please-wait": "请等待...",
     "transaction-pending" : "前一个交易正在确认中，请等待此交易确认后再执行",
+    "share-erc20-token": "Check out this Elastos ERC20 Token",
 
     /************
     * Home Page *
@@ -241,6 +242,13 @@ export const zh = {
     * Export Mnemonic Page *
     ************************/
    'text-export-mnemonic': '导出助记词',
+
+    /***********************
+    * ERC20 Details Page *
+    ************************/
+    'coin-erc20-details-address': 'Contract Address',
+    'coin-erc20-details-share': 'Share',
+    'coin-erc20-details-delete': 'Delete',
 
     /*****************
     * Add ERC20 Page *

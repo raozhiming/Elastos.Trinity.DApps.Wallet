@@ -84,6 +84,7 @@ export class AppComponent {
             await this.currencyService.init();
             await this.contactsService.init();
             await this.uiService.init();
+            await this.erc20CoinService.init();
 
             // Wait until the wallet manager is ready before showing the first screen.
             this.events.subscribe("walletmanager:initialized", () => {
@@ -103,7 +104,6 @@ export class AppComponent {
 
             await this.walletManager.init();
             await this.intentService.init();
-            this.erc20CoinService.init();
         });
     }
 

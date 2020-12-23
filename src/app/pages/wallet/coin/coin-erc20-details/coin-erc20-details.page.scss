@@ -38,11 +38,18 @@
         }
     }
 
+    .coinTitle {
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+        word-break: break-all;
+        margin: 5px 10px 20px;
+    }
+
     .qrcode-container {
         border-radius: 21px;
         background-color: #ffffff;
         padding: 20px;
-        margin: 20px;
         zoom: 1.2;
     }
 
@@ -53,7 +60,7 @@
 
     h1 {
         font-size: 13px;
-        margin-bottom: 20px;
+        margin: 20px;
     }
 
     h2 {
@@ -104,9 +111,9 @@
     }
 
     .expand {
-        left: 2%;
-        right: 2%;
-        width: 96%;
+        left: 4%;
+        right: 4%;
+        width: 92%;
     }
 
     .confirm {

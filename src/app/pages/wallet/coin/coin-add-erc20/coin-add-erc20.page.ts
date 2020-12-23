@@ -2,7 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { Native } from '../../../../services/native.service';
 import { LocalStorage } from '../../../../services/storage.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletEditionService } from 'src/app/services/walletedition.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
@@ -14,6 +14,7 @@ import { PopupProvider } from 'src/app/services/popup.service';
 import { CoinService } from 'src/app/services/coin.service';
 import { PrefsService } from 'src/app/services/prefs.service';
 import { ERC20CoinService } from 'src/app/services/erc20coin.service';
+import { Util } from 'src/app/model/Util';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -23,6 +24,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     styleUrls: ['./coin-add-erc20.page.scss'],
 })
 export class CoinAddERC20Page implements OnInit {
+
     public walletname: string = "";
     public masterWallet: MasterWallet = null;
     public allCustomERC20Coins: ERC20Coin[] = [];
@@ -34,6 +36,10 @@ export class CoinAddERC20Page implements OnInit {
 
     public coinInfoFetched: boolean = false;
     public fetchingCoinInfo: boolean = false;
+
+    public Util = Util;
+
+    private intentMode = false;
 
     constructor(
         public route: ActivatedRoute,
@@ -49,26 +55,39 @@ export class CoinAddERC20Page implements OnInit {
         public theme: ThemeService,
         private popup: PopupProvider,
         private prefs: PrefsService,
-        private zone: NgZone
+        private zone: NgZone,
+        private router: Router,
     ) {
         this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
         this.walletname = this.walletManager.masterWallets[this.masterWallet.id].name;
         this.getAllCustomERC20Coins();
 
-        console.log('All available erc20tokens', this.allCustomERC20Coins);
+        const navigation = this.router.getCurrentNavigation();
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            this.intentMode = true;
+            this.coinAddress = navigation.extras.state.contractAddress;
+            this.checkCoinAddress();
+            console.log('Received intent - checking coin address', this.coinAddress);
+        }
     }
 
     ngOnInit() {
     }
 
     ionViewWillEnter() {
-        this.appService.setBackKeyVisibility(true);
+        appManager.setVisible("show", () => {}, (err) => {});
         this.appService.setTitleBarTitle(this.translate.instant("coin-adderc20-title"));
+
+        if (this.intentMode) {
+            this.appService.setBackKeyVisibility(false);
+        } else {
+            this.appService.setBackKeyVisibility(true);
+        }
     }
 
     getAllCustomERC20Coins() {
         this.allCustomERC20Coins = this.coinService.getAvailableERC20Coins();
-        console.log('all erc20 coins', this.allCustomERC20Coins);
+        console.log('All available erc20tokens', this.allCustomERC20Coins);
     }
 
     /**
@@ -93,12 +112,14 @@ export class CoinAddERC20Page implements OnInit {
                 this.popup.ionicAlert("not-a-valid-address", "coin-adderc20-not-a-erc20-contract", "Ok");
                 this.coinAddress = '';
             } else {
-                if (this.coinAlreadyAdded(this.coinAddress)) {
+              /*   if (this.coinAlreadyAdded(this.coinAddress)) {
                     this.native.toast_trans('coin-adderc20-alreadyadded');
                     this.coinAddress = '';
                 } else {
                     this.tryFetchingCoinByAddress(this.coinAddress);
-                }
+                } */
+
+                this.tryFetchingCoinByAddress(this.coinAddress);
             }
         });
     }
@@ -166,11 +187,19 @@ export class CoinAddERC20Page implements OnInit {
     }
 
     async addCoin() {
-        const activeNetwork = await this.prefs.getActiveNetworkType();
-        const newCoin = new ERC20Coin(this.coinSymbol, this.coinSymbol, this.coinName, this.coinAddress, activeNetwork);
-        await this.coinService.addCustomERC20Coin(newCoin, this.masterWallet);
+        if (this.coinAlreadyAdded(this.coinAddress)) {
+            this.native.toast_trans('coin-adderc20-alreadyadded');
+        }  else {
+            const activeNetwork = await this.prefs.getActiveNetworkType();
+            const newCoin = new ERC20Coin(this.coinSymbol, this.coinSymbol, this.coinName, this.coinAddress, activeNetwork);
+            await this.coinService.addCustomERC20Coin(newCoin, this.masterWallet);
 
-        // Coin added - go back to the previous screen
-        this.native.pop();
+             // Coin added - go back to the previous screen
+            if (this.intentMode) {
+                appManager.close();
+            } else {
+                this.native.pop();
+            }
+        }
     }
 }

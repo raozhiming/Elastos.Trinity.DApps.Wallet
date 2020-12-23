@@ -6,20 +6,21 @@
               <img src="assets/coins/ela-black.svg"/>
           </div>
       </div>
+      <div class="coinTitle">{{ coin.getDescription() }}</div>
       <div class="qrcode-container">
-          <qrcode [qrdata]="qrcode" [size]="150"></qrcode>
+          <qrcode [qrdata]="contractAddress" [size]="150"></qrcode>
       </div>
-      <h1>Contract Address</h1>
-      <h2 *ngIf="qrcode" (click)="copy()">
-          {{ qrcode.slice(0,20) }}<br>{{ qrcode.slice(20,50) }}
+      <h1>{{ 'coin-erc20-details-address' | translate }}</h1>
+      <h2 *ngIf="contractAddress" (click)="copy()">
+          {{ contractAddress.slice(0,20) }}<br>{{ contractAddress.slice(20,50) }}
       </h2>
       <p>{{ 'coin-receive-tap-to-copy' | translate }}</p>
       <div *ngIf="canDelete" class="btn cancel ion-activatable ripple" (click)="delete()">
-        <ion-label>Delete</ion-label>
+        <ion-label>{{ 'coin-erc20-details-delete' | translate }}</ion-label>
         <ion-ripple-effect></ion-ripple-effect>
       </div>
       <div class="btn confirm ion-activatable ripple" [class.expand]="!canDelete" (click)="share()">
-        <ion-label>Share</ion-label>
+        <ion-label>{{ 'coin-erc20-details-share' | translate }}</ion-label>
         <ion-ripple-effect></ion-ripple-effect>
       </div>
   </ion-grid>

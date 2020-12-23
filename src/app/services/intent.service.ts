@@ -10,6 +10,7 @@ import { CoinTransferService, TransferType } from './cointransfer.service';
 import { WalletAccessService } from './walletaccess.service';
 import { WalletManager } from './wallet.service';
 import { MasterWallet } from '../model/wallets/MasterWallet';
+import { WalletEditionService } from './walletedition.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -28,7 +29,8 @@ export class IntentService {
         private walletManager: WalletManager,
         private coinService: CoinService,
         private coinTransferService: CoinTransferService,
-        private walletAccessService: WalletAccessService
+        private walletAccessService: WalletAccessService,
+        private walletEditionService: WalletEditionService
     ) {
     }
 
@@ -64,6 +66,9 @@ export class IntentService {
             case 'elawalletmnemonicaccess':
             case 'walletaccess':
                 this.handleAccessIntent(intent);
+                break;
+            case 'addcoin':
+                this.handleAddCoinIntent(intent);
                 break;
             default:
                 this.handleTransactionIntent(intent);
@@ -188,6 +193,23 @@ export class IntentService {
         }
     }
 
+    handleAddCoinIntent(intent: AppManagerPlugin.ReceivedIntent) {
+        if (this.walletList.length === 1) {
+            const masterWallet = this.walletList[0];
+            this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
+            this.native.setRootRouter("/coin-add-erc20", { contractAddress: intent.params.contract });
+        } else {
+            this.native.setRootRouter(
+                'wallet-manager',
+                {
+                    forIntent: true,
+                    intent: 'addcoin',
+                    intentParams: intent.params
+                }
+            );
+        }
+    }
+
     handleAccessIntent(intent: AppManagerPlugin.ReceivedIntent) {
         this.walletAccessService.reset();
         this.walletAccessService.intentTransfer = {
@@ -201,7 +223,14 @@ export class IntentService {
             this.walletAccessService.masterWalletId = masterWallet.id;
             this.native.setRootRouter("/access");
         } else {
-            this.native.setRootRouter('wallet-manager', { forWalletAccess: true });
+            this.native.setRootRouter(
+                'wallet-manager',
+                {
+                    forIntent: true,
+                    intent: 'access',
+                    intentParams: intent.params
+                }
+            );
         }
     }
 

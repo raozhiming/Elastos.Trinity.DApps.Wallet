@@ -39,6 +39,7 @@ export const fr = {
     "please-add-ethereum-first": "Veuillez d'abord ajouter le jeton Ethereum à votre portefeuille.",
     "please-wait": "Veuillez patienter...",
     "transaction-pending" : "Une transaction est déjà en cours. Veuillez attendre la confirmation de la première transaction.",
+    "share-erc20-token": "Check out this Elastos ERC20 Token",
 
     /************
     * Home Page *
@@ -241,6 +242,13 @@ export const fr = {
     * Export Mnemonic Page *
     ************************/
    'text-export-mnemonic': 'Exporter le mnémonique',
+
+    /***********************
+    * ERC20 Details Page *
+    ************************/
+    'coin-erc20-details-address': 'Contract Address',
+    'coin-erc20-details-share': 'Share',
+    'coin-erc20-details-delete': 'Delete',
 
     /*****************
     * Add ERC20 Page *

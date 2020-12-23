@@ -198,4 +198,10 @@ export class CoinListPage implements OnInit, OnDestroy {
     private handleOnAddECR20Coin() {
         this.native.go("/coin-add-erc20");
     }
+
+    public goToCoinDetails(item: EditableCoinInfo) {
+      /*   if (item.coin.getType() === CoinType.ERC20) {
+            this.native.go('/coin-erc20-details', { coin: item.coin });
+        } */
+    }
 }

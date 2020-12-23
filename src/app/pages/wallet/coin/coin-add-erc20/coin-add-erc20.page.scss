@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  min-height: 100%;
   margin: 0;
   padding: 30px;
 
@@ -93,6 +92,15 @@
 
   .btn-row {
     margin-top: 30px;
+  }
+}
+
+ion-footer {
+  background: transparent;
+  padding: 20px;
+
+  ion-button {
+      width: 100%;
   }
 }
 

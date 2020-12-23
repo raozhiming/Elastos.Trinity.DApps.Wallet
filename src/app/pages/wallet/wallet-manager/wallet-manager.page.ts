@@ -24,7 +24,10 @@ export class WalletManagerPage implements OnInit {
 
     public Util = Util;
     public SELA = Config.SELA;
-    public forWalletAccess = false;
+
+    public forIntent = false;
+    public intent: string = null;
+    public intentParams: any = null;
 
     constructor(
         public events: Events,
@@ -43,22 +46,30 @@ export class WalletManagerPage implements OnInit {
     ngOnInit() {
         const navigation = this.router.getCurrentNavigation();
         if (!Util.isEmptyObject(navigation.extras.state)) {
-            this.forWalletAccess = navigation.extras.state.forWalletAccess;
-            console.log('For wallet access?', this.forWalletAccess);
+            this.forIntent = navigation.extras.state.forIntent;
+            this.intent = navigation.extras.state.intent;
+            this.intentParams = navigation.extras.state.intentParams;
+            console.log('For intent?', this.forIntent, this.intent);
         }
     }
 
     ionViewWillEnter() {
         appManager.setVisible("show", () => {}, (err) => {});
-        this.forWalletAccess ?
+        this.forIntent ?
             this.appService.setTitleBarTitle(this.translate.instant('intent-select-wallet')) :
             this.appService.setTitleBarTitle(this.translate.instant('settings-my-wallets'));
     }
 
     walletSelected(masterWallet: MasterWallet) {
-        if (this.forWalletAccess) {
-            this.walletAccessService.masterWalletId = masterWallet.id;
-            this.native.go('/access');
+        if (this.forIntent) {
+            if (this.intent === 'access') {
+                this.walletAccessService.masterWalletId = masterWallet.id;
+                this.native.go('/access');
+            } else if (this.intent === 'addcoin') {
+                this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
+                this.native.go("/coin-add-erc20", { contractAddress: this.intentParams.contract });
+
+            }
         } else {
             this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
             this.native.go("/wallet-settings");

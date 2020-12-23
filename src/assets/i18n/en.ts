@@ -40,6 +40,7 @@ export const en = {
     "please-add-ethereum-first": "Please add the ethereum token to your wallet first",
     "please-wait": "Please wait...",
     "transaction-pending" : "There is already an on going transaction. Please wait for the transaction to be confirmed.",
+    "share-erc20-token": "Check out this Elastos ERC20 Token",
 
     /************
     * Home Page *
@@ -242,6 +243,13 @@ export const en = {
     * Export Mnemonic Page *
     ************************/
    'text-export-mnemonic': 'Export Mnemonic',
+
+    /***********************
+    * ERC20 Details Page *
+    ************************/
+   'coin-erc20-details-address': 'Contract Address',
+   'coin-erc20-details-share': 'Share',
+   'coin-erc20-details-delete': 'Delete',
 
     /*****************
     * Add ERC20 Page *

@@ -84,6 +84,9 @@
         },
         {
             "action": "https://wallet.elastos.net/crproposalvoteagainst"
+        },
+        {
+            "action": "https://wallet.elastos.net/addcoin"
         }
     ],
     "startup_service": [
