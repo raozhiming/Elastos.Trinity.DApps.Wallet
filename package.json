@@ -23,6 +23,7 @@
     "@elastosfoundation/trinity-dapp-sdk": "^1.0.22",
     "@ionic-native/clipboard": "^5.29.0",
     "@ionic-native/core": "^5.29.0",
+    "@ionic-native/file": "^5.30.0",
     "@ionic-native/ionic-webview": "^5.30.0",
     "@ionic-native/keyboard": "^5.29.0",
     "@ionic-native/splash-screen": "^5.29.0",
