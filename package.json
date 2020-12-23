@@ -23,7 +23,6 @@
     "@elastosfoundation/trinity-dapp-sdk": "^1.0.22",
     "@ionic-native/clipboard": "^5.29.0",
     "@ionic-native/core": "^5.29.0",
-    "@ionic-native/file": "^5.30.0",
     "@ionic-native/ionic-webview": "^5.30.0",
     "@ionic-native/keyboard": "^5.29.0",
     "@ionic-native/splash-screen": "^5.29.0",
@@ -36,8 +35,6 @@
     "@teamhive/lottie-player": "^1.0.0",
     "angularx-qrcode": "^1.6.1",
     "bignumber.js": "^9.0.1",
-    "cordova-plugin-file": "^6.0.2",
-    "cordova-plugin-ionic-keyboard": "^2.2.0",
     "core-js": "^2.5.4",
     "ethereumjs-tx": "^2.1.2",
     "http": "0.0.1-security",
@@ -82,11 +79,5 @@
     "os": false,
     "stream": false
   },
-  "description": "An Ionic project",
-  "cordova": {
-    "plugins": {
-      "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-file": {}
-    }
-  }
+  "description": "An Ionic project"
 }
