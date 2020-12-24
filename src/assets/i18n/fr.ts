@@ -254,10 +254,11 @@ export const fr = {
     * Add ERC20 Page *
     ******************/
     "coin-adderc20-title": "Ajout de jeton ERC20",
-    "coin-adderc20-intro": 'Saisir l\'adresse du jeton, ou scanner son QR code.',
-    "coin-adderc20-intro2": 'Après confirmation, le jeton sera ajouté à votre portefeuille automatiquement.',
+    "coin-adderc20-intro": 'Saisir l\'adresse du jeton,',
+    "coin-adderc20-intro2": 'ou scanner son QR code.',
     "coin-adderc20-enteraddress": 'Saisir l\'adresse du jeton',
     "coin-adderc20-add": 'Ajouter le jeton',
+    "coin-adderc20-search": 'Search Token',
     "coin-adderc20-name": 'Nom du jeton',
     "coin-adderc20-symbol": 'Symbole',
     "coin-adderc20-not-a-erc20-contract": "Le contenu n'est pas une adresse de jeton ERC20 valide.",

@@ -194,10 +194,17 @@ export class IntentService {
     }
 
     handleAddCoinIntent(intent: AppManagerPlugin.ReceivedIntent) {
+        this.walletEditionService.reset();
+        this.walletEditionService.intentTransfer = {
+            action: this.getShortAction(intent.action),
+            intentId: intent.intentId,
+            from: intent.from,
+        };
+
         if (this.walletList.length === 1) {
             const masterWallet = this.walletList[0];
             this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
-            this.native.setRootRouter("/coin-add-erc20", { contractAddress: intent.params.contract });
+            this.native.setRootRouter("/coin-add-erc20", { contract: intent.params.contract });
         } else {
             this.native.setRootRouter(
                 'wallet-manager',

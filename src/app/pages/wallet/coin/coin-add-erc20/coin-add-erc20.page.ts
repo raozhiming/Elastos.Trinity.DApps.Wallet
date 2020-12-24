@@ -15,6 +15,7 @@ import { CoinService } from 'src/app/services/coin.service';
 import { PrefsService } from 'src/app/services/prefs.service';
 import { ERC20CoinService } from 'src/app/services/erc20coin.service';
 import { Util } from 'src/app/model/Util';
+import { IntentService } from 'src/app/services/intent.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -57,6 +58,7 @@ export class CoinAddERC20Page implements OnInit {
         private prefs: PrefsService,
         private zone: NgZone,
         private router: Router,
+        private intentService: IntentService
     ) {
         this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
         this.walletname = this.walletManager.masterWallets[this.masterWallet.id].name;
@@ -65,7 +67,7 @@ export class CoinAddERC20Page implements OnInit {
         const navigation = this.router.getCurrentNavigation();
         if (!Util.isEmptyObject(navigation.extras.state)) {
             this.intentMode = true;
-            this.coinAddress = navigation.extras.state.contractAddress;
+            this.coinAddress = navigation.extras.state.contract;
             this.checkCoinAddress();
             console.log('Received intent - checking coin address', this.coinAddress);
         }
@@ -176,10 +178,8 @@ export class CoinAddERC20Page implements OnInit {
         }
     }
 
-    async onInputAddress(address: string) {
-        if (!address) {
-            this.coinInfoFetched = false;
-        }
+    onInputAddress(address: string) {
+        this.coinInfoFetched = false;
     }
 
     private async getEthAccountAddress(): Promise<string> {
@@ -196,7 +196,11 @@ export class CoinAddERC20Page implements OnInit {
 
              // Coin added - go back to the previous screen
             if (this.intentMode) {
-                appManager.close();
+                await this.intentService.sendIntentResponse(
+                    this.walletEditionService.intentTransfer.action,
+                    this.coinAddress + ' added to wallet ' + this.masterWallet.name,
+                    this.walletEditionService.intentTransfer.intentId
+                );
             } else {
                 this.native.pop();
             }

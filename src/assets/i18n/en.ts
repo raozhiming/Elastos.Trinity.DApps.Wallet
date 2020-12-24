@@ -255,16 +255,17 @@ export const en = {
     * Add ERC20 Page *
     ******************/
     "coin-adderc20-title": "Add ERC20 Token",
-    "coin-adderc20-intro": 'Manually enter the token address or scan its QR code.',
-    "coin-adderc20-intro2": 'After validation, the token will be added to your wallet automatically.',
+    "coin-adderc20-intro": 'Manually enter the token address,',
+    "coin-adderc20-intro2": 'or scan its QR code.',
     "coin-adderc20-enteraddress": 'Enter token address',
     "coin-adderc20-add": 'Add Token',
+    "coin-adderc20-search": 'Search Token',
     "coin-adderc20-name": 'Token Name',
     "coin-adderc20-symbol": 'Token Symbol',
-    "coin-adderc20-not-a-erc20-contract": "The content is not a valid ERC20 coin address",
-    "coin-adderc20-invalid-contract-or-network-error" : "The content is not a valid ERC20 coin address, or network error",
+    "coin-adderc20-not-a-erc20-contract": "The provided ERC20 token address is not valid.",
+    "coin-adderc20-invalid-contract-or-network-error" : "The provided ERC20 token address is not valid or there is a network error.",
     'coin-adderc20-alreadyadded': 'Token already added',
-    'coin-adderc20-not-found': "The token address can't be found, pls check it!",
+    'coin-adderc20-not-found': "The token address can't be found, please check it!",
 
     /********************************************** Intent Screens ***********************************************/
 

@@ -21,6 +21,7 @@
  */
 
 import { Injectable } from '@angular/core';
+import { IntentTransfer } from './cointransfer.service';
 
 export type SelectableMnemonic = {
     text: string;
@@ -36,5 +37,15 @@ export class WalletEditionService {
     // Consider this service as a singleton shared class.
     public modifiedMasterWalletId: string = null;
 
-    constructor() {}
+    // Intent - 'addcoin'
+    public intentTransfer: IntentTransfer;
+
+    constructor() {
+        this.reset();
+    }
+
+    public reset() {
+        this.modifiedMasterWalletId = null;
+        this.intentTransfer = null;
+    }
 }

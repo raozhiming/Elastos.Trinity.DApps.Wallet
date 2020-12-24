@@ -47,7 +47,6 @@ export class CoinErc20DetailsPage implements OnInit {
   }
 
   delete() {
-
   }
 
   share() {

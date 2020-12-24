@@ -67,7 +67,7 @@ export class WalletManagerPage implements OnInit {
                 this.native.go('/access');
             } else if (this.intent === 'addcoin') {
                 this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
-                this.native.go("/coin-add-erc20", { contractAddress: this.intentParams.contract });
+                this.native.go("/coin-add-erc20", { contract: this.intentParams.contract });
 
             }
         } else {

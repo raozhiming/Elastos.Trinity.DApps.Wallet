@@ -254,10 +254,11 @@ export const zh = {
     * Add ERC20 Page *
     ******************/
     "coin-adderc20-title": "添加 ERC20 币种",
-    "coin-adderc20-intro": '手动输入币种地址或扫描其QR码。',
-    "coin-adderc20-intro2": '验证后，币种将自动添加到您的钱包中。',
+    "coin-adderc20-intro": '手动输入令牌地址',
+    "coin-adderc20-intro2": '或扫描其QR码。',
     "coin-adderc20-enteraddress": '输入币种地址',
     "coin-adderc20-add": '添加币种',
+    "coin-adderc20-search": 'Search Token',
     "coin-adderc20-name": '币种名称',
     "coin-adderc20-symbol": '币种符号',
     "coin-adderc20-not-a-erc20-contract": "不是有效的 ERC20 币种地址",

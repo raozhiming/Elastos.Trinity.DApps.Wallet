@@ -200,8 +200,8 @@ export class CoinListPage implements OnInit, OnDestroy {
     }
 
     public goToCoinDetails(item: EditableCoinInfo) {
-      /*   if (item.coin.getType() === CoinType.ERC20) {
+        if (item.coin.getType() === CoinType.ERC20) {
             this.native.go('/coin-erc20-details', { coin: item.coin });
-        } */
+        }
     }
 }

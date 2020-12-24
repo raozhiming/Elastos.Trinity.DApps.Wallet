@@ -1,23 +1,23 @@
 <ion-content>
     <ion-grid class="container" [class.darkContainer]="theme.darkMode">
-        
-        <p>{{ 'coin-adderc20-intro' | translate }}</p>
-        <p>{{ 'coin-adderc20-intro2' | translate }}</p>
-
+        <p>
+            {{ 'coin-adderc20-intro' | translate }} <br> 
+            {{ 'coin-adderc20-intro2' | translate }}
+        </p>
         <ion-row class="scan-row">
-            <ion-col size="10" class="left-col">
+            <ion-col size="12">
                 <ion-input
                     #input
                     autosize
-                    clearInput
                     [placeholder]="'coin-adderc20-enteraddress' | translate"
                     [(ngModel)]="coinAddress"
                     (input)='onInputAddress($event.target.value)'
                 >
                 </ion-input>
-            </ion-col>
-            <ion-col size="2" class="right-col">
-                <img (click)="scanCoinAddress()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
+                <div class="scan-btn ripple ion-activatable">
+                    <img (click)="scanCoinAddress()" [src]="!theme.darkMode ? 'assets/icons/scan.svg' : 'assets/icons/darkmode/scan.svg'"/>
+                    <ion-ripple-effect></ion-ripple-effect>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -44,7 +44,7 @@
         <ion-label>{{ 'coin-adderc20-add' | translate }}</ion-label>
     </ion-button>
     <ion-button  *ngIf="!coinInfoFetched && !fetchingCoinInfo" color="primary" [disabled]="!coinAddress" (click)="checkCoinAddress()">
-        <ion-label>{{ 'coin-adderc20-add' | translate }}</ion-label>
+        <ion-label>{{ 'coin-adderc20-search' | translate }}</ion-label>
     </ion-button>
 </ion-footer>
 
