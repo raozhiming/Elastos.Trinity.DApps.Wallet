@@ -39,7 +39,7 @@ export const zh = {
     "please-add-ethereum-first": "请先将以太坊币种添加到您的钱包中",
     "please-wait": "请等待...",
     "transaction-pending" : "前一个交易正在确认中，请等待此交易确认后再执行",
-    "share-erc20-token": "Check out this Elastos ERC20 Token",
+    "share-erc20-token": "查看这个Elastos ERC20币种",
 
     /************
     * Home Page *
@@ -246,9 +246,9 @@ export const zh = {
     /***********************
     * ERC20 Details Page *
     ************************/
-    'coin-erc20-details-address': 'Contract Address',
-    'coin-erc20-details-share': 'Share',
-    'coin-erc20-details-delete': 'Delete',
+    'coin-erc20-details-address': '合约地址',
+    'coin-erc20-details-share': '分享',
+    'coin-erc20-details-delete': '删除',
 
     /*****************
     * Add ERC20 Page *
@@ -258,7 +258,7 @@ export const zh = {
     "coin-adderc20-intro2": '或扫描其QR码。',
     "coin-adderc20-enteraddress": '输入币种地址',
     "coin-adderc20-add": '添加币种',
-    "coin-adderc20-search": 'Search Token',
+    "coin-adderc20-search": '搜索币种',
     "coin-adderc20-name": '币种名称',
     "coin-adderc20-symbol": '币种符号',
     "coin-adderc20-not-a-erc20-contract": "不是有效的 ERC20 币种地址",
