@@ -60,6 +60,7 @@ import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-er
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
 import { SelectSubwalletPage } from './pages/intents/select-subwallet/select-subwallet.page';
 import { CoinErc20DetailsPage } from './pages/wallet/coin/coin-erc20-details/coin-erc20-details.page';
+import { QrcodePage } from './pages/settings/qrcode/qrcode.page';
 
 @Component({ template: "<div></div>" })
 export class EmptyPage  {}
@@ -86,6 +87,7 @@ const routes: Routes = [
     // Settings
     { path: 'wallet-color', component: WalletColorPage },
     { path: 'currency-select', component: CurrencySelectPage },
+    { path: 'qrcode', component: QrcodePage },
 
     // Coin
     { path: 'coin', component: CoinHomePage },

@@ -64,6 +64,13 @@ export class SettingsPage implements OnInit {
             icon: '/assets/settings/dollar.svg',
             iconDarkmode: '/assets/settings/darkmode/dollar.svg'
         },
+        {
+            route: "/qrcode",
+            title: 'QRCode',
+            subtitle: 'Test Custom QR',
+            icon: '/assets/settings/dollar.svg',
+            iconDarkmode: '/assets/settings/darkmode/dollar.svg'
+        },
     ];
 
     public Util = Util;

@@ -97,6 +97,7 @@ import { CoinAddERC20Page } from './pages/wallet/coin/coin-add-erc20/coin-add-er
 import { WalletAdvancedImportPage } from './pages/wallet/wallet-advanced-import/wallet-advanced-import.page';
 import { SelectSubwalletPage } from './pages/intents/select-subwallet/select-subwallet.page';
 
+
 /****************** Components ******************/
 import { WalletCreatedComponent } from './components/wallet-created/wallet-created.component';
 import { TxConfirmComponent } from './components/tx-confirm/tx-confirm.component';
@@ -104,6 +105,7 @@ import { TxSuccessComponent } from './components/tx-success/tx-success.component
 import { HelpComponent } from './components/help/help.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
 import { CoinErc20DetailsPage } from './pages/wallet/coin/coin-erc20-details/coin-erc20-details.page';
+import { QrcodePage } from './pages/settings/qrcode/qrcode.page';
 
 Sentry.init({
   dsn: "https://b58a6612e1554e6fbeab3b24d980fead@sentry.io/1875741",
@@ -222,6 +224,7 @@ export function TranslateLoaderFactory() {
         CurrencySelectPage,
         WalletColorPage,
         SelectSubwalletPage,
+        QrcodePage,
         WalletCreatedComponent,
         TxConfirmComponent,
         TxSuccessComponent,
