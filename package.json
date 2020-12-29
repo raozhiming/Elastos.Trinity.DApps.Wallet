@@ -37,6 +37,7 @@
     "angularx-qrcode": "^1.6.1",
     "bignumber.js": "^9.0.1",
     "core-js": "^2.5.4",
+    "dom-to-image": "^2.6.0",
     "easyqrcodejs": "^4.1.0",
     "ethereumjs-tx": "^2.1.2",
     "html2canvas": "^1.0.0-rc.7",
