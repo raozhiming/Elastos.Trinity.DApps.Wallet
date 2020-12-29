@@ -59,8 +59,19 @@ export class StandardCoin extends Coin {
 }
 
 export class ERC20Coin extends Coin {
-    constructor(id: CoinID, name: string, description: string, private erc20ContractAddress: string, network: NetworkType) {
+
+    isCustom: boolean = false;
+
+    constructor(
+        id: CoinID,
+        name: string,
+        description: string,
+        private erc20ContractAddress: string,
+        network: NetworkType,
+        isCustom: boolean = false,
+    ) {
         super(CoinType.ERC20, id, name, description, true, network);
+        isCustom = this.isCustom;
     }
 
     /**

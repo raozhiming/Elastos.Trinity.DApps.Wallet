@@ -6,6 +6,7 @@ import { Util } from 'src/app/model/Util';
 import { Router } from '@angular/router';
 import { ERC20Coin } from 'src/app/model/Coin';
 import { AppService } from 'src/app/services/app.service';
+import { CoinService } from 'src/app/services/coin.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -28,12 +29,14 @@ export class CoinErc20DetailsPage implements OnInit {
     private native: Native,
     private translate: TranslateService,
     private router: Router,
+    private coinService: CoinService
   ) { }
 
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
     if (!Util.isEmptyObject(navigation.extras.state)) {
         this.coin = navigation.extras.state.coin;
+        this.canDelete = this.coin.isCustom ? true : false;
         console.log('ERC20 Details', this.coin);
 
         this.contractAddress = this.coin.getContractAddress();
@@ -46,7 +49,9 @@ export class CoinErc20DetailsPage implements OnInit {
     this.native.toast(this.translate.instant("copied"));
   }
 
-  delete() {
+  async delete() {
+    await this.coinService.deleteERC20Coin(this.coin);
+    this.native.pop();
   }
 
   share() {

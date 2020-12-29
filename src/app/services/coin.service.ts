@@ -101,7 +101,7 @@ export class CoinService {
     public async addCustomERC20Coin(coin: ERC20Coin, activateInWallet?: MasterWallet) {
         console.log("Add coin to custom ERC20 coins list", coin);
 
-        let existingCoins = await this.getCustomERC20Coins();
+        const existingCoins = await this.getCustomERC20Coins();
         existingCoins.push(coin);
 
         // Add to the available coins list
@@ -118,12 +118,20 @@ export class CoinService {
         this.events.publish("custom-coin-added", coin.getID());
     }
 
-    public async getCustomERC20Coins(): Promise<ERC20Coin[]> {
-        let rawCoinList = await this.storage.get("custom-erc20-coins");
-        if (!rawCoinList)
-            return [];
+    public async deleteERC20Coin(erc20Coin: ERC20Coin) {
+        this.availableCoins = this.availableCoins.filter((coin) => coin.getID() !== erc20Coin.getID());
+        let allCustomERC20Coins = await this.getCustomERC20Coins();
+        allCustomERC20Coins = allCustomERC20Coins.filter((coin) => coin.getContractAddress() !== erc20Coin.getContractAddress());
+        await this.storage.set("custom-erc20-coins", allCustomERC20Coins);
+    }
 
-        let customCoins: ERC20Coin[] = [];
+    public async getCustomERC20Coins(): Promise<ERC20Coin[]> {
+        const rawCoinList = await this.storage.get("custom-erc20-coins");
+        if (!rawCoinList) {
+            return [];
+        }
+
+        const customCoins: ERC20Coin[] = [];
         for (let rawCoin of rawCoinList) {
             customCoins.push(ERC20Coin.fromJson(rawCoin));
         }
@@ -135,7 +143,7 @@ export class CoinService {
      * Appens all custom ERC20 coins to the list of available coins.
      */
     private async addCustomERC20CoinsToAvailableCoins() {
-        let existingCoins = await this.getCustomERC20Coins();
+        const existingCoins = await this.getCustomERC20Coins();
 
         for (let coin of existingCoins) {
             this.availableCoins.push(coin);
