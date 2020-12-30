@@ -28,7 +28,6 @@ export class Coin {
         private description: string,
         private removable: boolean,
         public network: NetworkType,
-       //  public isCustom?: boolean
     ) {}
 
     public getType(): CoinType {
