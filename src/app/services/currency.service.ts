@@ -60,7 +60,7 @@ export class CurrencyService {
     console.log("Currency service initialization complete");
   }
 
-  getSavedPrices() {
+  getSavedPrices(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.currencies.forEach((currency) => {
         this.storage.getPrice(currency.symbol).then((price) => {
@@ -72,7 +72,7 @@ export class CurrencyService {
     });
   }
 
-  getSavedCurrency() {
+  getSavedCurrency(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.storage.getCurrency().then((symbol) => {
         console.log("Got storage currency", symbol);
@@ -88,7 +88,7 @@ export class CurrencyService {
     });
   }
 
-  getSavedCurrencyDisplayPreference() {
+  getSavedCurrencyDisplayPreference(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.storage.getCurrencyDisplayPreference().then((useCurrency) => {
         console.log('Got stored currency display preference', useCurrency);
@@ -101,7 +101,8 @@ export class CurrencyService {
   }
 
   fetch() {
-    this.http.get<any>(this.proxyurl + 'https://api-price.elaphant.app/api/1/cmc?limit=200').subscribe((res) => {
+    // TODO: Get price by token name.
+    this.http.get<any>(this.proxyurl + 'https://api-price.elaphant.app/api/1/cmc?limit=500').subscribe((res) => {
       console.log('Got CMC response', res);
       this.elaStats = res.find((coin) => coin.symbol === 'ELA');
       if (this.elaStats) {
