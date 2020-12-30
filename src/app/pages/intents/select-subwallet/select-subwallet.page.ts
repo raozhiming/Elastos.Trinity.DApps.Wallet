@@ -43,6 +43,7 @@ export class SelectSubwalletPage implements OnInit {
   ionViewWillEnter() {
     this.appService.setTitleBarTitle(this.translate.instant('select-subwallet'));
     appManager.setVisible("show", () => {}, (err) => {});
+    this.appService.setBackKeyVisibility(false);
   }
 
   walletSelected(masterWallet: MasterWallet) {

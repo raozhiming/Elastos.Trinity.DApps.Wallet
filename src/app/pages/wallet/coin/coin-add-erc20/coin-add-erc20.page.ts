@@ -41,6 +41,7 @@ export class CoinAddERC20Page implements OnInit {
     public Util = Util;
 
     private intentMode = false;
+    private rootPage = false;
 
     constructor(
         public route: ActivatedRoute,
@@ -67,6 +68,7 @@ export class CoinAddERC20Page implements OnInit {
         const navigation = this.router.getCurrentNavigation();
         if (!Util.isEmptyObject(navigation.extras.state)) {
             this.intentMode = true;
+            this.rootPage = navigation.extras.state.rootPage;
             this.coinAddress = navigation.extras.state.contract;
             this.checkCoinAddress();
             console.log('Received intent - checking coin address', this.coinAddress);
@@ -79,12 +81,15 @@ export class CoinAddERC20Page implements OnInit {
     ionViewWillEnter() {
         appManager.setVisible("show", () => {}, (err) => {});
         this.appService.setTitleBarTitle(this.translate.instant("coin-adderc20-title"));
-
-        if (this.intentMode) {
+        if (this.rootPage) {
             this.appService.setBackKeyVisibility(false);
         } else {
             this.appService.setBackKeyVisibility(true);
         }
+    }
+
+    ionViewWillLeave() {
+        this.appService.setBackKeyVisibility(false);
     }
 
     getAllCustomERC20Coins() {

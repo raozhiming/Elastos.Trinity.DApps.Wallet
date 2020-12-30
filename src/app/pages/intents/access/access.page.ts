@@ -12,6 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { UiService } from 'src/app/services/ui.service';
 import { IntentTransfer } from 'src/app/services/cointransfer.service';
+import { Router } from '@angular/router';
+import { Util } from 'src/app/model/Util';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -36,6 +38,7 @@ export class AccessPage implements OnInit {
     public title = '';
     public requestItems: ClaimRequest[] = [];
     public showReason = false;
+    private rootPage = false;
 
     constructor(
         public appService: AppService,
@@ -43,11 +46,17 @@ export class AccessPage implements OnInit {
         public walletManager: WalletManager,
         public popupProvider: PopupProvider,
         public native: Native,
+        private router: Router,
         private translate: TranslateService,
         public theme: ThemeService,
         private walletAccessService: WalletAccessService,
         public uiService: UiService
-    ) { }
+    ) {
+        const navigation = this.router.getCurrentNavigation();
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            this.rootPage = navigation.extras.state.rootPage;
+        }
+    }
 
     ngOnInit() {
         this.init();
@@ -56,6 +65,13 @@ export class AccessPage implements OnInit {
     ionViewWillEnter() {
         this.appService.setTitleBarTitle(this.translate.instant('access-title'));
         appManager.setVisible("show", () => {}, (err) => {});
+        if (!this.rootPage) {
+            this.appService.setBackKeyVisibility(true);
+        }
+    }
+
+    ionViewWillLeave() {
+        this.appService.setBackKeyVisibility(false);
     }
 
     init() {

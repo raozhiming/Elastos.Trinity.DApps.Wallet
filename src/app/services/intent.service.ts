@@ -1,7 +1,5 @@
-import { Events, NavController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { Events } from '@ionic/angular';
 import { Native } from './native.service';
-import { Config } from '../config/Config';
 import { Util } from '../model/Util';
 import { StandardCoinName } from '../model/Coin';
 import { Injectable, NgZone } from '@angular/core';
@@ -23,7 +21,6 @@ export class IntentService {
     private walletList: MasterWallet [] = null;
 
     constructor(
-        private zone: NgZone,
         public events: Events,
         public native: Native,
         private walletManager: WalletManager,
@@ -187,7 +184,7 @@ export class IntentService {
             const masterWallet = this.walletList[0];
             this.coinTransferService.masterWalletId = masterWallet.id;
             this.coinTransferService.walletInfo = masterWallet.account;
-            this.native.setRootRouter("/waitforsync");
+            this.native.setRootRouter('/waitforsync', {rootPage: true});
         } else {
             this.native.setRootRouter('select-subwallet');
         }
@@ -204,7 +201,7 @@ export class IntentService {
         if (this.walletList.length === 1) {
             const masterWallet = this.walletList[0];
             this.walletEditionService.modifiedMasterWalletId = masterWallet.id;
-            this.native.setRootRouter("/coin-add-erc20", { contract: intent.params.contract });
+            this.native.setRootRouter("/coin-add-erc20", { contract: intent.params.contract, rootPage: true });
         } else {
             this.native.setRootRouter(
                 'wallet-manager',
@@ -228,7 +225,7 @@ export class IntentService {
         if (this.walletList.length === 1) {
             const masterWallet = this.walletList[0];
             this.walletAccessService.masterWalletId = masterWallet.id;
-            this.native.setRootRouter("/access");
+            this.native.setRootRouter('/access', { rootPage: true});
         } else {
             this.native.setRootRouter(
                 'wallet-manager',

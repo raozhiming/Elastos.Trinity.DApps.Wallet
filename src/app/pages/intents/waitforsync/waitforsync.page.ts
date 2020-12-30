@@ -14,6 +14,8 @@ import { CurrencyService } from 'src/app/services/currency.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/services/ui.service';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
+import { Util } from 'src/app/model/Util';
+import { Router } from '@angular/router';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -40,6 +42,7 @@ export class WaitForSyncPage implements OnInit {
     action = '';
     nextScreen = '';
 
+    private rootPage = false;
 
     constructor(
         public appService: AppService,
@@ -50,11 +53,16 @@ export class WaitForSyncPage implements OnInit {
         private coinTransferService: CoinTransferService,
         private walletManager: WalletManager,
         public popupProvider: PopupProvider,
+        private router: Router,
         public theme: ThemeService,
         public translate: TranslateService,
         public currencyService: CurrencyService,
         public uiService: UiService
     ) {
+        const navigation = this.router.getCurrentNavigation();
+        if (!Util.isEmptyObject(navigation.extras.state)) {
+            this.rootPage = navigation.extras.state.rootPage;
+        }
     }
 
     ngOnInit() {
@@ -66,6 +74,9 @@ export class WaitForSyncPage implements OnInit {
     ionViewWillEnter() {
         this.appService.setTitleBarTitle(this.translate.instant('waitforsync-syncing'));
         appManager.setVisible("show", () => {}, (err) => {});
+        if (!this.rootPage) {
+            this.appService.setBackKeyVisibility(true);
+        }
     }
 
     async init() {
@@ -151,7 +162,7 @@ export class WaitForSyncPage implements OnInit {
     }
 
     doAction() {
-        this.native.setRootRouter(this.nextScreen);
+        this.native.go(this.nextScreen);
     }
 
     async cancelOperation() {
