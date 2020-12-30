@@ -50,18 +50,18 @@ export class CoinService {
         this.availableCoins.push(new StandardCoin(StandardCoinName.ETHSC, "ELA/ETHSC", "Elastos ETH"));
 
         // ERC20 tokens
-        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xFDce7FB4050CD43C654C6ceCeAd950343990cE75", NetworkType.TestNet));
+        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xa4e4a46b228f3658e96bf782741c67db9e1ef91c", NetworkType.MainNet, false));
+        this.availableCoins.push(new ERC20Coin("TTECH", "TTECH", "Trinity Tech", "0xFDce7FB4050CD43C654C6ceCeAd950343990cE75", NetworkType.TestNet, false));
 
         // Community ERC20 tokens - could be removed in the future - for now only to create some synergy
-        this.availableCoins.push(new ERC20Coin("APL", "APL", "Apple Token", "0x09046e26d8b4cf640323850786455cec8e6f665e", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("BNA", "BNA", "Banana", "0x2fceb9e10c165ef72d5771a722e8ab5e6bc85015", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("SUG", "SUG", "Sugarcane", "0xe272e043259bd2a4773c75768a5a56492c551291", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("DMA", "DMA", "DMA Token", "0x9c22cec60392cb8c87eb65c6e344872f1ead1115", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("TOK-LP-SUG", "TOK-LP-SUG", "Tokswap LP Token SUG", "0xcf9c63a11631e52e0b4d4d3fd3ea45fde3183bfe", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("TOK-LP-APL", "TOK-LP-APL", "Tokswap LP Token APL", "0x4c18cc638df020ac1f1398d52ade77ed84d60f48", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("TOK-LP-BNA", "TOK-LP-BNA", "Tokswap LP Token BNA", "0x593cd928586612c7196e1f8eecf23db43555cf44", NetworkType.MainNet));
-        this.availableCoins.push(new ERC20Coin("ELP", "ELP", "Elaphant", "0x677d40ccc1c1fc3176e21844a6c041dbd106e6cd", NetworkType.MainNet));
+        this.availableCoins.push(new ERC20Coin("APL", "APL", "Apple Token", "0x09046e26d8b4cf640323850786455cec8e6f665e", NetworkType.MainNet, false));
+        this.availableCoins.push(new ERC20Coin("BNA", "BNA", "Banana", "0x2fceb9e10c165ef72d5771a722e8ab5e6bc85015", NetworkType.MainNet, false));
+        this.availableCoins.push(new ERC20Coin("SUG", "SUG", "Sugarcane", "0xe272e043259bd2a4773c75768a5a56492c551291", NetworkType.MainNet, false));
+        this.availableCoins.push(new ERC20Coin("DMA", "DMA", "DMA Token", "0x9c22cec60392cb8c87eb65c6e344872f1ead1115", NetworkType.MainNet, false));
+        this.availableCoins.push(new ERC20Coin("TOK-LP-SUG", "TOK-LP-SUG", "Tokswap LP Token SUG", "0xcf9c63a11631e52e0b4d4d3fd3ea45fde3183bfe", NetworkType.MainNet, false));
+        this.availableCoins.push(new ERC20Coin("TOK-LP-APL", "TOK-LP-APL", "Tokswap LP Token APL", "0x4c18cc638df020ac1f1398d52ade77ed84d60f48", NetworkType.MainNet, false));
+        this.availableCoins.push(new ERC20Coin("TOK-LP-BNA", "TOK-LP-BNA", "Tokswap LP Token BNA", "0x593cd928586612c7196e1f8eecf23db43555cf44", NetworkType.MainNet, false));
+        this.availableCoins.push(new ERC20Coin("ELP", "ELP", "Elaphant", "0x677d40ccc1c1fc3176e21844a6c041dbd106e6cd", NetworkType.MainNet, false));
 
         await this.addCustomERC20CoinsToAvailableCoins();
 

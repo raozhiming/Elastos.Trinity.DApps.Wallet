@@ -38,7 +38,7 @@ export class CoinErc20DetailsPage implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     if (!Util.isEmptyObject(navigation.extras.state)) {
         this.coin = navigation.extras.state.coin;
-        this.canDelete = this.coin.isCustom ? true : false;
+        this.canDelete = this.coin.coinIsCustom() ? true : false;
         console.log('ERC20 Details', this.coin);
 
         this.contractAddress = this.coin.getContractAddress();

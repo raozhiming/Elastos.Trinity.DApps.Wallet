@@ -28,7 +28,7 @@ export class Coin {
         private description: string,
         private removable: boolean,
         public network: NetworkType,
-        public isCustom: boolean
+       //  public isCustom?: boolean
     ) {}
 
     public getType(): CoinType {
@@ -55,7 +55,7 @@ export class Coin {
 export class StandardCoin extends Coin {
     constructor(id: CoinID, name: string, description: string) {
         // Null network means that the coin is available on all networks
-        super(CoinType.STANDARD, id, name, description, false, null, false);
+        super(CoinType.STANDARD, id, name, description, false, null);
     }
 }
 
@@ -67,9 +67,9 @@ export class ERC20Coin extends Coin {
         description: string,
         private erc20ContractAddress: string,
         network: NetworkType,
-        isCustom: boolean = false,
+        private isCustom: boolean,
     ) {
-        super(CoinType.ERC20, id, name, description, true, network, isCustom);
+        super(CoinType.ERC20, id, name, description, true, network);
     }
 
     /**
@@ -80,8 +80,12 @@ export class ERC20Coin extends Coin {
         return this.erc20ContractAddress;
     }
 
+    coinIsCustom() {
+        return this.isCustom;
+    }
+
     static fromJson(jsonCoin: any): ERC20Coin {
-        let coin = new ERC20Coin(null, null, null, null, null);
+        let coin = new ERC20Coin(null, null, null, null, null, null);
         Object.assign(coin, jsonCoin);
         return coin;
     }

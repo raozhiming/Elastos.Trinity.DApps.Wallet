@@ -205,7 +205,7 @@ export class MasterWallet {
                         if (erc20Coin) {
                             await this.createSubWallet(erc20Coin);
                         } else {
-                            const newCoin = new ERC20Coin(token.symbol, token.symbol, token.name, token.contractAddress, activeNetwork);
+                            const newCoin = new ERC20Coin(token.symbol, token.symbol, token.name, token.contractAddress, activeNetwork, false);
                             await this.coinService.addCustomERC20Coin(newCoin, this);
                         }
                     } catch (e) {
