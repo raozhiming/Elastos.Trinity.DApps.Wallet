@@ -250,6 +250,8 @@ export const en = {
    'coin-erc20-details-address': 'Contract Address',
    'coin-erc20-details-share': 'Share',
    'coin-erc20-details-delete': 'Delete',
+   'delete-coin-confirm-title': 'Delete Coin',
+   'delete-coin-confirm-subtitle': 'This coin will be removed from your wallet but your coin balance will remain safe. To utilize and see your coin balance, you would have to re-add this coin again.',
 
     /*****************
     * Add ERC20 Page *

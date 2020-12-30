@@ -123,6 +123,8 @@ export class CoinService {
         let allCustomERC20Coins = await this.getCustomERC20Coins();
         allCustomERC20Coins = allCustomERC20Coins.filter((coin) => coin.getContractAddress() !== erc20Coin.getContractAddress());
         await this.storage.set("custom-erc20-coins", allCustomERC20Coins);
+        console.log('availableCoins after deleting', this.availableCoins);
+        this.events.publish("custom-coin-deleted");
     }
 
     public async getCustomERC20Coins(): Promise<ERC20Coin[]> {

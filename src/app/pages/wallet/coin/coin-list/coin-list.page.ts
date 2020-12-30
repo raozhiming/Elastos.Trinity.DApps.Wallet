@@ -123,6 +123,9 @@ export class CoinListPage implements OnInit, OnDestroy {
         this.events.subscribe("custom-coin-added", () => {
             this.refreshCoinList();
         });
+        this.events.subscribe("custom-coin-deleted", () => {
+            this.refreshCoinList();
+        });
 
         this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
 

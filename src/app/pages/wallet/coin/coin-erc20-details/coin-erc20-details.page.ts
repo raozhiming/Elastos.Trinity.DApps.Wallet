@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ERC20Coin } from 'src/app/model/Coin';
 import { AppService } from 'src/app/services/app.service';
 import { CoinService } from 'src/app/services/coin.service';
+import { PopupProvider } from 'src/app/services/popup.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -29,7 +30,8 @@ export class CoinErc20DetailsPage implements OnInit {
     private native: Native,
     private translate: TranslateService,
     private router: Router,
-    private coinService: CoinService
+    private coinService: CoinService,
+    private popupProvider: PopupProvider
   ) { }
 
   ngOnInit() {
@@ -44,14 +46,26 @@ export class CoinErc20DetailsPage implements OnInit {
     }
   }
 
+  ionViewWillLeave() {
+    if (this.popupProvider.alertPopup) {
+      this.popupProvider.alertCtrl.dismiss();
+      this.popupProvider.alertPopup = null;
+    }
+  }
+
   copy() {
     this.native.copyClipboard(this.contractAddress);
     this.native.toast(this.translate.instant("copied"));
   }
 
   async delete() {
-    await this.coinService.deleteERC20Coin(this.coin);
-    this.native.pop();
+    this.popupProvider.ionicConfirm('delete-coin-confirm-title', 'delete-coin-confirm-subtitle')
+      .then(async (data) => {
+        if (data) {
+          await this.coinService.deleteERC20Coin(this.coin);
+          this.native.pop();
+        }
+    });
   }
 
   share() {

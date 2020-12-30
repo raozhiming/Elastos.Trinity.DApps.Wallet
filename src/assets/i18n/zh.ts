@@ -249,6 +249,8 @@ export const zh = {
     'coin-erc20-details-address': '合约地址',
     'coin-erc20-details-share': '分享',
     'coin-erc20-details-delete': '删除',
+    'delete-coin-confirm-title': 'Delete Coin',
+    'delete-coin-confirm-subtitle': 'This coin will be removed from your wallet but your coin balance will remain safe. To utilize and see your coin balance, you would have to re-add this coin again.',
 
     /*****************
     * Add ERC20 Page *
