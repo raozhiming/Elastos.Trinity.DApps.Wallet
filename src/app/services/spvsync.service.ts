@@ -45,7 +45,8 @@ export enum RPCMethod {
     STOP_WALLET_SYNC,
     GET_WALLET_SYNC_PROGRESS,
     SEND_WALLET_SYNC_PROGRESS,
-    UPDAET_MASTER_WALLET
+    UPDAET_MASTER_WALLET,
+    STOP_WALLET_SYNC_RESPONSE
 }
 
 export type RPCStartWalletSyncParams = {
@@ -54,6 +55,12 @@ export type RPCStartWalletSyncParams = {
 };
 
 export type RPCStopWalletSyncParams = RPCStartWalletSyncParams;
+
+export type RPCStopWalletSyncResponseParams = {
+    masterId: WalletID;
+    chainIds: StandardCoinName[];
+    success: boolean; // Whether the sync could successfully be stopped or not
+}
 
 export type ChainSyncProgress = {
   progress: number;
@@ -135,14 +142,25 @@ export class SPVSyncService {
         for (const chainId of chainIds) {
             await this.spvBridge.syncStart(masterId, chainId);
         }
+
+        console.log("SubWallet sync start is completed");
     }
 
-    public async syncStopSubWallets(masterId: WalletID, chainIds: StandardCoinName[]): Promise<void> {
+    public async syncStopSubWallets(masterId: WalletID, chainIds: StandardCoinName[]): Promise<boolean> {
         console.log("SubWallets sync is stopping:", masterId);
 
         for (const chainId of chainIds) {
-            await this.spvBridge.syncStop(masterId, chainId);
+            try {
+                await this.spvBridge.syncStop(masterId, chainId);
+            }
+            catch (e) {
+                console.error("Failed to stop subwallet "+chainId+" of master wallet "+masterId+"! Reason:", e, JSON.stringify(e));
+                return false;
+            }
         }
+
+        console.log("SubWallet sync stop is completed");
+        return true;
     }
 
     private async handleAppManagerMessage(message: AppManagerPlugin.ReceivedMessage) {
@@ -177,7 +195,35 @@ export class SPVSyncService {
                 break;
             case RPCMethod.STOP_WALLET_SYNC:
                 const stopWalletSyncParams = rpcMessage.params as RPCStopWalletSyncParams;
-                await this.syncStopSubWallets(stopWalletSyncParams.masterId, stopWalletSyncParams.chainIds);
+                let success: boolean = false;
+                try {
+                    success = await this.syncStopSubWallets(stopWalletSyncParams.masterId, stopWalletSyncParams.chainIds);
+                }
+                catch (e) {
+                    console.error("Stop wallet sync error:", e);
+                    success = false;
+                }
+                console.log("All subwallets stopped in spvsync service. Now sending response to the app side.");
+
+                const responseParams: RPCStopWalletSyncResponseParams = {
+                    masterId: stopWalletSyncParams.masterId,
+                    chainIds: stopWalletSyncParams.chainIds,
+                    success: success
+                };
+
+                const responseMessage: InAppRPCMessage = {
+                    method: RPCMethod.STOP_WALLET_SYNC_RESPONSE,
+                    params: responseParams,
+                    startupMode: 'service'
+                };
+
+                // Send message to the app (default)
+                appManager.sendMessage("org.elastos.trinity.dapp.wallet", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(responseMessage), ()=>{
+                    // Nothing to do
+                }, (err) => {
+                    console.log("Failed to send sync stop response to wallet - app not running", err);
+                });
+
                 break;
             case RPCMethod.UPDAET_MASTER_WALLET:
                 const updateWalletInfoParams = rpcMessage.params as RPCUpdateWalletInfoParams;

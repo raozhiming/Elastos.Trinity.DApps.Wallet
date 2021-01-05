@@ -241,6 +241,32 @@ export class BackupRestoreService {
     })
   }
 
+  // DEBUG ONLY - TO TEST SYNC RESTORATION
+  public async testInstantELAStateDownload(wallets: MasterWallet[]) {
+    // Stop all on going wallets synchronization first
+    this.logDebug("Stopping on going subwallets sync");
+    for (let wallet of wallets) {
+      await WalletManager.instance.stopWalletSync(wallet.id);
+    }
+
+    for (let wallet of wallets) {
+      for (let subWallet of Object.values(wallet.subWallets)) {
+        let fileName = this.getSubwalletBackupFileName(subWallet);
+        if (fileName) {
+          this.logDebug("FORCE downloading file", fileName);
+          let restoreResult = await this.downloadAndSaveSPVSyncStateFile(wallet, subWallet, this.getSubwalletBackupFileName(subWallet));
+          this.logDebug("FORCED DOWNLOAD RESULT:", restoreResult);
+        }
+      }
+    }
+
+    // Restart all wallets synchronizations
+    this.logDebug("Restarting subwallets sync");
+    for (let wallet of wallets) {
+        await WalletManager.instance.startWalletSync(wallet.id);
+    }
+  }
+
   /**
    * Main entry point to initiate a backup synchronization
    */

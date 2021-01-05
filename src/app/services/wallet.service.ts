@@ -37,7 +37,7 @@ import { CoinService } from './coin.service';
 import { JsonRPCService } from './jsonrpc.service';
 import { PopupProvider } from './popup.service';
 import { Native } from './native.service';
-import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, SPVSyncService } from './spvsync.service';
+import { InAppRPCMessage, RPCMethod, RPCStartWalletSyncParams, RPCStopWalletSyncParams, RPCStopWalletSyncResponseParams, SPVSyncService } from './spvsync.service';
 import { LocalStorage } from './storage.service';
 import { AuthService } from './auth.service';
 import { Transfer } from './cointransfer.service';
@@ -91,6 +91,8 @@ export class WalletManager {
     public needToPromptTransferToIDChain = false; // Whether it's time to ask user to transfer some funds to the ID chain for better user experience or not.
 
     public spvBridge: SPVWalletPluginBridge = null;
+
+    private onGoingSubWalletsSyncStopRequestResolver: (success: boolean)=>void = null; // Promise resolver to call to complete the stop wallet sync operation after receiving a response from the background service
 
     constructor(
         public events: Events,
@@ -191,7 +193,7 @@ export class WalletManager {
             for (let i = 0; i < idList.length; i++) {
                 const masterId = idList[i];
 
-                console.log("Rebuilding local model for subwallet id "+masterId);
+                console.log("Rebuilding local model for wallet id "+masterId);
 
                 // Try to retrieve locally storage extended info about this wallet
                 const extendedInfo = await this.localStorage.getExtendedMasterWalletInfos(masterId);
@@ -205,20 +207,22 @@ export class WalletManager {
                     // Create a model instance for each master wallet returned by the SPV SDK.
                     this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
 
-                    if (extendedInfo.subWallets.length < 3) {
-                        // open IDChain and ETHSC automatically
-                        let subwallet: SerializedSubWallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
-                        if (!subwallet) {
-                            console.log('Opening IDChain');
-                            const subWallet = new IDChainSubWallet(this.masterWallets[masterId]);
-                            extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
-                        }
-                        subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
-                        if (!subwallet) {
-                            console.log('Opening ETHSC');
-                            const subWallet = new MainchainSubWallet(this.masterWallets[masterId]);
-                            extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
-                        }
+                    // reopen ELA, IDChain and ETHSC automatically
+                    let subwallet: SerializedSubWallet;
+                    subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ELA);
+                    if (!subwallet || !this.masterWallets[masterId].hasSubWallet(StandardCoinName.ELA)) {
+                        console.log('(Re)Opening ELA');
+                        await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
+                    }
+                    subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
+                    if (!subwallet || !this.masterWallets[masterId].hasSubWallet(StandardCoinName.IDChain)) {
+                        console.log('(Re)Opening IDChain');
+                        await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
+                    }
+                    subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
+                    if (!subwallet || !this.masterWallets[masterId].hasSubWallet(StandardCoinName.ETHSC)) {
+                        console.log('(Re)Opening ETHSC');
+                        await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
                     }
                 }
 
@@ -284,6 +288,7 @@ export class WalletManager {
             }
 
             await this.backupService.checkSync(Object.values(this.masterWallets));
+            //await this.backupService.testInstantELAStateDownload(Object.values(this.masterWallets));
         }, 5000);
     }
 
@@ -501,7 +506,7 @@ export class WalletManager {
     }
 
     // TODO: When wallet is destroyed
-    public async stopWalletSync(masterId: WalletID): Promise<void> {
+    public async stopWalletSync(masterId: WalletID): Promise<boolean> {
         console.log("Requesting sync service to stop syncing wallet " + masterId);
 
         // Add only standard subwallets to SPV stop sync request
@@ -512,7 +517,7 @@ export class WalletManager {
             }
         }
 
-        await this.stopSubWalletsSync(masterId, chainIds);
+        return await this.stopSubWalletsSync(masterId, chainIds);
     }
 
     private startSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]): Promise<void> {
@@ -544,7 +549,7 @@ export class WalletManager {
         });
     }
 
-    private stopSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]): Promise<void> {
+    private stopSubWalletsSync(masterId: WalletID, subWalletIds: StandardCoinName[]): Promise<boolean> {
         return new Promise(async (resolve, reject)=>{
             console.log("Requesting sync service to stop syncing some subwallets for wallet " + masterId);
 
@@ -560,15 +565,19 @@ export class WalletManager {
             };
 
             if (this.appService.runningAsAService()) {
-                await this.syncService.syncStopSubWallets(messageParams.masterId, messageParams.chainIds);
-                resolve();
+                let success = await this.syncService.syncStopSubWallets(messageParams.masterId, messageParams.chainIds);
+                resolve(success);
             } else {
+                this.onGoingSubWalletsSyncStopRequestResolver = resolve;
                 appManager.sendMessage("#service:walletservice", AppManagerPlugin.MessageType.INTERNAL, JSON.stringify(rpcMessage), () => {
-                    resolve();
+                    console.log("Stop sync message sent to the background service. Now waiting for response");
+                    // Do NOT resolve here. We will resolve when we receive the message response from the background service.
                 }, (err) => {
                     // Service probably not running
                     console.warn("Failed to send stop RPC message to the sync service:", err);
-                    resolve();
+
+                    // Return success because if the servie is not running, we can consider we have stopped the sync.
+                    resolve(true);
                 });
             }
         });
@@ -580,6 +589,16 @@ export class WalletManager {
 
     public async stopSubWalletSync(masterId: WalletID, subWalletId: StandardCoinName): Promise<void> {
         await this.stopSubWalletsSync(masterId, [subWalletId]);
+    }
+
+    private onStopWalletSyncResponse(response: RPCStopWalletSyncResponseParams) {
+        console.log("Received wallet sync stop response in wallet service: ", response);
+
+        if (this.onGoingSubWalletsSyncStopRequestResolver) {
+            console.log("Calling wallet sync stop promise resolve with success = "+response.success);
+            this.onGoingSubWalletsSyncStopRequestResolver(response.success);
+            this.onGoingSubWalletsSyncStopRequestResolver = null;
+        }
     }
 
     /**
@@ -620,8 +639,11 @@ export class WalletManager {
                         this.updateSyncProgress(masterId, chainId, progress, lastBlockTime);
                     }
                 }
-
                 this.getAllMasterWalletBalanceByRPC();
+                break;
+            case RPCMethod.STOP_WALLET_SYNC_RESPONSE:
+                const stopWalletSyncResponseParams = rpcMessage.params as RPCStopWalletSyncResponseParams;
+                this.onStopWalletSyncResponse(stopWalletSyncResponseParams);
                 break;
             default:
                 break;
