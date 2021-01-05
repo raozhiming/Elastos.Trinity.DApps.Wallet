@@ -9,7 +9,7 @@
             <p>{{ 'dposvote-voting-for' | translate }}</p>
             <h1 id="count">{{ coinTransferService.publickeys.length }}/36</h1>
             <p id="with">{{ 'dposvote-with' | translate }}</p>
-            <h1 id="amount">{{ balance | number:'1.0-3' }} <span>ELA</span></h1>
+            <h1 id="amount">{{ voteAmount | number:'1.0-3' }} <span>ELA</span></h1>
             <h2>{{ 'dposvote-revote' | translate }}</h2>
         </div>
         <div class="btn cancel ion-activatable ripple" (click)="cancelOperation()">

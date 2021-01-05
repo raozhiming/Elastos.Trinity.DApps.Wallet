@@ -30,6 +30,8 @@ import { IntentService } from 'src/app/services/intent.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MainchainSubWallet } from 'src/app/model/wallets/MainchainSubWallet';
+import BigNumber from 'bignumber.js';
+import { Config } from 'src/app/config/Config';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -42,7 +44,7 @@ export class DPoSVotePage implements OnInit {
 
     private masterWalletId: string;
     private sourceSubwallet: MainchainSubWallet = null;
-    public balance: string; // Balance in SELA
+    public voteAmount: string; // Estimate amount, Balance in SELA
     public chainId: string;
     private walletInfo = {};
     public intentTransfer: IntentTransfer;
@@ -83,7 +85,8 @@ export class DPoSVotePage implements OnInit {
         this.masterWalletId = this.coinTransferService.masterWalletId;
 
         this.sourceSubwallet = this.walletManager.getMasterWallet(this.masterWalletId).getSubWallet(this.chainId) as MainchainSubWallet;
-        this.balance = this.sourceSubwallet.getDisplayBalance().toString();
+
+        this.voteAmount = this.sourceSubwallet.balance.minus(this.votingFees()).dividedBy(Config.SELAAsBigNumber).toString();
         this.hasPendingVoteTransaction();
     }
 
@@ -110,26 +113,19 @@ export class DPoSVotePage implements OnInit {
     }
 
     async checkValue() {
-        const stakeAmount = this.sourceSubwallet.balance.minus(this.votingFees());
-        if (stakeAmount.isNegative()) {
-            console.log('DPoSVotePage: Not enough balance:', stakeAmount.toString());
-            this.native.toast_trans('amount-null');
-            return;
-        }
-
+        // -1 mean max.
         try {
-            this.createVoteProducerTransaction(stakeAmount.toString());
+            this.createVoteProducerTransaction(-1);
         } catch (error) {
             console.log('dposvote createVoteProducerTransaction error:', error);
         }
     }
 
     /**
-     * Fees needed to pay for the vote transaction. They have to be deduced from the total amount otherwise
-     * funds won't be enough to vote.
+     * Fees needed to pay for the vote transaction (Estimate). The more utxo, the more fees.
      */
     votingFees(): number {
-        return 100000; // SELA: 0.001ELA
+        return 20000; // SELA: 0.0002ELA
     }
 
     /**
