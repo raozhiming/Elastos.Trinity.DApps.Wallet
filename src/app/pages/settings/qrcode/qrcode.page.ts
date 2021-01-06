@@ -3,6 +3,8 @@ import QRCode from 'easyqrcodejs';
 import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
 
+declare let printer: any;
+
 @Component({
   selector: 'app-qrcode',
   templateUrl: './qrcode.page.html',
@@ -130,5 +132,9 @@ export class QrcodePage implements OnInit {
     catch (e) {
       console.warn("Exception in setTimeout", e);
     }
+  }
+
+  printTest() {
+    printer.print('<h1>Hello World!</h1>');
   }
 }

@@ -2,4 +2,6 @@
     <div #qrcode style="visibility:hidden"></div>
     <!-- <img #canvas> -->
      <ion-img *ngIf="qrcodeImg" [src]="qrcodeImg" style="width:400px;height:400px"></ion-img>
+
+     <ion-button (click)="printTest()">Print</ion-button>
 </ion-content>
