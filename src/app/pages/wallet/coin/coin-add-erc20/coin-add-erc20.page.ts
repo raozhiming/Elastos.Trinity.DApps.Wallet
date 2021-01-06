@@ -203,7 +203,7 @@ export class CoinAddERC20Page implements OnInit {
             if (this.intentMode) {
                 await this.intentService.sendIntentResponse(
                     this.walletEditionService.intentTransfer.action,
-                    this.coinAddress + ' added to wallet ' + this.masterWallet.name,
+                    { message: this.coinName + ' added successfully', status: 'success' },
                     this.walletEditionService.intentTransfer.intentId
                 );
             } else {

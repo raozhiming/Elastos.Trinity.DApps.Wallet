@@ -79,7 +79,7 @@ export class ERC20Coin extends Coin {
         return this.erc20ContractAddress;
     }
 
-    coinIsCustom() {
+    coinIsCustom(): boolean {
         return this.isCustom;
     }
 
