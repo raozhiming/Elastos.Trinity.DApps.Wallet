@@ -39,7 +39,7 @@ export const fr = {
     "please-add-ethereum-first": "Veuillez d'abord ajouter le jeton Ethereum à votre portefeuille.",
     "please-wait": "Veuillez patienter...",
     "transaction-pending" : "Une transaction est déjà en cours. Veuillez attendre la confirmation de la première transaction.",
-    "share-erc20-token": "Check out this Elastos ERC20 Token",
+    "share-erc20-token": "Adresse de jeton ERC20 partagée",
 
     /************
     * Home Page *
@@ -55,10 +55,10 @@ export const fr = {
     "coin-list": "Liste des jetons",
     "activate-hive-vault": "Activer le stockage Hive",
     "pull-down-to-refresh": "Faire glisser l'écran pour rafraîchir",
-    "hive-not-configured-title": "Hive not configured",
-    "hive-not-configured-text": "Your hive storage is not configured. Would you like to configure it now?",
-    "hive-not-configured-not-now": "Not now",
-    "hive-not-configured-configure": "Configure",
+    "hive-not-configured-title": "Stockage Hiv enon configuré",
+    "hive-not-configured-text": "Votre espace de stockage Hive n\'est pas configuré. Voulez-vous le configurer maintenant?",
+    "hive-not-configured-not-now": "Pas maintenant",
+    "hive-not-configured-configure": "Configurer",
 
     /********************************************** General Settings Screen ***********************************************/
 
@@ -246,11 +246,11 @@ export const fr = {
     /***********************
     * ERC20 Details Page *
     ************************/
-    'coin-erc20-details-address': 'Contract Address',
-    'coin-erc20-details-share': 'Share',
-    'coin-erc20-details-delete': 'Delete',
-    'delete-coin-confirm-title': 'Delete Coin',
-    'delete-coin-confirm-subtitle': 'This coin will be removed from your wallet but your coin balance will remain safe. To utilize and see your coin balance, you would have to re-add this coin again.',
+    'coin-erc20-details-address': 'Adresse du contract',
+    'coin-erc20-details-share': 'Partager',
+    'coin-erc20-details-delete': 'Supprimer',
+    'delete-coin-confirm-title': 'Supprimer le jeton',
+    'delete-coin-confirm-subtitle': 'Ce jeton sera supprimé de votre portefeuille mais vos devises existeront toujours. Pour voir votre balance, vous devrez ajouter ce jeton à nouveau.',
 
     /*****************
     * Add ERC20 Page *
@@ -260,7 +260,7 @@ export const fr = {
     "coin-adderc20-intro2": 'ou scanner son QR code.',
     "coin-adderc20-enteraddress": 'Saisir l\'adresse du jeton',
     "coin-adderc20-add": 'Ajouter le jeton',
-    "coin-adderc20-search": 'Search Token',
+    "coin-adderc20-search": 'Rechercher le jeton',
     "coin-adderc20-name": 'Nom du jeton',
     "coin-adderc20-symbol": 'Symbole',
     "coin-adderc20-not-a-erc20-contract": "Le contenu n'est pas une adresse de jeton ERC20 valide.",
@@ -322,7 +322,7 @@ export const fr = {
     * ESC Transaction Page *
     ************************/
     "esctransaction-title": "Transaction Ethereum",
-    "esctransaction-smart-contract": "Smart Contract",
+    "esctransaction-smart-contract": "Contrat intelligent",
     "esctransaction-intro": "Vous allez signer et éxécuter une action sur la châine publique Elastos Ethereum.",
     "esctransaction-you-are-using": "Vous utilisez:",
     "esctransaction-value": "Montant:",
@@ -397,7 +397,7 @@ export const fr = {
     'text-consolidate-prompt': 'Consolider?',
     'text-consolidate-UTXO-counts': 'Nombre d\'UTXOs: {{ count }}',
     'text-consolidate-note': 'Trop d\'UTXO peuvent provoquer l\'échec de certaines transactions, il est recommandé de consolider. La consolidation n\'affecte pas les votes en cours',
-    'reasons-failure': 'Reason for failure',
+    'reasons-failure': 'Cause de l\'échec',
 
     // Error codes
     'Error-10000': 'Json parse error of action parameters',
