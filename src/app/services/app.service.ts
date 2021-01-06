@@ -84,6 +84,8 @@ export class AppService {
         titleBarManager.addOnItemClickedListener((menuIcon) => {
             if (menuIcon.key === "back") {
               this.titlebarBackButtonHandle();
+            } else if (menuIcon.key === "backToHome") {
+                this.native.go('/wallet-home');
             }
         });
     }

@@ -18,6 +18,7 @@ import { Util } from 'src/app/model/Util';
 import { IntentService } from 'src/app/services/intent.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
+declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
 @Component({
     selector: 'app-coin-add-erc20',
@@ -82,7 +83,10 @@ export class CoinAddERC20Page implements OnInit {
         appManager.setVisible("show", () => {}, (err) => {});
         this.appService.setTitleBarTitle(this.translate.instant("coin-adderc20-title"));
         if (this.rootPage) {
-            this.appService.setBackKeyVisibility(false);
+            titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_LEFT, {
+                key: "backToHome",
+                iconPath: TitleBarPlugin.BuiltInIcon.BACK
+            });
         } else {
             this.appService.setBackKeyVisibility(true);
         }
@@ -201,11 +205,13 @@ export class CoinAddERC20Page implements OnInit {
 
              // Coin added - go back to the previous screen
             if (this.intentMode) {
-                await this.intentService.sendIntentResponse(
+               /*  await this.intentService.sendIntentResponse(
                     this.walletEditionService.intentTransfer.action,
                     { message: this.coinName + ' added successfully', status: 'success' },
                     this.walletEditionService.intentTransfer.intentId
-                );
+                ); */
+
+                this.native.go("/wallet-home");
             } else {
                 this.native.pop();
             }

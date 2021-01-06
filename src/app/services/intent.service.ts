@@ -57,17 +57,17 @@ export class IntentService {
             return false;
         }
 
-        titleBarManager.setNavigationMode(TitleBarPlugin.TitleBarNavigationMode.CLOSE);
-
         switch (this.getShortAction(intent.action)) {
             case 'elawalletmnemonicaccess':
-            case 'walletaccess':
-                this.handleAccessIntent(intent);
-                break;
             case 'addcoin':
                 this.handleAddCoinIntent(intent);
                 break;
+            case 'walletaccess':
+                titleBarManager.setNavigationMode(TitleBarPlugin.TitleBarNavigationMode.CLOSE);
+                this.handleAccessIntent(intent);
+                break;
             default:
+                titleBarManager.setNavigationMode(TitleBarPlugin.TitleBarNavigationMode.CLOSE);
                 this.handleTransactionIntent(intent);
                 break;
         }
