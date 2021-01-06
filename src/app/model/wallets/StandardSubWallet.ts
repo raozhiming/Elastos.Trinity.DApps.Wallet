@@ -26,7 +26,7 @@ export abstract class StandardSubWallet extends SubWallet {
     }
 
     public async destroy() {
-        this.masterWallet.walletManager.stopSubWalletSync(this.masterWallet.id, this.id as StandardCoinName);
+        await this.masterWallet.walletManager.stopSubWalletSync(this.masterWallet.id, this.id as StandardCoinName);
         await this.masterWallet.walletManager.spvBridge.destroySubWallet(this.masterWallet.id, this.id);
 
         super.destroy();

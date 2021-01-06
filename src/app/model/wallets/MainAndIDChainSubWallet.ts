@@ -40,13 +40,19 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
     }
 
     public async updateBalance() {
+        console.log('MainAndIDChainSubWallet updateBalance ', this.id,
+                    ' syncTimestamp:', this.syncTimestamp,
+                    ' timestampRPC:', this.timestampRPC,
+                    ' this.progress:', this.progress);
+
         // if the balance form spvsdk is newer, then use it.
-        if (this.syncTimestamp > this.timestampRPC) {
+        if ((this.progress === 100) || (this.syncTimestamp > this.timestampRPC)) {
             // Get the current balance from the wallet plugin.
-            let balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
+            const balanceStr = await this.masterWallet.walletManager.spvBridge.getBalance(this.masterWallet.id, this.id);
             // Balance in SELA
             this.balance = new BigNumber(balanceStr, 10);
         } else {
+            console.log('Do not get Balance from spvsdk.');
             // TODO: update balance by rpc?
         }
     }
@@ -127,12 +133,15 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
         console.log('TIMETEST getBalanceByRPC start:', this.id);
         const currentTimestamp = moment().valueOf();
         const onedayago = moment().add(-1, 'days').valueOf();
-        const oneHourago = moment().add(-1, 'hours').valueOf();
+        const oneHourago = moment().add(-10, 'minutes').valueOf();
 
         if (this.lastBlockTime
                 && ((this.syncTimestamp > onedayago)
-                || ((this.timestampRPC > oneHourago)))) {
-            console.log('Do not need to get balance by rpc');
+                || (this.timestampRPC > oneHourago))) {
+            console.log('Do not need to get balance by rpc.',
+                ' this.lastBlockTime:', this.lastBlockTime,
+                ' this.syncTimestamp:', this.syncTimestamp,
+                ' this.timestampRPC:', this.timestampRPC);
             return false;
         }
         // If the balance of 5 consecutive request is 0, then end the query.(100 addresses)
@@ -237,7 +246,7 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
                 ' totalRequestCount:', totalRequestCount,
                 ' requestAddressCountOfInternal:', requestAddressCountOfInternal,
                 ' requestAddressCountOfExternal:', requestAddressCountOfExternal);
-
+        console.log(this.masterWallet.id, ' ', this.id, ' timestampRPC:', this.timestampRPC);
         return true;
     }
 }
