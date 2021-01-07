@@ -8,6 +8,10 @@ import { ERC20Coin } from 'src/app/model/Coin';
 import { AppService } from 'src/app/services/app.service';
 import { CoinService } from 'src/app/services/coin.service';
 import { PopupProvider } from 'src/app/services/popup.service';
+import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
+import { WalletManager } from 'src/app/services/wallet.service';
+import { WalletEditionService } from 'src/app/services/walletedition.service';
+import { SubWallet } from 'src/app/model/wallets/SubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -18,6 +22,8 @@ declare let appManager: AppManagerPlugin.AppManager;
 })
 export class CoinErc20DetailsPage implements OnInit {
 
+  private masterWallet: MasterWallet = null;
+  private subWallet: SubWallet = null;
   public coin: ERC20Coin;
   public contractAddress: string = '1234';
   public canDelete: boolean = false;
@@ -31,15 +37,25 @@ export class CoinErc20DetailsPage implements OnInit {
     private translate: TranslateService,
     private router: Router,
     private coinService: CoinService,
-    private popupProvider: PopupProvider
+    private popupProvider: PopupProvider,
+    private walletManager: WalletManager,
+    private walletEditionService: WalletEditionService
   ) { }
 
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
     if (!Util.isEmptyObject(navigation.extras.state)) {
         this.coin = navigation.extras.state.coin;
-        this.canDelete = this.coin.coinIsCustom() ? true : false;
+        this.masterWallet = this.walletManager.getMasterWallet(this.walletEditionService.modifiedMasterWalletId);
+        this.subWallet = this.masterWallet.getSubWallet(this.coin.getID());
+
+        console.log('ERC20 Masterwallet', this.masterWallet);
+        console.log('ERC20 Subwallet', this.subWallet);
         console.log('ERC20 Details', this.coin);
+
+        if (this.coin.coinIsCustom() || this.subWallet && !this.subWallet.getDisplayBalance().isZero()) {
+          this.canDelete = true;
+        }
 
         this.contractAddress = this.coin.getContractAddress();
         this.appService.setTitleBarTitle(this.coin.getName());
