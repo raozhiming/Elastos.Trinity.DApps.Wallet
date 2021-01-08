@@ -58,10 +58,10 @@ export class IntentService {
         }
 
         switch (this.getShortAction(intent.action)) {
-            case 'elawalletmnemonicaccess':
             case 'addcoin':
                 this.handleAddCoinIntent(intent);
                 break;
+            case 'elawalletmnemonicaccess':
             case 'walletaccess':
                 titleBarManager.setNavigationMode(TitleBarPlugin.TitleBarNavigationMode.CLOSE);
                 this.handleAccessIntent(intent);
