@@ -48,6 +48,7 @@ import { BackupRestoreService } from './backuprestore.service';
 import { StandardSubWallet } from '../model/wallets/StandardSubWallet';
 import { MainAndIDChainSubWallet } from '../model/wallets/MainAndIDChainSubWallet';
 import { identifierName } from '@angular/compiler';
+import { ETHChainSubWallet } from '../model/wallets/ETHChainSubWallet';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -208,21 +209,25 @@ export class WalletManager {
                     this.masterWallets[masterId] = new MasterWallet(this, this.coinService, masterId);
 
                     // reopen ELA, IDChain and ETHSC automatically
+                    // Don't need to createSubwallet, MasterWallets::populateWithExtendedInfo will create Subwallet with name.
                     let subwallet: SerializedSubWallet;
                     subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ELA);
-                    if (!subwallet || !this.masterWallets[masterId].hasSubWallet(StandardCoinName.ELA)) {
+                    if (!subwallet) {
                         console.log('(Re)Opening ELA');
-                        await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ELA));
+                        const subWallet = new MainchainSubWallet(this.masterWallets[masterId]);
+                        extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                     }
                     subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.IDChain);
-                    if (!subwallet || !this.masterWallets[masterId].hasSubWallet(StandardCoinName.IDChain)) {
+                    if (!subwallet) {
                         console.log('(Re)Opening IDChain');
-                        await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.IDChain));
+                        const subWallet = new IDChainSubWallet(this.masterWallets[masterId]);
+                        extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                     }
                     subwallet = extendedInfo.subWallets.find(wallet => wallet.id === StandardCoinName.ETHSC);
-                    if (!subwallet || !this.masterWallets[masterId].hasSubWallet(StandardCoinName.ETHSC)) {
+                    if (!subwallet) {
                         console.log('(Re)Opening ETHSC');
-                        await this.masterWallets[masterId].createSubWallet(this.coinService.getCoinByID(StandardCoinName.ETHSC));
+                        const subWallet = new ETHChainSubWallet(this.masterWallets[masterId]);
+                        extendedInfo.subWallets.push(subWallet.toSerializedSubWallet());
                     }
                 }
 
@@ -726,7 +731,10 @@ export class WalletManager {
         }
 
         if (progress === 100) {
-            await this.saveMasterWallet(masterWallet);
+            // ETHSC send event too often.
+            if (chainId !== StandardCoinName.ETHSC) {
+                await this.saveMasterWallet(masterWallet);
+            }
         }
     }
 
