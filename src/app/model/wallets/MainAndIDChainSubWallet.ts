@@ -144,26 +144,51 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
                 ' this.timestampRPC:', this.timestampRPC);
             return false;
         }
-        // If the balance of 5 consecutive request is 0, then end the query.(100 addresses)
-        let maxRequestTimesOfGetEmptyBalance = 5;
+
+        let totalBalance = new BigNumber(0);
+
+        let balance: BigNumber;
+        // The Single Address Wallet should use the external address.
+        if (!this.masterWallet.account.SingleAddress) {
+            balance = await this.getBalanceByAddress(jsonRPCService, true);
+            totalBalance = totalBalance.plus(balance);
+        }
+
+        balance = await this.getBalanceByAddress(jsonRPCService, false);
+        totalBalance = totalBalance.plus(balance);
+
+        this.balanceByRPC = totalBalance;
+        this.balance = totalBalance;
+        this.timestampRPC = currentTimestamp;
+
+        console.log('TIMETEST getBalanceByRPC ', this.id, ' end');
+        console.log('getBalanceByRPC totalBalance:', totalBalance.toString());
+        console.log(this.masterWallet.id, ' ', this.id, ' timestampRPC:', this.timestampRPC);
+        return true;
+    }
+
+    async getBalanceByAddress(jsonRPCService: JsonRPCService, internalAddress: boolean) {
+        // If the balance of 5 consecutive request is 0, then stop the query.(100 addresses)
+        const maxRequestTimesOfGetEmptyBalance = 5;
         let requestTimesOfGetEmptyBalance = 0;
         // In order to calculate blanks
-        let requestAddressCountOfInternal = 1;
-        let requestAddressCountOfExternal = 1;
+        let requestAddressCount = 1;
 
         let startIndex = 0;
         let totalBalance = new BigNumber(0);
-        let totalRequestCount = 0;
 
-        console.log('Internal address');
+        if (internalAddress) {
+            console.log('get Balance for internal Address');
+        } else {
+            console.log('get Balance for external Address');
+        }
 
-        // internal address
         let addressArray = null;
         do {
-            addressArray = await this.masterWallet.walletManager.spvBridge.getAllAddresses(this.masterWallet.id, this.id, startIndex, true);
+            addressArray = await this.masterWallet.walletManager.spvBridge.getAllAddresses(
+                    this.masterWallet.id, this.id, startIndex, internalAddress);
             if (addressArray.Addresses.length === 0) {
-                requestAddressCountOfInternal = startIndex;
-                totalRequestCount = startIndex;
+                requestAddressCount = startIndex;
                 break;
             }
             startIndex += addressArray.Addresses.length;
@@ -175,8 +200,7 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
                 if (balance.lte(0)) {
                     requestTimesOfGetEmptyBalance++;
                     if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
-                        requestAddressCountOfInternal = startIndex;
-                        totalRequestCount = startIndex;
+                        requestAddressCount = startIndex;
                         break;
                     }
                 } else {
@@ -188,65 +212,9 @@ export class MainAndIDChainSubWallet extends StandardSubWallet {
             }
         } while (!this.masterWallet.account.SingleAddress);
 
-        console.log('External address');
+        console.log('request Address count:', requestAddressCount);
+        console.log('balance:', totalBalance.toString());
 
-        if (!this.masterWallet.account.SingleAddress) {
-            // external address for user
-            const currentReceiveAddress = await this.masterWallet.walletManager.spvBridge.createAddress(this.masterWallet.id, this.id);
-            let currentReceiveAddressIndex = -1;
-            let startCheckBlanks = false;
-
-            maxRequestTimesOfGetEmptyBalance = 1; // is 1 ok for external?
-            startIndex = 0;
-            while (true) {
-                const addressArray = await this.masterWallet.walletManager.spvBridge.getAllAddresses(this.masterWallet.id, this.id, startIndex, false);
-                if (addressArray.Addresses.length === 0) {
-                    requestAddressCountOfExternal = startIndex;
-                    totalRequestCount += startIndex;
-                    break;
-                }
-                startIndex += addressArray.Addresses.length;
-                if (currentReceiveAddressIndex === -1) {
-                    currentReceiveAddressIndex = addressArray.Addresses.findIndex((address) => (address === currentReceiveAddress));
-                    if (currentReceiveAddressIndex !== -1) {
-                        currentReceiveAddressIndex += startIndex;
-                        startCheckBlanks = true;
-                    }
-                }
-
-                try {
-                    const balance = await jsonRPCService.getBalanceByAddress(this.id as StandardCoinName, addressArray.Addresses);
-                    totalBalance = totalBalance.plus(balance);
-
-                    if (startCheckBlanks) {
-                        if (balance.lte(0)) {
-                            requestTimesOfGetEmptyBalance++;
-                            if (requestTimesOfGetEmptyBalance >= maxRequestTimesOfGetEmptyBalance) {
-                                requestAddressCountOfExternal = startIndex;
-                                totalRequestCount += startIndex;
-                                break;
-                            }
-                        } else {
-                            requestTimesOfGetEmptyBalance = 0;
-                        }
-                    }
-                } catch (e) {
-                    console.log('jsonRPCService.getBalanceByAddress exception:', e);
-                    throw e;
-                }
-            }
-        }
-
-        this.balanceByRPC = totalBalance;
-        this.balance = totalBalance;
-        this.timestampRPC = currentTimestamp;
-
-        console.log('TIMETEST getBalanceByRPC ', this.id, ' end');
-        console.log('getBalanceByRPC totalBalance:', totalBalance,
-                ' totalRequestCount:', totalRequestCount,
-                ' requestAddressCountOfInternal:', requestAddressCountOfInternal,
-                ' requestAddressCountOfExternal:', requestAddressCountOfExternal);
-        console.log(this.masterWallet.id, ' ', this.id, ' timestampRPC:', this.timestampRPC);
-        return true;
+        return totalBalance;
     }
 }

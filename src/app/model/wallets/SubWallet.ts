@@ -32,7 +32,7 @@ export class SerializedSubWallet {
         serializedSubWallet.lastBlockTime = subWallet.lastBlockTime;
         serializedSubWallet.timestamp = subWallet.timestamp;
         serializedSubWallet.progress = subWallet.progress;
-        serializedSubWallet.timestampRPC = subWallet.timestampRPC;
+        serializedSubWallet.timestampRPC = subWallet.timestampRPC ? subWallet.timestampRPC : 0;
         return serializedSubWallet;
     }
 }
