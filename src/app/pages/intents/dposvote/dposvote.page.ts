@@ -113,9 +113,9 @@ export class DPoSVotePage implements OnInit {
     }
 
     async checkValue() {
-        // -1 mean max.
         try {
-            this.createVoteProducerTransaction(-1);
+            // -1 mean max.
+            this.createVoteProducerTransaction('-1');
         } catch (error) {
             console.log('dposvote createVoteProducerTransaction error:', error);
         }
@@ -131,7 +131,7 @@ export class DPoSVotePage implements OnInit {
     /**
      * stakeAmount: SELA
      */
-    async createVoteProducerTransaction(stakeAmount) {
+    async createVoteProducerTransaction(stakeAmount: string) {
         console.log('Creating vote transaction with amount', stakeAmount);
 
         const rawTx =
