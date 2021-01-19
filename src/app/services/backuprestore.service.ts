@@ -190,7 +190,10 @@ export class BackupRestoreService {
    */
   private async getWalletSyncContextName(wallet: MasterWallet): Promise<string> {
     let rootAddress = await this.getWalletFirstELAAddress(wallet);
-    return "walletbackup-" + this.activeNetwork + "-" + rootAddress;
+    // CU-jv00d3: We need to remember the address mode because the sync data format is different and if user re-imports
+    // His wallet with a different mode, the restored data breaks the wallet.
+    let singleMultiAddress = (wallet.account.SingleAddress ? "single" : "multi");
+    return "walletbackup-" + this.activeNetwork + singleMultiAddress + "-" + rootAddress;
   }
 
   private async getWalletFirstELAAddress(wallet: MasterWallet): Promise<string> {
