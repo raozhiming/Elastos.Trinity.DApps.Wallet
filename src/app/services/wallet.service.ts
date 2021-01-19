@@ -22,9 +22,8 @@
 
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Events, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import moment from 'moment';
 
 import { SPVWalletPluginBridge, SPVWalletMessage, TxPublishedResult, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
 import { MasterWallet, WalletID } from '../model/wallets/MasterWallet';
@@ -47,8 +46,8 @@ import { MainchainSubWallet } from '../model/wallets/MainchainSubWallet';
 import { BackupRestoreService } from './backuprestore.service';
 import { StandardSubWallet } from '../model/wallets/StandardSubWallet';
 import { MainAndIDChainSubWallet } from '../model/wallets/MainAndIDChainSubWallet';
-import { identifierName } from '@angular/compiler';
 import { ETHChainSubWallet } from '../model/wallets/ETHChainSubWallet';
+import { Events } from './events.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 

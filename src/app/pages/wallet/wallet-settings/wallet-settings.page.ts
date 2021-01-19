@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { LocalStorage } from '../../../services/storage.service';
 import { PopupProvider } from "../../../services/popup.service";
 import { WalletManager } from '../../../services/wallet.service';
@@ -14,6 +13,7 @@ import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Events } from 'src/app/services/events.service';
 
 @Component({
     selector: 'app-wallet-settings',

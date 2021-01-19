@@ -1,6 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { Events } from '@ionic/angular';
 import { AppService } from '../../../../services/app.service';
 import { AuthService } from '../../../../services/auth.service';
 import { Native } from '../../../../services/native.service';
@@ -12,6 +11,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { IntentTransfer } from 'src/app/services/cointransfer.service';
 import { WalletAccessService } from 'src/app/services/walletaccess.service';
+import { Events } from 'src/app/services/events.service';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -55,14 +55,7 @@ export class MnemonicExportPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.events.subscribe("error:update", () => {
-            this.hideMnemonic = true;
-        });
-    }
-
-    ionViewWillLeave() {
         this.theme.getTheme();
-        this.events.unsubscribe('error:update');
     }
 
     init() {

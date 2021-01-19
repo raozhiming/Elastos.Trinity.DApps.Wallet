@@ -1,11 +1,11 @@
 import { MasterWallet } from './MasterWallet';
-import { Events } from '@ionic/angular';
 import { CoinType, CoinID, StandardCoinName } from '../Coin';
 import { AllTransactions, Transaction, TransactionInfo, TransactionStatus, TransactionType } from '../Transaction';
 import { Transfer } from '../../services/cointransfer.service';
 import BigNumber from 'bignumber.js';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
+import { Events } from 'src/app/services/events.service';
 
 /**
  * Subwallet representation ready to save to local storage for persistance.

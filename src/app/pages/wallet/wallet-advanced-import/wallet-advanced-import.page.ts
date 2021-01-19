@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { Native } from 'src/app/services/native.service';
 import { Util } from "../../../model/Util";
 import { TranslateService } from '@ngx-translate/core';
 import { WalletManager } from 'src/app/services/wallet.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
+import { Events } from 'src/app/services/events.service';
 
 @Component({
   selector: 'app-wallet-advanced-import',

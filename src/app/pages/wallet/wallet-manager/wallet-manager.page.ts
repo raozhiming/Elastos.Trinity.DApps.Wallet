@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
@@ -12,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { WalletAccessService } from 'src/app/services/walletaccess.service';
 import { Router } from '@angular/router';
 import { CurrencyService } from 'src/app/services/currency.service';
+import { Events } from 'src/app/services/events.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 

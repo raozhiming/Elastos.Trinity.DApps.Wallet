@@ -22,7 +22,6 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Events } from '@ionic/angular';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
 import { PopupProvider } from '../../../../services/popup.service';
@@ -43,6 +42,8 @@ import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
 import { UiService } from 'src/app/services/ui.service';
 import BigNumber from 'bignumber.js';
 import { LocalStorage } from 'src/app/services/storage.service';
+import { Events } from 'src/app/services/events.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-coin-home',
@@ -71,6 +72,9 @@ export class CoinHomePage implements OnInit {
 
     public isShowMore = false;
 
+    private syncSubscription: Subscription = null;
+    private syncCompletedSubscription: Subscription = null;
+
     constructor(
         public router: Router,
         public walletManager: WalletManager,
@@ -89,7 +93,7 @@ export class CoinHomePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.events.subscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress', (coin) => {
+        this.syncSubscription = this.events.subscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress', (coin) => {
             this.initData();
         });
 
@@ -99,8 +103,8 @@ export class CoinHomePage implements OnInit {
     }
 
     ionViewDidLeave() {
-        this.events.unsubscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress');
-        if (this.eventId) this.events.unsubscribe(this.eventId);
+        if (this.syncSubscription) this.syncSubscription.unsubscribe();
+        if (this.syncCompletedSubscription) this.syncCompletedSubscription.unsubscribe();
     }
 
     async init() {
@@ -120,9 +124,9 @@ export class CoinHomePage implements OnInit {
 
             if (this.masterWallet.subWallets[this.chainId].progress !== 100) {
                 this.eventId = this.masterWallet.id + ':' + this.chainId + ':synccompleted';
-                this.events.subscribe(this.eventId, (coin) => {
-                    this.events.unsubscribe(this.eventId);
-                    this.eventId = null;
+                this.syncCompletedSubscription = this.events.subscribe(this.eventId, (coin) => {
+                    this.syncCompletedSubscription.unsubscribe();
+                    this.syncCompletedSubscription = null;
                     this.CheckPublishTx();
                     this.checkUTXOCount();
                 });

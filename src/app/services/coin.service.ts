@@ -24,10 +24,10 @@ import { Injectable } from '@angular/core';
 import { Coin, CoinID, CoinType, ERC20Coin, StandardCoin } from '../model/Coin';
 import { StandardCoinName } from '../model/Coin';
 import { LocalStorage } from './storage.service';
-import { Events } from '@ionic/angular';
 import { MasterWallet } from '../model/wallets/MasterWallet';
 import { NetworkType } from '../model/NetworkType';
 import { PrefsService } from './prefs.service';
+import { Events } from './events.service';
 
 @Injectable({
     providedIn: 'root'

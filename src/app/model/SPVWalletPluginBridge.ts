@@ -1,10 +1,10 @@
 import { Util } from './Util';
 import { Native } from '../services/native.service';
-import { Events } from '@ionic/angular';
 import { PopupProvider } from '../services/popup.service';
 import { Config } from '../config/Config';
 import { StandardCoinName } from './Coin';
 import { AllTransactions } from './Transaction';
+import { Events } from '../services/events.service';
 
 declare let walletManager: WalletPlugin.WalletManager;
 

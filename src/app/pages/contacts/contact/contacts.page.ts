@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { Native } from '../../../services/native.service';
 import { LocalStorage } from '../../../services/storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Util } from 'src/app/model/Util';
+import { Events } from 'src/app/services/events.service';
 
 @Component({
     selector: 'app-contacts',
@@ -16,7 +16,10 @@ export class ContactsPage implements OnInit {
     masterId: string = "1";
     isShow: boolean = false;
     params: any = {};
-    constructor(public router: Router, public native: Native, public localStorage: LocalStorage, public events: Events) {
+    constructor(public router: Router,
+                public native: Native,
+                public localStorage: LocalStorage,
+                public events: Events) {
         const navigation = this.router.getCurrentNavigation();
         if (!Util.isEmptyObject(navigation.extras.state)) {
             this.params = navigation.extras.state || {};

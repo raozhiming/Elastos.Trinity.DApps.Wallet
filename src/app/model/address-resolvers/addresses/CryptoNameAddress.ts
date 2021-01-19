@@ -6,6 +6,6 @@ export class CryptoNameAddress extends Address {
     }
 
     public getDisplayName() {
-        return "CryptoName: "+this.name;    
+        return "CryptoName: "+this.name;
     }
 }

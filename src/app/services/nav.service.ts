@@ -1,4 +1,3 @@
-import { Events } from '@ionic/angular';
 import { Native } from './native.service';
 import { WalletManager } from './wallet.service';
 import { Injectable } from '@angular/core';
@@ -9,7 +8,7 @@ declare let appManager: AppManagerPlugin.AppManager;
     providedIn: 'root'
 })
 export class NavService {
-    constructor(public events: Events, public native: Native, private walletManager: WalletManager) {
+    constructor(public native: Native, private walletManager: WalletManager) {
     }
 
     public showStartupScreen() {

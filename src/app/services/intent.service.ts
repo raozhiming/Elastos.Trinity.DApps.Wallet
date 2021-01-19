@@ -1,4 +1,3 @@
-import { Events } from '@ionic/angular';
 import { Native } from './native.service';
 import { Util } from '../model/Util';
 import { StandardCoinName } from '../model/Coin';
@@ -9,6 +8,7 @@ import { WalletAccessService } from './walletaccess.service';
 import { WalletManager } from './wallet.service';
 import { MasterWallet } from '../model/wallets/MasterWallet';
 import { WalletEditionService } from './walletedition.service';
+import { Events } from './events.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;

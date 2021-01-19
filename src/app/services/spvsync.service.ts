@@ -22,7 +22,6 @@
 
 import { Injectable } from '@angular/core';
 import { StandardCoinName, CoinType } from '../model/Coin';
-import { Events } from '@ionic/angular';
 import { WalletID } from '../model/wallets/MasterWallet';
 import { SPVWalletPluginBridge, SPVWalletMessage, ETHSCEventType, ETHSCEvent, ETHSCEventAction } from '../model/SPVWalletPluginBridge';
 import { Native } from './native.service';
@@ -30,6 +29,7 @@ import { PopupProvider } from './popup.service';
 import { WalletManager } from './wallet.service';
 import { LocalStorage } from './storage.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Events } from './events.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let notificationManager: NotificationManagerPlugin.NotificationManager;

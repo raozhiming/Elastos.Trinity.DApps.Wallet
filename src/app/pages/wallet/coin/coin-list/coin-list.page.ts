@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ModalController, Events } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Config } from '../../../../config/Config';
 import { LocalStorage } from '../../../../services/storage.service';
 import { Native } from '../../../../services/native.service';
@@ -15,6 +15,8 @@ import { Util } from 'src/app/model/Util';
 import { TranslateService } from '@ngx-translate/core';
 import { UiService } from 'src/app/services/ui.service';
 import { CurrencyService } from 'src/app/services/currency.service';
+import { Events } from 'src/app/services/events.service';
+import { Subscription } from 'rxjs';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 
@@ -43,6 +45,11 @@ export class CoinListPage implements OnInit, OnDestroy {
     public SELA = Config.SELA;
     public CoinType = CoinType;
 
+    private updateSubscription: Subscription = null;
+    private destroySubscription: Subscription = null;
+    private coinAddSubscription: Subscription = null;
+    private coinDeleteSubscription: Subscription = null;
+
     // Titlebar
     private onItemClickedListener: any;
 
@@ -70,9 +77,18 @@ export class CoinListPage implements OnInit, OnDestroy {
         });
     }
 
+    unsubscribe(subscription: Subscription) {
+      if (subscription) {
+        subscription.unsubscribe();
+        subscription = null;
+      }
+    }
+
     ngOnDestroy() {
-        this.events.unsubscribe("error:update");
-        this.events.unsubscribe("error:destroySubWallet");
+        this.unsubscribe(this.updateSubscription);
+        this.unsubscribe(this.destroySubscription);
+        this.unsubscribe(this.coinAddSubscription);
+        this.unsubscribe(this.coinDeleteSubscription);
 
         titleBarManager.removeOnItemClickedListener(this.onItemClickedListener);
         this.onItemClickedListener = null;
@@ -114,16 +130,16 @@ export class CoinListPage implements OnInit, OnDestroy {
     }
 
     async init() {
-        this.events.subscribe("error:update", () => {
+        this.updateSubscription = this.events.subscribe("error:update", () => {
             this.currentCoin["open"] = false;
         });
-        this.events.subscribe("error:destroySubWallet", () => {
+        this.destroySubscription = this.events.subscribe("error:destroySubWallet", () => {
             this.currentCoin["open"] = true;
         });
-        this.events.subscribe("custom-coin-added", () => {
+        this.coinAddSubscription = this.events.subscribe("custom-coin-added", () => {
             this.refreshCoinList();
         });
-        this.events.subscribe("custom-coin-deleted", () => {
+        this.coinDeleteSubscription = this.events.subscribe("custom-coin-deleted", () => {
             this.refreshCoinList();
         });
 

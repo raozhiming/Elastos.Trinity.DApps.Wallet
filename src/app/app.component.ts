@@ -20,13 +20,11 @@
  * SOFTWARE.
  */
 
-import { Component, NgZone, ViewChild, OnInit, AfterViewInit } from '@angular/core';
-import { Events, Platform, ModalController, IonRouterOutlet } from '@ionic/angular';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { Platform, ModalController, IonRouterOutlet } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import { LocalStorage } from './services/storage.service';
-import { Native } from './services/native.service';
 import { WalletManager } from './services/wallet.service';
 import { AppService } from './services/app.service';
 import { PopupProvider } from './services/popup.service';
@@ -38,6 +36,7 @@ import { UiService } from './services/ui.service';
 import { ContactsService } from './services/contacts.service';
 import { ERC20CoinService } from './services/erc20coin.service';
 import { ImageLoaderConfigService } from 'ionic-image-loader-v5';
+import { Events } from './services/events.service';
 
 @Component({
     selector: 'app-root',
@@ -48,11 +47,9 @@ export class AppComponent {
 
     constructor(
         private platform: Platform,
-        private statusBar: StatusBar,
         public localStorage: LocalStorage,
         public walletManager: WalletManager,
         public events: Events,
-        private native: Native,
         public zone: NgZone,
         public translate: TranslateService,
         private navService: NavService,
@@ -74,7 +71,6 @@ export class AppComponent {
         console.log("Initialize app");
         this.platform.ready().then(async () => {
             console.log("Platform is ready");
-            this.statusBar.styleDefault();
             this.imageLoaderConfig.useImageTag(true);
 
             this.setupBackKeyNavigation();

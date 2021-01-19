@@ -8,7 +8,8 @@ import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { StandardCoinName } from 'src/app/model/Coin';
-import { Events } from '@ionic/angular';
+import { Events } from 'src/app/services/events.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-coin-receive',
@@ -22,7 +23,7 @@ export class CoinReceivePage implements OnInit, OnDestroy {
     public chainId: string;
     public qrcode: string = null;
     public isSingleAddress = false;
-    private eventId: string = null;
+    private selectSubscription: Subscription = null;
 
     constructor(
         public route: ActivatedRoute,
@@ -46,8 +47,8 @@ export class CoinReceivePage implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.eventId) {
-            this.events.unsubscribe(this.eventId);
+        if (this.selectSubscription) {
+            this.selectSubscription.unsubscribe();
         }
     }
 
@@ -79,13 +80,12 @@ export class CoinReceivePage implements OnInit, OnDestroy {
     }
 
     showAddressList() {
-        this.eventId = 'selectaddress';
-        this.events.subscribe(this.eventId, (address) => {
+        this.selectSubscription = this.events.subscribe('selectaddress', (address) => {
             this.zone.run(() => {
                 this.qrcode = address;
             });
-            this.events.unsubscribe(this.eventId);
-            this.eventId = null;
+            this.selectSubscription.unsubscribe();
+            this.selectSubscription = null;
           });
         this.native.go(
             '/coin-address',

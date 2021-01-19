@@ -1,10 +1,11 @@
-import { Events, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Native } from './native.service';
 import { Injectable, NgZone } from '@angular/core';
 import { CoinTransferService } from './cointransfer.service';
 import { ThemeService } from './theme.service';
 import * as moment from 'moment';
+import { Events } from './events.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;

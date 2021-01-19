@@ -2,13 +2,14 @@ import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { Native } from '../../../../services/native.service';
 import { Util } from "../../../../model/Util";
 import { ActivatedRoute } from '@angular/router';
-import { Events, IonSlides, ModalController, IonInput } from '@ionic/angular';
+import { IonSlides, ModalController, IonInput } from '@ionic/angular';
 import { WalletManager } from '../../../../services/wallet.service';
 import { AuthService } from '../../../../services/auth.service';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 import { WalletCreatedComponent } from 'src/app/components/wallet-created/wallet-created.component';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Events } from 'src/app/services/events.service';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 

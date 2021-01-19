@@ -11,16 +11,16 @@ export class CryptoNameResolver extends Resolver {
 
     public async resolve(name: string, coin: CoinID): Promise<Address[]> {
         let addresses: Address[] = [];
-        
+
         if (coin == StandardCoinName.ELA) {
             console.log("Searching name "+name+" on cryptoname...");
-            
+
             try {
                 var url = "https://"+name+".elastos.name/ela.address";
                 let address = await this.http.get(url, {
                     responseType: "text"
                 }).toPromise();
-                
+
                 if (address) {
                     addresses.push(new CryptoNameAddress(name, address));
                 }

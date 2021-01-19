@@ -1,14 +1,14 @@
 import { Component, OnInit, NgZone, OnDestroy, ViewChild } from '@angular/core';
-import { Events, IonSlides } from '@ionic/angular';
+import { IonSlides } from '@ionic/angular';
 import { WalletManager } from '../../../services/wallet.service';
 import { Native } from '../../../services/native.service';
 import { LocalStorage } from '../../../services/storage.service';
 import { Util } from "../../../model/Util";
-import { Config } from '../../../config/Config';
 import { PopupProvider } from '../../../services/popup.service';
 import { WalletCreationService } from 'src/app/services/walletcreation.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Events } from 'src/app/services/events.service';
 
 export enum MnemonicLanguage {
   CHINESE_SIMPLIFIED,
@@ -21,7 +21,7 @@ export enum MnemonicLanguage {
     styleUrls: ['./wallet-import.page.scss'],
 })
 
-export class WalletImportPage implements OnInit, OnDestroy {
+export class WalletImportPage implements OnInit {
 
     @ViewChild('slider', {static: false}) slider: IonSlides;
 
@@ -52,19 +52,6 @@ export class WalletImportPage implements OnInit, OnDestroy {
         private walletCreateService: WalletCreationService
     ) {
         this.masterWalletId = Util.uuid(6, 16);
-        this.events.subscribe("error:update", (item) => {
-            if (item && item["error"]) {
-                if (item["error"]["code"] === 20036) {
-                    /* NOT SUPPORTED ANY MORE - COMMENTED OUT FOR NOW this.popupProvider.webKeyPrompt().then((val) => {
-                        console.log("========webKeyStore" + val);
-                        if (val === null) {
-                            return;
-                        }
-                        this.webKeyStore(val.toString());
-                    });*/
-                }
-            }
-        });
     }
 
     ngOnInit() {
@@ -76,9 +63,6 @@ export class WalletImportPage implements OnInit, OnDestroy {
         console.log('Input list created', this.inputList);
     }
 
-    ngOnDestroy() {
-        this.events.unsubscribe("error:update");
-    }
 
  /*    goToNextInput(event, nextInput?: any) {
         console.log('Input key code', event);

@@ -32,8 +32,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 /****************** Ionic ******************/
 import { AlertController, IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { IonicImageLoaderModule } from 'ionic-image-loader-v5';
@@ -137,7 +135,7 @@ export class SentryErrorHandler implements ErrorHandler {
     }
 }
 
-public ionicAlert(title: string, subTitle?: string, okText?: string): Promise<any> {
+public ionicAlert(title: string, subTitle?: string, okText?: string): Promise<void> {
   return new Promise((resolve, reject) => {
       this.alertCtrl.create({
           header : this.translate.instant(title),
@@ -265,8 +263,6 @@ export function TranslateLoaderFactory() {
         }),
     ],
     providers: [
-        StatusBar,
-        SplashScreen,
         Clipboard,
         LocalStorage,
         Native,

@@ -1,5 +1,4 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { AppService } from '../../../services/app.service';
 import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
@@ -16,6 +15,8 @@ import { UiService } from 'src/app/services/ui.service';
 import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import { Util } from 'src/app/model/Util';
 import { Router } from '@angular/router';
+import { Events } from 'src/app/services/events.service';
+import { Subscription } from 'rxjs';
 
 declare let appManager: AppManagerPlugin.AppManager;
 
@@ -38,11 +39,12 @@ export class WaitForSyncPage implements OnInit {
     txId: string;
     walletInfo = {};
 
-    eventType = '';
     action = '';
     nextScreen = '';
 
     private rootPage = false;
+
+    private waitSubscription : Subscription = null;
 
     constructor(
         public appService: AppService,
@@ -144,11 +146,11 @@ export class WaitForSyncPage implements OnInit {
         }
 
         if (this.masterWallet.subWallets[this.chainId].progress !== 100) {
-            this.eventType = this.masterWallet.id + ':' + this.chainId + ':synccompleted';
-            this.events.subscribe(this.eventType, (coin) => {
+            const eventType = this.masterWallet.id + ':' + this.chainId + ':synccompleted';
+            this.waitSubscription = this.events.subscribe(eventType, (coin) => {
                 console.log('WaitforsyncPage coin:', coin);
                 this.doAction();
-                this.events.unsubscribe(this.eventType);
+                this.waitSubscription.unsubscribe();
             });
         } else {
             setTimeout(() => {

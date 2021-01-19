@@ -1,5 +1,4 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { Native } from '../../../../services/native.service';
 import { LocalStorage } from '../../../../services/storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +15,7 @@ import { PrefsService } from 'src/app/services/prefs.service';
 import { ERC20CoinService } from 'src/app/services/erc20coin.service';
 import { Util } from 'src/app/model/Util';
 import { IntentService } from 'src/app/services/intent.service';
+import { Events } from 'src/app/services/events.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;

@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
-import { NavParams, Events, IonSlides } from '@ionic/angular';
+import { NavParams, IonSlides } from '@ionic/angular';
 import { Native } from '../../../../services/native.service';
 import { WalletManager } from '../../../../services/wallet.service';
 import { Config } from '../../../../config/Config';
@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { WalletCreationService, SelectableMnemonic } from 'src/app/services/walletcreation.service';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Events } from 'src/app/services/events.service';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 

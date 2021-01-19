@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { Util } from '../../../model/Util';
-import { Config } from '../../../config/Config';
 import { Native } from '../../../services/native.service';
 import { LocalStorage } from '../../../services/storage.service';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +9,7 @@ import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AppService } from 'src/app/services/app.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Events } from 'src/app/services/events.service';
 
 @Component({
     selector: 'app-wallet-edit-name',

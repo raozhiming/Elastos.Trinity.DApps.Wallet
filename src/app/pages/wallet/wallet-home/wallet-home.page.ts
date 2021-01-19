@@ -36,11 +36,13 @@ import { MasterWallet } from 'src/app/model/wallets/MasterWallet';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
 import { StandardSubWallet } from 'src/app/model/wallets/StandardSubWallet';
-import { IonSlides, Events } from '@ionic/angular';
+import { IonSlides } from '@ionic/angular';
 import { ERC20SubWallet } from 'src/app/model/wallets/ERC20SubWallet';
 import { BackupRestoreService } from 'src/app/services/backuprestore.service';
 import { LocalStorage } from 'src/app/services/storage.service';
 import { PrefsService } from 'src/app/services/prefs.service';
+import { Events } from 'src/app/services/events.service';
+import { Subscription } from 'rxjs';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -64,6 +66,8 @@ export class WalletHomePage implements OnInit, OnDestroy {
     public masterWalletList: MasterWallet[] = [];
     public isSingleWallet = false;
     public resolvingBackupService = false;
+
+    private walletChangedSubscription: Subscription = null;
 
     // Helpers
     public Util = Util;
@@ -98,7 +102,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
 
         this.updateWallet();
 
-        this.events.subscribe("masterwalletcount:changed", (result) => {
+        this.walletChangedSubscription = this.events.subscribe("masterwalletcount:changed", (result) => {
             console.log("masterwalletcount:changed event received result:", result);
             this.zone.run(() => {
                 this.updateWallet();
@@ -130,7 +134,7 @@ export class WalletHomePage implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.events.unsubscribe('masterwalletcount:changed');
+        this.walletChangedSubscription.unsubscribe();
     }
 
     ionViewWillEnter() {

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Events } from '@ionic/angular';
 import { Config } from '../../../../config/Config';
 import { JsonRPCService } from '../../../../services/jsonrpc.service';
 import { Native } from '../../../../services/native.service';
@@ -17,6 +16,8 @@ import { SubWallet } from 'src/app/model/wallets/SubWallet';
 import { ETHChainSubWallet } from 'src/app/model/wallets/ETHChainSubWallet';
 import { CoinService } from 'src/app/services/coin.service';
 import { ERC20CoinService } from 'src/app/services/erc20coin.service';
+import { Events } from 'src/app/services/events.service';
+import { Subscription } from 'rxjs';
 
 class TransactionDetail {
     type: string;
@@ -64,9 +65,7 @@ export class CoinTxInfoPage implements OnInit {
     // List of displayable transaction details
     public txDetails: TransactionDetail[] = [];
 
-    // TODO: it should use callback if the spvsdk can send callback when the confirm count is 6
-    preConfirmCount = '';
-    hasSubscribeprogressEvent = false;
+    private syncSubscription: Subscription = null;
 
     constructor(
         public events: Events,
@@ -270,17 +269,15 @@ export class CoinTxInfoPage implements OnInit {
     }
 
     subscribeprogressEvent() {
-        if (!this.hasSubscribeprogressEvent) {
-            this.events.subscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress', (coin) => {
+        if (!this.syncSubscription) {
+            this.syncSubscription = this.events.subscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress', (coin) => {
                 this.getTransactionDetails();
             });
-            this.hasSubscribeprogressEvent = true;
         }
     }
     unsubscribeprogressEvent() {
-        if (this.hasSubscribeprogressEvent) {
-            this.events.unsubscribe(this.masterWallet.id + ':' + this.chainId + ':syncprogress');
-            this.hasSubscribeprogressEvent = false;
+        if (this.syncSubscription) {
+            this.syncSubscription.unsubscribe();
         }
     }
 

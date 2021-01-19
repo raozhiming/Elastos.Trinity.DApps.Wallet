@@ -22,7 +22,7 @@
 
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Events, PopoverController, ModalController } from '@ionic/angular';
+import { PopoverController, ModalController } from '@ionic/angular';
 import { AppService, ScanType } from '../../../../services/app.service';
 import { Config } from '../../../../config/Config';
 import { Native } from '../../../../services/native.service';
@@ -47,6 +47,8 @@ import { TxSuccessComponent } from 'src/app/components/tx-success/tx-success.com
 import { ContactsService } from 'src/app/services/contacts.service';
 import { ContactsComponent } from 'src/app/components/contacts/contacts.component';
 import { MainAndIDChainSubWallet } from 'src/app/model/wallets/MainAndIDChainSubWallet';
+import { Events } from 'src/app/services/events.service';
+import { Subscription } from 'rxjs';
 
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
 declare let appManager: AppManagerPlugin.AppManager;
@@ -60,7 +62,6 @@ declare let appManager: AppManagerPlugin.AppManager;
 export class CoinTransferPage implements OnInit, OnDestroy {
 
     public masterWallet: MasterWallet;
-    private syncCompletionEventName: string = null;
     public waitingForSyncCompletion = false;
 
     // Define transfer type
@@ -98,6 +99,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     // Addresses resolved from typed user friendly names (ex: user types "rong" -> resolved to rong's ela address)
     public suggestedAddresses: CryptoAddressResolvers.Address[] = [];
 
+    private syncSubscription: Subscription = null;
+    private addressUpdateSubscription: Subscription = null;
+
     constructor(
         public route: ActivatedRoute,
         public walletManager: WalletManager,
@@ -109,7 +113,6 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         private http: HttpClient,
         public theme: ThemeService,
         private translate: TranslateService,
-        private popoverCtrl: PopoverController,
         public currencyService: CurrencyService,
         private intentService: IntentService,
         public uiService: UiService,
@@ -121,7 +124,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
 
     async ngOnInit() {
         await this.init();
-        this.events.subscribe('address:update', (address) => {
+        this.addressUpdateSubscription = this.events.subscribe('address:update', (address) => {
             this.zone.run(() => {
                 this.toAddress = address;
                 this.addressName = null;
@@ -151,12 +154,8 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.events.unsubscribe('address:update');
-        this.events.unsubscribe('intent:pay');
-
-        if (this.syncCompletionEventName) {
-            this.events.unsubscribe(this.syncCompletionEventName);
-        }
+        if (this.addressUpdateSubscription) this.addressUpdateSubscription.unsubscribe();
+        if (this.syncSubscription) this.syncSubscription.unsubscribe();
     }
 
     setContactsKeyVisibility(showKey: boolean) {
@@ -257,13 +256,14 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         // by the SPVSDK, it's not persistant in case of restart.
         if (this.masterWallet.subWallets[this.fromSubWallet.id].progress !== 100) {
             this.waitingForSyncCompletion = true;
-            this.syncCompletionEventName = this.masterWallet.id + ':' + this.fromSubWallet.id + ':synccompleted';
-            this.events.subscribe(this.syncCompletionEventName, (coin) => {
+            const syncCompletionEventName = this.masterWallet.id + ':' + this.fromSubWallet.id + ':synccompleted';
+            this.syncSubscription = this.events.subscribe(syncCompletionEventName, (coin) => {
                 this.zone.run(() => {
                     this.waitingForSyncCompletion = false;
                     this.amount = 0.1;
                 });
-                this.events.unsubscribe(this.syncCompletionEventName);
+                this.syncSubscription.unsubscribe();
+                this.syncSubscription = null;
             });
         }
     }

@@ -12,11 +12,10 @@ import { MainchainSubWallet } from '../model/wallets/MainchainSubWallet';
 import moment from "moment";
 import { AppService } from './app.service';
 import { WalletManager } from './wallet.service';
-import { Events } from '@ionic/angular';
 import { CoinService } from './coin.service';
-import { ResolveEnd } from '@angular/router';
 import { PopupProvider } from './popup.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Events } from './events.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let walletManager: WalletPlugin.WalletManager;

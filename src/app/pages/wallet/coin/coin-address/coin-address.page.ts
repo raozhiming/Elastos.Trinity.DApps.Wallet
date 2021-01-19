@@ -6,7 +6,8 @@ import { Util } from 'src/app/model/Util';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { ThemeService } from 'src/app/services/theme.service';
-import { Events, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
+import { Events } from 'src/app/services/events.service';
 
 @Component({
     selector: 'app-coin-address',
