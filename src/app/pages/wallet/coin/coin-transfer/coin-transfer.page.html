@@ -51,7 +51,8 @@
             </ion-col>
         </ion-row>
         <ion-row class="input-row">
-            <ion-input
+            <h4 *ngIf="sendAllBalance">{{ 'transfer-all' | translate }}</h4>
+            <ion-input *ngIf="!sendAllBalance"
                 type="number"
                 placeholder="{{ 'amount' | translate }}"
                 [(ngModel)]="amount"
@@ -65,7 +66,7 @@
 <ion-content *ngIf="transferType === 2">
     <ion-grid class="send-container" [class.send-dark-container]="theme.darkMode" [class.blur]="native.popup">
         <img class="header-img" [src]="!theme.darkMode ? 'assets/coins/ela-black.svg' : 'assets/coins/ela-white.svg'"/>
-    
+
         <h1>{{ 'enter-amount' | translate }}</h1>
         <ion-row class="item-row">
             <ion-col size="6" class="left-col">
@@ -73,14 +74,15 @@
                 <p *ngIf="isStandardSubwallet(fromSubWallet)">{{ currencyService.selectedCurrency.symbol }}</p>
             </ion-col>
             <ion-col size="6" class="right-col">
-                <ion-input
+                <h4 *ngIf="sendAllBalance">{{ 'transfer-all' | translate }}</h4>
+                <ion-input *ngIf="!sendAllBalance"
                     class="amount-input"
                     type="number"
                     placeholder="0"
                     [(ngModel)]="amount"
                 >
                 </ion-input>
-                <p *ngIf="amount">
+                <p *ngIf="amount && !sendAllBalance">
                     {{ fromSubWallet.getAmountInExternalCurrency(convertAmountToBigNumber(amount)) }}
                 </p>
             </ion-col>

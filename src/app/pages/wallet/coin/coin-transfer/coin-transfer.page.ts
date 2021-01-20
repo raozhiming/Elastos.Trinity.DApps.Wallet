@@ -72,6 +72,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     public toAddress: string;
     public amount: number; // Here we can use JS "number" type, for now we consider we will never transfer a number that is larger than JS's MAX INT.
     public memo = '';
+    public sendAllBalance = false;
 
     // Display recharge wallets
     public fromSubWallet: SubWallet;
@@ -273,7 +274,7 @@ export class CoinTransferPage implements OnInit, OnDestroy {
      */
     async createSendTransaction() {
         let toAmount: number;
-        if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
+        if (!this.sendAllBalance && ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain))) {
             toAmount = this.accMul(this.amount, Config.SELA);
         } else {
             toAmount = this.amount;
@@ -367,17 +368,38 @@ export class CoinTransferPage implements OnInit, OnDestroy {
         this.appService.scan(ScanType.Address);
     }
 
+    supportSendAllBalance() {
+        // Only the payment transaction of ELA and IDChain support send all balance.
+        // TODO: what should to do with ETHSC and ERC20 Token?
+        if ((this.chainId === StandardCoinName.ELA) || (this.chainId === StandardCoinName.IDChain)) {
+            if (this.fromSubWallet.id === this.toSubWallet.id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    sendAll() {
+        if (this.supportSendAllBalance()) {
+            this.sendAllBalance = true;
+            // -1 means send all.
+            this.amount = -1;
+        }
+    }
+
     async goTransaction() {
         // this.showConfirm();
         // this.showSuccess();
 
-        if (this.valuesReady()) {
+        if (this.sendAllBalance || this.valuesReady()) {
             await this.startTransaction();
         }
     }
 
     // For revealing button
     valuesValid(): boolean {
+        if (this.sendAllBalance) return true;
+
         if (Util.isNull(this.amount)) {
             return false;
         } else if (!Util.number(this.amount)) {

@@ -33,7 +33,6 @@ export const en = {
     "amount-invalid": "Please enter the correct amount",
     'eth-insuff-balance': 'You must have enough ETHSC for gas fees in order to send Elastos ERC20 tokens',
     "insuff-balance": "Insufficient balance",
-    'transaction-has-been-published': "Transaction has been published! Please wait a moment",
     "sync-completed": "Sync completed",
     "not-a-valid-address": "Not a valid address",
     "no-ethereum-token": "No ethereum token",
@@ -144,6 +143,7 @@ export const en = {
     "balance": "Balance",
     "balance-remaining": "Balance Remaining",
     "insufficient-balance": "Insufficient Balance",
+    "transfer-all": "All",
 
     /********************
     * Coin Receive Page *

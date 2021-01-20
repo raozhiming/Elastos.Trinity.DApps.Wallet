@@ -343,7 +343,6 @@ export class ERC20SubWallet extends SubWallet {
                         status = 'error';
                     }
                     this.masterWallet.walletManager.native.hideLoading();
-                    this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
                     console.log('Sending intent response', transfer.action, { txid: txId }, transfer.intentId);
                     await this.masterWallet.walletManager.sendIntentResponse(transfer.action,
                         { txid: txId, status }, transfer.intentId);
@@ -354,7 +353,6 @@ export class ERC20SubWallet extends SubWallet {
                 console.log("Published transaction id:", publishedTransaction.TxHash);
 
                 await this.masterWallet.walletManager.native.hideLoading();
-                this.masterWallet.walletManager.native.toast_trans('transaction-has-been-published');
                 await this.masterWallet.walletManager.native.setRootRouter('/wallet-home');
 
                 resolve(true);

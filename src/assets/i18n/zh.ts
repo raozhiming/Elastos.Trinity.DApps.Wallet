@@ -32,7 +32,6 @@ export const zh = {
     "amount-invalid": "请输入正确的金额",
     'eth-insuff-balance': '您必须有足够的ETHSC来支付gas费，才能发送Elastos ERC20代币',
     "insuff-balance": "余额不足",
-    'transaction-has-been-published': "交易已经发布，请稍后",
     "sync-completed": "已完成同步",
     "not-a-valid-address": "地址无效",
     "no-ethereum-token": "没有以太坊币种",
@@ -143,6 +142,7 @@ export const zh = {
     "balance": "余额",
     "balance-remaining": "余额 ",
     "insufficient-balance": "余额不足",
+    "transfer-all": "全部",
 
     /********************
     * Coin Receive Page *
