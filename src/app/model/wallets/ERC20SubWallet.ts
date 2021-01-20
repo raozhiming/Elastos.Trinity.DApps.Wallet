@@ -128,7 +128,8 @@ export class ERC20SubWallet extends SubWallet {
      * @param amount unit is ETHER
      */
     public isBalanceEnough(amount: BigNumber) {
-        return this.balance.gt(amount);
+        // The fee is ELA/ETHSC, not ERC20 TOKEN. So can send all the balance.
+        return this.balance.gte(amount);
     }
 
     private async getERC20TransactionDirection(targetAddress: string): Promise<TransactionDirection> {
