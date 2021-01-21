@@ -81,6 +81,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
     // Display memo
     public hideMemo = true;
 
+    // Pay intent
+    public amountCanBeEditedInPayIntent = true;
+
     // Submit transaction
     public transaction: any;
 
@@ -249,6 +252,9 @@ export class CoinTransferPage implements OnInit, OnDestroy {
                 this.toAddress = this.coinTransferService.payTransfer.toAddress;
                 this.amount = this.coinTransferService.payTransfer.amount;
                 this.memo = this.coinTransferService.payTransfer.memo;
+                if (this.amount) {
+                    this.amountCanBeEditedInPayIntent = false;
+                }
                 break;
         }
 
