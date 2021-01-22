@@ -329,6 +329,11 @@ export const en = {
     "esctransaction-value": "Value:",
     "esctransaction-fees": "Fees:",
 
+    /***********************
+    * No Wallet *
+    ************************/
+    "intent-no-wallet": "You don't have a wallet, do you want to create it now?",
+
     /********************************************** Create Wallet Screens ***********************************************/
 
     /****************

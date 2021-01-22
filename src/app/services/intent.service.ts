@@ -9,6 +9,7 @@ import { WalletManager } from './wallet.service';
 import { MasterWallet } from '../model/wallets/MasterWallet';
 import { WalletEditionService } from './walletedition.service';
 import { Events } from './events.service';
+import { PopupProvider } from './popup.service';
 
 declare let appManager: AppManagerPlugin.AppManager;
 declare let titleBarManager: TitleBarPlugin.TitleBarManager;
@@ -26,6 +27,7 @@ export class IntentService {
         private walletManager: WalletManager,
         private coinService: CoinService,
         private coinTransferService: CoinTransferService,
+        private popupProvider: PopupProvider,
         private walletAccessService: WalletAccessService,
         private walletEditionService: WalletEditionService
     ) {
@@ -53,7 +55,13 @@ export class IntentService {
 
         this.walletList = this.walletManager.getWalletsList();
         if (this.walletList.length === 0) {
-            await this.sendIntentResponse(intent.action, {message: 'No active master wallet!', status: 'error'}, intent.intentId);
+            const confirmToDelete = await this.popupProvider.ionicConfirm('confirmTitle', 'intent-no-wallet');
+            if (confirmToDelete) {
+                this.native.setRootRouter('launcher');
+                // Should call sendIntentResponse?
+            }  else {
+                await this.sendIntentResponse(intent.action, {message: 'No active master wallet!', status: 'error'}, intent.intentId);
+            }
             return false;
         }
 

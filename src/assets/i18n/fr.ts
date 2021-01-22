@@ -328,6 +328,11 @@ export const fr = {
     "esctransaction-value": "Montant:",
     "esctransaction-fees": "Frais:",
 
+    /***********************
+    * No Wallet *
+    ************************/
+    "intent-no-wallet": "Vous n'avez pas de portefeuille, voulez-vous le créer maintenant?",
+
     /********************************************** Create Wallet Screens ***********************************************/
 
     /****************
