@@ -33,6 +33,7 @@ export class Native {
     private mnemonicLang: string = "english";
     private loader: HTMLIonLoadingElement = null;
     public popup: any = null;
+    private loadingCtrlCreating = false;
 
     constructor(
         public toastCtrl: ToastController,
@@ -133,9 +134,14 @@ export class Native {
     }
 
     public async showLoading(content: string = ''): Promise<void> {
+        if (this.loadingCtrlCreating) {// Just in case.
+            console.log('loadingCtrl is preparing, skip')
+            return;
+        }
         // Hide a previous loader in case there was one already.
         await this.hideLoading();
 
+        this.loadingCtrlCreating = true;
         this.loader = await this.loadingCtrl.create({
             mode: 'ios',
             cssClass: 'loader',
@@ -145,6 +151,7 @@ export class Native {
             this.loader = null;
         });
 
+        this.loadingCtrlCreating = false;
         return await this.loader.present();
     }
 

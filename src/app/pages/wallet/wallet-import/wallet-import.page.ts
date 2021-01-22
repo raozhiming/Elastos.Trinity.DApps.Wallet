@@ -37,6 +37,8 @@ export class WalletImportPage implements OnInit {
     public walletType: string;
     private masterWalletId: string = "1";
 
+    private walletIsCreating = false; // Just in case, Ignore user action when the wallet is creating.
+
     public inputList: Array<{input:string}> = [];
     private inputStr: string = "";
 
@@ -158,15 +160,25 @@ export class WalletImportPage implements OnInit {
 
     async onImport() {
         if (this.allInputsFilled()) {
-            console.log('Input string is valid');
-
-            const payPassword = await this.authService.createAndSaveWalletPassword(this.masterWalletId);
-            if (payPassword) {
-                await this.native.showLoading(this.translate.instant('please-wait'));
-                await this.importWalletWithMnemonic(payPassword);
-            } else {
-                // Cancelled, do nothing
+            if (this.walletIsCreating) {
+                console.log('The wallet is creating, skip this action');
+                return;
             }
+            console.log('Input string is valid');
+            this.walletIsCreating = true;
+            try {
+                const payPassword = await this.authService.createAndSaveWalletPassword(this.masterWalletId);
+                if (payPassword) {
+                    await this.native.showLoading(this.translate.instant('please-wait'));
+                    await this.importWalletWithMnemonic(payPassword);
+                } else {
+                    // Cancelled, do nothing
+                }
+            } catch(err) {
+                console.error('CreateWalet error:', err)
+            }
+
+            this.walletIsCreating = false;
         } else {
             this.native.toast(this.translate.instant("mnemonic-import-missing-words"));
             this.inputStr = "";
