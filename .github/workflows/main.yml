@@ -22,5 +22,5 @@ jobs:
         run: |
           pwd
           npm install
-          npm install -g cordova @ionic/cli
+          sudo npm install -g cordova @ionic/cli
           ionic build --prod
