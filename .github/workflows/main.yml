@@ -21,4 +21,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           npm install
+          npm install -g @ionic/cli cordova
           ionic build --prod
