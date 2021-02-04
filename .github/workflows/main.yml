@@ -57,17 +57,17 @@ jobs:
       #   with:
       #       string: ${{ github.ref }}
       #       split-by: '/'
-      - name: Get release
-        id: get_release
-        uses: bruceadams/get-release@v1.2.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      # - name: Get release
+      #   id: get_release
+      #   uses: bruceadams/get-release@v1.2.2
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
       - name: Upload
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: tsconfig.json
           asset_name: tsconfig.json
           asset_content_type: application/json
