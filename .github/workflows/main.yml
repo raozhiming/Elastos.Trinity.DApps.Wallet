@@ -52,16 +52,16 @@ jobs:
           draft: false
           prerelease: false
 
-      - uses: rishabhgupta/split-by@v1
-        id: split
-        with:
-            string: ${{ github.ref }}
-            split-by: '/'
+      # - uses: rishabhgupta/split-by@v1
+      #   id: split
+      #   with:
+      #       string: ${{ github.ref }}
+      #       split-by: '/'
       - name: Get release
         id: get_release
-        uses: bruceadams/get-release@v1.2.1
+        uses: bruceadams/get-release@v1.2.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Upload
         uses: actions/upload-release-asset@v1.0.2
         env:
