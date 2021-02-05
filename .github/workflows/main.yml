@@ -37,31 +37,26 @@ jobs:
       - uses: actions/checkout@v2
         with:
           node-version: 14
+      - name: Get tag name
+        run: |
+          export COMMITID=$(git log --format=%h -1);
+          export APPSUFFIX=$(date +'%Y%m%d%H')-$COMMITID;
+          export TAG_NAME="daily"-$APPSUFFIX;
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: release_v1.0
-          release_name: release_v1.0
+          tag_name: ${{ TAG_NAME }}
+          release_name: ${{ TAG_NAME }}
           body: |
             Changes in this Release
             - First Change
             - Second Change
-          draft: false
-          prerelease: false
-
-      # - uses: rishabhgupta/split-by@v1
-      #   id: split
-      #   with:
-      #       string: ${{ github.ref }}
-      #       split-by: '/'
-      # - name: Get release
-      #   id: get_release
-      #   uses: bruceadams/get-release@v1.2.2
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token }}
+          draft: true
+          prerelease: true
       - name: Upload
         uses: actions/upload-release-asset@v1.0.2
         env:
