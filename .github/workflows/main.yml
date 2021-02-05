@@ -52,10 +52,7 @@ jobs:
         with:
           tag_name: ${{ steps.get_tag_name.outputs.TAG_NAME }}
           release_name: ${{ steps.get_tag_name.outputs.TAG_NAME }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+          body: for test
           draft: false
           prerelease: true
       - name: Upload
