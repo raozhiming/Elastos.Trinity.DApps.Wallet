@@ -39,7 +39,7 @@ jobs:
           node-version: 14
       - name: env test
         env:
-          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
         run: |
           echo "CSC_LINK:" $CSC_LINK
           export
