@@ -37,31 +37,37 @@ jobs:
       - uses: actions/checkout@v2
         with:
           node-version: 14
-      - name: Get tag name
-        id: get_tag_name
+      - name: env test
+        env:
+          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
         run: |
-          COMMITID=$(git log --format=%h -1);
-          APPSUFFIX=$(date +'%Y%m%d%H')-$COMMITID;
-          echo "::set-output name=TAG_NAME::daily-$APPSUFFIX"
+          echo "CSC_LINK:" $CSC_LINK
+          export
+      # - name: Get tag name
+      #   id: get_tag_name
+      #   run: |
+      #     COMMITID=$(git log --format=%h -1);
+      #     APPSUFFIX=$(date +'%Y%m%d%H')-$COMMITID;
+      #     echo "::set-output name=TAG_NAME::daily-$APPSUFFIX"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ steps.get_tag_name.outputs.TAG_NAME }}
-          release_name: ${{ steps.get_tag_name.outputs.TAG_NAME }}
-          body: for test
-          draft: false
-          prerelease: true
-      - name: Upload
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: tsconfig.json
-          asset_name: tsconfig.json
-          asset_content_type: application/json
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      #   with:
+      #     tag_name: ${{ steps.get_tag_name.outputs.TAG_NAME }}
+      #     release_name: ${{ steps.get_tag_name.outputs.TAG_NAME }}
+      #     body: for test
+      #     draft: false
+      #     prerelease: true
+      # - name: Upload
+      #   uses: actions/upload-release-asset@v1.0.2
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: tsconfig.json
+      #     asset_name: tsconfig.json
+      #     asset_content_type: application/json
 
